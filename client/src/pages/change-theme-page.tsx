@@ -1,6 +1,6 @@
 import { useState } from "react";
-import ThemeSwitcher from "../components/theme-swticher";
-import useTheme, { Theme } from "../hooks/useTheme";
+import ThemeSwitcher from "../shared/components/theme-swticher";
+import useTheme, { Theme } from "../shared/hooks/useTheme";
 
 const ChangeThemePage = () => {
   const {theme, toggleTheme} = useTheme()

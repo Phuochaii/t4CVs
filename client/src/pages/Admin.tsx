@@ -1,8 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Snackbar, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  TextField,
+  Snackbar,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
 import { Trash2Icon, PlusIcon } from 'lucide-react';
-import axios from "axios";
-import Pagination from '../components/Pagination';
+import axios from 'axios';
+import Pagination from '../shared/components/Pagination';
 
 function AdminPage() {
   const [users, setUsers] = useState([]);
@@ -23,7 +38,9 @@ function AdminPage() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(`https://reqres.in/api/users?page=${page}`);
+      const response = await axios.get(
+        `https://reqres.in/api/users?page=${page}`
+      );
       const data = response.data;
       setUsers(data.data);
       setTotalPages(Math.ceil(data.total / usersPerPage));
@@ -34,7 +51,7 @@ function AdminPage() {
 
   const handleDeleteUser = async (userId) => {
     try {
-      const updatedUsers = users.filter(user => user.id !== userId);
+      const updatedUsers = users.filter((user) => user.id !== userId);
       setUsers(updatedUsers);
       setSnackbarMessage('Xóa người dùng thành công');
       setSnackbarOpen(true);
@@ -56,7 +73,11 @@ function AdminPage() {
 
   const handleAddUser = () => {
     // Thực hiện thêm người dùng vào danh sách
-    const newUser = { id: Date.now(), first_name: newUserName, email: newUserEmail };
+    const newUser = {
+      id: Date.now(),
+      first_name: newUserName,
+      email: newUserEmail,
+    };
     setUsers([...users, newUser]);
     setSnackbarMessage('Thêm người dùng thành công');
     setSnackbarOpen(true);
@@ -82,7 +103,12 @@ function AdminPage() {
     <div className="container mx-auto mt-8">
       <h1 className="text-2xl font-bold mb-4">Danh sách người dùng</h1>
       <div className="flex justify-end mb-4">
-        <Button variant="contained" color="primary" onClick={handleOpenDialog} startIcon={<PlusIcon />}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleOpenDialog}
+          startIcon={<PlusIcon />}
+        >
           Thêm người dùng
         </Button>
       </div>
@@ -128,16 +154,16 @@ function AdminPage() {
             onChange={(e) => setInputPage(e.target.value)}
             style={{ marginRight: '10px' }}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={goToPage}
-          >
+          <Button variant="contained" color="primary" onClick={goToPage}>
             Đi đến trang
           </Button>
         </div>
         <div className="mt-2 flex justify-center">
-          <Pagination active={page} setActive={setPage} totalPages={totalPages} />
+          <Pagination
+            active={page}
+            setActive={setPage}
+            totalPages={totalPages}
+          />
         </div>
       </div>
       <Dialog open={openDialog} onClose={handleCloseDialog}>
