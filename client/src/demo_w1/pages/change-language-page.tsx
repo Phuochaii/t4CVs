@@ -1,4 +1,4 @@
-import LanguageSwitcher from "../components/language-swticher";
+import LanguageSwitcher from '../shared/components/language-swticher';
 
 const ChangeLanguagePage = () => (
   <div className="h-screen flex items-center justify-center bg-gray-200 dark:bg-gray-800">
