@@ -1,11 +1,13 @@
 import { LazyExoticComponent, Suspense, lazy } from 'react';
 
-const CvPage = lazy(() => import('../../pages/cv-page'));
-const JobsPage = lazy(() => import('../../pages/job-page'));
+const CvPage = lazy(() => import('../../demo_w1/pages/cv-page'));
+const JobsPage = lazy(() => import('../../demo_w1/pages/job-page'));
 const ChangeLanguagePage = lazy(
-  () => import('../../pages/change-language-page')
+  () => import('../../demo_w1/pages/change-language-page')
 );
-const ChangeThemePage = lazy(() => import('../../pages/change-theme-page'));
+const ChangeThemePage = lazy(
+  () => import('../../demo_w1/pages/change-theme-page')
+);
 
 function suspensePage(Page: LazyExoticComponent<() => JSX.Element>) {
   return (

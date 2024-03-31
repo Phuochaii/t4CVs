@@ -1,7 +1,7 @@
-import { useTranslation } from "react-i18next";
-import NavBar from "../shared/components/nav-bar";
-import useIndex from "../shared/hooks/useIndex";
-import useLazyNavTabs from "../shared/hooks/useLazyNavTabs";
+import { useTranslation } from 'react-i18next';
+import NavBar from '../components/nav-bar';
+import useIndex from '../hooks/useIndex';
+import useLazyNavTabs from '../hooks/useLazyNavTabs';
 
 function SplashPage() {
   const { tabs } = useLazyNavTabs();
