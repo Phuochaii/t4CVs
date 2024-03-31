@@ -1,34 +1,37 @@
-// import {
-//   BrowserRouter as Router,
-//   Routes,
-//   Route,
-//   Navigate,
-// } from "react-router-dom";
-// import DashBoardPage from "./pages/dashBoard";
-// import UpLoad from "./pages/upLoadFile";
-// import NewDashBoardPage from "./pages/newdashBoard";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
-// function App() {
-//   return (
-//     <Router>
-//       <Routes>
-//         <Route path="/" element={<Navigate to="/dashBoard" />} />
-//         <Route path="/dashBoard" element={<DashBoardPage />} />
-//         <Route path="/upload" element={<UpLoad />} />
-//         <Route path="/newDashBoard" element={<NewDashBoardPage />} />
-//       </Routes>
-//     </Router>
-//   );
-
-// }
-
-// export default App;
-
-import { RouterProvider } from "react-router-dom";
-import router from "./router";
+import routes from "./routes";
+import EmptyLayout from "./layouts/EmptyLayout";
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Router>
+      <Routes>
+        {routes.map((route, index) => {
+          const Layout = route.layout || EmptyLayout;
+          const Page = route.component;
+          return (
+            <Route
+              key={index}
+              path={route.path}
+              element={
+                <Layout>
+                  <Page />
+                </Layout>
+              }
+            />
+          );
+        })}
+        {/*  */}
+        <Route path="*" element={<Navigate to="/error-path" />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;

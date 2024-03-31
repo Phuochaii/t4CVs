@@ -1,7 +1,7 @@
-import ChangeLanguagePage from "../pages/change-language-page";
-import ChangeThemePage from "../pages/change-theme-page";
-import CvPage from "../pages/cv-page";
-import JobsPage from "../pages/job-page";
+import ChangeLanguagePage from "../demo_w1/pages/change-language-page";
+import ChangeThemePage from "../demo_w1/pages/change-theme-page";
+import CvPage from "../demo_w1/pages/cv-page";
+import JobsPage from "../demo_w1/pages/job-page";
 
 function useNavTabs() {
   const tabs = [
