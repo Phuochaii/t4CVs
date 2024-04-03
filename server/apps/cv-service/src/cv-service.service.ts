@@ -30,6 +30,7 @@ export class CvServiceService {
   }
 
   async getCVById(id: number): Promise<CvService> {
+    console.log(id);
     return this.CVs.find((cv) => cv.id === id);
   }
 }

@@ -6,17 +6,21 @@ import { CvService } from './entities/cv-service.entity';
 export class CvServiceResolver {
   constructor(private readonly cvServiceService: CvServiceService) {}
 
-  @Mutation(() => CvService)
+  //@Mutation(() => CvService)
   @Query(() => CvService)
-  async getCV(@Args('id') id: number): Promise<CvService> {
+  async getCV(
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<CvService> | null {
+    console.log(1);
     return this.cvServiceService.getCVById(id);
   }
 
   @Mutation(() => CvService)
   async createCV(
-    @Args('userId') userId: number,
+    @Args('userId', { type: () => Int }) userId: number,
     @Args('cvData') cvData: string,
   ): Promise<CvService> {
+    console.log(1);
     return this.cvServiceService.createCV(userId, cvData);
   }
   // createCvService(
