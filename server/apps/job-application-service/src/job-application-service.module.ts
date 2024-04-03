@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { JobApplicationServiceController } from './job-application-service.controller';
-import { JobApplicationServiceService } from './job-application-service.service';
+import { JobApplicationController } from './job-application-service.controller';
+import { JobApplicationService } from './job-application-service.service';
 
 @Module({
   imports: [],
-  controllers: [JobApplicationServiceController],
-  providers: [JobApplicationServiceService],
+  controllers: [JobApplicationController],
+  providers: [JobApplicationService],
 })
-export class JobApplicationServiceModule {}
+export class JobApplicationServiceModule { }
