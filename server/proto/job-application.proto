@@ -7,8 +7,10 @@ service JobApplicationService {
   rpc CreateJobApplication (CreateJobApplicationRequest) returns (JobApplication) {}
   rpc ReadJobApplication (ReadJobApplicationRequest) returns (JobApplication) {}
   rpc UpdateJobApplication (JobApplication) returns (JobApplication) {}
-  rpc DeleteJobApplication (DeleteJobApplicationRequest) returns (google.protobuf.Empty) {}
+  rpc DeleteJobApplication (DeleteJobApplicationRequest) returns (Empty) {}
 }
+
+message Empty {}
 
 // The JobApplication message represents a job application record.
 message JobApplication {
