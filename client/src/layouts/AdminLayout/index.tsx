@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "./components/Header";
-import Footer from "./components/Footer";
+import GradientFill from "./components/GradientFill";
+import Sidebar from "./components/Sidebar";
 
 interface LayoutProp {
   children: React.ReactNode | React.ReactElement<any>;
@@ -8,11 +9,14 @@ interface LayoutProp {
 
 function AdminLayout({ children }: LayoutProp) {
   return (
-    <>
+    <div className="w-screen">
+      <GradientFill />
       <Header />
-      {React.cloneElement(children as React.ReactElement<any>)}
-      <Footer />
-    </>
+      <div className="flex">
+        <Sidebar />
+        {React.cloneElement(children as React.ReactElement<any>)}
+      </div>
+    </div>
   );
 }
 
