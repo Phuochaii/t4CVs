@@ -122,7 +122,7 @@ function Compaign() {
                   {openDialog === index && (
                     <div className="absolute flex flex-col translate-x-16 translate-y-2 bg-white">
                       <div
-                        className="flex items-center justify-center px-4 py-2 rounded-t-lg hover:bg-gradient-to-r from-blue-500 to-green-500 hover:text-white"
+                        className="flex items-center justify-center px-4 py-2 border-t border-l border-r rounded-t-lg hover:bg-gradient-to-r from-blue-500 to-green-500 hover:text-white"
                         onClick={() => {
                           const newUser = {
                             ...user,
@@ -136,7 +136,7 @@ function Compaign() {
                         Accept
                       </div>
                       <div
-                        className="flex items-center justify-center px-4 py-2 rounded-b-lg hover:bg-gradient-to-r from-blue-500 to-green-500 hover:text-white"
+                        className="flex items-center justify-center px-4 py-2 border-b border-l border-r rounded-b-lg hover:bg-gradient-to-r from-blue-500 to-green-500 hover:text-white"
                         onClick={() => {
                           const newUser = {
                             ...user,

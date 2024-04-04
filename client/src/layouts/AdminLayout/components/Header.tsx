@@ -14,7 +14,7 @@ function Header() {
       <SearchBar placeholder="Search e.g card" />
       <div className="flex items-center gap-2">
         <GradientIcon icon={Bitcoin} size={18} />
-        <span className="text-slate-500">CoinBase</span>S
+        <span className="text-slate-500">CoinBase</span>
       </div>
       <Bell className="mx-2 text-slate-500" />
     </div>
