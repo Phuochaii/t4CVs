@@ -1,7 +1,7 @@
 // thuc
 
 function Agents() {
-  return <></>;
+  return <>Agents</>;
 }
 
 export default Agents;

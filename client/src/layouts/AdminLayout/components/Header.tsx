@@ -1,5 +1,6 @@
 import { Bell, Bitcoin } from "lucide-react";
 import GradientIcon from "./GradientIcon";
+import SearchBar from "./SearchBar";
 
 function Header() {
   return (
@@ -10,15 +11,10 @@ function Header() {
           className="object-contain h-full"
         ></img>
       </div>
-      <div className="bg-gradient-to-r flex-1 from-pink-500 to-purple-500 p-4 rounded-[1.5rem] px-[.1rem] py-[.1rem] flex items-center">
-        <textarea
-          rows={1}
-          className="w-full h-full border-none resize-none active:border-none focus:border-none active:outline-none focus:outline-none rounded-[1.5rem] px-4 py-2"
-        ></textarea>
-      </div>
+      <SearchBar placeholder="Search e.g card" />
       <div className="flex items-center gap-2">
         <GradientIcon icon={Bitcoin} size={18} />
-        <span className="text-slate-500">CoinBase</span>
+        <span className="text-slate-500">CoinBase</span>S
       </div>
       <Bell className="mx-2 text-slate-500" />
     </div>
