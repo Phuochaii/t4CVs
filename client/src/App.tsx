@@ -29,6 +29,7 @@ function App() {
         })}
         {/*  */}
         <Route path="*" element={<Navigate to="/error-path" />} />
+        <Route path="*" element={<Navigate to="/quan-ly-cv" />} />
       </Routes>
     </Router>
   );
