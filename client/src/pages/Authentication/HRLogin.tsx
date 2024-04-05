@@ -10,7 +10,7 @@ function HRLogIn() {
     password: '',
   });
 
-  const handleSignUp = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
     // Kiểm tra các trường có dữ liệu đầy đủ không
     // if (!formData.agreeToTerms || !formData.name || !formData.email || !formData.password || !formData.confirmPassword || (formData.password !== formData.confirmPassword)) {
@@ -29,8 +29,8 @@ function HRLogIn() {
         <h3 className="text-2xl font-bold mb-1 mt-1 text-green-600">Chào mừng bạn đã quay trở lại</h3>
         <div className='text-gray-500 mb-4'>Cùng tạo dựng lợi thế cho doanh nghiệp bằng trải nghiệm công nghệ tuyển dụng ứng dụng sâu AI & Hiring Funnel.</div>
 
-        <form onSubmit={handleSignUp} className="space-y-4 mb-4">
-          <h4 className='text-gray-700 font-bold'>Email <span className='text-red-500'>*</span></h4>
+        <form onSubmit={handleLogin} className="space-y-4 mb-4">
+          <h4 className='text-gray-700 font-bold'>Email</h4>
           <TextField
             id="email"
             name="email"
@@ -50,7 +50,7 @@ function HRLogIn() {
               ),
             }}
           />
-          <h4 className='text-gray-700 font-bold'>Mật khẩu <span className='text-red-500'>*</span></h4>
+          <h4 className='text-gray-700 font-bold'>Mật khẩu</h4>
           <TextField
             id="password"
             name="password"
