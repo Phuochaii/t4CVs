@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FormControlLabel, Checkbox, Button, TextField, InputAdornment } from '@mui/material';
-import { User, Mail, ShieldCheck } from 'lucide-react';
+import { FormControlLabel, Checkbox, TextField, InputAdornment } from '@mui/material';
+import { Mail, ShieldCheck } from 'lucide-react';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
