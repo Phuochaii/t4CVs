@@ -1,5 +1,16 @@
 import { useState } from "react";
-import { Eye, Download, Save, RotateCcw, RotateCw } from "lucide-react";
+import {
+  Eye,
+  Download,
+  Save,
+  RotateCcw,
+  RotateCw,
+  RefreshCcw,
+  PlusCircle,
+  BookOpen,
+  HelpCircle,
+  Briefcase,
+} from "lucide-react";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 import CV from "../../shared/components/CV";
@@ -178,47 +189,76 @@ function CreateCV() {
           </div>
         </div>
       </div>
-      <div className="bg-gray-200 flex flex-row justify-around">
+      <div className="bg-gray-200 flex flex-row justify-between">
         <div className="flex flex-col mt-2 p-4">
-          <div className="flex flex-col rounded-lg bg-white w-80 p-1">
-            <div className="flex flex-row">
-              <p className="m-2">Hướng dẫn viết CV</p>
-              <p className="m-2">Hướng dẫn sử dụng</p>
+          <div className="flex flex-row justify-center items-center">
+            <div className="flex flex-col mr-2">
+              <button className="flex flex-col items-center justify-center border border-green-500 bg-white text-green-500 px-4 py-2 rounded-lg hover:bg-green-500 hover:text-white transition duration-300 w-24 mb-2 text-sm">
+                <RefreshCcw size={24} className="mb-2" />
+                Đổi mẫu CV
+              </button>
+              <button className="flex flex-col items-center justify-center border border-green-500 bg-white text-green-500 px-4 py-2 rounded-lg hover:bg-green-500 hover:text-white transition duration-300 w-24 mb-2 text-sm">
+                <PlusCircle size={24} className="mb-2" />
+                Thêm mục
+              </button>
+              <button className="flex flex-col items-center justify-center border border-green-500 bg-white text-green-500 px-4 py-2 rounded-lg hover:bg-green-500 hover:text-white transition duration-300 w-24 mb-2 text-sm">
+                <BookOpen size={24} className="mb-2" />
+                Thư viện CV theo ngành nghề
+              </button>
+              <button className="flex flex-col items-center justify-center border border-green-500 bg-white text-green-500 px-4 py-2 rounded-lg hover:bg-green-500 hover:text-white transition duration-300 w-24 mb-2 text-sm">
+                <HelpCircle size={24} className="mb-2" />
+                Hướng dẫn viết CV
+              </button>
+              <button className="flex flex-col items-center justify-center border border-green-500 bg-white text-green-500 px-4 py-2 rounded-lg hover:bg-green-500 hover:text-white transition duration-300 w-24 mb-2 text-sm">
+                <Briefcase size={24} className="mb-2" />
+                Việc làm phù hợp với CV
+              </button>
             </div>
-            <div className="rounded-lg bg-gray-200 m-4">
-              <p className="m-4">
-                CV cơ bản cần có thông tin cá nhân, kỹ năng, học vấn và kinh
-                nghiệm làm việc. Lưu ý ghi rõ tên bạn vào tiêu đề khi bấm Lưu
-                hoặc Tải CV về máy. Một số lỗi sai thường gặp:
-              </p>
-            </div>
-            <div>
-              <p className="ml-2">Hướng dẫn này có hữu ích không</p>
-              <div className="flex flex-row justify-around m-4">
-                <button className="flex items-center justify-center border border-gray-400 rounded-lg bg-white text-gray-600 px-4 py-2 hover:border-green-500 hover:text-green-500 transition duration-300">
-                  Có
-                </button>
-                <button className="flex items-center justify-center border border-gray-400 rounded-lg bg-white text-gray-600 px-4 py-2 hover:border-green-500 hover:text-green-500 transition duration-300">
-                  Không
-                </button>
+            <div className="flex flex-col">
+              <div className="flex flex-col rounded-lg bg-white w-80 p-3">
+                <div className="flex flex-row">
+                  <p className="m-2">Hướng dẫn viết CV</p>
+                  <p className="m-2">Hướng dẫn sử dụng</p>
+                </div>
+                <div className="rounded-lg bg-gray-200 m-4">
+                  <p className="m-4">
+                    CV cơ bản cần có thông tin cá nhân, kỹ năng, học vấn và kinh
+                    nghiệm làm việc. Lưu ý ghi rõ tên bạn vào tiêu đề khi bấm
+                    Lưu hoặc Tải CV về máy. Một số lỗi sai thường gặp:
+                  </p>
+                </div>
+                <div>
+                  <p className="ml-2">Hướng dẫn này có hữu ích không</p>
+                  <div className="flex flex-row justify-around m-4">
+                    <button className="flex items-center justify-center border border-gray-400 rounded-lg bg-white text-gray-600 px-4 py-2 hover:border-green-500 hover:text-green-500 transition duration-300">
+                      Có
+                    </button>
+                    <button className="flex items-center justify-center border border-gray-400 rounded-lg bg-white text-gray-600 px-4 py-2 hover:border-green-500 hover:text-green-500 transition duration-300">
+                      Không
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col rounded-lg bg-white w-80 p-1 mt-2">
+                <p className="m-4">Mọi chi tiết vui lòng liên hệ:</p>
+                <p className="m-4">
+                  Email:{" "}
+                  <a href="mailto:hotro@topcv.vn" className="text-green-500">
+                    hotro@topcv.vn
+                  </a>{" "}
+                  hoặc đăng ký tư vấn CV cùng chuyên gia tại:{" "}
+                  <a
+                    href="https://reviewcv.topcv.vn"
+                    className="text-green-500"
+                  >
+                    https://reviewcv.topcv.vn
+                  </a>
+                </p>
               </div>
             </div>
           </div>
-          <div className="flex flex-col rounded-lg bg-white w-80 p-1 mt-2">
-            <p className="m-4">Mọi chi tiết vui lòng liên hệ:</p>
-            <p className="m-4">
-              Email:{" "}
-              <a href="mailto:hotro@topcv.vn" className="text-green-500">
-                hotro@topcv.vn
-              </a>{" "}
-              hoặc đăng ký tư vấn CV cùng chuyên gia tại:{" "}
-              <a href="https://reviewcv.topcv.vn" className="text-green-500">
-                https://reviewcv.topcv.vn
-              </a>
-            </p>
-          </div>
         </div>
-        <div className="m-4">
+        <div className="m-4 mr-36">
           <CV />
         </div>
       </div>
