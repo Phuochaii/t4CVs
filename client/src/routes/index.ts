@@ -16,6 +16,8 @@ import {UserLayout, AdminLayout, HRLayout, EmptyLayout} from '../layouts'
 
   // USER PAGES - Nguyên , Khoa, Hùng
   {path: '/', component:User.Home, layout:UserLayout},
+  {path: '/search-job', component:User.SearchJob, layout:UserLayout},
+  {path: '/detail', component:User.Detail, layout:UserLayout},
   {path: '/results', component:User.SearchResult, layout:UserLayout},
   {path: '/your-application', component:User.YourApplications, layout:UserLayout},
   {path: '/apply', component:User.ApplyCV, layout:UserLayout},
