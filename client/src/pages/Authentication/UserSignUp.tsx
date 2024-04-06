@@ -31,11 +31,11 @@ function UserSignUp() {
         setShowSuccessMessage(true); // Hiển thị thông báo khi đăng ký thành công
     };
 
-    const isEmailValid = (email) => {
-        // Biểu thức chính quy để kiểm tra định dạng email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    };
+    // const isEmailValid = (email) => {
+    //     // Biểu thức chính quy để kiểm tra định dạng email
+    //     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //     return emailRegex.test(email);
+    // };
 
     const isPasswordValid = (password) => {
         const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,25}$/;
@@ -76,8 +76,8 @@ function UserSignUp() {
                         placeholder="Nhập email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        error={!!formData.email && !isEmailValid(formData.email)}
-                        helperText={(!!formData.email && !isEmailValid(formData.email)) ? "Email không hợp lệ." : ""}
+                        //error={!!formData.email && !isEmailValid(formData.email)}
+                        //helperText={(!!formData.email && !isEmailValid(formData.email)) ? "Email không hợp lệ." : ""}
                         required // Đánh dấu trường này là bắt buộc
                         margin='dense'
                         className="mt-1"

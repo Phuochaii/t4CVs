@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FormControlLabel, InputAdornment, Card, CardActions, CardContent, Collapse, Typography, Menu } from '@mui/material';
+import { FormControlLabel, InputAdornment, Card, CardActions, CardContent, Collapse, Typography } from '@mui/material';
 import { Checkbox, TextField, FormControl, RadioGroup, Radio, Select, MenuItem } from '@mui/material';
 import { User, Mail, Lock, Phone, Building } from 'lucide-react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -24,36 +24,44 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 function HRSignUp() {
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
     password: '',
     confirmPassword: '',
     agreeToTerms: false
   });
+
+  const [hrData, setHrData] = useState({
+    name: '',
+    sex: '',
+    phone: '',
+    company: '',
+    position: '',
+    address_work: '',
+    district: '',
+    skype_account: '',
+  })
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [expanded, setExpanded] = useState(true);
-  const [position, setPosition] = useState("");
-  const [address, setAddress] = useState("");
-  const [district, setDistrict] = useState("");
 
   const handleSignUp = (e) => {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
     // Kiểm tra các trường có dữ liệu đầy đủ không
-    if (!formData.agreeToTerms || !formData.name || !formData.email || !formData.password || !formData.confirmPassword || (formData.password !== formData.confirmPassword)) {
-      alert("Vui lòng điền đầy đủ thông tin và đồng ý với điều khoản dịch vụ và chính sách bảo mật.");
-      return;
-    }
+    // if (!formData.agreeToTerms || !formData.name || !formData.email || !formData.password || !formData.confirmPassword || (formData.password !== formData.confirmPassword)) {
+    //   alert("Vui lòng điền đầy đủ thông tin và đồng ý với điều khoản dịch vụ và chính sách bảo mật.");
+    //   return;
+    // }
     // Lưu thông tin tài khoản vào Local Storage hoặc gửi đến server
-    localStorage.setItem('user', JSON.stringify(formData));
+    localStorage.setItem('account', JSON.stringify(formData));
+    localStorage.setItem('hr_info', JSON.stringify(hrData))
     console.log('Đăng ký thành công.');
     setShowSuccessMessage(true); // Hiển thị thông báo khi đăng ký thành công
   };
 
-  const isEmailValid = (email) => {
-    // Biểu thức chính quy để kiểm tra định dạng email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  // const isEmailValid = (email) => {
+  //   // Biểu thức chính quy để kiểm tra định dạng email
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   return emailRegex.test(email);
+  // };
 
   const isPasswordValid = (password) => {
     const passwordLength = password.length;
@@ -112,8 +120,8 @@ function HRSignUp() {
             placeholder="Email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            error={!!formData.email && !isEmailValid(formData.email)}
-            helperText={(!!formData.email && !isEmailValid(formData.email)) ? "Email không hợp lệ." : ""}
+            // error={!!formData.email && !isEmailValid(formData.email)}
+            // helperText={(!!formData.email && !isEmailValid(formData.email)) ? "Email không hợp lệ." : ""}
             required // Đánh dấu trường này là bắt buộc
             margin='dense'
             className="mt-1"
@@ -183,8 +191,8 @@ function HRSignUp() {
                 name="name"
                 variant="outlined"
                 placeholder="Họ và tên"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                value={hrData.name}
+                onChange={(e) => setHrData({ ...hrData, name: e.target.value })}
                 required // Đánh dấu trường này là bắt buộc
                 margin='dense'
                 fullWidth
@@ -204,8 +212,9 @@ function HRSignUp() {
               <FormControl>
                 <RadioGroup
                   row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
+                  name="sex"
+                  id="sex"
+                  onChange={(e) => setHrData({ ...hrData, sex: e.target.value })}
                 >
                   <FormControlLabel value="Nam" control={<Radio />} label="Nam" />
                   <FormControlLabel value="Nữ" control={<Radio />} label="Nữ" />
@@ -222,10 +231,8 @@ function HRSignUp() {
             name="phone"
             variant="outlined"
             placeholder="Số điện thoại cá nhân"
-            //value={formData.email}
-            //onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            //error={!!formData.email && !isEmailValid(formData.email)}
-            //helperText={(!!formData.email && !isEmailValid(formData.email)) ? "Email không hợp lệ." : ""}
+            value={hrData.phone}
+            onChange={(e) => setHrData({ ...hrData, phone: e.target.value })}
             required // Đánh dấu trường này là bắt buộc
             margin='dense'
             className="mt-1"
@@ -237,7 +244,9 @@ function HRSignUp() {
                 </InputAdornment>
               ),
             }}
-          />
+            error={(!!hrData.phone && (!/^\d*$/.test(hrData.phone) || hrData.phone.length > 10))}
+            helperText={(!/^\d*$/.test(hrData.phone) && !!hrData.phone) ? "Số điện thoại không hợp lệ" : (hrData.phone.length > 10 ? "Số điện thoại không vượt quá 10 ký số" : "")}
+            />
 
           <div className='grid grid-cols-2 gap-4'>
             <div className="col-span-1">
@@ -247,8 +256,8 @@ function HRSignUp() {
                 name="name"
                 variant="outlined"
                 placeholder="Tên công ty"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                value={hrData.company}
+                onChange={(e) => setHrData({ ...hrData, company: e.target.value })}
                 required // Đánh dấu trường này là bắt buộc
                 margin='dense'
                 fullWidth
@@ -268,9 +277,9 @@ function HRSignUp() {
               <FormControl fullWidth>
                 <Select
                   id="Position"
-                  value={position}
+                  value={hrData.position}
                   displayEmpty
-                  onChange={(e) => setPosition(e.target.value)}
+                  onChange={(e) => setHrData({ ...hrData, position: e.target.value })}
                   placeholder="Chọn vị trí công tác"
                   className="mt-2"
                   required
@@ -298,9 +307,9 @@ function HRSignUp() {
               <FormControl fullWidth>
                 <Select
                   id="Address"
-                  value={address}
+                  value={hrData.address_work}
                   displayEmpty
-                  onChange={(e) => setAddress(e.target.value)}
+                  onChange={(e) => setHrData({ ...hrData, address_work: e.target.value })}
                   placeholder="Chọn tỉnh/ thành phố"
                   className="mt-2"
                   required
@@ -324,9 +333,9 @@ function HRSignUp() {
               <FormControl fullWidth>
                 <Select
                   id="District"
-                  value={district}
+                  value={hrData.district}
                   displayEmpty
-                  onChange={(e) => setDistrict(e.target.value)}
+                  onChange={(e) => setHrData({ ...hrData, district: e.target.value })}
                   placeholder="Chọn quận/ huyện"
                   className="mt-2"
                 >
@@ -351,8 +360,8 @@ function HRSignUp() {
             name="skype_account"
             variant="outlined"
             placeholder="Tài khoản Skype"
-            //value={formData.email}
-            //onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            value={hrData.skype_account}
+            onChange={(e) => setHrData({ ...hrData, skype_account: e.target.value })}
             //error={!!formData.email && !isEmailValid(formData.email)}
             //helperText={(!!formData.email && !isEmailValid(formData.email)) ? "Email không hợp lệ." : ""}
             margin='dense'

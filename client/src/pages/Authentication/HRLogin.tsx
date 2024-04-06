@@ -10,17 +10,27 @@ function HRLogIn() {
     password: '',
   });
 
+  const [error, setError] = useState('');
+  const [showError, setShowError] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const handleLogin = (e) => {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
-    // Kiểm tra các trường có dữ liệu đầy đủ không
-    // if (!formData.agreeToTerms || !formData.name || !formData.email || !formData.password || !formData.confirmPassword || (formData.password !== formData.confirmPassword)) {
-    //   alert("Vui lòng điền đầy đủ thông tin và đồng ý với điều khoản dịch vụ và chính sách bảo mật.");
-    //   return;
-    // }
-    // Lưu thông tin tài khoản vào Local Storage hoặc gửi đến server
-    localStorage.setItem('user', JSON.stringify(formData));
-    console.log('Đăng ký thành công.');
-    //setShowSuccessMessage(true); // Hiển thị thông báo khi đăng ký thành công
+   
+    const storedUserString = localStorage.getItem('user');
+    const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
+    if (storedUser && storedUser.email === formData.email && storedUser.password === formData.password) {
+      // Đăng nhập thành công
+      console.log('Đăng nhập thành công với email:', formData.email);
+      setError('');
+      setShowError(false);
+      setIsLoggedIn(true); // Set state để hiển thị thông báo đăng nhập thành công
+    } else {
+      // Đăng nhập không thành công
+      setError('Email hoặc mật khẩu không chính xác.');
+      setShowError(true);
+    }
+  
   };
 
   return (
@@ -84,6 +94,15 @@ function HRLogIn() {
             Đăng nhập
           </button>
         </form>
+
+        {showError && (
+          <div className="text-red-500">{error}</div>
+        )}
+        {isLoggedIn && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mt-4">
+            Đăng nhập thành công!
+          </div>
+        )}
 
         <p className="text-center text-gray-600">
           Chưa có tài khoản? {' '}
