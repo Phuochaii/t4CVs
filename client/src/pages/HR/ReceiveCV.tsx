@@ -1,6 +1,24 @@
 import CustomSelectOption from "../../layouts/HRLayout/components/CustomSelectOption";
 
 function ReceiveCV() {
+  const listCV = [
+    {
+      name: "Nguyễn Thị Lụa",
+      statusView: "Đã xem",
+      campaign: {
+        name: "Tuyển nhân viên Tester",
+        id: "#407764",
+      },
+      email: "haiyyen123@gmail.com",
+      phone: "0223092551",
+      insight: {
+        descript: "Tìm CV",
+        time: "07/04/2024 09:22",
+        job: "Chuyên viên nhân sự tổng hợp",
+      },
+      status: "Phù hợp",
+    },
+  ];
   const recruitmentCampaign = [
     { title: "Chiến dịch 1", value: "1" },
     { title: "Chiến dịch 2", value: "2" },
@@ -26,6 +44,13 @@ function ReceiveCV() {
     { title: "Chưa gắn nhãn", value: "1" },
     { title: "Ưu tiên", value: "2" },
     { title: "Ít tiềm năng", value: "3" },
+  ];
+  const cvSeeMode = [
+    {
+      title: "Hiển thị tất cả CV",
+      value: "1",
+    },
+    { title: "Chỉ hiện thị CV chưa xem", value: "2" },
   ];
   return (
     <>
@@ -91,20 +116,114 @@ function ReceiveCV() {
         </button>
       </div>
       <div className="mt-6 mx-6 items-center rounded-lg bg-white">
-        <div className="flex p-6 justify-between">
+        <div className="flex justify-between" style={{ padding: "15.96px" }}>
           <p className="flex-grow">
             Tìm thấy <span className="text-green-500 font-bold">0</span> ứng
             viên
           </p>
-          <CustomSelectOption label="Hiển thị tất cả" />
-          <label>
-            <input type="checkbox" checked={true} />
+          <CustomSelectOption
+            label="Hiển thị tất cả"
+            labelColor="#000"
+            list={cvSeeMode}
+            width="240px"
+          />
+          <label style={{ transform: "translateY(5px)" }}>
+            <input type="checkbox" style={{ color: "pink" }} />
             Chỉ xem ứng viên Pro
           </label>
         </div>
+        {listCV.length == 0 ? (
+          <div className="flex justify-center items-center flex-col p-5">
+            <img src="https://tuyendung.topcv.vn/app/_nuxt/img/empty.73d75f4.png" />
+            Bạn không có CV
+          </div>
+        ) : (
+          <div className="p-5">
+            <table className="p-5" style={{ width: "100%" }}>
+              <tr>
+                <th className="text-left">Ứng viên</th>
+                <th className="text-left">Chiến dịch</th>
+                <th className="text-left">Thông tin liên hệ</th>
+                <th className="text-left">Insighs</th>
+                <th className="text-left">Trạng thái</th>
+                <th className="text-left"></th>
+              </tr>
+              <tbody style={{ backgroundColor: "#F8F8F8" }}>
+                {listCV.map((item) => (
+                  <tr
+                    className="font-medium my-5 mx-3"
+                    style={{ fontSize: "13px" }}
+                  >
+                    <td>
+                      <p className="font-semibold">{item.name}</p>
+                      <span className="text-sm">{item.statusView}</span>
+                    </td>
+                    <td>
+                      <p>{item.campaign.name}</p>
+                      <span>{item.campaign.id}</span>
+                    </td>
+                    <td>
+                      <p>
+                        <i
+                          style={{ color: "#38A34D" }}
+                          className="mr-2 fa-solid fa-envelope"
+                        ></i>
+                        {item.email}
+                      </p>
+                      <p>
+                        <i
+                          style={{ color: "#38A34D" }}
+                          className="mr-2 fa-solid fa-phone"
+                        ></i>
+                        {item.phone}
+                      </p>
+                    </td>
+                    <td>
+                      <p>
+                        <i
+                          style={{ color: "#38A34D" }}
+                          className="mr-2 fa-solid fa-envelope"
+                        ></i>
+                        {item.insight.descript}
+                      </p>
+                      <p>
+                        <i
+                          style={{ color: "#38A34D" }}
+                          className="mr-2 fa-regular fa-clock"
+                        ></i>
+                        {item.insight.time}
+                      </p>
+                      <p>
+                        <i
+                          style={{ color: "#38A34D" }}
+                          className="mr-2 fa-solid fa-briefcase"
+                        ></i>
+                        {item.insight.job}
+                      </p>
+                    </td>
+                    <td>
+                      <div className="rounded-full bg-orange-100 text-orange-400 px-3">
+                        {item.status}
+                      </div>
+                    </td>
+                    <td>
+                      <button
+                        className="btn px-3 rounded-md ml-5"
+                        style={{ backgroundColor: "#EAEAEA" }}
+                      >
+                        <i className="fa-solid fa-ellipsis"></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </>
   );
 }
 
 export default ReceiveCV;
+2;
