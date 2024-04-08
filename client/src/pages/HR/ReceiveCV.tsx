@@ -1,4 +1,13 @@
 import CustomSelectOption from "../../layouts/HRLayout/components/CustomSelectOption";
+import {
+  ChevronRight,
+  Ellipsis,
+  Mail,
+  Phone,
+  BriefcaseBusiness,
+  Clock,
+  Search,
+} from "lucide-react";
 
 function ReceiveCV() {
   const listCV = [
@@ -69,7 +78,7 @@ function ReceiveCV() {
             <input
               type="search"
               id="search-dropdown"
-              className="flex-grow pl-2.5 z-20"
+              className="flex-grow pl-2.5 z-20 focus:outline-none"
               style={{ fontSize: "14px" }}
               placeholder="Tìm kiếm tên, email, số điện thoại"
               required
@@ -78,10 +87,7 @@ function ReceiveCV() {
               type="submit"
               className=" top-0 end-0 p-1.5 text-sm h-full text-black bg-white mr-1"
             >
-              <i
-                className="fa-solid fa-magnifying-glass"
-                style={{ fontSize: "14px", marginTop: "2px" }}
-              ></i>
+              <Search color="#959494" size={16} />
             </button>
           </div>
           <CustomSelectOption
@@ -108,11 +114,11 @@ function ReceiveCV() {
           <span className="text-green-500 font-bold">SHring.ai</span>
         </p>
         <button
-          className="pl-3 pr-8 text-green-500 bg-white font-medium"
+          className="pl-3 pr-8 text-green-500 bg-white font-medium flex"
           style={{ borderLeft: "1px solid green " }}
         >
           Đăng ký ngay
-          <i className="fas fa-angle-right"></i>
+          <ChevronRight size={18} />
         </button>
       </div>
       <div className="mt-6 mx-6 items-center rounded-lg bg-white">
@@ -140,17 +146,20 @@ function ReceiveCV() {
         ) : (
           <div className="p-5">
             <table className="p-5" style={{ width: "100%" }}>
-              <tr>
-                <th className="text-left">Ứng viên</th>
-                <th className="text-left">Chiến dịch</th>
-                <th className="text-left">Thông tin liên hệ</th>
-                <th className="text-left">Insighs</th>
-                <th className="text-left">Trạng thái</th>
-                <th className="text-left"></th>
-              </tr>
+              <thead>
+                <tr>
+                  <th className="text-left">Ứng viên</th>
+                  <th className="text-left">Chiến dịch</th>
+                  <th className="text-left">Thông tin liên hệ</th>
+                  <th className="text-left">Insighs</th>
+                  <th className="text-left">Trạng thái</th>
+                  <th className="text-left"></th>
+                </tr>
+              </thead>
               <tbody style={{ backgroundColor: "#F8F8F8" }}>
-                {listCV.map((item) => (
+                {listCV.map((item, index) => (
                   <tr
+                    key={index}
                     className="font-medium my-5 mx-3"
                     style={{ fontSize: "13px" }}
                   >
@@ -163,41 +172,46 @@ function ReceiveCV() {
                       <span>{item.campaign.id}</span>
                     </td>
                     <td>
-                      <p>
-                        <i
-                          style={{ color: "#38A34D" }}
-                          className="mr-2 fa-solid fa-envelope"
-                        ></i>
+                      <p className="flex">
+                        <Mail
+                          size={15}
+                          color="#38A34D"
+                          style={{ marginRight: "5px" }}
+                        />
                         {item.email}
                       </p>
-                      <p>
-                        <i
-                          style={{ color: "#38A34D" }}
-                          className="mr-2 fa-solid fa-phone"
-                        ></i>
+                      <p className="flex">
+                        <Phone
+                          color="#38A34D"
+                          size={18}
+                          style={{ marginRight: "5px" }}
+                        />
                         {item.phone}
                       </p>
                     </td>
                     <td>
-                      <p>
-                        <i
-                          style={{ color: "#38A34D" }}
-                          className="mr-2 fa-solid fa-envelope"
-                        ></i>
+                      <p className="flex">
+                        <Mail
+                          size={15}
+                          color="#38A34D"
+                          style={{ marginRight: "5px" }}
+                        />
                         {item.insight.descript}
                       </p>
-                      <p>
-                        <i
-                          style={{ color: "#38A34D" }}
-                          className="mr-2 fa-regular fa-clock"
-                        ></i>
+                      <p className="flex">
+                        <Clock
+                          size={15}
+                          color="#38A34D"
+                          style={{ marginRight: "5px" }}
+                        />
                         {item.insight.time}
                       </p>
-                      <p>
-                        <i
-                          style={{ color: "#38A34D" }}
-                          className="mr-2 fa-solid fa-briefcase"
-                        ></i>
+                      <p className="flex">
+                        <BriefcaseBusiness
+                          size={15}
+                          color="#38A34D"
+                          style={{ marginRight: "5px" }}
+                        />
                         {item.insight.job}
                       </p>
                     </td>
@@ -211,7 +225,7 @@ function ReceiveCV() {
                         className="btn px-3 rounded-md ml-5"
                         style={{ backgroundColor: "#EAEAEA" }}
                       >
-                        <i className="fa-solid fa-ellipsis"></i>
+                        <Ellipsis size={18} />
                       </button>
                     </td>
                   </tr>

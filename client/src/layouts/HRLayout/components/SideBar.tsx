@@ -1,38 +1,63 @@
+import * as React from "react";
+import Icon from "../../../shared/components/regular-icon";
+import {
+  LucideProps,
+  LayoutGrid,
+  Gem,
+  Gift,
+  Bot,
+  BriefcaseBusiness,
+  File,
+  User,
+  LineChart,
+  ShoppingCart,
+  WandSparkles,
+  BadgePercent,
+  History,
+  Settings,
+  Bell,
+  Mail,
+} from "lucide-react";
 const Item = ({
-  icon,
+  _icon,
+  iconSize = 16,
+
   title,
-  subItems = [],
+  // subItems = [],
 }: {
-  icon?: string;
+  _icon?: React.FC<LucideProps>;
+  iconSize?: number;
   title: string;
-  subItems?: { icon?: string; title: string }[];
+  // subItems?: { icon?: string; title: string }[];
 }) => {
   return (
     <li style={{ padding: " 12px 14px", margin: 0 }}>
       <a href="#" className="flex items-center space-x-2">
-        {icon && (
+        {_icon && (
           <div
             style={{
-              width: "32px",
+              // width: "32px",
               textAlign: "center",
               marginRight: "10px",
+              marginLeft: "10px",
             }}
           >
-            <i
+            <Icon icon={_icon} size={iconSize} color="black" />
+            {/* <i
               className={icon}
               style={{
                 fontSize: "16px",
               }}
-            ></i>
+            ></i> */}
           </div>
         )}
 
         <span>{title}</span>
-        {subItems.length > 0 && (
+        {/* {subItems.length > 0 && (
           <div className="flex-grow flex justify-end">
             <i className="fa-solid fa-angle-right"></i>
           </div>
-        )}
+        )} */}
       </a>
     </li>
   );
@@ -42,43 +67,75 @@ const Sidebar: React.FC = () => {
   //
   const sidebar_items = [
     [
-      { icon: "fa-solid fa-border-none", title: "Bảng tin" },
-      { icon: "fa-regular fa-sharp fa-regular fa-gem", title: "TopCV Rewards" },
-      { icon: "fa-solid fa-gift", title: "Đổi quà" },
-      { icon: "fa-solid fa-robot", title: "Toppy AI - Đề xuất" },
+      { _icon: LayoutGrid, title: "Bảng tin" },
+      {
+        _icon: Gem,
+        title: "TopCV Rewards",
+      },
+      { _icon: Gift, title: "Đổi quà" },
+      { _icon: Bot, icon: "fa-solid fa-robot", title: "Toppy AI - Đề xuất" },
     ],
 
     [
-      { icon: "fa-solid fa-briefcase", title: "Chiến dịch tuyển dụng" },
-      { icon: "fa-solid fa-file", title: "Tin tuyển dụng" },
       {
-        icon: "fa-solid fa-user",
+        _icon: BriefcaseBusiness,
+        title: "Chiến dịch tuyển dụng",
+      },
+      { _icon: File, title: "Tin tuyển dụng" },
+      {
+        _icon: User,
         title: "Quản lí CV",
         sub_items: [{ icon: "", title: "Quản lí nhãn CV" }],
       },
-      { icon: "fa-solid fa-chart-line", title: "Báo cáo tuyển dụng" },
+      {
+        _icon: LineChart,
+        title: "Báo cáo tuyển dụng",
+      },
     ],
 
     [
-      { icon: "fa-solid fa-cart-shopping", title: "Mua dịch vụ" },
-      { icon: "fa-solid fa-wand-magic-sparkles", title: "Dịch vụ của tôi" },
-      { icon: "fa-solid fa-percent", title: "Mã ưu đãi" },
-      { icon: "fa-solid fa-file", title: "Theo dõi đơn hàng" },
+      {
+        _icon: ShoppingCart,
+        title: "Mua dịch vụ",
+      },
+      {
+        _icon: WandSparkles,
+        title: "Dịch vụ của tôi",
+      },
+      {
+        _icon: BadgePercent,
+        title: "Mã ưu đãi",
+      },
+      { _icon: File, icon: "fa-solid fa-file", title: "Theo dõi đơn hàng" },
     ],
     [
-      { icon: "fa-solid fa-clock-rotate-left", title: "Lịch sử hoạt động" },
-      { icon: "fa-solid fa-gear", title: "Cài đặt tài khoản" },
+      {
+        _icon: History,
+        icon: "fa-solid fa-clock-rotate-left",
+        title: "Lịch sử hoạt động",
+      },
+      { _icon: Settings, icon: "fa-solid fa-gear", title: "Cài đặt tài khoản" },
     ],
     [
-      { icon: "fa-regular fa-bell", title: "Thông báo hệ thống" },
-      { icon: "fa-regular fa-envelope", title: "Nộp thư hỗ trợ" },
+      {
+        _icon: Bell,
+        icon: "fa-regular fa-bell",
+        title: "Thông báo hệ thống",
+      },
+      { _icon: Mail, icon: "fa-regular fa-envelope", title: "Nộp thư hỗ trợ" },
     ],
   ];
 
   return (
     <div
       className="bg-white w-64 flex flex-col"
-      style={{ fontWeight: "500", width: "260px", color: "#212F3FE4" }}
+      style={{
+        fontWeight: "500",
+        width: "260px",
+        color: "#212F3FE4",
+        height: "100vh",
+        overflowY: "scroll",
+      }}
     >
       <div className="flex" style={{ padding: " 10px 14px", margin: 0 }}>
         <a href="#" className="flex items-center space-x-2">
@@ -131,10 +188,11 @@ const Sidebar: React.FC = () => {
             {items.map((item, index_1) => {
               return (
                 <Item
-                  icon={item.icon}
+                  _icon={item._icon}
                   title={item.title}
                   key={index_1}
-                  subItems={item.sub_items}
+
+                  // subItems={item.sub_items}
                 />
               );
             })}

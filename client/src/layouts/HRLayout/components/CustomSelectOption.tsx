@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { ChevronDown } from "lucide-react";
 
 function CustomSelectOption({
   label,
@@ -48,7 +49,7 @@ function CustomSelectOption({
         onClick={handleToggle}
       >
         <span style={{ color: labelColor }}> {label}</span>
-        <i className="fas fa-caret-down mt-1 ml-2"></i>
+        <ChevronDown className="ml-2" size={24} />
       </button>
       {isOpen && (
         <ul

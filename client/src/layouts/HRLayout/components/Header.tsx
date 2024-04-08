@@ -1,46 +1,53 @@
 import RoundedButton from "./RoundedButton";
-
+import {
+  Bookmark,
+  Pencil,
+  MessageCircle,
+  Bell,
+  ShoppingCart,
+  ChevronDown,
+} from "lucide-react";
 function Header() {
   const list_btn = [
     {
       name: "HR Insider",
       link: "",
-      icon: "fa-solid fa-bookmark",
+      icon: Bookmark,
     },
     {
       name: "Đăng tin",
       link: "",
-      icon: "fa-solid fa-pencil",
+      icon: Pencil,
     },
     {
       name: "Tìm CV",
       link: "",
-      icon: "fa-solid fa-pencil",
+      icon: Pencil,
     },
     {
       name: "Connect",
       link: "",
-      icon: "fa-solid fa-message",
+      icon: MessageCircle,
     },
 
     {
       name: "",
       link: "",
-      icon: "fa-solid fa-bell",
-      iconSize: "16px",
+      icon: Bell,
+      iconSize: 20,
     },
     {
       name: "Giỏ hàng",
       link: "",
-      icon: "fa-solid fa-cart-shopping",
-      iconSize: "16px",
+      icon: ShoppingCart,
+      iconSize: 20,
       numberNoti: 1,
     },
     {
       name: "",
       link: "",
-      icon: "fa-solid fa-caret-down",
-      iconSize: "16px",
+      icon: ChevronDown,
+      iconSize: 20,
       image:
         "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg",
     },

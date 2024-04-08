@@ -1,9 +1,12 @@
+import { LucideProps } from "lucide-react";
+import Icon from "../../../shared/components/fill-icon";
+
 const RoundedButton = ({
   text,
   textColor = "white",
   backgroundColor = "#364C66",
   icon,
-  iconSize = "12px",
+  iconSize = 18,
   image,
   numberNoti,
   onClick = () => {},
@@ -11,13 +14,12 @@ const RoundedButton = ({
   text?: string;
   textColor?: string;
   backgroundColor?: string;
-  icon?: string;
-  iconSize?: string;
+  icon?: React.FC<LucideProps>;
+  iconSize?: number;
   image?: string;
   numberNoti?: number;
   onClick?: () => void;
 }) => {
-  image;
   return (
     <button
       style={{
@@ -42,16 +44,8 @@ const RoundedButton = ({
             alt="Avatar"
           />
         )}{" "}
-        {icon && (
-          <i
-            className={icon}
-            style={{
-              fontSize: iconSize,
-              marginRight: text ? "5px" : "0px",
-            }}
-          ></i>
-        )}{" "}
-        {text}
+        {icon && <Icon icon={icon} size={iconSize} />}
+        {text && <span className="ml-2">{text}</span>}
         {numberNoti && (
           <div className="bg-red-500 ml-3 px-2 rounded-full">{numberNoti}</div>
         )}
