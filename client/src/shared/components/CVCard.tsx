@@ -29,12 +29,12 @@ const CVCard: React.FC<CVCardProps> = ({ cv, tag, name }) => {
   const remainingTagsCount = tag.length - maxTagsToShow;
   return (
     <Card
-      className="rounded-lg flex flex-col w-64 h-72 border border-transparent transition-all duration-300"
+      className="rounded-lg flex flex-col mx-1 my-1.5 h-72 border border-transparent transition-all duration-300"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <div
-        className="size-64 bg-gray-200 relative"
+        className="size-72 bg-gray-200 relative m-auto"
         style={{
           backgroundImage: `url(${cv})`,
           backgroundSize: "cover",
@@ -59,9 +59,9 @@ const CVCard: React.FC<CVCardProps> = ({ cv, tag, name }) => {
           </div>
         )}
       </div>
-      <CardContent>
+      <div className="p-3">
         {/* Hiển thị các tag */}
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap justify-start">
           {displayTags.map((tagItem, index) => (
             <div
               key={index}
@@ -89,8 +89,10 @@ const CVCard: React.FC<CVCardProps> = ({ cv, tag, name }) => {
           )}
         </div>
         {/* Hiển thị tên */}
-        <div className="mt-2 justify-center items-center font-bold">{name}</div>
-      </CardContent>
+        <div className="mt-2 justify-center items-center font-bold text-lg">
+          {name}
+        </div>
+      </div>
     </Card>
   );
 };

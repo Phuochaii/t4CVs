@@ -17,7 +17,7 @@ const routes = [
 
   // USER PAGES - Nguyên , Khoa, Hùng
   { path: "/", component: User.Home, layout: UserLayout },
-  { path: "/results", component: User.SearchResult, layout: UserLayout },
+  { path: "/results", component: User.SearchJob, layout: UserLayout },
   {
     path: "/your-application",
     component: User.YourApplications,

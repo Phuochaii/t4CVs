@@ -9,7 +9,7 @@ function AdminLogIn() {
     password: '',
   });
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [showError, setShowError] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -102,7 +102,7 @@ function AdminLogIn() {
           </div>
           {passwordEmpty && !formData.password ? <div className='text-red-500'>Không được để trống mất khẩu</div> : ""}
 
-          <div className='flex justify-end'>
+          <div className="flex justify-end">
             <Link to="/" className="text-green-500 hover:underline">
               Quên mật khẩu
             </Link>
@@ -110,20 +110,18 @@ function AdminLogIn() {
 
           <button
             type="submit"
-            className='py-2 px-4 w-full focus:outline-none text-white rounded-md bg-green-600 hover:bg-green-500 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50'>
+            className="py-2 px-4 w-full focus:outline-none text-white rounded-md bg-green-600 hover:bg-green-500 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+          >
             Đăng nhập
           </button>
         </form>
 
-        {showError && (
-          <div className="text-red-500">{error}</div>
-        )}
+        {showError && <div className="text-red-500">{error}</div>}
         {isLoggedIn && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mt-4">
             Đăng nhập thành công!
           </div>
         )}
-
       </div>
 
       <div className="col-span-1">

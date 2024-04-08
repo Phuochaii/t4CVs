@@ -128,10 +128,9 @@ const Sidebar: React.FC = () => {
 
   return (
     <div
-      className="bg-white w-64 flex flex-col"
+      className="bg-white w-1/6 flex flex-col"
       style={{
         fontWeight: "500",
-        width: "260px",
         color: "#212F3FE4",
         height: "100vh",
         overflowY: "scroll",

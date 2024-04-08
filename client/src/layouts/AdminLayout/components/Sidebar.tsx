@@ -5,19 +5,19 @@ import GradientIcon from "./GradientIcon";
 const links = [
   {
     name: "Overview",
-    path: "/admin",
+    path: "",
     icon: Eye,
     iconComponent: <Eye className="text-white" />,
   },
   {
     name: "Compaign",
-    path: "/admin/Compaign",
+    path: "/admin/compaign",
     icon: CreditCard,
     iconComponent: <CreditCard className="text-white" />,
   },
   {
     name: "Agents",
-    path: "/admin/Agents",
+    path: "/admin/agents",
     icon: MapPin,
     iconComponent: <MapPin className="text-white" />,
   },
@@ -46,9 +46,7 @@ function Sidebar() {
             )}{" "}
             <span
               className={
-                pathname == item.path
-                  ? "text-white"
-                  : "text-slate-500"
+                pathname == item.path ? "text-white" : "text-slate-500"
               }
             >
               {item.name}
