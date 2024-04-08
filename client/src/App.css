@@ -43,3 +43,206 @@
 .read-the-docs {
   color: #888;
 } */
+
+/* Home User */
+.top-menu {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 0;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.nav-menu ul {
+  list-style-type: none;
+}
+
+.nav-menu ul li {
+  display: inline;
+}
+
+.nav-menu ul li a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+}
+
+.user-actions a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 20px;
+}
+
+  /* section-header */
+.section-header {
+  background-image: url(../public/images/bg-header.png);
+  background-size: cover;
+  height: 500px;
+  padding: 30px;
+}
+
+.section-header .title {
+  font-size: 30px;
+  font-weight: bold;
+  color: #009643;
+}
+
+.section-header .description {
+  font-size: 13px;
+}
+
+.section-header .description span {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.MuiFormControl-root > .MuiInputBase-root{
+  background: white;
+  box-shadow: 1px 1px 5px 1px rgba(128, 128, 128, 0.233);
+}
+
+.MuiFormControl-root > .MuiInputBase-root > .MuiOutlinedInput-notchedOutline{
+  border: none;
+}
+
+.item.item-search > .MuiFormControl-root > .MuiInputBase-root{
+  border-radius: 5px 0 0 5px;
+}
+
+.item.item-search > .MuiFormControl-root > .MuiInputBase-root > .MuiOutlinedInput-notchedOutline{
+  border-right: 1px solid black !important;
+}
+
+.item.search-city > .MuiFormControl-root > .MuiInputBase-root{
+  border-radius: 0 5px 5px 0;
+}
+
+.item.search-city > .MuiFormControl-root > .MuiInputBase-root > .MuiOutlinedInput-notchedOutline{
+  border: none !important;
+}
+
+.search-job .btn-search {
+  background-color: #009643;
+  box-shadow: 1px 1px 5px 1px rgba(128, 128, 128, 0.233);
+  text-transform: none;
+  transition: 0.5s;
+  font-weight: bold;
+}
+
+.search-job .btn-search:hover {
+  background-color: #00a048 !important;
+}
+
+.box-work-market .box-work-market__item .quantity.item-number, .box-work-market .box-work-market__item .time-scan.item-number {
+  color: #00B04E;
+  font-weight: bold;
+}
+
+
+/* SearchJob */
+.search-job .header {
+  background: url('../public/images/bg-search-left-header.png'),url('../public/images/bg-search-right-header.png'),linear-gradient(90deg,#212f3f,#00b14f);
+  background-position: 0 0,100% 0,50%;
+  background-repeat: no-repeat;
+  background-size: auto 340px,auto 340px,100% 100%;
+  font-family: Inter,sans-serif;
+  font-style: normal;
+  padding: 16px 0
+}
+.search-job .header .box-search-job .btn-search {
+  background-color: #00BA54;
+}
+
+.search-job .header .search-result .total-job-search {
+  color: #15bf61;
+}
+
+.search-job .header .search-result .search-result-text{
+  background-color: #1b664f;
+}
+
+.search-job .header .search-result .search-result-tool{
+  background-color: #00c056;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.search-job .header .search-result .search-result-tool:hover{
+  background-color: #00a048;
+  box-shadow: 1px 1px 5px 1px rgba(128, 128, 128, 0.233);
+}
+
+.search-job .header .search-result .search-result-tool.active{
+  background-color: #19734e;
+  border: 1px solid #15bf61;
+}
+
+.search-job .header .box-option{
+  border-radius: 8px;
+  background: linear-gradient(90deg, #00b150b3, #212f3faf);
+}
+
+.search-job .header .box-option .item{
+  background-color: #19734e;
+}
+
+.result-job-search {
+  background-color: #F3F5F7;
+}
+
+.job-body .job-list-search-result .job-item-search-result:hover{
+  border: 1px solid #00b14f;
+}
+
+.job-item-search-result .job-detail .job-sub-detail{
+  padding: 5px;
+  margin: 0 5px 0 0;
+  background-color: #E9EAEC;
+  border-radius: 5px;
+  color: rgba(0, 0, 0, 0.696);
+}
+
+.job-item-search-result .job-detail .job-salary{
+  color: #00b14f;
+  font-size: 15px;
+}
+
+.job-item-search-result .job-detail .job-actions .btn-apply{
+  padding: 5px 13px;
+  font-size: 13px;
+  color: white;
+  border-radius: 5px;
+  background-color: #00b14f;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.job-item-search-result .job-detail .job-actions .btn-apply:hover{
+  background-color: #028d40;
+}
+
+.job-item-search-result .job-detail .job-actions .btn-save{
+  padding: 5px;
+  color: #00b14f;
+  border-radius: 5px;
+  background-color: #f6f6f6;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.job-item-search-result .job-detail .job-actions .btn-apply:hover{
+  background-color: #028d40;
+}
+
