@@ -5,10 +5,18 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { JobApplicationModule } from './job-application/job-application.module';
 @Module({
   imports: [
-    JobApplicationModule,
+    // JobApplicationModule,
     ClientsModule.register([
+      // {
+      //   name: 'CV',
+      //   transport: Transport.TCP,
+      //   options: {
+      //     host: 'localhost',
+      //     port: 3001,
+      //   },
+      // },
       {
-        name: 'CV',
+        name: 'JOB',
         transport: Transport.TCP,
         options: {
           host: 'localhost',
