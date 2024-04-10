@@ -1,6 +1,10 @@
 import * as React from "react";
+
 import Icon from "../../../shared/components/regular-icon";
 import {
+  CircleHelp,
+  ShieldCheck,
+  ChevronsRight,
   LucideProps,
   LayoutGrid,
   Gem,
@@ -21,7 +25,6 @@ import {
 const Item = ({
   _icon,
   iconSize = 16,
-
   title,
   // subItems = [],
 }: {
@@ -31,39 +34,45 @@ const Item = ({
   // subItems?: { icon?: string; title: string }[];
 }) => {
   return (
-    <li style={{ padding: " 12px 14px", margin: 0 }}>
-      <a href="#" className="flex items-center space-x-2">
-        {_icon && (
-          <div
-            style={{
-              // width: "32px",
-              textAlign: "center",
-              marginRight: "10px",
-              marginLeft: "10px",
-            }}
-          >
-            <Icon icon={_icon} size={iconSize} color="black" />
-            {/* <i
+    <li
+      className="hover:text-green-500 active:text-green-500 cursor-pointer flex items-center space-x-2"
+      style={{
+        padding: " 12px 14px",
+        // color: "black",
+        margin: 0,
+      }}
+    >
+      {_icon && (
+        <div
+          style={{
+            // width: "32px",
+            textAlign: "center",
+            marginRight: "10px",
+            marginLeft: "10px",
+          }}
+        >
+          <Icon icon={_icon} size={iconSize} />
+          {/* <i
               className={icon}
               style={{
                 fontSize: "16px",
               }}
             ></i> */}
-          </div>
-        )}
+        </div>
+      )}
 
-        <span>{title}</span>
-        {/* {subItems.length > 0 && (
+      <span>{title}</span>
+      {/* {subItems.length > 0 && (
           <div className="flex-grow flex justify-end">
             <i className="fa-solid fa-angle-right"></i>
           </div>
         )} */}
-      </a>
     </li>
   );
 };
 
-const Sidebar: React.FC = () => {
+const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
+  React.useEffect(() => {}, [isCollapsed]);
   //
   const sidebar_items = [
     [
@@ -128,54 +137,52 @@ const Sidebar: React.FC = () => {
 
   return (
     <div
-      className="bg-white w-1/6 flex flex-col"
+      className="bg-white flex flex-col hr-sidebar"
       style={{
         fontWeight: "500",
         color: "#212F3FE4",
         height: "100vh",
         overflowY: "scroll",
+        width: isCollapsed ? "88px" : "300px",
+        transition: "width .2s ease",
       }}
     >
       <div className="flex" style={{ padding: " 10px 14px", margin: 0 }}>
-        <a href="#" className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2">
           <img
             src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg"
             className="rounded-full"
             style={{ width: "32px", marginRight: "10px" }}
             alt="Avatar"
           />
-
-          <div>
-            <p>Moira Vien</p>
-            <p style={{ fontSize: "12px" }}>Employer</p>
-            <p style={{ fontSize: "12px" }}>
-              Tài khoản xác thực:{" "}
-              <span className="text-green-600 mr-2">Cấp 1/5</span>
-              <i
-                className="fa-solid fa-circle-question"
-                style={{ color: "#757575B9", fontSize: "16px" }}
-              ></i>
-            </p>
-          </div>
-        </a>
+          {!isCollapsed && (
+            <div>
+              <p>Moira Vien</p>
+              <p style={{ fontSize: "12px" }}>Employer</p>
+              <p style={{ fontSize: "12px" }} className="flex">
+                Tài khoản xác thực:{" "}
+                <span className="text-green-600 mr-2">Cấp 1/5</span>
+                <CircleHelp color="#757575B9" size={14} />
+              </p>
+            </div>
+          )}
+        </div>
       </div>
       <button
-        className="btn mx-4 text-sm py-1 rounded-full w-11/12"
+        className={`btn ${!isCollapsed && "mx-4"} text-sm py-1 flex items-center justify-center rounded-full w-11/12`}
         style={{
           backgroundColor: "#EBF3FF",
           color: "#2D7CF1",
           marginBottom: "15.96px",
         }}
       >
-        <i
-          className="fa-solid fa-shield-halved"
-          style={{ fontSize: "14px" }}
-        ></i>
-        <span className="ml-2 mr-3">Xác nhận tài khoản điện tử</span>
-        <i
-          className="fa-solid fa-angles-right slide-animation"
-          style={{ fontSize: "14px" }}
-        ></i>
+        <ShieldCheck size={15} />
+        {!isCollapsed && (
+          <>
+            <span className="ml-1 mr-1">Xác nhận tài khoản điện tử</span>
+            <ChevronsRight className="slide-animation" />
+          </>
+        )}
       </button>
       {sidebar_items.map((items, index) => {
         return (
@@ -188,7 +195,7 @@ const Sidebar: React.FC = () => {
               return (
                 <Item
                   _icon={item._icon}
-                  title={item.title}
+                  title={isCollapsed ? "" : item.title}
                   key={index_1}
 
                   // subItems={item.sub_items}

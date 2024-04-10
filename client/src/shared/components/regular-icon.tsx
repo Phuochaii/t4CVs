@@ -2,7 +2,7 @@ import { LucideProps } from "lucide-react";
 function RegularIcon({
   icon: Icon,
   size,
-  color = "white",
+  color,
 }: {
   icon: React.FC<LucideProps>;
   size?: number;
