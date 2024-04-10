@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package notification;
+
+// The job application service definition.
+service NotificationService {
+    rpc SendNotification (SendNotificationRequest) returns (SendNotificationResponse) {}
+//   rpc CreateJobApplication (CreateJobApplicationRequest) returns (JobApplication) {}
+}
+
+// The request message containing the users id.
+message User {
+    string id = 1;
+}
+message SendNotificationRequest {
+    string message = 1;
+    repeated User users = 2;
+}
+
+// The response message containing the greetings
+message SendNotificationResponse {
+    
+}
