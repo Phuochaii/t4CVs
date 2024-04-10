@@ -101,6 +101,7 @@
 
 .section-header .description {
   font-size: 13px;
+  color: black;
 }
 
 .section-header .description span {
@@ -108,9 +109,15 @@
   font-weight: bold;
 }
 
+.search-job .group-search{
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px 1px rgba(128, 128, 128, 0.233);
+  max-height: 50px;
+}
+
 .MuiFormControl-root > .MuiInputBase-root{
   background: white;
-  box-shadow: 1px 1px 5px 1px rgba(128, 128, 128, 0.233);
+  max-height: 45px;
 }
 
 .MuiFormControl-root > .MuiInputBase-root > .MuiOutlinedInput-notchedOutline{
@@ -119,10 +126,19 @@
 
 .item.item-search > .MuiFormControl-root > .MuiInputBase-root{
   border-radius: 5px 0 0 5px;
+  position: relative;
 }
 
-.item.item-search > .MuiFormControl-root > .MuiInputBase-root > .MuiOutlinedInput-notchedOutline{
-  border-right: 1px solid black !important;
+.item.item-search > .MuiFormControl-root > .MuiInputBase-root::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: left center;
+  transform: scaleY(60%);
+  width: 99%;
+  height: 100%;
+  border-right: 1px solid rgba(128, 128, 128, 0.345);
 }
 
 .item.search-city > .MuiFormControl-root > .MuiInputBase-root{
@@ -133,12 +149,18 @@
   border: none !important;
 }
 
+.group .item .MuiFormControl-root .MuiInputBase-root{
+  box-shadow: 1px 1px 5px 1px rgba(128, 128, 128, 0.233);
+}
+
 .search-job .btn-search {
   background-color: #009643;
   box-shadow: 1px 1px 5px 1px rgba(128, 128, 128, 0.233);
   text-transform: none;
   transition: 0.5s;
   font-weight: bold;
+  font-size: 15px;
+  max-height: 50px;
 }
 
 .search-job .btn-search:hover {
