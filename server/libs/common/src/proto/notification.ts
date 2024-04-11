@@ -10,7 +10,9 @@ export interface User {
 }
 
 export interface SendNotificationRequest {
-  message: string;
+  title: string;
+  content: string;
+  link: string;
   users: User[];
 }
 
