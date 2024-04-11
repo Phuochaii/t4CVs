@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Switch } from "@mui/material";
+import { Switch, colors } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Search } from 'lucide-react';
 
 import ManganeBanner from "../../shared/assets/images/manage-cv-banner.webp";
 import NoCVImage from "../../shared/assets/images/no-cv.webp";
@@ -32,17 +33,18 @@ const ManageCV = () => {
   };
 
   return (
-    <div className="justify-center flex flex-row">
-      <div className="w-5/12 flex flex-col m-10">
-        <div className="w-full align-center justify-center m-10 content-center">
+    <div className="justify-center flex flex-row" style={{ backgroundColor: "#f1f2f6" }}>
+      <div className="w-1/2 flex flex-col m-8">
+        <div className="w-full mb-2">
           <img
-            className="w-full self-start b rounded-lg justify-self-stretch"
+            className="w-full self-start b rounded-lg"
             src={ManganeBanner}
             loading="eager"
             alt="banner"
           />
         </div>
-        <div className="bg-white rounded-lg shadow-md mb-4 mt-4 p-6 flex flex-row justify-between h-64 border border-gray-100">
+
+        <div className="bg-white rounded-lg shadow-md mb-2 mt-4 p-6 flex flex-row justify-between h-64 border border-gray-100">
           <div>
             <h1 className="text-black text-19 font-bold leading-24 m-0">
               CV đã tạo trên TopCV
@@ -54,14 +56,15 @@ const ManageCV = () => {
           </div>
           <div>
             <button
-              className="bg-green-500 rounded-full text-white leading-none px-4 py-3"
+              className="bg-green-600 rounded-full text-white leading-none px-4 py-3 hover:bg-green-700"
               onClick={() => navigate("/list-cv")}
             >
-              <a className="font-bold"> + Tạo mới</a>
+              <span className="font-bold"> + Tạo mới</span>
             </button>
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-md mb-4 mt-4 p-6 flex flex-row justify-between h-64 border border-gray-100">
+
+        <div className="bg-white rounded-lg shadow-md mb-2 mt-4 p-6 flex flex-row justify-between h-64 border border-gray-100">
           <div>
             <h1 className="text-black text-19 font-bold leading-24 m-0">
               CV đã tải lên TopCV
@@ -77,12 +80,13 @@ const ManageCV = () => {
             <p> Bạn chưa tải lên CV nào</p>
           </div>
           <div>
-            <button className="bg-green-500 rounded-full text-white leading-none px-4 py-3">
-              <a className="font-bold"> + Tải CV lên</a>
+            <button className="bg-green-600 rounded-full text-white leading-none px-4 py-3 hover:bg-green-700">
+              <span className="font-bold"> + Tải CV lên</span>
             </button>
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-md mb-4 mt-4 p-6 flex flex-row justify-between h-64 border border-gray-100">
+
+        <div className="bg-white rounded-lg shadow-md mb-2 mt-4 p-6 flex flex-row justify-between h-64 border border-gray-100">
           <div>
             <h1 className="text-black text-19 font-bold leading-24 m-0">
               TopCV Profile
@@ -98,15 +102,17 @@ const ManageCV = () => {
             <p> Bạn chưa tạo TopCV Profile</p>
           </div>
           <div>
-            <button className="bg-green-500 rounded-full text-white leading-none px-4 py-3">
-              <a className="font-bold"> + Tạo mới</a>
+            <button className="bg-green-600 rounded-full text-white leading-none px-4 py-3 hover:bg-green-700">
+              <span className="font-bold"> + Tạo mới</span>
             </button>
           </div>
         </div>
+
       </div>
-      <div className="w-3/12 m-10 flex flex-col">
-        <div className="rounded-lg p-5 md:p-6 shadow-md">
-          <div className="container mx-auto mt-8">
+
+      <div className="w-3/12 m-8 flex flex-col">
+        <div className="bg-white rounded-lg p-5 md:p-6 mb-5">
+          <div className="container mx-auto">
             <div className="flex items-center">
               <div className="w-16 h-16 bg-gray-300 rounded-full mr-4 overflow-hidden">
                 <img
@@ -188,7 +194,8 @@ const ManageCV = () => {
             </button>
           </div>
         </div>
-        <div className="rounded-lg p-5 md:p-6 shadow-md">
+
+        <div className="bg-white rounded-lg p-5 md:p-6 mb-5">
           <div>
             <h1 className="font-bold">Ẩn hồ sơ với NTD</h1>
             <p>
@@ -201,14 +208,16 @@ const ManageCV = () => {
           </div>
           <div className="flex flex-row mt-4">
             <div className="w-2/3 mr-4">
-              <label className="flex items-center">
-                <span className="text-gray-500 mr-2">@</span>
+              <label className="relative items-center">
+                <span className="text-gray-500 mr-2 absolute left-3 top-1/2 transform -translate-y-1/2">@</span>
                 <span className="sr-only">Nhập tên miền email</span>
                 <input
                   type="text"
                   name="email-address"
                   id="email-address"
-                  className="w-full border-0 rounded-md focus:ring-primary-500 focus:border-primary-500 text-sm p-2.5"
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                  className="border border-gray-300 rounded-lg py-2 pl-10 pr-4 hover:border-green-500 focus:border-green-500 outline-none w-full"
                   placeholder="Nhập tên miền email"
                 />
               </label>
@@ -224,42 +233,24 @@ const ManageCV = () => {
             <div className="mt-4">
               <h1 className="font-bold">Các NTD thuộc công ty</h1>
             </div>
-            <div className="mt-4 flex flex-row">
+            <div className="mt-4 relative">
+              <Search className={`
+                  w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500
+                  `} />
               <input
                 type="text"
                 value={searchValue}
                 onChange={handleChange}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                className={`border border-gray-300 rounded-lg py-2 pl-8 pr-4  focus:border-green-500 outline-none w-full ${
-                  isFocused ? "border-green-500" : ""
-                }`}
+                className="border border-gray-300 rounded-lg py-2 pl-12 pr-4 hover:border-green-500 focus:border-green-500 outline-none w-full"
                 placeholder="Nhập tên công ty"
               />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-gray-400 absolute left-2 top-1/2 transform -translate-y-1/2 mr-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17.5 17.5l5.5 5.5"
-                />
-              </svg>
             </div>
           </div>
         </div>
-        <div className="rounded-lg p-5 md:p-6 shadow-md">
+
+        <div className="bg-white rounded-lg p-5 md:p-6 mb-5">
           <div>
             <h1 className="font-bold text-green-500">CV của bạn đã đủ tốt?</h1>
             <p>Bao nhiêu NTD đang quan tâm tới Hồ sơ của bạn?</p>
@@ -285,6 +276,7 @@ const ManageCV = () => {
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );

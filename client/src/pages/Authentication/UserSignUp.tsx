@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FormControlLabel, Checkbox, Button, TextField, InputAdornment } from '@mui/material';
-import { User, Mail, ShieldCheck } from 'lucide-react';
+import { FormControlLabel, Checkbox } from '@mui/material';
+import { User, Mail, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import img from '../../shared/assets/images/Sign-up user.png';
+
 
 function UserSignUp() {
     const [formData, setFormData] = useState({
@@ -12,138 +14,206 @@ function UserSignUp() {
         email: '',
         password: '',
         confirmPassword: '',
-        agreeToTerms: false
+        agreeToTerms: true
     });
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [showGuide, setShowGuide] = useState(false);
-    const [socialAgree, setSocialAgree] = useState(false);
+    const [socialAgree, setSocialAgree] = useState(true);
 
-    const handleSignUp = (e) => {
-        e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
-        // Kiểm tra các trường có dữ liệu đầy đủ không
-        if (!formData.agreeToTerms || !formData.name || !formData.email || !formData.password || !formData.confirmPassword || (formData.password !== formData.confirmPassword)) {
-            alert("Vui lòng điền đầy đủ thông tin và đồng ý với điều khoản dịch vụ và chính sách bảo mật.");
-            return;
-        }
-        // Lưu thông tin tài khoản vào Local Storage hoặc gửi đến server
-        localStorage.setItem('user', JSON.stringify(formData));
-        console.log('Đăng ký thành công.');
-        setShowSuccessMessage(true); // Hiển thị thông báo khi đăng ký thành công
+    const [showPassword, setShowPassword] = useState(false);
+
+    const [nameError, setNameError] = useState(false);
+    const [emailError, setEmailError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
+    const [confirmPasswordError, setConfirmPasswordError] = useState(false);
+
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const handlePasswordToggle = () => {
+        setShowPassword(!showPassword);
     };
 
-    // const isEmailValid = (email) => {
-    //     // Biểu thức chính quy để kiểm tra định dạng email
-    //     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    //     return emailRegex.test(email);
-    // };
-
-    const isPasswordValid = (password) => {
+    const isPasswordValid = (password: string) => {
         const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,25}$/;
         return passwordRegex.test(password);
     };
 
+    const isEmailValid = (email: string) => {
+        // Biểu thức chính quy để kiểm tra định dạng email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const handleSignUp = (e: { preventDefault: () => void; }) => {
+        e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
+        setErrorMessage("");
+        setEmailError(false);
+        setNameError(false);
+        setPasswordError(false);
+        setConfirmPasswordError(false);
+
+        let errorCount = 0;
+
+        // Kiểm tra các trường có dữ liệu đầy đủ không
+        if (!formData.confirmPassword) {
+            errorCount++;
+            setErrorMessage("Mật khẩu xác nhập chưa đúng 2");
+            setConfirmPasswordError(true);
+            setPasswordError(true);
+        }
+        if (!formData.password) {
+            errorCount++;
+            setErrorMessage("Hãy cho chúng tôi biết mật khẩu của bạn");
+            setPasswordError(true);
+        }
+        if (!formData.email) {
+            errorCount++;
+            setErrorMessage("Hãy cho chúng tôi biết địa chỉ email của bạn");
+            setEmailError(true);
+        }
+        if (!formData.name) {
+            errorCount++;
+            setErrorMessage("Hãy cho chúng tôi biết họ tên của bạn");
+            setNameError(true);
+        }
+
+        if (formData.email && !isEmailValid(formData.email)) {
+            errorCount++;
+            setErrorMessage("Định dạng email không đúng");
+            setEmailError(true);
+        }
+
+        if (formData.password && !isPasswordValid(formData.password)) {
+            errorCount++;
+            setErrorMessage("Định dạng mật khẩu không đúng");
+            setEmailError(true);
+        }
+
+        if (formData.password && formData.confirmPassword && formData.confirmPassword !== formData.password) {
+            errorCount++;
+            setErrorMessage("Mật khẩu xác nhập chưa đúng");
+            setConfirmPasswordError(true);
+            setPasswordError(true);
+        }
+
+        if (errorCount === 0) {
+            // Lưu thông tin tài khoản vào Local Storage hoặc gửi đến server
+            //localStorage.setItem('user', JSON.stringify(formData));
+            console.log('Đăng ký thành công.');
+            setShowSuccessMessage(true); // Hiển thị thông báo khi đăng ký thành công
+        }
+    };
+
     return (
         <div className="grid grid-cols-3 gap-4 ">
-            <div className="col-span-2 px-40 py-20">
+            <div className="col-span-2 px-52 py-20">
                 <h3 className="text-2xl font-semibold mb-1 mt-1 text-green-600">Chào mừng bạn đến với TopCV</h3>
                 <div className='text-gray-500 mb-4'>Cùng xây dựng một hồ sơ nổi bật và nhận được các cơ hội sự nghiệp lý tưởng</div>
                 <form onSubmit={handleSignUp} className="space-y-4 mb-4">
+                    {errorMessage ? <div className='text-red-500 py-2' style={{ backgroundColor: 'rgba(255, 69, 58, 0.05)' }}>
+                        <span className='px-4 py-4'>{errorMessage}</span>
+                    </div> : ""}
                     <h4 className='text-gray-700'>Họ và tên</h4>
-                    <TextField
-                        id="name"
-                        name="name"
-                        variant="outlined"
-                        placeholder="Nhập họ tên"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        required // Đánh dấu trường này là bắt buộc
-                        margin='dense'
-                        className="mt-1"
-                        fullWidth
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <User color='#00b14f' />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
+                    <div className="relative">
+                        <User className={`
+                            w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 
+                            ${nameError ? "text-red-500" : "text-green-500"}  
+                            `} />
+                        <input
+                            id="name"
+                            name="name"
+                            type="text"
+                            placeholder="Nhập họ tên"
+                            value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            className={`
+                                text-black bg-white pl-12 pr-3 py-3 border-gray-200 border rounded-md w-full
+                                focus:border-gray-400 focus:outline-none focus:border-gray-400
+                                ${nameError ? "border-red-500" : ""}
+                            `} />
+                    </div>
+
                     <h4 className='text-gray-700'>Email</h4>
-                    <TextField
-                        id="email"
-                        name="email"
-                        variant="outlined"
-                        placeholder="Nhập email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        //error={!!formData.email && !isEmailValid(formData.email)}
-                        //helperText={(!!formData.email && !isEmailValid(formData.email)) ? "Email không hợp lệ." : ""}
-                        required // Đánh dấu trường này là bắt buộc
-                        margin='dense'
-                        className="mt-1"
-                        fullWidth
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Mail color='#00b14f' />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
+                    <div className="relative">
+                        <Mail className={`
+                            w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 
+                            ${emailError ? "text-red-500" : "text-green-500"}  
+                            `} />
+                        <input
+                            id="email"
+                            name="email"
+                            type="text"
+                            placeholder="Nhập email"
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            className={`
+                                text-black bg-white pl-12 pr-3 py-3 border-gray-200 border rounded-md w-full
+                                focus:border-gray-400 focus:outline-none focus:border-gray-400
+                                ${emailError ? "border-red-500" : ""}
+                            `} />
+                    </div>
+
                     <h4 className='text-gray-700'>Mật khẩu</h4>
-                    <TextField
-                        id="password"
-                        name="password"
-                        variant="outlined"
-                        type="password"
-                        placeholder="Nhập mật khẩu"
-                        value={formData.password}
-                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                        required
-                        margin='dense'
-                        className="mt-1"
-                        fullWidth
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <ShieldCheck color='#00b14f' />
-                                </InputAdornment>
-                            ),
-                            onFocus: () => setShowGuide(true),
-                            onBlur: () => setShowGuide(false)
-                        }}
-                        error={!!formData.password && !isPasswordValid(formData.password)}
-                        helperText={formData.password && !isPasswordValid(formData.password) ? "Mật khẩu không hợp lệ." : ""}
-                    />
+                    <div className="relative">
+                        <div className="flex items-center">
+                            <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                                <ShieldCheck className={`w-5 h-5 ${passwordError ? "text-red-500" : "text-green-500"}`} />
+                            </div>
+                            <input
+                                id="password"
+                                name="password"
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="Nhập mật khẩu"
+                                value={formData.password}
+                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                className={`
+                                    text-black bg-white pl-12 pr-3 py-3 border-gray-200 border rounded-md w-full
+                                    focus:border-gray-400 focus:outline-none focus:border-gray-400
+                                    ${passwordError ? "border-red-500" : ""}
+                                `}
+                                onFocus={() => setShowGuide(true)}
+                                onBlur={() => setShowGuide(false)}
+                            />
+                            <div className="absolute right-3 top-8 transform -translate-y-1/2">
+                                <button type="button" onClick={handlePasswordToggle} className="focus:outline-none">
+                                    {showPassword ? <Eye className="w-5 h-5 text-gray-500" /> : <EyeOff className="w-5 h-5 text-gray-500" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                     {showGuide && (
                         <ul className="list-disc pl-6 text-xs text-gray-600">
                             <li>Mật khẩu từ 6 đến 25 ký tự</li>
                             <li>Bao gồm chữ hoa, chữ thường và ký tự số</li>
                         </ul>
                     )}
+
                     <h4 className='text-gray-700'>Xác nhận mật khẩu</h4>
-                    <TextField
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        variant="outlined"
-                        type="password"
-                        placeholder="Nhập lại mật khẩu"
-                        value={formData.confirmPassword}
-                        onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                        error={formData.confirmPassword !== formData.password}
-                        helperText={formData.confirmPassword !== formData.password ? 'Mật khẩu và xác nhận mật khẩu không khớp.' : ''}
-                        required // Đánh dấu trường này là bắt buộc
-                        margin='dense'
-                        className="mt-1"
-                        fullWidth
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <ShieldCheck color='#00b14f' />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
+                    <div className="relative">
+                        <div className="flex items-center">
+                            <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                                <ShieldCheck className={`w-5 h-5 ${confirmPasswordError ? "text-red-500" : "text-green-500"}`} />
+                            </div>
+                            <input
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="Nhập lại mật khẩu"
+                                value={formData.confirmPassword}
+                                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                                className={`
+                                    text-black bg-white pl-12 pr-3 py-3 border-gray-200 border rounded-md w-full
+                                    focus:border-gray-400 focus:outline-none focus:border-gray-400
+                                    ${confirmPasswordError ? "border-red-500" : ""}
+                                `} />
+                            <div className="absolute right-3 top-8 transform -translate-y-1/2">
+                                <button type="button" onClick={handlePasswordToggle} className="focus:outline-none">
+                                    {showPassword ? <Eye className="w-5 h-5 text-gray-500" /> : <EyeOff className="w-5 h-5 text-gray-500" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     <FormControlLabel
                         control={
                             <Checkbox
@@ -183,7 +253,7 @@ function UserSignUp() {
                         Hoặc đăng nhập bằng
                     </p>
                     <div className="flex fullwidth">
-                        <button 
+                        <button
                             disabled={!socialAgree}
                             className={`flex-grow rounded-md py-2 px-4 mr-2 mb-4 text-white ${!socialAgree ? 'bg-red-400' : 'bg-red-500 hover:bg-red-600'}`}>
                             <GoogleIcon></GoogleIcon>
@@ -191,11 +261,11 @@ function UserSignUp() {
                         </button>
                         <button
                             disabled={!socialAgree}
-                            className={`flex-grow rounded-md py-2 px-4 mx-2 mb-4 text-white ${!socialAgree ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-500' }`}>
+                            className={`flex-grow rounded-md py-2 px-4 mx-2 mb-4 text-white ${!socialAgree ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-500'}`}>
                             <FacebookIcon></FacebookIcon>
                             {' '}Facebook
                         </button>
-                        <button 
+                        <button
                             disabled={!socialAgree}
                             className={`flex-grow rounded-md py-2 px-4 ml-2 mb-4 text-white ${!socialAgree ? 'bg-blue-500' : 'bg-blue-800 hover:bg-blue-700'}`}>
                             <LinkedInIcon></LinkedInIcon>
@@ -238,11 +308,13 @@ function UserSignUp() {
                             Vui lòng gọi tới số <span className="text-green-500 font-bold">(024) 6680 5588</span> (giờ hành chính).
                         </div>
                     </div>
+
+                    <div className='text-green-500 text-center mt-16'>© 2016. All Rights Reserved. TopCV Vietnam JSC.</div>
                 </div>
             </div>
             <div className="col-span-1">
                 {/* Hình ảnh */}
-                <img src="../../shared/assets/images/Sign-up-user.png" className="w-full h-auto" />
+                <img src={img} alt='banner' className="fixed top-0 left-2/3 w-auto h-full" />
             </div>
         </div>
     );

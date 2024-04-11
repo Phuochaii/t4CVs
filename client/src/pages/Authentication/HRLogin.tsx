@@ -1,8 +1,26 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { InputAdornment, TextField } from '@mui/material';
-import { Mail, Lock } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import '../../shared/assets/styles/hr-signup.css';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
+
+const images = [
+  {
+    label: "banner_01",
+    path: "https://tuyendung.topcv.vn/app/_nuxt/img/banner-01.d2c28c7.png",
+  },
+  {
+    label: "banner_02",
+    path: "https://tuyendung.topcv.vn/app/_nuxt/img/banner-02.3506b83.png",
+  },
+  {
+    label: "banner_03",
+    path: "https://tuyendung.topcv.vn/app/_nuxt/img/banner-03.6c4018d.png",
+  },
+]
 
 function HRLogIn() {
   const [formData, setFormData] = useState({
@@ -14,11 +32,29 @@ function HRLogIn() {
   const [showError, setShowError] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleLogin = (e) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [emailEmpty, setEmailEmpty] = useState(false);
+  const [passwordEmpty, setPasswordEmpty] = useState(false);
+
+  const handlePasswordToggle = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleLogin = (e: { preventDefault: () => void; }) => {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
-   
+
     const storedUserString = localStorage.getItem('user');
     const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
+
+    if (!formData.email) {
+      setEmailEmpty(true);
+    }
+
+    if (!formData.password) {
+      setPasswordEmpty(true);
+    }
+
     if (storedUser && storedUser.email === formData.email && storedUser.password === formData.password) {
       // Đăng nhập thành công
       console.log('Đăng nhập thành công với email:', formData.email);
@@ -30,57 +66,69 @@ function HRLogIn() {
       setError('Email hoặc mật khẩu không chính xác.');
       setShowError(true);
     }
-  
+  };
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 300,
+    slidesToShow: 1,
+    slidesToScroll: 1
   };
 
   return (
-    <div className="grid grid-cols-3 gap-4 ">
-      <div className="col-span-2 px-40 py-20">
+    <div className="grid grid-cols-3 gap-4">
+      <div className="col-span-2 px-48 py-24">
+        <img src="https://tuyendung.topcv.vn/app/_nuxt/img/topcv-logo.c9a1ca1.webp" alt='logo-signup' className='w-52 h-auto pb-20'></img>
         <h3 className="text-2xl font-bold mb-1 mt-1 text-green-600">Chào mừng bạn đã quay trở lại</h3>
         <div className='text-gray-500 mb-4'>Cùng tạo dựng lợi thế cho doanh nghiệp bằng trải nghiệm công nghệ tuyển dụng ứng dụng sâu AI & Hiring Funnel.</div>
 
         <form onSubmit={handleLogin} className="space-y-4 mb-4">
           <h4 className='text-gray-700 font-bold'>Email</h4>
-          <TextField
-            id="email"
-            name="email"
-            variant="outlined"
-            placeholder="Email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            required // Đánh dấu trường này là bắt buộc
-            margin='dense'
-            className="mt-1"
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Mail color='#00b14f' />
-                </InputAdornment>
-              ),
-            }}
-          />
+          <div className="relative">
+            <Mail className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500" />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className={`
+                  text-black mt-1 bg-white pl-12 pr-3 py-3 border rounded-md w-full
+                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
+                  ${emailEmpty ? "border-red-500" : ""}
+                `} />
+          </div>
+          {emailEmpty && !formData.email ? <div className='text-red-500'>Không được để trống email</div> : ""}
+
           <h4 className='text-gray-700 font-bold'>Mật khẩu</h4>
-          <TextField
-            id="password"
-            name="password"
-            variant="outlined"
-            type="password"
-            placeholder="Mật khẩu (6 đến 25 ký tự)"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            required
-            margin='dense'
-            className="mt-1"
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Lock color='#00b14f' />
-                </InputAdornment>
-              ),
-            }}
-          />
+          <div className="relative">
+            <div className="flex items-center">
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                <Lock className="w-5 h-5 text-green-500" />
+              </div>
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Mật khẩu"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                className={`
+                  text-black mt-1 bg-white pl-12 pr-3 py-3 border rounded-md w-full
+                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
+                  ${passwordEmpty ? "border-red-500" : ""}
+                `}
+              />
+              <div className="absolute right-3 top-8 transform -translate-y-1/2">
+                <button type="button" onClick={handlePasswordToggle} className="focus:outline-none">
+                  {showPassword ? <Eye className="w-5 h-5 text-gray-500" /> : <EyeOff className="w-5 h-5 text-gray-500" />}
+                </button>
+              </div>
+            </div>
+          </div>
+          {passwordEmpty && !formData.password ? <div className='text-red-500'>Không được để trống mất khẩu</div> : ""}
 
           <div className='flex justify-end'>
             <Link to="/" className="text-green-500 hover:underline">
@@ -112,10 +160,25 @@ function HRLogIn() {
         </p>
       </div>
 
-      <div className="col-span-1">
-        {/* Hình ảnh */}
-        <img src="../../shared/assets/images/Sign-up-user.png" className="w-full h-auto" />
+      <div className="col-span-1 fixed top-0 right-0 left-2/3 bottom-0">
+        <div className="absolute top-0 left-0 right-0 text-center text-3xl text-white font-bold pt-48 z-10">Track your funnel with <span className='text-green-500'>Report</span></div>
+        <Slider {...settings}>
+          {images.map((step, index) => (
+            <div key={step.label}>
+              <img src={step.path} alt={step.label} className="w-full h-full object-cover"></img>
+            </div>
+          ))}
+        </Slider>
+        <img src="https://tuyendung.topcv.vn/app/_nuxt/img/logo-slogan.90e03a7.png" alt='logo' className='absolute bottom-0 left-1/2 transform -translate-x-1/2 w-48 h-auto pb-10'></img>
       </div>
+
+      <div className='col-span-2 relative mb-3'>
+        <img src='https://tuyendung.topcv.vn/app/_nuxt/img/background.89c9cc5.svg' className='w-full'></img>
+        <div className='absolute bottom-0 left-0 w-full text-center text-green-500'>
+          <span>©2014-2024 TopCV Vietnam JSC. All rights reserved.</span>
+        </div>
+      </div>
+
     </div>
   );
 }
