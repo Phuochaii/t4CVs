@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotificationController } from './notification-service.controller';
 import { NotificationServiceService } from './services';
+import { Notification, User_Notification } from './entities';
 
 @Module({
   imports: [
@@ -12,9 +13,10 @@ import { NotificationServiceService } from './services';
       username: 'root',
       password: 'password',
       database: 'notification',
-      entities: [],
+      autoLoadEntities: true,
       synchronize: true,
     }),
+    TypeOrmModule.forFeature([Notification, User_Notification]),
   ],
   controllers: [NotificationController],
   providers: [NotificationServiceService],
