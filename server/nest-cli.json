@@ -69,7 +69,11 @@
       "entryFile": "main",
       "sourceRoot": "apps/notification-service/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/notification-service/tsconfig.app.json"
+        "tsConfigPath": "apps/notification-service/tsconfig.app.json",
+        "assets": [
+          "./proto/*.proto"
+        ],
+        "watchAssets": true
       }
     }
   }

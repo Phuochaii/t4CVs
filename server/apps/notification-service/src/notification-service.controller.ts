@@ -1,5 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
-import { NotificationServiceService } from './notification-service.service';
+import { Controller} from '@nestjs/common';
+import { NotificationServiceService } from './services';
 import { NotificationServiceController, SendNotificationRequest, SendNotificationResponse } from '@app/common/proto/notification';
 import { Observable } from 'rxjs';
 
@@ -9,5 +9,4 @@ export class NotificationController implements NotificationServiceController {
   sendNotification(request: SendNotificationRequest): SendNotificationResponse | Promise<SendNotificationResponse> | Observable<SendNotificationResponse> {
     throw new Error('Method not implemented.');
   }
-
 }
