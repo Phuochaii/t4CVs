@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FormControlLabel, Checkbox, TextField, InputAdornment } from '@mui/material';
+import { FormControlLabel, Checkbox } from '@mui/material';
 import { Mail, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
@@ -14,14 +14,13 @@ function UserLogIn() {
   });
   const [socialAgree, setSocialAgree] = useState(true);
 
-  const [error, setError] = useState('');
-  const [showError, setShowError] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const [emailEmpty, setEmailEmpty] = useState(false);
-  const [passwordEmpty, setPasswordEmpty] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
@@ -33,24 +32,22 @@ function UserLogIn() {
     const storedUserString = localStorage.getItem('user');
     const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
 
-    if (!formData.email) {
-      setEmailEmpty(true);
-    }
-
     if (!formData.password) {
-      setPasswordEmpty(true);
+      setErrorMessage("Hãy cho chúng tôi biết mật khẩu của bạn");
+      setPasswordError(true);
+    }
+    if (!formData.email) {
+      setErrorMessage("Hãy cho chúng tôi biết địa chỉ email của bạn");
+      setEmailError(true);
     }
 
     if (storedUser && storedUser.email === formData.email && storedUser.password === formData.password) {
       // Đăng nhập thành công
       console.log('Đăng nhập thành công với email:', formData.email);
-      setError('');
-      setShowError(false);
       setIsLoggedIn(true); // Set state để hiển thị thông báo đăng nhập thành công
-    } else {
+    } else if (formData.password &&formData.email) {
       // Đăng nhập không thành công
-      setError('Email hoặc mật khẩu không chính xác.');
-      setShowError(true);
+      setErrorMessage('Email hoặc mật khẩu không chính xác.');
     }
   };
 
@@ -62,9 +59,15 @@ function UserLogIn() {
         <h3 className="text-2xl font-semibold mb-1 mt-1 text-green-600">Chào mừng bạn đã quay trở lại</h3>
         <div className='text-gray-500 mb-4'>Cùng xây dựng một hồ sơ nổi bật và nhận được các cơ hội sự nghiệp lý tưởng</div>
         <form onSubmit={handleLogin} className="space-y-4 mb-4">
+          {errorMessage ? <div className='text-red-500 py-2' style={{ backgroundColor: 'rgba(255, 69, 58, 0.05)' }}>
+            <span className='px-4 py-4'>{errorMessage}</span>
+          </div> : ""}
           <h4 className='text-gray-700'>Email</h4>
           <div className="relative">
-            <Mail className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500" />
+            <Mail className={`
+                  w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2
+                  ${emailError ? "text-red-500" : "text-green-500"}
+                  `} />
             <input
               id="email"
               name="email"
@@ -75,16 +78,18 @@ function UserLogIn() {
               className={`
                 text-black mt-1 bg-white pl-12 pr-3 py-3 border-gray-200 border rounded-md w-full
                 focus:border-gray-400 focus:outline-none focus:border-gray-400
-                ${emailEmpty ? "border-red-500" : ""}
+                ${emailError ? "border-red-500" : ""}
                 `} />
           </div>
-          {emailEmpty && !formData.email ? <div className='text-red-500'>Không được để trống email</div> : ""}
 
           <h4 className='text-gray-700'>Mật khẩu</h4>
           <div className="relative">
             <div className="flex items-center">
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                <ShieldCheck className="w-5 h-5 text-green-500" />
+                <ShieldCheck className={`
+                  w-5 h-5
+                  ${passwordError ? "text-red-500" : "text-green-500"}
+                  `} />
               </div>
               <input
                 id="password"
@@ -96,7 +101,7 @@ function UserLogIn() {
                 className={`
                   text-black mt-1 bg-white pl-12 pr-3 py-3 border-gray-200 border rounded-md w-full
                   focus:border-gray-400 focus:outline-none focus:border-gray-400
-                  ${passwordEmpty ? "border-red-500" : ""}
+                  ${passwordError ? "border-red-500" : ""}
                 `}
               />
               <div className="absolute right-3 top-8 transform -translate-y-1/2">
@@ -106,7 +111,6 @@ function UserLogIn() {
               </div>
             </div>
           </div>
-          {passwordEmpty && !formData.password ? <div className='text-red-500'>Không được để trống mất khẩu</div> : ""}
 
           <div className='flex justify-end'>
             <Link to="/" className="text-green-500 hover:underline">
@@ -121,9 +125,6 @@ function UserLogIn() {
           </button>
         </form>
 
-        {showError && (
-          <div className="text-red-500">{error}</div>
-        )}
         {isLoggedIn && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mt-4">
             Đăng nhập thành công!
