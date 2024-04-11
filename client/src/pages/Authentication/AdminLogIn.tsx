@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { InputAdornment, TextField } from '@mui/material';
-import { User, Lock } from 'lucide-react';
+import { User, Lock, Eye, EyeOff } from 'lucide-react';
+import img from '../../shared/assets/images/Sign-up user.png';
 
 function AdminLogIn() {
   const [formData, setFormData] = useState({
@@ -13,9 +13,15 @@ function AdminLogIn() {
   const [showError, setShowError] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handlePasswordToggle = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleLogin = (e) => {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
-    
+
     const storedUserString = localStorage.getItem('user');
     const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
     if (storedUser && storedUser.email === formData.email && storedUser.password === formData.password) {
@@ -32,52 +38,50 @@ function AdminLogIn() {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-4 ">
+    <div className="grid grid-cols-3 gap-4">
       <div className="col-span-2 px-40 py-20">
+        <img src="https://tuyendung.topcv.vn/app/_nuxt/img/topcv-logo.c9a1ca1.webp" alt='logo-signup' className='w-52 h-auto pb-20'></img>
         <h3 className="text-2xl font-bold mb-1 mt-1 text-green-600 mb-4">Hệ thống quản lý TopCV</h3>
-      
+
         <form onSubmit={handleLogin} className="space-y-4 mb-4">
           <h4 className='text-gray-700 font-bold'>Tên tài khoản</h4>
-          <TextField
-            id="email"
-            name="email"
-            variant="outlined"
-            placeholder="Tên tài khoản"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            required // Đánh dấu trường này là bắt buộc
-            margin='dense'
-            className="mt-1"
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <User color='#00b14f' />
-                </InputAdornment>
-              ),
-            }}
-          />
+          <div className="relative">
+            <User className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500" />
+            <input
+              id="username"
+              name="username"
+              type="text"
+              placeholder="Tên tài khoản"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              required
+              className="text-black mt-1 bg-white focus:border-green-500 pl-12 pr-3 py-3 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 w-full"
+            />
+          </div>
           <h4 className='text-gray-700 font-bold'>Mật khẩu</h4>
-          <TextField
-            id="password"
-            name="password"
-            variant="outlined"
-            type="password"
-            placeholder="Mật khẩu (6 đến 25 ký tự)"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            required
-            margin='dense'
-            className="mt-1"
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Lock color='#00b14f' />
-                </InputAdornment>
-              ),
-            }}
-          />
+          <div className="relative">
+            <div className="flex items-center">
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                <Lock className="w-5 h-5 text-green-500" />
+              </div>
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Mật khẩu"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                required
+                className="text-black mt-1 bg-white focus:border-green-500 pl-12 pr-3 py-3 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 w-full"
+              />
+              <div className="absolute right-3 top-7 transform -translate-y-1/2">
+                <button type="button" onClick={handlePasswordToggle} className="focus:outline-none">
+                  {showPassword ? <EyeOff className="w-5 h-5 text-gray-500" /> : <Eye className="w-5 h-5 text-gray-500" />}
+                </button>
+              </div>
+            </div>
+          </div>
+
 
           <div className='flex justify-end'>
             <Link to="/" className="text-green-500 hover:underline">
@@ -105,7 +109,14 @@ function AdminLogIn() {
 
       <div className="col-span-1">
         {/* Hình ảnh */}
-        <img src="../../shared/assets/images/Sign-up-user.png" className="w-full h-auto" />
+        <img src={img} alt='banner' className="fixed top-0 left-2/3 w-auto h-full" />
+      </div>
+
+      <div className='col-span-2 relative mb-3'>
+        <img src='https://tuyendung.topcv.vn/app/_nuxt/img/background.89c9cc5.svg' className='w-full'></img>
+        <div className='absolute bottom-0 left-0 w-full text-center text-green-500'>
+          <span>©2014-2024 TopCV Vietnam JSC. All rights reserved.</span>
+        </div>
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FormControlLabel, Checkbox, TextField, InputAdornment } from '@mui/material';
-import { Mail, ShieldCheck } from 'lucide-react';
+import { Mail, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import img from '../../shared/assets/images/Sign-up user.png';
 
 function UserLogIn() {
   const [formData, setFormData] = useState({
@@ -17,11 +18,29 @@ function UserLogIn() {
   const [showError, setShowError] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleLogin = (e) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [emailEmpty, setEmailEmpty] = useState(false);
+  const [passwordEmpty, setPasswordEmpty] = useState(false);
+
+  const handlePasswordToggle = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleLogin = (e: { preventDefault: () => void; }) => {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
 
     const storedUserString = localStorage.getItem('user');
     const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
+
+    if (!formData.email) {
+      setEmailEmpty(true);
+    }
+
+    if (!formData.password) {
+      setPasswordEmpty(true);
+    }
+
     if (storedUser && storedUser.email === formData.email && storedUser.password === formData.password) {
       // Đăng nhập thành công
       console.log('Đăng nhập thành công với email:', formData.email);
@@ -44,46 +63,51 @@ function UserLogIn() {
         <div className='text-gray-500 mb-4'>Cùng xây dựng một hồ sơ nổi bật và nhận được các cơ hội sự nghiệp lý tưởng</div>
         <form onSubmit={handleLogin} className="space-y-4 mb-4">
           <h4 className='text-gray-700'>Email</h4>
-          <TextField
-            id="email"
-            name="email"
-            variant="outlined"
-            placeholder="Email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            required // Đánh dấu trường này là bắt buộc
-            margin='dense'
-            className="mt-1"
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Mail color='#00b14f' />
-                </InputAdornment>
-              ),
-            }}
-          />
+          <div className="relative">
+            <Mail className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500" />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className={`
+                text-black mt-1 bg-white pl-12 pr-3 py-3 border-gray-200 border rounded-md w-full
+                focus:border-gray-400 focus:outline-none focus:border-gray-400
+                ${emailEmpty ? "border-red-500" : ""}
+                `} />
+          </div>
+          {emailEmpty && !formData.email ? <div className='text-red-500'>Không được để trống email</div> : ""}
+
           <h4 className='text-gray-700'>Mật khẩu</h4>
-          <TextField
-            id="password"
-            name="password"
-            variant="outlined"
-            type="password"
-            placeholder="Mật khẩu"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            required
-            margin='dense'
-            className="mt-1"
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <ShieldCheck color='#00b14f' />
-                </InputAdornment>
-              ),
-            }}
-          />
+          <div className="relative">
+            <div className="flex items-center">
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                <ShieldCheck className="w-5 h-5 text-green-500" />
+              </div>
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Mật khẩu"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                className={`
+                  text-black mt-1 bg-white pl-12 pr-3 py-3 border-gray-200 border rounded-md w-full
+                  focus:border-gray-400 focus:outline-none focus:border-gray-400
+                  ${passwordEmpty ? "border-red-500" : ""}
+                `}
+              />
+              <div className="absolute right-3 top-8 transform -translate-y-1/2">
+                <button type="button" onClick={handlePasswordToggle} className="focus:outline-none">
+                  {showPassword ? <Eye className="w-5 h-5 text-gray-500" /> : <EyeOff className="w-5 h-5 text-gray-500" />}
+                </button>
+              </div>
+            </div>
+          </div>
+          {passwordEmpty && !formData.password ? <div className='text-red-500'>Không được để trống mất khẩu</div> : ""}
+
           <div className='flex justify-end'>
             <Link to="/" className="text-green-500 hover:underline">
               Quên mật khẩu
@@ -167,10 +191,12 @@ function UserLogIn() {
             </div>
           </div>
         </div>
+
+        <div className='text-green-500 text-center mt-16'>© 2016. All Rights Reserved. TopCV Vietnam JSC.</div>
       </div>
       <div className="col-span-1">
         {/* Hình ảnh */}
-        <img src="../../shared/assets/images/Sign-up-user.png" className="w-full h-auto" />
+        <img src={img} alt='banner' className="fixed top-0 left-2/3 w-auto h-full" />
       </div>
     </div>
   );

@@ -8,11 +8,11 @@ import { UserLayout, AdminLayout, HRLayout, EmptyLayout } from "../layouts";
 
 const routes = [
   // AUTHENTICATION PAGES - Tiến
-  {path: 'admin-login', component:Authentication.AdminLogIn, layout: AdminLayout},
-  {path: 'hr-login', component:Authentication.HRLogIn, layout: HRLayout},
-  {path: 'hr-signup', component:Authentication.HRSignUp, layout: HRLayout},
-  {path: 'user-login', component:Authentication.UserLogIn, layout: UserLayout},
-  {path: 'user-signup', component:Authentication.UserSignUp, layout: UserLayout},
+  {path: 'admin-login', component:Authentication.AdminLogIn, layout: EmptyLayout},
+  {path: 'hr-login', component:Authentication.HRLogIn, layout: EmptyLayout},
+  {path: 'hr-signup', component:Authentication.HRSignUp, layout: EmptyLayout},
+  {path: 'user-login', component:Authentication.UserLogIn, layout: EmptyLayout},
+  {path: 'user-signup', component:Authentication.UserSignUp, layout: EmptyLayout},
   // khuc nay tien them vo nha
 
   // USER PAGES - Nguyên , Khoa, Hùng

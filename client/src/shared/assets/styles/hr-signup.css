@@ -1,0 +1,43 @@
+/* Định dạng vị trí và khoảng cách của chấm chỉ mục */
+.slick-dots {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-bottom: 100px; /* Điều chỉnh khoảng cách từ trên xuống */
+}
+
+.slick-dots li button::before {
+    content: ''; /* Ẩn nội dung của button */
+}
+
+.slick-slider.slick-initialized button.slick-arrow {
+    position: absolute;
+    left: -9999px;
+}
+
+/* Định dạng chấm chỉ mục */
+.slick-dots li button {
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    border-radius: 50%;
+    background-color: #fff; /* Màu sắc của chấm chỉ mục */
+}
+
+/* Định dạng chấm chỉ mục khi được chọn */
+.slick-dots li.slick-active button {
+    background-color: #00b14f; /* Màu sắc của chấm chỉ mục khi được chọn */
+}
+
+.slick-slide {
+    height: 100vh;   
+}
+
+.slick-slide img {
+    z-index: -1;
+}
+
+.green-radio .MuiRadio-colorPrimary.Mui-checked {
+    color: #00b14f; /* Màu xanh lá bạn muốn */
+  }
