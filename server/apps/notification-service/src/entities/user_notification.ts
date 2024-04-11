@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { Notification } from "./notification";
 
 enum NotificationStatus {
@@ -7,13 +7,17 @@ enum NotificationStatus {
 }
 
 @Entity()
-export class User_Notification{
+export class User_Notification {
     @PrimaryColumn()
     userId: number;
 
-    @ManyToOne(() => Notification)
-    notification: number;
+    @PrimaryColumn()
+    notificationId: number;
 
-    @Column("enum", { enum: NotificationStatus })
+    @ManyToOne(() => Notification)
+    @JoinColumn({ name: 'notificationId' })
+    notification: Notification;
+
+    @Column("enum", { enum: NotificationStatus, default: NotificationStatus.UNREAD })
     status: NotificationStatus;
 }

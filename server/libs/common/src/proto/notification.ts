@@ -6,7 +6,7 @@ export const protobufPackage = "notification";
 
 /** The request message containing the users id. */
 export interface User {
-  id: string;
+  id: number;
 }
 
 export interface SendNotificationRequest {

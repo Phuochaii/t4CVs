@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Notification{
@@ -11,7 +11,7 @@ export class Notification{
     @Column("text")
     content:string;
 
-    @Column("date")
+    @CreateDateColumn()
     createdAt: Date;
 
     @Column("text")
