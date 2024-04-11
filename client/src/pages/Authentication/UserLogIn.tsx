@@ -26,6 +26,12 @@ function UserLogIn() {
     setShowPassword(!showPassword);
   };
 
+  const isEmailValid = (email: string) => {
+    // Biểu thức chính quy để kiểm tra định dạng email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleLogin = (e: { preventDefault: () => void; }) => {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
 
@@ -41,13 +47,19 @@ function UserLogIn() {
       setEmailError(true);
     }
 
+    
+
     if (storedUser && storedUser.email === formData.email && storedUser.password === formData.password) {
       // Đăng nhập thành công
       console.log('Đăng nhập thành công với email:', formData.email);
       setIsLoggedIn(true); // Set state để hiển thị thông báo đăng nhập thành công
-    } else if (formData.password &&formData.email) {
+    } else if (formData.password && formData.email) {
       // Đăng nhập không thành công
       setErrorMessage('Email hoặc mật khẩu không chính xác.');
+      if (formData.email && !isEmailValid(formData.email)) {
+        setErrorMessage("Định dạng email không đúng");
+        setEmailError(true);
+      }
     }
   };
 
@@ -71,7 +83,7 @@ function UserLogIn() {
             <input
               id="email"
               name="email"
-              type="email"
+              type="text"
               placeholder="Email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}

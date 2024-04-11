@@ -142,7 +142,7 @@ function UserSignUp() {
                         <input
                             id="email"
                             name="email"
-                            type="email"
+                            type="text"
                             placeholder="Nhập email"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}

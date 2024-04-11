@@ -1,7 +1,7 @@
-import { SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FormControlLabel, InputAdornment, Card, CardActions, CardContent, Collapse, Typography } from '@mui/material';
-import { Checkbox, TextField, FormControl, RadioGroup, Radio, Select, MenuItem, Dialog } from '@mui/material';
+import { FormControlLabel, Card, CardActions, CardContent, Collapse, Typography } from '@mui/material';
+import { Checkbox, FormControl, RadioGroup, Radio, Select, MenuItem, Dialog } from '@mui/material';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -482,7 +482,7 @@ function HRSignUp() {
             <button className='rounded-full px-4 py-4 bg-green-600 text-white  hover:bg-green-700' onClick={(e) => handleCloseDialog("HR")}>Tôi là nhà tuyển dụng</button>
           </div>
           <div className='basis-1/2 justify-self-center text-center'>
-            <button className='rounded-full px-4 py-4 bg-green-600 text-white  hover:bg-green-700' onClick={(e) => handleCloseDialog("employee")}>Tôi là ứng viên tìm việc</button>
+            <a className='rounded-full px-4 py-4 bg-green-600 text-white hover:bg-green-700' href="/user-signup">Tôi là ứng viên tìm việc</a>
           </div>
         </div>
       </Dialog>
