@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FormControlLabel, Card, CardActions, CardContent, Collapse, Typography } from '@mui/material';
+import { FormControlLabel, Card, CardActions, CardContent, Collapse, Typography, Snackbar } from '@mui/material';
 import { Checkbox, FormControl, RadioGroup, Radio, Select, MenuItem, Dialog } from '@mui/material';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -66,34 +66,134 @@ function HRSignUp() {
   const [openDialog, setOpenDialog] = useState(true);
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSignUp = (e: { preventDefault: () => void; }) => {
-    e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
-    // Kiểm tra các trường có dữ liệu đầy đủ không
-    // if (!formData.agreeToTerms || !formData.name || !formData.email || !formData.password || !formData.confirmPassword || (formData.password !== formData.confirmPassword)) {
-    //   alert("Vui lòng điền đầy đủ thông tin và đồng ý với điều khoản dịch vụ và chính sách bảo mật.");
-    //   return;
-    // }
-    // Lưu thông tin tài khoản vào Local Storage hoặc gửi đến server
-    localStorage.setItem('account', JSON.stringify(formData));
-    localStorage.setItem('hr_info', JSON.stringify(hrData))
-    console.log('Đăng ký thành công.');
-    setShowSuccessMessage(true); // Hiển thị thông báo khi đăng ký thành công
+  const [phoneErrorMessage, setPhoneErrorMessage] = useState("");
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState("");
+
+  const [sexError, setSexError] = useState(false);
+  const [nameError, setNameError] = useState(false);
+  const [companyError, setCompanyError] = useState(false);
+  const [addressWorkError, setAddressWorkError] = useState(false);
+  const [positionError, setPositionError] = useState(false);
+
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 300,
+    slidesToShow: 1,
+    slidesToScroll: 1
   };
 
-  // const isEmailValid = (email) => {
-  //   // Biểu thức chính quy để kiểm tra định dạng email
-  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   return emailRegex.test(email);
-  // };
+  const isEmailValid = (email: string) => {
+    // Biểu thức chính quy để kiểm tra định dạng email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setEmailErrorMessage("");
 
-  const isPasswordValid = (password: string | any[]) => {
+    if (!email) {
+      setEmailErrorMessage("Email đăng nhập không được để trống");
+      return false;
+    }
+    else if (!emailRegex.test(email)) {
+      setEmailErrorMessage("Định dạng email không phù hợp");
+      return false;
+    }
+    else {
+      return true;
+    }
+  };
+
+  const isPasswordValid = (password: string) => {
+    setPasswordErrorMessage("");
+    //const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,25}$/;
+    const passwordRegexOnlyNumber = /^(?=.*\d)[0-9]{6,25}$/;
+    const passwordRegexOnlyLowcase = /^[a-z]{6,25}$/;
+    const passwordRegexOnlyUppcase = /^[A-Z]{6,25}$/;
+    const passwordRegexNumberandLowcase = /^(?=.*[a-z])(?=.*\d)[a-zA-Z\d]{6,25}$/;
+    const passwordRegexNumberandUpcase = /^(?=.*\d)(?=.*[A-Z])[A-Za-z\d]{6,25}$/;
+    const passwordRegexNoNumber = /^[a-zA-Z]{6,25}$/;
+
     const passwordLength = password.length;
-    return passwordLength >= 6 && passwordLength <= 25;
+    console.log(passwordLength);
+    if (!password) {
+      setPasswordErrorMessage("Mật khẩu không được để trống");
+      return false
+    }
+    else if (passwordLength < 6 || passwordLength > 25) {
+      setPasswordErrorMessage("Mật khẩu từ 6 đến 25 ký tự");
+      return false
+    }
+    else if (passwordRegexOnlyNumber.test(password)) {
+      setPasswordErrorMessage("Mật khẩu phải chứa ít nhất một chữ hoa và một chữ thường.");
+      return false
+    }
+    else if (passwordRegexOnlyLowcase.test(password)) {
+      setPasswordErrorMessage("Mật khẩu phải chứa ít nhất một chữ số và một chữ hoa.");
+      return false
+    }
+    else if (passwordRegexOnlyUppcase.test(password)) {
+      setPasswordErrorMessage("Mật khẩu phải chứa ít nhất một chữ số và một chữ thường.");
+      return false
+    }
+    else if (passwordRegexNumberandLowcase.test(password)) {
+      setPasswordErrorMessage("Mật khẩu phải chứa ít nhất một chữ hoa.");
+      return false
+    }
+    else if (passwordRegexNumberandUpcase.test(password)) {
+      setPasswordErrorMessage("Mật khẩu phải chứa ít nhất một chữ thường.");
+      return false
+    }
+    else if (passwordRegexNoNumber.test(password)) {
+      setPasswordErrorMessage("Mật khẩu phải chứa ít nhất một chữ số.");
+      return false
+    }
+    else {
+      return true;
+    }
   };
+
+  const isConfirmPasswordValid = (confirmpassword: string, password: string) => {
+    setConfirmPasswordErrorMessage("");
+
+    if (!confirmpassword) {
+      setConfirmPasswordErrorMessage("Nhập lại mật khẩu không được để trống");
+      return false
+    }
+    else if (confirmpassword !== password) {
+      setConfirmPasswordErrorMessage("Nhập lại mật khẩu không đúng");
+      return false
+    }
+    else {
+      return true;
+    }
+  }
+
+  const isPhoneValid = (phone: string) => {
+    setPhoneErrorMessage("");
+
+    if (!phone) {
+      setPhoneErrorMessage("Số điện thoại cá nhân không được để trống");
+      return false;
+    }
+    else if (phone.length !== 10) {
+      setPhoneErrorMessage("Số điện thoại phải có 10 ký tự");
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
 
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleConfirmPasswordToggle = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   const handleExpandClick = () => {
@@ -105,12 +205,42 @@ function HRSignUp() {
     setOpenDialog(false);
   };
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 300,
-    slidesToShow: 1,
-    slidesToScroll: 1
+  const handleSignUp = (e: { preventDefault: () => void; }) => {
+    e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
+
+    let error = false;
+
+    const validations = [
+      { check: !hrData.address_work, action: () => { setAddressWorkError(true); setErrorMessage("Địa chỉ làm việc không được để trống"); } },
+      { check: !hrData.position, action: () => { setPositionError(true); setErrorMessage("Vị trí công tác không được để trống"); } },
+      { check: !hrData.company, action: () => { setCompanyError(true); setErrorMessage("Tên công ty không được để trống"); } },
+      { check: !isPhoneValid(hrData.phone), action: () => setErrorMessage(phoneErrorMessage) },
+      { check: !hrData.sex, action: () => { setSexError(true); setErrorMessage("Giới tính không được để trống"); } },
+      { check: !hrData.name, action: () => { setNameError(true); setErrorMessage("Họ tên không được để trống"); } },
+      { check: !isConfirmPasswordValid(formData.confirmPassword, formData.password), action: () => setErrorMessage(confirmPasswordErrorMessage) },
+      { check: !isPasswordValid(formData.password), action: () => { setErrorMessage(passwordErrorMessage) } },
+      { check: !isEmailValid(formData.email), action: () => setErrorMessage(emailErrorMessage) },
+      { check: !formData.agreeToTerms, action: () => setErrorMessage("Bạn chưa đồng ý với điều khoản dịch vụ của TopCV") },
+    ];
+
+    validations.forEach(({ check, action }) => {
+      if (check) {
+        action();
+        error = true;
+      }
+    });
+
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+
+    // Lưu thông tin tài khoản vào Local Storage hoặc gửi đến server
+    if (!error) {
+      // localStorage.setItem('account', JSON.stringify(formData));
+      // localStorage.setItem('hr_info', JSON.stringify(hrData))
+      console.log('Đăng ký thành công.');
+      setShowSuccessMessage(true); // Hiển thị thông báo khi đăng ký thành công
+    }
   };
 
   return (
@@ -163,15 +293,19 @@ function HRSignUp() {
               <input
                 id="email"
                 name="email"
-                type="email"
+                type="text"
                 placeholder="Email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-                className="text-black mt-1 bg-white focus:border-green-500 pl-12 pr-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 w-full"
+                className={`text-black mt-1 bg-white w-full pl-12 pr-3 py-2 border rounded-md
+                focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
+                ${emailErrorMessage && "border-red-500"}
+                `}
+                onFocus={() => setEmailErrorMessage("")}
               />
             </div>
             <div className='text-red-500 text-sm'>Trường hợp bạn đăng ký tài khoản bằng email không phải email tên miền công ty, một số dịch vụ trên tài khoản có thể sẽ bị giới hạn quyền mua hoặc sử dụng.</div>
+            {emailErrorMessage && <div className='text-red-500 font-semibold'>{emailErrorMessage}</div>}
 
             <h4 className='text-gray-700 font-bold'>Mật khẩu <span className='text-red-500'>*</span></h4>
             <div className="relative">
@@ -186,8 +320,11 @@ function HRSignUp() {
                   placeholder="Mật khẩu (6 đến 25 ký tự)"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  required
-                  className="text-black mt-1 bg-white focus:border-green-500 pl-12 pr-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 w-full"
+                  className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
+                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
+                  ${passwordErrorMessage && "border-red-500"}
+                  `}
+                  onFocus={() => setPasswordErrorMessage("")}
                 />
                 <div className="absolute right-3 top-7 transform -translate-y-1/2">
                   <button type="button" onClick={handlePasswordToggle} className="focus:outline-none">
@@ -196,6 +333,7 @@ function HRSignUp() {
                 </div>
               </div>
             </div>
+            {passwordErrorMessage && <div className='text-red-500 font-semibold'>{passwordErrorMessage}</div>}
 
             <h4 className='text-gray-700 font-bold'>Nhập lại mật khẩu <span className='text-red-500'>*</span></h4>
             <div className="relative">
@@ -206,24 +344,24 @@ function HRSignUp() {
                 <input
                   id="confirmPassword"
                   name="confirmPassword"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Mật khẩu (6 đến 25 ký tự)"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  placeholder="Nhập lại mật khẩu"
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                  required
-                  className="text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
-                    focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 "
+                  className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
+                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
+                  ${confirmPasswordErrorMessage && "border-red-500"}
+                  `}
+                  onFocus={() => setConfirmPasswordErrorMessage("")}
                 />
                 <div className="absolute right-3 top-7 transform -translate-y-1/2">
-                  <button type="button" onClick={handlePasswordToggle} className="focus:outline-none">
-                    {showPassword ? <Eye className="w-5 h-5 text-gray-500" /> : <EyeOff className="w-5 h-5 text-gray-500" />}
+                  <button type="button" onClick={handleConfirmPasswordToggle} className="focus:outline-none">
+                    {showConfirmPassword ? <Eye className="w-5 h-5 text-gray-500" /> : <EyeOff className="w-5 h-5 text-gray-500" />}
                   </button>
                 </div>
               </div>
             </div>
-            {/* error={formData.confirmPassword !== formData.password}
-              helperText={formData.confirmPassword !== formData.password ? 'Mật khẩu và xác nhận mật khẩu không khớp.' : ''}
-              */}
+            {confirmPasswordErrorMessage && <div className='text-red-500 font-semibold'>{confirmPasswordErrorMessage}</div>}
 
             <div className='border-l-4 border-green-500'><span className='text-2xl font-bold ml-2 text-black'>Thông tin nhà tuyển dụng</span></div>
             <div className='grid grid-cols-2 gap-4'>
@@ -238,10 +376,14 @@ function HRSignUp() {
                     placeholder="Họ và tên"
                     value={hrData.name}
                     onChange={(e) => setHrData({ ...hrData, name: e.target.value })}
-                    required
-                    className="text-black mt-1 bg-white focus:border-green-500 pl-12 pr-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 w-full"
+                    className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
+                      focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
+                      ${nameError && "border-red-500"} 
+                      `}
+                    onFocus={() => setNameError(false)}
                   />
                 </div>
+                {nameError && <div className='text-red-500 font-semibold'>Họ tên không được để trống</div>}
               </div>
 
               <div className="col-span-1 justify-self-end">
@@ -251,12 +393,13 @@ function HRSignUp() {
                     row
                     name="sex"
                     id="sex"
-                    onChange={(e) => setHrData({ ...hrData, sex: e.target.value })}
+                    onChange={(e) => { setHrData({ ...hrData, sex: e.target.value }); setSexError(false) }}
                   >
                     <FormControlLabel value="Nam" control={<Radio />} label="Nam" className={`text-black ${hrData.sex === 'Nam' ? 'green-radio' : ''}`} />
                     <FormControlLabel value="Nữ" control={<Radio />} label="Nữ" className={`text-black ${hrData.sex === 'Nữ' ? 'green-radio' : ''}`} />
                   </RadioGroup>
                 </FormControl>
+                {sexError && <div className='text-red-500 font-semibold'>Giới tính không được để trống</div>}
               </div>
             </div>
 
@@ -270,13 +413,14 @@ function HRSignUp() {
                 placeholder="Số điện thoại cá nhân"
                 value={hrData.phone}
                 onChange={(e) => setHrData({ ...hrData, phone: e.target.value })}
-                required
-                className="text-black mt-1 bg-white focus:border-green-500 pl-12 pr-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 w-full"
+                className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
+                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
+                  ${phoneErrorMessage && "border-red-500"}
+                  `}
+                onFocus={() => setPhoneErrorMessage("")}
               />
             </div>
-            {/* error={(!!hrData.phone && (!/^\d*$/.test(hrData.phone) || hrData.phone.length > 10))}
-              helperText={(!/^\d*$/.test(hrData.phone) && !!hrData.phone) ? "Số điện thoại không hợp lệ" : (hrData.phone.length > 10 ? "Số điện thoại không vượt quá 10 ký số" : "")}
-           */}
+            {phoneErrorMessage && <div className='text-red-500 font-semibold'>{phoneErrorMessage}</div>}
 
             <div className='grid grid-cols-2 gap-4'>
               <div className="col-span-1">
@@ -290,10 +434,14 @@ function HRSignUp() {
                     placeholder="Tên công ty"
                     value={hrData.company}
                     onChange={(e) => setHrData({ ...hrData, company: e.target.value })}
-                    required
-                    className="text-black mt-1 bg-white focus:border-green-500 pl-12 pr-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 w-full"
-                  />
+                    className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
+                    focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
+                    ${companyError && "border-red-500"} 
+                    `} 
+                    onFocus={() => setCompanyError(false)}
+                    />
                 </div>
+                {companyError && <div className='text-red-500 font-semibold'>Tên công ty không được để trống</div>}
               </div>
 
               <div className="col-span-1">
@@ -303,10 +451,9 @@ function HRSignUp() {
                     id="Position"
                     value={hrData.position}
                     displayEmpty
-                    onChange={(e) => setHrData({ ...hrData, position: e.target.value })}
+                    onChange={(e) => {setHrData({ ...hrData, position: e.target.value }); setPositionError(false)}}
                     placeholder="Chọn vị trí công tác"
                     className="mt-2 h-9"
-                    required
                   >
                     <MenuItem value='' disabled>
                       Chọn vị trí công tác
@@ -320,9 +467,8 @@ function HRSignUp() {
                     <MenuItem value={"Tổng giám đốc"}>Tổng giám đốc</MenuItem>
                   </Select>
                 </FormControl>
+                {positionError && <div className='text-red-500 font-semibold'>Vị trí công tác không được để trống</div>}
               </div>
-
-
             </div>
 
             <div className='grid grid-cols-2 gap-4'>
@@ -333,10 +479,9 @@ function HRSignUp() {
                     id="Address"
                     value={hrData.address_work}
                     displayEmpty
-                    onChange={(e) => setHrData({ ...hrData, address_work: e.target.value })}
+                    onChange={(e) => {setHrData({ ...hrData, address_work: e.target.value }); setAddressWorkError(false)}}
                     placeholder="Chọn tỉnh/ thành phố"
                     className="mt-2 h-9"
-                    required
                   >
                     <MenuItem value='' disabled>
                       Chọn tỉnh/ thành phố
@@ -350,6 +495,7 @@ function HRSignUp() {
                   <MenuItem value={"Tổng giám đốc"}>Tổng giám đốc</MenuItem> */}
                   </Select>
                 </FormControl>
+                {addressWorkError && <div className='text-red-500 font-semibold'>Địa chỉ làm việc  không được để trống</div>}
               </div>
 
               <div className="col-span-1">
@@ -386,9 +532,9 @@ function HRSignUp() {
               placeholder="Tài khoản skype"
               value={hrData.skype_account}
               onChange={(e) => setHrData({ ...hrData, skype_account: e.target.value })}
-              required
-              className="text-black mt-1 bg-white focus:border-green-500 pl-3 pr-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 w-full"
-            />
+              className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
+                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 
+                  `} />
 
             <FormControlLabel
               control={
@@ -479,13 +625,19 @@ function HRSignUp() {
         </div>
         <div className='col-span-2 flex flex-row pb-16'>
           <div className='basis-1/2 justify-self-center  text-center'>
-            <button className='rounded-full px-4 py-4 bg-green-600 text-white  hover:bg-green-700' onClick={(e) => handleCloseDialog("HR")}>Tôi là nhà tuyển dụng</button>
+            <button className='rounded-full px-4 py-4 bg-green-600 text-white hover:bg-green-700' onClick={(e) => handleCloseDialog("HR")}>Tôi là nhà tuyển dụng</button>
           </div>
           <div className='basis-1/2 justify-self-center text-center'>
             <a className='rounded-full px-4 py-4 bg-green-600 text-white hover:bg-green-700' href="/user-signup">Tôi là ứng viên tìm việc</a>
           </div>
         </div>
       </Dialog>
+
+      <Snackbar open={!!errorMessage} autoHideDuration={3000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+        <div className="bg-red-50 text-red-600 p-4 rounded-md">
+          {errorMessage}
+        </div>
+      </Snackbar>
     </>
   );
 }

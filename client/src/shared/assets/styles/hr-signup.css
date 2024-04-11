@@ -4,11 +4,13 @@
     bottom: 0;
     left: 0;
     right: 0;
-    margin-bottom: 100px; /* Điều chỉnh khoảng cách từ trên xuống */
+    margin-bottom: 100px;
+    /* Điều chỉnh khoảng cách từ trên xuống */
 }
 
 .slick-dots li button::before {
-    content: ''; /* Ẩn nội dung của button */
+    content: '';
+    /* Ẩn nội dung của button */
 }
 
 .slick-slider.slick-initialized button.slick-arrow {
@@ -22,16 +24,18 @@
     height: 10px;
     margin: 0 5px;
     border-radius: 50%;
-    background-color: #fff; /* Màu sắc của chấm chỉ mục */
+    background-color: #fff;
+    /* Màu sắc của chấm chỉ mục */
 }
 
 /* Định dạng chấm chỉ mục khi được chọn */
 .slick-dots li.slick-active button {
-    background-color: #00b14f; /* Màu sắc của chấm chỉ mục khi được chọn */
+    background-color: #00b14f;
+    /* Màu sắc của chấm chỉ mục khi được chọn */
 }
 
 .slick-slide {
-    height: 100vh;   
+    height: 100vh;
 }
 
 .slick-slide img {
@@ -39,5 +43,6 @@
 }
 
 .green-radio .MuiRadio-colorPrimary.Mui-checked {
-    color: #00b14f; /* Màu xanh lá bạn muốn */
-  }
+    color: #00b14f;
+    /* Màu xanh lá bạn muốn */
+}
