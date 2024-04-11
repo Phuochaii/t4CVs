@@ -66,7 +66,6 @@ function HRLogIn() {
       setError('Email hoặc mật khẩu không chính xác.');
       setShowError(true);
     }
-
   };
 
   const settings = {

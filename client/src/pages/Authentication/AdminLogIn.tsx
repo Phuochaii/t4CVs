@@ -5,7 +5,7 @@ import img from '../../shared/assets/images/Sign-up user.png';
 
 function AdminLogIn() {
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
 
@@ -15,24 +15,36 @@ function AdminLogIn() {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const [userNameEmpty, setUserNameEmpty] = useState(false);
+  const [passwordEmpty, setPasswordEmpty] = useState(false);
+
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = (e: { preventDefault: () => void; }) => {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
 
     const storedUserString = localStorage.getItem('user');
     const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
-    if (storedUser && storedUser.email === formData.email && storedUser.password === formData.password) {
+
+    if (!formData.username) {
+      setUserNameEmpty(true);
+    }
+
+    if (!formData.password) {
+      setPasswordEmpty(true);
+    }
+
+    if (storedUser && storedUser.username === formData.username && storedUser.password === formData.password) {
       // Đăng nhập thành công
-      console.log('Đăng nhập thành công với email:', formData.email);
+      console.log('Đăng nhập thành công với tài khoản:', formData.username);
       setError('');
       setShowError(false);
       setIsLoggedIn(true); // Set state để hiển thị thông báo đăng nhập thành công
     } else {
       // Đăng nhập không thành công
-      setError('Email hoặc mật khẩu không chính xác.');
+      setError('Tên tài khoản hoặc mật khẩu không chính xác.');
       setShowError(true);
     }
   };
@@ -52,12 +64,16 @@ function AdminLogIn() {
               name="username"
               type="text"
               placeholder="Tên tài khoản"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              required
-              className="text-black mt-1 bg-white focus:border-green-500 pl-12 pr-3 py-3 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 w-full"
-            />
+              value={formData.username}
+              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              className={`
+                  text-black mt-1 bg-white pl-12 pr-3 py-3 border rounded-md w-full
+                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
+                  ${userNameEmpty ? "border-red-500" : ""}
+                `} />
           </div>
+          {userNameEmpty && !formData.username ? <div className='text-red-500'>Không được để trống tên tài khoản</div> : ""}
+
           <h4 className='text-gray-700 font-bold'>Mật khẩu</h4>
           <div className="relative">
             <div className="flex items-center">
@@ -71,17 +87,20 @@ function AdminLogIn() {
                 placeholder="Mật khẩu"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                required
-                className="text-black mt-1 bg-white focus:border-green-500 pl-12 pr-3 py-3 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 w-full"
-              />
-              <div className="absolute right-3 top-7 transform -translate-y-1/2">
+                className={`
+                  text-black mt-1 bg-white pl-12 pr-3 py-3 border rounded-md w-full
+                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
+                  ${passwordEmpty ? "border-red-500" : ""}
+                `}
+                />
+              <div className="absolute right-3 top-8 transform -translate-y-1/2">
                 <button type="button" onClick={handlePasswordToggle} className="focus:outline-none">
                   {showPassword ? <EyeOff className="w-5 h-5 text-gray-500" /> : <Eye className="w-5 h-5 text-gray-500" />}
                 </button>
               </div>
             </div>
           </div>
-
+          {passwordEmpty && !formData.password ? <div className='text-red-500'>Không được để trống mất khẩu</div> : ""}
 
           <div className='flex justify-end'>
             <Link to="/" className="text-green-500 hover:underline">
