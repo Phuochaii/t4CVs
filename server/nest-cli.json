@@ -50,6 +50,17 @@
         "watchAssets": true
       }
     },
+    "application": {
+      "type": "application",
+      "root": "apps/application",
+      "entryFile": "main",
+      "sourceRoot": "apps/application/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/application/tsconfig.app.json",
+        "assets": ["./proto/*.proto"],
+        "watchAssets": true
+      }
+    },
     "common": {
       "type": "library",
       "root": "libs/common",
