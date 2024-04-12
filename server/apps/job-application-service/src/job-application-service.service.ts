@@ -10,7 +10,7 @@ export class JobApplicationService {
       id: this.jobApplications.length,
       userId: createRequest.userId,
       jobPostId: createRequest.jobPostId,
-      cvId: createRequest.cvId,
+      cvId: createRequest.cvId,z
       status: 0,
     };
 
