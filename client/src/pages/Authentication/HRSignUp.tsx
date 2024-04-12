@@ -568,7 +568,7 @@ function HRSignUp() {
 
           <p className="text-center text-gray-600">
             Bạn đã có tài khoản? {' '}
-            <Link to="/hr-login" className="text-green-500 hover:underline">
+            <Link to="/hr-login" className="text-green-500 hover:underline hover:text-green-500">
               Đăng nhập ngay
             </Link>
           </p>
