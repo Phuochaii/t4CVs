@@ -1,8 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { JobService } from './job.service';
-import { CreateJobDto } from './dto/create-job.dto';
-import { UpdateJobDto } from './dto/update-job.dto';
+import { CreateJobDto } from './dto/Req/create-job.dto';
 import { MessagePattern } from '@nestjs/microservices';
+import { UpdateJobDto } from './dto/Req/update-job.dto';
 
 @Controller()
 export class JobController {
@@ -32,6 +32,21 @@ export class JobController {
   @MessagePattern({ cmd: 'get_all_jobs' })
   findAllJobs() {
     return this.jobService.findAll();
+  }
+
+  @MessagePattern({ cmd: 'get_valid_jobs' })
+  findValidJobs() {
+    return this.jobService.findValidJobs();
+  }
+
+  @MessagePattern({ cmd: 'find_job_by_id' })
+  findJobById(id: number) {
+    return this.jobService.findJobById(id);
+  }
+
+  @MessagePattern({ cmd: 'update_job_status' })
+  updateJobStatus(data: UpdateJobDto) {
+    return this.jobService.updateJobStatus(data);
   }
 
   // @Patch(':id')

@@ -4,6 +4,8 @@ import { JobController } from './job.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Job } from './entities/job.entity';
+import { JobDetailModule } from './job-detail/job-detail.module';
+import { MajorModule } from './major/major.module';
 
 @Module({
   imports: [
@@ -23,7 +25,9 @@ import { Job } from './entities/job.entity';
         synchronize: true,
       }),
     }),
-    TypeOrmModule.forFeature([Job]), // JobRepository]),
+    TypeOrmModule.forFeature([Job]),
+    JobDetailModule,
+    MajorModule, // JobRepository]),
   ],
   controllers: [JobController],
   providers: [JobService], //, JobRepository],
