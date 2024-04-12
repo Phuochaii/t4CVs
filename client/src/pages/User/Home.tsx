@@ -59,22 +59,12 @@ const salary_range = [
   },
 ];
 const slides = [
-  '../../../public/images/slide_1.png',
-  '../../../public/images/slide_2.png',
-  '../../../public/images/slide_3.png',
-  '../../../public/images/slide_4.png',
-  '../../../public/images/slide_5.png'
+  '../../../images/slide_1.png',
+  '../../../images/slide_2.png',
+  '../../../images/slide_3.png',
+  '../../../images/slide_4.png',
+  '../../../images/slide_5.png'
 ];
-
-// const [currentSlide, setCurrentSlide] = useState(0);
-
-// const previous = () => {
-//   setCurrentSlide((prevSlide) => (prevSlide === 0 ? slides.length - 1 : prevSlide - 1));
-// };
-
-// const next = () => {
-//   setCurrentSlide((prevSlide) => (prevSlide === slides.length - 1 ? 0 : prevSlide + 1));
-// };
 
 function Home() {
   const autoSlideInterval = 5000;

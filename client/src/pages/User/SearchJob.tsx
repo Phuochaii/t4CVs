@@ -427,7 +427,7 @@ function SearchJob() {
                       {/* job content 1 */}
                       <div className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3">
                         <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                          <img src="../../../public/images/logo_company_1.png" />
+                          <img src="../../../images/logo_company_1.png" />
                         </div>
                         <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
                           <span className="job-title text-black font-semibold col-span-3">
@@ -465,7 +465,7 @@ function SearchJob() {
                       {/* job content 2 */}
                       <div className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3">
                         <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                          <img src="../../../public/images/logo_company_1.png" />
+                          <img src="../../../images/logo_company_1.png" />
                         </div>
                         <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
                           <span className="job-title text-black font-semibold col-span-3">
@@ -503,7 +503,7 @@ function SearchJob() {
                       {/* job content 3 */}
                       <div className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3">
                         <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                          <img src="../../../public/images/logo_company_1.png" />
+                          <img src="../../../images/logo_company_1.png" />
                         </div>
                         <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
                           <span className="job-title text-black font-semibold col-span-3">
@@ -541,7 +541,7 @@ function SearchJob() {
                       {/* job content 4 */}
                       <div className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3">
                         <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                          <img src="../../../public/images/logo_company_1.png" />
+                          <img src="../../../images/logo_company_1.png" />
                         </div>
                         <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
                           <span className="job-title text-black font-semibold col-span-3">
@@ -579,7 +579,7 @@ function SearchJob() {
                       {/* job content 5 */}
                       <div className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3">
                         <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                          <img src="../../../public/images/logo_company_1.png" />
+                          <img src="../../../images/logo_company_1.png" />
                         </div>
                         <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
                           <span className="job-title text-black font-semibold col-span-3">
@@ -617,7 +617,7 @@ function SearchJob() {
                       {/* job content 6 */}
                       <div className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3">
                         <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                          <img src="../../../public/images/logo_company_1.png" />
+                          <img src="../../../images/logo_company_1.png" />
                         </div>
                         <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
                           <span className="job-title text-black font-semibold col-span-3">
@@ -655,7 +655,7 @@ function SearchJob() {
                       {/* job content 7 */}
                       <div className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3">
                         <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                          <img src="../../../public/images/logo_company_1.png" />
+                          <img src="../../../images/logo_company_1.png" />
                         </div>
                         <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
                           <span className="job-title text-black font-semibold col-span-3">
@@ -689,7 +689,6 @@ function SearchJob() {
                           </div>
                         </div>
                       </div>
-
                     </div>
                   </div>
                   <div className="col-span-1">2</div>
