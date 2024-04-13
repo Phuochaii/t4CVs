@@ -6,7 +6,7 @@ function copyDir(sourceDir, targetDir) {
     .catch(err => console.error(err));
 }
 
-const serviceConfig = require('./service-config.json');
+const serviceConfig = require('./service.config.json');
 
 for (const config of serviceConfig) {
   const { serviceName, protoFiles } = config;

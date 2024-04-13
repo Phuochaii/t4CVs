@@ -23,4 +23,13 @@ export class NotificationServiceService {
     });
     await this.userNotificationRepository.save(userNotifications);
   }
+
+  async getNotifications(userId: User_Notification['userId']): Promise<User_Notification[]> {
+    return await this.userNotificationRepository.find({
+      where: {
+        userId,
+      },
+      relations: ['notification'],
+    });
+  }
 }

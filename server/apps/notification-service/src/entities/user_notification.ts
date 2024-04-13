@@ -2,8 +2,8 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { Notification } from "./notification";
 
 enum NotificationStatus {
-    READ = 0,
-    UNREAD = 1
+    UNREAD = 0,
+    READ = 1
 }
 
 @Entity()
