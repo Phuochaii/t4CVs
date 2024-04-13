@@ -6,8 +6,9 @@ import {
   Bell,
   ShoppingCart,
   ChevronDown,
+  Menu,
 } from "lucide-react";
-function Header() {
+function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
   const list_btn = [
     {
       name: "HR Insider",
@@ -59,10 +60,16 @@ function Header() {
     >
       <div className="flex items-center">
         <div className="flex items-center flex-grow">
-          <i className="fa-solid fa-bars"></i>
+          <Menu
+            size={18}
+            className="ml-1"
+            strokeWidth={1.65}
+            onClick={collapedSidebar}
+          />
+
           <div
             style={{
-              marginLeft: "27px",
+              marginLeft: "23px",
               marginRight: "20px",
               marginTop: "4px",
             }}
