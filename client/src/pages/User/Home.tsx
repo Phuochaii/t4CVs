@@ -1,8 +1,8 @@
 // khoa
 import { useState, useEffect } from 'react';
 import { TextField, FormControl, OutlinedInput, InputAdornment, MenuItem, Button } from '@mui/material';
-// import { Carousel } from "@material-tailwind/react";
 import { MagnifyingGlassIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/solid';
+import { MapPinIcon, StarIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 
 const city = [
   {
@@ -59,22 +59,12 @@ const salary_range = [
   },
 ];
 const slides = [
-  '../../../public/images/slide_1.png',
-  '../../../public/images/slide_2.png',
-  '../../../public/images/slide_3.png',
-  '../../../public/images/slide_4.png',
-  '../../../public/images/slide_5.png'
+  '../../../images/slide_1.png',
+  '../../../images/slide_2.png',
+  '../../../images/slide_3.png',
+  '../../../images/slide_4.png',
+  '../../../images/slide_5.png'
 ];
-
-// const [currentSlide, setCurrentSlide] = useState(0);
-
-// const previous = () => {
-//   setCurrentSlide((prevSlide) => (prevSlide === 0 ? slides.length - 1 : prevSlide - 1));
-// };
-
-// const next = () => {
-//   setCurrentSlide((prevSlide) => (prevSlide === slides.length - 1 ? 0 : prevSlide + 1));
-// };
 
 function Home() {
   const autoSlideInterval = 5000;
@@ -108,7 +98,11 @@ function Home() {
               <FormControl>
                 <OutlinedInput
                   id="outlined-adornment-amount"
-                  startAdornment={<InputAdornment position="start"><MagnifyingGlassIcon /></InputAdornment>}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <MagnifyingGlassIcon className="w-6" />
+                    </InputAdornment>
+                  }
                 />
               </FormControl>
             </div>
@@ -117,6 +111,13 @@ function Home() {
                 id="outlined-select-currency"
                 select
                 defaultValue="0"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <MapPinIcon className="w-7" />
+                    </InputAdornment>
+                  ),
+                }}
               >
                 {city.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -132,6 +133,13 @@ function Home() {
                   id="outlined-select-currency"
                   select
                   defaultValue="0"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <StarIcon className="w-6 border-2 border-neutral-500 rounded-full" />
+                      </InputAdornment>
+                    ),
+                  }}
                 >
                   {exp_year.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
@@ -145,6 +153,13 @@ function Home() {
                 id="outlined-select-currency"
                 select
                 defaultValue="0"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <CurrencyDollarIcon className="w-7" />
+                    </InputAdornment>
+                  ),
+                }}
               >
                 {salary_range.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -157,7 +172,7 @@ function Home() {
           <Button className="btn-search" variant='contained'>Tìm kiếm</Button>
         </form>
 
-        <div className="box-work-market flex flex-row gap-4">
+        <div className="box-work-market flex flex-row gap-4 text-black">
           <div className="box-work-market__item flex flex-row gap-2 items-center">
             <span className="lable-item text-sm">Vị trí chờ bạn khám phá</span>
             <span className='quantity item-number number-job-new-today'>46.052</span>

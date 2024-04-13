@@ -15,7 +15,17 @@ import {
   ChevronUpIcon,
   CurrencyDollarIcon,
 } from "@heroicons/react/20/solid";
-import { HeartIcon } from "@heroicons/react/24/outline";
+import {
+  HeartIcon,
+  MapPinIcon,
+  StarIcon,
+  BriefcaseIcon,
+  CubeIcon,
+  ClockIcon,
+  AcademicCapIcon,
+  FolderIcon,
+  Bars3Icon
+} from "@heroicons/react/24/outline";
 import { Tooltip } from "@mui/material";
 
 const city = [
@@ -188,7 +198,7 @@ function SearchJob() {
                         id="outlined-adornment-amount"
                         startAdornment={
                           <InputAdornment position="start">
-                            <MagnifyingGlassIcon />
+                            <MagnifyingGlassIcon className="w-6" />
                           </InputAdornment>
                         }
                       />
@@ -199,6 +209,13 @@ function SearchJob() {
                       id="outlined-select-currency"
                       select
                       defaultValue="0"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MapPinIcon className="w-7" />
+                          </InputAdornment>
+                        ),
+                      }}
                     >
                       {city.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
@@ -216,6 +233,13 @@ function SearchJob() {
                       select
                       defaultValue="0"
                       className="w-full"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <StarIcon className="w-6 border-2 border-neutral-500 rounded-full" />
+                          </InputAdornment>
+                        ),
+                      }}
                     >
                       {exp_year.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
@@ -232,6 +256,15 @@ function SearchJob() {
                       select
                       defaultValue="0"
                       className="w-full"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                          </InputAdornment>
+                        ),
+                      }}
                     >
                       {salary_range.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
@@ -255,9 +288,10 @@ function SearchJob() {
                   </span>
                 </div>
                 <div
-                  className={`search-result-tool ml-28 flex flex-row items-center px-4 font-bold text-white rounded-md ${isActive ? "active" : ""}`}
+                  className={`search-result-tool ml-28 flex flex-row items-center py-2 px-4 border border-transparent font-bold text-white rounded-md ${isActive ? "active" : ""}`}
                   onClick={handleClick}
                 >
+                  <Bars3Icon className="w-8 mr-2" />
                   <span>Lọc nâng cao</span>
                   {iconDirection === "down" ? (
                     <ChevronDownIcon className="w-8" />
@@ -268,13 +302,20 @@ function SearchJob() {
               </div>
 
               {boxOptionShow ? (
-                <div className="box-option grid grid-cols-5 gap-x-4 mt-4 p-4">
+                <div className="box-option grid grid-cols-5 gap-x-4 mt-4 p-3">
                   <div className="item col-span-1">
                     <TextField
                       id="outlined-select-currency"
                       select
                       defaultValue="0"
                       className="w-full"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <BriefcaseIcon className="w-7" />
+                          </InputAdornment>
+                        ),
+                      }}
                     >
                       {job_name.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
@@ -289,6 +330,13 @@ function SearchJob() {
                       select
                       defaultValue="0"
                       className="w-full"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <CubeIcon className="w-7" />
+                          </InputAdornment>
+                        ),
+                      }}
                     >
                       {job_field.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
@@ -303,6 +351,13 @@ function SearchJob() {
                       select
                       defaultValue="0"
                       className="w-full"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <ClockIcon className="w-7" />
+                          </InputAdornment>
+                        ),
+                      }}
                     >
                       {job_type.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
@@ -317,6 +372,13 @@ function SearchJob() {
                       select
                       defaultValue="0"
                       className="w-full"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <AcademicCapIcon className="w-7" />
+                          </InputAdornment>
+                        ),
+                      }}
                     >
                       {job_level.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
@@ -331,6 +393,13 @@ function SearchJob() {
                       select
                       defaultValue="0"
                       className="w-full"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <FolderIcon className="w-7" />
+                          </InputAdornment>
+                        ),
+                      }}
                     >
                       {news_type.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
@@ -354,16 +423,17 @@ function SearchJob() {
                 <div className="job-body wrapper-main grid grid-cols-3 gap-x-4">
                   <div className="wrapper-content col-span-2">
                     <div className="job-list-search-result mt-4">
+                      
                       {/* job content 1 */}
                       <div className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3">
                         <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                          <img src="../../../public/images/logo_company_1.png" />
+                          <img src="../../../images/logo_company_1.png" />
                         </div>
-                        <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col gap-y-2">
-                          <span className="job-title font-semibold col-span-3">
+                        <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
+                          <span className="job-title text-black font-semibold col-span-3">
                             Nhân viên IT (PHP + JAVASCRIPT)
                           </span>
-                          <span className="job-company-name text-sm col-span-3">
+                          <span className="job-company-name text-slate-600 text-sm col-span-3">
                             CÔNG TY TNHH CHYANG SHENG VIỆT NAM
                           </span>
                           <span className="row-start-4 col-span-3 flex items-center">
@@ -378,7 +448,7 @@ function SearchJob() {
                             </span>
                           </span>
                           <div className="job-salary col-start-4 flex items-center">
-                            <CurrencyDollarIcon className="w-4 mr-2" />
+                            <CurrencyDollarIcon className="w-5 mr-2" />
                             <strong className="salary-count">Thỏa thuận</strong>
                           </div>
                           <div className="job-actions row-start-4 flex items-center justify-end">
@@ -392,16 +462,16 @@ function SearchJob() {
                         </div>
                       </div>
 
-                      {/* job content 2*/}
+                      {/* job content 2 */}
                       <div className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3">
                         <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                          <img src="../../../public/images/logo_company_1.png" />
+                          <img src="../../../images/logo_company_1.png" />
                         </div>
-                        <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col gap-y-2">
-                          <span className="job-title font-semibold col-span-3">
+                        <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
+                          <span className="job-title text-black font-semibold col-span-3">
                             Nhân viên IT (PHP + JAVASCRIPT)
                           </span>
-                          <span className="job-company-name text-sm col-span-3">
+                          <span className="job-company-name text-slate-600 text-sm col-span-3">
                             CÔNG TY TNHH CHYANG SHENG VIỆT NAM
                           </span>
                           <span className="row-start-4 col-span-3 flex items-center">
@@ -416,7 +486,7 @@ function SearchJob() {
                             </span>
                           </span>
                           <div className="job-salary col-start-4 flex items-center">
-                            <CurrencyDollarIcon className="w-4 mr-2" />
+                            <CurrencyDollarIcon className="w-5 mr-2" />
                             <strong className="salary-count">Thỏa thuận</strong>
                           </div>
                           <div className="job-actions row-start-4 flex items-center justify-end">
@@ -429,16 +499,17 @@ function SearchJob() {
                           </div>
                         </div>
                       </div>
-                      {/* job content 2*/}
+
+                      {/* job content 3 */}
                       <div className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3">
                         <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                          <img src="../../../public/images/logo_company_1.png" />
+                          <img src="../../../images/logo_company_1.png" />
                         </div>
-                        <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col gap-y-2">
-                          <span className="job-title font-semibold col-span-3">
+                        <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
+                          <span className="job-title text-black font-semibold col-span-3">
                             Nhân viên IT (PHP + JAVASCRIPT)
                           </span>
-                          <span className="job-company-name text-sm col-span-3">
+                          <span className="job-company-name text-slate-600 text-sm col-span-3">
                             CÔNG TY TNHH CHYANG SHENG VIỆT NAM
                           </span>
                           <span className="row-start-4 col-span-3 flex items-center">
@@ -453,7 +524,7 @@ function SearchJob() {
                             </span>
                           </span>
                           <div className="job-salary col-start-4 flex items-center">
-                            <CurrencyDollarIcon className="w-4 mr-2" />
+                            <CurrencyDollarIcon className="w-5 mr-2" />
                             <strong className="salary-count">Thỏa thuận</strong>
                           </div>
                           <div className="job-actions row-start-4 flex items-center justify-end">
@@ -466,16 +537,17 @@ function SearchJob() {
                           </div>
                         </div>
                       </div>
-                      {/* job content 2*/}
+
+                      {/* job content 4 */}
                       <div className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3">
                         <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                          <img src="../../../public/images/logo_company_1.png" />
+                          <img src="../../../images/logo_company_1.png" />
                         </div>
-                        <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col gap-y-2">
-                          <span className="job-title font-semibold col-span-3">
+                        <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
+                          <span className="job-title text-black font-semibold col-span-3">
                             Nhân viên IT (PHP + JAVASCRIPT)
                           </span>
-                          <span className="job-company-name text-sm col-span-3">
+                          <span className="job-company-name text-slate-600 text-sm col-span-3">
                             CÔNG TY TNHH CHYANG SHENG VIỆT NAM
                           </span>
                           <span className="row-start-4 col-span-3 flex items-center">
@@ -490,7 +562,7 @@ function SearchJob() {
                             </span>
                           </span>
                           <div className="job-salary col-start-4 flex items-center">
-                            <CurrencyDollarIcon className="w-4 mr-2" />
+                            <CurrencyDollarIcon className="w-5 mr-2" />
                             <strong className="salary-count">Thỏa thuận</strong>
                           </div>
                           <div className="job-actions row-start-4 flex items-center justify-end">
@@ -503,16 +575,17 @@ function SearchJob() {
                           </div>
                         </div>
                       </div>
-                      {/* job content 2*/}
+
+                      {/* job content 5 */}
                       <div className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3">
                         <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                          <img src="../../../public/images/logo_company_1.png" />
+                          <img src="../../../images/logo_company_1.png" />
                         </div>
-                        <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col gap-y-2">
-                          <span className="job-title font-semibold col-span-3">
+                        <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
+                          <span className="job-title text-black font-semibold col-span-3">
                             Nhân viên IT (PHP + JAVASCRIPT)
                           </span>
-                          <span className="job-company-name text-sm col-span-3">
+                          <span className="job-company-name text-slate-600 text-sm col-span-3">
                             CÔNG TY TNHH CHYANG SHENG VIỆT NAM
                           </span>
                           <span className="row-start-4 col-span-3 flex items-center">
@@ -527,7 +600,83 @@ function SearchJob() {
                             </span>
                           </span>
                           <div className="job-salary col-start-4 flex items-center">
-                            <CurrencyDollarIcon className="w-4 mr-2" />
+                            <CurrencyDollarIcon className="w-5 mr-2" />
+                            <strong className="salary-count">Thỏa thuận</strong>
+                          </div>
+                          <div className="job-actions row-start-4 flex items-center justify-end">
+                            <span className="btn-apply mr-2">Ứng tuyển</span>
+                            <span className="btn-save">
+                              <Tooltip title="Lưu" placement="top">
+                                <HeartIcon className="w-5" />
+                              </Tooltip>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* job content 6 */}
+                      <div className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3">
+                        <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
+                          <img src="../../../images/logo_company_1.png" />
+                        </div>
+                        <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
+                          <span className="job-title text-black font-semibold col-span-3">
+                            Nhân viên IT (PHP + JAVASCRIPT)
+                          </span>
+                          <span className="job-company-name text-slate-600 text-sm col-span-3">
+                            CÔNG TY TNHH CHYANG SHENG VIỆT NAM
+                          </span>
+                          <span className="row-start-4 col-span-3 flex items-center">
+                            <span className="job-sub-detail job-location text-xs">
+                              Hồ Chí Minh
+                            </span>
+                            <span className="job-sub-detail job-remaining-application-days text-xs">
+                              Còn <strong>19</strong> ngày để ứng tuyển
+                            </span>
+                            <span className="job-sub-detail job-update-time text-xs">
+                              Cập nhật 4 giờ trước
+                            </span>
+                          </span>
+                          <div className="job-salary col-start-4 flex items-center">
+                            <CurrencyDollarIcon className="w-5 mr-2" />
+                            <strong className="salary-count">Thỏa thuận</strong>
+                          </div>
+                          <div className="job-actions row-start-4 flex items-center justify-end">
+                            <span className="btn-apply mr-2">Ứng tuyển</span>
+                            <span className="btn-save">
+                              <Tooltip title="Lưu" placement="top">
+                                <HeartIcon className="w-5" />
+                              </Tooltip>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* job content 7 */}
+                      <div className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3">
+                        <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
+                          <img src="../../../images/logo_company_1.png" />
+                        </div>
+                        <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
+                          <span className="job-title text-black font-semibold col-span-3">
+                            Nhân viên IT (PHP + JAVASCRIPT)
+                          </span>
+                          <span className="job-company-name text-slate-600 text-sm col-span-3">
+                            CÔNG TY TNHH CHYANG SHENG VIỆT NAM
+                          </span>
+                          <span className="row-start-4 col-span-3 flex items-center">
+                            <span className="job-sub-detail job-location text-xs">
+                              Hồ Chí Minh
+                            </span>
+                            <span className="job-sub-detail job-remaining-application-days text-xs">
+                              Còn <strong>19</strong> ngày để ứng tuyển
+                            </span>
+                            <span className="job-sub-detail job-update-time text-xs">
+                              Cập nhật 4 giờ trước
+                            </span>
+                          </span>
+                          <div className="job-salary col-start-4 flex items-center">
+                            <CurrencyDollarIcon className="w-5 mr-2" />
                             <strong className="salary-count">Thỏa thuận</strong>
                           </div>
                           <div className="job-actions row-start-4 flex items-center justify-end">
