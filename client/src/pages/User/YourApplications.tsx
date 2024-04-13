@@ -148,11 +148,11 @@ function YourApplications() {
     setIsOn(!isOn);
   };
   return (
-    <div className="flex justify-center flex-row items-start bg-gray-100 w-screen h-screen space-x-5">
-      <div className='justify-center flex-row items-center  w-8/12 mt-5'>
+    <div className="flex justify-center flex-row items-start bg-gray-100 w-screen space-x-5">
+      <div className='justify-center flex-row items-center  w-8/12 mt-5 mb-5'>
         <CompanyList /> {/* Sử dụng component danh sách công ty */}
       </div>
-      <div className="rounded-lg p-5  border-2 w-3/12 bg-white mt-5">
+      <div className="rounded-lg p-5  border-2 w-3/12 bg-white mt-5 mb-5">
         <div className="container mx-auto mt-8">
           <div className="flex items-center">
             <div className="w-16 h-16 bg-gray-300 rounded-full mr-4 overflow-hidden">
