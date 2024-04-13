@@ -1,4 +1,3 @@
-import gradient from "@material-tailwind/react/theme/components/timeline/timelineIconColors/gradient";
 import CustomSelectOption from "../../layouts/HRLayout/components/CustomSelectOption";
 import {
   ChevronRight,
@@ -63,17 +62,17 @@ function ReceiveCV() {
     { title: "Chỉ hiện thị CV chưa xem", value: "2" },
   ];
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center overflow-x-hidden">
       <div
         className="bg-white w-full"
         style={{ marginLeft: "1px", paddingLeft: "20px" }}
       >
-        <p style={{ padding: "20px 0", fontSize: "16px", fontWeight: "500" }}>
+        <p style={{ padding: "20px 15px", fontSize: "16px", fontWeight: "500" }}>
           Quản lý CV ứng viên
         </p>
-        <div className="flex py-2">
+        <div className="flex py-2  flex-wrap">
           <div
-            className="flex justify-between bg-white border border-gray-200"
+            className="flex  mx-3.5 justify-between bg-white border border-gray-200"
             style={{ width: "280px" }}
           >
             <input
@@ -120,10 +119,10 @@ function ReceiveCV() {
             <span className="text-green-500 font-bold">SHring.ai</span>
           </p>
           <button
-            className="pl-3 pr-8 text-green-500 bg-white flex"
+            className="pl-3 pr-8 text-green-600 bg-white flex"
             style={{ borderLeft: "1px solid green " }}
           >
-            <span style={{ fontSize: "13px" }}>Đăng ký ngay</span>
+            <span style={{ fontSize: "13px" }} className="hover:text-green-900">Đăng ký ngay</span>
             <ChevronRight size={18} />
           </button>
         </div>

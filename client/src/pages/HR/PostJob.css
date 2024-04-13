@@ -1,21 +1,3 @@
-.background{
-    width: 100%;
-    background-color: #e8edf2;
-    padding: 20px;
-    overflow-y: "scroll",
-}
-
-.post {
-  background-color: #fff;
-  padding: 20px;
-  display: flex;
-}
-
-.post_banner {
-  width: 60%;
-  background-image: linear-gradient(#e1fbed, white);
-  background-color: #fff;
-}
 
 .banner_img{
     width: 100%;
@@ -52,10 +34,7 @@
   color: #00b14f;
 }
 
-.post_info {
-  width: 40%;
-  padding-left: 20px;
-}
+
 
 .info_main{
     font-size: 20px;

@@ -7,6 +7,7 @@ import {
   ShoppingCart,
   ChevronDown,
   Menu,
+  LineChart
 } from "lucide-react";
 function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
   const list_btn = [
@@ -56,6 +57,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
   return (
     <div
       className=" text-white"
+      id="hr-header"
       style={{ padding: "16px 20px", backgroundColor: "#212F3F" }}
     >
       <div className="flex items-center">
@@ -82,6 +84,16 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
           </div>
         </div>
         <div className="flex items-center">
+          <RoundedButton
+            icon={LineChart}
+            isFillIcon={false}
+            iconColor="#00B14F"
+            iconSize={20}
+            iconStrokeWidth={2.2}
+            border="2px solid green"
+            text="Tải báo cáo thị trường 2023-2024"
+            backgroundImage="linear-gradient(90deg, #213142 .62%, #0a9c4b 99.38%)"
+          />
           {list_btn.map((btn, index) => (
             <RoundedButton
               key={index}
