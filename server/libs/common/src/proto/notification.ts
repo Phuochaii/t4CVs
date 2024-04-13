@@ -4,6 +4,12 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "notification";
 
+export enum status {
+  UNREAD = 0,
+  READ = 1,
+  UNRECOGNIZED = -1,
+}
+
 /** The request message containing the users id. */
 export interface User {
   id: number;
@@ -20,12 +26,25 @@ export interface SendNotificationRequest {
 export interface SendNotificationResponse {
 }
 
+export interface Notifications {
+  notifications: Notification[];
+}
+
+export interface Notification {
+  title: string;
+  content: string;
+  link: string;
+  status: status;
+}
+
 export const NOTIFICATION_PACKAGE_NAME = "notification";
 
 /** The job application service definition. */
 
 export interface NotificationServiceClient {
   sendNotification(request: SendNotificationRequest): Observable<SendNotificationResponse>;
+
+  getNotifications(request: User): Observable<Notifications>;
 }
 
 /** The job application service definition. */
@@ -34,11 +53,13 @@ export interface NotificationServiceController {
   sendNotification(
     request: SendNotificationRequest,
   ): Promise<SendNotificationResponse> | Observable<SendNotificationResponse> | SendNotificationResponse;
+
+  getNotifications(request: User): Promise<Notifications> | Observable<Notifications> | Notifications;
 }
 
 export function NotificationServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["sendNotification"];
+    const grpcMethods: string[] = ["sendNotification", "getNotifications"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("NotificationService", method)(constructor.prototype[method], method, descriptor);
