@@ -1,17 +1,33 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { CvServiceService } from './cv-service.service';
 import { CvService } from './entities/cv-service.entity';
-import { CreateCvServiceInput } from './dto/create-cv-service.input';
-import { UpdateCvServiceInput } from './dto/update-cv-service.input';
 
 @Resolver(() => CvService)
 export class CvServiceResolver {
   constructor(private readonly cvServiceService: CvServiceService) {}
 
-  @Mutation(() => CvService)
-  createCvService(@Args('createCvServiceInput') createCvServiceInput: CreateCvServiceInput) {
-    return this.cvServiceService.create(createCvServiceInput);
+  //@Mutation(() => CvService)
+  @Query(() => CvService)
+  async getCV(
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<CvService> | null {
+    console.log(1);
+    return this.cvServiceService.getCVById(id);
   }
+
+  @Mutation(() => CvService)
+  async createCV(
+    @Args('userId', { type: () => Int }) userId: number,
+    @Args('cvData') cvData: string,
+  ): Promise<CvService> {
+    console.log(1);
+    return this.cvServiceService.createCV(userId, cvData);
+  }
+  // createCvService(
+  //   @Args('createCvServiceInput') createCvServiceInput: CreateCvServiceInput,
+  // ) {
+  //   return this.cvServiceService.create(createCvServiceInput);
+  // }
 
   @Query(() => [CvService], { name: 'cvService' })
   findAll() {
@@ -23,13 +39,13 @@ export class CvServiceResolver {
     return this.cvServiceService.findOne(id);
   }
 
-  @Mutation(() => CvService)
-  updateCvService(@Args('updateCvServiceInput') updateCvServiceInput: UpdateCvServiceInput) {
-    return this.cvServiceService.update(updateCvServiceInput.id, updateCvServiceInput);
-  }
+  // @Mutation(() => CvService)
+  // updateCvService(@Args('updateCvServiceInput') updateCvServiceInput: UpdateCvServiceInput) {
+  //   return this.cvServiceService.update(updateCvServiceInput.id, updateCvServiceInput);
+  // }
 
-  @Mutation(() => CvService)
-  removeCvService(@Args('id', { type: () => Int }) id: number) {
-    return this.cvServiceService.remove(id);
-  }
+  // @Mutation(() => CvService)
+  // removeCvService(@Args('id', { type: () => Int }) id: number) {
+  //   return this.cvServiceService.remove(id);
+  // }
 }
