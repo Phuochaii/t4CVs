@@ -48,7 +48,6 @@ export class UploadService {
       return newFilename;
     } catch (error: any) {
       console.error('Error uploading file:', error);
-      return 'Error';
       throw new Error(error);
     }
   }
