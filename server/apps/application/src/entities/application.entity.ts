@@ -1,3 +1,4 @@
+import { Application_Status } from '@app/common';
 import {
   Column,
   CreateDateColumn,
@@ -11,13 +12,13 @@ export class Application {
   id: number;
 
   @Column('text')
-  status: string;
+  status: Application_Status;
 
   @Column('text')
   fullname: string;
 
   @CreateDateColumn()
-  phone: Date;
+  phone: string;
 
   @Column('text')
   email: string;
@@ -26,7 +27,7 @@ export class Application {
   coverLetter: string;
 
   @Column('text')
-  createAt: string;
+  createdAt: string;
 
   @Column('text')
   updateAt: string;

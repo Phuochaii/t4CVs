@@ -1,40 +1,48 @@
-// import { CreateApplicationDto } from './dto/create-application.dto';
-// import { UpdateApplicationDto } from './dto/update-application.dto';
-// import { Application, CreateApplicationDTO, UpdateApplicationDTO } from '@app/common';
-// import { Application } from './entities/application.entity';
-
-// import { Injectable } from '@nestjs/common';
-// import { InjectRepository } from '@nestjs/typeorm';
-// import { Repository } from 'typeorm';
-// import { Application } from './entities/application.entity';
-// import { CreateApplicationRequest } from '@app/common/proto/application';
-
-import { Injectable } from '@nestjs/common';
-import {
-  // User,
-  CreateApplicationRequest,
-  ReadApplicationRequest,
-  // Users,
-  // PaginationDto,
-  Application
-} from '@app/common';
-import { Observable, Subject } from 'rxjs';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateApplicationRequest, ReadApplicationRequest } from '@app/common';
+import { Application } from './entities/application.entity';
+import { v4 as randomUUID } from 'uuid'; // Import randomUUID
 
 @Injectable()
 export class ApplicationService {
   private readonly application: Application[] = [];
-  findAll(): Application {
-    return { Application: this.Application };
+
+  findById(readApplication: ReadApplicationRequest): Promise<Application> {
+    return new Promise((resolve, reject) => {
+      const application = this.application.find(
+        (app) => app.id === readApplication.id,
+      );
+      if (application) {
+        resolve(application);
+      } else {
+        reject(
+          new NotFoundException(
+            `Application with ID ${readApplication.id} not found.`,
+          ),
+        );
+      }
+    });
   }
 
-  create(createApplication: CreateApplicationRequest) {
-    const user: User = {
-      ...createUserDto,
-      subscribed: false,
-      socialMedia: {},
+  findAll(): Application[] {
+    return this.application;
+  }
+
+  create(createApplication: CreateApplicationRequest): Application {
+    const application: Application = {
       id: randomUUID(),
+      fullname: createApplication.fullname,
+      phone: createApplication.phone,
+      email: createApplication.email,
+      cvId: createApplication.cvId,
+      status: 1,
+      coverLetter: '',
+      createdAt: '',
+      updateAt: '',
+      jobId: 0,
+      userId: 0,
     };
-    this.users.push(user);
-    return user;
+    this.application.push(application); // Corrected the variable name to plural
+    return application;
   }
 }

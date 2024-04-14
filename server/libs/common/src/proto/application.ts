@@ -4,10 +4,6 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "Application";
 
-export interface DeleteApplicationRequest {
-  id: number;
-}
-
 export interface ReadApplicationRequest {
   id: number;
 }
@@ -52,27 +48,18 @@ export interface ApplicationServiceClient {
   createApplication(request: CreateApplicationRequest): Observable<Application>;
 
   readApplication(request: ReadApplicationRequest): Observable<Application>;
-
-  updateApplication(request: Application): Observable<Application>;
-
-  deleteApplication(request: DeleteApplicationRequest): Observable<Empty>;
 }
 
 /** The job application service definition. */
 
 export interface ApplicationServiceController {
   createApplication(request: CreateApplicationRequest): Promise<Application> | Observable<Application> | Application;
-
   readApplication(request: ReadApplicationRequest): Promise<Application> | Observable<Application> | Application;
-
-  updateApplication(request: Application): Promise<Application> | Observable<Application> | Application;
-
-  deleteApplication(request: DeleteApplicationRequest): Promise<Empty> | Observable<Empty> | Empty;
 }
 
 export function ApplicationServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["createApplication", "readApplication", "updateApplication", "deleteApplication"];
+    const grpcMethods: string[] = ["createApplication", "readApplication"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("ApplicationService", method)(constructor.prototype[method], method, descriptor);
@@ -86,4 +73,3 @@ export function ApplicationServiceControllerMethods() {
 }
 
 export const APPLICATION_SERVICE_NAME = "ApplicationService";
-

@@ -50,7 +50,7 @@
         "watchAssets": true
       }
     },
-    "application-service": {
+    "application": {
       "type": "application",
       "root": "apps/application",
       "entryFile": "main",
