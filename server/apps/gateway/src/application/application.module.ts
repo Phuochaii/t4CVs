@@ -1,24 +1,24 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ClientProxyFactory, Transport } from '@nestjs/microservices';
+import { ApplicationService } from './application.service';
 import { ApplicationController } from './application.controller';
-
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { join } from 'path';
+import { APPLICATION_PACKAGE_NAME } from '@app/common';
 @Module({
-  imports: [ConfigModule],
-  controllers: [ApplicationController],
-  providers: [
-    {
-      provide: 'APPLICATION_SERVICE',
-      useFactory: (configService: ConfigService) =>
-        ClientProxyFactory.create({
-          transport: Transport.TCP,
-          options: {
-            host: configService.get('localhost'),
-            port: configService.get('4000'),
-          },
-        }),
-      inject: [ConfigService],
-    },
+  imports: [
+    ClientsModule.register([
+      {
+        name: APPLICATION_PACKAGE_NAME,
+        transport: Transport.GRPC,
+        options: {
+          url: 'localhost:50051',
+          package: APPLICATION_PACKAGE_NAME,
+          protoPath: join(__dirname, './proto/application.proto'),
+        },
+      },
+    ]),
   ],
+  controllers: [ApplicationController],
+  providers: [ApplicationService],
 })
 export class ApplicationModule {}

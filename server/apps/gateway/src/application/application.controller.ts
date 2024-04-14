@@ -1,30 +1,41 @@
-import { Controller, Get, Inject, Post, Req } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  // Patch,
+  Param,
+  // Delete,
+} from '@nestjs/common';
+import { ApplicationService } from './application.service';
+import { CreateApplicationRequest } from '@app/common';
 
 @Controller('application')
 export class ApplicationController {
-  constructor(
-    @Inject('APPLICATION_SERVICE')
-    private readonly applicationService: ClientProxy,
-  ) {}
-
-  @Get()
-  async getApplication() {
-    return this.applicationService.send(
-      {
-        cmd: 'get-all-application',
-      },
-      {},
-    );
-  }
+  constructor(private readonly applicationService: ApplicationService) {}
 
   @Post()
-  async createSubscriberTCP(@Req() req: any) {
-    return this.applicationService.send(
-      {
-        cmd: 'add-application',
-      },
-      req.user,
-    );
+  create(@Body() createApplicationRequest: CreateApplicationRequest) {
+    return this.applicationService.create(createApplicationRequest);
   }
+
+  // @Get()
+  // findAll() {
+  //   return this.applicationService.findAll();
+  // }
+
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.applicationService.findOne(id);
+  }
+
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateApplicationDto: UpdateApplicationDto) {
+  //   return this.applicationService.update(+id, updateApplicationDto);
+  // }
+
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.applicationService.remove(+id);
+  // }
 }

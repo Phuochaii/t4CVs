@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApplicationService } from './application.service';
 import { ApplicationController } from './application.controller';
 import { Application } from './entities/application.entity';
+import { ApplicationRepository } from './application.repository';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { Application } from './entities/application.entity';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Application]),
+    TypeOrmModule.forFeature([Application, ApplicationRepository]),
   ],
   controllers: [ApplicationController],
   providers: [ApplicationService],

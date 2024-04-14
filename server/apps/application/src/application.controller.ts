@@ -28,8 +28,10 @@ export class ApplicationController implements ApplicationServiceController {
   async readApplication(
     readApplication: ReadApplicationRequest,
   ): Promise<Application> {
-    // Use Promise<Application> as return type
     const application = await this.applicationService.findById(readApplication);
-    return application;
+    if (application) {
+      return application;
+    }
+    return null;
   }
 }
