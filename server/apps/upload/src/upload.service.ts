@@ -1,15 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { UploadFileDto } from './dto/upload.dto';
+import { UploadCVDto } from './dto/upload.dto';
 import { v4 as uuidv4 } from 'uuid';
 import * as fs from 'fs';
 
 @Injectable()
 export class UploadService {
-  async uploadFile(uploadFileDto: UploadFileDto): Promise<string> {
-    const { file, filename, mimetype } = uploadFileDto;
+  async uploadCV(uploadCVDto: UploadCVDto): Promise<any> {
+    const {
+      file,
+      filename,
+      mimetype,
+      fileSize,
+      userId,
+      cvId,
+      uploadDate,
+      updateDate,
+    } = uploadCVDto;
 
     // File size validation (5MB limit)
-    if (file.length > 5 * 1024 * 1024) {
+    if (fileSize > 5 * 1024 * 1024) {
       throw new Error('File size exceeds 5MB limit');
     }
 
@@ -27,7 +36,7 @@ export class UploadService {
 
     const newFilename = `${uuidv4()}.${filename.split('.').pop()}`;
 
-    const uploadPath = './uploads'; 
+    const uploadPath = './uploads';
 
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true });
@@ -39,6 +48,7 @@ export class UploadService {
       return newFilename;
     } catch (error: any) {
       console.error('Error uploading file:', error);
+      return 'Error';
       throw new Error(error);
     }
   }

@@ -1,34 +1,34 @@
-import {
-  Controller,
-  Post,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import * as multer from 'multer';
-import { UploadFileDto } from './dto/upload.dto';
+import { UploadCVDto } from './dto/upload.dto';
 import { UploadService } from './upload.service';
+import { MessagePattern } from '@nestjs/microservices';
 
-const upload = multer({
-  dest: './uploads',
-  fileFilter: (req: any, file: any, cb: any) => {
-    if (file.mimetype.match(/\/(pdf|doc|docx)$/i)) {
-      cb(null, true);
-    } else {
-      cb(null, false);
-    }
-  },
-  limits: { fileSize: 5 * 1024 * 1024 }, // Maximum file size: 5MB
-});
+// const upload = multer({
+//   dest: './uploads',
+//   fileFilter: (req: any, file: any, cb: any) => {
+//     if (file.mimetype.match(/\/(pdf|doc|docx)$/i)) {
+//       cb(null, true);
+//     } else {
+//       cb(null, false);
+//     }
+//   },
+//   limits: { fileSize: 5 * 1024 * 1024 }, // Maximum file size: 5MB
+// });
 
-@Controller('upload')
+@Controller()
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
-  @Post()
-  @UseInterceptors(upload.single('file'))
-  async uploadFile(@UploadedFile() file: any): Promise<string> {
-    const uploadFileDto = new UploadFileDto();
-    return await this.uploadService.uploadFile(uploadFileDto);
+  @MessagePattern({ cmd: 'hello' })
+  getHello() {
+    console.log('Message Hello');
+    return 'Hello World';
+  }
+
+  @MessagePattern({ cmd: 'upload_cv' })
+  uploadCV(upload: UploadCVDto) {
+    return this.uploadService.uploadCV(upload);
   }
 }
 
