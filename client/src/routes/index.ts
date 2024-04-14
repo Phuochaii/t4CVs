@@ -48,11 +48,6 @@ const routes = [
   // ADMIN PAGES - Thức
   { path: "/admin", component: Admin.Overview, layout: AdminLayout },
   {
-    path: "/admin/agents",
-    component: Admin.Agents,
-    layout: AdminLayout,
-  },
-  {
     path: "/admin/compaign",
     component: Admin.Compaign,
     layout: AdminLayout,
