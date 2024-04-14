@@ -2,53 +2,88 @@
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 
-export const protobufPackage = "notification";
+export const protobufPackage = "Application";
 
-/** The request message containing the users id. */
-export interface User {
+export interface DeleteApplicationRequest {
   id: number;
 }
 
-export interface SendNotificationRequest {
-  title: string;
-  content: string;
-  link: string;
-  users: User[];
+export interface ReadApplicationRequest {
+  id: number;
 }
 
-/** The response message containing the greetings */
-export interface SendNotificationResponse {
+export interface CreateApplicationRequest {
+  id: number;
+  fullname: string;
+  phone: string;
+  email: string;
+  cvId: number;
 }
 
-export const NOTIFICATION_PACKAGE_NAME = "notification";
+export interface Empty {
+}
+
+/** The JobApplication message represents a job application record. */
+export interface Application {
+  id: number;
+  status: Application_Status;
+  fullname: string;
+  phone: string;
+  email: string;
+  coverLetter: string;
+  createdAt: string;
+  updateAt: string;
+  jobId: number;
+  userId: number;
+  cvId: number;
+}
+
+export enum Application_Status {
+  SUBMITTED = 0,
+  VIEWED = 1,
+  UNRECOGNIZED = -1,
+}
+
+export const APPLICATION_PACKAGE_NAME = "Application";
 
 /** The job application service definition. */
 
-export interface NotificationServiceClient {
-  sendNotification(request: SendNotificationRequest): Observable<SendNotificationResponse>;
+export interface ApplicationServiceClient {
+  createApplication(request: CreateApplicationRequest): Observable<Application>;
+
+  readApplication(request: ReadApplicationRequest): Observable<Application>;
+
+  updateApplication(request: Application): Observable<Application>;
+
+  deleteApplication(request: DeleteApplicationRequest): Observable<Empty>;
 }
 
 /** The job application service definition. */
 
-export interface NotificationServiceController {
-  sendNotification(
-    request: SendNotificationRequest,
-  ): Promise<SendNotificationResponse> | Observable<SendNotificationResponse> | SendNotificationResponse;
+export interface ApplicationServiceController {
+  createApplication(request: CreateApplicationRequest): Promise<Application> | Observable<Application> | Application;
+
+  readApplication(request: ReadApplicationRequest): Promise<Application> | Observable<Application> | Application;
+
+  updateApplication(request: Application): Promise<Application> | Observable<Application> | Application;
+
+  deleteApplication(request: DeleteApplicationRequest): Promise<Empty> | Observable<Empty> | Empty;
 }
 
-export function NotificationServiceControllerMethods() {
+export function ApplicationServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["sendNotification"];
+    const grpcMethods: string[] = ["createApplication", "readApplication", "updateApplication", "deleteApplication"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcMethod("NotificationService", method)(constructor.prototype[method], method, descriptor);
+      GrpcMethod("ApplicationService", method)(constructor.prototype[method], method, descriptor);
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcStreamMethod("NotificationService", method)(constructor.prototype[method], method, descriptor);
+      GrpcStreamMethod("ApplicationService", method)(constructor.prototype[method], method, descriptor);
     }
   };
 }
 
-export const NOTIFICATION_SERVICE_NAME = "NotificationService";
+export const APPLICATION_SERVICE_NAME = "ApplicationService";
+
