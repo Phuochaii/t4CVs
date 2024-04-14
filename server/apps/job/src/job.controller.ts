@@ -3,25 +3,15 @@ import { JobService } from './job.service';
 import { CreateJobDto } from './dto/Req/create-job.dto';
 import { MessagePattern } from '@nestjs/microservices';
 import { UpdateJobDto } from './dto/Req/update-job.dto';
+import { MajorService } from './major/major.service';
+import { CreateMajorDto } from './dto/Req/createMajor.dto';
 
 @Controller()
 export class JobController {
-  constructor(private readonly jobService: JobService) {}
-
-  // @Post()
-  // create(@Body() createJobDto: CreateJobDto) {
-  //   return this.jobService.create(createJobDto);
-  // }
-
-  // @Get()
-  // findAll() {
-  //   return this.jobService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.jobService.findOne(+id);
-  // }
+  constructor(
+    private readonly jobService: JobService,
+    private readonly majorService: MajorService,
+  ) {}
 
   @MessagePattern({ cmd: 'create_job' })
   createJob(job: CreateJobDto) {
@@ -49,13 +39,13 @@ export class JobController {
     return this.jobService.updateJobStatus(data);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateJobDto: UpdateJobDto) {
-  //   return this.jobService.update(+id, updateJobDto);
-  // }
+  @MessagePattern({ cmd: 'create_major' })
+  createMajor(major: CreateMajorDto) {
+    return this.majorService.create(major);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.jobService.remove(+id);
-  // }
+  @MessagePattern({ cmd: 'get_all_major' })
+  getAllMajor() {
+    return this.majorService.findAll();
+  }
 }

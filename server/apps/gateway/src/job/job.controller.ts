@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CreateJobDto } from './dto/Req/createJob.dto';
 import { JobService } from './job.service';
+import { CreateMajorDto } from './dto/Req/createMajor.dto';
 
 @Controller('job')
 export class JobController {
@@ -25,5 +26,15 @@ export class JobController {
   @Get(':id')
   findJobById(@Param('id') id: number): Observable<string> {
     return this.jobService.findJobById(id);
+  }
+
+  @Post('major/create')
+  createMajor(@Body() data: CreateMajorDto): Observable<string> {
+    return this.jobService.createMajor(data);
+  }
+
+  @Get('major/all')
+  getAllMajor(): Observable<string> {
+    return this.jobService.getAllMajor();
   }
 }

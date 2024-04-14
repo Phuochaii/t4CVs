@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
+import { ApplicationModule } from './application/application.module';
+import { JobModule } from './job/job.module';
+
+import { UploadModule } from './upload/upload.module';
 import { GatewayController } from './gateway.controller';
 import { GatewayService } from './gateway.service';
-import { JobApplicationModule } from './job-application/job-application.module';
-import { JobModule } from './job/job.module';
-import { UploadModule } from './upload/upload.module';
 @Module({
   imports: [
-    // JobApplicationModule,
+    ApplicationModule,
     JobModule,
     UploadModule,
   ],

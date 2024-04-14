@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateJobDto } from './dto/Req/create-job.dto';
 import { Job } from './entities/job.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Any, ArrayContainedBy, Repository } from 'typeorm';
 import { FindJobDTOResponse } from './dto/Resp/find-job.dto';
 import { JobDetailService } from './job-detail/job-detail.service';
 import { UpdateJobDto } from './dto/Req/update-job.dto';
@@ -47,6 +47,7 @@ export class JobService {
     const jobs = await this.JobRepository.find({
       where: {
         status: true,
+        // region: Any(['USA']),
       },
     });
     const result: FindJobDTOResponse[] = jobs.map((job) => {

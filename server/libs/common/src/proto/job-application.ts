@@ -30,7 +30,14 @@ export interface DeleteJobApplicationRequest {
   id: number;
 }
 
-export interface CreateJobApplicationRequest {
+export interface CreateApplicationRequest {
+  linkCV : string;
+  fullname: string;
+  email: string;
+  phone: number;
+}
+
+export interface ApplyJobApplicationRequest {
   userId: number;
   jobPostId: number;
   cvId: number;

@@ -8,60 +8,55 @@
     "tsConfigPath": "apps/gateway/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/gateway",
-  "gateway": {
-    "type": "application",
-    "root": "apps/gateway",
-    "entryFile": "main",
-    "sourceRoot": "apps/gateway/src",
-    "compilerOptions": {
-      "tsConfigPath": "apps/gateway/tsconfig.app.json",
-      "assets": [
-        "./proto/*.proto"
-      ],
-      "watchAssets": true
-    }
-  },
-  "cv-service": {
-    "type": "application",
-    "root": "apps/cv-service",
-    "entryFile": "main",
-    "sourceRoot": "apps/cv-service/src",
-    "compilerOptions": {
-      "tsConfigPath": "apps/cv-service/tsconfig.app.json",
-      "watchAssets": true
-    }
-  },
-  "job-application-service": {
-    "type": "application",
-    "root": "apps/job-application-service",
-    "entryFile": "main",
-    "sourceRoot": "apps/job-application-service/src",
-    "compilerOptions": {
-      "tsConfigPath": "apps/job-application-service/tsconfig.app.json",
-      "assets": [
-        "./proto/*.proto"
-      ],
-      "watchAssets": true
-    }
-  },
-  "common": {
-    "type": "library",
-    "root": "libs/common",
-    "entryFile": "index",
-    "sourceRoot": "libs/common/src",
-    "compilerOptions": {
-      "tsConfigPath": "libs/common/tsconfig.lib.json"
-    }
-  },
+  "root": "apps/server",
   "projects": {
-    "job": {
+    "server": {
       "type": "application",
-      "root": "apps/job",
+      "root": "apps/server",
       "entryFile": "main",
-      "sourceRoot": "apps/job/src",
+      "sourceRoot": "apps/server/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/job/tsconfig.app.json"
+        "tsConfigPath": "apps/server/tsconfig.app.json"
+      }
+    },
+    "gateway": {
+      "type": "application",
+      "root": "apps/gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/gateway/tsconfig.app.json",
+        "assets": ["./proto/*.proto"],
+        "watchAssets": true
+      }
+    },
+    "cv-service": {
+      "type": "application",
+      "root": "apps/cv-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/cv-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/cv-service/tsconfig.app.json"
+      }
+    },
+    "job-application-service": {
+      "type": "application",
+      "root": "apps/job-application-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/job-application-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/job-application-service/tsconfig.app.json",
+        "assets": ["./proto/*.proto"],
+        "watchAssets": true
+      }
+    },
+    "common": {
+      "type": "library",
+      "root": "libs/common",
+      "entryFile": "index",
+      "sourceRoot": "libs/common/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     },
     "upload": {
