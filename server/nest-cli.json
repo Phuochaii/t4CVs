@@ -8,17 +8,9 @@
     "tsConfigPath": "apps/gateway/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/server",
+  "root": "apps/gateway",
   "projects": {
-    "server": {
-      "type": "application",
-      "root": "apps/server",
-      "entryFile": "main",
-      "sourceRoot": "apps/server/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/server/tsconfig.app.json"
-      }
-    },
+
     "gateway": {
       "type": "application",
       "root": "apps/gateway",
@@ -26,7 +18,9 @@
       "sourceRoot": "apps/gateway/src",
       "compilerOptions": {
         "tsConfigPath": "apps/gateway/tsconfig.app.json",
-        "assets": ["./proto/*.proto"],
+        "assets": [
+          "./proto/*.proto"
+        ],
         "watchAssets": true
       }
     },
@@ -46,7 +40,9 @@
       "sourceRoot": "apps/job-application-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/job-application-service/tsconfig.app.json",
-        "assets": ["./proto/*.proto"],
+        "assets": [
+          "./proto/*.proto"
+        ],
         "watchAssets": true
       }
     },
@@ -57,6 +53,19 @@
       "sourceRoot": "libs/common/src",
       "compilerOptions": {
         "tsConfigPath": "libs/common/tsconfig.lib.json"
+      }
+    },
+    "notification-service": {
+      "type": "application",
+      "root": "apps/notification-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/notification-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/notification-service/tsconfig.app.json",
+        "assets": [
+          "./proto/*.proto"
+        ],
+        "watchAssets": true
       }
     }
   }
