@@ -43,25 +43,25 @@ function Compaign() {
 
   return (
     <div
-      className="z-0 w-full px-10 pt-16 bg-pink-100"
+      className="z-0 w-[88%] px-10 py-4 bg-slate-100"
       onClick={(event) => {
         event.preventDefault();
         setOpenDialog(-1);
       }}
     >
-      <div className="flex justify-between w-full gap-12 my-8">
+      <div className="flex justify-between w-full gap-12 my-4">
         <h1 className="text-2xl font-bold text-slate-500">
           Compaign
         </h1>
-        <div className="w-[24%]">
+        <div className="">
           <SearchBar placeholder="Search Compaign" />
         </div>
       </div>
 
       {/* Table */}
-      <table className="flex flex-col w-full gap-10 px-8 py-12 bg-white border-slate-500 rounded-2xl">
-        <thead>
-          <tr className="flex justify-evenly">
+      <table className="flex flex-col w-full gap-10 px-10 py-12 bg-white border-slate-500 rounded-2xl">
+        <thead className="w-full">
+          <tr className="flex text-center justify-evenly">
             {columns.map((item, index) => {
               return (
                 <td
@@ -82,21 +82,21 @@ function Compaign() {
                 key={"row-" + index}
               >
                 <td
-                  className={`flex justify-center  capitalize font-bold text-white w-1/5 `}
+                  className={`flex justify-center  capitalize font-bold text-white w-1/5`}
                 >
                   <span
                     className={`rounded-[24rem] px-4 py-2 ${
                       user.status === "accepted"
                         ? "bg-green-500"
                         : user.status === "pending"
-                        ? "bg-gradient-to-r from-pink-500 to-purple-500"
+                        ? "bg-gradient-to-b from-green-500 to-blue-500"
                         : "bg-red-500"
                     }`}
                   >
                     {user.status}
                   </span>
                 </td>
-                <td className="flex items-center justify-center w-1/5 gap-12">
+                <td className="flex items-center justify-center w-1/5 gap-6">
                   <img
                     src={user.imageUrl}
                     alt="User image"

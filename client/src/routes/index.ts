@@ -29,8 +29,12 @@ const routes = [
   {path: "/list-cv", component: User.ListCV, layout: UserLayout}, // nguyên
 
   // ADMIN PAGES - Thức
-  { path: "/admin/agents", component: Admin.Agents, layout: AdminLayout },
-  { path: "/admin/compaign", component: Admin.Compaign, layout: AdminLayout },
+  { path: "/admin", component: Admin.Overview, layout: AdminLayout },
+  {
+    path: "/admin/compaign",
+    component: Admin.Compaign,
+    layout: AdminLayout,
+  },
 
   // HR PAGES - Yến , Thịnh
   { path: "/hr/post-job", component: HR.PostJob, layout: HRLayout }, // thinh
