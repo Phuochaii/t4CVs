@@ -6,7 +6,9 @@ import * as Error from "../pages/Error";
 
 import { UserLayout, AdminLayout, HRLayout, EmptyLayout } from "../layouts";
 
+
 const routes = [
+  // 1st UI 
   // AUTHENTICATION PAGES - Tiến
   {path: 'admin-login', component:Authentication.AdminLogIn, layout: EmptyLayout},
   {path: 'hr-login', component:Authentication.HRLogIn, layout: EmptyLayout},
@@ -25,22 +27,54 @@ const routes = [
   { path: "/apply", component: User.ApplyCV, layout: UserLayout },//khoa
   { path: "/create-cv", component: User.CreateCV, layout: UserLayout },//
   { path: "/edit-cv", component: User.EditCV, layout: UserLayout },//
-  { path: "/manage-cv", component: User.ManageCV, layout: UserLayout }, //nguyên
+  { path: "/template-cv", component: User.TemplateCV, layout: UserLayout }, //nguyên
   {path: "/list-cv", component: User.ListCV, layout: UserLayout}, // nguyên
 
   // ADMIN PAGES - Thức
   { path: "/admin", component: Admin.Overview, layout: AdminLayout },
-  {
-    path: "/admin/compaign",
-    component: Admin.Compaign,
-    layout: AdminLayout,
-  },
+
 
   // HR PAGES - Yến , Thịnh
   { path: "/hr/post-job", component: HR.PostJob, layout: HRLayout }, // thinh
   { path: "/hr/approve", component: HR.ReceiveCV, layout: HRLayout }, // yến
   // ERROR PAGES
   { path: "error-path", component: Error.ErrorPath, layout: EmptyLayout },
+
+//-------------------------------------------------------------------------------------
+  // 2nd UI
+  // USER
+  { path: "/cv", component: User.CV, layout: UserLayout },
+  { path: "/companies/:id", component: User.Company, layout: UserLayout },
+  { path: "/companies/", component: User.Companies, layout: UserLayout },
+
+  // ADMIN
+  { path: "/admin/company", component: Admin.Company, layout: AdminLayout },
+  {path: "/admin/compaign",component: Admin.Compaign,layout: AdminLayout,},
+
+
+  // HR
+  { path: "/hr/news", component: HR.News, layout: HRLayout },
+
+  { path: "/hr/post-compaign", component: HR.PostCompaign.PostCompaign, layout: HRLayout },
+  { path: "/hr/post-compaign/1", component: HR.PostCompaign.Page1, layout: HRLayout },
+  { path: "/hr/post-compaign/2", component: HR.PostCompaign.Page2, layout: HRLayout },
+  { path: "/hr/post-compaign/3", component: HR.PostCompaign.Page3, layout: HRLayout },
+
+  { path: "/hr/verify-account/1", component: HR.VerifyAccount.Page1, layout: HRLayout },
+  { path: "/hr/verify-account/2", component: HR.VerifyAccount.Page2, layout: HRLayout },
+
+  { path: "/hr/compain", component: HR.Compaign, layout: HRLayout },
+
+  { path: "/hr/compain-edit/:id", component: HR.CompaignEdit, layout: HRLayout },
+
+  { path: "/hr/recruitment", component: HR.Recuitment, layout: HRLayout },
+
+  { path: "/hr/manage-cv/recruitment", component: HR.ManageCV.Recuitment, layout: HRLayout },
+  { path: "/hr/manage-cv/cv", component: HR.ManageCV.CV, layout: HRLayout },
+  { path: "/hr/manage-cv/support", component: HR.ManageCV.Support, layout: HRLayout },
+
+  { path: "/hr/help", component: HR.Support, layout: EmptyLayout },
+
 ];
 
 export default routes;
