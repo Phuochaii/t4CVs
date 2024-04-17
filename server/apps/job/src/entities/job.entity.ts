@@ -4,8 +4,15 @@ import {
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { JobDetail } from './job-detail.entity';
+import { Major } from './major.entity';
+import { Currency } from './currency.entity';
+import { Level } from './level.entity';
+import { Field } from './field.entity';
 
 @Entity({ name: 'job' })
 export class Job {
@@ -15,15 +22,22 @@ export class Job {
   @Column()
   titleRecruitment: string;
 
-  @Column()
-  major: string;
+  @ManyToOne(() => Major)
+  @JoinColumn()
+  major: Major;
 
   //field
+  @ManyToMany(() => Field)
+  @JoinTable()
+  fields: Field[];
 
   @Column()
   compaignId: number;
 
   //currencyId
+  @ManyToOne(() => Currency)
+  @JoinColumn()
+  currency: Currency;
 
   @Column()
   salaryMin: number;
@@ -32,7 +46,7 @@ export class Job {
   salaryMax: number;
 
   @Column()
-  exp: number;
+  exp: string;
 
   @Column('character varying', { array: true })
   region: string[];
@@ -47,6 +61,9 @@ export class Job {
   updateAt: Date;
 
   //level
+  @ManyToOne(() => Level)
+  @JoinColumn()
+  level: Level;
 
   @Column({ default: false })
   status: boolean;

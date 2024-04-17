@@ -1,6 +1,9 @@
 export class CreateJobDto {
   titleRecruitment: string;
-  major: string;
+  majorId: number;
+  fieldsId: number[];
+  currencyId: number;
+  levelId: number;
   compaignId: number;
   salaryMin: number;
   salaryMax: number;

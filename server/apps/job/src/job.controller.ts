@@ -3,15 +3,12 @@ import { JobService } from './job.service';
 import { CreateJobDto } from './dto/Req/create-job.dto';
 import { MessagePattern } from '@nestjs/microservices';
 import { UpdateJobDto } from './dto/Req/update-job.dto';
-import { MajorService } from './major/major.service';
-import { CreateMajorDto } from './dto/Req/createMajor.dto';
+import { CreateBaseDto } from './dto/Req/createBase.dto';
+import { QueryDTO } from './dto/Req/query.dto';
 
 @Controller()
 export class JobController {
-  constructor(
-    private readonly jobService: JobService,
-    private readonly majorService: MajorService,
-  ) {}
+  constructor(private readonly jobService: JobService) {}
 
   @MessagePattern({ cmd: 'create_job' })
   createJob(job: CreateJobDto) {
@@ -20,8 +17,8 @@ export class JobController {
   }
 
   @MessagePattern({ cmd: 'get_all_jobs' })
-  findAllJobs() {
-    return this.jobService.findAll();
+  findAllJobs(query: QueryDTO) {
+    return this.jobService.findAll(query);
   }
 
   @MessagePattern({ cmd: 'get_valid_jobs' })
@@ -40,12 +37,41 @@ export class JobController {
   }
 
   @MessagePattern({ cmd: 'create_major' })
-  createMajor(major: CreateMajorDto) {
-    return this.majorService.create(major);
+  createMajor(majors: CreateBaseDto) {
+    return this.jobService.createMajor(majors);
   }
 
   @MessagePattern({ cmd: 'get_all_major' })
   getAllMajor() {
-    return this.majorService.findAll();
+    return this.jobService.findAllMajor();
+  }
+  @MessagePattern({ cmd: 'create_level' })
+  createLevel(levels: CreateBaseDto) {
+    return this.jobService.createLevel(levels);
+  }
+
+  @MessagePattern({ cmd: 'get_all_level' })
+  getAllLevel() {
+    return this.jobService.findAllLevel();
+  }
+
+  @MessagePattern({ cmd: 'create_currency' })
+  createCurrency(currencies: CreateBaseDto) {
+    return this.jobService.createCurrency(currencies);
+  }
+
+  @MessagePattern({ cmd: 'get_all_currency' })
+  getAllCurrency() {
+    return this.jobService.findAllCurrency();
+  }
+
+  @MessagePattern({ cmd: 'create_field' })
+  createField(fields: CreateBaseDto) {
+    return this.jobService.createField(fields);
+  }
+
+  @MessagePattern({ cmd: 'get_all_field' })
+  getAllField() {
+    return this.jobService.findAllField();
   }
 }

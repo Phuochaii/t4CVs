@@ -2,13 +2,14 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CreateJobDto } from './dto/Req/createJob.dto';
 import { Observable } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
-import { CreateMajorDto } from './dto/Req/createMajor.dto';
+import { CreateBaseDto, CreateMajorDto } from './dto/Req/createBase.dto';
+import { QueryDTO } from './dto/Req/query.dto';
 
 @Injectable()
 export class JobService {
   constructor(@Inject('JOB') private readonly jobClient: ClientProxy) {}
-  getAllJobs(): Observable<string> {
-    return this.jobClient.send({ cmd: 'get_all_jobs' }, {});
+  getAllJobs(query: QueryDTO): Observable<string> {
+    return this.jobClient.send({ cmd: 'get_all_jobs' }, query);
     // return jobs.pipe((response) => {
     //   return response;
     // });
@@ -25,11 +26,32 @@ export class JobService {
     return this.jobClient.send({ cmd: 'find_job_by_id' }, id);
   }
 
-  createMajor(major: CreateMajorDto): Observable<string> {
+  createMajor(major: CreateBaseDto): Observable<string> {
     return this.jobClient.send({ cmd: 'create_major' }, major);
   }
 
   getAllMajor(): Observable<string> {
     return this.jobClient.send({ cmd: 'get_all_major' }, {});
+  }
+  createField(major: CreateBaseDto): Observable<string> {
+    return this.jobClient.send({ cmd: 'create_field' }, major);
+  }
+
+  getAllField(): Observable<string> {
+    return this.jobClient.send({ cmd: 'get_all_field' }, {});
+  }
+  createCurrency(major: CreateBaseDto): Observable<string> {
+    return this.jobClient.send({ cmd: 'create_currency' }, major);
+  }
+
+  getAllCurrency(): Observable<string> {
+    return this.jobClient.send({ cmd: 'get_all_currency' }, {});
+  }
+  createLevel(major: CreateBaseDto): Observable<string> {
+    return this.jobClient.send({ cmd: 'create_level' }, major);
+  }
+
+  getAllLevel(): Observable<string> {
+    return this.jobClient.send({ cmd: 'get_all_level' }, {});
   }
 }
