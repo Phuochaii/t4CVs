@@ -6,7 +6,7 @@ import Compaign from "./Compaign";
 import CompaignEdit from "./CompaignEdit";
 import Recuitment from "./Recuitment";
 
-import * as ManageCV from "./manage-cv";
+import ManageCV from "./manage-cv/index";
 import * as VerifyAccount from "./verify-account";
 import * as PostCompaign from "./post-compaign";
 

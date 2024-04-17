@@ -69,9 +69,8 @@ const routes = [
 
   { path: "/hr/recruitment", component: HR.Recuitment, layout: HRLayout },
 
-  { path: "/hr/manage-cv/recruitment", component: HR.ManageCV.Recuitment, layout: HRLayout },
-  { path: "/hr/manage-cv/cv", component: HR.ManageCV.CV, layout: HRLayout },
-  { path: "/hr/manage-cv/support", component: HR.ManageCV.Support, layout: HRLayout },
+  { path: "/hr/manage-cv", component: HR.ManageCV, layout: HRLayout },
+
 
   { path: "/hr/help", component: HR.Support, layout: EmptyLayout },
 
