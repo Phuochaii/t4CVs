@@ -67,6 +67,7 @@ function ManageCV() {
     "& .MuiButtonBase-root.MuiTab-root": {
       color: "black",
       transition: "color 0.2s ease-in-out",
+      textTransform: "none",
       "&:hover": {
         color: "green)",
       },
@@ -214,10 +215,10 @@ function ManageCV() {
                   Item Three
                 </TabPanel>
                 <TabPanel sx={{ padding: "12px 0" }} value="6">
-                  Item Three
+                  {tabs.CV()}
                 </TabPanel>
                 <TabPanel sx={{ padding: "12px 0" }} value="7">
-                  Item Three
+                  {tabs.Support()}
                 </TabPanel>
                 <TabPanel sx={{ padding: "12px 0" }} value="8">
                   Item Three

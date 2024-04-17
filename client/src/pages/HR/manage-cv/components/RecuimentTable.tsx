@@ -1,4 +1,4 @@
-function RecuitmentTable({
+function CustomTable({
   heading,
   data,
   objectKey,
@@ -39,4 +39,4 @@ function RecuitmentTable({
   );
 }
 
-export default RecuitmentTable;
+export default CustomTable;

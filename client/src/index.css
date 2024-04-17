@@ -18,8 +18,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-
-
 @keyframes slide {
   0% {
     transform: translateX(0);
@@ -54,7 +52,6 @@
   background: #bebebe;
 }
 
-
 .custom-select option {
   background-color: yellow;
   line-height: 5;
@@ -78,6 +75,11 @@ td {
   vertical-align: top;
 }
 input[type="checkbox"] {
+  accent-color: rgb(4, 167, 4);
+  width: 20px;
+  color: white;
+}
+input[type="radio"] {
   accent-color: rgb(4, 167, 4);
   width: 20px;
   color: white;

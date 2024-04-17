@@ -1,7 +1,7 @@
-import DayChooseButton from "./components/ChooseDay";
+import DayChooseButton from "../components/ChooseDay";
 import { ExternalLink } from "lucide-react";
 import { LineChart } from "@mui/x-charts/LineChart";
-import RecuitmentTable from "./components/RecuimentTable";
+import RecuitmentTable from "../components/RecuimentTable";
 
 function LineNote({ title, color }: { title: string; color: string }) {
   return (

@@ -1,5 +1,5 @@
-import CV from "./CV";
+import FollowingCV from "./FollowingCV";
 import Recuitment from "./Recuitment";
-import Support from "./Support";
+import Support from "./support/Support";
 
-export { CV, Recuitment, Support };
+export { FollowingCV as CV, Recuitment, Support };
