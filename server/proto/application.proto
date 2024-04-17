@@ -6,13 +6,7 @@ package Application;
 service ApplicationService {
   rpc CreateApplication (CreateApplicationRequest) returns (Application) {}
   rpc ReadApplication (ReadApplicationRequest) returns (Application) {}
-  // rpc UpdateApplication (Application) returns (Application) {}
-  // rpc DeleteApplication (DeleteApplicationRequest) returns (Empty) {}
 }
-
-// message DeleteApplicationRequest {
-//     int32 id = 1;
-// }
 
 message ReadApplicationRequest {
     int32 id = 1;
@@ -32,21 +26,10 @@ message Empty {}
 // The JobApplication message represents a job application record.
 message Application {
   int32 id = 1;
-  Status status = 2;
-  string fullname=3;
-  string phone =4;
-  string email=5;
-  string coverLetter =6;
-  string createdAt=7;
-  string updateAt=8;
-  int32 jobId=9;
-  int32 userId=10;
-  int32 cvId=11;
-
-  enum Status {
-    SUBMITTED = 0;
-    VIEWED = 1;
-  }
+  string fullname=2;
+  string phone =3;
+  string email=4;
+  int32 cvId=5;
 }
 
 

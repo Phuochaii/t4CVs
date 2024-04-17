@@ -1,43 +1,20 @@
-import { Application_Status } from '@app/common';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+// import { Application_Status } from '@app/common';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Application {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('text')
-  status: Application_Status;
-
-  @Column('text')
+  @Column('varchar')
   fullname: string;
 
-  @CreateDateColumn()
+  @Column('varchar')
   phone: string;
 
-  @Column('text')
+  @Column('varchar')
   email: string;
 
-  @Column('text')
-  coverLetter: string;
-
-  @Column('text')
-  createdAt: string;
-
-  @Column('text')
-  updateAt: string;
-
-  @Column('text')
-  jobId: number;
-
-  @Column('text')
-  userId: number;
-
-  @Column('text')
+  @Column('int')
   cvId: number;
 }

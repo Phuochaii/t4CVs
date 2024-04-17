@@ -22,22 +22,10 @@ export interface Empty {
 /** The JobApplication message represents a job application record. */
 export interface Application {
   id: number;
-  status: Application_Status;
   fullname: string;
   phone: string;
   email: string;
-  coverLetter: string;
-  createdAt: string;
-  updateAt: string;
-  jobId: number;
-  userId: number;
   cvId: number;
-}
-
-export enum Application_Status {
-  SUBMITTED = 0,
-  VIEWED = 1,
-  UNRECOGNIZED = -1,
 }
 
 export const APPLICATION_PACKAGE_NAME = "Application";
@@ -54,6 +42,7 @@ export interface ApplicationServiceClient {
 
 export interface ApplicationServiceController {
   createApplication(request: CreateApplicationRequest): Promise<Application> | Observable<Application> | Application;
+
   readApplication(request: ReadApplicationRequest): Promise<Application> | Observable<Application> | Application;
 }
 
