@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  // Patch,
+  Patch,
   Param,
   // Delete,
 } from '@nestjs/common';
@@ -19,20 +19,20 @@ export class ApplicationController {
     return this.applicationService.create(createApplicationRequest);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.applicationService.findAll();
-  // }
-
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.applicationService.findOne(id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateApplicationDto: UpdateApplicationDto) {
-  //   return this.applicationService.update(+id, updateApplicationDto);
-  // }
+  @Get()
+  findAll() {
+    return this.applicationService.findAll();
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: number) {
+    return this.applicationService.update(id);
+  }
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {

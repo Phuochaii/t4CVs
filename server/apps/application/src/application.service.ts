@@ -1,48 +1,81 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateApplicationRequest, ReadApplicationRequest } from '@app/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreateApplicationDto } from './dto/create-application.dto';
 import { Application } from './entities/application.entity';
-import { v4 as randomUUID } from 'uuid'; // Import randomUUID
-
+import { map, mergeAll } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
+// import { DeleteApplicationRequest, UpdateApplicationRequest } from '@app/common';
 @Injectable()
 export class ApplicationService {
-  private readonly application: Application[] = [];
+  private readonly application12: any[] = [];
+  constructor(
+    @InjectRepository(Application)
+    private applicationRepository: Repository<Application>,
+  ) {}
+  async store(data: CreateApplicationDto) {
+    try {
+      const application = this.applicationRepository.create(data);
+      application.status = 0;
+      console.log(data);
+      return await this.applicationRepository.save(application);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
 
-  findById(readApplication: ReadApplicationRequest): Promise<Application> {
-    return new Promise((resolve, reject) => {
-      const application = this.application.find(
-        (app) => app.id === readApplication.id,
+  async findOneOrFail(id: number) {
+    try {
+      const guest = await this.applicationRepository.findOneBy({ id });
+      return guest;
+    } catch {
+      console.log(id);
+      throw new NotFoundException();
+    }
+  }
+
+  // async findAll(): Promise<Observable<Application>> {
+  //   try {
+  //     // let applications1: any[] = [];
+  //     // applications1 = await this.applicationRepository.find();
+  //     // console.log(applications1);
+  //     // return applications1;
+  //     const applications = this.applicationRepository.find().pipe(
+  //       catchError((error) => {
+  //         console.log('lỗi:', error);
+  //         return throwError(new NotFoundException(error.message));
+  //       }),
+  //     );
+  //     console.log(applications);
+  //     return applications;
+  //   } catch (error) {
+  //     console.log('lỗi:', error);
+  //     throw new NotFoundException(error.message);
+  //   }
+  // }
+  findAll(): Observable<Application> {
+    try {
+      return from(this.applicationRepository.find()).pipe(
+        mergeAll(),
+        map((application) => application),
       );
-      if (application) {
-        resolve(application);
-      } else {
-        reject(
-          new NotFoundException(
-            `Application with ID ${readApplication.id} not found.`,
-          ),
-        );
-      }
-    });
+    } catch (error) {
+      console.log('lỗi:', error);
+      throw new NotFoundException(error.message);
+    }
   }
 
-  findAll(): Application[] {
-    return this.application;
+  async delete(id: number) {
+    // const application = await this.applicationRepository.findOneBy({ id });
+    await this.applicationRepository.delete(id);
   }
 
-  create(createApplication: CreateApplicationRequest): Application {
-    const application: Application = {
-      id: randomUUID(),
-      fullname: createApplication.fullname,
-      phone: createApplication.phone,
-      email: createApplication.email,
-      cvId: createApplication.cvId,
-      status: 1,
-      coverLetter: '',
-      createdAt: '',
-      updateAt: '',
-      jobId: 0,
-      userId: 0,
-    };
-    this.application.push(application); // Corrected the variable name to plural
-    return application;
+  async update(id: number) {
+    const application = await this.applicationRepository.findOneBy({ id });
+    application.status = 1;
+    const updatedApplication =
+      await this.applicationRepository.save(application);
+
+    return updatedApplication;
   }
 }

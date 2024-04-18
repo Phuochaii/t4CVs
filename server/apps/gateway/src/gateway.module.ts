@@ -8,8 +8,8 @@ import { GatewayService } from './gateway.service';
 @Module({
   imports: [
     ApplicationModule,
-    JobModule,
-    UploadModule,
+    // JobModule,
+    // UploadModule,
   ],
   controllers: [GatewayController],
   providers: [GatewayService],

@@ -1,18 +1,29 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  OnModuleInit,
+} from '@nestjs/common';
 import {
   CreateApplicationRequest,
   APPLICATION_PACKAGE_NAME,
   ApplicationServiceClient,
   APPLICATION_SERVICE_NAME,
+  Application,
 } from '@app/common';
 import { ClientGrpc } from '@nestjs/microservices';
+// import { Observable, from, throwError, toArray } from 'rxjs';
+// import { catchError, map, mergeAll } from 'rxjs/operators';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
+
+  private readonly application: any[] = [];
   private applicationServiceClient: ApplicationServiceClient;
 
-  @Inject(APPLICATION_PACKAGE_NAME)
-  private readonly client: ClientGrpc;
+  constructor(
+    @Inject(APPLICATION_PACKAGE_NAME) private readonly client: ClientGrpc,
+  ) {}
 
   onModuleInit() {
     this.applicationServiceClient =
@@ -21,18 +32,42 @@ export class ApplicationService implements OnModuleInit {
       );
   }
 
-  create(CreateApplicationRequest: CreateApplicationRequest) {
+  create(createApplicationRequest: CreateApplicationRequest) {
+    console.log(createApplicationRequest);
     return this.applicationServiceClient.createApplication(
-      CreateApplicationRequest,
+      createApplicationRequest,
     );
   }
 
-  // findAll() {
-  //   return `This action returns all application`;
-  // }
-
   findOne(id: number) {
     return this.applicationServiceClient.readApplication({ id });
+  }
+
+
+  async findAll() {
+    try {
+      let applications;
+      this.applicationServiceClient.readAllApplication({}).subscribe(
+        (data) => {
+          applications = data;
+          console.log(applications);
+        },
+        (error) => {
+          console.log('Lỗi:', error);
+          throw new NotFoundException(error.message);
+        },
+      );
+      return {
+        application: applications,
+      };
+    } catch (error) {
+      console.log('Lỗi:', error);
+      throw new NotFoundException(error.message);
+    }
+  }
+
+  async update(id: number) {
+    return this.applicationServiceClient.updateApplication({ id });
   }
 
   // update(id: number, updateApplicationDto: UpdateApplicationDto) {
