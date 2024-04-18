@@ -1,14 +1,23 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  OnModuleInit,
+} from '@nestjs/common';
 import {
   CreateApplicationRequest,
   APPLICATION_PACKAGE_NAME,
   ApplicationServiceClient,
   APPLICATION_SERVICE_NAME,
+  Application,
 } from '@app/common';
 import { ClientGrpc } from '@nestjs/microservices';
+// import { Observable, from, throwError, toArray } from 'rxjs';
+// import { catchError, map, mergeAll } from 'rxjs/operators';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
+
   private readonly application: any[] = [];
   private applicationServiceClient: ApplicationServiceClient;
 
@@ -34,11 +43,27 @@ export class ApplicationService implements OnModuleInit {
     return this.applicationServiceClient.readApplication({ id });
   }
 
+
   async findAll() {
-    console.log(this.applicationServiceClient.readAllApplication({}));
-    return {
-      application: this.applicationServiceClient.readAllApplication({}),
-    };
+    try {
+      let applications;
+      this.applicationServiceClient.readAllApplication({}).subscribe(
+        (data) => {
+          applications = data;
+          console.log(applications);
+        },
+        (error) => {
+          console.log('Lỗi:', error);
+          throw new NotFoundException(error.message);
+        },
+      );
+      return {
+        application: applications,
+      };
+    } catch (error) {
+      console.log('Lỗi:', error);
+      throw new NotFoundException(error.message);
+    }
   }
 
   async update(id: number) {

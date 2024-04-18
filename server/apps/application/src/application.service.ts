@@ -3,6 +3,8 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { Application } from './entities/application.entity';
+import { map, mergeAll } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
 // import { DeleteApplicationRequest, UpdateApplicationRequest } from '@app/common';
 @Injectable()
 export class ApplicationService {
@@ -24,30 +26,47 @@ export class ApplicationService {
 
   async findOneOrFail(id: number) {
     try {
-      // console.log(id);
-      // return id;
       const guest = await this.applicationRepository.findOneBy({ id });
       return guest;
-      // return await this.applicationRepository.findOneBy({ id });
     } catch {
       console.log(id);
       throw new NotFoundException();
     }
   }
 
-  async findAll() {
+  // async findAll(): Promise<Observable<Application>> {
+  //   try {
+  //     // let applications1: any[] = [];
+  //     // applications1 = await this.applicationRepository.find();
+  //     // console.log(applications1);
+  //     // return applications1;
+  //     const applications = this.applicationRepository.find().pipe(
+  //       catchError((error) => {
+  //         console.log('lỗi:', error);
+  //         return throwError(new NotFoundException(error.message));
+  //       }),
+  //     );
+  //     console.log(applications);
+  //     return applications;
+  //   } catch (error) {
+  //     console.log('lỗi:', error);
+  //     throw new NotFoundException(error.message);
+  //   }
+  // }
+  findAll(): Observable<Application> {
     try {
-      const application12 = await this.applicationRepository.find();
-      return application12;
-      console.log(application12);
+      return from(this.applicationRepository.find()).pipe(
+        mergeAll(),
+        map((application) => application),
+      );
     } catch (error) {
-      console.log('lỗi');
+      console.log('lỗi:', error);
       throw new NotFoundException(error.message);
     }
   }
 
   async delete(id: number) {
-    const application = await this.applicationRepository.findOneBy({ id });
+    // const application = await this.applicationRepository.findOneBy({ id });
     await this.applicationRepository.delete(id);
   }
 

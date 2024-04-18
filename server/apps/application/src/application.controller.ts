@@ -26,7 +26,11 @@ export class ApplicationController implements ApplicationServiceController {
     return this.applicationService.findOneOrFail(findOne.id);
   }
 
-  readAllApplication() {
+  // async readAllApplication(): Promise<Application[]> {
+  //   return await this.applicationService.findAll();
+  // }
+
+  readAllApplication(): Observable<Application> {
     return this.applicationService.findAll();
   }
 
