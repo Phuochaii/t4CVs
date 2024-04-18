@@ -6,6 +6,9 @@ export class Application {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column('int')
+  status: number;
+
   @Column('varchar')
   fullname: string;
 
@@ -15,6 +18,21 @@ export class Application {
   @Column('varchar')
   email: string;
 
-  @Column('int')
-  cvId: number;
+  @Column('varchar', { nullable: true })
+  coverLetter: string | null;
+
+  @Column('varchar', { nullable: true })
+  createdAt: string | null;
+
+  @Column('varchar', { nullable: true })
+  updateAt: string | null;
+
+  @Column('int', { nullable: true })
+  jobId: number | null;
+
+  @Column('int', { nullable: true })
+  userId: number | null;
+
+  @Column('int', { nullable: true })
+  cvId: number | null;
 }

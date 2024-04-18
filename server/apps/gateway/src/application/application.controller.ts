@@ -19,14 +19,14 @@ export class ApplicationController {
     return this.applicationService.create(createApplicationRequest);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.applicationService.findAll();
-  // }
-
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.applicationService.findOne(id);
+  }
+
+  @Get()
+  findAll() {
+    return this.applicationService.findAll();
   }
 
   // @Patch(':id')

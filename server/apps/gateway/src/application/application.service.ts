@@ -9,10 +9,9 @@ import { ClientGrpc } from '@nestjs/microservices';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
+  private readonly application: any[] = [];
   private applicationServiceClient: ApplicationServiceClient;
 
-  // @Inject(APPLICATION_PACKAGE_NAME)
-  // private readonly client: ClientGrpc;
   constructor(
     @Inject(APPLICATION_PACKAGE_NAME) private readonly client: ClientGrpc,
   ) {}
@@ -25,18 +24,21 @@ export class ApplicationService implements OnModuleInit {
   }
 
   create(createApplicationRequest: CreateApplicationRequest) {
+    console.log(createApplicationRequest);
     return this.applicationServiceClient.createApplication(
       createApplicationRequest,
     );
   }
 
-  // findAll() {
-  //   return this.applicationServiceClient.readApplication({});
-  // }
-
   findOne(id: number) {
     return this.applicationServiceClient.readApplication({ id });
-    // return `This action updates a #${id} application`;
+  }
+
+  async findAll() {
+    console.log(this.applicationServiceClient.readAllApplication({}));
+    return {
+      application: this.applicationServiceClient.readAllApplication({}),
+    };
   }
 
   // update(id: number, updateApplicationDto: UpdateApplicationDto) {

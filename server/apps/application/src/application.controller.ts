@@ -7,28 +7,15 @@ import {
   ApplicationServiceController,
   ApplicationServiceControllerMethods,
   CreateApplicationRequest,
+  DeleteApplicationRequest,
+  Empty,
   ReadApplicationRequest,
+  UpdateApplicationRequest,
 } from '@app/common';
 import { Observable } from 'rxjs';
 
 @Controller()
 @ApplicationServiceControllerMethods()
-// export class ApplicationController {
-//   constructor(private applicationService: ApplicationService) {}
-
-//   @GrpcMethod('ApplicationService', 'CreateApplication')
-//   async Create(data: CreateApplicationDto) {
-//     console.log(data);
-//     return await this.applicationService.store(data);
-//   }
-//   @GrpcMethod('ApplicationService', 'ReadApplication')
-//   async Show(data: { id: number }) {
-//     const { id } = data;
-//     const data1 = await this.applicationService.findOneOrFail(id);
-//     return data1;
-//     // return await this.applicationService.findAll();
-//   }
-// }
 export class ApplicationController implements ApplicationServiceController {
   constructor(private readonly applicationService: ApplicationService) {}
   createApplication(create: CreateApplicationRequest) {
@@ -37,5 +24,17 @@ export class ApplicationController implements ApplicationServiceController {
 
   readApplication(findOne: ReadApplicationRequest) {
     return this.applicationService.findOneOrFail(findOne.id);
+  }
+
+  readAllApplication() {
+    return this.applicationService.findAll();
+  }
+
+  updateApplication(update: UpdateApplicationRequest) {
+    return this.applicationService.update(update.id);
+  }
+
+  deleteApplication(request: DeleteApplicationRequest) {
+    return this.applicationService.delete(request.id);
   }
 }
