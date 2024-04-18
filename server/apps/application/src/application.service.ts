@@ -20,7 +20,13 @@ export class ApplicationService {
 
   async findOneOrFail(id: number) {
     try {
-      return 'cac du liẹu';
+      // console.log(id);
+      // return id;
+      const guest = await this.applicationRepository.findOneBy({ id });
+      if (!guest) {
+        return 'lỗi';
+      }
+      return guest;
       // return await this.applicationRepository.findOneBy({ id });
     } catch {
       console.log(id);

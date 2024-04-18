@@ -13,7 +13,9 @@ export class ApplicationService implements OnModuleInit {
 
   // @Inject(APPLICATION_PACKAGE_NAME)
   // private readonly client: ClientGrpc;
-  @Inject(APPLICATION_PACKAGE_NAME) private readonly client: ClientGrpc;
+  constructor(
+    @Inject(APPLICATION_PACKAGE_NAME) private readonly client: ClientGrpc,
+  ) {}
 
   onModuleInit() {
     this.applicationServiceClient =
@@ -22,9 +24,9 @@ export class ApplicationService implements OnModuleInit {
       );
   }
 
-  create(CreateApplicationRequest: CreateApplicationRequest) {
+  create(createApplicationRequest: CreateApplicationRequest) {
     return this.applicationServiceClient.createApplication(
-      CreateApplicationRequest,
+      createApplicationRequest,
     );
   }
 
