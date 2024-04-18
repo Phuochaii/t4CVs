@@ -1,12 +1,8 @@
 import { Module } from '@nestjs/common';
-// import { GuestGrpcServerController } from './application.controller';
 import { ApplicationModule } from './application.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
-
 @Module({
   imports: [
-    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -16,6 +12,7 @@ import { ConfigModule } from '@nestjs/config';
       database: 'test_topcv',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
+      autoLoadEntities: true,
     }),
     ApplicationModule,
   ],

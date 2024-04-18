@@ -11,8 +11,9 @@ import { ClientGrpc } from '@nestjs/microservices';
 export class ApplicationService implements OnModuleInit {
   private applicationServiceClient: ApplicationServiceClient;
 
-  @Inject(APPLICATION_PACKAGE_NAME)
-  private readonly client: ClientGrpc;
+  // @Inject(APPLICATION_PACKAGE_NAME)
+  // private readonly client: ClientGrpc;
+  @Inject(APPLICATION_PACKAGE_NAME) private readonly client: ClientGrpc;
 
   onModuleInit() {
     this.applicationServiceClient =
@@ -28,11 +29,12 @@ export class ApplicationService implements OnModuleInit {
   }
 
   // findAll() {
-  //   return `This action returns all application`;
+  //   return this.applicationServiceClient.readApplication({});
   // }
 
   findOne(id: number) {
     return this.applicationServiceClient.readApplication({ id });
+    // return `This action updates a #${id} application`;
   }
 
   // update(id: number, updateApplicationDto: UpdateApplicationDto) {
