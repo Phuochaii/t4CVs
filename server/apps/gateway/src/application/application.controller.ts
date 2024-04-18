@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  // Patch,
+  Patch,
   Param,
   // Delete,
 } from '@nestjs/common';
@@ -29,10 +29,10 @@ export class ApplicationController {
     return this.applicationService.findAll();
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateApplicationDto: UpdateApplicationDto) {
-  //   return this.applicationService.update(+id, updateApplicationDto);
-  // }
+  @Patch(':id')
+  update(@Param('id') id: number) {
+    return this.applicationService.update(id);
+  }
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {

@@ -41,6 +41,10 @@ export class ApplicationService implements OnModuleInit {
     };
   }
 
+  async update(id: number) {
+    return this.applicationServiceClient.updateApplication({ id });
+  }
+
   // update(id: number, updateApplicationDto: UpdateApplicationDto) {
   //   return `This action updates a #${id} application`;
   // }
