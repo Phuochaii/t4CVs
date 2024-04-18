@@ -53,9 +53,12 @@ const routes = [
     layout: AdminLayout,
   },
 
-  // HR PAGES - Yến , Thịnh
+  // HR PAGES - Yến, Thịnh, Thức
   { path: "/hr/post-job", component: HR.PostJob, layout: HRLayout },
   { path: "/hr/approve", component: HR.ReceiveCV, layout: HRLayout },
+  { path:"/hr/compaign", component: HR.Compaign, layout: HRLayout},
+  { path:"/hr/compaign-edit/:id", component: HR.CompaignEdit, layout: HRLayout},
+  { path:"/hr/recruitment", component: HR.Recruitment, layout: HRLayout},
 
   // ERROR PAGES
   {
