@@ -1,6 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import { Briefcase, QuestionMarkIcon } from "./Icons";
-import { BriefcaseBusiness, FileText } from "lucide-react";
+import { FileText } from "lucide-react";
+
+interface SidebarProp {
+  className: string;
+  openSidebar: boolean;
+}
 
 const sidebarLinks = [
   {
@@ -19,21 +24,27 @@ const sidebarLinks = [
   },
 ];
 
-function Sidebar() {
+function Sidebar({ className, openSidebar }: SidebarProp) {
   const location = useLocation();
   return (
-    <div className="flex flex-col p-2 w-1/10 item-start">
+    <div
+      className={[
+        "sticky",
+        className,
+        openSidebar ? "flex flex-col item-start" : "hidden",
+      ].join(" ")}
+    >
       {/* User Info */}
-      <div className="flex items-center gap-2 py-2 text-sm border-b-2">
+      <div className="flex items-center gap-2 p-2 text-sm border-b-2">
         <img
           src="/temp-avatar.jpg"
           className="w-10 h-10 rounded-[50%]"
         />
 
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-1">
           <h3 className="font-bold">Nguyễn Admin</h3>
-          <span>Diamond</span>
-          <div className="flex items-center gap-2">
+          <span className="text-xs">Diamond</span>
+          <div className="flex items-center gap-2 text-xs">
             Tài khoản xác thực
             <span className="text-green-600">Cấp 3/5</span>
             <div className="bg-gray-500 rounded-[50%]">
@@ -44,7 +55,7 @@ function Sidebar() {
       </div>
 
       {/* Links */}
-      <div className="flex flex-col gap-2 py-2">
+      <div className="flex flex-col gap-2 p-2">
         {sidebarLinks.map((item, key) => {
           return (
             <Link

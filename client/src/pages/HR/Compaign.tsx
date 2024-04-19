@@ -1,5 +1,9 @@
 function Compaign() {
-  return <div className="bg-slate-200 w-9/10"></div>;
+  return (
+    <div className="flex-grow bg-slate-200">
+      <div>Quản lý chiến dịch tuyển dụng</div>
+    </div>
+  );
 }
 
 export default Compaign;

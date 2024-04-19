@@ -9,6 +9,13 @@ import {
 } from "lucide-react";
 
 import { QuestionMarkIcon } from "./Icons";
+import { SetStateAction } from "react";
+
+interface HeaderProp {
+  className: string;
+  openSidebar: boolean;
+  setOpenSidebar: React.Dispatch<SetStateAction<boolean>>;
+}
 
 const headerButtons = [
   {
@@ -49,12 +56,25 @@ const headerButtons = [
   },
 ];
 
-function Header() {
+function Header({
+  className,
+  openSidebar,
+  setOpenSidebar,
+}: HeaderProp) {
   return (
-    <nav className="flex items-center gap-2 p-4 text-sm text-white bg-slate-800">
+    <nav
+      className={[
+        "flex items-center gap-2 p-4 text-sm text-white bg-slate-800",
+        className,
+      ].join(" ")}
+    >
       <Menu
-        className="p-[2px] rounded-sm text-slate-400 bg-slate-600"
+        className="p-[2px] rounded-sm text-slate-400 bg-slate-600 cursor-pointer"
         size={24}
+        onClick={() => {
+          console.log("Clicked");
+          setOpenSidebar(!openSidebar);
+        }}
       />
       <div className="flex items-start flex-grow gap-2">
         <img src="/logo_topcv_dark.webp" className="w-16" />
