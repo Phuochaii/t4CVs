@@ -4,6 +4,8 @@ import { Switch } from "@mui/material";
 import Avatar from "../../shared/assets/images/vietnam-flag-icon.png";
 import FPT from '../../shared/assets/images/FPT.jpg';
 import VNRS from '../../shared/assets/images/VNRS.png';
+import { Search, Check, CircleAlert } from 'lucide-react';
+import TopCVBanner from '../../shared/assets/images/Topcv-banner.jpg';
 const companies = [
   { id: 1, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', CV: 'TopCV', logo: VNRS, time: '06-09-2023 21:36 PM', status: 'Đã ứng tuyển', salary: '3 - 5 triệu' },
   { id: 2, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', CV: 'TopCV', logo: FPT, time: '14-09-2023 15:55 PM', status: 'NTD đã xem', salary: 'Thỏa thuận' },
@@ -14,6 +16,7 @@ const companies = [
 const DropdownMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedContent, setSelectedContent] = useState("Trạng thái");
+  
   const setContent = (content: any) => {
     setSelectedContent(content);
   }
@@ -25,7 +28,6 @@ const DropdownMenu = () => {
       dropdownMenu.style.width = buttonWidth + 'px';
     }
   };
-
   return (
     <div className="relative">
       <button
@@ -57,7 +59,7 @@ const DropdownMenu = () => {
         <ul className="py-2">
           <li>
             <button
-              onClick={() => {setContent("Trạng thái"), setIsOpen(false)}} // Change content and close dropdown when clicked
+              onClick={() => { setContent("Trạng thái"), setIsOpen(false) }} // Change content and close dropdown when clicked
               className="block py-2 px-4 w-full text-left hover:bg-gray-100"
             >
               Trạng thái
@@ -65,7 +67,7 @@ const DropdownMenu = () => {
           </li>
           <li>
             <button
-              onClick={() => {setContent("Đã ứng tuyển"), setIsOpen(false)}} // Change content and close dropdown when clicked
+              onClick={() => { setContent("Đã ứng tuyển"), setIsOpen(false) }} // Change content and close dropdown when clicked
               className="block py-2 px-4 w-full text-left hover:bg-gray-100"
             >
               Đã ứng tuyển
@@ -73,7 +75,7 @@ const DropdownMenu = () => {
           </li>
           <li>
             <button
-              onClick={() => {setContent("NTD đã xem hồ sơ"), setIsOpen(false)}} // Change content and close dropdown when clicked
+              onClick={() => { setContent("NTD đã xem hồ sơ"), setIsOpen(false) }} // Change content and close dropdown when clicked
               className="block py-2 px-4 w-full text-left hover:bg-gray-100"
             >
               NTD đã xem hồ sơ
@@ -81,7 +83,7 @@ const DropdownMenu = () => {
           </li>
           <li>
             <button
-              onClick={() => {setContent("Hồ sơ phù hợp"), setIsOpen(false)}} // Change content and close dropdown when clicked
+              onClick={() => { setContent("Hồ sơ phù hợp"), setIsOpen(false) }} // Change content and close dropdown when clicked
               className="block py-2 px-4 w-full text-left hover:bg-gray-100"
             >
               Hồ sơ phù hợp
@@ -143,7 +145,7 @@ function CompanyList() {
 }
 function YourApplications() {
   const [isOn, setIsOn] = useState(false);
-
+  
   const toggleSwitch = () => {
     setIsOn(!isOn);
   };
@@ -152,87 +154,105 @@ function YourApplications() {
       <div className='justify-center flex-row items-center  w-8/12 mt-5 mb-5'>
         <CompanyList /> {/* Sử dụng component danh sách công ty */}
       </div>
-      <div className="rounded-lg p-5  border-2 w-3/12 bg-white mt-5 mb-5">
-        <div className="container mx-auto mt-8">
-          <div className="flex items-center">
-            <div className="w-16 h-16 bg-gray-300 rounded-full mr-4 overflow-hidden">
-              <img
-                src={Avatar}
-                alt="avatar"
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <div className="ml-4">
-              <p>Chào bạn trở lại,</p>
-              <p className="font-medium">Trần Nguyên</p>
-              <div className=" bg-gray-200 rounded inline-block">
-                <p>Tài khoản đã xác thực</p>
+      <div className="w-3/12 m-8 flex flex-col">
+        <div className="bg-white rounded-lg p-5 md:p-6 mb-5">
+          <div className="container mx-auto">
+            <div className="flex items-center">
+              <div className="w-16 h-16 bg-gray-300 rounded-full mr-4 overflow-hidden">
+                <img
+                  src={Avatar}
+                  alt="avatar"
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <p>Nâng cấp tài khoản</p>
+
+              <div className="ml-4">
+                <p>Chào bạn trở lại,</p>
+                <p className="font-medium">Trần Nguyên</p>
+                <div className=" bg-gray-200 rounded inline-block">
+                  <p>Tài khoản đã xác thực</p>
+                </div>
+                <p>Nâng cấp tài khoản</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex flex-col border-t-2 border-gray mt-4">
-          <div className="flex items-center">
-            <Switch
-              checked={isOn}
-              onChange={toggleSwitch}
-              inputProps={{ "aria-label": "controlled" }}
-              sx={{
-                "& .MuiSwitch-thumb": {
-                  bgcolor: isOn ? "green" : "gray",
-                },
-                "& .MuiSwitch-track": {
-                  bgcolor: isOn ? "green" : "gray",
-                },
-              }}
+          <div className="flex flex-col border-t-2 border-gray mt-4">
+            <div className="flex items-center">
+              <Switch
+                checked={isOn}
+                onChange={toggleSwitch}
+                inputProps={{ "aria-label": "controlled" }}
+                sx={{
+                  "& .MuiSwitch-thumb": {
+                    bgcolor: isOn ? "green" : "gray",
+                  },
+                  "& .MuiSwitch-track": {
+                    bgcolor: isOn ? "green" : "gray",
+                  },
+                }}
+              />
+              <span
+                className={`ml-2 ${isOn ? "text-green-500" : "text-gray-400"} font-bold`}
+              >
+                {isOn ? "Đang Bật Tìm Việc" : "Đang Tắt Tìm Việc"}
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 mt-5 mb-5">
+              Bật tìm việc giúp hồ sơ của bạn nổi bật hơn và được chú ý nhiều
+              hơn trong danh sách tìm kiếm của NTD.
+            </p>
+            <div className="flex items-center">
+              <Switch
+                checked={isOn}
+                onChange={toggleSwitch}
+                inputProps={{ "aria-label": "controlled" }}
+                sx={{
+                  "& .MuiSwitch-thumb": {
+                    bgcolor: isOn ? "green" : "gray",
+                  },
+                  "& .MuiSwitch-track": {
+                    bgcolor: isOn ? "green" : "gray",
+                  },
+                }}
+              />
+              <span
+                className={`ml-2 ${isOn ? "text-green-500" : "text-gray-400"} font-bold`}
+              >
+                {isOn
+                  ? "Đang cho phép NTD tìm kiếm hồ sơ"
+                  : "Chưa cho phép NTD tìm kiếm hồ sơ"}
+              </span>
+            </div>
+            <p className="text-sm">
+              Khi có cơ hội việc làm phù hợp, NTD sẽ liên hệ và trao đổi với bạn qua:
+            </p>
+            <div className="flex flex-row items-center space-x-2 mb-2 mt-2">
+              <div className='p-1 bg-green-100 rounded-full w-fit h-fit'>
+                <Check style={{ color: 'green', width: 15, height: 15 }}></Check>
+              </div>
+              <p className="text-sm">Nhắn tin qua Top Connect trên TopCV</p>
+            </div>
+            <div className="flex flex-row items-center space-x-2">
+              <div className='p-1 bg-green-100 rounded-full w-fit h-fit'>
+                <Check style={{ color: 'green', width: 15, height: 15 }}></Check>
+              </div>
+              <p className="text-sm">Email và Số điện thoại của bạn</p>
+            </div>
+            <img
+              src={TopCVBanner}
+              alt="avatar"
+              className="w-full h-full object-cover mt-2 mb-4"
             />
-            <span
-              className={`ml-2 ${isOn ? "text-green-500" : "text-gray-400"} font-bold`}
-            >
-              {isOn ? "Đang Bật Tìm Việc" : "Đang Tắt Tìm Việc"}
-            </span>
           </div>
-          <p>
-            Bật tìm việc giúp hồ sơ của bạn nổi bật hơn và được chú ý nhiều
-            hơn trong danh sách tìm kiếm của NTD.
-          </p>
-          <div className="flex items-center">
-            <Switch
-              checked={isOn}
-              onChange={toggleSwitch}
-              inputProps={{ "aria-label": "controlled" }}
-              sx={{
-                "& .MuiSwitch-thumb": {
-                  bgcolor: isOn ? "green" : "gray",
-                },
-                "& .MuiSwitch-track": {
-                  bgcolor: isOn ? "green" : "gray",
-                },
-              }}
-            />
-            <span
-              className={`ml-2 ${isOn ? "text-green-500" : "text-gray-400"} font-bold`}
-            >
-              {isOn
-                ? "Đang cho phép NTD tìm kiếm hồ sơ"
-                : "Chưa cho phép NTD tìm kiếm hồ sơ"}
-            </span>
+          <div className="flex flex-col border-t-2 border-gray mt-4">
+            <div className="flex flex-row items-start">
+              <CircleAlert style={{ transform: 'rotate(180deg)', width: 15, height: 15, marginTop: 1, marginRight: 3 }}></CircleAlert>
+              <p className="text-[11px]">Khởi tạo TopCV Profile để gia tăng 300% cơ hội việc làm tốt</p>
+            </div>
+            <button className="mt-4 px-4 py-2 text-xs font-bold w-40 h-8 border border-green-500 rounded text-green-500 hover:bg-green-500 hover:text-white transition duration-300">
+              Tạo TopCV Profile
+            </button>
           </div>
-          <p>
-            Khi bạn cho phép, các NTD uy tín có thể chủ động kết nối và gửi
-            đến bạn những cơ hội việc làm hấp dẫn nhất, giúp nhân đôi hiệu quả
-            tìm việc.
-          </p>
-        </div>
-        <div className="flex flex-col border-t-2 border-gray mt-4">
-          <div>
-            <p>Khởi tạo TopCV Profile để gia tăng 300% cơ hội việc làm tốt</p>
-          </div>
-          <button className="mt-4 px-4 py-2 text-xs font-bold w-40 h-8 border border-green-500 rounded text-green-500 hover:bg-green-500 hover:text-white transition duration-300">
-            Tạo TopCV Profile
-          </button>
         </div>
       </div>
     </div>
