@@ -7,12 +7,16 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { JobDetail } from './job-detail.entity';
 import { Major } from './major.entity';
 import { Currency } from './currency.entity';
 import { Level } from './level.entity';
 import { Field } from './field.entity';
+import { Location } from './location.entity';
+import { Experience } from './experience.entity';
+import { Type } from './type.entity';
 
 @Entity({ name: 'job' })
 export class Job {
@@ -34,6 +38,10 @@ export class Job {
   @Column()
   compaignId: number;
 
+  @ManyToOne(() => Type)
+  @JoinColumn()
+  type: Type;
+
   //currencyId
   @ManyToOne(() => Currency)
   @JoinColumn()
@@ -45,11 +53,16 @@ export class Job {
   @Column()
   salaryMax: number;
 
-  @Column()
-  exp: string;
+  @ManyToOne(() => Experience)
+  @JoinColumn()
+  exp: Experience;
 
-  @Column('character varying', { array: true })
-  region: string[];
+  // @Column('character varying', { array: true })
+  // region: string[];
+  //location
+  @ManyToMany(() => Location)
+  @JoinColumn()
+  locations: Location[];
 
   @Column()
   expriedDate: Date;

@@ -9,6 +9,9 @@ import { MajorModule } from './major/major.module';
 import { LevelModule } from './level/level.module';
 import { CurrencyModule } from './currency/currency.module';
 import { FieldModule } from './field/field.module';
+import { LocationModule } from './location/location.module';
+import { ExperienceModule } from './experience/experience.module';
+import { TypeModule } from './type/type.module';
 
 @Module({
   imports: [
@@ -33,7 +36,10 @@ import { FieldModule } from './field/field.module';
     MajorModule,
     LevelModule,
     CurrencyModule,
-    FieldModule, // JobRepository]),
+    FieldModule,
+    LocationModule,
+    ExperienceModule,
+    TypeModule, // JobRepository]),
   ],
   controllers: [JobController],
   providers: [JobService], //, JobRepository],

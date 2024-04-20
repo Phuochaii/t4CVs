@@ -12,6 +12,9 @@ import { FieldService } from './field/field.service';
 import { UpdateJobDto } from './dto/Req/update-job.dto';
 import { QueryDTO } from './dto/Req/query.dto';
 import { CreateBaseDto } from './dto/Req/createBase.dto';
+import { LocationService } from './location/location.service';
+import { ExperienceService } from './experience/experience.service';
+import { TypeService } from './type/type.service';
 @Injectable()
 export class JobService {
   constructor(
@@ -22,6 +25,9 @@ export class JobService {
     private levelService: LevelService,
     private currencyService: CurrencyService,
     private fieldService: FieldService,
+    private locationService: LocationService,
+    private experienceService: ExperienceService,
+    private typeService: TypeService,
   ) {}
 
   async create(createJobDto: CreateJobDto) {
@@ -38,6 +44,12 @@ export class JobService {
       createJobDto.currencyId,
     );
     job.currency = currency;
+    //get exp
+    const exp = await this.experienceService.findById(createJobDto.expId);
+    job.exp = exp;
+    //get type
+    const type = await this.typeService.findById(createJobDto.typeId);
+    job.type = type;
     //get list of fields
     createJobDto.fieldsId.map(async (fieldId) => {
       const field = await this.fieldService.findById(fieldId);
@@ -45,7 +57,6 @@ export class JobService {
     });
 
     return await this.jobRepository.save(job);
-    //TODO: get try 1 save call to save 2 db , hint is using caches
   }
 
   async findAll(query: QueryDTO): Promise<Job[]> {
@@ -82,8 +93,6 @@ export class JobService {
         compaignId: true,
         salaryMin: true,
         salaryMax: true,
-        exp: true,
-        region: true,
         expriedDate: true,
         createAt: true,
         updateAt: true,
@@ -139,5 +148,23 @@ export class JobService {
   }
   async findAllField() {
     return await this.fieldService.findAll();
+  }
+  async createLocation(fields: CreateBaseDto) {
+    return await this.locationService.create(fields);
+  }
+  async findAllLocation() {
+    return await this.locationService.findAll();
+  }
+  async createExp(exps: CreateBaseDto) {
+    return await this.experienceService.create(exps);
+  }
+  async findAllExp() {
+    return await this.experienceService.findAll();
+  }
+  async createType(types: CreateBaseDto) {
+    return await this.typeService.create(types);
+  }
+  async findAllType() {
+    return await this.typeService.findAll();
   }
 }

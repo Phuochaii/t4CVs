@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CreateJobDto } from './dto/Req/createJob.dto';
 import { JobService } from './job.service';
-import { QueryDTO } from './dto/./dto/Req/createBase.dto';
+import { QueryDTO } from './dto/Req/query.dto';
 import { CreateBaseDto } from './dto/Req/createBase.dto';
 
 @Controller('job')
@@ -67,5 +67,32 @@ export class JobController {
   @Get('level/all')
   getAllLevel(): Observable<string> {
     return this.jobService.getAllLevel();
+  }
+  @Post('location/create')
+  createLocation(@Body() data: CreateBaseDto): Observable<string> {
+    return this.jobService.createLocation(data);
+  }
+
+  @Get('location/all')
+  getAllLocation(): Observable<string> {
+    return this.jobService.getAllLocation();
+  }
+  @Post('exp/create')
+  createExp(@Body() data: CreateBaseDto): Observable<string> {
+    return this.jobService.createExp(data);
+  }
+
+  @Get('exp/all')
+  getAllExp(): Observable<string> {
+    return this.jobService.getAllExp();
+  }
+  @Post('type/create')
+  createJobType(@Body() data: CreateBaseDto): Observable<string> {
+    return this.jobService.createJobType(data);
+  }
+
+  @Get('type/all')
+  getAllJobType(): Observable<string> {
+    return this.jobService.getAllJobType();
   }
 }

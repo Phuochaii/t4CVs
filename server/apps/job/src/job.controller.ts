@@ -74,4 +74,32 @@ export class JobController {
   getAllField() {
     return this.jobService.findAllField();
   }
+
+  @MessagePattern({ cmd: 'create_location' })
+  createLocation(fields: CreateBaseDto) {
+    return this.jobService.createLocation(fields);
+  }
+
+  @MessagePattern({ cmd: 'get_all_location' })
+  getAllLocation() {
+    return this.jobService.findAllLocation();
+  }
+  @MessagePattern({ cmd: 'create_exp' })
+  createExp(exps: CreateBaseDto) {
+    return this.jobService.createExp(exps);
+  }
+
+  @MessagePattern({ cmd: 'get_all_exp' })
+  getAllExp() {
+    return this.jobService.findAllExp();
+  }
+  @MessagePattern({ cmd: 'create_type' })
+  createJobType(types: CreateBaseDto) {
+    return this.jobService.createType(types);
+  }
+
+  @MessagePattern({ cmd: 'get_all_type' })
+  getAllJobType() {
+    return this.jobService.findAllType();
+  }
 }

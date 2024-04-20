@@ -25,7 +25,6 @@ export class MajorService {
       const _major = await this.majorRepository.findOne({
         where: { name: name },
       });
-      console.log(_major);
       if (_major === null) {
         await this.majorRepository.save({ name });
       }
