@@ -45,45 +45,6 @@
 } */
 
 /* Home User */
-.top-menu {
-  background-color: #333;
-  color: #fff;
-  padding: 10px 0;
-}
-
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.nav-menu ul {
-  list-style-type: none;
-}
-
-.nav-menu ul li {
-  display: inline;
-}
-
-.nav-menu ul li a {
-  color: #fff;
-  text-decoration: none;
-  padding: 10px 20px;
-}
-
-.user-actions a {
-  color: #fff;
-  text-decoration: none;
-  margin-left: 20px;
-}
 
   /* section-header */
 .section-header {
