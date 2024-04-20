@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UploadCVDto {
   @ApiProperty({ description: 'File data (base64 encoded)' })
-  file: string;
+  file: any;
 
   @ApiProperty({ description: 'File name' })
   filename: string;

@@ -1,7 +1,7 @@
 export class UploadCVDto {
+  file: any;
   mimeType: string;
   filename: string;
-  file: any;
   fileSize: number;
   userId: any;
   cvId: any;

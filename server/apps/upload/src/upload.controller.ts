@@ -22,13 +22,13 @@ export class UploadController {
 
   @MessagePattern({ cmd: 'hello' })
   getHello() {
-    console.log('Message Hello');
     return 'Hello World';
   }
 
   @MessagePattern({ cmd: 'upload_cv' })
-  uploadCV(upload: UploadCVDto) {
-    return this.uploadService.uploadCV(upload);
+  uploadCV(uploadCVDto: UploadCVDto) {
+
+    return this.uploadService.uploadCV(uploadCVDto);
   }
 }
 

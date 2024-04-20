@@ -1,7 +1,18 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { UploadService } from './upload.service';
 import { UploadCVDto } from './dto/upload.dto';
+import { Express } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 @Controller('upload')
 export class UploadController {
@@ -13,7 +24,18 @@ export class UploadController {
   }
 
   @Post('cv')
-  uploadCV(@Body() data: UploadCVDto): Observable<any> {
-    return this.uploadService.uploadCV(data);
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploadedFiles',
+      }),
+    }),
+  )
+  uploadCV(
+    @UploadedFile() file: any,
+    @Body() uploadCVDto: UploadCVDto,
+  ): Observable<any> {
+    console.log(JSON.stringify(file) + JSON.stringify(uploadCVDto));
+    return this.uploadService.uploadCV(file, uploadCVDto);
   }
 }

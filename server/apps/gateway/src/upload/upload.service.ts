@@ -7,13 +7,12 @@ import { UploadCVDto } from './dto/upload.dto';
 export class UploadService {
   constructor(@Inject('UPLOAD') private readonly uploadClient: ClientProxy) {}
   getHello(): Observable<any> {
-    console.log('Hello Service');
     return this.uploadClient.send({ cmd: 'hello' }, {});
   }
 
-  uploadCV(uploadCVDto: UploadCVDto): Observable<any> {
-    console.log('Upload Service');
-
+  uploadCV(file: any, uploadCVDto: UploadCVDto): Observable<any> {
+    console.log(JSON.stringify(file) + JSON.stringify(uploadCVDto));
+    uploadCVDto.file = file;
     return this.uploadClient.send({ cmd: 'upload_cv' }, uploadCVDto);
   }
 }
