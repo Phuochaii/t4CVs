@@ -84,7 +84,7 @@ function Home() {
 
   return <>
     <div className="section-header">
-      <div className="container justify-center flex flex-col gap-4">
+      <div className="container flex flex-col gap-4">
         <div className="hearder-box text-center">
           <h1 className="title">Tìm việc làm nhanh 24h, việc làm mới nhất trên toàn quốc.</h1>
           <p className="description">
@@ -92,7 +92,7 @@ function Home() {
           </p>
         </div>
 
-        <form className="search-job flex flex-row gap-x-4">
+        <form className="search-job flex flex-row justify-center gap-x-4">
           <div className="group-search flex flex-row">
             <div className="item item-search">
               <FormControl>
@@ -172,7 +172,7 @@ function Home() {
           <Button className="btn-search" variant='contained'>Tìm kiếm</Button>
         </form>
 
-        <div className="box-work-market flex flex-row gap-4 text-black">
+        <div className="box-work-market flex flex-row justify-center gap-4 text-black">
           <div className="box-work-market__item flex flex-row gap-2 items-center">
             <span className="lable-item text-sm">Vị trí chờ bạn khám phá</span>
             <span className='quantity item-number number-job-new-today'>46.052</span>
@@ -189,7 +189,7 @@ function Home() {
           </div>
         </div>
 
-        <div className="section-banner-vip-company">
+        <div className="section-banner-vip-company m-auto">
           <div className="max-w-screen-lg relative">
             <div className="overflow-hidden rounded-lg">
               <div className="flex transition-transform duration-500 ease-out w-full"

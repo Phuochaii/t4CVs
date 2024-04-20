@@ -420,7 +420,7 @@ function SearchJob() {
           <div className="container">
             <div className="max-w-screen-lg mx-auto">
               <div className="list-job">
-                <div className="job-body wrapper-main grid grid-cols-3 gap-x-4 my-4">
+                <div className="job-body wrapper-main grid grid-cols-3 gap-x-4 py-4">
                   <div className="wrapper-content col-span-2">
                     <div className="job-list-search-result">
                       
