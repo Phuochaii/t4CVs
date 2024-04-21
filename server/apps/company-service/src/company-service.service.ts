@@ -1,8 +1,51 @@
 import { Injectable } from '@nestjs/common';
+import { Company } from './entities/company.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreateCompanyDto } from './dto/Req/create-company.dto';
+import { FindCompanyDTOResponse } from './dto/Res/find-company.dto';
+import { UpdateCompanyDto } from './dto/Req/update-company.dto';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CompanyServiceService {
-  getHello(): string {
-    return 'Hello World!';
+  constructor(
+    @InjectRepository(Company)
+    private CompanyRepository: Repository<Company>,
+  ) {}
+
+  async create(createCompanyDto: CreateCompanyDto) {
+    const job = await this.CompanyRepository.save(createCompanyDto);
+
+    return await this.CompanyRepository.save(job);
+  }
+
+  async findAll(): Promise<FindCompanyDTOResponse[]> {
+    const companies = await this.CompanyRepository.find();
+    return companies;
+  }
+
+  async findCompanyById(id: number) {
+    const result = await this.CompanyRepository.findOne({
+      where: {
+        id,
+      },
+    });
+    return result;
+  }
+
+  async updateCompany(data: UpdateCompanyDto) {
+    return await this.CompanyRepository.update(data.id, {
+      website: data.website,
+      image: data.image,
+      address: data.address,
+      phone: data.phone,
+      companySize: data.companySize,
+      description: data.description,
+      status: data.status,
+    });
+  }
+
+  async remove(id: number) {
+    await this.CompanyRepository.delete(id);
   }
 }

@@ -3,7 +3,7 @@ import { CompanyServiceController } from './company-service.controller';
 import { CompanyServiceService } from './company-service.service';
 
 describe('CompanyServiceController', () => {
-  let companyServiceController: CompanyServiceController;
+  let controller: CompanyServiceController;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -11,12 +11,10 @@ describe('CompanyServiceController', () => {
       providers: [CompanyServiceService],
     }).compile();
 
-    companyServiceController = app.get<CompanyServiceController>(CompanyServiceController);
+    controller = app.get<CompanyServiceController>(CompanyServiceController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(companyServiceController.getHello()).toBe('Hello World!');
-    });
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
   });
 });
