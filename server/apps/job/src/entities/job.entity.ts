@@ -65,7 +65,7 @@ export class Job {
   locations: Location[];
 
   @Column()
-  expriedDate: Date;
+  expiredDate: Date;
 
   @Column({ default: new Date() })
   createAt: Date;

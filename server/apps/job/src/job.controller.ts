@@ -22,8 +22,8 @@ export class JobController {
   }
 
   @MessagePattern({ cmd: 'get_valid_jobs' })
-  findValidJobs() {
-    return this.jobService.findValidJobs();
+  findValidJobs(query: any) {
+    return this.jobService.findValidJobs(query);
   }
 
   @MessagePattern({ cmd: 'find_job_by_id' })

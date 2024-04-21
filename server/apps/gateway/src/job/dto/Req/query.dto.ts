@@ -1,7 +1,5 @@
 export class QueryDTO {
-  region?: string;
-  exp?: string;
-  salaryMin?: number;
-  salaryMax?: number;
+  page?: number;
   limit?: number;
+  queryParams?: any;
 }

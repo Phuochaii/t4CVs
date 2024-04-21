@@ -3,7 +3,15 @@ import { Injectable } from '@nestjs/common';
 import { CreateJobDto } from './dto/Req/create-job.dto';
 import { Job } from './entities/job.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Any, ArrayContainedBy, Repository, ArrayContains } from 'typeorm';
+import {
+  Any,
+  ArrayContainedBy,
+  Repository,
+  ArrayContains,
+  MoreThanOrEqual,
+  LessThanOrEqual,
+  MoreThan,
+} from 'typeorm';
 import { JobDetailService } from './job-detail/job-detail.service';
 import { MajorService } from './major/major.service';
 import { LevelService } from './level/level.service';
@@ -51,6 +59,7 @@ export class JobService {
     const type = await this.typeService.findById(createJobDto.typeId);
     job.type = type;
     //get list of fields
+    job.fields = [];
     createJobDto.fieldsId.map(async (fieldId) => {
       const field = await this.fieldService.findById(fieldId);
       job.fields.push(field);
@@ -85,26 +94,32 @@ export class JobService {
     return jobs;
   }
 
-  async findValidJobs(): Promise<Job[]> {
+  async findValidJobs(query: any): Promise<Job[]> {
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 10;
+    query.status = true;
+    delete query.page;
+    delete query.limit;
+    const min = query.salaryMin ?? 0;
+    const max = query.salaryMax ?? 1000000000;
+    const skip = (page - 1) * limit;
+    delete query.page;
+    delete query.limit;
+    delete query.salaryMin;
+    delete query.salaryMax;
     const jobs = await this.jobRepository.find({
-      select: {
-        id: true,
-        titleRecruitment: true,
-        compaignId: true,
-        salaryMin: true,
-        salaryMax: true,
-        expriedDate: true,
-        createAt: true,
-        updateAt: true,
-      },
       where: {
-        status: true,
-        // region: Any(['USA']),
+        ...query,
+        salaryMin: MoreThanOrEqual(min),
+        salaryMax: LessThanOrEqual(max),
+        expiredDate: MoreThan(new Date()),
       },
+      skip,
+      take: limit,
       order: {
         updateAt: 'ASC',
       },
-      relations: ['major'],
+      relations: ['major', 'level', 'currency', 'fields', 'exp', 'type'],
     });
     return jobs;
   }
@@ -115,7 +130,15 @@ export class JobService {
         status: true,
         id,
       },
-      relations: ['jobDetail'],
+      relations: [
+        'jobDetail',
+        'major',
+        'level',
+        'currency',
+        'fields',
+        'exp',
+        'type',
+      ],
     });
     //await result.jobDetail;
     return result;

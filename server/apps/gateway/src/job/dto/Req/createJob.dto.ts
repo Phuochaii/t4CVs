@@ -2,7 +2,7 @@ export class CreateJobDto {
   titleRecruitment: string;
   majorId: number;
   fieldsId: number[];
-  type: number;
+  typeId: number;
   currencyId: number;
   levelId: number;
   compaignId: number;
@@ -11,8 +11,6 @@ export class CreateJobDto {
   expId: number;
   locationId: number[];
   expriedDate: string;
-  // createAt: string;
-  // updateAt: string;
   quantity: string;
   jobSchedule: string;
   gender: string;

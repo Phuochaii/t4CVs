@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateBaseDto } from './dto/Req/createBase.dto';
 import { QueryDTO } from './dto/Req/query.dto';
+import { UpdateJobDto } from './dto/Req/update-job.dto';
 
 @Injectable()
 export class JobService {
@@ -14,8 +15,8 @@ export class JobService {
     //   return response;
     // });
   }
-  getValidJobs(): Observable<string> {
-    return this.jobClient.send({ cmd: 'get_valid_jobs' }, {});
+  getValidJobs(query: any): Observable<string> {
+    return this.jobClient.send({ cmd: 'get_valid_jobs' }, query);
   }
 
   createJob(createJobDTO: CreateJobDto): Observable<string> {
@@ -24,6 +25,10 @@ export class JobService {
 
   findJobById(id: number): Observable<string> {
     return this.jobClient.send({ cmd: 'find_job_by_id' }, id);
+  }
+
+  updateJobStatus(data: UpdateJobDto): Observable<string> {
+    return this.jobClient.send({ cmd: 'update_job_status' }, data);
   }
 
   createMajor(majors: CreateBaseDto): Observable<string> {
