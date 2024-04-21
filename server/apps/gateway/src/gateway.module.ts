@@ -8,7 +8,11 @@ import { GatewayController } from './gateway.controller';
 import { GatewayService } from './gateway.service';
 
 @Module({
-  imports: [ApplicationModule, JobModule, UploadModule, CompanyModule],
+  imports: [
+    ApplicationModule,
+    // JobModule,
+    // UploadModule,
+  ],
   controllers: [GatewayController],
   providers: [GatewayService],
 })

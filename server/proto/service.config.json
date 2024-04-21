@@ -10,5 +10,9 @@
     {
         "serviceName": "notification-service",
         "protoFiles": ["notification"]
+    },
+    {
+        "serviceName": "application",
+        "protoFiles": ["application"]
     }
 ]

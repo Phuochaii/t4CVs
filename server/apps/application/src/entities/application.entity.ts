@@ -1,43 +1,38 @@
-import { Application_Status } from '@app/common';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+// import { Application_Status } from '@app/common';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Application {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('text')
-  status: Application_Status;
+  @Column('int')
+  status: number;
 
-  @Column('text')
+  @Column('varchar')
   fullname: string;
 
-  @CreateDateColumn()
+  @Column('varchar')
   phone: string;
 
-  @Column('text')
+  @Column('varchar')
   email: string;
 
-  @Column('text')
-  coverLetter: string;
+  @Column('varchar', { nullable: true })
+  coverLetter: string | null;
 
-  @Column('text')
-  createdAt: string;
+  @Column('varchar', { nullable: true })
+  createdAt: string | null;
 
-  @Column('text')
-  updateAt: string;
+  @Column('varchar', { nullable: true })
+  updateAt: string | null;
 
-  @Column('text')
-  jobId: number;
+  @Column('int', { nullable: true })
+  jobId: number | null;
 
-  @Column('text')
-  userId: number;
+  @Column('int', { nullable: true })
+  userId: number | null;
 
-  @Column('text')
-  cvId: number;
+  @Column('int', { nullable: true })
+  cvId: number | null;
 }
