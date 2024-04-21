@@ -10,14 +10,15 @@ import {
   ApplicationServiceClient,
   APPLICATION_SERVICE_NAME,
   Application,
+  Applications,
 } from '@app/common';
 import { ClientGrpc } from '@nestjs/microservices';
-// import { Observable, from, throwError, toArray } from 'rxjs';
-// import { catchError, map, mergeAll } from 'rxjs/operators';
+import { toArray } from 'rxjs';
+// import { Observable, from } from 'rxjs';
+// import { mergeMap } from 'rxjs/operators';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
-
   private readonly application: any[] = [];
   private applicationServiceClient: ApplicationServiceClient;
 
@@ -43,31 +44,30 @@ export class ApplicationService implements OnModuleInit {
     return this.applicationServiceClient.readApplication({ id });
   }
 
-
-  async findAll() {
-    try {
-      let applications;
-      this.applicationServiceClient.readAllApplication({}).subscribe(
-        (data) => {
-          applications = data;
-          console.log(applications);
-        },
-        (error) => {
-          console.log('Lỗi:', error);
-          throw new NotFoundException(error.message);
-        },
-      );
-      return {
-        application: applications,
-      };
-    } catch (error) {
-      console.log('Lỗi:', error);
-      throw new NotFoundException(error.message);
-    }
+  // findAll() {
+  //   return this.applicationServiceClient.readAllApplication({});
+  // }
+  findAll() {
+    const applications$ = this.applicationServiceClient
+      .readAllApplication({})
+      .pipe(toArray());
+    return applications$;
+    // applications$.subscribe({
+    //   next(application) {
+    //     console.log(application);
+    //   },
+    //   error(err) {
+    //     console.error('Error: ' + err);
+    //   },
+    //   complete() {
+    //     console.log('Completed');
+    //   },
+    // });
   }
 
   async update(id: number) {
-    return this.applicationServiceClient.updateApplication({ id });
+    const data = await this.applicationServiceClient.updateApplication({ id });
+    return data;
   }
 
   // update(id: number, updateApplicationDto: UpdateApplicationDto) {

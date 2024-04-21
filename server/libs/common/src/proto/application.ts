@@ -47,6 +47,10 @@ export interface Application {
   cvId: number;
 }
 
+export interface Applications {
+  applications: Application[];
+}
+
 export const APPLICATION_PACKAGE_NAME = "Application";
 
 /** The job application service definition. */
@@ -56,7 +60,7 @@ export interface ApplicationServiceClient {
 
   readApplication(request: ReadApplicationRequest): Observable<Application>;
 
-  readAllApplication(request: Empty): Observable<Application>;
+  readAllApplication(request: Empty): Observable<Applications>;
 
   updateApplication(request: UpdateApplicationRequest): Observable<Application>;
 
@@ -70,7 +74,7 @@ export interface ApplicationServiceController {
 
   readApplication(request: ReadApplicationRequest): Promise<Application> | Observable<Application> | Application;
 
-  readAllApplication(request: Empty): Promise<Application> | Observable<Application> | Application;
+  readAllApplication(request: Empty): Promise<Applications> | Observable<Applications> | Applications;
 
   updateApplication(request: UpdateApplicationRequest): Promise<Application> | Observable<Application> | Application;
 

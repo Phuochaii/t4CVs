@@ -6,36 +6,45 @@ import {
   Application,
   ApplicationServiceController,
   ApplicationServiceControllerMethods,
+  Applications,
   CreateApplicationRequest,
   DeleteApplicationRequest,
-  Empty,
   ReadApplicationRequest,
   UpdateApplicationRequest,
 } from '@app/common';
-import { Observable } from 'rxjs';
+// import { Application } from './entities/application.entity';
+// import { Observable } from 'rxjs';
 
 @Controller()
 @ApplicationServiceControllerMethods()
 export class ApplicationController implements ApplicationServiceController {
   constructor(private readonly applicationService: ApplicationService) {}
-  createApplication(create: CreateApplicationRequest) {
-    return this.applicationService.store(create);
+  createApplication(request: CreateApplicationRequest) {
+    return this.applicationService.store(request);
   }
 
-  readApplication(findOne: ReadApplicationRequest) {
-    return this.applicationService.findOneOrFail(findOne.id);
+  readApplication(request: ReadApplicationRequest) {
+    return this.applicationService.findOneOrFail(request.id);
   }
 
-  // async readAllApplication(): Promise<Application[]> {
-  //   return await this.applicationService.findAll();
+  // async readAllApplication(): Promise<Applications> {
+  //   // console.log(this.applicationService.findAll());
+  //   const data = await this.applicationService.findAll();
+  //   console.log('service apply');
+  //   console.log(data);
+  //   return { Applications: data };
   // }
 
-  readAllApplication(): Observable<Application> {
-    return this.applicationService.findAll();
+  async readAllApplication(): Promise<Applications> {
+    // console.log(this.applicationService.findAll());
+    const data = await this.applicationService.findAll();
+    console.log('controller not gateway apply');
+    console.log({ Applications: data });
+    return { applications: data };
   }
 
-  updateApplication(update: UpdateApplicationRequest) {
-    return this.applicationService.update(update.id);
+  updateApplication(request: UpdateApplicationRequest) {
+    return this.applicationService.update(request.id);
   }
 
   deleteApplication(request: DeleteApplicationRequest) {

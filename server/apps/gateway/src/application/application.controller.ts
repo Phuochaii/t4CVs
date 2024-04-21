@@ -8,7 +8,11 @@ import {
   // Delete,
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
-import { CreateApplicationRequest } from '@app/common';
+import {
+  Application,
+  Applications,
+  CreateApplicationRequest,
+} from '@app/common';
 
 @Controller('application')
 export class ApplicationController {

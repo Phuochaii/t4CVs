@@ -3,12 +3,13 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { Application } from './entities/application.entity';
-import { map, mergeAll } from 'rxjs/operators';
+import { map, mergeAll, mergeMap } from 'rxjs/operators';
 import { Observable, from } from 'rxjs';
-// import { DeleteApplicationRequest, UpdateApplicationRequest } from '@app/common';
+import { Applications } from '@app/common';
+
 @Injectable()
 export class ApplicationService {
-  private readonly application12: any[] = [];
+  private readonly applications: Application[] = [];
   constructor(
     @InjectRepository(Application)
     private applicationRepository: Repository<Application>,
@@ -34,31 +35,25 @@ export class ApplicationService {
     }
   }
 
-  // async findAll(): Promise<Observable<Application>> {
+  // async findAll(): Promise<Application[]> {
   //   try {
-  //     // let applications1: any[] = [];
-  //     // applications1 = await this.applicationRepository.find();
-  //     // console.log(applications1);
-  //     // return applications1;
-  //     const applications = this.applicationRepository.find().pipe(
-  //       catchError((error) => {
-  //         console.log('lỗi:', error);
-  //         return throwError(new NotFoundException(error.message));
-  //       }),
-  //     );
-  //     console.log(applications);
-  //     return applications;
+  //     // console.log(this.applicationRepository.find());
+  //     const data = await this.applicationRepository.find();
+  //     // console.log(data);
+  //     return data;
   //   } catch (error) {
   //     console.log('lỗi:', error);
   //     throw new NotFoundException(error.message);
   //   }
   // }
-  findAll(): Observable<Application> {
+
+  async findAll() {
     try {
-      return from(this.applicationRepository.find()).pipe(
-        mergeAll(),
-        map((application) => application),
-      );
+      // console.log(this.applicationRepository.find());
+      const data = await this.applicationRepository.find();
+      console.log('service not gateway apply');
+      // console.log(data);
+      return data;
     } catch (error) {
       console.log('lỗi:', error);
       throw new NotFoundException(error.message);
@@ -66,7 +61,6 @@ export class ApplicationService {
   }
 
   async delete(id: number) {
-    // const application = await this.applicationRepository.findOneBy({ id });
     await this.applicationRepository.delete(id);
   }
 

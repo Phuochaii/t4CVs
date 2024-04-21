@@ -6,7 +6,7 @@ package Application;
 service ApplicationService {
   rpc CreateApplication (CreateApplicationRequest) returns (Application) {}
   rpc ReadApplication (ReadApplicationRequest) returns (Application) {}
-  rpc ReadAllApplication (Empty) returns (Application) {}
+  rpc ReadAllApplication (Empty) returns (Applications) {}
   rpc UpdateApplication (UpdateApplicationRequest) returns (Application) {}
   rpc DeleteApplication (DeleteApplicationRequest) returns (Empty) {}
 }
@@ -52,6 +52,10 @@ message Application {
   int32 jobId=9;
   int32 userId=10;
   int32 cvId=11;
+}
+
+message Applications {
+  repeated Application applications = 1;
 }
 
 
