@@ -53,9 +53,9 @@ const routes = [
 
   // HR
   { path: "/hr/news", component: HR.News, layout: HRLayout },
-  
+
   { path: "/hr/post-compaign", component: HR.PostJob, layout: HRLayout }, // thinh
-  { path: "/hr/post-compaign/data", component: HR.PostCompaign, layout: HRLayout }, // thinh
+  { path: "/hr/post-compaign/data", component: HR.PostCompaign, layout: HRLayout }, // khoa + hùng
 
 
   { path: "/hr/verify-account/1", component: HR.VerifyAccount.Page1, layout: HRLayout },

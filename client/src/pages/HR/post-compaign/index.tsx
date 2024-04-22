@@ -83,7 +83,7 @@ function PostCompaign() {
                       marginRight: 2,
                       fontWeight: "bold",
                     }}
-                    label="1. Tin tuyển dụng"
+                    label="1. Nội dung đăng tuyển"
                     value="1"
                   />
                   <Tab
@@ -93,7 +93,7 @@ function PostCompaign() {
                       marginRight: 2,
                       fontWeight: "bold",
                     }}
-                    label="2. CV ứng tuyển"
+                    label="2. Hình thức hiển thị"
                     value="2"
                   />
                   <Tab
@@ -103,7 +103,7 @@ function PostCompaign() {
                       marginRight: 2,
                       fontWeight: "bold",
                     }}
-                    label="3. Ứng viên đã xem tin"
+                    label="3. Test đầu vào"
                     value="3"
                   />
                 </TabList>
