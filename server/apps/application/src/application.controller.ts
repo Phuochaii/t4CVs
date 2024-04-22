@@ -29,8 +29,6 @@ export class ApplicationController implements ApplicationServiceController {
       request.page,
       request.limit,
     );
-    console.log('controller not gateway apply');
-    console.log({ Applications: data });
     return { applications: data };
   }
 

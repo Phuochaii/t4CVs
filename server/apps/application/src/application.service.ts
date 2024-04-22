@@ -3,11 +3,6 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { Application } from './entities/application.entity';
-import {
-  paginate,
-  Pagination,
-  IPaginationOptions,
-} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class ApplicationService {
@@ -19,8 +14,11 @@ export class ApplicationService {
   async store(data: CreateApplicationDto) {
     try {
       const application = this.applicationRepository.create(data);
-      application.status = 0;
+      application.status = false;
       console.log(data);
+      const now = new Date();
+      application.createdAt = now.toISOString().split('T')[0];
+      application.updateAt = now.toISOString().split('T')[0];
       return await this.applicationRepository.save(application);
     } catch (error) {
       throw new NotFoundException(error.message);
@@ -37,24 +35,15 @@ export class ApplicationService {
     }
   }
 
-  // async findAll() {
-  //   try {
-  //     // console.log(this.applicationRepository.find());
-  //     const data = await this.applicationRepository.find();
-  //     console.log('service not gateway apply');
-  //     // console.log(data);
-  //     return data;
-  //   } catch (error) {
-  //     console.log('lỗi:', error);
-  //     throw new NotFoundException(error.message);
-  //   }
-  // }
-
   async findAll(page: number, limit: number) {
     const skip = (page - 1) * limit;
     const data = await this.applicationRepository.find({
       skip: skip,
       take: limit,
+      order: {
+        createdAt: 'DESC',
+        id: 'DESC',
+      },
     });
     return data;
   }
@@ -65,7 +54,9 @@ export class ApplicationService {
 
   async update(id: number) {
     const application = await this.applicationRepository.findOneBy({ id });
-    application.status = 1;
+    application.status = true;
+    const now = new Date();
+    application.updateAt = now.toISOString().split('T')[0];
     const updatedApplication =
       await this.applicationRepository.save(application);
 
