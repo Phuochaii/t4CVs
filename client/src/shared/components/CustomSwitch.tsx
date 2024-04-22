@@ -21,7 +21,7 @@ const Switch = React.forwardRef<HTMLSpanElement, SwitchProps>(
             return {
               ...resolvedSlotProps,
               className: clsx(
-                `group relative inline-block w-[38px] h-[24px] m-2.5 ${
+                `group relative inline-block w-10 h-6 m-2.5 ${
                   ownerState.disabled
                     ? "cursor-not-allowed opacity-40"
                     : "cursor-pointer"
@@ -38,7 +38,7 @@ const Switch = React.forwardRef<HTMLSpanElement, SwitchProps>(
             return {
               ...resolvedSlotProps,
               className: clsx(
-                "cursor-inherit absolute w-full h-full top-0 left-0 opacity-0 z-10 border-none",
+                "cursor-pointer absolute w-full h-full top-0 left-0 opacity-0 z-10 border-none",
                 resolvedSlotProps?.className
               ),
             };
@@ -70,7 +70,7 @@ const Switch = React.forwardRef<HTMLSpanElement, SwitchProps>(
             return {
               ...resolvedSlotProps,
               className: clsx(
-                `block w-4 h-4 top-1 rounded-2xl border border-solid outline-none border-slate-300 dark:border-gray-700 transition shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:shadow-[0_1px_2px_rgb(0_0_0_/_0.25)] ${
+                `block w-4 cursor-pointer h-4 top-1 rounded-2xl border border-solid outline-none border-slate-300 dark:border-gray-700 transition shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:shadow-[0_1px_2px_rgb(0_0_0_/_0.25)] ${
                   ownerState.checked
                     ? "left-[18px] bg-white shadow-[0_0_0_rgb(0_0_0_/_0.3)]"
                     : "left-[4px] bg-white"

@@ -1,7 +1,9 @@
-interface Compaign {
+import { CV } from "./CV.type";
+
+export interface Compaign {
   compaignName: string;
   compaignId: number;
-  cvs: number;
+  cvs: CV[];
   optimization: number;
   recruitment: string;
   recruimentId: number;

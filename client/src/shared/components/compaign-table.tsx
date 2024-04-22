@@ -1,6 +1,7 @@
 import { SetStateAction, useState } from "react";
 import Switch from "../../shared/components/CustomSwitch";
 import { Link } from "react-router-dom";
+import { Compaign } from "../types/Compaign.type";
 
 export const CompaignTableHeaders = () => {
   return (
@@ -38,7 +39,7 @@ export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
         <div className="flex items-start gap-2 p-2">
           <Switch
             checked={compaign.isCompaignActive}
-            onChange={() => {
+            onClick={() => {
               setCompaign({
                 ...compaign,
                 isCompaignActive: !compaign.isCompaignActive,
@@ -48,7 +49,26 @@ export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
           <div className="flex flex-col items-start gap-2 mb-12">
             <h3 className="font-bold">{compaign.compaignName}</h3>
             <span className="font-bold text-slate-400">
-              {compaign.cvs === 0 ? "Chưa có CV nào" : ``}
+              {compaign.cvs.length === 0 ? (
+                "Chưa có CV nào"
+              ) : (
+                <div className="flex items-center gap-1">
+                  {compaign.cvs.slice(0, 5).map((candidate, item) => {
+                    return (
+                      <img
+                        key={item}
+                        src={candidate.candidateImage}
+                        className="w-8 h-8 rounded-full"
+                      />
+                    );
+                  })}
+                  {compaign.cvs.length > 5 ? (
+                    <span className="p-1 font-normal text-green-500 bg-green-100 rounded-full">{`+${
+                      compaign.cvs.length - 5
+                    } hồ sơ khác`}</span>
+                  ) : null}
+                </div>
+              )}
             </span>
             <span className="font-bold bg-slate-200 text-zinc-400">
               {`#${compaign.compaignId}`}

@@ -3,13 +3,14 @@ import { ChevronDown, Search } from "lucide-react";
 
 import { useState } from "react";
 import { CompaignTable } from "../../shared/components/compaign-table";
+import { Compaign as CompaignType } from "../../shared/types/Compaign.type";
 
 function Compaign() {
-  const [campaigns, setCompaigns] = useState<Compaign[]>([
+  const [campaigns, setCompaigns] = useState<CompaignType[]>([
     {
       compaignName: "Tuyển Nhân viên Marketing",
       compaignId: 407767,
-      cvs: 0,
+      cvs: [],
       optimization: 54,
       recruitment: "Tin tuyển dụng nhân viên Marketing",
       recruimentId: 416527,
@@ -23,7 +24,44 @@ function Compaign() {
     {
       compaignName: "Tuyển Lập trình viên PHP",
       compaignId: 407766,
-      cvs: 0,
+      cvs: [
+        {
+          candidateId: 1234,
+          candidateName: "Lil Wayne",
+          candidateImage:
+            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
+        },
+        {
+          candidateId: 1235,
+          candidateName: "Lil Wayne",
+          candidateImage:
+            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
+        },
+        {
+          candidateId: 1236,
+          candidateName: "Lil Wayne",
+          candidateImage:
+            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
+        },
+        {
+          candidateId: 1237,
+          candidateName: "Lil Wayne",
+          candidateImage:
+            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
+        },
+        {
+          candidateId: 1238,
+          candidateName: "Lil Wayne",
+          candidateImage:
+            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
+        },
+        {
+          candidateId: 1239,
+          candidateName: "Lil Wayne",
+          candidateImage:
+            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
+        },
+      ],
       optimization: 36,
       recruitment: "Lập trình viên PHP",
       recruimentId: 416526,
@@ -41,7 +79,7 @@ function Compaign() {
       <div className="w-full p-2 bg-white">
         <h2 className="font-bold">Quản lý chiến dịch tuyển dụng</h2>
       </div>
-      <div className="flex flex-col items-center justify-between w-4/5 gap-2 py-8">
+      <div className="flex flex-col items-center justify-between gap-2 py-8 w-[90%]">
         <div className="flex items-center justify-between w-full gap-2">
           <button className="flex items-center h-full gap-2 px-4 py-2 text-white bg-green-600 rounded-sm">
             <Briefcase stroke="white" /> Chiến dịch mới
