@@ -10,8 +10,19 @@ import {
   HRLayout,
   EmptyLayout,
 } from "../layouts";
+import { ReactElement } from "react";
 
-const routes = [
+interface LayoutProp {
+  children: React.ReactNode | React.ReactElement<any>;
+}
+
+interface RouteItem {
+  path: string;
+  component: () => ReactElement;
+  layout: ({ }:LayoutProp) => ReactElement;
+}
+
+const routes: RouteItem[] = [
   // AUTHENTICATION PAGES - Tiến
   {
     path: "admin-login",
