@@ -38,6 +38,7 @@ export interface SendNotificationResponse {
 }
 
 export interface Notification {
+  id: number;
   title: string;
   content: string;
   link: string;
@@ -54,6 +55,15 @@ export interface GetUserNotificationsResponse {
   data: Notification[];
 }
 
+export interface UpdateNotificationStatusRequest {
+  user: User | undefined;
+  notificationId: number;
+  status: status;
+}
+
+export interface Empty {
+}
+
 export const NOTIFICATION_PACKAGE_NAME = "notification";
 
 /** The job application service definition. */
@@ -62,6 +72,8 @@ export interface NotificationServiceClient {
   sendNotification(request: SendNotificationRequest): Observable<SendNotificationResponse>;
 
   getNotifications(request: GetUserNotificationsRequest): Observable<GetUserNotificationsResponse>;
+
+  updateNotificationStatus(request: UpdateNotificationStatusRequest): Observable<Empty>;
 }
 
 /** The job application service definition. */
@@ -74,11 +86,13 @@ export interface NotificationServiceController {
   getNotifications(
     request: GetUserNotificationsRequest,
   ): Promise<GetUserNotificationsResponse> | Observable<GetUserNotificationsResponse> | GetUserNotificationsResponse;
+
+  updateNotificationStatus(request: UpdateNotificationStatusRequest): Promise<Empty> | Observable<Empty> | Empty;
 }
 
 export function NotificationServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["sendNotification", "getNotifications"];
+    const grpcMethods: string[] = ["sendNotification", "getNotifications", "updateNotificationStatus"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("NotificationService", method)(constructor.prototype[method], method, descriptor);

@@ -51,4 +51,17 @@ export class NotificationServiceService {
       },
     });
   }
+
+  async updateNotificationStatus(
+    userId: User_Notification['userId'],
+    notificationId: User_Notification['notificationId'],
+    status: User_Notification['status']
+  ) {
+    await this.userNotificationRepository.update({
+      userId,
+      notificationId,
+    }, {
+      status,
+    });
+  }
 }
