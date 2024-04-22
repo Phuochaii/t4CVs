@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import { useNavigate } from "react-router-dom";
 import Icon from "../../../shared/components/regular-icon";
 import {
   CircleHelp,
@@ -26,15 +26,19 @@ const Item = ({
   _icon,
   iconSize = 16,
   title,
+  onClick = () => {},
   // subItems = [],
 }: {
-    _icon?: React.FC<LucideProps>;
-    iconSize?: number;
-    title: string;
-    // subItems?: { icon?: string; title: string }[];
+  _icon?: React.FC<LucideProps>;
+  iconSize?: number;
+  title: string;
+  onClick?: () => void;
+
+  // subItems?: { icon?: string; title: string }[];
 }) => {
   return (
     <li
+      onClick={onClick}
       className="hover:text-green-500 active:text-green-500 cursor-pointer flex items-center space-x-2"
       style={{
         padding: " 12px 14px",
@@ -72,80 +76,99 @@ const Item = ({
 };
 
 const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
+  const navigation = useNavigate();
+
   React.useEffect(() => {}, [isCollapsed]);
   //
   const sidebar_items = [
     [
-      { _icon: LayoutGrid, title: "Bảng tin" },
+      { _icon: LayoutGrid, title: "Bảng tin", to: "/hr/news" },
       {
         _icon: Gem,
+        to: "",
         title: "TopCV Rewards",
       },
-      { _icon: Gift, title: "Đổi quà" },
-      { _icon: Bot, icon: "fa-solid fa-robot", title: "Toppy AI - Đề xuất" },
+      { _icon: Gift, to: "", title: "Đổi quà" },
+      {
+        _icon: Bot,
+        icon: "fa-solid fa-robot",
+        to: "",
+        title: "Toppy AI - Đề xuất",
+      },
     ],
 
-        [
-            {
-                _icon: BriefcaseBusiness,
-                title: "Chiến dịch tuyển dụng",
-            },
-            { _icon: File, title: "Tin tuyển dụng" },
-            {
-                _icon: User,
-                title: "Quản lí CV",
-                sub_items: [{ icon: "", title: "Quản lí nhãn CV" }],
-            },
-            {
-                _icon: LineChart,
-                title: "Báo cáo tuyển dụng",
-            },
-        ],
+    [
+      {
+        _icon: BriefcaseBusiness,
+        to: "/hr/compaign",
+        title: "Chiến dịch tuyển dụng",
+      },
+      { _icon: File, to: "", title: "Tin tuyển dụng" },
+      {
+        _icon: User,
+        to: "/hr/approve",
+        title: "Quản lí CV",
+        sub_items: [{ icon: "", to: "", title: "Quản lí nhãn CV" }],
+      },
+      {
+        _icon: LineChart,
+        to: "",
+        title: "Báo cáo tuyển dụng",
+      },
+    ],
 
-        [
-            {
-                _icon: ShoppingCart,
-                title: "Mua dịch vụ",
-            },
-            {
-                _icon: WandSparkles,
-                title: "Dịch vụ của tôi",
-            },
-            {
-                _icon: BadgePercent,
-                title: "Mã ưu đãi",
-            },
-            {
-                _icon: File,
-                icon: "fa-solid fa-file",
-                title: "Theo dõi đơn hàng",
-            },
-        ],
-        [
-            {
-                _icon: History,
-                icon: "fa-solid fa-clock-rotate-left",
-                title: "Lịch sử hoạt động",
-            },
-            {
-                _icon: Settings,
-                icon: "fa-solid fa-gear",
-                title: "Cài đặt tài khoản",
-            },
-        ],
-        [
-            {
-                _icon: Bell,
-                icon: "fa-regular fa-bell",
-                title: "Thông báo hệ thống",
-            },
-            {
-                _icon: Mail,
-                icon: "fa-regular fa-envelope",
-                title: "Nộp thư hỗ trợ",
-            },
-        ],
-    ];
+    [
+      {
+        _icon: ShoppingCart,
+        to: "",
+        title: "Mua dịch vụ",
+      },
+      {
+        _icon: WandSparkles,
+        to: "",
+        title: "Dịch vụ của tôi",
+      },
+      {
+        _icon: BadgePercent,
+        to: "",
+        title: "Mã ưu đãi",
+      },
+      {
+        _icon: File,
+        icon: "fa-solid fa-file",
+        to: "",
+        title: "Theo dõi đơn hàng",
+      },
+    ],
+    [
+      {
+        _icon: History,
+        icon: "fa-solid fa-clock-rotate-left",
+        to: "",
+        title: "Lịch sử hoạt động",
+      },
+      {
+        _icon: Settings,
+        icon: "fa-solid fa-gear",
+        to: "",
+        title: "Cài đặt tài khoản",
+      },
+    ],
+    [
+      {
+        _icon: Bell,
+        icon: "fa-regular fa-bell",
+        to: "",
+        title: "Thông báo hệ thống",
+      },
+      {
+        _icon: Mail,
+        icon: "fa-regular fa-envelope",
+        to: "",
+        title: "Nộp thư hỗ trợ",
+      },
+    ],
+  ];
 
   return (
     <div
@@ -190,7 +213,13 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
         <ShieldCheck size={15} />
         {!isCollapsed && (
           <>
-            <span className="ml-1 mr-1">Xác nhận tài khoản điện tử</span>
+            <button
+              onClick={() => {
+                navigation("/hr/verify-account/1");
+              }}
+            >
+              <span className="ml-1 mr-1">Xác nhận tài khoản điện tử</span>
+            </button>
             <ChevronsRight className="slide-animation" />
           </>
         )}
@@ -208,6 +237,9 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                   _icon={item._icon}
                   title={isCollapsed ? "" : item.title}
                   key={index_1}
+                  onClick={() => {
+                    navigation(item.to);
+                  }}
 
                   // subItems={item.sub_items}
                 />

@@ -7,8 +7,9 @@ import {
   ShoppingCart,
   ChevronDown,
   Menu,
-  LineChart
+  LineChart,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
   const list_btn = [
     {
@@ -18,7 +19,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
     },
     {
       name: "Đăng tin",
-      link: "",
+      link: "/hr/post-compaign",
       icon: Pencil,
     },
     {
@@ -54,6 +55,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
         "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg",
     },
   ];
+  const navigation = useNavigate();
   return (
     <div
       className=" text-white"
@@ -102,6 +104,9 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
               image={btn.image}
               iconSize={btn.iconSize}
               numberNoti={btn.numberNoti}
+              onClick={() => {
+                navigation(btn.link);
+              }}
             />
           ))}
         </div>
