@@ -54,12 +54,9 @@ const routes = [
   // HR
   { path: "/hr/news", component: HR.News, layout: HRLayout },
   
-  // { path: "/hr/post-compaign-tmp", component: HR.PostCompaign.PostCompaign, layout: HRLayout },
   { path: "/hr/post-compaign", component: HR.PostJob, layout: HRLayout }, // thinh
   { path: "/hr/post-compaign/data", component: HR.PostCompaign, layout: HRLayout }, // thinh
-  // { path: "/hr/post-compaign/1", component: HR.PostCompaign.Page1, layout: HRLayout },
-  // { path: "/hr/post-compaign/2", component: HR.PostCompaign.Page2, layout: HRLayout },
-  // { path: "/hr/post-compaign/3", component: HR.PostCompaign.Page3, layout: HRLayout },
+
 
   { path: "/hr/verify-account/1", component: HR.VerifyAccount.Page1, layout: HRLayout },
   { path: "/hr/verify-account/2", component: HR.VerifyAccount.Page2, layout: HRLayout },
