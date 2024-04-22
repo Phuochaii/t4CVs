@@ -7,11 +7,11 @@ import { Notification, User_Notification } from './entities';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'password',
+      port: 5432,
+      username: 'postgres',
+      password: '123456',
       database: 'notification',
       autoLoadEntities: true,
       synchronize: true,
