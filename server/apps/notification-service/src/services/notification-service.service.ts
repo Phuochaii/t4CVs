@@ -36,6 +36,11 @@ export class NotificationServiceService {
       relations: ['notification'],
       take: paginationRequest.limit,
       skip: paginationRequest.offset,
+      order: {
+        notification: {
+          createdAt: 'DESC',
+        },
+      }
     });
   }
 
