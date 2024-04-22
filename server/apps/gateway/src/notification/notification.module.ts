@@ -14,7 +14,7 @@ import { join } from 'path';
         options: {
           url: 'localhost:50052',
           package: NOTIFICATION_PACKAGE_NAME,
-          protoPath: join(__dirname, './proto/application.proto'),
+          protoPath: join(__dirname, './proto/notification.proto'),
         },
       },
     ]),

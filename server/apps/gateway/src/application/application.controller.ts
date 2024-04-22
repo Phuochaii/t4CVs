@@ -8,7 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
-import { CreateApplicationRequest } from '@app/common';
+import { CreateApplicationRequest } from '@app/common/proto/application';
 
 @Controller('application')
 export class ApplicationController {
