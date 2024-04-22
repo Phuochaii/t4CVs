@@ -5,13 +5,17 @@ package notification;
 // The job application service definition.
 service NotificationService {
     rpc SendNotification (SendNotificationRequest) returns (SendNotificationResponse) {}
-    rpc GetNotifications (User) returns (Notifications) {}
+    rpc GetNotifications (GetUserNotificationsRequest) returns (Notifications) {}
 //   rpc CreateJobApplication (CreateJobApplicationRequest) returns (JobApplication) {}
 }
 
 // The request message containing the users id.
 message User {
     int32 id = 1;
+}
+message PaginationRequest {
+    int32 page = 1;
+    int32 limit = 2;
 }
 message SendNotificationRequest {
     string title = 1;
@@ -39,4 +43,9 @@ message Notification {
     string content = 2;
     string link = 3;
     status status = 4;
+}
+
+message GetUserNotificationsRequest {
+    User user = 1;
+    optional PaginationRequest paginationRequest = 2;
 }

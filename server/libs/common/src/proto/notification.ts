@@ -15,6 +15,11 @@ export interface User {
   id: number;
 }
 
+export interface PaginationRequest {
+  page: number;
+  limit: number;
+}
+
 export interface SendNotificationRequest {
   title: string;
   content: string;
@@ -37,6 +42,11 @@ export interface Notification {
   status: status;
 }
 
+export interface GetUserNotificationsRequest {
+  user: User | undefined;
+  paginationRequest?: PaginationRequest | undefined;
+}
+
 export const NOTIFICATION_PACKAGE_NAME = "notification";
 
 /** The job application service definition. */
@@ -44,7 +54,7 @@ export const NOTIFICATION_PACKAGE_NAME = "notification";
 export interface NotificationServiceClient {
   sendNotification(request: SendNotificationRequest): Observable<SendNotificationResponse>;
 
-  getNotifications(request: User): Observable<Notifications>;
+  getNotifications(request: GetUserNotificationsRequest): Observable<Notifications>;
 }
 
 /** The job application service definition. */
@@ -54,7 +64,9 @@ export interface NotificationServiceController {
     request: SendNotificationRequest,
   ): Promise<SendNotificationResponse> | Observable<SendNotificationResponse> | SendNotificationResponse;
 
-  getNotifications(request: User): Promise<Notifications> | Observable<Notifications> | Notifications;
+  getNotifications(
+    request: GetUserNotificationsRequest,
+  ): Promise<Notifications> | Observable<Notifications> | Notifications;
 }
 
 export function NotificationServiceControllerMethods() {

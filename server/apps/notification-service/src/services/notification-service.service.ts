@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Notification, User_Notification } from '../entities';
 import { SendNotificationRequest } from '@app/common/proto/notification';
+import { PaginationRequest } from '@app/common';
 @Injectable()
 export class NotificationServiceService {
   constructor(
@@ -24,12 +25,17 @@ export class NotificationServiceService {
     await this.userNotificationRepository.save(userNotifications);
   }
 
-  async getNotifications(userId: User_Notification['userId']): Promise<User_Notification[]> {
+  async getNotifications(
+    userId: User_Notification['userId'],
+    paginationRequest: PaginationRequest
+  ): Promise<User_Notification[]> {
     return await this.userNotificationRepository.find({
       where: {
         userId,
       },
       relations: ['notification'],
+      take: paginationRequest.limit,
+      skip: paginationRequest.offset,
     });
   }
 }

@@ -1,15 +1,22 @@
 import { Controller } from '@nestjs/common';
 import { NotificationServiceService } from './services';
-import { NotificationServiceController, NotificationServiceControllerMethods, Notifications, SendNotificationRequest, SendNotificationResponse, User, status } from '@app/common/proto/notification';
+import { GetUserNotificationsRequest, NotificationServiceController, NotificationServiceControllerMethods, Notifications, SendNotificationRequest, SendNotificationResponse, User, status } from '@app/common/proto/notification';
 import { Observable } from 'rxjs';
+import { PaginationRequest } from '@app/common';
 
 @Controller()
 @NotificationServiceControllerMethods()
 export class NotificationController implements NotificationServiceController {
   constructor(private readonly notificationServiceService: NotificationServiceService) { }
-  
-  async getNotifications(request: User): Promise<Notifications> {
-    const userNotifications = await this.notificationServiceService.getNotifications(request.id);
+
+  async getNotifications(
+    {
+      user,
+      paginationRequest
+    }: GetUserNotificationsRequest
+  ): Promise<Notifications> {
+    const paginationReq = new PaginationRequest(paginationRequest);
+    const userNotifications = await this.notificationServiceService.getNotifications(user.id, paginationReq);
     return {
       notifications: userNotifications.map((userNotification) => {
         return {
