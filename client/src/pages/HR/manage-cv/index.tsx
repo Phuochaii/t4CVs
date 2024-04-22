@@ -92,7 +92,9 @@ function ManageCV() {
 
       {/*  */}
 
-      <div style={{ maxWidth: "1206px" }}>
+      <div
+      //  style={{ maxWidth: "1206px" }}
+      >
         <div className="flex mt-6 mx-6 justify-between">
           {numberData.map((item, index) => (
             <div

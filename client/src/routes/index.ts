@@ -35,18 +35,17 @@ const routes = [
 
 
   // HR PAGES - Yến , Thịnh
-  { path: "/hr/post-job", component: HR.PostJob, layout: HRLayout }, // thinh
   { path: "/hr/approve", component: HR.ReceiveCV, layout: HRLayout }, // yến
   // ERROR PAGES
   { path: "error-path", component: Error.ErrorPath, layout: EmptyLayout },
 
 //-------------------------------------------------------------------------------------
-  // 2nd UI
+// 2nd UI
   // USER
   { path: "/cv", component: User.CV, layout: UserLayout },
   { path: "/companies/:id", component: User.Company, layout: UserLayout },
   { path: "/companies/", component: User.Companies, layout: UserLayout },
-
+  
   // ADMIN
   { path: "/admin/company", component: Admin.Company, layout: AdminLayout },
   {path: "/admin/compaign",component: Admin.Compaign,layout: AdminLayout,},
@@ -54,16 +53,18 @@ const routes = [
 
   // HR
   { path: "/hr/news", component: HR.News, layout: HRLayout },
-
-  { path: "/hr/post-compaign", component: HR.PostCompaign.PostCompaign, layout: HRLayout },
-  { path: "/hr/post-compaign/1", component: HR.PostCompaign.Page1, layout: HRLayout },
-  { path: "/hr/post-compaign/2", component: HR.PostCompaign.Page2, layout: HRLayout },
-  { path: "/hr/post-compaign/3", component: HR.PostCompaign.Page3, layout: HRLayout },
+  
+  // { path: "/hr/post-compaign-tmp", component: HR.PostCompaign.PostCompaign, layout: HRLayout },
+  { path: "/hr/post-compaign", component: HR.PostJob, layout: HRLayout }, // thinh
+  { path: "/hr/post-compaign/data", component: HR.PostCompaign, layout: HRLayout }, // thinh
+  // { path: "/hr/post-compaign/1", component: HR.PostCompaign.Page1, layout: HRLayout },
+  // { path: "/hr/post-compaign/2", component: HR.PostCompaign.Page2, layout: HRLayout },
+  // { path: "/hr/post-compaign/3", component: HR.PostCompaign.Page3, layout: HRLayout },
 
   { path: "/hr/verify-account/1", component: HR.VerifyAccount.Page1, layout: HRLayout },
   { path: "/hr/verify-account/2", component: HR.VerifyAccount.Page2, layout: HRLayout },
 
-  { path: "/hr/compain", component: HR.Compaign, layout: HRLayout },
+  { path: "/hr/compaign", component: HR.Compaign, layout: HRLayout },
 
   { path: "/hr/compain-edit/:id", component: HR.CompaignEdit, layout: HRLayout },
 

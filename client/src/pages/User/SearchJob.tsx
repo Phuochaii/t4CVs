@@ -24,7 +24,7 @@ import {
   ClockIcon,
   AcademicCapIcon,
   FolderIcon,
-  Bars3Icon
+  Bars3Icon,
 } from "@heroicons/react/24/outline";
 import { Tooltip } from "@mui/material";
 
@@ -259,8 +259,19 @@ function SearchJob() {
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              className="w-6 h-6"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                stroke-linejoin="round"
+                                d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                              />
                             </svg>
                           </InputAdornment>
                         ),
@@ -423,7 +434,6 @@ function SearchJob() {
                 <div className="job-body wrapper-main grid grid-cols-3 gap-x-4 py-4">
                   <div className="wrapper-content col-span-2">
                     <div className="job-list-search-result">
-                      
                       {/* job content 1 */}
                       <div className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3">
                         <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
@@ -916,7 +926,9 @@ function SearchJob() {
                   <div className="col-span-1 right-box box-interested text-black">
                     <div className="interested sticky top-3">
                       <div className="box-maybe-interested mb-3">
-                        <h3 className="box-maybe-interested__title text-2xl font-bold mb-3">Có thể bạn quan tâm</h3>
+                        <h3 className="box-maybe-interested__title text-2xl font-bold mb-3">
+                          Có thể bạn quan tâm
+                        </h3>
                         <div className="box-maybe-interested__company border border-green-400 rounded-lg overflow-hidden">
                           <div className="box-maybe-interested__company--image">
                             <img src="../../../images/right-box-interested-logo.png" />
@@ -928,24 +940,44 @@ function SearchJob() {
                               </div>
                               <div className="company__info--name text-xl font-bold flex flex-col gap-3">
                                 Công ty TNHH Sailun Việt Nam
-                                <img src="../../../images/right-box-interested-spotlight-company-logo.png" className="max-w-32 max-h-5"/>
+                                <img
+                                  src="../../../images/right-box-interested-spotlight-company-logo.png"
+                                  className="max-w-32 max-h-5"
+                                />
                               </div>
                             </div>
 
                             <div className="company__job mt-3">
                               <div className="job job-ta py-4 text-sm font-semibold border-b border-slate-200">
-                                <span className="job__name text-lg">Phiên Dịch Viên Tiếng Indonesia (Làm Việc Tại Kota Semarang) </span>
+                                <span className="job__name text-lg">
+                                  Phiên Dịch Viên Tiếng Indonesia (Làm Việc Tại
+                                  Kota Semarang){" "}
+                                </span>
                                 <div className="job__info mt-3 flex flex-row gap-5">
                                   <div className="job__info--salary flex flex-row items-center gap-2 text-green-500">
                                     <CurrencyDollarIcon className="w-4 h-4" />
                                     <span>Thoả thuận</span>
                                   </div>
                                   <div className="job__info--address flex flex-row items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(34 197 94)" className="w-4 h-4">
-                                      <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      viewBox="0 0 24 24"
+                                      fill="rgb(34 197 94)"
+                                      className="w-4 h-4"
+                                    >
+                                      <path
+                                        fill-rule="evenodd"
+                                        d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                                        clip-rule="evenodd"
+                                      />
                                     </svg>
-                                    <Tooltip title="Tây Ninh: Gò Dầu" placement="top">
-                                      <span className="font-normal">Tây Ninh</span>
+                                    <Tooltip
+                                      title="Tây Ninh: Gò Dầu"
+                                      placement="top"
+                                    >
+                                      <span className="font-normal">
+                                        Tây Ninh
+                                      </span>
                                     </Tooltip>
                                   </div>
                                 </div>
@@ -953,18 +985,35 @@ function SearchJob() {
                             </div>
                             <div className="company__job mt-3">
                               <div className="job job-ta py-4 text-sm font-semibold border-b border-slate-200">
-                                <span className="job__name text-lg">Phiên Dịch Viên Tiếng Indonesia (Làm Việc Tại Kota Semarang) </span>
+                                <span className="job__name text-lg">
+                                  Phiên Dịch Viên Tiếng Indonesia (Làm Việc Tại
+                                  Kota Semarang){" "}
+                                </span>
                                 <div className="job__info mt-3 flex flex-row gap-5">
                                   <div className="job__info--salary flex flex-row items-center gap-2 text-green-500">
                                     <CurrencyDollarIcon className="w-4 h-4" />
                                     <span>Thoả thuận</span>
                                   </div>
                                   <div className="job__info--address flex flex-row items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(34 197 94)" className="w-4 h-4">
-                                      <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      viewBox="0 0 24 24"
+                                      fill="rgb(34 197 94)"
+                                      className="w-4 h-4"
+                                    >
+                                      <path
+                                        fill-rule="evenodd"
+                                        d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                                        clip-rule="evenodd"
+                                      />
                                     </svg>
-                                    <Tooltip title="Tây Ninh: Gò Dầu" placement="top">
-                                      <span className="font-normal">Tây Ninh</span>
+                                    <Tooltip
+                                      title="Tây Ninh: Gò Dầu"
+                                      placement="top"
+                                    >
+                                      <span className="font-normal">
+                                        Tây Ninh
+                                      </span>
                                     </Tooltip>
                                   </div>
                                 </div>
@@ -972,18 +1021,35 @@ function SearchJob() {
                             </div>
                             <div className="company__job mt-3">
                               <div className="job job-ta py-4 text-sm font-semibold border-b border-slate-200">
-                                <span className="job__name text-lg">Phiên Dịch Viên Tiếng Indonesia (Làm Việc Tại Kota Semarang) </span>
+                                <span className="job__name text-lg">
+                                  Phiên Dịch Viên Tiếng Indonesia (Làm Việc Tại
+                                  Kota Semarang){" "}
+                                </span>
                                 <div className="job__info mt-3 flex flex-row gap-5">
                                   <div className="job__info--salary flex flex-row items-center gap-2 text-green-500">
                                     <CurrencyDollarIcon className="w-4 h-4" />
                                     <span>Thoả thuận</span>
                                   </div>
                                   <div className="job__info--address flex flex-row items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(34 197 94)" className="w-4 h-4">
-                                      <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      viewBox="0 0 24 24"
+                                      fill="rgb(34 197 94)"
+                                      className="w-4 h-4"
+                                    >
+                                      <path
+                                        fill-rule="evenodd"
+                                        d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                                        clip-rule="evenodd"
+                                      />
                                     </svg>
-                                    <Tooltip title="Tây Ninh: Gò Dầu" placement="top">
-                                      <span className="font-normal">Tây Ninh</span>
+                                    <Tooltip
+                                      title="Tây Ninh: Gò Dầu"
+                                      placement="top"
+                                    >
+                                      <span className="font-normal">
+                                        Tây Ninh
+                                      </span>
                                     </Tooltip>
                                   </div>
                                 </div>
@@ -997,7 +1063,10 @@ function SearchJob() {
                         </div>
                       </div>
                       <div className="box-maybe-interested__banner">
-                        <img src="../../../images/right-box-interested-banner.png" className="max-w-full rounded-lg"/>
+                        <img
+                          src="../../../images/right-box-interested-banner.png"
+                          className="max-w-full rounded-lg"
+                        />
                       </div>
                     </div>
                   </div>

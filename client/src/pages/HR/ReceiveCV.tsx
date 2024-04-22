@@ -67,7 +67,9 @@ function ReceiveCV() {
         className="bg-white w-full"
         style={{ marginLeft: "1px", paddingLeft: "20px" }}
       >
-        <p style={{ padding: "20px 15px", fontSize: "16px", fontWeight: "500" }}>
+        <p
+          style={{ padding: "20px 15px", fontSize: "16px", fontWeight: "500" }}
+        >
           Quản lý CV ứng viên
         </p>
         <div className="flex py-2  flex-wrap">
@@ -99,7 +101,9 @@ function ReceiveCV() {
           <CustomSelectOption label="Tất cả nhãn" list={cvLabel} />
         </div>
       </div>
-      <div style={{ maxWidth: "1206px" }}>
+      <div
+      // style={{ maxWidth: "1206px" }}
+      >
         <div
           className="mt-6 mx-6 flex items-center rounded-lg"
           style={{
@@ -122,7 +126,9 @@ function ReceiveCV() {
             className="pl-3 pr-8 text-green-600 bg-white flex"
             style={{ borderLeft: "1px solid green " }}
           >
-            <span style={{ fontSize: "13px" }} className="hover:text-green-900">Đăng ký ngay</span>
+            <span style={{ fontSize: "13px" }} className="hover:text-green-900">
+              Đăng ký ngay
+            </span>
             <ChevronRight size={18} />
           </button>
         </div>

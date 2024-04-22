@@ -1,4 +1,4 @@
-import PostJob from "./PostJob";
+import PostJob from "./PostJob/PostJob";
 import ReceiveCV from "./ReceiveCV";
 import Support from "./Support";
 import News from "./News";
@@ -8,7 +8,7 @@ import Recuitment from "./Recuitment";
 
 import ManageCV from "./manage-cv/index";
 import * as VerifyAccount from "./verify-account";
-import * as PostCompaign from "./post-compaign";
+import PostCompaign from "./post-compaign";
 
 export {
   PostJob,
