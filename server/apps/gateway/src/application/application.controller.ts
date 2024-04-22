@@ -5,14 +5,10 @@ import {
   Body,
   Patch,
   Param,
-  // Delete,
+  Query,
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
-import {
-  Application,
-  Applications,
-  CreateApplicationRequest,
-} from '@app/common';
+import { CreateApplicationRequest } from '@app/common';
 
 @Controller('application')
 export class ApplicationController {
@@ -29,8 +25,8 @@ export class ApplicationController {
   }
 
   @Get()
-  findAll() {
-    return this.applicationService.findAll();
+  findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
+    return this.applicationService.findAll(page, limit);
   }
 
   @Patch(':id')

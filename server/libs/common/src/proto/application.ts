@@ -32,6 +32,11 @@ export interface UpdateApplicationRequest {
 export interface Empty {
 }
 
+export interface Pagination {
+  page: number;
+  limit: number;
+}
+
 /** The JobApplication message represents a job application record. */
 export interface Application {
   id: number;
@@ -60,7 +65,7 @@ export interface ApplicationServiceClient {
 
   readApplication(request: ReadApplicationRequest): Observable<Application>;
 
-  readAllApplication(request: Empty): Observable<Applications>;
+  readAllApplication(request: Pagination): Observable<Applications>;
 
   updateApplication(request: UpdateApplicationRequest): Observable<Application>;
 
@@ -74,7 +79,7 @@ export interface ApplicationServiceController {
 
   readApplication(request: ReadApplicationRequest): Promise<Application> | Observable<Application> | Application;
 
-  readAllApplication(request: Empty): Promise<Applications> | Observable<Applications> | Applications;
+  readAllApplication(request: Pagination): Promise<Applications> | Observable<Applications> | Applications;
 
   updateApplication(request: UpdateApplicationRequest): Promise<Application> | Observable<Application> | Application;
 

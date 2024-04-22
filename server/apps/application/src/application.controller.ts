@@ -1,9 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { ApplicationService } from './application.service';
-// import { GrpcMethod } from '@nestjs/microservices';
-// import { CreateApplicationDto } from './dto/create-application.dto';
 import {
-  Application,
   ApplicationServiceController,
   ApplicationServiceControllerMethods,
   Applications,
@@ -11,9 +8,8 @@ import {
   DeleteApplicationRequest,
   ReadApplicationRequest,
   UpdateApplicationRequest,
+  Pagination,
 } from '@app/common';
-// import { Application } from './entities/application.entity';
-// import { Observable } from 'rxjs';
 
 @Controller()
 @ApplicationServiceControllerMethods()
@@ -27,17 +23,12 @@ export class ApplicationController implements ApplicationServiceController {
     return this.applicationService.findOneOrFail(request.id);
   }
 
-  // async readAllApplication(): Promise<Applications> {
-  //   // console.log(this.applicationService.findAll());
-  //   const data = await this.applicationService.findAll();
-  //   console.log('service apply');
-  //   console.log(data);
-  //   return { Applications: data };
-  // }
-
-  async readAllApplication(): Promise<Applications> {
+  async readAllApplication(request: Pagination): Promise<Applications> {
     // console.log(this.applicationService.findAll());
-    const data = await this.applicationService.findAll();
+    const data = await this.applicationService.findAll(
+      request.page,
+      request.limit,
+    );
     console.log('controller not gateway apply');
     console.log({ Applications: data });
     return { applications: data };

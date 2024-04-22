@@ -3,9 +3,11 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { Application } from './entities/application.entity';
-import { map, mergeAll, mergeMap } from 'rxjs/operators';
-import { Observable, from } from 'rxjs';
-import { Applications } from '@app/common';
+import {
+  paginate,
+  Pagination,
+  IPaginationOptions,
+} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class ApplicationService {
@@ -35,10 +37,11 @@ export class ApplicationService {
     }
   }
 
-  // async findAll(): Promise<Application[]> {
+  // async findAll() {
   //   try {
   //     // console.log(this.applicationRepository.find());
   //     const data = await this.applicationRepository.find();
+  //     console.log('service not gateway apply');
   //     // console.log(data);
   //     return data;
   //   } catch (error) {
@@ -47,17 +50,13 @@ export class ApplicationService {
   //   }
   // }
 
-  async findAll() {
-    try {
-      // console.log(this.applicationRepository.find());
-      const data = await this.applicationRepository.find();
-      console.log('service not gateway apply');
-      // console.log(data);
-      return data;
-    } catch (error) {
-      console.log('lỗi:', error);
-      throw new NotFoundException(error.message);
-    }
+  async findAll(page: number, limit: number) {
+    const skip = (page - 1) * limit;
+    const data = await this.applicationRepository.find({
+      skip: skip,
+      take: limit,
+    });
+    return data;
   }
 
   async delete(id: number) {
