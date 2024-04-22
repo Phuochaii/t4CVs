@@ -5,14 +5,16 @@ function CustomSelectOption({
   label,
   labelColor = "#A9ACAF",
   list = [],
+  value,
   width = "auto",
-  onClick = () => {},
+  onChange = () => {},
 }: {
   label: string;
   labelColor?: string;
-  list?: { title: string; value: string }[];
+  list?: { name: string; value: string }[];
+  value?: any;
   width?: string;
-  onClick?: (e: any) => void;
+  onChange?: (e: any) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -48,7 +50,10 @@ function CustomSelectOption({
         }}
         onClick={handleToggle}
       >
-        <span style={{ color: labelColor }}> {label}</span>
+        <span style={{ color: value != null ? "black" : labelColor }}>
+          {" "}
+          {value != null ? value.name : label}
+        </span>
         <ChevronDown className="ml-2" size={24} />
       </button>
       {isOpen && (
@@ -60,8 +65,15 @@ function CustomSelectOption({
           }}
         >
           {list.map((item, index) => (
-            <li key={index} className="px-2 py-2 font-normal hover-green">
-              {item.title}
+            <li
+              key={index}
+              className="px-2 py-2 font-normal hover-green"
+              onClick={() => {
+                onChange(item);
+                handleToggle();
+              }}
+            >
+              {item.name}
             </li>
           ))}
         </ul>
