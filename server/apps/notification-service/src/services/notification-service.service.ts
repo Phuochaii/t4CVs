@@ -38,4 +38,12 @@ export class NotificationServiceService {
       skip: paginationRequest.offset,
     });
   }
+
+  async getTotalNotifications(userId: User_Notification['userId']): Promise<number> {
+    return await this.userNotificationRepository.count({
+      where: {
+        userId,
+      },
+    });
+  }
 }

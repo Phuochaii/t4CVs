@@ -1,8 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { NotificationServiceService } from './services';
-import { GetUserNotificationsRequest, NotificationServiceController, NotificationServiceControllerMethods, Notifications, SendNotificationRequest, SendNotificationResponse, User, status } from '@app/common/proto/notification';
+import { GetUserNotificationsRequest, GetUserNotificationsResponse, NotificationServiceController, NotificationServiceControllerMethods, SendNotificationRequest, SendNotificationResponse, status } from '@app/common/proto/notification';
 import { Observable } from 'rxjs';
-import { PaginationRequest } from '@app/common';
+import { PaginationRequest, PaginationResponse} from '@app/common';
 
 @Controller()
 @NotificationServiceControllerMethods()
@@ -14,11 +14,15 @@ export class NotificationController implements NotificationServiceController {
       user,
       paginationRequest
     }: GetUserNotificationsRequest
-  ): Promise<Notifications> {
+  ): Promise<GetUserNotificationsResponse> {
     const paginationReq = new PaginationRequest(paginationRequest);
+
     const userNotifications = await this.notificationServiceService.getNotifications(user.id, paginationReq);
+    const total = await this.notificationServiceService.getTotalNotifications(user.id);
+    
     return {
-      notifications: userNotifications.map((userNotification) => {
+      pagination: new PaginationResponse(total, userNotifications, paginationReq),
+      data: userNotifications.map((userNotification) => {
         return {
           title: userNotification.notification.title,
           content: userNotification.notification.content,

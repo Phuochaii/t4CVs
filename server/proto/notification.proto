@@ -5,7 +5,7 @@ package notification;
 // The job application service definition.
 service NotificationService {
     rpc SendNotification (SendNotificationRequest) returns (SendNotificationResponse) {}
-    rpc GetNotifications (GetUserNotificationsRequest) returns (Notifications) {}
+    rpc GetNotifications (GetUserNotificationsRequest) returns (GetUserNotificationsResponse) {}
 //   rpc CreateJobApplication (CreateJobApplicationRequest) returns (JobApplication) {}
 }
 
@@ -17,6 +17,12 @@ message PaginationRequest {
     int32 page = 1;
     int32 limit = 2;
 }
+message PaginaionResponse {
+    int32 total = 1;
+    int32 page = 2;
+    int32 limit = 3;
+}
+
 message SendNotificationRequest {
     string title = 1;
     string content = 2;
@@ -27,10 +33,6 @@ message SendNotificationRequest {
 // The response message containing the greetings
 message SendNotificationResponse {
     
-}
-
-message Notifications {
-    repeated Notification notifications = 1;
 }
 
 enum status {
@@ -48,4 +50,9 @@ message Notification {
 message GetUserNotificationsRequest {
     User user = 1;
     optional PaginationRequest paginationRequest = 2;
+}
+
+message GetUserNotificationsResponse {
+    PaginaionResponse pagination = 1;
+    repeated Notification data = 2;
 }
