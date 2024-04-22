@@ -3,14 +3,14 @@ import { ApplicationService } from './application.service';
 // import { GrpcMethod } from '@nestjs/microservices';
 // import { CreateApplicationDto } from './dto/create-application.dto';
 import {
-  Application,
   ApplicationServiceController,
   ApplicationServiceControllerMethods,
+  Applications,
   CreateApplicationRequest,
   DeleteApplicationRequest,
-  Empty,
   ReadApplicationRequest,
   UpdateApplicationRequest,
+  Pagination,
 } from '@app/common';
 import { Observable } from 'rxjs';
 
@@ -18,24 +18,25 @@ import { Observable } from 'rxjs';
 @ApplicationServiceControllerMethods()
 export class ApplicationController implements ApplicationServiceController {
   constructor(private readonly applicationService: ApplicationService) {}
-  createApplication(create: CreateApplicationRequest) {
-    return this.applicationService.store(create);
+  createApplication(request: CreateApplicationRequest) {
+    return this.applicationService.store(request);
   }
 
-  readApplication(findOne: ReadApplicationRequest) {
-    return this.applicationService.findOneOrFail(findOne.id);
+  readApplication(request: ReadApplicationRequest) {
+    return this.applicationService.findOneOrFail(request.id);
   }
 
-  // async readAllApplication(): Promise<Application[]> {
-  //   return await this.applicationService.findAll();
-  // }
-
-  readAllApplication(): Observable<Application> {
-    return this.applicationService.findAll();
+  async readAllApplication(request: Pagination): Promise<Applications> {
+    // console.log(this.applicationService.findAll());
+    const data = await this.applicationService.findAll(
+      request.page,
+      request.limit,
+    );
+    return { applications: data };
   }
 
-  updateApplication(update: UpdateApplicationRequest) {
-    return this.applicationService.update(update.id);
+  updateApplication(request: UpdateApplicationRequest) {
+    return this.applicationService.update(request.id);
   }
 
   deleteApplication(request: DeleteApplicationRequest) {

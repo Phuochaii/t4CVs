@@ -18,9 +18,7 @@ export interface CreateApplicationRequest {
   phone: string;
   email: string;
   coverLetter: string;
-  createdAt: string;
-  updateAt: string;
-  jobId: number;
+  campaignId: number;
   userId: number;
   cvId: number;
 }
@@ -32,19 +30,28 @@ export interface UpdateApplicationRequest {
 export interface Empty {
 }
 
+export interface Pagination {
+  page: number;
+  limit: number;
+}
+
 /** The JobApplication message represents a job application record. */
 export interface Application {
   id: number;
-  status: number;
+  status: boolean;
   fullname: string;
   phone: string;
   email: string;
   coverLetter: string;
   createdAt: string;
   updateAt: string;
-  jobId: number;
+  campaignId: number;
   userId: number;
   cvId: number;
+}
+
+export interface Applications {
+  applications: Application[];
 }
 
 export const APPLICATION_PACKAGE_NAME = "Application";
@@ -56,7 +63,7 @@ export interface ApplicationServiceClient {
 
   readApplication(request: ReadApplicationRequest): Observable<Application>;
 
-  readAllApplication(request: Empty): Observable<Application>;
+  readAllApplication(request: Pagination): Observable<Applications>;
 
   updateApplication(request: UpdateApplicationRequest): Observable<Application>;
 
@@ -70,7 +77,7 @@ export interface ApplicationServiceController {
 
   readApplication(request: ReadApplicationRequest): Promise<Application> | Observable<Application> | Application;
 
-  readAllApplication(request: Empty): Promise<Application> | Observable<Application> | Application;
+  readAllApplication(request: Pagination): Promise<Applications> | Observable<Applications> | Applications;
 
   updateApplication(request: UpdateApplicationRequest): Promise<Application> | Observable<Application> | Application;
 

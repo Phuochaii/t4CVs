@@ -6,8 +6,8 @@ export class Application {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('int')
-  status: number;
+  @Column({ default: false })
+  status: boolean;
 
   @Column('varchar')
   fullname: string;
@@ -21,14 +21,14 @@ export class Application {
   @Column('varchar', { nullable: true })
   coverLetter: string | null;
 
-  @Column('varchar', { nullable: true })
+  @Column({ type: 'date', nullable: true })
   createdAt: string | null;
 
-  @Column('varchar', { nullable: true })
+  @Column({ type: 'date', nullable: true })
   updateAt: string | null;
 
   @Column('int', { nullable: true })
-  jobId: number | null;
+  campaignId: number | null;
 
   @Column('int', { nullable: true })
   userId: number | null;
