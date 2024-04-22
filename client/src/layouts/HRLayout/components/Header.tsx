@@ -1,115 +1,121 @@
+import RoundedButton from "./RoundedButton";
 import {
-  Menu,
-  WandSparkles,
   Bookmark,
   Pencil,
   MessageCircle,
   Bell,
+  ShoppingCart,
   ChevronDown,
+  Menu,
+  LineChart,
 } from "lucide-react";
-
-import { QuestionMarkIcon } from "./Icons";
-import { SetStateAction } from "react";
-
-interface HeaderProp {
-  className: string;
-  openSidebar: boolean;
-  setOpenSidebar: React.Dispatch<SetStateAction<boolean>>;
-}
-
-const headerButtons = [
-  {
-    icon: (
-      <div className="flex items-center bg-white">
-        <Bookmark fill="#1e293b" size={12} />
-      </div>
-    ),
-    title: "HR Insider",
-  },
-  {
-    icon: (
-      <div className="bg-white rounded-2xl">
-        <Pencil fill="#1e293b" size={16} className="p-[2px]" />
-      </div>
-    ),
-    title: "Đăng tin",
-  },
-  {
-    icon: (
-      <div className="bg-white rounded-2xl">
-        <Pencil fill="#1e293b" size={16} className="p-[2px]" />
-      </div>
-    ),
-    title: "Tìm CV",
-  },
-  {
-    icon: <MessageCircle size={16} fill="white" />,
-    title: "Connect",
-  },
-  {
-    icon: (
-      <div className="bg-white rounded-2xl">
-        <QuestionMarkIcon stroke="#1e293b" />
-      </div>
-    ),
-    title: "Trợ giúp",
-  },
-];
-
+import { useNavigate } from "react-router-dom";
 function Header({
-  className,
-  openSidebar,
-  setOpenSidebar,
-}: HeaderProp) {
+  collapedSidebar,
+}: {
+  collapedSidebar: () => void;
+}) {
+  const list_btn = [
+    {
+      name: "HR Insider",
+      link: "",
+      icon: Bookmark,
+    },
+    {
+      name: "Đăng tin",
+      link: "/hr/post-compaign",
+      icon: Pencil,
+    },
+    {
+      name: "Tìm CV",
+      link: "",
+      icon: Pencil,
+    },
+    {
+      name: "Connect",
+      link: "",
+      icon: MessageCircle,
+    },
+
+    {
+      name: "",
+      link: "",
+      icon: Bell,
+      iconSize: 20,
+    },
+    {
+      name: "Giỏ hàng",
+      link: "",
+      icon: ShoppingCart,
+      iconSize: 20,
+      numberNoti: 1,
+    },
+    {
+      name: "",
+      link: "",
+      icon: ChevronDown,
+      iconSize: 20,
+      image:
+        "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg",
+    },
+  ];
+  const navigation = useNavigate();
   return (
-    <nav
-      className={[
-        "flex items-center gap-2 p-4 text-sm text-white bg-slate-800",
-        className,
-      ].join(" ")}
+    <div
+      className="text-white "
+      id="hr-header"
+      style={{ padding: "16px 20px", backgroundColor: "#212F3F" }}
     >
-      <Menu
-        className="p-[2px] rounded-sm text-slate-400 bg-slate-600 cursor-pointer"
-        size={24}
-        onClick={() => {
-          console.log("Clicked");
-          setOpenSidebar(!openSidebar);
-        }}
-      />
-      <div className="flex items-start flex-grow gap-2">
-        <img src="/logo_topcv_dark.webp" className="w-16" />
-        <span>for Business</span>
+      <div className="flex items-center">
+        <div className="flex items-center flex-grow">
+          <Menu
+            size={18}
+            className="ml-1"
+            strokeWidth={1.65}
+            onClick={collapedSidebar}
+          />
+
+          <div
+            style={{
+              marginLeft: "23px",
+              marginRight: "20px",
+              marginTop: "4px",
+            }}
+          >
+            <img
+              src="https://tuyendung.topcv.vn/app/_nuxt/img/logo_topcv_dark.ee0b56e.png"
+              style={{ width: "56px" }}
+              alt="logo"
+            />
+          </div>
+        </div>
+        <div className="flex items-center">
+          <RoundedButton
+            icon={LineChart}
+            isFillIcon={false}
+            iconColor="#00B14F"
+            iconSize={20}
+            iconStrokeWidth={2.2}
+            border="2px solid green"
+            text="Tải báo cáo thị trường 2023-2024"
+            backgroundImage="linear-gradient(90deg, #213142 .62%, #0a9c4b 99.38%)"
+          />
+          {list_btn.map((btn, index) => (
+            <RoundedButton
+              key={index}
+              text={btn.name}
+              icon={btn.icon}
+              image={btn.image}
+              iconSize={btn.iconSize}
+              numberNoti={btn.numberNoti}
+              onClick={() => {
+                navigation(btn.link);
+              }}
+            />
+          ))}
+        </div>
       </div>
-
-      <div className="flex items-center gap-2">
-        {headerButtons.map((item, key) => {
-          return (
-            <button
-              key={key}
-              className="flex items-center gap-2 px-3 py-1 rounded-2xl bg-slate-600"
-            >
-              {item.icon}
-              {item.title}
-            </button>
-          );
-        })}
-      </div>
-
-      <button className="gap-2 p-1 rounded-2xl bg-slate-600">
-        <Bell size={16} fill="white" />
-      </button>
-
-      <button className="flex items-center gap-2 p-1 px-2 rounded-2xl bg-slate-600">
-        <img src="/temp-avatar.jpg" className="w-6 h-6 rounded-2xl" />
-
-        <ChevronDown size={16} />
-      </button>
-
-      <button className="flex items-center gap-2 px-4 py-1 bg-green-600 rounded-2xl">
-        <WandSparkles size={16} />
-        Báo giá dịch vụ
-      </button>
-    </nav>
+    </div>
   );
 }
 

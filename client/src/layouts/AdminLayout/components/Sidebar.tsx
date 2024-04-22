@@ -9,13 +9,13 @@ interface SidebarProps {
 const links = [
   {
     name: "Overview",
-    path: "/admin",
+    path: "",
     icon: Eye,
     iconComponent: <Eye className="text-white" />,
   },
   {
     name: "Compaign",
-    path: "/admin/Compaign",
+    path: "/admin/compaign",
     icon: CreditCard,
     iconComponent: <CreditCard className="text-white" />,
   },
@@ -49,9 +49,7 @@ function Sidebar({ className }: SidebarProps) {
             )}{" "}
             <span
               className={
-                pathname == item.path
-                  ? "text-white"
-                  : "text-slate-500"
+                pathname == item.path ? "text-white" : "text-slate-500"
               }
             >
               {item.name}

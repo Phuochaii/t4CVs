@@ -43,3 +43,246 @@
 .read-the-docs {
   color: #888;
 } */
+
+/* Home User */
+
+  /* section-header */
+.section-header {
+  background-image: url(../images/bg-header.png);
+  background-size: cover;
+  height: 500px;
+  padding: 30px;
+}
+
+.section-header .title {
+  font-size: 30px;
+  font-weight: bold;
+  color: #009643;
+}
+
+.section-header .description {
+  font-size: 13px;
+  color: black;
+}
+
+.section-header .description span {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.search-job .group-search{
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px 1px rgba(128, 128, 128, 0.233);
+  max-height: 50px;
+}
+
+.item .MuiFormControl-root > .MuiInputBase-root{
+  background: white;
+  max-height: 45px;
+}
+
+.MuiFormControl-root > .MuiInputBase-root > .MuiOutlinedInput-notchedOutline{
+  border: none;
+}
+
+.item.item-search > .MuiFormControl-root > .MuiInputBase-root{
+  border-radius: 5px 0 0 5px;
+  position: relative;
+}
+
+.item.item-search > .MuiFormControl-root > .MuiInputBase-root::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: left center;
+  transform: scaleY(60%);
+  width: 99%;
+  height: 100%;
+  border-right: 1px solid rgba(128, 128, 128, 0.345);
+}
+
+.item.search-city > .MuiFormControl-root > .MuiInputBase-root{
+  border-radius: 0 5px 5px 0;
+}
+
+.item.search-city > .MuiFormControl-root > .MuiInputBase-root > .MuiOutlinedInput-notchedOutline{
+  border: none !important;
+}
+
+.group .item .MuiFormControl-root .MuiInputBase-root{
+  box-shadow: 1px 1px 5px 1px rgba(128, 128, 128, 0.233);
+}
+
+.search-job .btn-search {
+  background-color: #00b752;
+  box-shadow: 1px 1px 5px 1px rgba(128, 128, 128, 0.233);
+  text-transform: none;
+  transition: 0.5s;
+  font-weight: bold;
+  font-size: 15px;
+  max-height: 50px;
+}
+
+.search-job .btn-search:hover {
+  background-color: #00a048 !important;
+}
+
+.box-work-market .box-work-market__item .quantity.item-number, .box-work-market .box-work-market__item .time-scan.item-number {
+  color: #00B04E;
+  font-weight: bold;
+}
+
+
+/* SearchJob */
+.search-job .header {
+  background: url('../images/bg-search-left-header.png'),url('../images/bg-search-right-header.png'),linear-gradient(90deg,#212f3f,#00b14f);
+  background-position: 0 0,100% 0,50%;
+  background-repeat: no-repeat;
+  background-size: auto 340px,auto 340px,100% 100%;
+  font-family: Inter,sans-serif;
+  font-style: normal;
+  padding: 16px 0
+}
+
+.search-job .header .search-result .total-job-search {
+  color: #15bf61;
+}
+
+.search-job .header .search-result .search-result-text{
+  background-color: #1b664f;
+}
+
+.search-job .header .search-result .search-result-tool{
+  background-color: #00b752;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.search-job .header .search-result .search-result-tool:hover{
+  background-color: #00a048;
+  box-shadow: 1px 1px 5px 1px rgba(128, 128, 128, 0.233);
+}
+
+.search-job .header .search-result .search-result-tool.active{
+  background-color: #19734e;
+  border: 1px solid #15bf61;
+}
+
+.search-job .header .box-option{
+  border-radius: 8px;
+  background: linear-gradient(90deg, #00b150b3, #212f3faf);
+}
+
+.search-job .header .box-option .item{
+  background-color: #19734e;
+}
+
+.result-job-search, .apply-cv {
+  background-color: #F3F5F7;
+}
+
+.job-body .job-list-search-result .job-item-search-result:hover{
+  border: 1px solid #00b14f;
+}
+
+.job-item-search-result .job-detail .job-sub-detail{
+  padding: 5px;
+  margin: 0 5px 0 0;
+  background-color: #E9EAEC;
+  border-radius: 5px;
+  color: rgba(0, 0, 0, 0.696);
+}
+
+.job-item-search-result .job-detail .job-salary{
+  color: #00b14f;
+  font-size: 15px;
+}
+
+.job-item-search-result .job-detail .job-actions .btn-apply{
+  padding: 5px 13px;
+  font-size: 13px;
+  color: white;
+  border-radius: 5px;
+  background-color: #00b14f;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.job-item-search-result .job-detail .job-actions .btn-apply:hover{
+  background-color: #028d40;
+}
+
+.job-item-search-result .job-detail .job-actions .btn-save{
+  padding: 5px;
+  color: #00b14f;
+  border-radius: 5px;
+  background-color: #f6f6f6;
+  cursor: pointer;
+}
+
+/* ApplyCV */
+.apply-cv .job-detail .job-body .job-detail__body-left .job-detail__info .job-detail__info--section-icon{
+  background: linear-gradient(11deg, #00bf5d, #00907c);
+}
+
+.job-detail__body-left .job-detail__info .job-detail__info--actions .btn-apply,
+.job-detail__body-left .job-detail__information-detail .job-detail__information-detail--actions .job-detail__information-detail--actions-buttons .btn-apply{
+  font-size: 13px;
+  color: white;
+  border-radius: 5px;
+  background-color: #00b14f;
+  border: 1px solid #00b14f;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.job-detail__body-left .job-detail__info .job-detail__info--actions .btn-apply:hover,
+.job-detail__body-left .job-detail__information-detail .job-detail__information-detail--actions .job-detail__information-detail--actions-buttons .btn-apply:hover{
+  background-color: #028d40;
+}
+
+.job-detail__body-left .job-detail__info .job-detail__info--actions .btn-save,
+.job-detail__body-left .job-detail__information-detail .job-detail__information-detail--actions .job-detail__information-detail--actions-buttons .btn-save{
+  color: #00b14f;
+  border: 1px solid #00d96280;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.job-detail__body-left .job-detail__info .job-detail__info--actions .btn-save:hover,
+.job-detail__body-left .job-detail__information-detail .job-detail__information-detail--actions .job-detail__information-detail--actions-buttons .btn-save:hover{
+  border: 1px solid #00b14f;
+  cursor: pointer;
+}
+
+/* Modal Apply CV */
+.modal-apply-cv .modal-body .cover-letter-area:focus-within {
+  border: 1px solid rgb(74 222 128);
+}
+
+/* config scrollbar */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #cacaca;
+    border-radius: 5px;
+}
+ 
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #747474;
+}
