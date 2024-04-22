@@ -1,11 +1,19 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  OnModuleInit,
+} from '@nestjs/common';
 import {
   CreateApplicationRequest,
   APPLICATION_PACKAGE_NAME,
   ApplicationServiceClient,
   APPLICATION_SERVICE_NAME,
+  Application,
 } from '@app/common';
 import { ClientGrpc } from '@nestjs/microservices';
+// import { Observable, from, throwError, toArray } from 'rxjs';
+// import { catchError, map, mergeAll } from 'rxjs/operators';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
@@ -33,7 +41,6 @@ export class ApplicationService implements OnModuleInit {
   findOne(id: number) {
     return this.applicationServiceClient.readApplication({ id });
   }
-
   findAll(page: number, limit: number) {
     const applications$ = this.applicationServiceClient.readAllApplication({
       page,
