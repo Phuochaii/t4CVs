@@ -18,37 +18,38 @@ function PostCompaign() {
     { value: "Đà Nẵng", label: "Đà Nẵng" },
   ];
   return (
-    <div className="h-screen w-screen m-10">
-      <h1 className="text-black text-xl font-bold mb-5">
+    <div className="w-screen h-screen m-10">
+      <h1 className="mb-5 text-xl font-bold text-black">
         Tạo chiến dịch đầu tiên của bạn
       </h1>
-      <div className="bg-white p-1 w-4/5 rounded-sm mb-5">
+      <div className="w-4/5 p-1 mb-5 bg-white rounded-sm">
         <div className="m-2">
-          <div className="flex flex-row justify-items-center space-x-2 mb-5">
-            <div className="rounded-full bg-green-600 w-7 h-7 flex items-center justify-center">
-              <span className="text-white text-lg font-bold">1</span>
+          <div className="flex flex-row mb-5 space-x-2 justify-items-center">
+            <div className="flex items-center justify-center bg-green-600 rounded-full w-7 h-7">
+              <span className="text-lg font-bold text-white">1</span>
             </div>
-            <h1 className="text-black text-xl font-bold">
+            <h1 className="text-xl font-bold text-black">
               Bắt đầu một chiến dịch mới
             </h1>
           </div>
-          <p className="text-black text-xs">
-            Hoạt động tuyển dụng của doanh nghiệp được tiến hành theo từng giai
-            đoạn với các mục tiêu tuyển dụng khác nhau. Chiến dịch tuyển dụng là
-            nơi tổng hợp cách hoạt động khác nhau của một đợt
+          <p className="text-xs text-black">
+            Hoạt động tuyển dụng của doanh nghiệp được tiến hành theo
+            từng giai đoạn với các mục tiêu tuyển dụng khác nhau.
+            Chiến dịch tuyển dụng là nơi tổng hợp cách hoạt động khác
+            nhau của một đợt
           </p>
-          <p className="text-black text-xs">
+          <p className="text-xs text-black">
             tuyển dụng được thực hiện trên nền tảng TopCV.
           </p>
         </div>
-        <div className="flex flex-row space-x-4 m-2">
-          <img className="border-2 w-1/2" src={image} />
+        <div className="flex flex-row m-2 space-x-4">
+          <img className="w-1/2 border-2" src={image} />
           <div className="w-1/2">
-            <p className="text-black text-xl font-bold mb-5">
+            <p className="mb-5 text-xl font-bold text-black">
               Tài liệu nên xem
             </p>
             <button
-              className="btn text-sm p-4 flex flex-row items-center w-full justify-between"
+              className="flex flex-row items-center justify-between w-full p-4 text-sm btn"
               style={{
                 backgroundColor: "#EBF3FF",
                 color: "#2D7CF1",
@@ -60,11 +61,15 @@ function PostCompaign() {
               </span>
               <ChevronRight
                 color="#000000"
-                style={{ strokeWidth: "0.5px", width: 40, height: 40 }}
+                style={{
+                  strokeWidth: "0.5px",
+                  width: 40,
+                  height: 40,
+                }}
               />
             </button>
             <button
-              className="btn text-sm p-4 flex flex-row items-center w-full justify-between"
+              className="flex flex-row items-center justify-between w-full p-4 text-sm btn"
               style={{
                 backgroundColor: "#EBF3FF",
                 color: "#2D7CF1",
@@ -76,11 +81,15 @@ function PostCompaign() {
               </span>
               <ChevronRight
                 color="#000000"
-                style={{ strokeWidth: "0.5px", width: 40, height: 40 }}
+                style={{
+                  strokeWidth: "0.5px",
+                  width: 40,
+                  height: 40,
+                }}
               />
             </button>
             <button
-              className="btn text-sm p-4 flex flex-row items-center w-full justify-between"
+              className="flex flex-row items-center justify-between w-full p-4 text-sm btn"
               style={{
                 backgroundColor: "#EBF3FF",
                 color: "#2D7CF1",
@@ -92,33 +101,40 @@ function PostCompaign() {
               </span>
               <ChevronRight
                 color="#000000"
-                style={{ strokeWidth: "0.5px", width: 40, height: 40 }}
+                style={{
+                  strokeWidth: "0.5px",
+                  width: 40,
+                  height: 40,
+                }}
               />
             </button>
           </div>
         </div>
         <div className="m-2">
-          <p className="text-black text-xs">
-            Hiểu về cách chiến dịch tuyển dụng hoạt động sẽ giúp bạn tối ưu tốt
-            hơn hoạt động tuyển dụng của doanh nghiệp trên TopCV. Hãy chắc chắn
-            bạn đã tìm hiểu thông tin về chiến dịch tuyển dụng từ
+          <p className="text-xs text-black">
+            Hiểu về cách chiến dịch tuyển dụng hoạt động sẽ giúp bạn
+            tối ưu tốt hơn hoạt động tuyển dụng của doanh nghiệp trên
+            TopCV. Hãy chắc chắn bạn đã tìm hiểu thông tin về chiến
+            dịch tuyển dụng từ
           </p>
-          <p className="text-black text-xs">các nội dung phía trên.</p>
+          <p className="text-xs text-black">
+            các nội dung phía trên.
+          </p>
         </div>
       </div>
-      <div className="bg-white p-1 w-4/5 rounded-sm mb-10">
+      <div className="w-4/5 p-1 mb-10 bg-white rounded-sm">
         <div className="m-2">
-          <div className="flex flex-row justify-items-center space-x-2 mb-5">
-            <div className="rounded-full bg-green-600 w-7 h-7 flex items-center justify-center">
-              <span className="text-white text-lg font-bold">2</span>
+          <div className="flex flex-row mb-5 space-x-2 justify-items-center">
+            <div className="flex items-center justify-center bg-green-600 rounded-full w-7 h-7">
+              <span className="text-lg font-bold text-white">2</span>
             </div>
-            <h1 className="text-black text-xl font-bold">
+            <h1 className="text-xl font-bold text-black">
               Tạo chiến dịch tuyển dụng đầu tiên của bạn
             </h1>
           </div>
-          <div className="flex flex-row w-full mb-2 space-x-10 border-t-2 pt-2 mb-5">
+          <div className="flex flex-row w-full pt-2 mb-5 space-x-10 border-t-2">
             <div className="w-1/2 space-y-3 ">
-              <span className="text-black text-base font-bold">
+              <span className="text-base font-bold text-black">
                 Tên chiến dịch tuyển dụng
               </span>
               <input
@@ -128,7 +144,7 @@ function PostCompaign() {
               />
             </div>
             <div className="w-1/2 space-y-3">
-              <span className="text-black text-base font-bold">
+              <span className="text-base font-bold text-black">
                 Vị trí tuyển dụng
               </span>
               <input
@@ -139,7 +155,7 @@ function PostCompaign() {
             </div>
           </div>
           <div className="space-y-3">
-            <span className="text-black text-base font-bold">
+            <span className="text-base font-bold text-black">
               Khu vực làm việc
             </span>
             <Select
@@ -180,33 +196,37 @@ function PostCompaign() {
             <div className="flex flex-row justify-center">
               <button
                 onClick={togglePopup}
-                className="py-1 px-2 text-white bg-green-600"
+                className="px-2 py-1 text-white bg-green-600"
               >
                 Tiếp theo
               </button>
             </div>
             <div className="relative">
               {showPopup && (
-                <div className="top-5 fixed bg-white p-6 w-8/12 rounded shadow-lg justify-center items-center">
+                <div className="fixed items-center justify-center w-8/12 p-6 bg-white rounded shadow-lg top-5">
                   <div className="flex flex-row justify-between mb-4">
                     <h2 className="text-xl font-bold ">
-                      Khởi động chiến dịch: Tuyển dụng Marketing tháng 10
+                      Khởi động chiến dịch: Tuyển dụng Marketing tháng
+                      10
                     </h2>
-                    <button className="bg-white" onClick={togglePopup}>
+                    <button
+                      className="bg-white"
+                      onClick={togglePopup}
+                    >
                       <X></X>
                     </button>
                   </div>
                   <p className="text-[13.5px] font-semibold mb-4 border-t pt-4">
-                    Vui lòng lựa chọn hoạt động đầu tiên để khởi động chiến dịch
-                    tuyển dụng của bạn. Dựa vào Insights chiến dịch tuyển dụng
-                    bạn chia sẻ, chúng tôi gợi ý những hoạt động phù hợp phía
-                    dưới. Hãy lựa chọn loại hoạt động bạn thấy phù hợp nhất vào
-                    lúc này.
+                    Vui lòng lựa chọn hoạt động đầu tiên để khởi động
+                    chiến dịch tuyển dụng của bạn. Dựa vào Insights
+                    chiến dịch tuyển dụng bạn chia sẻ, chúng tôi gợi ý
+                    những hoạt động phù hợp phía dưới. Hãy lựa chọn
+                    loại hoạt động bạn thấy phù hợp nhất vào lúc này.
                   </p>
                   <div className="flex flex-row w-full">
                     <div className="w-5/12">
-                      <button className="flex items-center p-4 bg-gray-200 w-full">
-                        <span className="text-base mr-1 font-semibold ">
+                      <button className="flex items-center w-full p-4 bg-gray-200">
+                        <span className="mr-1 text-base font-semibold ">
                           Thu hút ứng tuyển tự nhiên
                         </span>
                         <CircleHelp
@@ -214,16 +234,16 @@ function PostCompaign() {
                           style={{ width: 18, height: 18 }}
                         />
                       </button>
-                      <button className="flex items-center px-4 py-6 bg-green-100 justify-between w-full">
-                        <span className="text-base text-green-700 font-semibold">
+                      <button className="flex items-center justify-between w-full px-4 py-6 bg-green-100">
+                        <span className="text-base font-semibold text-green-700">
                           Đăng tin tuyển dụng
                         </span>
                         <span className="text-[8px] bg-green-200 p-1 text-green-800 font-semibold">
                           ĐỀ XUẤT
                         </span>
                       </button>
-                      <button className="flex items-center p-4 bg-gray-200 w-full">
-                        <span className="text-base mr-1 font-semibold">
+                      <button className="flex items-center w-full p-4 bg-gray-200">
+                        <span className="mr-1 text-base font-semibold">
                           Săn tìm ứng viên
                         </span>
                         <CircleHelp
@@ -231,32 +251,38 @@ function PostCompaign() {
                           style={{ width: 18, height: 18 }}
                         />
                       </button>
-                      <button className="flex items-center px-4 py-6 bg-white justify-between border w-full">
+                      <button className="flex items-center justify-between w-full px-4 py-6 bg-white border">
                         <span className="text-base font-semibold">
                           Scout AI - Tự động săn tìm CV
                         </span>
                       </button>
-                      <button className="flex items-center px-4 py-6 bg-white justify-between border w-full">
+                      <button className="flex items-center justify-between w-full px-4 py-6 bg-white border">
                         <span className="text-base font-semibold">
                           Lọc CV ứng viên TopCV
                         </span>
                       </button>
                     </div>
-                    <div className="w-7/12 border flex flex-col items-center justify-center w-full">
-                      <div className="border-black border-4 p-4 rounded-full w-fit mb-10">
+                    <div className="flex flex-col items-center justify-center w-full border ">
+                      <div className="p-4 mb-10 border-4 border-black rounded-full w-fit">
                         <Pencil
-                          style={{ color: "black", width: 40, height: 40 }}
+                          style={{
+                            color: "black",
+                            width: 40,
+                            height: 40,
+                          }}
                         ></Pencil>
                       </div>
-                      <p className="font-bold mb-5">Tuyển dụng tại TopCV</p>
+                      <p className="mb-5 font-bold">
+                        Tuyển dụng tại TopCV
+                      </p>
                       <p>
-                        Đăng tin tuyển dụng tiếp cận 3 triệu ứng viên tiềm năng
-                        &
+                        Đăng tin tuyển dụng tiếp cận 3 triệu ứng viên
+                        tiềm năng &
                       </p>
                       <p>nhận về CV ứng tuyển</p>
                       <button
                         onClick={togglePopup}
-                        className=" mt-4 px-4 py-2 text-white bg-green-600"
+                        className="px-4 py-2 mt-4 text-white bg-green-600 "
                       >
                         Đăng tin tuyển dụng
                       </button>

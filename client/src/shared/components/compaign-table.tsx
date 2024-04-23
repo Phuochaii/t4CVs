@@ -3,6 +3,10 @@ import Switch from "../../shared/components/CustomSwitch";
 import { Link } from "react-router-dom";
 import { Compaign } from "../types/Compaign.type";
 
+export interface CompaignTableProps {
+  data: Compaign[];
+  setData: React.Dispatch<SetStateAction<Compaign[]>>;
+}
 export const CompaignTableHeaders = () => {
   return (
     <thead>
@@ -163,11 +167,6 @@ export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
     </tr>
   );
 };
-
-export interface CompaignTableProps {
-  data: Compaign[];
-  setData: React.Dispatch<SetStateAction<Compaign[]>>;
-}
 
 export const CompaignTable = ({ data }: CompaignTableProps) => {
   return (

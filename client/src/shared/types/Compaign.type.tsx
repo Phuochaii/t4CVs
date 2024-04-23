@@ -13,4 +13,6 @@ export interface Compaign {
   isCVSystemActive: boolean;
   cvFiltered: number | null;
   runningServices: string[];
+  company?: string;
+  postDate?: Date;
 }

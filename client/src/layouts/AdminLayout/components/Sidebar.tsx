@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Eye, CreditCard } from "lucide-react";
+import { Eye, CreditCard, Building2 } from "lucide-react";
 import GradientIcon from "./GradientIcon";
 
 interface SidebarProps {
@@ -18,6 +18,12 @@ const links = [
     path: "/admin/compaign",
     icon: CreditCard,
     iconComponent: <CreditCard className="text-white" />,
+  },
+  {
+    name: "Company",
+    path: "/admin/company",
+    icon: Building2,
+    iconComponent: <Building2 className="text-white" />,
   },
 ];
 
@@ -49,7 +55,9 @@ function Sidebar({ className }: SidebarProps) {
             )}{" "}
             <span
               className={
-                pathname == item.path ? "text-white" : "text-slate-500"
+                pathname == item.path
+                  ? "text-white"
+                  : "text-slate-500"
               }
             >
               {item.name}
