@@ -4,9 +4,7 @@ export class CreateApplicationDto {
   phone: string;
   email: string;
   coverLetter: string;
-  createdAt: string;
-  updateAt: string;
-  jobId: number;
+  campaignId: number;
   userId: number;
   cvId: number;
 }

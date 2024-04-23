@@ -1,7 +1,7 @@
 [
     {
         "serviceName": "gateway",
-        "protoFiles": ["job-application", "notification"]
+        "protoFiles": ["application", "notification"]
     },
     {
         "serviceName": "job-application-service",

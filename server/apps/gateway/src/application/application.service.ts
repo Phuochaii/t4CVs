@@ -17,7 +17,6 @@ import { ClientGrpc } from '@nestjs/microservices';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
-
   private readonly application: any[] = [];
   private applicationServiceClient: ApplicationServiceClient;
 
@@ -42,39 +41,16 @@ export class ApplicationService implements OnModuleInit {
   findOne(id: number) {
     return this.applicationServiceClient.readApplication({ id });
   }
-
-
-  async findAll() {
-    try {
-      let applications;
-      this.applicationServiceClient.readAllApplication({}).subscribe(
-        (data) => {
-          applications = data;
-          console.log(applications);
-        },
-        (error) => {
-          console.log('Lỗi:', error);
-          throw new NotFoundException(error.message);
-        },
-      );
-      return {
-        application: applications,
-      };
-    } catch (error) {
-      console.log('Lỗi:', error);
-      throw new NotFoundException(error.message);
-    }
+  findAll(page: number, limit: number) {
+    const applications$ = this.applicationServiceClient.readAllApplication({
+      page,
+      limit,
+    });
+    return applications$;
   }
 
   async update(id: number) {
-    return this.applicationServiceClient.updateApplication({ id });
+    const data = await this.applicationServiceClient.updateApplication({ id });
+    return data;
   }
-
-  // update(id: number, updateApplicationDto: UpdateApplicationDto) {
-  //   return `This action updates a #${id} application`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} application`;
-  // }
 }
