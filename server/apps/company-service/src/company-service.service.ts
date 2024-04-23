@@ -13,14 +13,21 @@ export class CompanyServiceService {
     private CompanyRepository: Repository<Company>,
   ) {}
 
-  async create(createCompanyDto: CreateCompanyDto) {
-    const job = await this.CompanyRepository.save(createCompanyDto);
+  async createCompany(createCompanyDto: CreateCompanyDto) {
+    const company = await this.CompanyRepository.save(createCompanyDto);
 
-    return await this.CompanyRepository.save(job);
+    return await this.CompanyRepository.save(company);
   }
 
-  async findAll(): Promise<FindCompanyDTOResponse[]> {
-    const companies = await this.CompanyRepository.find();
+  // eslint-disable-next-line prettier/prettier
+  async findAllCompanies(page: number): Promise<FindCompanyDTOResponse[]> {
+    const limit = 10;
+    const offset = (page - 1) * limit;
+    const companies = await this.CompanyRepository.find({
+      skip: offset,
+      take: limit,
+    });
+
     return companies;
   }
 
@@ -45,7 +52,7 @@ export class CompanyServiceService {
     });
   }
 
-  async remove(id: number) {
+  async removeCompany(id: number) {
     await this.CompanyRepository.delete(id);
   }
 }

@@ -4,6 +4,7 @@ import { CompanyServiceService } from './company-service.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Company } from './entities/company.entity';
+import { CampaignModule } from './campaign/campaign.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { Company } from './entities/company.entity';
       }),
     }),
     TypeOrmModule.forFeature([Company]),
+    CampaignModule,
   ],
   controllers: [CompanyServiceController],
   providers: [CompanyServiceService],
