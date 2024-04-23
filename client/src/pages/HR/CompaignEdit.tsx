@@ -5,9 +5,11 @@ import {
   ChevronLeft,
   CircleAlert,
 } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Compaign } from "../../shared/types/Compaign.type";
 import { useState } from "react";
+import { statusColor } from "../../shared/types/RecruitmentStatus.type";
+import clsx from "clsx";
 
 function RecruitmentDisplayTable() {
   return (
@@ -115,13 +117,21 @@ function CompaignEdit() {
     {
       title: "Nội dung tuyển dụng",
       sectionComponent: <></>,
-      subtitle: <h2 className="text-black ">Lập trình viên PHP</h2>,
+      subtitle: (
+        <h2 className="text-black ">{compaign.compaignName}</h2>
+      ),
     },
     {
       title: "Hiển thị tin tuyển dụng",
       sectionComponent: <RecruitmentDisplaySection />,
       subtitle: (
-        <span className="p-2 text-sm font-bold rounded-sm bg-slate-100 text-md text-slate-400">
+        <span
+          className={clsx(
+            "p-1 font-semibold",
+            statusColor[compaign.recruitmentStatus].bg,
+            statusColor[compaign.recruitmentStatus].text
+          )}
+        >
           {compaign.recruitmentStatus}
         </span>
       ),
@@ -132,10 +142,14 @@ function CompaignEdit() {
       subtitle: <></>,
     },
   ];
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col items-center gap-2 p-0">
       <div className="flex items-center w-full gap-4 p-4 bg-white">
-        <button className="flex items-center p-2 bg-gray-200 rounded-sm">
+        <button
+          className="flex items-center p-2 bg-gray-200 rounded-sm"
+          onClick={() => navigate(-1)}
+        >
           <ArrowLeft size={16} /> Quay lại
         </button>
         <h2 className="font-bold capitalize">
