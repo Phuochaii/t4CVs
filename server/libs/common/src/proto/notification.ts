@@ -12,7 +12,7 @@ export enum status {
 
 /** The request message containing the users id. */
 export interface User {
-  id: number;
+  id: string;
 }
 
 export interface PaginationRequest {

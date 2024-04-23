@@ -1,9 +1,19 @@
 import { request } from 'http';
-import { NOTIFICATION_PACKAGE_NAME, NOTIFICATION_SERVICE_NAME, NotificationServiceClient, SendNotificationRequest, status } from '@app/common/proto/notification';
+import { GetUserNotificationsRequest, NOTIFICATION_PACKAGE_NAME, NOTIFICATION_SERVICE_NAME, NotificationServiceClient, SendNotificationRequest, status } from '@app/common/proto/notification';
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { PaginationRequest } from '@app/common';
 
+export enum NotificationUserRole {
+    USER = 'user',
+    HR = 'hr',
+};
+export class NotificationUserId {
+    constructor(private id: number, private role: NotificationUserRole) { }
+    get userId() {
+        return `${this.role}-${this.id}`
+    }
+}
 @Injectable()
 export class NotificationService implements OnModuleInit {
     private notificationServiceClient: NotificationServiceClient;
@@ -14,20 +24,35 @@ export class NotificationService implements OnModuleInit {
         this.notificationServiceClient = this.client.getService<NotificationServiceClient>(NOTIFICATION_SERVICE_NAME);
     }
 
-    create(request: SendNotificationRequest) {
-        return this.notificationServiceClient.sendNotification(request);
+    create(
+        notificationUserIds: NotificationUserId[],
+        request: Omit<SendNotificationRequest, 'users'>
+    ) {
+        return this.notificationServiceClient.sendNotification({
+            ...request,
+            users: notificationUserIds.map((notificationUserId) => ({
+                id: notificationUserId.userId
+            }))
+        });
     }
 
-    getAllOfUser(userId: number, paginationRequest: PaginationRequest) {
+    getAllOf(
+        notificationUserId: NotificationUserId,
+        paginationRequest: PaginationRequest
+    ) {
         return this.notificationServiceClient.getNotifications({
-            user: { id: userId },
+            user: { id: notificationUserId.userId },
             paginationRequest,
         });
     }
 
-    updateStatus(userId: number, notificationId: number, status: status) {
+    updateStatus(
+        notificationUserId: NotificationUserId,
+        notificationId: number,
+        status: status
+    ) {
         return this.notificationServiceClient.updateNotificationStatus({
-            user: { id: userId },
+            user: { id: notificationUserId.userId },
             notificationId,
             status,
         });

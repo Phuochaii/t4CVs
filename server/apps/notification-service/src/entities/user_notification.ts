@@ -9,7 +9,7 @@ export enum NotificationStatus {
 @Entity()
 export class User_Notification {
     @PrimaryColumn()
-    userId: number;
+    userId: string;
 
     @PrimaryColumn()
     notificationId: number;
