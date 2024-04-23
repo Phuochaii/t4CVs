@@ -110,6 +110,7 @@ export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
             <Link
               className="font-bold text-green-500"
               to={`/hr/compaign-edit/${compaign.recruimentId}`}
+              state={compaign}
             >
               Chỉnh sửa
             </Link>
