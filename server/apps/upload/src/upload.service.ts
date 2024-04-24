@@ -1,15 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { UploadCVDto } from './dto/upload.dto';
+import { Module, Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import * as fs from 'fs';
 import * as path from 'path';
+import { CVDto } from './dto/cv.dto';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class UploadService {
-  async uploadCV(uploadCVDto: UploadCVDto): Promise<any> {
-    console.log(JSON.stringify(uploadCVDto.file) + JSON.stringify(uploadCVDto));
-
-    const fileExtension = path.extname(uploadCVDto.file.originalname);
+  constructor(private readonly httpService: HttpService) {}
+  async uploadCV(data): Promise<any> {
+    const { file, userId } = data;
+    const fileExtension = path.extname(file.originalname);
     const newFilename = `${uuidv4()}${fileExtension}`;
     const uploadPath = './uploads';
 
@@ -18,11 +19,23 @@ export class UploadService {
     }
 
     try {
-      await fs.promises.rename(
-        uploadCVDto.file.path,
-        `${uploadPath}/${newFilename}`,
+      await fs.promises.rename(file.path, `${uploadPath}/${newFilename}`);
+      const cvDto = new CVDto();
+      cvDto.userId = Number(userId.userId);
+      cvDto.templateId = 1;
+      cvDto.link = `localhost:3000/cv/${newFilename}`;
+      cvDto.creationAt = new Date();
+      cvDto.isPublic = true;
+      cvDto.lastModified = new Date();
+
+      console.log(JSON.stringify(cvDto));
+
+      const result = this.httpService.post(
+        'http://localhost:3000/cv',
+        JSON.stringify(cvDto),
       );
-      return newFilename;
+
+      return result;
     } catch (error: any) {
       console.error('Error uploading file:', error);
       throw new Error(error);

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { CvServiceModule } from './../src/cv-service.module';
+import { CvServiceModule } from '../src/cv.module';
 
 describe('CvServiceController (e2e)', () => {
   let app: INestApplication;
