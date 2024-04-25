@@ -6,6 +6,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Job } from './entities/job.entity';
 import { JobDetailModule } from './job-detail/job-detail.module';
 import { MajorModule } from './major/major.module';
+import { LevelModule } from './level/level.module';
+import { CurrencyModule } from './currency/currency.module';
+import { FieldModule } from './field/field.module';
+import { LocationModule } from './location/location.module';
+import { ExperienceModule } from './experience/experience.module';
+import { TypeModule } from './type/type.module';
 
 @Module({
   imports: [
@@ -27,7 +33,13 @@ import { MajorModule } from './major/major.module';
     }),
     TypeOrmModule.forFeature([Job]),
     JobDetailModule,
-    MajorModule, // JobRepository]),
+    MajorModule,
+    LevelModule,
+    CurrencyModule,
+    FieldModule,
+    LocationModule,
+    ExperienceModule,
+    TypeModule, // JobRepository]),
   ],
   controllers: [JobController],
   providers: [JobService], //, JobRepository],

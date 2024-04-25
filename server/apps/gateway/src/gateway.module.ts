@@ -9,12 +9,7 @@ import { GatewayService } from './gateway.service';
 import { Company } from 'apps/company-service/src/entities/company.entity';
 
 @Module({
-  imports: [
-    ApplicationModule,
-    // JobModule,
-    // UploadModule,
-    CompanyModule,
-  ],
+  imports: [ApplicationModule, JobModule, UploadModule, CompanyModule],
   controllers: [GatewayController],
   providers: [GatewayService],
 })
