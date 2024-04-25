@@ -7,9 +7,16 @@ import { UploadModule } from './upload/upload.module';
 import { GatewayController } from './gateway.controller';
 import { GatewayService } from './gateway.service';
 import { Company } from 'apps/company-service/src/entities/company.entity';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [ApplicationModule, JobModule, UploadModule, CompanyModule],
+  imports: [
+    ApplicationModule,
+    JobModule,
+    UploadModule,
+    CompanyModule,
+    UserModule,
+  ],
   controllers: [GatewayController],
   providers: [GatewayService],
 })
