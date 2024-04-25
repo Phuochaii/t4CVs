@@ -34,7 +34,46 @@ function PostCompaign1({
     label: string;
   }> | null>(null);
   const [showPopup, setShowPopup] = useState(false);
-
+  const [showError, setShowError] = useState(true);
+  const [showDescriptionError, setDescritionError] = useState(true);
+  const [showRequirement, setRequirementError] = useState(true);
+  const [jobDescription, setJobDescription] = useState('');
+  const [description, setDescription] = useState('');
+  const [requirement, setRequirement] = useState('');
+  const [title, setTitle] = useState('');
+  const [titleError, setTitleError] = useState(true);
+  const handleTitleError = (value: SetStateAction<string>) => {
+    setTitle(value);
+    if (value.length === 0) {
+      setTitleError(true);
+    } else {
+      setTitleError(false);
+    }
+  }
+  const handleRequirementValidation = (value: SetStateAction<string>) => {
+    setRequirement(value);
+    if (value.length === 0) {
+      setRequirementError(true);
+    } else {
+      setRequirementError(false);
+    }
+  }
+  const handleDescriptionValidation = (value: SetStateAction<string>) => {
+    setDescription(value);
+    if (value.length === 0) {
+      setDescritionError(true);
+    } else {
+      setDescritionError(false);
+    }
+  }
+  const handleJobValidation = (value: SetStateAction<string>) => {
+    setJobDescription(value);
+    if (value.length === 0) {
+      setShowError(true);
+    } else {
+      setShowError(false);
+    }
+  }
   const togglePopup = (
     choice: SetStateAction<SingleValue<{ value: string; label: string }>>
   ) => {
@@ -93,7 +132,12 @@ function PostCompaign1({
               type="text"
               className=" bg-white border-b-2 border-slate-100 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
               placeholder="VD: Nhân viên Marketing"
+              value={title}
+              onChange={(e) => handleTitleError(e.target.value)}
             />
+            {titleError && (<div className="text-red-700">
+              Tiêu đề không được để trống
+            </div>)}
           </div>
         </div>
       </div>
@@ -855,12 +899,14 @@ function PostCompaign1({
                 </button>
               </div>
               <textarea
-                className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
+                className="w-full bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
                 placeholder="Nhập nội dung mô tả công việc"
+                onChange={(e) => handleJobValidation(e.target.value)}
+                value={jobDescription}
               />
-              <div className="text-red-700">
+              {showError && (<div className="text-red-700">
                 Mô tả công việc không được để trống
-              </div>
+              </div>)}
             </div>
           </div>
         </div>
@@ -958,9 +1004,14 @@ function PostCompaign1({
                 </button>
               </div>
               <textarea
-                className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
+                className="w-full bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
                 placeholder="Nhập nội dung mô tả công việc"
+                onChange={(e) => handleRequirementValidation(e.target.value)}
+                value={requirement}
               />
+              {showRequirement && (<div className="text-red-700">
+                Yêu cầu công việc không được để trống
+              </div>)}
               <div className="text-slate-600 mb-1">Kỹ năng liên quan</div>
               <div className="w-4/5">
                 <Select
@@ -1096,9 +1147,14 @@ function PostCompaign1({
                 </button>
               </div>
               <textarea
-                className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
+                className="w-full bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
                 placeholder="Nhập nội dung mô tả công việc"
+                onChange={(e) => handleDescriptionValidation(e.target.value)}
+                value={description}
               />
+              {showDescriptionError && (<div className="text-red-700">
+                Quyền lợi công việc không được để trống
+              </div>)}
             </div>
           </div>
         </div>
@@ -1118,7 +1174,7 @@ function PostCompaign1({
                   Hạn chót nhận CV
                 </span>
                 <input
-                  type="text"
+                  type="date"
                   className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                   placeholder="dd/mm/yy"
                 />
@@ -1131,7 +1187,9 @@ function PostCompaign1({
                   type="text"
                   className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                   placeholder="Họ tên"
+                 
                 />
+               
               </div>
               <div className="space-y-2 w-3/12">
                 <span className="text-base font-semibold">Số điện thoại</span>
