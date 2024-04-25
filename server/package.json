@@ -10,7 +10,7 @@
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "copy:proto": "node proto/copy-proto.js",
     "start": "pnpm run copy:proto && nest start",
-    "start:dev": "pnpm run copy:proto && nest start --watch",
+    "start:dev": "npm run copy:proto && nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/server/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
