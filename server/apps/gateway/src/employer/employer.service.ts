@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
+import { CreateEmployerDto } from 'apps/employer/src/dto/Req/create-employer.dto';
 
 @Injectable()
 export class EmployerService {
@@ -11,6 +12,13 @@ export class EmployerService {
   //   createCompany(createCompanyDTO: CreateCompanyDto): Observable<string> {
   //     return this.companyClient.send({ cmd: 'create_company' }, createCompanyDTO);
   //   }
+
+  createEmployer(createEmployerDTO: CreateEmployerDto): Observable<string> {
+    return this.employerClient.send(
+      { cmd: 'create_employer' },
+      createEmployerDTO,
+    );
+  }
 
   getAllEmployers(): Observable<string> {
     return this.employerClient.send({ cmd: 'get_all_employers' }, {});

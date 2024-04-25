@@ -1,15 +1,16 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { EmployerService } from './employer.service';
+import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
 
 @Controller('employer')
 export class EmployerController {
   constructor(private readonly employerService: EmployerService) {}
 
-  // @Post('create')
-  // createCompany(@Body() data: CreateCompanyDto): Observable<string> {
-  //   return this.companyService.createCompany(data);
-  // }
+  @Post('create')
+  createCompany(@Body() data: CreateEmployerDto): Observable<string> {
+    return this.employerService.createEmployer(data);
+  }
 
   @Get('all')
   getAllCompanies(): Observable<string> {

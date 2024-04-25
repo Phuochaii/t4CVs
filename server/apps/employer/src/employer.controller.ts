@@ -2,6 +2,7 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { EmployerService } from './employer.service';
 import { PositionService } from './position/position.service';
+import { CreateEmployerDto } from './dto/Req/create-employer.dto';
 
 @Controller()
 export class EmployerController {
@@ -9,6 +10,12 @@ export class EmployerController {
     private readonly employerService: EmployerService,
     private readonly positionService: PositionService,
   ) {}
+
+  @MessagePattern({ cmd: 'create_employer' })
+  createEmployer(employer: CreateEmployerDto) {
+    this.employerService.createEmployer(employer);
+    return 'Employer created successfully!';
+  }
 
   @MessagePattern({ cmd: 'get_all_employers' })
   findAllEmployers() {
