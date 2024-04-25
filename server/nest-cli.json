@@ -32,19 +32,6 @@
         "tsConfigPath": "apps/cv-service/tsconfig.app.json"
       }
     },
-    "job-application-service": {
-      "type": "application",
-      "root": "apps/job-application-service",
-      "entryFile": "main",
-      "sourceRoot": "apps/job-application-service/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/job-application-service/tsconfig.app.json",
-        "assets": [
-          "./proto/*.proto"
-        ],
-        "watchAssets": true
-      }
-    },
     "common": {
       "type": "library",
       "root": "libs/common",

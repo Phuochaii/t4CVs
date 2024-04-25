@@ -3,18 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotificationController } from './notification-service.controller';
 import { NotificationServiceService } from './services';
 import { Notification, User_Notification } from './entities';
+import { databaseConfig } from './database/init';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'password',
-      database: 'notification',
-      autoLoadEntities: true,
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      useFactory: databaseConfig,
     }),
     TypeOrmModule.forFeature([Notification, User_Notification]),
   ],
