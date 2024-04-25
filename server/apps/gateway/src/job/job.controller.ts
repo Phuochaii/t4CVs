@@ -1,16 +1,7 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CreateJobDto } from './dto/Req/createJob.dto';
 import { JobService } from './job.service';
-import { QueryDTO } from './dto/Req/query.dto';
 import { CreateBaseDto } from './dto/Req/createBase.dto';
 import { UpdateJobDto } from './dto/Req/update-job.dto';
 
@@ -21,9 +12,9 @@ export class JobController {
   @Get('all')
   getAllJobs(
     @Query()
-    query: QueryDTO,
+    queryParams: any,
   ): Observable<string> {
-    return this.jobService.getAllJobs(query);
+    return this.jobService.getAllJobs(queryParams);
   }
 
   @Get('valid-jobs')
@@ -32,6 +23,11 @@ export class JobController {
     queryParams: any,
   ): Observable<string> {
     return this.jobService.getValidJobs(queryParams);
+  }
+
+  @Get('create-info')
+  getJobInfo(): Observable<string> {
+    return this.jobService.createJobInfo();
   }
 
   @Post('create')

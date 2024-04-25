@@ -36,6 +36,11 @@ export class JobController {
     return this.jobService.updateJobStatus(data);
   }
 
+  @MessagePattern({ cmd: 'get_job_info' })
+  getJobInfo() {
+    return this.jobService.createJobInfo();
+  }
+
   @MessagePattern({ cmd: 'create_major' })
   createMajor(majors: CreateBaseDto) {
     return this.jobService.createMajor(majors);

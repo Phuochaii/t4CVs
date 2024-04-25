@@ -1,13 +1,9 @@
-import { Major } from './entities/major.entity';
 import { Injectable } from '@nestjs/common';
 import { CreateJobDto } from './dto/Req/create-job.dto';
 import { Job } from './entities/job.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  Any,
-  ArrayContainedBy,
   Repository,
-  ArrayContains,
   MoreThanOrEqual,
   LessThanOrEqual,
   MoreThan,
@@ -18,7 +14,6 @@ import { LevelService } from './level/level.service';
 import { CurrencyService } from './currency/currency.service';
 import { FieldService } from './field/field.service';
 import { UpdateJobDto } from './dto/Req/update-job.dto';
-import { QueryDTO } from './dto/Req/query.dto';
 import { CreateBaseDto } from './dto/Req/createBase.dto';
 import { LocationService } from './location/location.service';
 import { ExperienceService } from './experience/experience.service';
@@ -68,29 +63,32 @@ export class JobService {
     return await this.jobRepository.save(job);
   }
 
-  async findAll(query: QueryDTO): Promise<Job[]> {
+  async findAll(query: any): Promise<Job[]> {
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 10;
+    delete query.page;
+    delete query.limit;
+    const min = query.salaryMin ?? 0;
+    const max = query.salaryMax ?? 1000000000;
+    const skip = (page - 1) * limit;
+    delete query.page;
+    delete query.limit;
+    delete query.salaryMin;
+    delete query.salaryMax;
     const jobs = await this.jobRepository.find({
-      // where: {
-      //   region: ArrayContains([query.region]),
-      //   exp: query.exp,
-      // },
+      where: {
+        ...query,
+        salaryMin: MoreThanOrEqual(min),
+        salaryMax: LessThanOrEqual(max),
+        expiredDate: MoreThan(new Date()),
+      },
+      skip,
+      take: limit,
+      order: {
+        updateAt: 'ASC',
+      },
+      relations: ['major', 'level', 'currency', 'fields', 'exp', 'type'],
     });
-    // const result: FindJobDTOResponse[] = jobs.map((job) => {
-    //   const rs: FindJobDTOResponse = {
-    //     id: job.id,
-    //     titleRecruitment: job.titleRecruitment,
-    //     major: job.major,
-    //     compaignId: job.compaignId,
-    //     salaryMin: job.salaryMin,
-    //     salaryMax: job.salaryMax,
-    //     exp: job.exp,
-    //     region: job.region,
-    //     expriedDate: job.expriedDate,
-    //     createAt: job.createAt,
-    //     updateAt: job.updateAt,
-    //   };
-    //   return rs;
-    // });
     return jobs;
   }
 
@@ -122,6 +120,25 @@ export class JobService {
       relations: ['major', 'level', 'currency', 'fields', 'exp', 'type'],
     });
     return jobs;
+  }
+
+  async createJobInfo() {
+    const major = await this.findAllMajor();
+    const level = await this.findAllLevel();
+    const currency = await this.findAllCurrency();
+    const field = await this.findAllField();
+    const location = await this.findAllLocation();
+    const exp = await this.findAllExp();
+    const type = await this.findAllType();
+    return {
+      major,
+      level,
+      currency,
+      field,
+      location,
+      exp,
+      type,
+    };
   }
 
   async findJobById(id: number) {
