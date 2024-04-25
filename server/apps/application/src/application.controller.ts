@@ -1,37 +1,45 @@
 import { Controller } from '@nestjs/common';
 import { ApplicationService } from './application.service';
+// import { GrpcMethod } from '@nestjs/microservices';
+// import { CreateApplicationDto } from './dto/create-application.dto';
 import {
-  Application,
   ApplicationServiceController,
   ApplicationServiceControllerMethods,
+  Applications,
   CreateApplicationRequest,
+  DeleteApplicationRequest,
   ReadApplicationRequest,
+  UpdateApplicationRequest,
+  Pagination,
 } from '@app/common';
+import { Observable } from 'rxjs';
 
 @Controller()
 @ApplicationServiceControllerMethods()
 export class ApplicationController implements ApplicationServiceController {
   constructor(private readonly applicationService: ApplicationService) {}
-
-  async createApplication(
-    createApplication: CreateApplicationRequest,
-  ): Promise<Application> {
-    // Use Promise<Application> as return type
-    const application = await this.applicationService.create(createApplication);
-    return application;
+  createApplication(request: CreateApplicationRequest) {
+    return this.applicationService.store(request);
   }
 
-  findAllUsers() {
-    return this.applicationService.findAll();
+  readApplication(request: ReadApplicationRequest) {
+    return this.applicationService.findOneOrFail(request.id);
   }
 
-  async readApplication(
-    readApplication: ReadApplicationRequest,
-  ): Promise<Application> {
-    const application = await this.applicationService.findById(readApplication);
-    if (application) {
-      return application;
-    }
-    return null;
+  async readAllApplication(request: Pagination): Promise<Applications> {
+    // console.log(this.applicationService.findAll());
+    const data = await this.applicationService.findAll(
+      request.page,
+      request.limit,
+    );
+    return { applications: data };
+  }
+
+  updateApplication(request: UpdateApplicationRequest) {
+    return this.applicationService.update(request.id);
+  }
+
+  deleteApplication(request: DeleteApplicationRequest) {
+    return this.applicationService.delete(request.id);
   }
 }

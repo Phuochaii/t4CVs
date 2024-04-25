@@ -11,7 +11,7 @@ import { APPLICATION_PACKAGE_NAME } from '@app/common';
         name: APPLICATION_PACKAGE_NAME,
         transport: Transport.GRPC,
         options: {
-          url: 'localhost:50051',
+          url: 'localhost:50053',
           package: APPLICATION_PACKAGE_NAME,
           protoPath: join(__dirname, './proto/application.proto'),
         },

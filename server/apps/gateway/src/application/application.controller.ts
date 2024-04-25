@@ -3,9 +3,9 @@ import {
   Get,
   Post,
   Body,
-  // Patch,
+  Patch,
   Param,
-  // Delete,
+  Query,
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
 import { CreateApplicationRequest } from '@app/common';
@@ -19,20 +19,20 @@ export class ApplicationController {
     return this.applicationService.create(createApplicationRequest);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.applicationService.findAll();
-  // }
-
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.applicationService.findOne(id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateApplicationDto: UpdateApplicationDto) {
-  //   return this.applicationService.update(+id, updateApplicationDto);
-  // }
+  @Get()
+  findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
+    return this.applicationService.findAll(page, limit);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: number) {
+    return this.applicationService.update(id);
+  }
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {
