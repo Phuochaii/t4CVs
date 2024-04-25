@@ -1,5 +1,7 @@
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { DataSource, DataSourceOptions } from "typeorm";
+import { notifications, userNotifications } from './data'
+import { Notification, User_Notification } from "../entities";
 
 const DB_NOT_EXIST_ERROR_CODE = '3D000';
 const defaultConfig: TypeOrmModuleOptions = {
@@ -13,16 +15,29 @@ const defaultConfig: TypeOrmModuleOptions = {
     synchronize: true,
 };
 
+const doCallbackWithAutoCloseConnection = async (
+    option: DataSourceOptions,
+    callback: (dataSource: DataSource) => Promise<void>
+) => {
+    const appDataSource = await new DataSource(option).initialize();
+    await callback(appDataSource);
+    await appDataSource.destroy();
+}
+
 const createDatabase = async (name: string) => {
+    const createDatabaseSQL = `CREATE DATABASE ${name};`;
+    const createDatabase = async (dataSource: DataSource) => {
+        await dataSource.query(createDatabaseSQL);
+    }
+
     const postgresDBConnectOption = {
         ...defaultConfig,
         database: 'postgres'
-    }
-    const appDataSource = await new DataSource(
-        postgresDBConnectOption as DataSourceOptions
-    ).initialize();
-    await appDataSource.query(`CREATE DATABASE ${name};`);
-    await appDataSource.destroy();
+    } as DataSourceOptions;
+    await doCallbackWithAutoCloseConnection(
+        postgresDBConnectOption,
+        createDatabase
+    );
 }
 
 const isDatabaseExist = async (name: string) => {
@@ -32,11 +47,10 @@ const isDatabaseExist = async (name: string) => {
             database: name
         } as DataSourceOptions;
 
-        const appDataSource = await new DataSource(
-            dataSourceOption
-        ).initialize();
-
-        await appDataSource.destroy();
+        await doCallbackWithAutoCloseConnection(
+            dataSourceOption,
+            async () => { }
+        );
     } catch (error) {
         if (error.code === DB_NOT_EXIST_ERROR_CODE) {
             return false;
@@ -47,8 +61,23 @@ const isDatabaseExist = async (name: string) => {
     return true;
 }
 
+const insertData = async () => {
+    const option = {
+        ...defaultConfig,
+        entities: [Notification, User_Notification]
+    } as DataSourceOptions;
+    await doCallbackWithAutoCloseConnection(
+        option,
+        async (dataSource) => {
+            await dataSource.getRepository(Notification).insert(notifications);
+            await dataSource.getRepository(User_Notification).insert(userNotifications);
+        }
+    );
+}
+
 const initDatabase = async () => {
     await createDatabase(defaultConfig.database);
+    await insertData();
 }
 
 export const databaseConfig: () => Promise<TypeOrmModuleOptions> = async () => {
