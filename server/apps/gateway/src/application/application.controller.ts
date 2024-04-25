@@ -20,8 +20,19 @@ export class ApplicationController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.applicationService.findOne(id);
+  async findOne(@Param('id') id: number) {
+    // console.log(this.applicationService.findOne(id));
+    // return this.applicationService.findOne(id);
+    let campaignId;
+    const result = await this.applicationService.findOne(id);
+    this.applicationService.findOne(id).subscribe((value) => {
+      console.log(value);
+      campaignId = value.fullname;
+      console.log('123');
+      console.log(campaignId);
+    });
+
+    return result;
   }
 
   @Get()
