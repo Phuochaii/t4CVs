@@ -1,4 +1,9 @@
-import { APPLICATION_PACKAGE_NAME, APPLICATION_SERVICE_NAME, ApplicationServiceClient, CreateApplicationRequest } from '@app/common/proto/application';
+import {
+  APPLICATION_PACKAGE_NAME,
+  APPLICATION_SERVICE_NAME,
+  ApplicationServiceClient,
+  CreateApplicationRequest,
+} from '@app/common/proto/application';
 import {
   Inject,
   Injectable,
@@ -27,7 +32,7 @@ export class ApplicationService implements OnModuleInit {
   }
 
   create(createApplicationRequest: CreateApplicationRequest) {
-    console.log(createApplicationRequest);
+    // console.log(createApplicationRequest);
     return this.applicationServiceClient.createApplication(
       createApplicationRequest,
     );

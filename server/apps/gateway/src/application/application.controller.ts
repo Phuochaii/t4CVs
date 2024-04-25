@@ -8,21 +8,54 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
+import { CompanyService } from '../company/company.service';
+import {
+  NotificationService,
+  NotificationUserId,
+  NotificationUserRole,
+} from '../notification/notification.service';
 import { CreateApplicationRequest } from '@app/common/proto/application';
+import {
+  GetUserNotificationsRequest,
+  NOTIFICATION_PACKAGE_NAME,
+  NOTIFICATION_SERVICE_NAME,
+  NotificationServiceClient,
+  SendNotificationRequest,
+  status,
+} from '@app/common/proto/notification';
 
 @Controller('application')
 export class ApplicationController {
-  constructor(private readonly applicationService: ApplicationService) {}
+  constructor(
+    private readonly applicationService: ApplicationService,
+    private readonly companyService: CompanyService,
+    private readonly notificationService: NotificationService,
+  ) {}
 
   @Post()
   create(@Body() createApplicationRequest: CreateApplicationRequest) {
+    console.log(createApplicationRequest.campaignId);
+    this.applicationService
+      .create(createApplicationRequest)
+      .subscribe((application: any) => {
+        this.companyService.findCampaignById(5).subscribe((value: any) => {
+          const employerId = value.employerId;
+          this.notificationService.create(
+            [new NotificationUserId(employerId, NotificationUserRole.HR)],
+            {
+              content: `Ứng viên - ${value.name}`,
+              link: `application/${application.id}`,
+              title: `CV mới ứng tuyển`,
+            },
+          );
+        });
+      });
+
     return this.applicationService.create(createApplicationRequest);
   }
 
   @Get(':id')
   async findOne(@Param('id') id: number) {
-    // console.log(this.applicationService.findOne(id));
-    // return this.applicationService.findOne(id);
     let campaignId;
     const result = await this.applicationService.findOne(id);
     this.applicationService.findOne(id).subscribe((value) => {
