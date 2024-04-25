@@ -24,7 +24,6 @@ function ReceiveCV() {
   const listCV = [
     {
       name: "Nguyễn Thị Lụa",
-      statusView: "Đã xem",
       campaign: {
         name: "Tuyển nhân viên Tester",
         id: "#407764",
@@ -34,9 +33,8 @@ function ReceiveCV() {
       insight: {
         descript: "Tìm CV",
         time: "07/04/2024 09:22",
-        job: "Chuyên viên nhân sự tổng hợp",
       },
-      status: "Phù hợp",
+      status: "Đã xem",
     },
   ];
   const recruitmentCampaign = [
@@ -212,7 +210,6 @@ function ReceiveCV() {
                     >
                       <td>
                         <p className="font-semibold">{item.name}</p>
-                        <span className="text-sm">{item.statusView}</span>
                       </td>
                       <td>
                         <p>{item.campaign.name}</p>
@@ -253,14 +250,6 @@ function ReceiveCV() {
                           />
                           {item.insight.time}
                         </p>
-                        <p className="flex">
-                          <BriefcaseBusiness
-                            size={15}
-                            color="#38A34D"
-                            style={{ marginRight: "5px" }}
-                          />
-                          {item.insight.job}
-                        </p>
                       </td>
                       <td>
                         <div className="rounded-full bg-orange-100 text-orange-400 px-3">
@@ -269,10 +258,11 @@ function ReceiveCV() {
                       </td>
                       <td>
                         <button
-                          className="btn px-3 rounded-md ml-5"
-                          style={{ backgroundColor: "#EAEAEA" }}
+                          className="btn px-3 py-2 text-white rounded-md ml-5"
+                          style={{ backgroundColor: "#5EE199" }}
                         >
-                          <Ellipsis size={18} />
+                          {/* <Ellipsis size={18} /> */}
+                          Xem CV
                         </button>
                       </td>
                     </tr>
