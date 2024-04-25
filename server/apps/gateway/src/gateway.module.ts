@@ -13,8 +13,8 @@ import { Company } from 'apps/company-service/src/entities/company.entity';
   imports: [
     ApplicationModule,
     NotificationModule,
-    // JobModule,
-    // UploadModule,
+    JobModule,
+    UploadModule,
     CompanyModule,
   ],
   controllers: [GatewayController],
