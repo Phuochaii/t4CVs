@@ -14,8 +14,11 @@ export class CompanyService {
     return this.companyClient.send({ cmd: 'create_company' }, createCompanyDTO);
   }
 
-  getAllCompanies(page: number): Observable<string> {
-    return this.companyClient.send({ cmd: 'get_all_companies' }, page);
+  getAllCompanies(page: number, limit: number): Observable<string> {
+    return this.companyClient.send(
+      { cmd: 'get_all_companies' },
+      { page, limit },
+    );
   }
 
   findCompanyById(id: number): Observable<string> {
@@ -37,8 +40,11 @@ export class CompanyService {
     );
   }
 
-  getAllCampaigns(page: number): Observable<string> {
-    return this.companyClient.send({ cmd: 'get_all_campaigns' }, page);
+  getAllCampaigns(page: number, limit: number): Observable<string> {
+    return this.companyClient.send(
+      { cmd: 'get_all_campaigns' },
+      { page, limit },
+    );
   }
 
   findCampaignById(id: number): Observable<string> {

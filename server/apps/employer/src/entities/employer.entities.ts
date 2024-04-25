@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Position } from './position.entities';
-import { Company } from 'apps/company-service/src/entities/company.entity';
+// import { Company } from 'apps/company-service/src/entities/company.entity';
 
 @Entity({ name: 'Employer' })
 export class Employer {

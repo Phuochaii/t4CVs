@@ -20,11 +20,10 @@ export class CompanyServiceService {
   }
 
   // eslint-disable-next-line prettier/prettier
-  async findAllCompanies(page: number): Promise<FindCompanyDTOResponse[]> {
-    const limit = 10;
-    const offset = (page - 1) * limit;
+  async findAllCompanies(page: number, limit: number): Promise<FindCompanyDTOResponse[]> {
+    const skip = (page - 1) * limit;
     const companies = await this.CompanyRepository.find({
-      skip: offset,
+      skip: skip,
       take: limit,
     });
 
