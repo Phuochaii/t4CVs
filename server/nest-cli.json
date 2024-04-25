@@ -10,7 +10,6 @@
   "monorepo": true,
   "root": "apps/gateway",
   "projects": {
-
     "gateway": {
       "type": "application",
       "root": "apps/gateway",
@@ -31,19 +30,6 @@
       "sourceRoot": "apps/cv-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/cv-service/tsconfig.app.json"
-      }
-    },
-    "job-application-service": {
-      "type": "application",
-      "root": "apps/job-application-service",
-      "entryFile": "main",
-      "sourceRoot": "apps/job-application-service/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/job-application-service/tsconfig.app.json",
-        "assets": [
-          "./proto/*.proto"
-        ],
-        "watchAssets": true
       }
     },
     "common": {
@@ -93,8 +79,19 @@
       "sourceRoot": "apps/application/src",
       "compilerOptions": {
         "tsConfigPath": "apps/application/tsconfig.app.json",
-        "assets": ["./proto/*.proto"],
+        "assets": [
+          "./proto/*.proto"
+        ],
         "watchAssets": true
+      }
+    },
+    "company-service": {
+      "type": "application",
+      "root": "apps/company-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/company-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/company-service/tsconfig.app.json"
       }
     }
   }
