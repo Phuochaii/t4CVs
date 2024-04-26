@@ -33,4 +33,9 @@ export class CVService {
   deleteCV(id: number): Observable<any> {
     return this.cvClient.send({ cmd: 'deleteCV' }, id);
   }
+
+  downloadCV(id: number): Observable<any> {
+    console.log(1);
+    return this.cvClient.send({ cmd: 'downloadCV' }, id);
+  }
 }

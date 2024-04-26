@@ -42,4 +42,10 @@ export class CVController {
   async remove(id: number): Promise<void> {
     return this.cvService.remove(id);
   }
+
+  @MessagePattern({ cmd: 'downloadCV' })
+  async downloadCV(id: number): Promise<any> {
+    console.log(1);
+    return this.cvService.downloadCV(id);
+  }
 }
