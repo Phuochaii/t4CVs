@@ -61,5 +61,9 @@ export class CVController {
   deleteCV(@Param('id') id: number): Observable<any> {
     return this.cvService.deleteCV(id);
   }
-}
 
+  @Get('download/:id')
+  downloadCV(@Param('id') id: number): Observable<any> {
+    return this.cvService.downloadCV(id);
+  }
+}
