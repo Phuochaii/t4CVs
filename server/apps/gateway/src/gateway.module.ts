@@ -8,6 +8,7 @@ import { GatewayController } from './gateway.controller';
 import { GatewayService } from './gateway.service';
 import { NotificationModule } from './notification/notification.module';
 import { Company } from 'apps/company-service/src/entities/company.entity';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { Company } from 'apps/company-service/src/entities/company.entity';
     JobModule,
     UploadModule,
     CompanyModule,
+    UserModule,
   ],
   controllers: [GatewayController],
   providers: [GatewayService],

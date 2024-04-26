@@ -36,7 +36,7 @@ export class Job {
   fields: Field[];
 
   @Column()
-  compaignId: number;
+  campaignId: number;
 
   @ManyToOne(() => Type)
   @JoinColumn()

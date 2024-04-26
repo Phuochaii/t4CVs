@@ -8,6 +8,9 @@ import { UpdateJobDto } from './dto/Req/update-job.dto';
 @Injectable()
 export class JobService {
   constructor(@Inject('JOB') private readonly jobClient: ClientProxy) {}
+  findJobByCampaignId(campaignId: number): Observable<string> {
+    return this.jobClient.send({ cmd: 'find_job_by_campaignId' }, campaignId);
+  }
   getAllJobs(query: any): Observable<string> {
     return this.jobClient.send({ cmd: 'get_all_jobs' }, query);
   }

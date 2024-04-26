@@ -33,6 +33,26 @@ export class JobService {
     private typeService: TypeService,
   ) {}
 
+  async findJobByCampaignId(campaignId: number) {
+    const result = await this.jobRepository.findOne({
+      where: {
+        status: true,
+        campaignId,
+      },
+      relations: [
+        'jobDetail',
+        'major',
+        'level',
+        'currency',
+        'fields',
+        'exp',
+        'type',
+      ],
+    });
+    //await result.jobDetail;
+    return result;
+  }
+
   async create(createJobDto: CreateJobDto) {
     const job = await this.jobRepository.save(createJobDto);
     const jobDetail = await this.jobDetailService.createJobDetail(createJobDto);
