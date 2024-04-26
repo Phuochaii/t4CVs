@@ -10,6 +10,11 @@ import { QueryDTO } from './dto/Req/query.dto';
 export class JobController {
   constructor(private readonly jobService: JobService) {}
 
+  @MessagePattern({ cmd: 'find_job_by_campaignId' })
+  findJobByCampaignId(campaignId: number) {
+    return this.jobService.findJobByCampaignId(campaignId);
+  }
+
   @MessagePattern({ cmd: 'create_job' })
   createJob(job: CreateJobDto) {
     this.jobService.create(job);

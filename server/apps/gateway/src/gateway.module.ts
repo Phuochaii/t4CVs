@@ -14,13 +14,9 @@ import { UserModule } from './user/user.module';
   imports: [
     ApplicationModule,
     NotificationModule,
-
     JobModule,
-
     UploadModule,
-
     CompanyModule,
-    ,
     UserModule,
   ],
   controllers: [GatewayController],
