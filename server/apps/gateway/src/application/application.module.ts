@@ -7,6 +7,9 @@ import { ApplicationController } from './application.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { APPLICATION_PACKAGE_NAME } from '@app/common/proto/application';
+import { CVModule } from '../cv/cv.module';
+import { EmployerModule } from '../employer/employer.module';
+import { JobModule } from '../job/job.module';
 
 @Module({
   imports: [
@@ -21,19 +24,12 @@ import { APPLICATION_PACKAGE_NAME } from '@app/common/proto/application';
         },
       },
     ]),
-    // ClientsModule.register([
-    //   {
-    //     name: 'COMPANY',
-    //     transport: Transport.TCP,
-    //     options: {
-    //       host: 'localhost',
-    //       port: 3003,
-    //     },
-    //   },
-    // ]),
     CompanyModule,
     NotificationModule,
     UserModule,
+    CVModule,
+    EmployerModule,
+    JobModule,
   ],
   controllers: [ApplicationController],
   providers: [ApplicationService],

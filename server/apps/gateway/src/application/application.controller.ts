@@ -27,29 +27,35 @@ export class ApplicationController {
   ) {}
 
   @Post()
-  create(@Body() createApplicationRequest: CreateApplicationRequest) {
+  async create(@Body() createApplicationRequest: CreateApplicationRequest) {
     // console.log(createApplicationRequest.campaignId);
     this.applicationService
       .create(createApplicationRequest)
       .subscribe((application: any) => {
-        this.companyService.findCampaignById(5).subscribe((campaign: any) => {
-          const employerId = campaign.employerId;
-          this.userService
-            .findJobById(createApplicationRequest.userId)
-            .subscribe((user: any) => {
-              this.notificationService.create(
-                [new NotificationUserId(employerId, NotificationUserRole.HR)],
-                {
-                  content: `Ứng viên ${user.fullname} - ${campaign.name}`,
-                  link: `application/${application.id}`,
-                  title: `CV mới ứng tuyển`,
-                },
-              );
-            });
-        });
+        this.companyService
+          .findCampaignById(createApplicationRequest.campaignId)
+          .subscribe((campaign: any) => {
+            const employerId = campaign.employerId;
+            this.userService
+              .findJobById(createApplicationRequest.userId)
+              .subscribe((user: any) => {
+                this.notificationService.create(
+                  [new NotificationUserId(employerId, NotificationUserRole.HR)],
+                  {
+                    content: `Ứng viên ${user.fullname} - ${campaign.name}`,
+                    link: `application/${application.id}`,
+                    title: `CV mới ứng tuyển`,
+                  },
+                );
+              });
+          });
       });
-
     return this.applicationService.create(createApplicationRequest);
+  }
+
+  @Get(':id/cv')
+  hrGetCv(@Param('id') id: number) {
+    return this.applicationService.hrGetCv(id);
   }
 
   @Get(':id')
@@ -76,8 +82,5 @@ export class ApplicationController {
     return this.applicationService.update(id);
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.applicationService.remove(+id);
-  // }
+  
 }

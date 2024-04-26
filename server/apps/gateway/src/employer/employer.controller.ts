@@ -18,7 +18,7 @@ export class EmployerController {
   }
 
   @Get(':id')
-  findEmployerById(@Param('id') id: number): Observable<string> {
+  findEmployerById(@Param('id') id: number) {
     return this.employerService.findEmployerById(id);
   }
 
@@ -38,12 +38,12 @@ export class EmployerController {
   // }
 
   @Get('position/all')
-  getAllCampaigns(): Observable<string> {
+  getAllPositions(): Observable<string> {
     return this.employerService.getAllPositions();
   }
 
   @Get('position/:id')
-  findCampaignById(@Param('id') id: number): Observable<string> {
+  findPositionById(@Param('id') id: number): Observable<string> {
     return this.employerService.findPositionById(id);
   }
 
