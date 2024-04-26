@@ -15,6 +15,7 @@ import {
   NotificationUserRole,
 } from '../notification/notification.service';
 import { CreateApplicationRequest } from '@app/common/proto/application';
+import { UserService } from '../user/user.service';
 
 @Controller('application')
 export class ApplicationController {
@@ -22,24 +23,29 @@ export class ApplicationController {
     private readonly applicationService: ApplicationService,
     private readonly companyService: CompanyService,
     private readonly notificationService: NotificationService,
+    private readonly userService: UserService,
   ) {}
 
   @Post()
   create(@Body() createApplicationRequest: CreateApplicationRequest) {
-    console.log(createApplicationRequest.campaignId);
+    // console.log(createApplicationRequest.campaignId);
     this.applicationService
       .create(createApplicationRequest)
       .subscribe((application: any) => {
-        this.companyService.findCampaignById(5).subscribe((value: any) => {
-          const employerId = value.employerId;
-          this.notificationService.create(
-            [new NotificationUserId(employerId, NotificationUserRole.HR)],
-            {
-              content: `Ứng viên user.fullname? - ${value.name}`,
-              link: `application/${application.id}`,
-              title: `CV mới ứng tuyển`,
-            },
-          );
+        this.companyService.findCampaignById(5).subscribe((campaign: any) => {
+          const employerId = campaign.employerId;
+          this.userService
+            .findJobById(createApplicationRequest.userId)
+            .subscribe((user: any) => {
+              this.notificationService.create(
+                [new NotificationUserId(employerId, NotificationUserRole.HR)],
+                {
+                  content: `Ứng viên ${user.fullname} - ${campaign.name}`,
+                  link: `application/${application.id}`,
+                  title: `CV mới ứng tuyển`,
+                },
+              );
+            });
         });
       });
 

@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ApplicationService } from './application.service';
-import { CompanyService } from '../company/company.service';
 import { CompanyModule } from '../company/company.module';
 import { NotificationModule } from '../notification/notification.module';
-import { NotificationService } from '../notification/notification.service';
+import { UserModule } from '../user/user.module';
 import { ApplicationController } from './application.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { APPLICATION_PACKAGE_NAME } from '@app/common/proto/application';
-import { NOTIFICATION_PACKAGE_NAME } from '@app/common/proto/notification';
+
 @Module({
   imports: [
     ClientsModule.register([
@@ -34,6 +33,7 @@ import { NOTIFICATION_PACKAGE_NAME } from '@app/common/proto/notification';
     // ]),
     CompanyModule,
     NotificationModule,
+    UserModule,
   ],
   controllers: [ApplicationController],
   providers: [ApplicationService],
