@@ -6,6 +6,7 @@ import { UpdateCompanyDto } from './dto/Req/updateCompany.dto';
 import { CreateCampaignDto } from './dto/Req/createCampaign.dto';
 import { UpdateCampaignDto } from './dto/Req/updateCampaign.dto';
 import { FindCampaignDTOResponse } from './dto/Res/find-campaign.dto';
+import { FindCompanyDTOResponse } from './dto/Res/find-company.dto';
 
 @Injectable()
 export class CompanyService {
@@ -22,8 +23,8 @@ export class CompanyService {
     );
   }
 
-  findCompanyById(id: number): Observable<string> {
-    return this.companyClient.send({ cmd: 'find_company_by_id' }, id);
+  findCompanyById(id: number) {
+    return this.companyClient.send<FindCompanyDTOResponse>({ cmd: 'find_company_by_id' }, id);
   }
 
   updateCompany(data: UpdateCompanyDto): Observable<string> {

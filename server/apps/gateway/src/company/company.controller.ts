@@ -32,7 +32,7 @@ export class CompanyController {
   }
 
   @Get(':id')
-  findCompanyById(@Param('id') id: number): Observable<string> {
+  findCompanyById(@Param('id') id: number) {
     return this.companyService.findCompanyById(id);
   }
 
