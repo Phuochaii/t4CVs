@@ -24,4 +24,4 @@ import { EmployerModule } from './employer/employer.module';
   controllers: [GatewayController],
   providers: [GatewayService],
 })
-export class GatewayModule { }
+export class GatewayModule {}
