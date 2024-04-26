@@ -1,41 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import { UploadCVDto } from './dto/upload.dto';
+import { Module, Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import * as fs from 'fs';
+import * as path from 'path';
+import { CVDto } from './dto/cv.dto';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class UploadService {
-  async uploadCV(uploadCVDto: UploadCVDto): Promise<any> {
-    const {
-      file,
-      filename,
-      mimetype,
-      fileSize,
-      userId,
-      cvId,
-      uploadDate,
-      updateDate,
-    } = uploadCVDto;
-
-    // File size validation (5MB limit)
-    if (fileSize > 5 * 1024 * 1024) {
-      throw new Error('File size exceeds 5MB limit');
-    }
-
-    // Validate supported file types (PDF, DOC, DOCX)
-    const allowedMimeTypes = [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ];
-    if (!allowedMimeTypes.includes(mimetype)) {
-      throw new Error(
-        'Invalid file type. Only PDF, DOC, and DOCX files are allowed',
-      );
-    }
-
-    const newFilename = `${uuidv4()}.${filename.split('.').pop()}`;
-
+  constructor(private readonly httpService: HttpService) {}
+  async uploadCV(data): Promise<any> {
+    const { file, userId } = data;
+    const fileExtension = path.extname(file.originalname);
+    const newFilename = `${uuidv4()}${fileExtension}`;
     const uploadPath = './uploads';
 
     if (!fs.existsSync(uploadPath)) {
@@ -43,9 +19,23 @@ export class UploadService {
     }
 
     try {
-      const decodedFile = Buffer.from(file, 'base64');
-      fs.writeFileSync(`${uploadPath}/${newFilename}`, decodedFile);
-      return newFilename;
+      await fs.promises.rename(file.path, `${uploadPath}/${newFilename}`);
+      const cvDto = new CVDto();
+      cvDto.userId = Number(userId.userId);
+      cvDto.templateId = 1;
+      cvDto.link = `localhost:3000/cv/${newFilename}`;
+      cvDto.creationAt = new Date();
+      cvDto.isPublic = true;
+      cvDto.lastModified = new Date();
+
+      console.log(JSON.stringify(cvDto));
+
+      const result = this.httpService.post(
+        'http://localhost:3000/cv',
+        JSON.stringify(cvDto),
+      );
+
+      return result;
     } catch (error: any) {
       console.error('Error uploading file:', error);
       throw new Error(error);

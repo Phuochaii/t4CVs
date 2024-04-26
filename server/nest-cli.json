@@ -23,14 +23,17 @@
         "watchAssets": true
       }
     },
-    "cv-service": {
+    "job-application-service": {
       "type": "application",
-      "root": "apps/cv-service",
+      "root": "apps/job-application-service",
       "entryFile": "main",
-      "sourceRoot": "apps/cv-service/src",
+      "sourceRoot": "apps/job-application-service/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/cv-service/tsconfig.app.json"
-      }
+        "tsConfigPath": "apps/job-application-service/tsconfig.app.json",
+        "assets": [
+          "./proto/*.proto"
+        ],
+        "watchAssets": true
     },
     "common": {
       "type": "library",
@@ -48,6 +51,15 @@
       "sourceRoot": "apps/upload/src",
       "compilerOptions": {
         "tsConfigPath": "apps/upload/tsconfig.app.json"
+      }
+    },
+    "cv": {
+      "type": "application",
+      "root": "apps/cv",
+      "entryFile": "main",
+      "sourceRoot": "apps/cv/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/cv/tsconfig.app.json"
       }
     },
     "notification-service": {
