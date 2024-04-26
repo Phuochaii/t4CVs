@@ -11,7 +11,7 @@ import {
   ReadApplicationRequest,
   UpdateApplicationRequest,
   Pagination,
-} from '@app/common';
+} from '@app/common/proto/application';
 import { Observable } from 'rxjs';
 
 @Controller()
