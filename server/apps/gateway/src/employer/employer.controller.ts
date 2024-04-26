@@ -18,7 +18,7 @@ export class EmployerController {
   }
 
   @Get(':id')
-  findCompanyById(@Param('id') id: number): Observable<string> {
+  findCompanyById(@Param('id') id: number) {
     return this.employerService.findEmployerById(id);
   }
 
