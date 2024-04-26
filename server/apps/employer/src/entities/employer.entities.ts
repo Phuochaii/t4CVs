@@ -39,5 +39,5 @@ export class Employer {
   @Column()
   phoneNumberStatus: boolean;
   @Column()
-  imgae: string;
+  image: string;
 }
