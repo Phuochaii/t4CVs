@@ -63,7 +63,8 @@ export interface UpdateNotificationStatusRequest {
   status: status;
 }
 
-export interface Empty {
+export interface UpdateNotificationStatusResponse {
+  status: status;
 }
 
 export const NOTIFICATION_PACKAGE_NAME = "notification";
@@ -75,7 +76,7 @@ export interface NotificationServiceClient {
 
   getNotifications(request: GetUserNotificationsRequest): Observable<GetUserNotificationsResponse>;
 
-  updateNotificationStatus(request: UpdateNotificationStatusRequest): Observable<Empty>;
+  updateNotificationStatus(request: UpdateNotificationStatusRequest): Observable<UpdateNotificationStatusResponse>;
 }
 
 /** The job application service definition. */
@@ -89,7 +90,12 @@ export interface NotificationServiceController {
     request: GetUserNotificationsRequest,
   ): Promise<GetUserNotificationsResponse> | Observable<GetUserNotificationsResponse> | GetUserNotificationsResponse;
 
-  updateNotificationStatus(request: UpdateNotificationStatusRequest): Promise<Empty> | Observable<Empty> | Empty;
+  updateNotificationStatus(
+    request: UpdateNotificationStatusRequest,
+  ):
+    | Promise<UpdateNotificationStatusResponse>
+    | Observable<UpdateNotificationStatusResponse>
+    | UpdateNotificationStatusResponse;
 }
 
 export function NotificationServiceControllerMethods() {

@@ -8,7 +8,7 @@ import "google/protobuf/timestamp.proto";
 service NotificationService {
     rpc SendNotification (SendNotificationRequest) returns (SendNotificationResponse) {}
     rpc GetNotifications (GetUserNotificationsRequest) returns (GetUserNotificationsResponse) {}
-    rpc UpdateNotificationStatus (UpdateNotificationStatusRequest) returns (Empty) {}
+    rpc UpdateNotificationStatus (UpdateNotificationStatusRequest) returns (UpdateNotificationStatusResponse) {}
 //   rpc CreateJobApplication (CreateJobApplicationRequest) returns (JobApplication) {}
 }
 
@@ -68,4 +68,6 @@ message UpdateNotificationStatusRequest {
     status status = 3;
 }
 
-message Empty {}
+message UpdateNotificationStatusResponse {
+    status status = 1;
+}

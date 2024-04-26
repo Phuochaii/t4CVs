@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { NotificationServiceService } from './services';
-import { Empty, GetUserNotificationsRequest, GetUserNotificationsResponse, NotificationServiceController, NotificationServiceControllerMethods, SendNotificationRequest, SendNotificationResponse, UpdateNotificationStatusRequest, status } from '@app/common/proto/notification';
+import { GetUserNotificationsRequest, GetUserNotificationsResponse, NotificationServiceController, NotificationServiceControllerMethods, SendNotificationRequest, SendNotificationResponse, UpdateNotificationStatusRequest, UpdateNotificationStatusResponse, status } from '@app/common/proto/notification';
 import { Observable } from 'rxjs';
 import { PaginationRequest, PaginationResponse } from '@app/common';
 import { NotificationStatus } from './entities';
@@ -17,13 +17,16 @@ export class NotificationController implements NotificationServiceController {
       notificationId,
       status
     }: UpdateNotificationStatusRequest
-  ): Promise<Empty | Observable<Empty>> {
-    await this.notificationServiceService.updateNotificationStatus(
+  ): Promise<UpdateNotificationStatusResponse> {
+    const userNotification = await this.notificationServiceService.updateNotificationStatus(
       userId,
       notificationId,
       status as unknown as NotificationStatus
     );
-    return true;
+
+    return {
+      status: userNotification.status as unknown as status,
+    }
   }
 
   async getNotifications(
