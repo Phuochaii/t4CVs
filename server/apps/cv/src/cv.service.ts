@@ -84,7 +84,7 @@ export class CVService {
         cvDto.link,
         cvDto.isPublic ? 1 : 0,
         id,
-        function (err) {
+        function (err: any) {
           if (err) {
             reject(err);
           } else {
@@ -106,7 +106,7 @@ export class CVService {
     });
   }
 
-  async uploadCV(data): Promise<any> {
+  async uploadCV(data: any): Promise<any> {
     const { file, userId } = data;
     const fileExtension = path.extname(file.originalname);
     const newFilename = `${uuidv4()}${fileExtension}`;
