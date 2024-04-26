@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Get, Param, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Get,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/Req/createCompany.dto';
@@ -15,9 +23,12 @@ export class CompanyController {
     return this.companyService.createCompany(data);
   }
 
-  @Get('all/:page')
-  getAllCompanies(@Param('page') page: number): Observable<string> {
-    return this.companyService.getAllCompanies(page);
+  @Get('all')
+  getAllCompanies(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ): Observable<string> {
+    return this.companyService.getAllCompanies(page, limit);
   }
 
   @Get(':id')
@@ -40,9 +51,12 @@ export class CompanyController {
     return this.companyService.createCampaign(data);
   }
 
-  @Get('campaign/all/:page')
-  getAllCampaigns(@Param('page') page: number): Observable<string> {
-    return this.companyService.getAllCampaigns(page);
+  @Get('campaign/all')
+  getAllCampaigns(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ): Observable<string> {
+    return this.companyService.getAllCampaigns(page, limit);
   }
 
   @Get('campaign/:id')

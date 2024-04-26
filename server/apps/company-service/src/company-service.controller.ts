@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { CompanyServiceService } from './company-service.service';
 import { CampaignService } from './campaign/campaign.service';
-import { MessagePattern } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CreateCompanyDto } from './dto/Req/create-company.dto';
 import { UpdateCompanyDto } from './dto/Req/update-company.dto';
 import { CreateCampaignDto } from './dto/Req/create-campaign.dto';
@@ -22,8 +22,11 @@ export class CompanyServiceController {
   }
 
   @MessagePattern({ cmd: 'get_all_companies' })
-  findAllCompanies(page: number = 1) {
-    return this.companyServiceService.findAllCompanies(page);
+  findAllCompanies(@Payload() data: any) {
+    const page = data.page;
+    const limit = data.limit;
+
+    return this.companyServiceService.findAllCompanies(page, limit);
   }
 
   @MessagePattern({ cmd: 'find_company_by_id' })
@@ -49,8 +52,11 @@ export class CompanyServiceController {
   }
 
   @MessagePattern({ cmd: 'get_all_campaigns' })
-  findAllCampaign(page: number = 1) {
-    return this.campaignService.findAllCampaigns(page);
+  findAllCampaign(@Payload() data: any) {
+    const page = data.page;
+    const limit = data.limit;
+
+    return this.campaignService.findAllCampaigns(page, limit);
   }
 
   @MessagePattern({ cmd: 'find_campaign_by_id' })

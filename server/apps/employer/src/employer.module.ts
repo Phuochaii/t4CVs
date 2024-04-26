@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { CompanyServiceController } from './company-service.controller';
-import { CompanyServiceService } from './company-service.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { EmployerController } from './employer.controller';
+import { EmployerService } from './employer.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Company } from './entities/company.entity';
-import { CampaignModule } from './campaign/campaign.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Employer } from './entities/employer.entities';
+import { PositionModule } from './position/position.module';
 
 @Module({
   imports: [
@@ -24,10 +24,10 @@ import { CampaignModule } from './campaign/campaign.module';
         synchronize: true,
       }),
     }),
-    TypeOrmModule.forFeature([Company]),
-    CampaignModule,
+    TypeOrmModule.forFeature([Employer]),
+    PositionModule,
   ],
-  controllers: [CompanyServiceController],
-  providers: [CompanyServiceService],
+  controllers: [EmployerController],
+  providers: [EmployerService],
 })
-export class CompanyServiceModule {}
+export class EmployerModule {}
