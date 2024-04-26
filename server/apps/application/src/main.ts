@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { join } from 'path';
 import { Transport } from '@nestjs/microservices';
-import { APPLICATION_PACKAGE_NAME } from '@app/common';
+import { APPLICATION_PACKAGE_NAME } from '@app/common/proto/application';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice(AppModule, {

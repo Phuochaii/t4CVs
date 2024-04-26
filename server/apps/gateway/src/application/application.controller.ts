@@ -8,20 +8,62 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
-import { CreateApplicationRequest } from '@app/common';
+import { CompanyService } from '../company/company.service';
+import {
+  NotificationService,
+  NotificationUserId,
+  NotificationUserRole,
+} from '../notification/notification.service';
+import { CreateApplicationRequest } from '@app/common/proto/application';
+import { UserService } from '../user/user.service';
 
 @Controller('application')
 export class ApplicationController {
-  constructor(private readonly applicationService: ApplicationService) {}
+  constructor(
+    private readonly applicationService: ApplicationService,
+    private readonly companyService: CompanyService,
+    private readonly notificationService: NotificationService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post()
   create(@Body() createApplicationRequest: CreateApplicationRequest) {
+    // console.log(createApplicationRequest.campaignId);
+    this.applicationService
+      .create(createApplicationRequest)
+      .subscribe((application: any) => {
+        this.companyService.findCampaignById(5).subscribe((campaign: any) => {
+          const employerId = campaign.employerId;
+          this.userService
+            .findJobById(createApplicationRequest.userId)
+            .subscribe((user: any) => {
+              this.notificationService.create(
+                [new NotificationUserId(employerId, NotificationUserRole.HR)],
+                {
+                  content: `Ứng viên ${user.fullname} - ${campaign.name}`,
+                  link: `application/${application.id}`,
+                  title: `CV mới ứng tuyển`,
+                },
+              );
+            });
+        });
+      });
+
     return this.applicationService.create(createApplicationRequest);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.applicationService.findOne(id);
+  async findOne(@Param('id') id: number) {
+    let campaignId;
+    const result = await this.applicationService.findOne(id);
+    this.applicationService.findOne(id).subscribe((value) => {
+      console.log(value);
+      campaignId = value.fullname;
+      console.log('123');
+      console.log(campaignId);
+    });
+
+    return result;
   }
 
   @Get()

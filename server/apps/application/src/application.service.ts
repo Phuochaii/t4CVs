@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { Application } from './entities/application.entity';
 
-
 @Injectable()
 export class ApplicationService {
   private readonly applications: Application[] = [];
