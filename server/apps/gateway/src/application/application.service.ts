@@ -1,18 +1,28 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import {
-  CreateApplicationRequest,
   APPLICATION_PACKAGE_NAME,
-  ApplicationServiceClient,
   APPLICATION_SERVICE_NAME,
-} from '@app/common';
+  ApplicationServiceClient,
+  CreateApplicationRequest,
+} from '@app/common/proto/application';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  OnModuleInit,
+} from '@nestjs/common';
+
 import { ClientGrpc } from '@nestjs/microservices';
+// import { Observable, from, throwError, toArray } from 'rxjs';
+// import { catchError, map, mergeAll } from 'rxjs/operators';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
+  private readonly application: any[] = [];
   private applicationServiceClient: ApplicationServiceClient;
 
-  @Inject(APPLICATION_PACKAGE_NAME)
-  private readonly client: ClientGrpc;
+  constructor(
+    @Inject(APPLICATION_PACKAGE_NAME) private readonly client: ClientGrpc,
+  ) {}
 
   onModuleInit() {
     this.applicationServiceClient =
@@ -21,25 +31,26 @@ export class ApplicationService implements OnModuleInit {
       );
   }
 
-  create(CreateApplicationRequest: CreateApplicationRequest) {
+  create(createApplicationRequest: CreateApplicationRequest) {
+    // console.log(createApplicationRequest);
     return this.applicationServiceClient.createApplication(
-      CreateApplicationRequest,
+      createApplicationRequest,
     );
   }
-
-  // findAll() {
-  //   return `This action returns all application`;
-  // }
 
   findOne(id: number) {
     return this.applicationServiceClient.readApplication({ id });
   }
+  findAll(page: number, limit: number) {
+    const applications$ = this.applicationServiceClient.readAllApplication({
+      page,
+      limit,
+    });
+    return applications$;
+  }
 
-  // update(id: number, updateApplicationDto: UpdateApplicationDto) {
-  //   return `This action updates a #${id} application`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} application`;
-  // }
+  async update(id: number) {
+    const data = await this.applicationServiceClient.updateApplication({ id });
+    return data;
+  }
 }
