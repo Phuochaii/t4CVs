@@ -53,6 +53,11 @@ export class ApplicationController {
     return this.applicationService.create(createApplicationRequest);
   }
 
+  @Get(':id/cv')
+  hrGetCv(@Param('id') id: number) {
+    return this.applicationService.hrGetCv(id);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: number) {
     let campaignId;
@@ -77,8 +82,5 @@ export class ApplicationController {
     return this.applicationService.update(id);
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.applicationService.remove(+id);
-  // }
+  
 }
