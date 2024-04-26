@@ -7,12 +7,12 @@ import { UpdateJobDto } from './dto/Req/update-job.dto';
 
 @Controller('job')
 export class JobController {
-  constructor(private readonly jobService: JobService) {}
+  constructor(private readonly jobService: JobService) { }
 
   @Get('')
   findJobByCampaignId(
     @Query('campaignId') campaignId: number,
-  ): Observable<string> {
+  ) {
     return this.jobService.findJobByCampaignId(campaignId);
   }
 
