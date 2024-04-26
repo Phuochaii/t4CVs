@@ -15,14 +15,6 @@ import {
   NotificationUserRole,
 } from '../notification/notification.service';
 import { CreateApplicationRequest } from '@app/common/proto/application';
-import {
-  GetUserNotificationsRequest,
-  NOTIFICATION_PACKAGE_NAME,
-  NOTIFICATION_SERVICE_NAME,
-  NotificationServiceClient,
-  SendNotificationRequest,
-  status,
-} from '@app/common/proto/notification';
 
 @Controller('application')
 export class ApplicationController {
@@ -43,7 +35,7 @@ export class ApplicationController {
           this.notificationService.create(
             [new NotificationUserId(employerId, NotificationUserRole.HR)],
             {
-              content: `Ứng viên - ${value.name}`,
+              content: `Ứng viên user.fullname? - ${value.name}`,
               link: `application/${application.id}`,
               title: `CV mới ứng tuyển`,
             },

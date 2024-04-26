@@ -3,7 +3,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { config } from 'dotenv';
 import { resolve } from 'path';
 
-const envPath = resolve(__dirname, '../../../configs/.env.applicationservice');
+const envPath = resolve(__dirname, '../../../configs/.env.application');
 config({ path: envPath });
 
 const DB_PORT = parseInt(process.env.DB_PORT, 10);
