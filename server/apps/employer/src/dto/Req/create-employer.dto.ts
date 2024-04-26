@@ -8,5 +8,5 @@ export class CreateEmployerDto {
   phoneNumber: string;
   licenseStatus: boolean;
   phoneNumberStatus: boolean;
-  imgae: string;
+  image: string;
 }

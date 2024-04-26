@@ -8,17 +8,17 @@ export class EmployerController {
   constructor(private readonly employerService: EmployerService) {}
 
   @Post('create')
-  createCompany(@Body() data: CreateEmployerDto): Observable<string> {
+  createEmployer(@Body() data: CreateEmployerDto): Observable<string> {
     return this.employerService.createEmployer(data);
   }
 
   @Get('all')
-  getAllCompanies(): Observable<string> {
+  getAllEmployers(): Observable<string> {
     return this.employerService.getAllEmployers();
   }
 
   @Get(':id')
-  findCompanyById(@Param('id') id: number): Observable<string> {
+  findEmployerById(@Param('id') id: number): Observable<string> {
     return this.employerService.findEmployerById(id);
   }
 
