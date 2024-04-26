@@ -14,18 +14,22 @@ export class CampaignService {
   ) {}
 
   async createCampaign(createCampaignDto: CreateCampaignDto) {
+    const now = new Date();
+    createCampaignDto.creatednAt = now;
     const campaign = await this.CampaignRepository.save(createCampaignDto);
 
     return await this.CampaignRepository.save(campaign);
   }
 
   // eslint-disable-next-line prettier/prettier
-  async findAllCampaigns(page: number): Promise<FindCampaignDTOResponse[]> {
-    const limit = 10;
-    const offset = (page - 1) * limit;
+  async findAllCampaigns(page: number, limit: number): Promise<FindCampaignDTOResponse[]> {
+    const skip = (page - 1) * limit;
     const campaigns = await this.CampaignRepository.find({
-      skip: offset,
+      skip: skip,
       take: limit,
+      order: {
+        creatednAt: 'DESC',
+      },
     });
     return campaigns;
   }

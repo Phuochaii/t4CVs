@@ -94,6 +94,15 @@
         "tsConfigPath": "apps/company-service/tsconfig.app.json"
       }
     },
+    "employer": {
+      "type": "application",
+      "root": "apps/employer",
+      "entryFile": "main",
+      "sourceRoot": "apps/employer/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/employer/tsconfig.app.json"
+      }
+    },
     "user": {
       "type": "application",
       "root": "apps/user",

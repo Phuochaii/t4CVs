@@ -55,28 +55,14 @@ export class ApplicationController {
 
   @Get(':id')
   async findOne(@Param('id') id: number) {
-    // let campaignId;
-    // const result = await this.applicationService.findOne(id);
-    // this.applicationService.findOne(id).subscribe((value) => {
-    //   // console.log(value);
-    //   campaignId = value.fullname;
-    //   // console.log('123');
-    //   // console.log(campaignId);
-    // });
-    // console.log(campaignId);
-
-    // return result;
-    const result = await this.applicationService.findOne(id).toPromise();
     let campaignId;
-
-    await this.applicationService
-      .findOne(id)
-      .toPromise()
-      .then((value) => {
-        campaignId = value.fullname;
-      });
-
-    console.log(campaignId);
+    const result = await this.applicationService.findOne(id);
+    this.applicationService.findOne(id).subscribe((value) => {
+      console.log(value);
+      campaignId = value.fullname;
+      console.log('123');
+      console.log(campaignId);
+    });
 
     return result;
   }
