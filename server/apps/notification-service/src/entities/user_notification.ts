@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { Notification } from "./notification";
 
-enum NotificationStatus {
+export enum NotificationStatus {
     UNREAD = 0,
     READ = 1
 }
@@ -9,7 +9,7 @@ enum NotificationStatus {
 @Entity()
 export class User_Notification {
     @PrimaryColumn()
-    userId: number;
+    userId: string;
 
     @PrimaryColumn()
     notificationId: number;

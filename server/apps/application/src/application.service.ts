@@ -1,48 +1,65 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateApplicationRequest, ReadApplicationRequest } from '@app/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreateApplicationDto } from './dto/create-application.dto';
 import { Application } from './entities/application.entity';
-import { v4 as randomUUID } from 'uuid'; // Import randomUUID
 
 @Injectable()
 export class ApplicationService {
-  private readonly application: Application[] = [];
+  private readonly applications: Application[] = [];
+  constructor(
+    @InjectRepository(Application)
+    private applicationRepository: Repository<Application>,
+  ) {}
+  async store(data: CreateApplicationDto) {
+    try {
+      const application = this.applicationRepository.create(data);
+      application.status = false;
+      console.log(data);
+      const now = new Date();
+      application.createdAt = now.toISOString().split('T')[0];
+      application.updateAt = now.toISOString().split('T')[0];
+      return await this.applicationRepository.save(application);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
 
-  findById(readApplication: ReadApplicationRequest): Promise<Application> {
-    return new Promise((resolve, reject) => {
-      const application = this.application.find(
-        (app) => app.id === readApplication.id,
-      );
-      if (application) {
-        resolve(application);
-      } else {
-        reject(
-          new NotFoundException(
-            `Application with ID ${readApplication.id} not found.`,
-          ),
-        );
-      }
+  async findOneOrFail(id: number) {
+    try {
+      const guest = await this.applicationRepository.findOneBy({ id });
+      return guest;
+    } catch {
+      console.log(id);
+      throw new NotFoundException();
+    }
+  }
+
+  async findAll(page: number, limit: number) {
+    const skip = (page - 1) * limit;
+    const data = await this.applicationRepository.find({
+      skip: skip,
+      take: limit,
+      order: {
+        createdAt: 'DESC',
+        id: 'DESC',
+      },
     });
+    return data;
   }
 
-  findAll(): Application[] {
-    return this.application;
+  async delete(id: number) {
+    await this.applicationRepository.delete(id);
   }
 
-  create(createApplication: CreateApplicationRequest): Application {
-    const application: Application = {
-      id: randomUUID(),
-      fullname: createApplication.fullname,
-      phone: createApplication.phone,
-      email: createApplication.email,
-      cvId: createApplication.cvId,
-      status: 1,
-      coverLetter: '',
-      createdAt: '',
-      updateAt: '',
-      jobId: 0,
-      userId: 0,
-    };
-    this.application.push(application); // Corrected the variable name to plural
-    return application;
+  async update(id: number) {
+    const application = await this.applicationRepository.findOneBy({ id });
+    application.status = true;
+    const now = new Date();
+    application.updateAt = now.toISOString().split('T')[0];
+    const updatedApplication =
+      await this.applicationRepository.save(application);
+
+    return updatedApplication;
   }
 }
