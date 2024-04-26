@@ -193,7 +193,7 @@ function SearchJob() {
           <div className="container">
             <div className="max-w-screen-lg mx-auto">
               <form className="box-search-job grid grid-cols-7 justify-center gap-x-4">
-                <div className="group-search col-span-3 flex flex-row">
+                <div className="group-search col-span-3 grid grid-cols-2">
                   <div className="item item-search">
                     <FormControl>
                       <OutlinedInput
@@ -211,6 +211,7 @@ function SearchJob() {
                       id="outlined-select-currency"
                       select
                       defaultValue="0"
+                      className="w-full"
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
