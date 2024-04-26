@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
+import { Timestamp } from "../google/protobuf/timestamp";
 
 export const protobufPackage = "notification";
 
@@ -43,6 +44,7 @@ export interface Notification {
   content: string;
   link: string;
   status: status;
+  createdAt: Timestamp | undefined;
 }
 
 export interface GetUserNotificationsRequest {

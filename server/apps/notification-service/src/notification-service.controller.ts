@@ -4,6 +4,7 @@ import { Empty, GetUserNotificationsRequest, GetUserNotificationsResponse, Notif
 import { Observable } from 'rxjs';
 import { PaginationRequest, PaginationResponse } from '@app/common';
 import { NotificationStatus } from './entities';
+import { DateTimestampConverter } from '@app/common/conveters';
 
 @Controller()
 @NotificationServiceControllerMethods()
@@ -35,16 +36,17 @@ export class NotificationController implements NotificationServiceController {
 
     const userNotifications = await this.notificationServiceService.getNotifications(user.id, paginationReq);
     const total = await this.notificationServiceService.getTotalNotifications(user.id);
-
     return {
       pagination: new PaginationResponse(total, userNotifications, paginationReq),
       data: userNotifications.map((userNotification) => {
+        const notification = userNotification.notification;
         return {
-          id: userNotification.notification.id,
-          title: userNotification.notification.title,
-          content: userNotification.notification.content,
-          link: userNotification.notification.link,
+          id: notification.id,
+          title: notification.title,
+          content: notification.content,
+          link: notification.link,
           status: userNotification.status as unknown as status,
+          createdAt: DateTimestampConverter.toTimestamp(notification.createdAt),
         };
       }),
     };
