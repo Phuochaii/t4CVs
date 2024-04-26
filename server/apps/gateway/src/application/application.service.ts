@@ -12,8 +12,13 @@ import {
 } from '@nestjs/common';
 
 import { ClientGrpc } from '@nestjs/microservices';
-// import { Observable, from, throwError, toArray } from 'rxjs';
-// import { catchError, map, mergeAll } from 'rxjs/operators';
+import { CVService } from '../cv/cv.service';
+import { firstValueFrom } from 'rxjs';
+import { NotificationService, NotificationUserId, NotificationUserRole } from '../notification/notification.service';
+import { EmployerService } from '../employer/employer.service';
+import { CVDto } from '../cv/dto/cv.dto';
+import { CompanyService } from '../company/company.service';
+import { JobService } from '../job/job.service';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
@@ -22,7 +27,12 @@ export class ApplicationService implements OnModuleInit {
 
   constructor(
     @Inject(APPLICATION_PACKAGE_NAME) private readonly client: ClientGrpc,
-  ) {}
+    private readonly cvService: CVService,
+    private readonly notificationService: NotificationService,
+    private readonly employerService: EmployerService,
+    private readonly companyService: CompanyService,
+    private readonly jobService: JobService,
+  ) { }
 
   onModuleInit() {
     this.applicationServiceClient =
@@ -52,5 +62,27 @@ export class ApplicationService implements OnModuleInit {
   async update(id: number) {
     const data = await this.applicationServiceClient.updateApplication({ id });
     return data;
+  }
+
+  async hrGetCv(id: number) {
+    const cv = await firstValueFrom(this.cvService.getCVById(id)) as CVDto;
+    await this.update(id);
+    const application = await firstValueFrom(
+      this.applicationServiceClient.readApplication({ id })
+    );
+    const campaign = await firstValueFrom(this.companyService.findCampaignById(application.campaignId));
+    const employer = await firstValueFrom(this.employerService.findEmployerById(campaign.employerId));
+    const campany = await firstValueFrom(this.companyService.findCompanyById(employer.companyId));
+    const job = await firstValueFrom(this.jobService.findJobByCampaignId(campaign.id));
+    console.log(job)
+    const notification = await firstValueFrom(this.notificationService.create(
+      [new NotificationUserId(cv.userId, NotificationUserRole.USER)],
+      {
+        content: `${employer.fullname} - ${campany.name} vừa xem CV của bạn`,
+        link: `job/${job.id}`,
+        title: `Nhà tuyển dụng vừa xem CV của bạn`,
+      },
+    ));
+    return cv;
   }
 }
