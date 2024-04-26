@@ -1,5 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
+import { Application } from '../entities/application.entity';
+import { applications } from './data';
 import { config } from 'dotenv';
 import { resolve } from 'path';
 
@@ -24,6 +26,15 @@ const defaultConfig: TypeOrmModuleOptions = {
   database: DB_DATABASE,
   autoLoadEntities: true,
   synchronize: true,
+};
+
+const doCallbackWithAutoCloseConnection = async (
+  option: DataSourceOptions,
+  callback: (dataSource: DataSource) => Promise<void>,
+) => {
+  const appDataSource = await new DataSource(option).initialize();
+  await callback(appDataSource);
+  await appDataSource.destroy();
 };
 
 const createDatabase = async (name: string) => {
@@ -56,8 +67,19 @@ const isDatabaseExist = async (name: string) => {
   return true;
 };
 
+const insertData = async () => {
+  const option = {
+    ...defaultConfig,
+    entities: [Application],
+  } as DataSourceOptions;
+  await doCallbackWithAutoCloseConnection(option, async (dataSource) => {
+    await dataSource.getRepository(Application).insert(applications);
+  });
+};
+
 const initDatabase = async () => {
   await createDatabase(defaultConfig.database);
+  await insertData();
 };
 
 export const databaseConfig: () => Promise<TypeOrmModuleOptions> = async () => {
