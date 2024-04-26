@@ -23,7 +23,7 @@ export class UploadService {
       const cvDto = new CVDto();
       cvDto.userId = Number(userId.userId);
       cvDto.templateId = 1;
-      cvDto.link = `localhost:3000/cv/${newFilename}`;
+      cvDto.link = `localhost:3000/server/uploads/${newFilename}`;
       cvDto.creationAt = new Date();
       cvDto.isPublic = true;
       cvDto.lastModified = new Date();
@@ -34,7 +34,7 @@ export class UploadService {
         'http://localhost:3000/cv',
         JSON.stringify(cvDto),
       );
-
+      
       return result;
     } catch (error: any) {
       console.error('Error uploading file:', error);

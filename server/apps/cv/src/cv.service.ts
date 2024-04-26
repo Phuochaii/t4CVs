@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as sqlite3 from 'sqlite3';
 import { CV } from './entities/cv.entity';
 import { Client, ClientProxy } from '@nestjs/microservices';
@@ -181,5 +181,38 @@ export class CVService {
         }
       });
     });
+  }
+
+  async downloadCV(id: number): Promise<any> {
+    try {
+      const cv = await this.findOne(id);
+
+      const linkParts = cv.link.split('/');
+      const filename = linkParts[linkParts.length - 1];
+      const fileExtension = path.extname(filename);
+
+      const filePath = path.join('./uploads', filename);
+      const fileData = fs.readFileSync(filePath);
+
+      switch (fileExtension.toLowerCase()) {
+        case '.pdf':
+          return { data: fileData, contentType: 'application/pdf' };
+        case '.doc':
+          return { data: fileData, contentType: 'application/msword' };
+        case '.docx':
+          return {
+            data: fileData,
+            contentType:
+              'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          };
+        default:
+          throw new HttpException(
+            'Unsupported file format',
+            HttpStatus.BAD_REQUEST,
+          );
+      }
+    } catch (error: any) {
+      throw new HttpException('CV not found', HttpStatus.NOT_FOUND);
+    }
   }
 }
