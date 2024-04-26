@@ -5,15 +5,6 @@ import { databaseConfig } from './database/init';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      // type: 'postgres',
-      // host: 'localhost',
-      // port: 5432,
-      // username: 'postgres',
-      // password: '123456',
-      // database: 'test_topcv',
-      // entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      // synchronize: true,
-      // autoLoadEntities: true,
       useFactory: databaseConfig,
     }),
     ApplicationModule,
@@ -22,4 +13,3 @@ import { databaseConfig } from './database/init';
   providers: [],
 })
 export class AppModule {}
-//create env with postgress

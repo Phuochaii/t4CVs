@@ -27,41 +27,56 @@ export class ApplicationController {
   ) {}
 
   @Post()
-  create(@Body() createApplicationRequest: CreateApplicationRequest) {
+  async create(@Body() createApplicationRequest: CreateApplicationRequest) {
     // console.log(createApplicationRequest.campaignId);
     this.applicationService
       .create(createApplicationRequest)
       .subscribe((application: any) => {
-        this.companyService.findCampaignById(5).subscribe((campaign: any) => {
-          const employerId = campaign.employerId;
-          this.userService
-            .findJobById(createApplicationRequest.userId)
-            .subscribe((user: any) => {
-              this.notificationService.create(
-                [new NotificationUserId(employerId, NotificationUserRole.HR)],
-                {
-                  content: `Ứng viên ${user.fullname} - ${campaign.name}`,
-                  link: `application/${application.id}`,
-                  title: `CV mới ứng tuyển`,
-                },
-              );
-            });
-        });
+        this.companyService
+          .findCampaignById(createApplicationRequest.campaignId)
+          .subscribe((campaign: any) => {
+            const employerId = campaign.employerId;
+            this.userService
+              .findJobById(createApplicationRequest.userId)
+              .subscribe((user: any) => {
+                this.notificationService.create(
+                  [new NotificationUserId(employerId, NotificationUserRole.HR)],
+                  {
+                    content: `Ứng viên ${user.fullname} - ${campaign.name}`,
+                    link: `application/${application.id}`,
+                    title: `CV mới ứng tuyển`,
+                  },
+                );
+              });
+          });
       });
-
     return this.applicationService.create(createApplicationRequest);
   }
 
   @Get(':id')
   async findOne(@Param('id') id: number) {
+    // let campaignId;
+    // const result = await this.applicationService.findOne(id);
+    // this.applicationService.findOne(id).subscribe((value) => {
+    //   // console.log(value);
+    //   campaignId = value.fullname;
+    //   // console.log('123');
+    //   // console.log(campaignId);
+    // });
+    // console.log(campaignId);
+
+    // return result;
+    const result = await this.applicationService.findOne(id).toPromise();
     let campaignId;
-    const result = await this.applicationService.findOne(id);
-    this.applicationService.findOne(id).subscribe((value) => {
-      console.log(value);
-      campaignId = value.fullname;
-      console.log('123');
-      console.log(campaignId);
-    });
+
+    await this.applicationService
+      .findOne(id)
+      .toPromise()
+      .then((value) => {
+        campaignId = value.fullname;
+      });
+
+    console.log(campaignId);
 
     return result;
   }
