@@ -11,12 +11,6 @@ export class PositionService {
     private PositionRepository: Repository<Position>,
   ) {}
 
-  // async createCampaign(createCampaignDto: CreateCampaignDto) {
-  //   const campaign = await this.CampaignRepository.save(createCampaignDto);
-
-  //   return await this.CampaignRepository.save(campaign);
-  // }
-
   // eslint-disable-next-line prettier/prettier
   async findAllPositions(): Promise<FindPositionDTOResponse[]> {
     const positions = await this.PositionRepository.find();
@@ -31,21 +25,4 @@ export class PositionService {
     });
     return result;
   }
-
-  // async updateCampaign(data: UpdateCampaignDto) {
-  //   return await this.CampaignRepository.update(data.id, {
-  //     name: data.name,
-  //     creatednAt: data.creatednAt,
-  //     employerId: data.employerId,
-  //   });
-  // }
-
-  // async findEmployerId(id: number) {
-  //   const result = await this.CampaignRepository.findOne({
-  //     where: {
-  //       id,
-  //     },
-  //   });
-  //   return result.employerId;
-  // }
 }
