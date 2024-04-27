@@ -16,7 +16,7 @@ const doCallbackWithAutoCloseConnection = async (
 };
 
 export class DatabaseConfiger {
-  constructor(private defaultConfig: DatabaseOptions) {}
+  constructor(private defaultConfig: DatabaseOptions) { }
 
   private async isDatabaseExist(name: string) {
     try {
@@ -25,7 +25,7 @@ export class DatabaseConfiger {
         database: name,
       } as DataSourceOptions;
 
-      await doCallbackWithAutoCloseConnection(dataSourceOption, async () => {});
+      await doCallbackWithAutoCloseConnection(dataSourceOption, async () => { });
     } catch (error) {
       if (error.code === DB_NOT_EXIST_ERROR_CODE) {
         return false;
@@ -35,7 +35,7 @@ export class DatabaseConfiger {
   }
 
   private async createDatabase(name: string) {
-    const createDatabaseSQL = `CREATE DATABASE ${name};`;
+    const createDatabaseSQL = `CREATE DATABASE "${name}";`;
     const createDatabase = async (dataSource: DataSource) => {
       await dataSource.query(createDatabaseSQL);
     };
