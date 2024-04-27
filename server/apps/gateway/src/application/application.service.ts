@@ -58,6 +58,7 @@ export class ApplicationService implements OnModuleInit {
         campaignIds,
         status,
       });
+    console.log(status);
     return applications$;
   }
 

@@ -54,6 +54,7 @@ export class ApplicationService {
     campaignIds: number[],
     status: boolean | undefined,
   ) {
+    console.log(status);
     const skip = (page - 1) * limit;
     const data = await this.applicationRepository.find({
       where: {

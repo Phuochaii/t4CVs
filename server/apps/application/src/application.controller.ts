@@ -35,7 +35,16 @@ export class ApplicationController implements ApplicationServiceController {
       request.campaignIds,
       request.status,
     );
-    return { applications: data };
+    // console.log(data);
+    const total = data.length;
+    const total_pages = Math.ceil(total / request.limit);
+    return {
+      page: request.page,
+      limit: request.limit,
+      total: total,
+      totalPage: total_pages,
+      applications: data,
+    };
   }
 
   async readAllApplication(request: Pagination): Promise<Applications> {
@@ -44,7 +53,16 @@ export class ApplicationController implements ApplicationServiceController {
       request.page,
       request.limit,
     );
-    return { applications: data };
+    // Calculate pagination metadata
+    const total = data.length;
+    const total_pages = Math.ceil(total / request.limit);
+    return {
+      page: request.page,
+      limit: request.limit,
+      total: total,
+      totalPage: total_pages,
+      applications: data,
+    };
   }
 
   updateApplication(request: UpdateApplicationRequest) {
