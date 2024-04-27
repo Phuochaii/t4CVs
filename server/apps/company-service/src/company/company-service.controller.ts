@@ -96,8 +96,32 @@ export class CompanyServiceController {
   }
 
   @MessagePattern({ cmd: 'find_campaign_by_employerId' })
-  findCampaignByEmployerId(employerId: number) {
-    return this.campaignService.findCampaignByEmployerId(employerId);
+  async findCampaignByEmployerId(@Payload() data: any) {
+    const employerId = Number(data.employerId);
+    const page = Number(data.page);
+    const limit = Number(data.limit);
+
+    const total = Number(
+      await this.campaignService.getTotalCampaignByEmployerId(employerId),
+    );
+    const total_page = Math.ceil(total / limit);
+
+    const data_find = await this.campaignService.findCampaignByEmployerId(
+      employerId,
+      page,
+      limit,
+    );
+
+    const result = {
+      page: page,
+      limit: limit,
+      total: total,
+      total_page: total_page,
+      data: data_find,
+    };
+
+    return result;
+    // return this.campaignService.findCampaignByEmployerId(employerId);
   }
 
   // @MessagePattern({ cmd: 'find_employerid' })

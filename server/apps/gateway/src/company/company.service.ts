@@ -63,14 +63,10 @@ export class CompanyService {
     return this.companyClient.send({ cmd: 'update_campaign' }, data);
   }
 
-  findCampaignByEmployerId(employerId: number) {
-    return this.companyClient.send<FindCampaignDTOResponse, number>(
+  findCampaignByEmployerId(employerId: number, page: number, limit: number) {
+    return this.companyClient.send<FindCampaignDTOResponse>(
       { cmd: 'find_campaign_by_employerId' },
-      employerId,
+      { employerId, page, limit },
     );
   }
-
-  // findEmployerId(id: number): Observable<string> {
-  //   return this.companyClient.send({ cmd: 'find_employerid' }, id);
-  // }
 }

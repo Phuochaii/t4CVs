@@ -22,7 +22,10 @@ export class CampaignService {
   }
 
   // eslint-disable-next-line prettier/prettier
-  async findAllCampaigns(page: number, limit: number): Promise<FindCampaignDTOResponse[]> {
+  async findAllCampaigns(
+    page: number,
+    limit: number,
+  ): Promise<FindCampaignDTOResponse[]> {
     const skip = (page - 1) * limit;
     const campaigns = await this.CampaignRepository.find({
       skip: skip,
@@ -51,9 +54,16 @@ export class CampaignService {
     });
   }
 
-  async findCampaignByEmployerId(employerId: number) {
+  async findCampaignByEmployerId(
+    employerId: number,
+    page: number,
+    limit: number,
+  ): Promise<FindCampaignDTOResponse[]> {
+    const skip = (page - 1) * limit;
     const result = await this.CampaignRepository.find({
       where: { employerId: employerId },
+      skip: skip,
+      take: limit,
       order: {
         createdAt: 'DESC',
       },
@@ -64,6 +74,14 @@ export class CampaignService {
 
   async getTotalCampaign(): Promise<number> {
     const total = await this.CampaignRepository.count();
+
+    return total;
+  }
+
+  async getTotalCampaignByEmployerId(employerId: number): Promise<number> {
+    const total = await this.CampaignRepository.count({
+      where: { employerId: employerId },
+    });
 
     return total;
   }
