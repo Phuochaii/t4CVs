@@ -73,7 +73,7 @@ export class ApplicationController {
         title: `CV mới ứng tuyển`,
       },
     ));
-    return application;
+    return 'Success';
   }
 
   @Get('/hr/:hrId')
