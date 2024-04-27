@@ -10,6 +10,8 @@ import {
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { PaginationRequest } from '@app/common';
+import { map } from 'rxjs';
+import { DateTimestampConverter } from '@app/common/conveters';
 
 export enum NotificationUserRole {
   USER = 'user',
@@ -53,10 +55,22 @@ export class NotificationService implements OnModuleInit {
     notificationUserId: NotificationUserId,
     paginationRequest: PaginationRequest,
   ) {
-    return this.notificationServiceClient.getNotifications({
-      user: { id: notificationUserId.userId },
-      paginationRequest,
-    });
+    return this.notificationServiceClient
+      .getNotifications({
+        user: { id: notificationUserId.userId },
+        paginationRequest,
+      })
+      .pipe(
+        map((response) => ({
+          ...response,
+          data: response.data.map((notification) => ({
+            ...notification,
+            createdAt: DateTimestampConverter.fromTimestamp(
+              notification.createdAt,
+            ),
+          })),
+        })),
+      );
   }
 
   updateStatus(

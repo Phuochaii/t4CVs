@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
+import { Timestamp } from "../google/protobuf/timestamp";
 
 export const protobufPackage = "notification";
 
@@ -43,6 +44,7 @@ export interface Notification {
   content: string;
   link: string;
   status: status;
+  createdAt: Timestamp | undefined;
 }
 
 export interface GetUserNotificationsRequest {
@@ -61,7 +63,8 @@ export interface UpdateNotificationStatusRequest {
   status: status;
 }
 
-export interface Empty {
+export interface UpdateNotificationStatusResponse {
+  status: status;
 }
 
 export const NOTIFICATION_PACKAGE_NAME = "notification";
@@ -73,7 +76,7 @@ export interface NotificationServiceClient {
 
   getNotifications(request: GetUserNotificationsRequest): Observable<GetUserNotificationsResponse>;
 
-  updateNotificationStatus(request: UpdateNotificationStatusRequest): Observable<Empty>;
+  updateNotificationStatus(request: UpdateNotificationStatusRequest): Observable<UpdateNotificationStatusResponse>;
 }
 
 /** The job application service definition. */
@@ -87,7 +90,12 @@ export interface NotificationServiceController {
     request: GetUserNotificationsRequest,
   ): Promise<GetUserNotificationsResponse> | Observable<GetUserNotificationsResponse> | GetUserNotificationsResponse;
 
-  updateNotificationStatus(request: UpdateNotificationStatusRequest): Promise<Empty> | Observable<Empty> | Empty;
+  updateNotificationStatus(
+    request: UpdateNotificationStatusRequest,
+  ):
+    | Promise<UpdateNotificationStatusResponse>
+    | Observable<UpdateNotificationStatusResponse>
+    | UpdateNotificationStatusResponse;
 }
 
 export function NotificationServiceControllerMethods() {

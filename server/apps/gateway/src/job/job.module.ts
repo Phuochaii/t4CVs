@@ -18,5 +18,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
   ],
   controllers: [JobController],
   providers: [JobService],
+  exports: [JobService],
 })
 export class JobModule {}

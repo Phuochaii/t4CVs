@@ -54,7 +54,29 @@ export class ApplicationController {
     //       });
     //   });
     // Tạo ứng dụng
-    return this.applicationService.create(createApplicationRequest);
+    const application = await firstValueFrom(
+      this.applicationService.create(createApplicationRequest),
+    );
+
+    const campaign = await firstValueFrom(
+      this.companyService.findCampaignById(createApplicationRequest.campaignId),
+    );
+    const employerId = campaign.employerId;
+
+    // const user = await firstValueFrom(
+    //   this.userService.findJobById(createApplicationRequest.userId),
+    // );
+    // console.log(employerId);
+    const notification = await this.notificationService.create(
+      [new NotificationUserId(employerId, NotificationUserRole.HR)],
+      {
+        content: `Ứng viên ${application.fullname} - ${campaign.name}`,
+        link: `application/${application.id}`,
+        title: `CV mới ứng tuyển`,
+      },
+    );
+
+    return application;
   }
 
   @Get('/hr/:hrId')

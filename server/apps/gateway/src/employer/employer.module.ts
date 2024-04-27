@@ -18,5 +18,6 @@ import { EmployerService } from './employer.service';
   ],
   controllers: [EmployerController],
   providers: [EmployerService],
+  exports: [EmployerService],
 })
-export class CompanyModule {}
+export class EmployerModule {}

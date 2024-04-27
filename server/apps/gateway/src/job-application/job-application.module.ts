@@ -23,3 +23,21 @@
 // })
 // export class JobApplicationModule { }
 
+// @Module({
+//   imports: [
+//     ClientsModule.register([
+//       {
+//         name: JOBAPPLICATION_PACKAGE_NAME,
+//         transport: Transport.GRPC,
+//         options: {
+//           url: 'localhost:50051',
+//           package: JOBAPPLICATION_PACKAGE_NAME,
+//           protoPath: join(__dirname, './proto/job-application.proto'),
+//         },
+//       },
+//   ])],
+//   controllers: [JobApplicationController],
+//   providers: [JobApplicationService],
+// })
+// export class JobApplicationModule { }
+

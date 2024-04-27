@@ -1,88 +1,77 @@
-import { TypeOrmModuleOptions } from "@nestjs/typeorm";
-import { DataSource, DataSourceOptions } from "typeorm";
-import { notifications, userNotifications } from './data'
-import { Notification, User_Notification } from "../entities";
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { notifications, userNotifications } from './data';
+import { Notification, User_Notification } from '../entities';
 
 const DB_NOT_EXIST_ERROR_CODE = '3D000';
-const defaultConfig: TypeOrmModuleOptions = {
-    type: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    username: 'postgres',
-    password: '123456',
-    database: 'notification',
-    autoLoadEntities: true,
-    synchronize: true,
-};
+export type DatabaseOptions = TypeOrmModuleOptions & { database: string };
 
 const doCallbackWithAutoCloseConnection = async (
-    option: DataSourceOptions,
-    callback: (dataSource: DataSource) => Promise<void>
+  option: DataSourceOptions,
+  callback: (dataSource: DataSource) => Promise<void>,
 ) => {
-    const appDataSource = await new DataSource(option).initialize();
-    await callback(appDataSource);
-    await appDataSource.destroy();
-}
+  const appDataSource = await new DataSource(option).initialize();
+  await callback(appDataSource);
+  await appDataSource.destroy();
+};
 
-const createDatabase = async (name: string) => {
-    const createDatabaseSQL = `CREATE DATABASE ${name};`;
-    const createDatabase = async (dataSource: DataSource) => {
-        await dataSource.query(createDatabaseSQL);
-    }
+export class DatabaseConfiger {
+  constructor(private defaultConfig: DatabaseOptions) {}
 
-    const postgresDBConnectOption = {
-        ...defaultConfig,
-        database: 'postgres'
-    } as DataSourceOptions;
-    await doCallbackWithAutoCloseConnection(
-        postgresDBConnectOption,
-        createDatabase
-    );
-}
-
-const isDatabaseExist = async (name: string) => {
+  private async isDatabaseExist(name: string) {
     try {
-        const dataSourceOption = {
-            ...defaultConfig,
-            database: name
-        } as DataSourceOptions;
+      const dataSourceOption = {
+        ...this.defaultConfig,
+        database: name,
+      } as DataSourceOptions;
 
-        await doCallbackWithAutoCloseConnection(
-            dataSourceOption,
-            async () => { }
-        );
+      await doCallbackWithAutoCloseConnection(dataSourceOption, async () => {});
     } catch (error) {
-        if (error.code === DB_NOT_EXIST_ERROR_CODE) {
-            return false;
-        }
-        else
-            throw error;
+      if (error.code === DB_NOT_EXIST_ERROR_CODE) {
+        return false;
+      } else throw error;
     }
     return true;
-}
+  }
 
-const insertData = async () => {
-    const option = {
-        ...defaultConfig,
-        entities: [Notification, User_Notification]
+  private async createDatabase(name: string) {
+    const createDatabaseSQL = `CREATE DATABASE ${name};`;
+    const createDatabase = async (dataSource: DataSource) => {
+      await dataSource.query(createDatabaseSQL);
+    };
+
+    const postgresDBConnectOption = {
+      ...this.defaultConfig,
+      database: 'postgres',
     } as DataSourceOptions;
     await doCallbackWithAutoCloseConnection(
-        option,
-        async (dataSource) => {
-            await dataSource.getRepository(Notification).insert(notifications);
-            await dataSource.getRepository(User_Notification).insert(userNotifications);
-        }
+      postgresDBConnectOption,
+      createDatabase,
     );
-}
+  }
 
-const initDatabase = async () => {
-    await createDatabase(defaultConfig.database);
-    await insertData();
-}
+  private async insertData() {
+    const option = {
+      ...this.defaultConfig,
+      entities: [Notification, User_Notification],
+    } as DataSourceOptions;
+    await doCallbackWithAutoCloseConnection(option, async (dataSource) => {
+      await dataSource.getRepository(Notification).insert(notifications);
+      await dataSource
+        .getRepository(User_Notification)
+        .insert(userNotifications);
+    });
+  }
 
-export const databaseConfig: () => Promise<TypeOrmModuleOptions> = async () => {
-    if (!(await isDatabaseExist(defaultConfig.database)))
-        await initDatabase();
+  private async initDatabase() {
+    await this.createDatabase(this.defaultConfig.database);
+    await this.insertData();
+  }
 
-    return defaultConfig;
+  async config(): Promise<TypeOrmModuleOptions> {
+    if (!(await this.isDatabaseExist(this.defaultConfig.database)))
+      await this.initDatabase();
+
+    return this.defaultConfig;
+  }
 }

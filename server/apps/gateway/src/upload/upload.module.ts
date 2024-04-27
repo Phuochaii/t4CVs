@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, HttpCode } from '@nestjs/common';
 import { UploadService } from './upload.service';
 import { UploadController } from './upload.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';

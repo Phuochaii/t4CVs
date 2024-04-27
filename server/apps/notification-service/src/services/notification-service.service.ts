@@ -11,11 +11,12 @@ export class NotificationServiceService {
     private notificationRepository: Repository<Notification>,
     @InjectRepository(User_Notification)
     private userNotificationRepository: Repository<User_Notification>,
-  ) { }
+  ) {}
 
   async createNotification(createRequest: SendNotificationRequest) {
     const notification = this.notificationRepository.create(createRequest);
-    const savedNotification = await this.notificationRepository.save(notification);
+    const savedNotification =
+      await this.notificationRepository.save(notification);
     const userNotifications = createRequest.users.map((user) => {
       return this.userNotificationRepository.create({
         notification: savedNotification,
@@ -27,7 +28,7 @@ export class NotificationServiceService {
 
   async getNotifications(
     userId: User_Notification['userId'],
-    paginationRequest: PaginationRequest
+    paginationRequest: PaginationRequest,
   ): Promise<User_Notification[]> {
     return await this.userNotificationRepository.find({
       where: {
@@ -40,11 +41,13 @@ export class NotificationServiceService {
         notification: {
           createdAt: 'DESC',
         },
-      }
+      },
     });
   }
 
-  async getTotalNotifications(userId: User_Notification['userId']): Promise<number> {
+  async getTotalNotifications(
+    userId: User_Notification['userId'],
+  ): Promise<number> {
     return await this.userNotificationRepository.count({
       where: {
         userId,
@@ -55,13 +58,16 @@ export class NotificationServiceService {
   async updateNotificationStatus(
     userId: User_Notification['userId'],
     notificationId: User_Notification['notificationId'],
-    status: User_Notification['status']
+    status: User_Notification['status'],
   ) {
-    await this.userNotificationRepository.update({
+    const toBeUpdate = this.userNotificationRepository.create({
       userId,
       notificationId,
-    }, {
-      status,
+      status: status,
     });
+    const savedUserNotification =
+      await this.userNotificationRepository.save(toBeUpdate);
+
+    return savedUserNotification;
   }
 }
