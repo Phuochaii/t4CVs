@@ -26,7 +26,6 @@ import path from 'path';
           autoLoadEntities: true,
           synchronize: true,
         };
-        console.log(defaultConfig);
         const databaseConfiger = new DatabaseConfiger(defaultConfig);
         return databaseConfiger.config();
       },
