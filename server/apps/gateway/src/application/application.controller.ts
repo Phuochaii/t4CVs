@@ -75,7 +75,7 @@ export class ApplicationController {
         title: `CV mới ứng tuyển`,
       },
     );
-    console.log(notification);
+    console.log('111');
 
     return 'success';
   }

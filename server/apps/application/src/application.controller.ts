@@ -29,6 +29,7 @@ export class ApplicationController implements ApplicationServiceController {
   async readAllApplicationByCampaignId(
     request: ReadAllApplicationByCampaignIdRequest,
   ): Promise<Applications> {
+    console.log(request);
     const data = await this.applicationService.findAllApplicationByCampaignId(
       request.page,
       request.limit,

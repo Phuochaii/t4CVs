@@ -23,6 +23,14 @@ export class NotificationController implements NotificationServiceController {
     private readonly notificationServiceService: NotificationServiceService,
   ) {}
 
+  async sendNotification(
+    request: SendNotificationRequest,
+  ): Promise<SendNotificationResponse> {
+    console.log('sendNotification');
+    await this.notificationServiceService.createNotification(request);
+    return true;
+  }
+
   async updateNotificationStatus({
     user: { id: userId },
     notificationId,
@@ -44,6 +52,7 @@ export class NotificationController implements NotificationServiceController {
     user,
     paginationRequest,
   }: GetUserNotificationsRequest): Promise<GetUserNotificationsResponse> {
+    console.log('get notification');
     const paginationReq = new PaginationRequest(paginationRequest);
 
     const userNotifications =
@@ -72,13 +81,5 @@ export class NotificationController implements NotificationServiceController {
         };
       }),
     };
-  }
-
-  async sendNotification(
-    request: SendNotificationRequest,
-  ): Promise<SendNotificationResponse | Observable<SendNotificationResponse>> {
-    console.log('controller noti');
-    await this.notificationServiceService.createNotification(request);
-    return true;
   }
 }
