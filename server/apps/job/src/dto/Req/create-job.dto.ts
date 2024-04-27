@@ -9,7 +9,7 @@ export class CreateJobDto {
   salaryMin: number;
   salaryMax: number;
   expId: number;
-  locationId: number[];
+  locationsId: number[];
   expriedDate: string;
   quantity: string;
   jobSchedule: string;
