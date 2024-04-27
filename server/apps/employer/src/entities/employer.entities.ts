@@ -22,7 +22,7 @@ export class Employer {
   @JoinColumn()
   positionId: number;
 
-  @Column()
+  @Column({ nullable: true })
   skype: string;
 
   // @OneToOne(() => Company)
@@ -34,10 +34,10 @@ export class Employer {
   license: string;
   @Column()
   phoneNumber: string;
-  @Column()
+  @Column({ default: false })
   licenseStatus: boolean;
-  @Column()
+  @Column({ default: false })
   phoneNumberStatus: boolean;
-  @Column()
+  @Column({ nullable: true })
   image: string;
 }

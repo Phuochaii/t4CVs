@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { EmployerService } from './employer.service';
 import { PositionService } from './position/position.service';
 import { CreateEmployerDto } from './dto/Req/create-employer.dto';
@@ -18,8 +18,24 @@ export class EmployerController {
   }
 
   @MessagePattern({ cmd: 'get_all_employers' })
-  findAllEmployers() {
-    return this.employerService.findAllEmployers();
+  async findAllEmployers(@Payload() data: any) {
+    const page = Number(data.page);
+    const limit = Number(data.limit);
+
+    const total = Number(await this.employerService.getTotalEmployers());
+    const total_page = Math.ceil(total / limit);
+
+    const data_find = await this.employerService.findAllEmployers(page, limit);
+
+    const result = {
+      page: page,
+      limit: limit,
+      total: total,
+      total_page: total_page,
+      data: data_find,
+    };
+
+    return result;
   }
 
   @MessagePattern({ cmd: 'find_employer_by_id' })
