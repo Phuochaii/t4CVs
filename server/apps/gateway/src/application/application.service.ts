@@ -63,7 +63,6 @@ export class ApplicationService implements OnModuleInit {
         campaignIds,
         status,
       });
-    console.log(typeof status);
     return applications$;
   }
 
@@ -90,7 +89,6 @@ export class ApplicationService implements OnModuleInit {
     const job = await firstValueFrom(
       this.jobService.findJobByCampaignId(campaign.id),
     );
-    console.log(job);
     const notification = await firstValueFrom(
       this.notificationService.create(
         [new NotificationUserId(cv.userId, NotificationUserRole.USER)],
