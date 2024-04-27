@@ -57,11 +57,13 @@ export class NotificationServiceService {
     notificationId: User_Notification['notificationId'],
     status: User_Notification['status']
   ) {
-    await this.userNotificationRepository.update({
+    const toBeUpdate = this.userNotificationRepository.create({
       userId,
       notificationId,
-    }, {
-      status,
+      status: status
     });
+    const savedUserNotification = await this.userNotificationRepository.save(toBeUpdate);
+
+    return savedUserNotification;
   }
 }
