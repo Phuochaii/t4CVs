@@ -8,7 +8,7 @@ export class Campaign {
   @Column()
   name: string;
   @Column()
-  creatednAt: Date;
+  createdAt: Date;
   @Column()
   employerId: number;
 }

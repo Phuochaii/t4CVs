@@ -1,6 +1,6 @@
 export class UpdateCampaignDto {
   id: number;
   name: string;
-  creatednAt: Date;
+  createdAt: Date;
   employerId: number;
 }

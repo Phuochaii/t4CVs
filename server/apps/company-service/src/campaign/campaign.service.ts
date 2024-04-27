@@ -15,7 +15,7 @@ export class CampaignService {
 
   async createCampaign(createCampaignDto: CreateCampaignDto) {
     const now = new Date();
-    createCampaignDto.creatednAt = now;
+    createCampaignDto.createdAt = now;
     const campaign = await this.CampaignRepository.save(createCampaignDto);
 
     return await this.CampaignRepository.save(campaign);
@@ -28,7 +28,7 @@ export class CampaignService {
       skip: skip,
       take: limit,
       order: {
-        creatednAt: 'DESC',
+        createdAt: 'DESC',
       },
     });
     return campaigns;
@@ -46,9 +46,20 @@ export class CampaignService {
   async updateCampaign(data: UpdateCampaignDto) {
     return await this.CampaignRepository.update(data.id, {
       name: data.name,
-      creatednAt: data.creatednAt,
+      createdAt: data.createdAt,
       employerId: data.employerId,
     });
+  }
+
+  async findCampaignByEmployerId(employerId: number) {
+    const result = await this.CampaignRepository.find({
+      where: { employerId: employerId },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    return result;
   }
 
   // async findEmployerId(id: number) {

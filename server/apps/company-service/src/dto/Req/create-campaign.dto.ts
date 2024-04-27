@@ -1,5 +1,5 @@
 export class CreateCampaignDto {
   name: string;
-  creatednAt: Date;
+  createdAt: Date;
   employerId: number;
 }

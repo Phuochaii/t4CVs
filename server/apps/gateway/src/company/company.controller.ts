@@ -60,13 +60,18 @@ export class CompanyController {
   }
 
   @Get('campaign/:id')
-  findCampaignById(@Param('id') id: number){
+  findCampaignById(@Param('id') id: number) {
     return this.companyService.findCampaignById(id);
   }
 
   @Post('campaign/update')
   updateCampaign(@Body() data: UpdateCampaignDto): Observable<string> {
     return this.companyService.updateCampaign(data);
+  }
+
+  @Get('campaign/employer/:employerId')
+  findCampaignByEmployerId(@Param('employerId') employerId: number) {
+    return this.companyService.findCampaignByEmployerId(employerId);
   }
 
   // @Get('campaign/:id/employer')
