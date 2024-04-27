@@ -1,6 +1,4 @@
-import { request } from 'http';
 import {
-  GetUserNotificationsRequest,
   NOTIFICATION_PACKAGE_NAME,
   NOTIFICATION_SERVICE_NAME,
   NotificationServiceClient,
@@ -44,6 +42,7 @@ export class NotificationService implements OnModuleInit {
     request: Omit<SendNotificationRequest, 'users'>,
   ) {
     console.log(123);
+
     return this.notificationServiceClient.sendNotification({
       ...request,
       users: notificationUserIds.map((notificationUserId) => ({

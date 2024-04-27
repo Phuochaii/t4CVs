@@ -35,7 +35,6 @@ export class ApplicationController implements ApplicationServiceController {
       request.campaignIds,
       request.status,
     );
-    // console.log(data);
     const total = data.length;
     const total_pages = Math.ceil(total / request.limit);
     return {

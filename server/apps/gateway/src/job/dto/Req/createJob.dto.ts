@@ -5,12 +5,13 @@ export class CreateJobDto {
   typeId: number;
   currencyId: number;
   levelId: number;
-  compaignId: number;
+  campaignId: number;
+  companyId: number;
   salaryMin: number;
   salaryMax: number;
   expId: number;
   locationId: number[];
-  expriedDate: string;
+  expiredDate: string;
   quantity: string;
   jobSchedule: string;
   gender: string;
