@@ -42,35 +42,35 @@ const routes = [
 //-------------------------------------------------------------------------------------
 // 2nd UI
   // USER
-  { path: "/cv", component: User.CV, layout: UserLayout },
-  { path: "/companies/:id", component: User.Company, layout: UserLayout },
-  { path: "/companies/", component: User.Companies, layout: UserLayout },
+  { path: "/cv", component: User.CV, layout: UserLayout },//hung
+  { path: "/companies/:id", component: User.Company, layout: UserLayout },//thinh
+  { path: "/companies/", component: User.Companies, layout: UserLayout },// thinh
   
   // ADMIN
-  { path: "/admin/company", component: Admin.Company, layout: AdminLayout },
-  {path: "/admin/compaign",component: Admin.Compaign,layout: AdminLayout,},
+  { path: "/admin/company", component: Admin.Company, layout: AdminLayout }, // thuc
+  {path: "/admin/compaign",component: Admin.Compaign,layout: AdminLayout,}, // thuc
 
 
   // HR
-  { path: "/hr/news", component: HR.News, layout: HRLayout },
+  { path: "/hr/news", component: HR.News, layout: HRLayout }, //khoa
 
   { path: "/hr/post-compaign", component: HR.PostJob, layout: HRLayout }, // thinh
   { path: "/hr/post-compaign/data", component: HR.PostCompaign, layout: HRLayout }, // khoa + hùng
 
 
-  { path: "/hr/verify-account/1", component: HR.VerifyAccount.Page1, layout: HRLayout },
-  { path: "/hr/verify-account/2", component: HR.VerifyAccount.Page2, layout: HRLayout },
+  { path: "/hr/verify-account/1", component: HR.VerifyAccount.Page1, layout: HRLayout }, // thinh
+  { path: "/hr/verify-account/2", component: HR.VerifyAccount.Page2, layout: HRLayout }, // thinh
 
-  { path: "/hr/compaign", component: HR.Compaign, layout: HRLayout },
+  { path: "/hr/compaign", component: HR.Compaign, layout: HRLayout }, // thuc
 
-  { path: "/hr/compain-edit/:id", component: HR.CompaignEdit, layout: HRLayout },
+  { path: "/hr/compain-edit/:id", component: HR.CompaignEdit, layout: HRLayout }, // thuc
 
-  { path: "/hr/recruitment", component: HR.Recuitment, layout: HRLayout },
+  { path: "/hr/recruitment", component: HR.Recuitment, layout: HRLayout }, // thuc
 
-  { path: "/hr/manage-cv", component: HR.ManageCV, layout: HRLayout },
+  { path: "/hr/manage-cv", component: HR.ManageCV, layout: HRLayout }, // yen
 
 
-  { path: "/hr/help", component: HR.Support, layout: EmptyLayout },
+  { path: "/hr/help", component: HR.Support, layout: EmptyLayout }, // thinh
 
 ];
 
