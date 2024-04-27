@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Query,
+  ForbiddenException,
+  ParseBoolPipe,
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
 import { CompanyService } from '../company/company.service';
@@ -53,31 +55,25 @@ export class ApplicationController {
     //           });
     //       });
     //   });
-    // const application = await firstValueFrom(
-    //   this.applicationService.create(createApplicationRequest),
-    // );
+    const application = await firstValueFrom(
+      this.applicationService.create(createApplicationRequest),
+    );
 
-    // const campaign = await firstValueFrom(
-    //   this.companyService.findCampaignById(createApplicationRequest.campaignId),
-    // );
-    // const employerId = campaign.employerId;
-
-    // // const user = await firstValueFrom(
-    // //   this.userService.findJobById(createApplicationRequest.userId),
-    // // );
+    const campaign = await firstValueFrom(
+      this.companyService.findCampaignById(createApplicationRequest.campaignId),
+    );
+    const employerId = campaign.employerId;
 
     // console.log(employerId);
     const notification = await this.notificationService.create(
-      [new NotificationUserId(123, NotificationUserRole.HR)],
+      [new NotificationUserId(employerId, NotificationUserRole.HR)],
       {
-        content: `Ứng viên`,
-        link: `application`,
+        content: `Ứng viên ${application.fullname}- ${campaign.name}`,
+        link: `application/${application.id}`,
         title: `CV mới ứng tuyển`,
       },
     );
-    console.log('111');
-
-    return 'success';
+    return application;
   }
 
   @Get('/hr/:hrId')
@@ -86,36 +82,26 @@ export class ApplicationController {
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
     @Query('campaignId') campaignId: number | null,
-    @Query('status') status: boolean | null, //truyen vao false or null //filter
+    @Query(
+      'status',
+      new ParseBoolPipe({
+        optional: true,
+      }),
+    )
+    status: boolean | null, //truyen vao false or null //filter
   ) {
     const campaignRes = await firstValueFrom(
-      this.companyService.findCampaignByEmployerId(hrId, 1, 10),
+      this.companyService.findCampaignByEmployerId(hrId, 1, 100),
     );
-    const campaignIds = [];
-    let id;
-    let n = 0;
-    while (campaignRes[n]) {
-      id = campaignRes[n].id;
-      campaignIds.push(id);
-      n++;
-    }
+    console.log(campaignRes);
+    let campaignIds = campaignRes.data.map((campaign) => campaign.id);
     if (campaignId) {
-      campaignIds.forEach((element) => {
-        if (element.campaignId == campaignId) {
-          const campaignIds_one = [];
-          campaignIds_one.push(campaignId);
-          return this.applicationService.findAll(
-            page,
-            limit,
-            campaignIds_one,
-            status,
-          );
-        }
-      });
+      if (campaignIds.includes(campaignId)) campaignIds = [campaignId];
+      else throw new ForbiddenException();
     }
-    console.log(status);
 
     return this.applicationService.findAll(page, limit, campaignIds, status);
+    // return 'success';
   }
 
   @Get(':id')
