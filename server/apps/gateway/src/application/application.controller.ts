@@ -89,7 +89,7 @@ export class ApplicationController {
     @Query('status') status: boolean | null, //truyen vao false or null //filter
   ) {
     const campaignRes = await firstValueFrom(
-      this.companyService.findCampaignByEmployerId(hrId),
+      this.companyService.findCampaignByEmployerId(hrId, 1, 10),
     );
     const campaignIds = [];
     let id;
