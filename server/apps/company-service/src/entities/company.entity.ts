@@ -13,7 +13,7 @@ export class Company {
   name: string;
   @Column()
   website: string;
-  @Column()
+  @Column({ nullable: true })
   image: string;
   @Column()
   address: string;
@@ -21,8 +21,8 @@ export class Company {
   phone: string;
   @Column()
   companySize: number;
-  @Column()
+  @Column({ nullable: true })
   description: string;
-  @Column()
+  @Column({ default: false })
   status: boolean;
 }
