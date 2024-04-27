@@ -15,7 +15,6 @@ export class ApplicationService {
     try {
       const application = this.applicationRepository.create(data);
       application.status = false;
-      console.log(data);
       const now = new Date();
       application.createdAt = now.toISOString().split('T')[0];
       application.updateAt = now.toISOString().split('T')[0];
@@ -30,7 +29,6 @@ export class ApplicationService {
       const guest = await this.applicationRepository.findOneBy({ id });
       return guest;
     } catch {
-      console.log(id);
       throw new NotFoundException();
     }
   }
@@ -54,7 +52,6 @@ export class ApplicationService {
     campaignIds: number[],
     status: boolean | undefined,
   ) {
-    console.log(status);
     const skip = (page - 1) * limit;
     const data = await this.applicationRepository.find({
       where: {

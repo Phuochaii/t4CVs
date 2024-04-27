@@ -23,7 +23,7 @@ export class NotificationServiceService {
         userId: user.id,
       });
     });
-    await this.userNotificationRepository.save(userNotifications);
+    return await this.userNotificationRepository.save(userNotifications);
   }
 
   async getNotifications(

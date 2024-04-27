@@ -67,15 +67,14 @@ export class ApplicationController {
     // // );
 
     // console.log(employerId);
-    const notification = await this.notificationService.create(
+    const notification = await firstValueFrom(this.notificationService.create(
       [new NotificationUserId(123, NotificationUserRole.HR)],
       {
         content: `Ứng viên`,
         link: `application`,
         title: `CV mới ứng tuyển`,
       },
-    );
-    console.log(notification);
+    ));
 
     return 'success';
   }
@@ -113,7 +112,6 @@ export class ApplicationController {
         }
       });
     }
-    console.log(status);
 
     return this.applicationService.findAll(page, limit, campaignIds, status);
   }
@@ -123,10 +121,7 @@ export class ApplicationController {
     let campaignId;
     const result = await this.applicationService.findOne(id);
     this.applicationService.findOne(id).subscribe((value) => {
-      console.log(value);
       campaignId = value.fullname;
-      console.log('123');
-      console.log(campaignId);
     });
 
     return result;

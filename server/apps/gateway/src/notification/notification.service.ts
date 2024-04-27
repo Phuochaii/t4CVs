@@ -10,7 +10,7 @@ import {
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { PaginationRequest } from '@app/common';
-import { map } from 'rxjs';
+import { first, firstValueFrom, lastValueFrom, map } from 'rxjs';
 import { DateTimestampConverter } from '@app/common/conveters';
 
 export enum NotificationUserRole {
@@ -21,7 +21,7 @@ export class NotificationUserId {
   constructor(
     private id: number,
     private role: NotificationUserRole,
-  ) {}
+  ) { }
   get userId() {
     return `${this.role}-${this.id}`;
   }
@@ -31,7 +31,7 @@ export class NotificationService implements OnModuleInit {
   private notificationServiceClient: NotificationServiceClient;
   constructor(
     @Inject(NOTIFICATION_PACKAGE_NAME) private readonly client: ClientGrpc,
-  ) {}
+  ) { }
   onModuleInit() {
     this.notificationServiceClient =
       this.client.getService<NotificationServiceClient>(
@@ -43,7 +43,6 @@ export class NotificationService implements OnModuleInit {
     notificationUserIds: NotificationUserId[],
     request: Omit<SendNotificationRequest, 'users'>,
   ) {
-    console.log(123);
     return this.notificationServiceClient.sendNotification({
       ...request,
       users: notificationUserIds.map((notificationUserId) => ({
@@ -52,26 +51,24 @@ export class NotificationService implements OnModuleInit {
     });
   }
 
-  getAllOf(
+  async getAllOf(
     notificationUserId: NotificationUserId,
     paginationRequest: PaginationRequest,
   ) {
-    return this.notificationServiceClient
+    const { pagination, data = [] } = await lastValueFrom(this.notificationServiceClient
       .getNotifications({
         user: { id: notificationUserId.userId },
         paginationRequest,
-      })
-      .pipe(
-        map((response) => ({
-          ...response,
-          data: response.data.map((notification) => ({
-            ...notification,
-            createdAt: DateTimestampConverter.fromTimestamp(
-              notification.createdAt,
-            ),
-          })),
-        })),
-      );
+      }));
+    return {
+      pagination,
+      data: data.map((notification) => ({
+        ...notification,
+        createdAt: DateTimestampConverter.fromTimestamp(
+          notification.createdAt,
+        ),
+      })),
+    }
   }
 
   updateStatus(

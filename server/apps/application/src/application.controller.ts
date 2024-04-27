@@ -35,7 +35,6 @@ export class ApplicationController implements ApplicationServiceController {
       request.campaignIds,
       request.status,
     );
-    // console.log(data);
     const total = data.length;
     const total_pages = Math.ceil(total / request.limit);
     return {
@@ -48,7 +47,6 @@ export class ApplicationController implements ApplicationServiceController {
   }
 
   async readAllApplication(request: Pagination): Promise<Applications> {
-    // console.log(this.applicationService.findAll());
     const data = await this.applicationService.findAll(
       request.page,
       request.limit,
