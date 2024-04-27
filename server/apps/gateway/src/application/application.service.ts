@@ -4,12 +4,7 @@ import {
   ApplicationServiceClient,
   CreateApplicationRequest,
 } from '@app/common/proto/application';
-import {
-  Inject,
-  Injectable,
-  NotFoundException,
-  OnModuleInit,
-} from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 
 import { ClientGrpc } from '@nestjs/microservices';
 // import { Observable, from, throwError, toArray } from 'rxjs';
@@ -32,7 +27,6 @@ export class ApplicationService implements OnModuleInit {
   }
 
   create(createApplicationRequest: CreateApplicationRequest) {
-    // console.log(createApplicationRequest);
     return this.applicationServiceClient.createApplication(
       createApplicationRequest,
     );
@@ -41,11 +35,15 @@ export class ApplicationService implements OnModuleInit {
   findOne(id: number) {
     return this.applicationServiceClient.readApplication({ id });
   }
-  findAll(page: number, limit: number) {
-    const applications$ = this.applicationServiceClient.readAllApplication({
-      page,
-      limit,
-    });
+
+  findAll(page: number, limit: number, campaignIds: number[], status: boolean) {
+    const applications$ =
+      this.applicationServiceClient.readAllApplicationByCampaignId({
+        page,
+        limit,
+        campaignIds,
+        status,
+      });
     return applications$;
   }
 

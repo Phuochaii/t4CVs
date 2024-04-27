@@ -9,13 +9,16 @@ import {
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
 import { CompanyService } from '../company/company.service';
+import { UserService } from '../user/user.service';
 import {
   NotificationService,
   NotificationUserId,
   NotificationUserRole,
 } from '../notification/notification.service';
 import { CreateApplicationRequest } from '@app/common/proto/application';
-import { UserService } from '../user/user.service';
+import { firstValueFrom } from 'rxjs';
+
+// import { firstValueFrom } from 'rxjs';
 
 @Controller('application')
 export class ApplicationController {
@@ -28,29 +31,48 @@ export class ApplicationController {
 
   @Post()
   async create(@Body() createApplicationRequest: CreateApplicationRequest) {
-    // console.log(createApplicationRequest.campaignId);
-    this.applicationService
-      .create(createApplicationRequest)
-      .subscribe((application: any) => {
-        this.companyService
-          .findCampaignById(createApplicationRequest.campaignId)
-          .subscribe((campaign: any) => {
-            const employerId = campaign.employerId;
-            this.userService
-              .findJobById(createApplicationRequest.userId)
-              .subscribe((user: any) => {
-                this.notificationService.create(
-                  [new NotificationUserId(employerId, NotificationUserRole.HR)],
-                  {
-                    content: `Ứng viên ${user.fullname} - ${campaign.name}`,
-                    link: `application/${application.id}`,
-                    title: `CV mới ứng tuyển`,
-                  },
-                );
-              });
-          });
-      });
+    //application campagin  user notification
+    // this.applicationService
+    //   .create(createApplicationRequest)
+    //   .subscribe((application: any) => {
+    //     this.companyService
+    //       .findCampaignById(createApplicationRequest.campaignId)
+    //       .subscribe((campaign: any) => {
+    //         const employerId = campaign.employerId;
+    //         this.userService
+    //           .findJobById(createApplicationRequest.userId)
+    //           .subscribe((user: any) => {
+    //             this.notificationService.create(
+    //               [new NotificationUserId(employerId, NotificationUserRole.HR)],
+    //               {
+    //                 content: `Ứng viên ${user.fullname} - ${campaign.name}`,
+    //                 link: `application/${application.id}`,
+    //                 title: `CV mới ứng tuyển`,
+    //               },
+    //             );
+    //           });
+    //       });
+    //   });
+    // Tạo ứng dụng
     return this.applicationService.create(createApplicationRequest);
+  }
+
+  @Get('/hr/:hrId')
+  findAll(
+    @Param('hrId') hrId: number,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('campaignId') campaignId: number | null,
+    @Query('status') status: boolean | null, //truyen vao false or null //filter
+  ) {
+    // hrid -> campaign ids gọi hàm bên Tiến để lấy campaignIds
+    // if campaignId -> check campaignId in campaign ids ? -> truyền vào kiểu mảng nhưng thật ra chỉ có 1 phần tử
+
+    // if !campaignId -> thì lấy hết các campaignIds cho dô campaignId kiểu mảng
+
+    //làm xong cái này thì còn thiếu 4 cái  "page": 2, "limit": 6, "total": 12, "total_pages": 2, giống trang reqres.in
+    const campaignIds = [1, 2, 3];
+    return this.applicationService.findAll(page, limit, campaignIds, status);
   }
 
   @Get(':id')
@@ -65,11 +87,6 @@ export class ApplicationController {
     });
 
     return result;
-  }
-
-  @Get()
-  findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
-    return this.applicationService.findAll(page, limit);
   }
 
   @Patch(':id')

@@ -11,8 +11,8 @@ import {
   ReadApplicationRequest,
   UpdateApplicationRequest,
   Pagination,
+  ReadAllApplicationByCampaignIdRequest,
 } from '@app/common/proto/application';
-import { Observable } from 'rxjs';
 
 @Controller()
 @ApplicationServiceControllerMethods()
@@ -24,6 +24,18 @@ export class ApplicationController implements ApplicationServiceController {
 
   readApplication(request: ReadApplicationRequest) {
     return this.applicationService.findOneOrFail(request.id);
+  }
+
+  async readAllApplicationByCampaignId(
+    request: ReadAllApplicationByCampaignIdRequest,
+  ): Promise<Applications> {
+    const data = await this.applicationService.findAllApplicationByCampaignId(
+      request.page,
+      request.limit,
+      request.campaignIds,
+      request.status,
+    );
+    return { applications: data };
   }
 
   async readAllApplication(request: Pagination): Promise<Applications> {

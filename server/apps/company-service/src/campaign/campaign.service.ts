@@ -22,7 +22,10 @@ export class CampaignService {
   }
 
   // eslint-disable-next-line prettier/prettier
-  async findAllCampaigns(page: number, limit: number): Promise<FindCampaignDTOResponse[]> {
+  async findAllCampaigns(
+    page: number,
+    limit: number,
+  ): Promise<FindCampaignDTOResponse[]> {
     const skip = (page - 1) * limit;
     const campaigns = await this.CampaignRepository.find({
       skip: skip,
