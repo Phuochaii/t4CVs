@@ -24,7 +24,10 @@ export class CompanyService {
   }
 
   findCompanyById(id: number) {
-    return this.companyClient.send<FindCompanyDTOResponse>({ cmd: 'find_company_by_id' }, id);
+    return this.companyClient.send<FindCompanyDTOResponse>(
+      { cmd: 'find_company_by_id' },
+      id,
+    );
   }
 
   updateCompany(data: UpdateCompanyDto): Observable<string> {
@@ -50,11 +53,21 @@ export class CompanyService {
   }
 
   findCampaignById(id: number) {
-    return this.companyClient.send<FindCampaignDTOResponse, number>({ cmd: 'find_campaign_by_id' }, id) ;
+    return this.companyClient.send<FindCampaignDTOResponse, number>(
+      { cmd: 'find_campaign_by_id' },
+      id,
+    );
   }
 
   updateCampaign(data: UpdateCampaignDto): Observable<string> {
     return this.companyClient.send({ cmd: 'update_campaign' }, data);
+  }
+
+  findCampaignByEmployerId(employerId: number) {
+    return this.companyClient.send<FindCampaignDTOResponse, number>(
+      { cmd: 'find_campaign_by_employerId' },
+      employerId,
+    );
   }
 
   // findEmployerId(id: number): Observable<string> {
