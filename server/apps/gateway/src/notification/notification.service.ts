@@ -43,6 +43,7 @@ export class NotificationService implements OnModuleInit {
     notificationUserIds: NotificationUserId[],
     request: Omit<SendNotificationRequest, 'users'>,
   ) {
+    console.log(123);
     return this.notificationServiceClient.sendNotification({
       ...request,
       users: notificationUserIds.map((notificationUserId) => ({

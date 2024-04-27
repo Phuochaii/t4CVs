@@ -16,7 +16,7 @@ export interface ReadAllApplicationByCampaignIdRequest {
   page: number;
   limit: number;
   campaignIds: number[];
-  status: boolean;
+  status?: boolean | undefined;
 }
 
 export interface CreateApplicationRequest {

@@ -18,11 +18,11 @@ import path from 'path';
       useFactory: async (configService: ConfigService) => {
         const defaultConfig: DatabaseOptions = {
           type: 'postgres',
-          host: 'localhost',
-          port: 5432,
-          username: 'postgres',
-          password: '123456',
-          database: 'notification',
+          host: configService.get('DB_HOST'),
+          port: configService.get('DB_PORT'),
+          username: configService.get('DB_USERNAME'),
+          password: `${configService.get('DB_PASSWORD')}`,
+          database: configService.get('DB_DATABASE'),
           autoLoadEntities: true,
           synchronize: true,
         };

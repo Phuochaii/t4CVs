@@ -53,31 +53,31 @@ export class ApplicationController {
     //           });
     //       });
     //   });
-    // Tạo ứng dụng
-    const application = await firstValueFrom(
-      this.applicationService.create(createApplicationRequest),
-    );
-
-    const campaign = await firstValueFrom(
-      this.companyService.findCampaignById(createApplicationRequest.campaignId),
-    );
-    const employerId = campaign.employerId;
-
-    // const user = await firstValueFrom(
-    //   this.userService.findJobById(createApplicationRequest.userId),
+    // const application = await firstValueFrom(
+    //   this.applicationService.create(createApplicationRequest),
     // );
-    console.log(employerId);
+
+    // const campaign = await firstValueFrom(
+    //   this.companyService.findCampaignById(createApplicationRequest.campaignId),
+    // );
+    // const employerId = campaign.employerId;
+
+    // // const user = await firstValueFrom(
+    // //   this.userService.findJobById(createApplicationRequest.userId),
+    // // );
+
+    // console.log(employerId);
     const notification = await this.notificationService.create(
-      [new NotificationUserId(employerId, NotificationUserRole.HR)],
+      [new NotificationUserId(123, NotificationUserRole.HR)],
       {
-        content: `Ứng viên ${application.fullname} - ${campaign.name}`,
-        link: `application/${application.id}`,
+        content: `Ứng viên`,
+        link: `application`,
         title: `CV mới ứng tuyển`,
       },
     );
     console.log(notification);
 
-    return application;
+    return 'success';
   }
 
   @Get('/hr/:hrId')

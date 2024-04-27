@@ -77,6 +77,7 @@ export class NotificationController implements NotificationServiceController {
   async sendNotification(
     request: SendNotificationRequest,
   ): Promise<SendNotificationResponse | Observable<SendNotificationResponse>> {
+    console.log('controller noti');
     await this.notificationServiceService.createNotification(request);
     return true;
   }

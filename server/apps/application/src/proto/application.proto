@@ -24,7 +24,7 @@ message ReadAllApplicationByCampaignIdRequest {
   int32 page = 1;
   int32 limit = 2;
   repeated int32 campaignIds = 3;
-  bool status = 4;
+  optional bool status = 4;
 }
 
 message CreateApplicationRequest {

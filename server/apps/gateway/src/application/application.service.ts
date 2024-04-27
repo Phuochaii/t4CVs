@@ -50,7 +50,12 @@ export class ApplicationService implements OnModuleInit {
     return this.applicationServiceClient.readApplication({ id });
   }
 
-  findAll(page: number, limit: number, campaignIds: number[], status: boolean) {
+  findAll(
+    page: number,
+    limit: number,
+    campaignIds: number[],
+    status: boolean | null,
+  ) {
     const applications$ =
       this.applicationServiceClient.readAllApplicationByCampaignId({
         page,
