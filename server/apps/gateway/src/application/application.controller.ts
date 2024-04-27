@@ -66,7 +66,7 @@ export class ApplicationController {
 
     // console.log(employerId);
     const notification = await firstValueFrom(this.notificationService.create(
-      [new NotificationUserId(123, NotificationUserRole.HR)],
+      [new NotificationUserId(employerId, NotificationUserRole.HR)],
       {
         content: `Ứng viên ${application.fullname}- ${campaign.name}`,
         link: `application/${application.id}`,
