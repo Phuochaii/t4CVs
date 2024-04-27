@@ -70,6 +70,11 @@ export class CompanyServiceController {
     return 'Company update successfully!';
   }
 
+  @MessagePattern({ cmd: 'find_campaign_by_employerId' })
+  findCampaignByEmployerId(employerId: number) {
+    return this.campaignService.findCampaignByEmployerId(employerId);
+  }
+
   // @MessagePattern({ cmd: 'find_employerid' })
   // findEmployerId(id: number) {
   //   return this.campaignService.findEmployerId(id);
