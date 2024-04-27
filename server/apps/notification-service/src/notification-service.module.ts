@@ -10,13 +10,13 @@ import path from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: path.resolve(__dirname, '.env')
+      envFilePath: path.resolve(__dirname, '.env'),
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const defaultConfig : DatabaseOptions = {
+        const defaultConfig: DatabaseOptions = {
           type: 'postgres',
           host: configService.get('DB_HOST'),
           port: configService.get('DB_PORT'),
@@ -28,11 +28,11 @@ import path from 'path';
         };
         const databaseConfiger = new DatabaseConfiger(defaultConfig);
         return databaseConfiger.config();
-      }
+      },
     }),
     TypeOrmModule.forFeature([Notification, User_Notification]),
   ],
   controllers: [NotificationController],
   providers: [NotificationServiceService],
 })
-export class NotificationServiceModule { }
+export class NotificationServiceModule {}

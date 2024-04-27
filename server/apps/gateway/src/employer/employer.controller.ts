@@ -7,10 +7,10 @@ import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
 export class EmployerController {
   constructor(private readonly employerService: EmployerService) {}
 
-  @Post('create')
-  createEmployer(@Body() data: CreateEmployerDto): Observable<string> {
-    return this.employerService.createEmployer(data);
-  }
+  // @Post('create')
+  // createEmployer(@Body() data: CreateEmployerDto): Observable<string> {
+  //   return this.employerService.createEmployer(data);
+  // }
 
   @Get('all')
   getAllEmployers(): Observable<string> {

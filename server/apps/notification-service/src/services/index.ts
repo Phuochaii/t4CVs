@@ -1,1 +1,1 @@
-export * from "./notification-service.service"
+export * from './notification-service.service';

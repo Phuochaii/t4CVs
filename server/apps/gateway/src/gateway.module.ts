@@ -19,7 +19,7 @@ import { EmployerModule } from './employer/employer.module';
     CompanyModule,
     UserModule,
     CVModule,
-    EmployerModule,
+    // EmployerModule,
   ],
   controllers: [GatewayController],
   providers: [GatewayService],
