@@ -10,7 +10,7 @@ import path from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: path.resolve(__dirname, '.env'),
+      envFilePath: "./configs/.env",
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -22,10 +22,11 @@ import path from 'path';
           port: configService.get('DB_PORT'),
           username: configService.get('DB_USERNAME'),
           password: `${configService.get('DB_PASSWORD')}`,
-          database: configService.get('DB_DATABASE'),
+          database: configService.get('DB_NOTIFICATION_DATABASE'),
           autoLoadEntities: true,
           synchronize: true,
         };
+        console.log(defaultConfig);
         const databaseConfiger = new DatabaseConfiger(defaultConfig);
         return databaseConfiger.config();
       },

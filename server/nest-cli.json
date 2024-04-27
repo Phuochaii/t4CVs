@@ -71,8 +71,7 @@
       "compilerOptions": {
         "tsConfigPath": "apps/notification-service/tsconfig.app.json",
         "assets": [
-          "./proto/*.proto",
-          ".env"
+          "./proto/*.proto"
         ],
         "watchAssets": true
       }
