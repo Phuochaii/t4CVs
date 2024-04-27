@@ -10,7 +10,7 @@ import path from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: "./configs/.env",
+      envFilePath: './configs/.env',
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -18,11 +18,13 @@ import path from 'path';
       useFactory: async (configService: ConfigService) => {
         const defaultConfig: DatabaseOptions = {
           type: 'postgres',
+
           host: configService.get('DB_HOST'),
           port: configService.get('DB_PORT'),
           username: configService.get('DB_USERNAME'),
           password: `${configService.get('DB_PASSWORD')}`,
           database: configService.get('DB_NOTIFICATION_DATABASE'),
+
           autoLoadEntities: true,
           synchronize: true,
         };

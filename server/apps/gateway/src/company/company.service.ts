@@ -64,7 +64,7 @@ export class CompanyService {
   }
 
   findCampaignByEmployerId(employerId: number, page: number, limit: number) {
-    return this.companyClient.send<FindCampaignDTOResponse>(
+    return this.companyClient.send<{ data: FindCampaignDTOResponse[] }>(
       { cmd: 'find_campaign_by_employerId' },
       { employerId, page, limit },
     );

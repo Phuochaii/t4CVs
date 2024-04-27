@@ -96,6 +96,8 @@ export class Job {
   status: boolean;
 
   //companyId
+  @Column()
+  companyId: number;
 
   //jobDetailId
   @OneToOne(() => JobDetail)

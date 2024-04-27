@@ -1,6 +1,4 @@
-import { request } from 'http';
 import {
-  GetUserNotificationsRequest,
   NOTIFICATION_PACKAGE_NAME,
   NOTIFICATION_SERVICE_NAME,
   NotificationServiceClient,

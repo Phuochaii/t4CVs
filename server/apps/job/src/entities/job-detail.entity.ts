@@ -5,7 +5,7 @@ export class JobDetail {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  quantity: string;
+  quantity: number;
 
   @Column()
   jobSchedule: string;
