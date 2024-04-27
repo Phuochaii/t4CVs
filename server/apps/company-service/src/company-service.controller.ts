@@ -52,11 +52,23 @@ export class CompanyServiceController {
   }
 
   @MessagePattern({ cmd: 'get_all_campaigns' })
-  findAllCampaign(@Payload() data: any) {
-    const page = data.page;
-    const limit = data.limit;
+  async findAllCampaign(@Payload() data: any) {
+    const page = Number(data.page);
+    const limit = Number(data.limit);
 
-    return this.campaignService.findAllCampaigns(page, limit);
+    const total = Number(await this.campaignService.getTotalCampaign());
+    const total_page = Math.ceil(total / limit);
+    const data_find = await this.campaignService.findAllCampaigns(page, limit);
+
+    const result = {
+      page: page,
+      limit: limit,
+      total: total,
+      total_page: total_page,
+      data: data_find,
+    };
+
+    return result;
   }
 
   @MessagePattern({ cmd: 'find_campaign_by_id' })

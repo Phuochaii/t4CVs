@@ -62,12 +62,9 @@ export class CampaignService {
     return result;
   }
 
-  // async findEmployerId(id: number) {
-  //   const result = await this.CampaignRepository.findOne({
-  //     where: {
-  //       id,
-  //     },
-  //   });
-  //   return result.employerId;
-  // }
+  async getTotalCampaign(): Promise<number> {
+    const total = await this.CampaignRepository.count();
+
+    return total;
+  }
 }
