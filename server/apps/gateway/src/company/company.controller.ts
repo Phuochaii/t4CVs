@@ -70,8 +70,16 @@ export class CompanyController {
   }
 
   @Get('campaign/employer/:employerId')
-  findCampaignByEmployerId(@Param('employerId') employerId: number) {
-    return this.companyService.findCampaignByEmployerId(employerId);
+  findCampaignByEmployerId(
+    @Param('employerId') employerId: number,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.companyService.findCampaignByEmployerId(
+      employerId,
+      page,
+      limit,
+    );
   }
 
   // @Get('campaign/:id/employer')

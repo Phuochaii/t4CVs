@@ -1,4 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'Campaign' })
 export class Campaign {
@@ -7,7 +12,7 @@ export class Campaign {
 
   @Column()
   name: string;
-  @Column()
+  @CreateDateColumn()
   createdAt: Date;
   @Column()
   employerId: number;

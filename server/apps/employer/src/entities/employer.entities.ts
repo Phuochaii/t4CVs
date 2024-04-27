@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Position } from './position.entities';
@@ -18,7 +18,7 @@ export class Employer {
   @Column()
   gender: string;
 
-  @OneToOne(() => Position)
+  @ManyToOne(() => Position)
   @JoinColumn()
   positionId: number;
 
