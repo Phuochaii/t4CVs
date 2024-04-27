@@ -3,9 +3,9 @@ import { CompanyServiceController } from './company-service.controller';
 import { CompanyServiceService } from './company-service.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Company } from './entities/company.entity';
-import { CampaignModule } from './campaign/campaign.module';
-import { DatabaseConfiger, DatabaseOptions } from './database/init';
+import { Company } from '../entities/company.entity';
+import { CampaignModule } from '../campaign/campaign.module';
+import { DatabaseConfiger, DatabaseOptions } from '../database/init';
 import * as path from 'path';
 
 @Module({

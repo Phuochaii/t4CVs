@@ -1,11 +1,11 @@
 import { Controller } from '@nestjs/common';
 import { CompanyServiceService } from './company-service.service';
-import { CampaignService } from './campaign/campaign.service';
+import { CampaignService } from '../campaign/campaign.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { CreateCompanyDto } from './dto/Req/create-company.dto';
-import { UpdateCompanyDto } from './dto/Req/update-company.dto';
-import { CreateCampaignDto } from './dto/Req/create-campaign.dto';
-import { UpdateCampaignDto } from './dto/Req/update-campaign.dto';
+import { CreateCompanyDto } from '../dto/Req/create-company.dto';
+import { UpdateCompanyDto } from '../dto/Req/update-company.dto';
+import { CreateCampaignDto } from '../dto/Req/create-campaign.dto';
+import { UpdateCampaignDto } from '../dto/Req/update-campaign.dto';
 // import { FindCompanyDTOResponse } from './dto/Res/find-company.dto';
 
 @Controller()
@@ -22,11 +22,24 @@ export class CompanyServiceController {
   }
 
   @MessagePattern({ cmd: 'get_all_companies' })
-  findAllCompanies(@Payload() data: any) {
-    const page = data.page;
-    const limit = data.limit;
+  async findAllCompanies(@Payload() data: any) {
+    const page = Number(data.page);
+    const limit = Number(data.limit);
 
-    return this.companyServiceService.findAllCompanies(page, limit);
+    const total = Number(await this.campaignService.getTotalCampaign());
+    const total_page = Math.ceil(total / limit);
+    // eslint-disable-next-line prettier/prettier
+    const data_find = await this.companyServiceService.findAllCompanies(page, limit);
+
+    const result = {
+      page: page,
+      limit: limit,
+      total: total,
+      total_page: total_page,
+      data: data_find,
+    };
+
+    return result;
   }
 
   @MessagePattern({ cmd: 'find_company_by_id' })
