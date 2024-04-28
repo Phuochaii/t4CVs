@@ -1,5 +1,6 @@
 export class CreateJobDto {
   id?: number;
+  status?: boolean;
   titleRecruitment: string;
   majorId: number;
   fieldsId: number[];
@@ -19,5 +20,5 @@ export class CreateJobDto {
   description: string;
   benefit: string;
   requirement: string;
-  skill: string;
+  skills: string;
 }
