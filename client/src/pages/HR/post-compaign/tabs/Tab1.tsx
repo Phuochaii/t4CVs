@@ -123,7 +123,7 @@ function PostCompaign1({
     expId: 0,
     locationsId: [] as number[], // Specify the type explicitly
     expiredDate: "",
-    quantity: "",
+    quantity: 0,
     jobSchedule: "",
     gender: "",
     description: "",
@@ -154,8 +154,8 @@ function PostCompaign1({
       updatedItem.salaryMax = Number.parseInt(salary);
       updatedItem.expId = Number.parseInt(expOptions?.value!);
       updatedItem.locationsId = cityOption ? cityOption.map(option => parseInt(option.value)) : []; // Replace [4, 5] with your desired array of location IDs
-      updatedItem.expiredDate = date;
-      updatedItem.quantity = quantity;
+      updatedItem.expiredDate = "2024-05-01";
+      updatedItem.quantity = Number.parseInt(quantity);
       updatedItem.jobSchedule = "8:00am-17:00pm T2-T6";
       updatedItem.gender = "Any";
       updatedItem.description =
