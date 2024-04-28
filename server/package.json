@@ -1,0 +1,109 @@
+{
+  "name": "server",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
+    "copy:proto": "node proto/copy-proto.js",
+    "start": "pnpm run copy:proto && nest start",
+    "start:dev": "pnpm run copy:proto && nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/apps/server/main",
+    "start:all": "pnpm run copy:proto && concurrently --kill-others --names \"gateway,notification,application,company,cv,employer,job,upload,user\" -c \"auto\" \"nest start gateway\" \"nest start notification-service\" \"nest start application\" \"nest start company-service\" \"nest start cv\" \"nest start employer\" \"nest start job\" \"nest start upload\" \"nest start user\"",
+    "start:all:dev": "pnpm run copy:proto && concurrently --kill-others --names \"gateway,notification,application,company,cv,employer,job,upload,user\" -c \"auto\" \"nest start --watch gateway\" \"nest start --watch notification-service\" \"nest start --watch application\" \"nest start --watch company-service\" \"nest start --watch cv\" \"nest start --watch employer\" \"nest start --watch job\" \"nest start --watch upload\" \"nest start --watch user\"",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "protoc:win": "node ./proto/protoc/protoc.win.js",
+    "protoc": "node ./proto/protoc/protoc.js"
+  },
+  "dependencies": {
+    "@apollo/gateway": "^2.7.2",
+    "@apollo/server": "^4.10.2",
+    "@apollo/subgraph": "^2.7.2",
+    "@grpc/grpc-js": "^1.10.5",
+    "@grpc/proto-loader": "^0.7.12",
+    "@nestjs/apollo": "^12.1.0",
+    "@nestjs/axios": "^3.0.2",
+    "@nestjs/common": "^10.3.7",
+    "@nestjs/config": "^3.2.2",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/graphql": "^12.1.1",
+    "@nestjs/mapped-types": "*",
+    "@nestjs/microservices": "^10.3.7",
+    "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/swagger": "^7.3.1",
+    "@nestjs/typeorm": "^10.0.2",
+    "@types/multer": "^1.4.11",
+    "apollo-server-express": "^3.13.0",
+    "axios": "^1.6.8",
+    "file-type-mime": "^0.3.10",
+    "graphql": "^16.8.1",
+    "multer": "1.4.5-lts.1",
+    "mysql2": "^3.9.4",
+    "nestjs-typeorm-paginate": "^4.0.4",
+    "pg": "^8.11.5",
+    "reflect-metadata": "^0.2.0",
+    "rxjs": "^7.8.1",
+    "sqlite3": "^5.1.7",
+    "ts-proto": "^1.172.0",
+    "typeorm": "^0.3.20",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.0.0",
+    "@nestjs/schematics": "^10.0.0",
+    "@nestjs/testing": "^10.0.0",
+    "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.2",
+    "@types/node": "^20.12.2",
+    "@types/supertest": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "concurrently": "^8.2.2",
+    "dotenv": "^16.4.5",
+    "eslint": "^8.42.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "fs-extra": "^11.2.0",
+    "jest": "^29.5.0",
+    "prettier": "^3.0.0",
+    "source-map-support": "^0.5.21",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.0",
+    "ts-loader": "^9.4.3",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.1.3"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": ".",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/apps/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1"
+    }
+  }
+}

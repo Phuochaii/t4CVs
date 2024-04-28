@@ -1,0 +1,14 @@
+[
+    {
+        "serviceName": "gateway",
+        "protoFiles": ["application", "notification"]
+    },
+    {
+        "serviceName": "notification-service",
+        "protoFiles": ["notification"]
+    },
+    {
+        "serviceName": "application",
+        "protoFiles": ["application"]
+    }
+]
