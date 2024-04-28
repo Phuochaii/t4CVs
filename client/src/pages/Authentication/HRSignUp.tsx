@@ -26,6 +26,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import { styled } from "@mui/material/styles";
 import "../../shared/assets/styles/hr-signup.css";
+import { data_provinces } from "../auth-page/signup-page/provinces-data";
+import { data_districts } from "../auth-page/signup-page/districts-data";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -76,6 +78,9 @@ function HRSignUp() {
     district: "",
     skype_account: "",
   });
+
+  // const [provinces, setProvinces] = useState([]);
+
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [expanded, setExpanded] = useState(true);
 
@@ -87,8 +92,7 @@ function HRSignUp() {
   const [phoneErrorMessage, setPhoneErrorMessage] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
-  const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] =
-    useState("");
+  const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState("");
 
   const [sexError, setSexError] = useState(false);
   const [nameError, setNameError] = useState(false);
@@ -105,6 +109,10 @@ function HRSignUp() {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
+
+  const filteredDistricts = data_districts.data.filter(
+    (district) => district.parent_code === hrData.address_work
+  );
 
   const isEmailValid = (email: string) => {
     // Biểu thức chính quy để kiểm tra định dạng email
@@ -301,8 +309,14 @@ function HRSignUp() {
 
     // Lưu thông tin tài khoản vào Local Storage hoặc gửi đến server
     if (!error) {
+      const foundProvince = data_provinces.data.find(
+        (province) => province.code === hrData.address_work
+      );
+
+      setHrData(prevHrData => ({ ...prevHrData, address_work: foundProvince?.name_with_type || "" }));
       // localStorage.setItem('account', JSON.stringify(formData));
-      // localStorage.setItem('hr_info', JSON.stringify(hrData))
+      // localStorage.setItem('hr_info', JSON.stringify(hrData));
+
       console.log("Đăng ký thành công.");
       setShowSuccessMessage(true); // Hiển thị thông báo khi đăng ký thành công
     }
@@ -680,17 +694,16 @@ function HRSignUp() {
                     }}
                     placeholder="Chọn tỉnh/ thành phố"
                     className="mt-2 h-9"
+                    MenuProps={{ PaperProps: { style: { maxHeight: 200 } } }}
                   >
                     <MenuItem value="" disabled>
                       Chọn tỉnh/ thành phố
                     </MenuItem>
-                    {/* <MenuItem value={"Nhân viên"}>Nhân viên</MenuItem>
-                  <MenuItem value={"Trưởng nhóm"}>Trưởng nhóm</MenuItem>
-                  <MenuItem value={"Phó phòng"}>Phó phòng</MenuItem>
-                  <MenuItem value={"Trưởng phòng"}>Trưởng phòng</MenuItem>
-                  <MenuItem value={"Phó giám đốc"}>Phó giám đốc</MenuItem>
-                  <MenuItem value={"Giám đốc"}>Giám đốc</MenuItem>
-                  <MenuItem value={"Tổng giám đốc"}>Tổng giám đốc</MenuItem> */}
+                    {data_provinces.data.map((province) => (
+                      <MenuItem key={province.code} value={province.code}>
+                        {province.name_with_type}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
                 {addressWorkError && (
@@ -712,17 +725,17 @@ function HRSignUp() {
                     }
                     placeholder="Chọn quận/ huyện"
                     className="mt-2 h-9"
+                    disabled={!hrData.address_work}
+                    MenuProps={{ PaperProps: { style: { maxHeight: 200 } } }}
                   >
                     <MenuItem value="" disabled>
                       Chọn quận/ huyện
                     </MenuItem>
-                    {/* <MenuItem value={"Nhân viên"}>Nhân viên</MenuItem>
-                  <MenuItem value={"Trưởng nhóm"}>Trưởng nhóm</MenuItem>
-                  <MenuItem value={"Phó phòng"}>Phó phòng</MenuItem>
-                  <MenuItem value={"Trưởng phòng"}>Trưởng phòng</MenuItem>
-                  <MenuItem value={"Phó giám đốc"}>Phó giám đốc</MenuItem>
-                  <MenuItem value={"Giám đốc"}>Giám đốc</MenuItem>
-                  <MenuItem value={"Tổng giám đốc"}>Tổng giám đốc</MenuItem> */}
+                    {filteredDistricts.map((district) => (
+                      <MenuItem key={district.code} value={district.name_with_type}>
+                        {district.name_with_type}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </div>
@@ -795,7 +808,7 @@ function HRSignUp() {
             <span className="text-green-500">Report</span>
           </div>
           <Slider {...settings}>
-            {images.map((step, index) => (
+            {images.map((step, _index) => (
               <div key={step.label}>
                 <img
                   src={step.path}
@@ -870,7 +883,7 @@ function HRSignUp() {
           <div className="basis-1/2 justify-self-center  text-center">
             <button
               className="rounded-full px-4 py-4 bg-green-600 text-white hover:bg-green-700"
-              onClick={(e) => handleCloseDialog("HR")}
+              onClick={(_e) => handleCloseDialog("HR")}
             >
               Tôi là nhà tuyển dụng
             </button>
