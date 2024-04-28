@@ -14,7 +14,7 @@ export class CreateJobDto {
   expId: number;
   locationId: number[];
   expiredDate: string;
-  quantity: string;
+  quantity: number;
   jobSchedule: string;
   gender: string;
   description: string;
