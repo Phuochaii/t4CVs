@@ -10,6 +10,7 @@ import { CVModule } from './cv/cv.module';
 import { NotificationModule } from './notification/notification.module';
 import { Company } from 'apps/company-service/src/entities/company.entity';
 import { UserModule } from './user/user.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { UserModule } from './user/user.module';
     UploadModule,
     CompanyModule,
     UserModule,
-  CVModule,
+    CVModule,
+    ConfigModule.forRoot({ envFilePath: '.env.example' }),
   ],
   controllers: [GatewayController],
   providers: [GatewayService],
