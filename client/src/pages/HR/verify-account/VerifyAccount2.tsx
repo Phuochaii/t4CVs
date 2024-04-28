@@ -1,4 +1,41 @@
+import { useState, useCallback, useRef } from "react";
+
 function VerifyAccount2() {
+    const [firstImage, setFirstImage] = useState(null);
+    const [secondImage, setSecondImage] = useState(null);
+
+    const firstImageUploadRef = useRef(null);
+    const secondImageUploadRef = useRef(null);
+    const handleFirstImageUpload = useCallback((e) => {
+        firstImageUploadRef.current?.click(e);
+    }, []);
+    const firstImagePreview = useCallback((e) => {
+        const selectedImage = e.target.files[0];
+        if (selectedImage) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                setFirstImage(event.target.result);
+            };
+
+            reader.readAsDataURL(selectedImage);
+        }
+    }, []);
+    const handleSecondImageUpload = useCallback(() => {
+        secondImageUploadRef?.current?.click();
+    }, []);
+    const secondImagePreview = (e) => {
+        const selectedImage = e.target.files[0];
+
+        if (selectedImage) {
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+                setSecondImage(event.target.result);
+            };
+
+            reader.readAsDataURL(selectedImage);
+        }
+    };
     return (
         <div className="text-black mt-12 mx-[200px] mb-20 px-8 pt-8 pb-10 bg-white rounded">
             <div className="flex gap-6 pb-4 border-b border-[#e8edf2]">
@@ -23,7 +60,23 @@ function VerifyAccount2() {
             <div className="flex">
                 <div className="item mr-8 w-[50%]">
                     <div className="relative w-full inner border border-dashed border-[#a8afb6] h-[206px] rounded-[8px] flex justify-center">
-                        <div className="absolute w-full bottom-2 flex justify-center items-center">
+                        {firstImage && (
+                            <img
+                                src={firstImage}
+                                alt=""
+                                className="absolute top-0 left-0 h-full w-full object-cover"
+                            />
+                        )}
+                        <input
+                            type="file"
+                            ref={firstImageUploadRef}
+                            onChange={firstImagePreview}
+                            style={{ display: "none" }}
+                            accept="image/png, image/gif, image/jpeg"
+                        />
+                        <div
+                            className={`absolute w-full bottom-0 py-2 flex justify-center items-center ${firstImage && "bg-white opacity-90"}`}
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 512 512"
@@ -38,7 +91,10 @@ function VerifyAccount2() {
                             </svg>
                             <div>
                                 <div>Kéo thả ảnh vào hoặc</div>
-                                <a className="underline italic cursor-pointer text-[#00B14F]">
+                                <a
+                                    className="underline italic cursor-pointer text-[#00B14F]"
+                                    onClick={handleFirstImageUpload}
+                                >
                                     Chọn từ máy tính
                                 </a>
                             </div>
@@ -50,7 +106,23 @@ function VerifyAccount2() {
                 </div>
                 <div className="item mr-8 w-[50%]">
                     <div className="relative w-full inner border border-dashed border-[#a8afb6] h-[206px] rounded-[8px] flex justify-center">
-                        <div className="absolute w-full bottom-2 flex justify-center items-center">
+                        {secondImage && (
+                            <img
+                                src={secondImage}
+                                alt=""
+                                className="absolute top-0 left-0 h-full w-full object-cover"
+                            />
+                        )}
+                        <input
+                            type="file"
+                            ref={secondImageUploadRef}
+                            onChange={secondImagePreview}
+                            style={{ display: "none" }}
+                            accept="image/png, image/gif, image/jpeg"
+                        />
+                        <div
+                            className={`absolute w-full bottom-0 py-2 flex justify-center items-center ${firstImage && "bg-white opacity-90"}`}
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 512 512"
@@ -65,7 +137,10 @@ function VerifyAccount2() {
                             </svg>
                             <div>
                                 <div>Kéo thả ảnh vào hoặc</div>
-                                <a className="underline italic cursor-pointer text-[#00B14F]">
+                                <a
+                                    className="underline italic cursor-pointer text-[#00B14F]"
+                                    onClick={handleSecondImageUpload}
+                                >
                                     Chọn từ máy tính
                                 </a>
                             </div>
@@ -89,7 +164,9 @@ function VerifyAccount2() {
                         thoại
                     </span>
                 </div>
-                <button className="cursor-pointer text-white bg-[#00b14f] rounded-[5px] py-4 px-16 text-base">
+                <button
+                    className={`cursor-pointer text-white bg-[#00b14f] rounded-[5px] py-4 px-16 text-base ${firstImage && secondImage ? "opacity-100" : "opacity-65"}`}
+                >
                     Tiếp tục
                 </button>
             </div>
