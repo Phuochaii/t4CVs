@@ -15,7 +15,7 @@ function ReceiveCV() {
   const [listCV, setListCV] = React.useState<any>([]);
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
-  const [compaignList, setCompaignList] = React.useState([]);
+  const [compaignList, setCompaignList] = React.useState<any>([]);
 
   const fetchApplication = async (hrId: string) => {
     HRModule.getApplicationByCampaignIdHRId({
@@ -30,10 +30,9 @@ function ReceiveCV() {
 
   React.useEffect(() => {
     const fetchAllCompaign = async () => {
-      setCompaignList({ id: "", name: "Tất cả" });
       HRModule.getAllCompaignByHrId({ hrId: "1" }).then((res) => {
         console.log(res.data);
-        setCompaignList((data: any) => [data, ...res.data]);
+        setCompaignList([{ id: "", name: "Tất cả" }, ...res.data]);
       });
     };
 

@@ -1,31 +1,31 @@
-import {
-  BriefcaseBusiness,
-  Clock,
-  MapPin,
-  GraduationCap,
-  Info,
-  Eye,
-  Contact,
-  Phone,
-  Mail,
-} from "lucide-react";
+import { Clock, Info, Phone, Mail } from "lucide-react";
+import * as React from "react";
+import { DefaultPagination } from "../../../../shared/components/default-pagination";
+import * as HRModule from "../../../../modules/hr-module";
+
 function FollowingCV() {
-  const listCV = [
-    {
-      name: "Nguyễn Thị Lụa",
-      campaign: {
-        name: "Tuyển nhân viên Tester",
-        id: "#407764",
-      },
-      email: "haiyyen123@gmail.com",
-      phone: "0223092551",
-      insight: {
-        descript: "Tìm CV",
-        time: "07/04/2024 09:22",
-      },
-      status: "Đã xem",
-    },
-  ];
+  const hrId = "1";
+
+  const [listCV, setListCV] = React.useState<any>([]);
+
+  const [page, setPage] = React.useState<number>(1);
+  const [totalPage, setTotalPage] = React.useState<number>(1);
+
+  const fetchApplication = async (hrId: string) => {
+    HRModule.getApplicationByCampaignIdHRId({
+      campaignId: "3",
+      hrId: hrId,
+    }).then((res) => {
+      console.log(res);
+      setListCV(res.applications);
+      setTotalPage(res.totalPage);
+    });
+  };
+
+  React.useEffect(() => {
+    fetchApplication(hrId);
+  }, []);
+
   return (
     <div>
       {listCV.length == 0 ? (
@@ -45,7 +45,7 @@ function FollowingCV() {
               </tr>
             </thead>
             <tbody className="pt-2">
-              {listCV.map((item, index) => (
+              {listCV.map((item: any, index: number) => (
                 <tr
                   key={index}
                   className="font-medium my-5 mx-3"
@@ -62,17 +62,9 @@ function FollowingCV() {
                       />
                     </div>
                     <div className="h-full">
-                      <p className=" text-lg font-bold">{item.name}</p>
+                      <p className=" text-lg font-bold">{item.fullname}</p>
 
-                      <span className="text-sm flex">
-                        <Info
-                          size={15}
-                          strokeWidth={2.3}
-                          style={{ marginRight: "5px" }}
-                        />
-                        {item.status}
-                      </span>
-                      <button className="bg-green-400 text-white my-2 p-2">
+                      <button className="bg-green-300 text-white my-2 px-2">
                         Xem CV
                       </button>
                     </div>
@@ -103,7 +95,7 @@ function FollowingCV() {
                         color="#38A34D"
                         style={{ marginRight: "5px" }}
                       />
-                      {item.insight.descript}
+                      Tìm việc
                     </p>
                     <p className="flex">
                       <Clock
@@ -111,18 +103,27 @@ function FollowingCV() {
                         color="#38A34D"
                         style={{ marginRight: "5px" }}
                       />
-                      {item.insight.time}
+                      {item.updateAt}
                     </p>
                   </td>
                   <td>
-                    <div className="rounded-full bg-orange-100 text-orange-400 px-3">
-                      {item.status}
+                    <div
+                      className={`rounded-full ${item.status ? "bg-orange-100 text-orange-400" : "bg-blue-200 text-blue-500"} px-3`}
+                    >
+                      {item.status ? "Đã xem" : "Chưa xem"}
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          <div className="flex justify-center mt-5">
+            <DefaultPagination
+              totalPage={totalPage}
+              active={page}
+              setActive={setPage}
+            />
+          </div>
         </div>
       )}
     </div>

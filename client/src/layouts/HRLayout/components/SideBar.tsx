@@ -214,6 +214,7 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
         {!isCollapsed && (
           <>
             <button
+              className="bg-transparent"
               onClick={() => {
                 navigation("/hr/verify-account/1");
               }}
