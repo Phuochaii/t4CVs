@@ -90,18 +90,28 @@ export class ApplicationController {
     )
     status: boolean | null, //truyen vao false or null //filter
   ) {
+    // const campaignRes = await firstValueFrom(
+    //   this.companyService.findCampaignByEmployerId(hrId, 1, 100),
+    // );
+    // console.log(campaignRes);
+    // let campaignIds = campaignRes.data.map((campaign) => campaign.id);
+    // if (campaignId) {
+    //   if (campaignIds.includes(campaignId)) campaignIds = [campaignId];
+    //   else throw new ForbiddenException();
+    // }
+
+    // return this.applicationService.findAll(page, limit, campaignIds, status);
+    // // return 'success';
+
     const campaignRes = await firstValueFrom(
       this.companyService.findCampaignByEmployerId(hrId, 1, 100),
     );
-    console.log(campaignRes);
+
     let campaignIds = campaignRes.data.map((campaign) => campaign.id);
     if (campaignId) {
-      if (campaignIds.includes(campaignId)) campaignIds = [campaignId];
-      else throw new ForbiddenException();
+      campaignIds = [campaignId];
     }
-
     return this.applicationService.findAll(page, limit, campaignIds, status);
-    // return 'success';
   }
 
   @Get(':id/cv')
