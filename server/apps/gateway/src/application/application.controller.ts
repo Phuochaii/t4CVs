@@ -104,6 +104,11 @@ export class ApplicationController {
     // return 'success';
   }
 
+  @Get(':id/cv')
+  hrGetCv(@Param('id') id: number) {
+    return this.applicationService.hrGetCv(id);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: number) {
     let campaignId;
