@@ -5,13 +5,13 @@ import { applications } from './data';
 import { config } from 'dotenv';
 import { resolve } from 'path';
 
-const envPath = resolve(__dirname, '../../../configs/.env.application');
+const envPath = resolve(__dirname, '../../../configs/.env');
 config({ path: envPath });
 
 const DB_PORT = parseInt(process.env.DB_PORT, 10);
 const DB_USERNAME = process.env.DB_USERNAME;
 const DB_PASSWORD = process.env.DB_PASSWORD;
-const DB_DATABASE = process.env.DB_DATABASE;
+const DB_DATABASE = process.env.DB_APPLICATION_DATABASE;
 
 if (!DB_PORT || !DB_USERNAME || !DB_PASSWORD || !DB_DATABASE) {
   throw new Error('Missing required environment variables');

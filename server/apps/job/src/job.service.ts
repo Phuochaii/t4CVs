@@ -18,6 +18,7 @@ import { CreateBaseDto } from './dto/Req/createBase.dto';
 import { LocationService } from './location/location.service';
 import { ExperienceService } from './experience/experience.service';
 import { TypeService } from './type/type.service';
+import { FindJobRespDTO } from './dto/Resp/findJobResp.dto';
 @Injectable()
 export class JobService {
   constructor(
@@ -36,7 +37,6 @@ export class JobService {
   async findJobByCampaignId(campaignId: number) {
     const result = await this.jobRepository.findOne({
       where: {
-        status: true,
         campaignId,
       },
       relations: [
@@ -80,66 +80,138 @@ export class JobService {
       job.fields.push(field);
     });
 
+    //get list of locations
+    job.locations = [];
+    createJobDto.locationsId.map(async (locationId) => {
+      const location = await this.locationService.findById(locationId);
+      job.locations.push(location);
+    });
     return await this.jobRepository.save(job);
   }
 
-  async findAll(query: any): Promise<Job[]> {
+  async findAll(query: any): Promise<FindJobRespDTO> {
     const page = query.page ?? 1;
     const limit = query.limit ?? 10;
-    delete query.page;
-    delete query.limit;
     const min = query.salaryMin ?? 0;
     const max = query.salaryMax ?? 1000000000;
     const skip = (page - 1) * limit;
+    const fieldId = query.fieldId ?? null;
+    const locationId = query.locationId ?? null;
+    delete query.locationId;
+    delete query.fieldId;
     delete query.page;
     delete query.limit;
     delete query.salaryMin;
     delete query.salaryMax;
-    const jobs = await this.jobRepository.find({
+    let jobs = await this.jobRepository.find({
       where: {
         ...query,
         salaryMin: MoreThanOrEqual(min),
         salaryMax: LessThanOrEqual(max),
         expiredDate: MoreThan(new Date()),
       },
-      skip,
-      take: limit,
+      // skip,
+      // take: limit,
       order: {
         updateAt: 'ASC',
       },
-      relations: ['major', 'level', 'currency', 'fields', 'exp', 'type'],
+      relations: [
+        'major',
+        'level',
+        'currency',
+        'fields',
+        'exp',
+        'type',
+        'locations',
+      ],
     });
-    return jobs;
+
+    // get the list of job have fieldId
+
+    if (fieldId) {
+      const jobField = jobs.filter((job) => {
+        return job.fields.some((field) => field.id == fieldId);
+      });
+      jobs = jobField;
+    }
+    // get the list of job have locationId
+    if (locationId) {
+      const jobLocation = jobs.filter((job) => {
+        return job.locations.some((location) => location.id == locationId);
+      });
+      jobs = jobLocation;
+    }
+
+    const result: FindJobRespDTO = {
+      page,
+      limit,
+      total: jobs.length,
+      total_pages: Math.ceil(jobs.length / limit),
+      data: jobs.slice(skip, skip + limit),
+    };
+    return result;
   }
 
-  async findValidJobs(query: any): Promise<Job[]> {
+  async findValidJobs(query: any): Promise<FindJobRespDTO> {
     const page = query.page ?? 1;
     const limit = query.limit ?? 10;
     query.status = true;
-    delete query.page;
-    delete query.limit;
     const min = query.salaryMin ?? 0;
     const max = query.salaryMax ?? 1000000000;
     const skip = (page - 1) * limit;
+    const fieldId = query.fieldId ?? null;
+    const locationId = query.locationId ?? null;
+    delete query.locationId;
+    delete query.fieldId;
     delete query.page;
     delete query.limit;
     delete query.salaryMin;
     delete query.salaryMax;
-    const jobs = await this.jobRepository.find({
+    let jobs = await this.jobRepository.find({
       where: {
         ...query,
         salaryMin: MoreThanOrEqual(min),
         salaryMax: LessThanOrEqual(max),
         expiredDate: MoreThan(new Date()),
       },
-      skip,
-      take: limit,
+      // skip,
+      // take: limit,
       order: {
         updateAt: 'ASC',
       },
-      relations: ['major', 'level', 'currency', 'fields', 'exp', 'type'],
+      relations: [
+        'major',
+        'level',
+        'currency',
+        'fields',
+        'exp',
+        'type',
+        'locations',
+      ],
     });
-    return jobs;
+    // get the list of job have fieldId
+
+    if (fieldId) {
+      const jobField = jobs.filter((job) => {
+        return job.fields.some((field) => field.id == fieldId);
+      });
+      jobs = jobField;
+    }
+    // get the list of job have locationId
+    if (locationId) {
+      const jobLocation = jobs.filter((job) => {
+        return job.locations.some((location) => location.id == locationId);
+      });
+      jobs = jobLocation;
+    }
+    const result: FindJobRespDTO = {
+      page,
+      limit,
+      total: jobs.length,
+      total_pages: Math.ceil(jobs.length / limit),
+      data: jobs.slice(skip, skip + limit),
+    };
+    return result;
   }
 
   async createJobInfo() {

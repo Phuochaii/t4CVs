@@ -18,9 +18,23 @@ export class EmployerService {
     return await this.EmployerRepository.save(employer);
   }
 
-  async findAllEmployers(): Promise<FindEmployerDTOResponse[]> {
-    const positions = await this.EmployerRepository.find();
-    return positions;
+  async findAllEmployers(
+    page: number,
+    limit: number,
+  ): Promise<FindEmployerDTOResponse[]> {
+    const skip = (page - 1) * limit;
+    const employers = await this.EmployerRepository.find({
+      skip: skip,
+      take: limit,
+    });
+
+    return employers;
+  }
+
+  async getTotalEmployers(): Promise<number> {
+    const total = await this.EmployerRepository.count();
+
+    return total;
   }
 
   async findEmployerById(id: number) {

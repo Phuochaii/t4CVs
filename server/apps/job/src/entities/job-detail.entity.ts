@@ -5,7 +5,7 @@ export class JobDetail {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  quantity: string;
+  quantity: number;
 
   @Column()
   jobSchedule: string;
@@ -21,5 +21,5 @@ export class JobDetail {
   @Column()
   requirement: string;
   @Column()
-  skill: string;
+  skills: string;
 }

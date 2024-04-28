@@ -4,12 +4,13 @@ import { Observable } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateBaseDto } from './dto/Req/createBase.dto';
 import { UpdateJobDto } from './dto/Req/update-job.dto';
+import { FindJobResponse } from './dto/Res/find-job.reponse';
 
 @Injectable()
 export class JobService {
-  constructor(@Inject('JOB') private readonly jobClient: ClientProxy) {}
-  findJobByCampaignId(campaignId: number): Observable<string> {
-    return this.jobClient.send({ cmd: 'find_job_by_campaignId' }, campaignId);
+  constructor(@Inject('JOB') private readonly jobClient: ClientProxy) { }
+  findJobByCampaignId(campaignId: number) {
+    return this.jobClient.send<FindJobResponse>({ cmd: 'find_job_by_campaignId' }, campaignId);
   }
   getAllJobs(query: any): Observable<string> {
     return this.jobClient.send({ cmd: 'get_all_jobs' }, query);

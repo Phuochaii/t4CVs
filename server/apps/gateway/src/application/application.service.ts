@@ -4,16 +4,20 @@ import {
   ApplicationServiceClient,
   CreateApplicationRequest,
 } from '@app/common/proto/application';
-import {
-  Inject,
-  Injectable,
-  NotFoundException,
-  OnModuleInit,
-} from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 
 import { ClientGrpc } from '@nestjs/microservices';
-// import { Observable, from, throwError, toArray } from 'rxjs';
-// import { catchError, map, mergeAll } from 'rxjs/operators';
+import { CVService } from '../cv/cv.service';
+import { firstValueFrom } from 'rxjs';
+import {
+  NotificationService,
+  NotificationUserId,
+  NotificationUserRole,
+} from '../notification/notification.service';
+import { EmployerService } from '../employer/employer.service';
+import { CVDto } from '../cv/dto/cv.dto';
+import { CompanyService } from '../company/company.service';
+import { JobService } from '../job/job.service';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
@@ -22,6 +26,11 @@ export class ApplicationService implements OnModuleInit {
 
   constructor(
     @Inject(APPLICATION_PACKAGE_NAME) private readonly client: ClientGrpc,
+    private readonly cvService: CVService,
+    private readonly notificationService: NotificationService,
+    private readonly employerService: EmployerService,
+    private readonly companyService: CompanyService,
+    private readonly jobService: JobService,
   ) {}
 
   onModuleInit() {
@@ -32,7 +41,6 @@ export class ApplicationService implements OnModuleInit {
   }
 
   create(createApplicationRequest: CreateApplicationRequest) {
-    // console.log(createApplicationRequest);
     return this.applicationServiceClient.createApplication(
       createApplicationRequest,
     );
@@ -41,16 +49,53 @@ export class ApplicationService implements OnModuleInit {
   findOne(id: number) {
     return this.applicationServiceClient.readApplication({ id });
   }
-  findAll(page: number, limit: number) {
-    const applications$ = this.applicationServiceClient.readAllApplication({
-      page,
-      limit,
-    });
+
+  findAll(
+    page: number,
+    limit: number,
+    campaignIds: number[],
+    status: boolean | null,
+  ) {
+    const applications$ =
+      this.applicationServiceClient.readAllApplicationByCampaignId({
+        page,
+        limit,
+        campaignIds,
+        status,
+      });
     return applications$;
   }
 
   async update(id: number) {
-    const data = await this.applicationServiceClient.updateApplication({ id });
+    const data = await firstValueFrom(this.applicationServiceClient.updateApplication({ id }));
     return data;
+  }
+
+  async hrGetCv(id: number) {
+    const application = await this.update(id);
+    const cv = (await firstValueFrom(this.cvService.getCVById(application.cvId))) as CVDto;
+    const campaign = await firstValueFrom(
+      this.companyService.findCampaignById(application.campaignId),
+    );
+    const employer = await firstValueFrom(
+      this.employerService.findEmployerById(campaign.employerId),
+    );
+    const campany = await firstValueFrom(
+      this.companyService.findCompanyById(employer.companyId),
+    );
+    const job = await firstValueFrom(
+      this.jobService.findJobByCampaignId(campaign.id),
+    );
+    const notification = await firstValueFrom(
+      this.notificationService.create(
+        [new NotificationUserId(cv.userId, NotificationUserRole.USER)],
+        {
+          content: `${employer.fullname} - ${campany.name} vừa xem CV của bạn`,
+          link: `job/${job.id}`,
+          title: `Nhà tuyển dụng vừa xem CV của bạn`,
+        },
+      ),
+    );
+    return cv;
   }
 }
