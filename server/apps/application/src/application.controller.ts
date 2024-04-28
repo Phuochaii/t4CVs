@@ -1,37 +1,73 @@
 import { Controller } from '@nestjs/common';
 import { ApplicationService } from './application.service';
+// import { GrpcMethod } from '@nestjs/microservices';
+// import { CreateApplicationDto } from './dto/create-application.dto';
 import {
-  Application,
   ApplicationServiceController,
   ApplicationServiceControllerMethods,
+  Applications,
   CreateApplicationRequest,
+  DeleteApplicationRequest,
   ReadApplicationRequest,
-} from '@app/common';
+  UpdateApplicationRequest,
+  Pagination,
+  ReadAllApplicationByCampaignIdRequest,
+} from '@app/common/proto/application';
 
 @Controller()
 @ApplicationServiceControllerMethods()
 export class ApplicationController implements ApplicationServiceController {
   constructor(private readonly applicationService: ApplicationService) {}
-
-  async createApplication(
-    createApplication: CreateApplicationRequest,
-  ): Promise<Application> {
-    // Use Promise<Application> as return type
-    const application = await this.applicationService.create(createApplication);
-    return application;
+  createApplication(request: CreateApplicationRequest) {
+    return this.applicationService.store(request);
   }
 
-  findAllUsers() {
-    return this.applicationService.findAll();
+  readApplication(request: ReadApplicationRequest) {
+    return this.applicationService.findOneOrFail(request.id);
   }
 
-  async readApplication(
-    readApplication: ReadApplicationRequest,
-  ): Promise<Application> {
-    const application = await this.applicationService.findById(readApplication);
-    if (application) {
-      return application;
-    }
-    return null;
+  async readAllApplicationByCampaignId(
+    request: ReadAllApplicationByCampaignIdRequest,
+  ): Promise<Applications> {
+    const data = await this.applicationService.findAllApplicationByCampaignId(
+      request.page,
+      request.limit,
+      request.campaignIds,
+      request.status,
+    );
+    const total = data.length;
+    const total_pages = Math.ceil(total / request.limit);
+    return {
+      page: request.page,
+      limit: request.limit,
+      total: total,
+      totalPage: total_pages,
+      applications: data,
+    };
+  }
+
+  async readAllApplication(request: Pagination): Promise<Applications> {
+    const data = await this.applicationService.findAll(
+      request.page,
+      request.limit,
+    );
+    // Calculate pagination metadata
+    const total = data.length;
+    const total_pages = Math.ceil(total / request.limit);
+    return {
+      page: request.page,
+      limit: request.limit,
+      total: total,
+      totalPage: total_pages,
+      applications: data,
+    };
+  }
+
+  updateApplication(request: UpdateApplicationRequest) {
+    return this.applicationService.update(request.id);
+  }
+
+  deleteApplication(request: DeleteApplicationRequest) {
+    return this.applicationService.delete(request.id);
   }
 }

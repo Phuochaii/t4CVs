@@ -6,26 +6,24 @@ import {
   Info,
   Eye,
   Contact,
+  Phone,
+  Mail,
 } from "lucide-react";
 function FollowingCV() {
   const listCV = [
     {
       name: "Nguyễn Thị Lụa",
-      statusView: "Đã xem",
+      campaign: {
+        name: "Tuyển nhân viên Tester",
+        id: "#407764",
+      },
       email: "haiyyen123@gmail.com",
       phone: "0223092551",
-      experience: "Phục vụ cà phê và nhà hàng",
-      education: "Đại học Công nghệ",
-      target: "Apply vị trí chuyên viên nhân sự tổng hợp tại Thừa Thiên Huế",
       insight: {
         descript: "Tìm CV",
-        time: "Cập nhật 1 tháng trước",
-        job: "Chuyên viên nhân sự tổng hợp",
-        view: 1,
-        openTime: 1,
-        location: "Thừa Thiên Huế",
+        time: "07/04/2024 09:22",
       },
-      status: "Phù hợp",
+      status: "Đã xem",
     },
   ];
   return (
@@ -41,8 +39,9 @@ function FollowingCV() {
             <thead className="border-b-2 border-gray-100 capitalize pb-2">
               <tr>
                 <th className="text-left capitalize">CV Ứng viên</th>
-                <th className="text-left capitalize">Thông tin CV</th>
-                <th className="text-left capitalize">Insighs</th>
+                <th className="text-left">Thông tin liên hệ</th>
+                <th className="text-left">Insighs</th>
+                <th className="text-left">Trạng thái</th>
               </tr>
             </thead>
             <tbody className="pt-2">
@@ -64,84 +63,61 @@ function FollowingCV() {
                     </div>
                     <div className="h-full">
                       <p className=" text-lg font-bold">{item.name}</p>
-                      <span className="text-sm flex">
-                        <BriefcaseBusiness
-                          size={15}
-                          strokeWidth={2.3}
-                          style={{ marginRight: "5px" }}
-                        />
-                        {item.insight.job}
-                      </span>
+
                       <span className="text-sm flex">
                         <Info
                           size={15}
                           strokeWidth={2.3}
                           style={{ marginRight: "5px" }}
                         />
-                        {item.statusView}
+                        {item.status}
                       </span>
+                      <button className="bg-green-400 text-white my-2 p-2">
+                        Xem CV
+                      </button>
                     </div>
                   </td>
 
-                  <td className="mr-8" style={{ maxWidth: "450px" }}>
-                    <div className="mb-3">
-                      <b>Kinh nghiệm</b>
-                      <p className="flex">
-                        <BriefcaseBusiness
-                          size={15}
-                          strokeWidth={2.3}
-                          style={{ marginRight: "5px" }}
-                        />
-                        {item.experience}
-                      </p>
-                    </div>
-                    <div className="mb-3">
-                      <b>Học vấn</b>
-                      <p className="flex">
-                        <GraduationCap
-                          size={15}
-                          strokeWidth={2.3}
-                          style={{ marginRight: "5px" }}
-                        />
-                        {item.education}
-                      </p>
-                    </div>
-                    <b>Mục tiêu sự nghiệp</b>
-                    <p className=" bg-gray-100 p-3">{item.target} /</p>
+                  <td>
+                    <p className="flex">
+                      <Mail
+                        size={15}
+                        color="#38A34D"
+                        style={{ marginRight: "5px" }}
+                      />
+                      {item.email}
+                    </p>
+                    <p className="flex">
+                      <Phone
+                        color="#38A34D"
+                        size={18}
+                        style={{ marginRight: "5px" }}
+                      />
+                      {item.phone}
+                    </p>
                   </td>
                   <td>
                     <p className="flex">
+                      <Mail
+                        size={15}
+                        color="#38A34D"
+                        style={{ marginRight: "5px" }}
+                      />
+                      {item.insight.descript}
+                    </p>
+                    <p className="flex">
                       <Clock
                         size={15}
-                        strokeWidth={2.3}
+                        color="#38A34D"
                         style={{ marginRight: "5px" }}
                       />
                       {item.insight.time}
                     </p>
-                    <p className="flex">
-                      <Eye
-                        size={15}
-                        strokeWidth={2.3}
-                        style={{ marginRight: "5px" }}
-                      />
-                      {item.insight.view} lượt xem
-                    </p>
-                    <p className="flex">
-                      <Contact
-                        size={15}
-                        strokeWidth={2.3}
-                        style={{ marginRight: "5px" }}
-                      />
-                      {item.insight.openTime} lượt mở liên hệ
-                    </p>
-                    <p className="flex">
-                      <MapPin
-                        size={15}
-                        strokeWidth={2.3}
-                        style={{ marginRight: "5px" }}
-                      />
-                      {item.insight.location}
-                    </p>
+                  </td>
+                  <td>
+                    <div className="rounded-full bg-orange-100 text-orange-400 px-3">
+                      {item.status}
+                    </div>
                   </td>
                 </tr>
               ))}

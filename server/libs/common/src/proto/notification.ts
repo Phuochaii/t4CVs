@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
+import { Timestamp } from "../google/protobuf/timestamp";
 
 export const protobufPackage = "notification";
 
@@ -12,7 +13,18 @@ export enum status {
 
 /** The request message containing the users id. */
 export interface User {
-  id: number;
+  id: string;
+}
+
+export interface PaginationRequest {
+  page: number;
+  limit: number;
+}
+
+export interface PaginaionResponse {
+  total: number;
+  page: number;
+  limit: number;
 }
 
 export interface SendNotificationRequest {
@@ -26,14 +38,32 @@ export interface SendNotificationRequest {
 export interface SendNotificationResponse {
 }
 
-export interface Notifications {
-  notifications: Notification[];
-}
-
 export interface Notification {
+  id: number;
   title: string;
   content: string;
   link: string;
+  status: status;
+  createdAt: Timestamp | undefined;
+}
+
+export interface GetUserNotificationsRequest {
+  user: User | undefined;
+  paginationRequest?: PaginationRequest | undefined;
+}
+
+export interface GetUserNotificationsResponse {
+  pagination: PaginaionResponse | undefined;
+  data: Notification[];
+}
+
+export interface UpdateNotificationStatusRequest {
+  user: User | undefined;
+  notificationId: number;
+  status: status;
+}
+
+export interface UpdateNotificationStatusResponse {
   status: status;
 }
 
@@ -44,7 +74,9 @@ export const NOTIFICATION_PACKAGE_NAME = "notification";
 export interface NotificationServiceClient {
   sendNotification(request: SendNotificationRequest): Observable<SendNotificationResponse>;
 
-  getNotifications(request: User): Observable<Notifications>;
+  getNotifications(request: GetUserNotificationsRequest): Observable<GetUserNotificationsResponse>;
+
+  updateNotificationStatus(request: UpdateNotificationStatusRequest): Observable<UpdateNotificationStatusResponse>;
 }
 
 /** The job application service definition. */
@@ -54,12 +86,21 @@ export interface NotificationServiceController {
     request: SendNotificationRequest,
   ): Promise<SendNotificationResponse> | Observable<SendNotificationResponse> | SendNotificationResponse;
 
-  getNotifications(request: User): Promise<Notifications> | Observable<Notifications> | Notifications;
+  getNotifications(
+    request: GetUserNotificationsRequest,
+  ): Promise<GetUserNotificationsResponse> | Observable<GetUserNotificationsResponse> | GetUserNotificationsResponse;
+
+  updateNotificationStatus(
+    request: UpdateNotificationStatusRequest,
+  ):
+    | Promise<UpdateNotificationStatusResponse>
+    | Observable<UpdateNotificationStatusResponse>
+    | UpdateNotificationStatusResponse;
 }
 
 export function NotificationServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["sendNotification", "getNotifications"];
+    const grpcMethods: string[] = ["sendNotification", "getNotifications", "updateNotificationStatus"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("NotificationService", method)(constructor.prototype[method], method, descriptor);

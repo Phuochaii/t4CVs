@@ -33,8 +33,264 @@ function PostCompaign1({
     value: string;
     label: string;
   }> | null>(null);
+  const [careerOptions, setCareerOptions] = useState<SingleValue<{
+    value: string;
+    label: string;
+  }> | null>(null);
+  const [cityOption, setCityOptions] = useState<SingleValue<{
+    value: string;
+    label: string;
+  }> | null>(null);
+  const [district, setDistrictOptions] = useState<SingleValue<{
+    value: string;
+    label: string;
+  }> | null>(null);
+  const [jobTypeOptions, setjobTypeOptions] = useState<SingleValue<{
+    value: string;
+    label: string;
+  }> | null>(null);
+  const [genderOptions, setGenderOptions] = useState<SingleValue<{
+    value: string;
+    label: string;
+  }> | null>(null);
+  const [levelOptions, setLevelOptions] = useState<SingleValue<{
+    value: string;
+    label: string;
+  }> | null>(null);
+  const [expOptions, setExpOptions] = useState<SingleValue<{
+    value: string;
+    label: string;
+  }> | null>(null);
+  const [currencyOptions, setCurrencyOptions] = useState<SingleValue<{
+    value: string;
+    label: string;
+  }> | null>(null);
+  const [emailOptions, setEmailOptions] = useState<MultiValue<{
+    value: string;
+    label: string;
+  }> | null>(null);
+  const [fieldOptions, setFieldOptions] = useState<MultiValue<{
+    value: string;
+    label: string;
+  }> | null>(null);
+  const [skillOptions, setSkillOptions] = useState<MultiValue<{
+    value: string;
+    label: string;
+  }> | null>(null);
+  const [careerError, setCareerError] = useState(true);
+  const [skillError, setSkillError] = useState(true);
+  const [nameError, setNameError] = useState(true);
+  const [phoneError, setPhoneError] = useState(true);
+  const [emailError, setEmailError] = useState(true);
+  const [fieldError, setFieldError] = useState(true);
+  const [dateError, setDateError] = useState(true);
+  const [jobTypeError, setJobTypeError] = useState(true);
+  const [genderError, setGenderError] = useState(true);
+  const [levelError, setLevelError] = useState(true);
+  const [expError, setExpError] = useState(true);
+  const [currencyError, setCurrencyError] = useState(true);
+  const [quantityError, setQuantityError] = useState(true);
+  const [salaryError, setSalaryError] = useState(true);
+  const [cityError, setCityError] = useState(true);
+  const [districtError, setDistrictError] = useState(true);
+  const [addressError, setAddressError] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-
+  const [showError, setShowError] = useState(true);
+  const [showDescriptionError, setDescritionError] = useState(true);
+  const [showRequirement, setRequirementError] = useState(true);
+  const [address, setAddress] = useState('');
+  const [jobDescription, setJobDescription] = useState('');
+  const [description, setDescription] = useState('');
+  const [requirement, setRequirement] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [salary, setSalary] = useState('');
+  const [title, setTitle] = useState('');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [date, setDate] = useState('');
+  const [titleError, setTitleError] = useState(true);
+  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault();
+    if (!titleError && !showError && !showDescriptionError && !showRequirement
+      && !fieldError && !careerError &&
+      !quantityError && !jobTypeError && !genderError && !levelError && !expError && !currencyError 
+      && !salaryError && !cityError && !districtError && !addressError && 
+      !dateError && !nameError && !phoneError && !emailError &&!skillError ) {
+      next(event)
+    } else {
+      //Do nothing
+    }
+  };
+  const handleTitleError = (value: SetStateAction<string>) => {
+    setTitle(value);
+    if (value.length === 0) {
+      setTitleError(true);
+    } else {
+      setTitleError(false);
+    }
+  }
+  const handleDateError = (value: SetStateAction<string>) => {
+    setDate(value);
+    if (value.length === 0) {
+      setDateError(true);
+    } else {
+      setDateError(false);
+    }
+  }
+  const handleNameError = (value: SetStateAction<string>) => {
+    setName(value);
+    if (value.length === 0) {
+      setNameError(true);
+    } else {
+      setNameError(false);
+    }
+  }
+  const handlePhoneError = (value: SetStateAction<string>) => {
+    setPhone(value);
+    if (value.length === 0) {
+      setPhoneError(true);
+    } else {
+      setPhoneError(false);
+    }
+  }
+  const handleAddressError = (value: SetStateAction<string>) => {
+    setAddress(value);
+    if (value.length === 0) {
+      setAddressError(true);
+    } else {
+      setAddressError(false);
+    }
+  }
+  const handleQuantityError = (value: SetStateAction<string>) => {
+    setQuantity(value);
+    if (value.length === 0) {
+      setQuantityError(true);
+    } else {
+      setQuantityError(false);
+    }
+  }
+  const handleSalaryError = (value: SetStateAction<string>) => {
+    setSalary(value);
+    if (value.length === 0) {
+      setSalaryError(true);
+    } else {
+      setSalaryError(false);
+    }
+  }
+  const handleJobTypeError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
+    setjobTypeOptions(value)
+    if (value !== null) {
+      setJobTypeError(false);
+    } else {
+      setJobTypeError(true);
+    }
+  }
+  const handleEmailError = (value: SetStateAction<MultiValue<{ value: string; label: string }> | null>) => {
+    setEmailOptions(value)
+    if (value?.length !== 0) {
+      setEmailError(false);
+    } else {
+      setEmailError(true);
+    }
+  }
+  const handleCityError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
+    setCityOptions(value)
+    if (value !== null) {
+      setCityError(false);
+    } else {
+      setCityError(true);
+    }
+  }
+  const handleDistrictError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
+    setDistrictOptions(value)
+    if (value !== null) {
+      setDistrictError(false);
+    } else {
+      setDistrictError(true);
+    }
+  }
+  //
+  const handleGenderError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
+    setGenderOptions(value)
+    if (false !== null) {
+      setGenderError(false);
+    } else {
+      setGenderError(true);
+    }
+  }
+  const handleLevelError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
+    setLevelOptions(value)
+    if (value !== null) {
+      setLevelError(false);
+    } else {
+      setLevelError(true);
+    }
+  }
+  const handleExpError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
+    setExpOptions(value)
+    if (value !== null) {
+      setExpError(false);
+    } else {
+      setExpError(true);
+    }
+  }
+  const handleCurrencyError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
+    setCurrencyOptions(value)
+    if (value !== null) {
+      setCurrencyError(false);
+    } else {
+      setCurrencyError(true);
+    }
+  }
+  const handleCareerError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
+    setCareerOptions(value)
+    if (value !== null) {
+      setCareerError(false);
+    } else {
+      setCareerError(true);
+    }
+  }
+  //
+  const handleFieldError = (value: SetStateAction<MultiValue<{ value: string; label: string }> | null>) => {
+    setFieldOptions(value)
+    if (value?.length!==0) {
+      setFieldError(false);
+    } else {
+      setFieldError(true);
+    }
+  }
+  const handleSkillError = (value: SetStateAction<MultiValue<{ value: string; label: string }> | null>) => {
+    setSkillOptions(value)
+    if (value?.length !== 0) {
+      setSkillError(false);
+    } else {
+      setSkillError(true);
+    }
+  }
+  const handleRequirementValidation = (value: SetStateAction<string>) => {
+    setRequirement(value);
+    if (value.length === 0) {
+      setRequirementError(true);
+    } else {
+      setRequirementError(false);
+    }
+  }
+  const handleDescriptionValidation = (value: SetStateAction<string>) => {
+    setDescription(value);
+    if (value.length === 0) {
+      setDescritionError(true);
+    } else {
+      setDescritionError(false);
+    }
+  }
+  const handleJobValidation = (value: SetStateAction<string>) => {
+    setJobDescription(value);
+    if (value.length === 0) {
+      setShowError(true);
+    } else {
+      setShowError(false);
+    }
+  }
   const togglePopup = (
     choice: SetStateAction<SingleValue<{ value: string; label: string }>>
   ) => {
@@ -93,7 +349,12 @@ function PostCompaign1({
               type="text"
               className=" bg-white border-b-2 border-slate-100 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
               placeholder="VD: Nhân viên Marketing"
+              value={title}
+              onChange={(e) => handleTitleError(e.target.value)}
             />
+            {titleError && (<div className="text-red-700">
+              Tiêu đề không được để trống
+            </div>)}
           </div>
         </div>
       </div>
@@ -111,7 +372,7 @@ function PostCompaign1({
             ></Folder>
           </div>
           <div className="w-full space-y-8">
-            <span className="font-bold">Tiêu đề tuyển dụng</span>
+            <span className="font-bold">Ngành nghề và lĩnh vực</span>
             <div className="flex flex-row space-x-10 mb-8">
               <div className="w-3/12 space-y-2">
                 <span className="text-gray-500 text-base font-semibold">
@@ -162,6 +423,7 @@ function PostCompaign1({
                     options={cityOptions}
                     className="basic-multi-select"
                     classNamePrefix="select"
+                    onChange={(e)=>handleCareerError(e)}
                   />
                 </div>
               </div>
@@ -216,14 +478,18 @@ function PostCompaign1({
                     options={cityOptions}
                     className="basic-multi-select"
                     classNamePrefix="select"
-                    onChange={setSelectedOptions}
-                    isOptionDisabled={() => selectedOptions?.length! >= 2}
+                    onChange={(e)=>handleFieldError(e)}
+                    isOptionDisabled={() => fieldOptions?.length! >= 2}
                   />
                 </div>
+
               </div>
             </div>
           </div>
         </div>
+        {(fieldError || careerError) && (<div className="ml-14 text-red-700">
+          Ngành nghề và lĩnh vực không được để trống
+        </div>)}
         <span className="ml-14 text-red-600 text-base ">
           *Nội dung được đề xuất bởi Toppy AI
         </span>
@@ -249,6 +515,8 @@ function PostCompaign1({
                     type="text"
                     className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                     placeholder="Nhập số lượng"
+                    value={quantity}
+                    onChange={(e)=>handleQuantityError(e.target.value)}
                   />
                 </div>
                 <div className="space-y-2 w-3/12">
@@ -307,6 +575,7 @@ function PostCompaign1({
                       options={cityOptions}
                       className="basic-multi-select"
                       classNamePrefix="select"
+                      onChange={(e)=>handleJobTypeError(e)}
                     />
                   </div>
                 </div>
@@ -359,6 +628,7 @@ function PostCompaign1({
                       options={cityOptions}
                       className="basic-multi-select"
                       classNamePrefix="select"
+                      onChange={(e)=>handleGenderError(e)}
                     />
                   </div>
                 </div>
@@ -409,6 +679,7 @@ function PostCompaign1({
                       options={cityOptions}
                       className="basic-multi-select"
                       classNamePrefix="select"
+                      onChange={(e)=>handleLevelError(e)}
                     />
                   </div>
                 </div>
@@ -459,6 +730,7 @@ function PostCompaign1({
                       options={cityOptions}
                       className="basic-multi-select"
                       classNamePrefix="select"
+                      onChange={(e)=>handleExpError(e)}
                     />
                   </div>
                 </div>
@@ -512,6 +784,7 @@ function PostCompaign1({
                       options={cityOptions}
                       className="basic-multi-select"
                       classNamePrefix="select"
+                      onChange={(e)=>handleCurrencyError(e)}
                     />
                   </div>
                 </div>
@@ -577,6 +850,8 @@ function PostCompaign1({
                       type="text"
                       className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                       placeholder="0 VND"
+                      value={salary}
+                      onChange={(e)=>handleSalaryError(e.target.value)}
                     />
                   </div>
                 )}
@@ -639,6 +914,8 @@ function PostCompaign1({
                       options={cityOptions}
                       className="basic-multi-select"
                       classNamePrefix="select"
+                      value={cityOption}
+                      onChange={(e)=>handleCityError(e)}
                     />
                   </div>
                 </div>
@@ -688,6 +965,8 @@ function PostCompaign1({
                       options={cityOptions}
                       className="basic-multi-select"
                       classNamePrefix="select"
+                      value={district}
+                      onChange={(e)=>handleDistrictError(e)}
                     />
                   </div>
                   <div className="w-8/12">
@@ -695,6 +974,8 @@ function PostCompaign1({
                       type="text"
                       className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                       placeholder="Nhập địa điểm làm việc cụ thể"
+                      value = {address}
+                      onChange={(e) => handleAddressError(e.target.value)}
                     />
                   </div>
                 </div>
@@ -708,6 +989,9 @@ function PostCompaign1({
             </div>
           </div>
         </div>
+        {(quantityError || jobTypeError || genderError || levelError || expError || currencyError || salaryError || cityError || districtError || addressError) && (<div className="ml-14 text-red-700">
+          Vui lòng điền đầy đủ thông tin
+        </div>)}
       </div>
       <div className="bg-white p-4 rounded-sm mb-5">
         <div className="flex flex-row space-x-5 mb-4">
@@ -855,12 +1139,14 @@ function PostCompaign1({
                 </button>
               </div>
               <textarea
-                className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
+                className="w-full bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
                 placeholder="Nhập nội dung mô tả công việc"
+                onChange={(e) => handleJobValidation(e.target.value)}
+                value={jobDescription}
               />
-              <div className="text-red-700">
+              {showError && (<div className="text-red-700">
                 Mô tả công việc không được để trống
-              </div>
+              </div>)}
             </div>
           </div>
         </div>
@@ -958,9 +1244,12 @@ function PostCompaign1({
                 </button>
               </div>
               <textarea
-                className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
+                className="w-full bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
                 placeholder="Nhập nội dung mô tả công việc"
+                onChange={(e) => handleRequirementValidation(e.target.value)}
+                value={requirement}
               />
+              
               <div className="text-slate-600 mb-1">Kỹ năng liên quan</div>
               <div className="w-4/5">
                 <Select
@@ -996,8 +1285,13 @@ function PostCompaign1({
                   name="cities"
                   options={cityOptions}
                   classNamePrefix="select"
+                  value={skillOptions}
+                  onChange={(e)=>handleSkillError(e)}
                 />
               </div>
+              {(showRequirement || skillError) && (<div className="text-red-700 mb-5">
+                Vui lòng điền đầy đủ thông tin
+              </div>)}
               <div className="text-base text-red-600">
                 *Nội dung được đề xuất bởi ToppyAI
               </div>
@@ -1096,9 +1390,14 @@ function PostCompaign1({
                 </button>
               </div>
               <textarea
-                className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
+                className="w-full bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
                 placeholder="Nhập nội dung mô tả công việc"
+                onChange={(e) => handleDescriptionValidation(e.target.value)}
+                value={description}
               />
+              {showDescriptionError && (<div className="text-red-700">
+                Quyền lợi công việc không được để trống
+              </div>)}
             </div>
           </div>
         </div>
@@ -1118,9 +1417,11 @@ function PostCompaign1({
                   Hạn chót nhận CV
                 </span>
                 <input
-                  type="text"
+                  type="date"
                   className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                   placeholder="dd/mm/yy"
+                  value={date}
+                  onChange={(e) => handleDateError(e.target.value)}
                 />
               </div>
             </div>
@@ -1131,6 +1432,8 @@ function PostCompaign1({
                   type="text"
                   className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                   placeholder="Họ tên"
+                  value={name}
+                  onChange={(e)=>handleNameError(e.target.value)}
                 />
               </div>
               <div className="space-y-2 w-3/12">
@@ -1139,6 +1442,8 @@ function PostCompaign1({
                   type="text"
                   className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                   placeholder="Số điện thoại"
+                  value={phone}
+                  onChange={(e)=>handlePhoneError(e.target.value)}
                 />
               </div>
               <div className="space-y-2 w-3/12">
@@ -1190,12 +1495,17 @@ function PostCompaign1({
                     options={cityOptions}
                     className="basic-multi-select"
                     classNamePrefix="select"
+                    value={emailOptions}
+                    onChange={(e)=>handleEmailError(e)}
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
+        {(dateError || nameError || phoneError ||emailError) && (<div className="ml-14 text-red-700">
+          Vui lòng điền đầy đủ thông tin
+        </div>)}
       </div>
       <div className="bg-white p-4 rounded-sm mb-5">
         <div className="flex flex-row space-x-5 mb-4">
@@ -1255,7 +1565,7 @@ function PostCompaign1({
               Hủy
             </button>
             <button
-              onClick={next}
+              onClick={handleSubmit}
               className="post-compaign-2_content-item--action btn-success py-2 px-4 rounded text-white bg-green-500 shadow-md cursor-pointer"
             >
               Tiếp tục

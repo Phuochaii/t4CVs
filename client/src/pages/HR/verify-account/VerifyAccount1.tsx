@@ -1,4 +1,10 @@
+import { useNavigate } from "react-router-dom";
+
 function VerifyAccount1() {
+    const navigate = useNavigate();
+    const handleAccept = () => {
+        navigate("/hr/verify-account/2");
+    };
     return (
         <div>
             <div className="title p-5 font-medium text-lg text-black bg-white">
@@ -53,7 +59,10 @@ function VerifyAccount1() {
                         của TopCV.
                     </span>
                 </div>
-                <button className="w-[313px] px-[10px] py-4 font-bold text-white mt-4 bg-[#00b14f] opacity-65 rounded-[5px]">
+                <button
+                    className="w-[313px] px-[10px] py-4 font-bold text-white mt-4 bg-[#00b14f] opacity-65 rounded-[5px]"
+                    onClick={handleAccept}
+                >
                     Xác thực eKYC
                 </button>
             </div>

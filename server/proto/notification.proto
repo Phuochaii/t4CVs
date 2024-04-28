@@ -2,17 +2,30 @@ syntax = "proto3";
 
 package notification;
 
+import "google/protobuf/timestamp.proto";
+
 // The job application service definition.
 service NotificationService {
     rpc SendNotification (SendNotificationRequest) returns (SendNotificationResponse) {}
-    rpc GetNotifications (User) returns (Notifications) {}
+    rpc GetNotifications (GetUserNotificationsRequest) returns (GetUserNotificationsResponse) {}
+    rpc UpdateNotificationStatus (UpdateNotificationStatusRequest) returns (UpdateNotificationStatusResponse) {}
 //   rpc CreateJobApplication (CreateJobApplicationRequest) returns (JobApplication) {}
 }
 
 // The request message containing the users id.
 message User {
-    int32 id = 1;
+    string id = 1;
 }
+message PaginationRequest {
+    int32 page = 1;
+    int32 limit = 2;
+}
+message PaginaionResponse {
+    int32 total = 1;
+    int32 page = 2;
+    int32 limit = 3;
+}
+
 message SendNotificationRequest {
     string title = 1;
     string content = 2;
@@ -25,18 +38,36 @@ message SendNotificationResponse {
     
 }
 
-message Notifications {
-    repeated Notification notifications = 1;
-}
-
 enum status {
     UNREAD = 0;
     READ = 1;
 }
 
 message Notification {
-    string title = 1;
-    string content = 2;
-    string link = 3;
-    status status = 4;
+    int32 id = 1;
+    string title = 2;
+    string content = 3;
+    string link = 4;
+    status status = 5;
+    google.protobuf.Timestamp createdAt = 6;
+}
+
+message GetUserNotificationsRequest {
+    User user = 1;
+    optional PaginationRequest paginationRequest = 2;
+}
+
+message GetUserNotificationsResponse {
+    PaginaionResponse pagination = 1;
+    repeated Notification data = 2;
+}
+
+message UpdateNotificationStatusRequest {
+    User user = 1;
+    int32 notificationId = 2;
+    status status = 3;
+}
+
+message UpdateNotificationStatusResponse {
+    status status = 1;
 }

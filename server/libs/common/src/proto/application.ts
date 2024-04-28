@@ -4,8 +4,19 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "Application";
 
+export interface DeleteApplicationRequest {
+  id: number;
+}
+
 export interface ReadApplicationRequest {
   id: number;
+}
+
+export interface ReadAllApplicationByCampaignIdRequest {
+  page: number;
+  limit: number;
+  campaignIds: number[];
+  status?: boolean | undefined;
 }
 
 export interface CreateApplicationRequest {
@@ -13,31 +24,45 @@ export interface CreateApplicationRequest {
   fullname: string;
   phone: string;
   email: string;
+  coverLetter: string;
+  campaignId: number;
+  userId: number;
   cvId: number;
+}
+
+export interface UpdateApplicationRequest {
+  id: number;
 }
 
 export interface Empty {
 }
 
+export interface Pagination {
+  page: number;
+  limit: number;
+}
+
 /** The JobApplication message represents a job application record. */
 export interface Application {
   id: number;
-  status: Application_Status;
+  status: boolean;
   fullname: string;
   phone: string;
   email: string;
   coverLetter: string;
   createdAt: string;
   updateAt: string;
-  jobId: number;
+  campaignId: number;
   userId: number;
   cvId: number;
 }
 
-export enum Application_Status {
-  SUBMITTED = 0,
-  VIEWED = 1,
-  UNRECOGNIZED = -1,
+export interface Applications {
+  page: number;
+  limit: number;
+  total: number;
+  totalPage: number;
+  applications: Application[];
 }
 
 export const APPLICATION_PACKAGE_NAME = "Application";
@@ -48,18 +73,44 @@ export interface ApplicationServiceClient {
   createApplication(request: CreateApplicationRequest): Observable<Application>;
 
   readApplication(request: ReadApplicationRequest): Observable<Application>;
+
+  readAllApplication(request: Pagination): Observable<Applications>;
+
+  readAllApplicationByCampaignId(request: ReadAllApplicationByCampaignIdRequest): Observable<Applications>;
+
+  updateApplication(request: UpdateApplicationRequest): Observable<Application>;
+
+  deleteApplication(request: DeleteApplicationRequest): Observable<Empty>;
 }
 
 /** The job application service definition. */
 
 export interface ApplicationServiceController {
   createApplication(request: CreateApplicationRequest): Promise<Application> | Observable<Application> | Application;
+
   readApplication(request: ReadApplicationRequest): Promise<Application> | Observable<Application> | Application;
+
+  readAllApplication(request: Pagination): Promise<Applications> | Observable<Applications> | Applications;
+
+  readAllApplicationByCampaignId(
+    request: ReadAllApplicationByCampaignIdRequest,
+  ): Promise<Applications> | Observable<Applications> | Applications;
+
+  updateApplication(request: UpdateApplicationRequest): Promise<Application> | Observable<Application> | Application;
+
+  deleteApplication(request: DeleteApplicationRequest): Promise<Empty> | Observable<Empty> | Empty;
 }
 
 export function ApplicationServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["createApplication", "readApplication"];
+    const grpcMethods: string[] = [
+      "createApplication",
+      "readApplication",
+      "readAllApplication",
+      "readAllApplicationByCampaignId",
+      "updateApplication",
+      "deleteApplication",
+    ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("ApplicationService", method)(constructor.prototype[method], method, descriptor);

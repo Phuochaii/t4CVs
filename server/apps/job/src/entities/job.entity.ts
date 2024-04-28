@@ -4,8 +4,19 @@ import {
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { JobDetail } from './job-detail.entity';
+import { Major } from './major.entity';
+import { Currency } from './currency.entity';
+import { Level } from './level.entity';
+import { Field } from './field.entity';
+import { Location } from './location.entity';
+import { Experience } from './experience.entity';
+import { Type } from './type.entity';
 
 @Entity({ name: 'job' })
 export class Job {
@@ -16,14 +27,33 @@ export class Job {
   titleRecruitment: string;
 
   @Column()
-  major: string;
+  majorId: number;
+
+  @ManyToOne(() => Major)
+  @JoinColumn()
+  major: Major;
 
   //field
+  @ManyToMany(() => Field)
+  @JoinTable()
+  fields: Field[];
 
   @Column()
-  compaignId: number;
+  campaignId: number;
 
+  @Column()
+  typeId: number;
+
+  @ManyToOne(() => Type)
+  @JoinColumn()
+  type: Type;
+
+  @Column()
+  currencyId: number;
   //currencyId
+  @ManyToOne(() => Currency)
+  @JoinColumn()
+  currency: Currency;
 
   @Column()
   salaryMin: number;
@@ -32,13 +62,21 @@ export class Job {
   salaryMax: number;
 
   @Column()
-  exp: number;
+  expId: number;
 
-  @Column('character varying', { array: true })
-  region: string[];
+  @ManyToOne(() => Experience)
+  @JoinColumn()
+  exp: Experience;
+
+  // @Column('character varying', { array: true })
+  // region: string[];
+  //location
+  @ManyToMany(() => Location)
+  @JoinTable()
+  locations: Location[];
 
   @Column()
-  expriedDate: Date;
+  expiredDate: Date;
 
   @Column({ default: new Date() })
   createAt: Date;
@@ -46,12 +84,20 @@ export class Job {
   @Column({ default: new Date() })
   updateAt: Date;
 
+  @Column()
+  levelId: number;
+
   //level
+  @ManyToOne(() => Level)
+  @JoinColumn()
+  level: Level;
 
   @Column({ default: false })
   status: boolean;
 
   //companyId
+  @Column()
+  companyId: number;
 
   //jobDetailId
   @OneToOne(() => JobDetail)

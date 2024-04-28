@@ -58,7 +58,7 @@ function CustomSelectOption({
       </button>
       {isOpen && (
         <ul
-          className="absolute bg-white border border-gray-200 "
+          className="absolute bg-white border border-gray-200 z-10"
           style={{
             width: "100%",
             marginLeft: "12px",

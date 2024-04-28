@@ -1,14 +1,17 @@
 export class CreateJobDto {
   titleRecruitment: string;
-  major: string;
-  compaignId: number;
+  majorId: number;
+  fieldsId: number[];
+  typeId: number;
+  currencyId: number;
+  levelId: number;
+  campaignId: number;
+  companyId: number;
   salaryMin: number;
   salaryMax: number;
-  exp: number;
-  region: string[];
-  expriedDate: string;
-  // createAt: string;
-  // updateAt: string;
+  expId: number;
+  locationId: number[];
+  expiredDate: string;
   quantity: string;
   jobSchedule: string;
   gender: string;

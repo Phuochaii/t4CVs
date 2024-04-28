@@ -10,7 +10,6 @@
   "monorepo": true,
   "root": "apps/gateway",
   "projects": {
-
     "gateway": {
       "type": "application",
       "root": "apps/gateway",
@@ -22,15 +21,6 @@
           "./proto/*.proto"
         ],
         "watchAssets": true
-      }
-    },
-    "cv-service": {
-      "type": "application",
-      "root": "apps/cv-service",
-      "entryFile": "main",
-      "sourceRoot": "apps/cv-service/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/cv-service/tsconfig.app.json"
       }
     },
     "job-application-service": {
@@ -64,6 +54,15 @@
         "tsConfigPath": "apps/upload/tsconfig.app.json"
       }
     },
+    "cv": {
+      "type": "application",
+      "root": "apps/cv",
+      "entryFile": "main",
+      "sourceRoot": "apps/cv/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/cv/tsconfig.app.json"
+      }
+    },
     "notification-service": {
       "type": "application",
       "root": "apps/notification-service",
@@ -93,8 +92,37 @@
       "sourceRoot": "apps/application/src",
       "compilerOptions": {
         "tsConfigPath": "apps/application/tsconfig.app.json",
-        "assets": ["./proto/*.proto"],
+        "assets": [
+          "./proto/*.proto"
+        ],
         "watchAssets": true
+      }
+    },
+    "company-service": {
+      "type": "application",
+      "root": "apps/company-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/company-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/company-service/tsconfig.app.json"
+      }
+    },
+    "employer": {
+      "type": "application",
+      "root": "apps/employer",
+      "entryFile": "main",
+      "sourceRoot": "apps/employer/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/employer/tsconfig.app.json"
+      }
+    },
+    "user": {
+      "type": "application",
+      "root": "apps/user",
+      "entryFile": "main",
+      "sourceRoot": "apps/user/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/user/tsconfig.app.json"
       }
     }
   }

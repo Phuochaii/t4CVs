@@ -261,6 +261,11 @@
   border: 1px solid rgb(74 222 128);
 }
 
+.modal-apply-cv .modal-body .input-userInfo .input_item.MuiTextField-root .MuiInputBase-root {
+  border: 1px solid rgb(203 213 225);
+  border-radius: 5px;
+}
+
 /* config scrollbar */
 @tailwind base;
 @tailwind components;
