@@ -131,7 +131,7 @@ function HRLogIn() {
           {passwordEmpty && !formData.password ? <div className='text-red-500'>Không được để trống mất khẩu</div> : ""}
 
           <div className='flex justify-end'>
-            <Link to="/" className="text-green-500 hover:underline">
+            <Link to="/" className="text-green-500 hover:underline hover:text-green-500">
               Quên mật khẩu
             </Link>
           </div>
@@ -154,7 +154,7 @@ function HRLogIn() {
 
         <p className="text-center text-gray-600">
           Chưa có tài khoản? {' '}
-          <Link to="/hr-signup" className="text-green-500 hover:underline">
+          <Link to="/hr-signup" className="text-green-500 hover:underline hover:text-green-500">
             Đăng ký ngay
           </Link>
         </p>

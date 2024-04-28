@@ -125,7 +125,7 @@ function UserLogIn() {
           </div>
 
           <div className='flex justify-end'>
-            <Link to="/" className="text-green-500 hover:underline">
+            <Link to="/" className="text-green-500 hover:underline hover:text-green-500">
               Quên mật khẩu
             </Link>
           </div>
@@ -177,11 +177,11 @@ function UserLogIn() {
             label={
               <span className='text-gray-700'>
                 Bằng việc đăng nhập bằng tài khoản mạng xã hội, tôi đã đọc và đồng ý với {' '}
-                <Link to="/" className="text-green-500 hover:underline">
+                <Link to="/" className="text-green-500 hover:underline hover:text-green-500">
                   Điều khoản dịch vụ
                 </Link>
                 {' và '}
-                <Link to="/" className="text-green-500 hover:underline">
+                <Link to="/" className="text-green-500 hover:underline hover:text-green-500">
                   Chính sách bảo mật
                 </Link>
                 {' của TopCV.'}
@@ -192,7 +192,7 @@ function UserLogIn() {
 
           <p className="text-center text-gray-600">
             Bạn chưa có tài khoản? {' '}
-            <Link to="/user-signup" className="text-green-500 hover:underline">
+            <Link to="/user-signup" className="text-green-500 hover:underline hover:text-green-500">
               Đăng ký ngay
             </Link>
           </p>

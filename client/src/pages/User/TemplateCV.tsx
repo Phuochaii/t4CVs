@@ -9,7 +9,7 @@ import NoCVUploadImage from "../../shared/assets/images/no-cv-upload.webp";
 import NoProfileImage from "../../shared/assets/images/no-profile.webp";
 import Avatar from "../../shared/assets/images/vietnam-flag-icon.png";
 
-const ManageCV = () => {
+const TemplateCV = () => {
   const [isOn, setIsOn] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -282,4 +282,4 @@ const ManageCV = () => {
   );
 };
 
-export default ManageCV;
+export default TemplateCV;

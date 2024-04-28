@@ -9,11 +9,11 @@ interface LayoutProp {
 
 function AdminLayout({ children }: LayoutProp) {
   return (
-    <div className="w-screen">
-      <GradientFill />
+    <div>
       <Header />
-      <div className="flex">
-        <Sidebar />
+      <div className="flex w-full">
+        <Sidebar className="w-[12%]" />
+        <GradientFill />
         {React.cloneElement(children as React.ReactElement<any>)}
       </div>
     </div>

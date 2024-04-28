@@ -6,7 +6,7 @@ interface SearchBarProps {
 
 function SearchBar({ placeholder }: SearchBarProps) {
   return (
-    <div className="relative bg-gradient-to-r flex-1 from-pink-500 to-purple-500 p-4 rounded-[1.5rem] px-[2px] py-[2px] flex items-center">
+    <div className="relative bg-gradient-to-b flex-1 from-green-500 to-blue-500 p-4 rounded-[1.5rem] px-[2px] py-[2px] flex items-center">
       <Search className="absolute text-slate-400 left-2" />
       <textarea
         rows={1}

@@ -8,16 +8,20 @@ interface LayoutProp {
 }
 
 function HRLayout({ children }: LayoutProp) {
+  const [collapsedSidebar, setCollapsedSidebar] = React.useState(false);
+  const toggleCollopsedSidebar = () => {
+    setCollapsedSidebar(!collapsedSidebar);
+  };
+
   return (
     <div style={{ backgroundColor: "#E8EDF2" }}>
-      <Header />
-      <div className="flex">
-        <SideBar />
-        <div className="flex-grow">
+      <Header collapedSidebar={toggleCollopsedSidebar} />
+      <div className="flex" style={{ height: `calc(100vh - 63px)` }}>
+        <SideBar isCollapsed={collapsedSidebar} />
+        <div className="flex-grow  overflow-y-scroll">
           {React.cloneElement(children as React.ReactElement<any>)}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

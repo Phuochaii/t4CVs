@@ -6,8 +6,11 @@ import {
   Bell,
   ShoppingCart,
   ChevronDown,
+  Menu,
+  LineChart,
 } from "lucide-react";
-function Header() {
+import { useNavigate } from "react-router-dom";
+function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
   const list_btn = [
     {
       name: "HR Insider",
@@ -16,7 +19,7 @@ function Header() {
     },
     {
       name: "Đăng tin",
-      link: "",
+      link: "/hr/post-compaign",
       icon: Pencil,
     },
     {
@@ -52,17 +55,25 @@ function Header() {
         "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg",
     },
   ];
+  const navigation = useNavigate();
   return (
     <div
       className=" text-white"
+      id="hr-header"
       style={{ padding: "16px 20px", backgroundColor: "#212F3F" }}
     >
       <div className="flex items-center">
         <div className="flex items-center flex-grow">
-          <i className="fa-solid fa-bars"></i>
+          <Menu
+            size={18}
+            className="ml-1"
+            strokeWidth={1.65}
+            onClick={collapedSidebar}
+          />
+
           <div
             style={{
-              marginLeft: "27px",
+              marginLeft: "23px",
               marginRight: "20px",
               marginTop: "4px",
             }}
@@ -75,6 +86,16 @@ function Header() {
           </div>
         </div>
         <div className="flex items-center">
+          <RoundedButton
+            icon={LineChart}
+            isFillIcon={false}
+            iconColor="#00B14F"
+            iconSize={20}
+            iconStrokeWidth={2.2}
+            border="2px solid green"
+            text="Tải báo cáo thị trường 2023-2024"
+            backgroundImage="linear-gradient(90deg, #213142 .62%, #0a9c4b 99.38%)"
+          />
           {list_btn.map((btn, index) => (
             <RoundedButton
               key={index}
@@ -83,6 +104,9 @@ function Header() {
               image={btn.image}
               iconSize={btn.iconSize}
               numberNoti={btn.numberNoti}
+              onClick={() => {
+                navigation(btn.link);
+              }}
             />
           ))}
         </div>

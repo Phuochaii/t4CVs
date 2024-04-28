@@ -1,5 +1,6 @@
 import { LucideProps } from "lucide-react";
-import Icon from "../../../shared/components/fill-icon";
+import FillIcon from "../../../shared/components/fill-icon";
+import RegularIcon from "../../../shared/components/regular-icon";
 
 const RoundedButton = ({
   text,
@@ -7,8 +8,13 @@ const RoundedButton = ({
   backgroundColor = "#364C66",
   icon,
   iconSize = 18,
+  iconColor,
+  iconStrokeWidth,
   image,
   numberNoti,
+  backgroundImage,
+  isFillIcon = true,
+  border,
   onClick = () => {},
 }: {
   text?: string;
@@ -16,19 +22,26 @@ const RoundedButton = ({
   backgroundColor?: string;
   icon?: React.FC<LucideProps>;
   iconSize?: number;
+  iconColor?: string;
+  iconStrokeWidth?: number;
   image?: string;
   numberNoti?: number;
+  backgroundImage?: string;
+  isFillIcon?: boolean;
+  border?: string;
   onClick?: () => void;
 }) => {
   return (
     <button
+      className="hover:opacity-80 transition-all duration-200"
       style={{
         padding: image ? "3px 8px" : "5px 15px",
         margin: "0 7px",
         borderRadius: "20px",
         backgroundColor: backgroundColor,
+        backgroundImage: backgroundImage,
         color: textColor,
-        border: "none",
+        border: border || "none",
         cursor: "pointer",
         outline: "none",
         fontWeight: "500",
@@ -44,7 +57,12 @@ const RoundedButton = ({
             alt="Avatar"
           />
         )}{" "}
-        {icon && <Icon icon={icon} size={iconSize} />}
+        {icon &&
+          (isFillIcon ? (
+            <FillIcon icon={icon} color={iconColor} size={iconSize} strokeWidth={iconStrokeWidth} />
+          ) : (
+            <RegularIcon icon={icon} color={iconColor} size={iconSize} strokeWidth={iconStrokeWidth} />
+          ))}
         {text && <span className="ml-2">{text}</span>}
         {numberNoti && (
           <div className="bg-red-500 ml-3 px-2 rounded-full">{numberNoti}</div>

@@ -1,4 +1,4 @@
-import gradient from "@material-tailwind/react/theme/components/timeline/timelineIconColors/gradient";
+import React from "react";
 import CustomSelectOption from "../../layouts/HRLayout/components/CustomSelectOption";
 import {
   ChevronRight,
@@ -11,10 +11,19 @@ import {
 } from "lucide-react";
 
 function ReceiveCV() {
+  interface Data {
+    name: string;
+    value: string;
+  }
+  const [campaign, setCampaign] = React.useState<Data>();
+  const [receivedCvState, setReceivedCvState] = React.useState<Data>();
+  const [cvSourceState, setCvSourceState] = React.useState<Data>();
+  const [cvLabelState, setCvLabelState] = React.useState<Data>();
+  const [cvSeeModeState, setCvSeeModeState] = React.useState<Data>();
+
   const listCV = [
     {
       name: "Nguyễn Thị Lụa",
-      statusView: "Đã xem",
       campaign: {
         name: "Tuyển nhân viên Tester",
         id: "#407764",
@@ -24,56 +33,57 @@ function ReceiveCV() {
       insight: {
         descript: "Tìm CV",
         time: "07/04/2024 09:22",
-        job: "Chuyên viên nhân sự tổng hợp",
       },
-      status: "Phù hợp",
+      status: "Đã xem",
     },
   ];
   const recruitmentCampaign = [
-    { title: "Chiến dịch 1", value: "1" },
-    { title: "Chiến dịch 2", value: "2" },
-    { title: "Chiến dịch 3", value: "3" },
-    { title: "Chiến dịch 4", value: "4" },
+    { name: "Chiến dịch 1", value: "1" },
+    { name: "Chiến dịch 2", value: "2" },
+    { name: "Chiến dịch 3", value: "3" },
+    { name: "Chiến dịch 4", value: "4" },
   ];
   const cvState = [
-    { title: "CV tiếp nhận", value: "1" },
-    { title: "Phù hợp", value: "2" },
-    { title: "Hẹn phỏng vấn", value: "3" },
-    { title: "Gửi đề nghị", value: "4" },
-    { title: "Nhận việc", value: "5" },
-    { title: "Từ chối", value: "6" },
+    { name: "CV tiếp nhận", value: "1" },
+    { name: "Phù hợp", value: "2" },
+    { name: "Hẹn phỏng vấn", value: "3" },
+    { name: "Gửi đề nghị", value: "4" },
+    { name: "Nhận việc", value: "5" },
+    { name: "Từ chối", value: "6" },
   ];
   const cvSource = [
-    { title: "Ứng tuyển", value: "1" },
-    { title: "Tìm CV", value: "2" },
-    { title: "Việc làm siêu tốc", value: "3" },
-    { title: "Exclusive CV", value: "4" },
-    { title: "CV đề xuất", value: "5" },
+    { name: "Ứng tuyển", value: "1" },
+    { name: "Tìm CV", value: "2" },
+    { name: "Việc làm siêu tốc", value: "3" },
+    { name: "Exclusive CV", value: "4" },
+    { name: "CV đề xuất", value: "5" },
   ];
   const cvLabel = [
-    { title: "Chưa gắn nhãn", value: "1" },
-    { title: "Ưu tiên", value: "2" },
-    { title: "Ít tiềm năng", value: "3" },
+    { name: "Chưa gắn nhãn", value: "1" },
+    { name: "Ưu tiên", value: "2" },
+    { name: "Ít tiềm năng", value: "3" },
   ];
   const cvSeeMode = [
     {
-      title: "Hiển thị tất cả CV",
+      name: "Hiển thị tất cả CV",
       value: "1",
     },
-    { title: "Chỉ hiện thị CV chưa xem", value: "2" },
+    { name: "Chỉ hiện thị CV chưa xem", value: "2" },
   ];
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center overflow-x-hidden">
       <div
         className="bg-white w-full"
         style={{ marginLeft: "1px", paddingLeft: "20px" }}
       >
-        <p style={{ padding: "20px 0", fontSize: "16px", fontWeight: "500" }}>
+        <p
+          style={{ padding: "20px 15px", fontSize: "16px", fontWeight: "500" }}
+        >
           Quản lý CV ứng viên
         </p>
-        <div className="flex py-2">
+        <div className="flex py-2  flex-wrap">
           <div
-            className="flex justify-between bg-white border border-gray-200"
+            className="flex  mx-3.5 justify-between bg-white border border-gray-200"
             style={{ width: "280px" }}
           >
             <input
@@ -93,14 +103,41 @@ function ReceiveCV() {
           </div>
           <CustomSelectOption
             label=" Chọn chiến dịch tuyển dụng"
+            value={campaign}
+            onChange={(e) => {
+              setCampaign(e);
+            }}
             list={recruitmentCampaign}
           />
-          <CustomSelectOption label="Nhập trạng thái" list={cvState} />
-          <CustomSelectOption label="Nhập nguồn CV" list={cvSource} />
-          <CustomSelectOption label="Tất cả nhãn" list={cvLabel} />
+          <CustomSelectOption
+            label="Nhập trạng thái"
+            value={receivedCvState}
+            onChange={(e) => {
+              setReceivedCvState(e);
+            }}
+            list={cvState}
+          />
+          <CustomSelectOption
+            label="Nhập nguồn CV"
+            value={cvSourceState}
+            onChange={(e) => {
+              setCvSourceState(e);
+            }}
+            list={cvSource}
+          />
+          <CustomSelectOption
+            label="Tất cả nhãn"
+            value={cvLabelState}
+            onChange={(e) => {
+              setCvLabelState(e);
+            }}
+            list={cvLabel}
+          />
         </div>
       </div>
-      <div style={{ maxWidth: "1206px" }}>
+      <div
+      // style={{ maxWidth: "1206px" }}
+      >
         <div
           className="mt-6 mx-6 flex items-center rounded-lg"
           style={{
@@ -120,10 +157,12 @@ function ReceiveCV() {
             <span className="text-green-500 font-bold">SHring.ai</span>
           </p>
           <button
-            className="pl-3 pr-8 text-green-500 bg-white flex"
+            className="pl-3 pr-8 text-green-600 bg-white flex"
             style={{ borderLeft: "1px solid green " }}
           >
-            <span style={{ fontSize: "13px" }}>Đăng ký ngay</span>
+            <span style={{ fontSize: "13px" }} className="hover:text-green-900">
+              Đăng ký ngay
+            </span>
             <ChevronRight size={18} />
           </button>
         </div>
@@ -171,7 +210,6 @@ function ReceiveCV() {
                     >
                       <td>
                         <p className="font-semibold">{item.name}</p>
-                        <span className="text-sm">{item.statusView}</span>
                       </td>
                       <td>
                         <p>{item.campaign.name}</p>
@@ -212,14 +250,6 @@ function ReceiveCV() {
                           />
                           {item.insight.time}
                         </p>
-                        <p className="flex">
-                          <BriefcaseBusiness
-                            size={15}
-                            color="#38A34D"
-                            style={{ marginRight: "5px" }}
-                          />
-                          {item.insight.job}
-                        </p>
                       </td>
                       <td>
                         <div className="rounded-full bg-orange-100 text-orange-400 px-3">
@@ -228,10 +258,11 @@ function ReceiveCV() {
                       </td>
                       <td>
                         <button
-                          className="btn px-3 rounded-md ml-5"
-                          style={{ backgroundColor: "#EAEAEA" }}
+                          className="btn px-3 py-2 text-white rounded-md ml-5"
+                          style={{ backgroundColor: "#5EE199" }}
                         >
-                          <Ellipsis size={18} />
+                          {/* <Ellipsis size={18} /> */}
+                          Xem CV
                         </button>
                       </td>
                     </tr>
