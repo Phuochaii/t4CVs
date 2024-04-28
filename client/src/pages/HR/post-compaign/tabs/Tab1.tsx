@@ -129,7 +129,7 @@ function PostCompaign1({
     description: "",
     benefit: "",
     requirement: "",
-    skill: "",
+    skills: "",
   });
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     console.log(fieldOptions)
@@ -154,7 +154,7 @@ function PostCompaign1({
       updatedItem.salaryMax = Number.parseInt(salary);
       updatedItem.expId = Number.parseInt(expOptions?.value!);
       updatedItem.locationsId = cityOption ? cityOption.map(option => parseInt(option.value)) : []; // Replace [4, 5] with your desired array of location IDs
-      updatedItem.expiredDate = "2024-05-01";
+      updatedItem.expiredDate = date;
       updatedItem.quantity = Number.parseInt(quantity);
       updatedItem.jobSchedule = "8:00am-17:00pm T2-T6";
       updatedItem.gender = "Any";
@@ -164,7 +164,7 @@ function PostCompaign1({
         description;
       updatedItem.requirement =
         requirement;
-      updatedItem.skill = "Java, Python, JavaScript, SQL";
+      updatedItem.skills = "Java, Python, JavaScript, SQL";
 
       // Log the updated item
       console.log(updatedItem);
@@ -175,7 +175,7 @@ function PostCompaign1({
             'Content-Type': 'application/json',
             // Add any other headers if needed
           },
-          body: JSON.stringify(item), // Convert item to JSON string
+          body: JSON.stringify(updatedItem), // Convert item to JSON string
         });
 
         if (!response.ok) {
