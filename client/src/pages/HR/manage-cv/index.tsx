@@ -2,7 +2,6 @@ import * as tabs from "./tabs";
 
 import { ArrowLeft } from "lucide-react";
 import * as React from "react";
-import { styled } from "@mui/system";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -156,16 +155,6 @@ function ManageCV() {
                         marginRight: 2,
                         fontWeight: "bold",
                       }}
-                      label="Scount AI"
-                      value="4"
-                    />
-                    <Tab
-                      sx={{
-                        paddingRight: 0,
-                        paddingLeft: 0,
-                        marginRight: 2,
-                        fontWeight: "bold",
-                      }}
                       label="CV tìm kiếm"
                       value="5"
                     />
@@ -205,14 +194,12 @@ function ManageCV() {
                   {tabs.Recuitment()}
                 </TabPanel>
                 <TabPanel sx={{ padding: "12px 0" }} value="2">
-                  Item Two
+                  {tabs.Application()}
                 </TabPanel>
                 <TabPanel sx={{ padding: "12px 0" }} value="3">
                   Item Three
                 </TabPanel>
-                <TabPanel sx={{ padding: "12px 0" }} value="4">
-                  Item Three
-                </TabPanel>
+
                 <TabPanel sx={{ padding: "12px 0" }} value="5">
                   Item Three
                 </TabPanel>

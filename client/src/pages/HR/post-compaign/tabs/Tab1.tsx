@@ -157,7 +157,7 @@ function PostCompaign1({
       updatedItem.expiredDate = date;
       updatedItem.quantity = Number.parseInt(quantity);
       updatedItem.jobSchedule = "8:00am-17:00pm T2-T6";
-      updatedItem.gender = "Any";
+      updatedItem.gender = genderOptions?.value!;
       updatedItem.description =
         jobDescription;
       updatedItem.benefit =
@@ -419,6 +419,21 @@ function PostCompaign1({
     }
     setUserChoice(choice);
   };
+  const gender =[
+    {value:"Nam", label:"Nam"},
+    {value:"Nữ", label:"Nữ"}
+  ]
+  const skills = [
+    {value:"SQL", label:"SQL"},
+    {value:"Java", label:"Java"},
+    {value:"Python", label:"Python"},
+    {value:"JavaScript", label:"JavaScript"},
+  ]
+  const email = [
+    {value:"hr@gmail.com", label:"hr@gmail.com"},
+    {value:"tuyendung@gmail.com", label:"tuyendung@gmail.com"},
+    {value:"example@email.com", label:"example@email.com"},
+  ]
   const cityOptions = [
     { value: "Hồ Chí Minh", label: "Hồ Chí Minh" },
     { value: "Bình Dương", label: "Bình Dương" },
@@ -743,7 +758,7 @@ function PostCompaign1({
                       isClearable
                       placeholder="-- Chọn giới tính --"
                       name="cities"
-                      options={cityOptions}
+                      options={gender}
                       className="basic-multi-select"
                       classNamePrefix="select"
                       onChange={(e) => handleGenderError(e)}
@@ -1403,7 +1418,7 @@ function PostCompaign1({
                   placeholder="-- Chọn kỹ năng liên quan --"
                   isMulti
                   name="cities"
-                  options={cityOptions}
+                  options={skills}
                   classNamePrefix="select"
                   value={skillOptions}
                   onChange={(e) => handleSkillError(e)}
@@ -1611,8 +1626,7 @@ function PostCompaign1({
                     isClearable
                     isMulti
                     placeholder="Email"
-                    name="cities"
-                    options={cityOptions}
+                    options={email}
                     className="basic-multi-select"
                     classNamePrefix="select"
                     value={emailOptions}

@@ -11,7 +11,7 @@ function CustomSelectOption({
 }: {
   label: string;
   labelColor?: string;
-  list?: { name: string; value: string }[];
+  list?: { name: string; value: string | boolean | undefined }[];
   value?: any;
   width?: string;
   onChange?: (e: any) => void;
@@ -47,13 +47,22 @@ function CustomSelectOption({
           color: "#A9ACAF",
           marginLeft: "12px",
           minWidth: "170px",
+          maxWidth: "230px",
         }}
         onClick={handleToggle}
       >
-        <span style={{ color: value != null ? "black" : labelColor }}>
-          {" "}
-          {value != null ? value.name : label}
-        </span>
+        <div
+          style={{
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+          }}
+        >
+          <span style={{ color: value != null ? "black" : labelColor }}>
+            {" "}
+            {value != null ? value.name : label}
+          </span>
+        </div>
         <ChevronDown className="ml-2" size={24} />
       </button>
       {isOpen && (
@@ -67,7 +76,7 @@ function CustomSelectOption({
           {list.map((item, index) => (
             <li
               key={index}
-              className="px-2 py-2 font-normal hover-green"
+              className="px-2 py-2 font-normal hover-green border-b-slate-400"
               onClick={() => {
                 onChange(item);
                 handleToggle();
