@@ -15,7 +15,7 @@ import {
   Image,
   Video,
 } from "lucide-react";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 
 import Select, { MultiValue, SingleValue } from "react-select";
 function PostCompaign1({
@@ -37,7 +37,7 @@ function PostCompaign1({
     value: string;
     label: string;
   }> | null>(null);
-  const [cityOption, setCityOptions] = useState<SingleValue<{
+  const [cityOption, setCityOptions] = useState<MultiValue<{
     value: string;
     label: string;
   }> | null>(null);
@@ -109,14 +109,85 @@ function PostCompaign1({
   const [phone, setPhone] = useState('');
   const [date, setDate] = useState('');
   const [titleError, setTitleError] = useState(true);
-  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+  const [item, setItem] = useState({
+    titleRecruitment: "",
+    majorId: 0,
+    fieldsId: [] as number[], // Specify the type explicitly
+    typeId: 0,
+    currencyId: 0,
+    levelId: 0,
+    campaignId: 0,
+    companyId: 0,
+    salaryMin: 0,
+    salaryMax: 0,
+    expId: 0,
+    locationsId: [] as number[], // Specify the type explicitly
+    expiredDate: "",
+    quantity: 0,
+    jobSchedule: "",
+    gender: "",
+    description: "",
+    benefit: "",
+    requirement: "",
+    skills: "",
+  });
+  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
+    console.log(fieldOptions)
     event.preventDefault();
     if (!titleError && !showError && !showDescriptionError && !showRequirement
       && !fieldError && !careerError &&
-      !quantityError && !jobTypeError && !genderError && !levelError && !expError && !currencyError 
-      && !salaryError && !cityError && !districtError && !addressError && 
-      !dateError && !nameError && !phoneError && !emailError &&!skillError ) {
+      !quantityError && !jobTypeError && !genderError && !levelError && !expError && !currencyError
+      && !salaryError && !cityError && !districtError && !addressError &&
+      !dateError && !nameError && !phoneError && !emailError && !skillError) {
+      let updatedItem = { ...item };
+
+      // Modify each property
+      updatedItem.titleRecruitment = title;
+      updatedItem.majorId = Number.parseInt(careerOptions?.value!);
+      updatedItem.fieldsId = fieldOptions ? fieldOptions.map(option => parseInt(option.value)) : []; // Replace [2, 3] with your desired array of field IDs
+      updatedItem.typeId = Number.parseInt(jobTypeOptions?.value!);
+      updatedItem.currencyId = Number.parseInt(currencyOptions?.value!);
+      updatedItem.levelId = Number.parseInt(levelOptions?.value!);
+      updatedItem.campaignId = 123;
+      updatedItem.companyId = 1;
+      updatedItem.salaryMin = Number.parseInt(salary);
+      updatedItem.salaryMax = Number.parseInt(salary);
+      updatedItem.expId = Number.parseInt(expOptions?.value!);
+      updatedItem.locationsId = cityOption ? cityOption.map(option => parseInt(option.value)) : []; // Replace [4, 5] with your desired array of location IDs
+      updatedItem.expiredDate = date;
+      updatedItem.quantity = Number.parseInt(quantity);
+      updatedItem.jobSchedule = "8:00am-17:00pm T2-T6";
+      updatedItem.gender = "Any";
+      updatedItem.description =
+        jobDescription;
+      updatedItem.benefit =
+        description;
+      updatedItem.requirement =
+        requirement;
+      updatedItem.skills = "Java, Python, JavaScript, SQL";
+
+      // Log the updated item
+      console.log(updatedItem);
+      try {
+        const response = await fetch('http://localhost:3000/job/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Add any other headers if needed
+          },
+          body: JSON.stringify(updatedItem), // Convert item to JSON string
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to post data to API');
+        }
+
+        console.log('Data posted successfully');
+      } catch (error) {
+        console.error('Error posting data:', error);
+      }
       next(event)
+
     } else {
       //Do nothing
     }
@@ -193,9 +264,9 @@ function PostCompaign1({
       setEmailError(true);
     }
   }
-  const handleCityError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
+  const handleCityError = (value: SetStateAction<MultiValue<{ value: string; label: string }> | null>) => {
     setCityOptions(value)
-    if (value !== null) {
+    if (value?.length !== 0) {
       setCityError(false);
     } else {
       setCityError(true);
@@ -253,7 +324,8 @@ function PostCompaign1({
   //
   const handleFieldError = (value: SetStateAction<MultiValue<{ value: string; label: string }> | null>) => {
     setFieldOptions(value)
-    if (value?.length!==0) {
+    console.log(fieldOptions)
+    if (value?.length !== 0) {
       setFieldError(false);
     } else {
       setFieldError(true);
@@ -291,6 +363,52 @@ function PostCompaign1({
       setShowError(false);
     }
   }
+  //
+  const [fields, setFields] = useState<any>(null);
+
+  useEffect(() => {
+    // Fetch data from your API
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/job/create-info', {
+          method: 'GET',
+          headers: {
+            "Access-control-allow-origin": "http://localhost:3000",
+            "Content-type": "application/json"
+          },
+        }); // Modify the URL to match your API endpoint
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        setFields(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Convert each field to the desired format
+  const convertToOptions = (data: { id: any; name: any; }[]) => {
+    if (!data) return [];
+    return data.map(({ id, name }) => ({ value: id.toString(), label: name }));
+  };
+  const major = convertToOptions(fields?.major);
+  const city = convertToOptions(fields?.location);
+  const level = convertToOptions(fields?.level);
+  const currency = convertToOptions(fields?.currency);
+  const field = convertToOptions(fields?.field);
+  const exp = convertToOptions(fields?.exp);
+  const typeOptions = convertToOptions(fields?.type);
+
+  // console.log(city);
+  // console.log(level);
+  // console.log(currency);
+  // console.log(field);
+  // console.log(exp);
+  // console.log(typeOptions);
   const togglePopup = (
     choice: SetStateAction<SingleValue<{ value: string; label: string }>>
   ) => {
@@ -420,10 +538,10 @@ function PostCompaign1({
                     isClearable
                     placeholder="Lựa chọn tối đa một ngành nghề chính cho tin tuyển dụng"
                     name="cities"
-                    options={cityOptions}
+                    options={major}
                     className="basic-multi-select"
                     classNamePrefix="select"
-                    onChange={(e)=>handleCareerError(e)}
+                    onChange={(e) => handleCareerError(e)}
                   />
                 </div>
               </div>
@@ -475,10 +593,10 @@ function PostCompaign1({
                     isMulti
                     placeholder="Lựa chọn tối đa 2 ngành nghề"
                     name="cities"
-                    options={cityOptions}
+                    options={field}
                     className="basic-multi-select"
                     classNamePrefix="select"
-                    onChange={(e)=>handleFieldError(e)}
+                    onChange={(e) => handleFieldError(e)}
                     isOptionDisabled={() => fieldOptions?.length! >= 2}
                   />
                 </div>
@@ -516,7 +634,7 @@ function PostCompaign1({
                     className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                     placeholder="Nhập số lượng"
                     value={quantity}
-                    onChange={(e)=>handleQuantityError(e.target.value)}
+                    onChange={(e) => handleQuantityError(e.target.value)}
                   />
                 </div>
                 <div className="space-y-2 w-3/12">
@@ -572,10 +690,10 @@ function PostCompaign1({
                       isClearable
                       placeholder="-- Chọn loại công việc --"
                       name="cities"
-                      options={cityOptions}
+                      options={typeOptions}
                       className="basic-multi-select"
                       classNamePrefix="select"
-                      onChange={(e)=>handleJobTypeError(e)}
+                      onChange={(e) => handleJobTypeError(e)}
                     />
                   </div>
                 </div>
@@ -628,7 +746,7 @@ function PostCompaign1({
                       options={cityOptions}
                       className="basic-multi-select"
                       classNamePrefix="select"
-                      onChange={(e)=>handleGenderError(e)}
+                      onChange={(e) => handleGenderError(e)}
                     />
                   </div>
                 </div>
@@ -676,10 +794,10 @@ function PostCompaign1({
                       isClearable
                       placeholder="-- Chọn cấp bậc --"
                       name="cities"
-                      options={cityOptions}
+                      options={level}
                       className="basic-multi-select"
                       classNamePrefix="select"
-                      onChange={(e)=>handleLevelError(e)}
+                      onChange={(e) => handleLevelError(e)}
                     />
                   </div>
                 </div>
@@ -727,10 +845,10 @@ function PostCompaign1({
                       isClearable
                       placeholder="-- Chọn kinh nghiệm --"
                       name="cities"
-                      options={cityOptions}
+                      options={exp}
                       className="basic-multi-select"
                       classNamePrefix="select"
-                      onChange={(e)=>handleExpError(e)}
+                      onChange={(e) => handleExpError(e)}
                     />
                   </div>
                 </div>
@@ -781,10 +899,10 @@ function PostCompaign1({
                       isClearable
                       placeholder="-- Chọn loại tiền tệ --"
                       name="cities"
-                      options={cityOptions}
+                      options={currency}
                       className="basic-multi-select"
                       classNamePrefix="select"
-                      onChange={(e)=>handleCurrencyError(e)}
+                      onChange={(e) => handleCurrencyError(e)}
                     />
                   </div>
                 </div>
@@ -851,7 +969,7 @@ function PostCompaign1({
                       className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                       placeholder="0 VND"
                       value={salary}
-                      onChange={(e)=>handleSalaryError(e.target.value)}
+                      onChange={(e) => handleSalaryError(e.target.value)}
                     />
                   </div>
                 )}
@@ -880,22 +998,23 @@ function PostCompaign1({
                             borderColor: "green",
                           },
                         }),
-                        option: (base, state) => ({
+                        option: (base) => ({
                           ...base,
-                          backgroundColor: state.isSelected
-                            ? "lightgrey"
-                            : "white",
-                          color: "black",
+                          backgroundColor: "white",
                           "&:hover": {
                             backgroundColor: "lightgrey",
                             fontWeight: "bold",
-                            color: "black",
                           },
                         }),
-                        singleValue: (base) => ({
+                        multiValue: (base) => ({
+                          ...base,
+                          backgroundColor: "#C4F0D5",
+                        }),
+                        multiValueLabel: (base) => ({
                           ...base,
                           color: "black",
                         }),
+
                         placeholder: (base) => ({
                           ...base,
                           overflow: "hidden",
@@ -904,18 +1023,19 @@ function PostCompaign1({
                         }),
                         menu: (base) => ({
                           ...base,
-                          maxHeight: "200px",
+                          maxHeight: "200px", // Set maximum height for the dropdown menu
                           overflowY: "auto",
                         }),
                       }}
                       isClearable
                       placeholder="Chọn Tỉnh/ Thành phố"
                       name="cities"
-                      options={cityOptions}
+                      options={city}
                       className="basic-multi-select"
                       classNamePrefix="select"
                       value={cityOption}
-                      onChange={(e)=>handleCityError(e)}
+                      isMulti
+                      onChange={(e) => handleCityError(e)}
                     />
                   </div>
                 </div>
@@ -966,7 +1086,7 @@ function PostCompaign1({
                       className="basic-multi-select"
                       classNamePrefix="select"
                       value={district}
-                      onChange={(e)=>handleDistrictError(e)}
+                      onChange={(e) => handleDistrictError(e)}
                     />
                   </div>
                   <div className="w-8/12">
@@ -974,7 +1094,7 @@ function PostCompaign1({
                       type="text"
                       className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                       placeholder="Nhập địa điểm làm việc cụ thể"
-                      value = {address}
+                      value={address}
                       onChange={(e) => handleAddressError(e.target.value)}
                     />
                   </div>
@@ -1249,7 +1369,7 @@ function PostCompaign1({
                 onChange={(e) => handleRequirementValidation(e.target.value)}
                 value={requirement}
               />
-              
+
               <div className="text-slate-600 mb-1">Kỹ năng liên quan</div>
               <div className="w-4/5">
                 <Select
@@ -1286,7 +1406,7 @@ function PostCompaign1({
                   options={cityOptions}
                   classNamePrefix="select"
                   value={skillOptions}
-                  onChange={(e)=>handleSkillError(e)}
+                  onChange={(e) => handleSkillError(e)}
                 />
               </div>
               {(showRequirement || skillError) && (<div className="text-red-700 mb-5">
@@ -1433,7 +1553,7 @@ function PostCompaign1({
                   className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                   placeholder="Họ tên"
                   value={name}
-                  onChange={(e)=>handleNameError(e.target.value)}
+                  onChange={(e) => handleNameError(e.target.value)}
                 />
               </div>
               <div className="space-y-2 w-3/12">
@@ -1443,7 +1563,7 @@ function PostCompaign1({
                   className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                   placeholder="Số điện thoại"
                   value={phone}
-                  onChange={(e)=>handlePhoneError(e.target.value)}
+                  onChange={(e) => handlePhoneError(e.target.value)}
                 />
               </div>
               <div className="space-y-2 w-3/12">
@@ -1496,14 +1616,14 @@ function PostCompaign1({
                     className="basic-multi-select"
                     classNamePrefix="select"
                     value={emailOptions}
-                    onChange={(e)=>handleEmailError(e)}
+                    onChange={(e) => handleEmailError(e)}
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {(dateError || nameError || phoneError ||emailError) && (<div className="ml-14 text-red-700">
+        {(dateError || nameError || phoneError || emailError) && (<div className="ml-14 text-red-700">
           Vui lòng điền đầy đủ thông tin
         </div>)}
       </div>
