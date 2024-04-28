@@ -58,6 +58,7 @@ export class ApplicationController {
     const application = await firstValueFrom(
       this.applicationService.create(createApplicationRequest),
     );
+    //
 
     const campaign = await firstValueFrom(
       this.companyService.findCampaignById(createApplicationRequest.campaignId),
@@ -102,6 +103,11 @@ export class ApplicationController {
 
     return this.applicationService.findAll(page, limit, campaignIds, status);
     // return 'success';
+  }
+
+  @Get(':id/cv')
+  hrGetCv(@Param('id') id: number) {
+    return this.applicationService.hrGetCv(id);
   }
 
   @Get(':id')

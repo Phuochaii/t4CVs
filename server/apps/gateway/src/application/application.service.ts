@@ -68,16 +68,13 @@ export class ApplicationService implements OnModuleInit {
   }
 
   async update(id: number) {
-    const data = await this.applicationServiceClient.updateApplication({ id });
+    const data = await firstValueFrom(this.applicationServiceClient.updateApplication({ id }));
     return data;
   }
 
   async hrGetCv(id: number) {
-    const cv = (await firstValueFrom(this.cvService.getCVById(id))) as CVDto;
-    await this.update(id);
-    const application = await firstValueFrom(
-      this.applicationServiceClient.readApplication({ id }),
-    );
+    const application = await this.update(id);
+    const cv = (await firstValueFrom(this.cvService.getCVById(application.cvId))) as CVDto;
     const campaign = await firstValueFrom(
       this.companyService.findCampaignById(application.campaignId),
     );
