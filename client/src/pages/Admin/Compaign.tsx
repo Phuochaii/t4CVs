@@ -43,7 +43,7 @@ function Compaign() {
 
   return (
     <div
-      className="z-0 w-[88%] px-10 py-4 bg-slate-100"
+      className="z-0 flex-grow px-10 py-4 bg-slate-100"
       onClick={(event) => {
         event.preventDefault();
         setOpenDialog(-1);

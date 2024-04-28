@@ -71,7 +71,7 @@ function Overview() {
     },
   ]);
   return (
-    <div className="bg-slate-100 w-[88%] px-12 py-8 flex flex-col gap-8">
+    <div className="flex flex-col flex-grow gap-8 px-12 py-8 bg-slate-100">
       <div className="flex items-center justify-between font-bold text-slate-500">
         <h3>Admin Management System Overview</h3>
         <div className="flex gap-2">

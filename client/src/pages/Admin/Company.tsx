@@ -237,7 +237,7 @@ function Company() {
   ]);
 
   return (
-    <div className="flex flex-col items-center flex-grow w-full bg-slate-200">
+    <div className="flex flex-col items-center flex-grow bg-slate-200">
       <div className="w-full p-2 bg-white">
         <h2 className="font-bold">Quản lý chiến dịch tuyển dụng</h2>
       </div>

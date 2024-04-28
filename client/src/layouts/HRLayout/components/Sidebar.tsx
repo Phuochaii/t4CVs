@@ -27,8 +27,8 @@ const Item = ({
   iconSize = 16,
   title,
   onClick = () => {},
-  // subItems = [],
-}: {
+}: // subItems = [],
+{
   _icon?: React.FC<LucideProps>;
   iconSize?: number;
   title: string;
@@ -39,7 +39,7 @@ const Item = ({
   return (
     <li
       onClick={onClick}
-      className="hover:text-green-500 active:text-green-500 cursor-pointer flex items-center space-x-2"
+      className="flex items-center space-x-2 cursor-pointer hover:text-green-500 active:text-green-500"
       style={{
         padding: " 12px 14px",
         // color: "black",
@@ -67,7 +67,7 @@ const Item = ({
 
       <span>{title}</span>
       {/* {subItems.length > 0 && (
-          <div className="flex-grow flex justify-end">
+          <div className="flex justify-end flex-grow">
             <i className="fa-solid fa-angle-right"></i>
           </div>
         )} */}
@@ -172,7 +172,7 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
 
   return (
     <div
-      className="bg-white flex-shrink-0 overflow-y-scroll overflow-x-hidden"
+      className="flex-shrink-0 overflow-x-hidden overflow-y-scroll bg-white"
       style={{
         fontWeight: "500",
         color: "#212F3FE4",
@@ -181,7 +181,10 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
         transition: "width .2s ease",
       }}
     >
-      <div className="flex" style={{ padding: " 10px 14px", margin: 0 }}>
+      <div
+        className="flex"
+        style={{ padding: " 10px 14px", margin: 0 }}
+      >
         <div className="flex items-center space-x-2">
           <img
             src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg"
@@ -195,7 +198,7 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
               <p style={{ fontSize: "12px" }}>Employer</p>
               <p style={{ fontSize: "12px" }} className="flex">
                 Tài khoản xác thực:{" "}
-                <span className="text-green-600 mr-2">Cấp 1/5</span>
+                <span className="mr-2 text-green-600">Cấp 1/5</span>
                 <CircleHelp color="#757575B9" size={14} />
               </p>
             </div>
@@ -203,7 +206,9 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
         </div>
       </div>
       <button
-        className={`btn ${!isCollapsed && "mx-4"} text-sm py-1 flex items-center justify-center rounded-full w-11/12`}
+        className={`btn ${
+          !isCollapsed && "mx-4"
+        } text-sm py-1 flex items-center justify-center rounded-full w-11/12`}
         style={{
           backgroundColor: "#EBF3FF",
           color: "#2D7CF1",
@@ -218,7 +223,9 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                 navigation("/hr/verify-account/1");
               }}
             >
-              <span className="ml-1 mr-1">Xác nhận tài khoản điện tử</span>
+              <span className="ml-1 mr-1">
+                Xác nhận tài khoản điện tử
+              </span>
             </button>
             <ChevronsRight className="slide-animation" />
           </>
