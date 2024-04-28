@@ -9,4 +9,8 @@ export const types: Type[] = [
     id: 2,
     name: 'Part-Time',
   },
+  {
+    id: 3,
+    name: 'Internship',
+  },
 ];

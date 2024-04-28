@@ -21,5 +21,5 @@ export class JobDetail {
   @Column()
   requirement: string;
   @Column()
-  skill: string;
+  skills: string;
 }
