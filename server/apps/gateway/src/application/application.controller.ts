@@ -58,7 +58,6 @@ export class ApplicationController {
     const application = await firstValueFrom(
       this.applicationService.create(createApplicationRequest),
     );
-    //
 
     const campaign = await firstValueFrom(
       this.companyService.findCampaignById(createApplicationRequest.campaignId),
@@ -66,15 +65,15 @@ export class ApplicationController {
     const employerId = campaign.employerId;
 
     // console.log(employerId);
-    const notification = await this.notificationService.create(
+    const notification = await firstValueFrom(this.notificationService.create(
       [new NotificationUserId(employerId, NotificationUserRole.HR)],
       {
         content: `Ứng viên ${application.fullname}- ${campaign.name}`,
         link: `application/${application.id}`,
         title: `CV mới ứng tuyển`,
       },
-    );
-    return application;
+    ));
+    return 'Success';
   }
 
   @Get('/hr/:hrId')
@@ -115,10 +114,7 @@ export class ApplicationController {
     let campaignId;
     const result = await this.applicationService.findOne(id);
     this.applicationService.findOne(id).subscribe((value) => {
-      console.log(value);
       campaignId = value.fullname;
-      console.log('123');
-      console.log(campaignId);
     });
 
     return result;

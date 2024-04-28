@@ -35,7 +35,7 @@ export class CVService {
   }
 
   downloadCV(id: number): Observable<any> {
-    console.log(1);
+    console.log(1)
     return this.cvClient.send({ cmd: 'downloadCV' }, id);
   }
 }
