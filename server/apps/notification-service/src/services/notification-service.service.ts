@@ -14,7 +14,6 @@ export class NotificationServiceService {
   ) {}
 
   async createNotification(createRequest: SendNotificationRequest) {
-    console.log('service');
     const notification = this.notificationRepository.create(createRequest);
     const savedNotification =
       await this.notificationRepository.save(notification);
