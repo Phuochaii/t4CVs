@@ -37,7 +37,7 @@ function PostCompaign1({
     value: string;
     label: string;
   }> | null>(null);
-  const [cityOption, setCityOptions] = useState<SingleValue<{
+  const [cityOption, setCityOptions] = useState<MultiValue<{
     value: string;
     label: string;
   }> | null>(null);
@@ -109,7 +109,29 @@ function PostCompaign1({
   const [phone, setPhone] = useState('');
   const [date, setDate] = useState('');
   const [titleError, setTitleError] = useState(true);
-  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+  const [item, setItem] = useState({
+    titleRecruitment: "",
+    majorId: 0,
+    fieldsId: [] as number[], // Specify the type explicitly
+    typeId: 0,
+    currencyId: 0,
+    levelId: 0,
+    campaignId: 0,
+    companyId: 0,
+    salaryMin: 0,
+    salaryMax: 0,
+    expId: 0,
+    locationsId: [] as number[], // Specify the type explicitly
+    expiredDate: "",
+    quantity: "",
+    jobSchedule: "",
+    gender: "",
+    description: "",
+    benefit: "",
+    requirement: "",
+    skill: "",
+  });
+  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     console.log(fieldOptions)
     event.preventDefault();
     if (!titleError && !showError && !showDescriptionError && !showRequirement
@@ -117,8 +139,55 @@ function PostCompaign1({
       !quantityError && !jobTypeError && !genderError && !levelError && !expError && !currencyError
       && !salaryError && !cityError && !districtError && !addressError &&
       !dateError && !nameError && !phoneError && !emailError && !skillError) {
+      let updatedItem = { ...item };
+
+      // Modify each property
+      updatedItem.titleRecruitment = title;
+      updatedItem.majorId = Number.parseInt(careerOptions?.value!);
+      updatedItem.fieldsId = fieldOptions ? fieldOptions.map(option => parseInt(option.value)) : []; // Replace [2, 3] with your desired array of field IDs
+      updatedItem.typeId = Number.parseInt(jobTypeOptions?.value!);
+      updatedItem.currencyId = Number.parseInt(currencyOptions?.value!);
+      updatedItem.levelId = Number.parseInt(levelOptions?.value!);
+      updatedItem.campaignId = 123;
+      updatedItem.companyId = 1;
+      updatedItem.salaryMin = Number.parseInt(salary);
+      updatedItem.salaryMax = Number.parseInt(salary);
+      updatedItem.expId = Number.parseInt(expOptions?.value!);
+      updatedItem.locationsId = cityOption ? cityOption.map(option => parseInt(option.value)) : []; // Replace [4, 5] with your desired array of location IDs
+      updatedItem.expiredDate = date;
+      updatedItem.quantity = quantity;
+      updatedItem.jobSchedule = "8:00am-17:00pm T2-T6";
+      updatedItem.gender = "Any";
+      updatedItem.description =
+        jobDescription;
+      updatedItem.benefit =
+        description;
+      updatedItem.requirement =
+        requirement;
+      updatedItem.skill = "Java, Python, JavaScript, SQL";
+
+      // Log the updated item
+      console.log(updatedItem);
+      try {
+        const response = await fetch('http://localhost:3000/job/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Add any other headers if needed
+          },
+          body: JSON.stringify(item), // Convert item to JSON string
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to post data to API');
+        }
+
+        console.log('Data posted successfully');
+      } catch (error) {
+        console.error('Error posting data:', error);
+      }
       next(event)
-      
+
     } else {
       //Do nothing
     }
@@ -195,9 +264,9 @@ function PostCompaign1({
       setEmailError(true);
     }
   }
-  const handleCityError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
+  const handleCityError = (value: SetStateAction<MultiValue<{ value: string; label: string }> | null>) => {
     setCityOptions(value)
-    if (value !== null) {
+    if (value?.length !== 0) {
       setCityError(false);
     } else {
       setCityError(true);
@@ -304,7 +373,7 @@ function PostCompaign1({
         const response = await fetch('http://localhost:3000/job/create-info', {
           method: 'GET',
           headers: {
-            "Access-control-allow-origin" : "http://localhost:3000",
+            "Access-control-allow-origin": "http://localhost:3000",
             "Content-type": "application/json"
           },
         }); // Modify the URL to match your API endpoint
@@ -776,7 +845,7 @@ function PostCompaign1({
                       isClearable
                       placeholder="-- Chọn kinh nghiệm --"
                       name="cities"
-                      options={cityOptions}
+                      options={exp}
                       className="basic-multi-select"
                       classNamePrefix="select"
                       onChange={(e) => handleExpError(e)}
@@ -830,7 +899,7 @@ function PostCompaign1({
                       isClearable
                       placeholder="-- Chọn loại tiền tệ --"
                       name="cities"
-                      options={cityOptions}
+                      options={currency}
                       className="basic-multi-select"
                       classNamePrefix="select"
                       onChange={(e) => handleCurrencyError(e)}
@@ -929,22 +998,23 @@ function PostCompaign1({
                             borderColor: "green",
                           },
                         }),
-                        option: (base, state) => ({
+                        option: (base) => ({
                           ...base,
-                          backgroundColor: state.isSelected
-                            ? "lightgrey"
-                            : "white",
-                          color: "black",
+                          backgroundColor: "white",
                           "&:hover": {
                             backgroundColor: "lightgrey",
                             fontWeight: "bold",
-                            color: "black",
                           },
                         }),
-                        singleValue: (base) => ({
+                        multiValue: (base) => ({
+                          ...base,
+                          backgroundColor: "#C4F0D5",
+                        }),
+                        multiValueLabel: (base) => ({
                           ...base,
                           color: "black",
                         }),
+
                         placeholder: (base) => ({
                           ...base,
                           overflow: "hidden",
@@ -953,17 +1023,18 @@ function PostCompaign1({
                         }),
                         menu: (base) => ({
                           ...base,
-                          maxHeight: "200px",
+                          maxHeight: "200px", // Set maximum height for the dropdown menu
                           overflowY: "auto",
                         }),
                       }}
                       isClearable
                       placeholder="Chọn Tỉnh/ Thành phố"
                       name="cities"
-                      options={cityOptions}
+                      options={city}
                       className="basic-multi-select"
                       classNamePrefix="select"
                       value={cityOption}
+                      isMulti
                       onChange={(e) => handleCityError(e)}
                     />
                   </div>
