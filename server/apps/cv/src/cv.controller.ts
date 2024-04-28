@@ -45,7 +45,6 @@ export class CVController {
 
   @MessagePattern({ cmd: 'downloadCV' })
   async downloadCV(id: number): Promise<any> {
-    console.log(1);
     return this.cvService.downloadCV(id);
   }
 }

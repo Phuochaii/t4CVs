@@ -1,17 +1,34 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as sqlite3 from 'sqlite3';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { CV } from './entities/cv.entity';
-import { Client, ClientProxy } from '@nestjs/microservices';
 import { CVDto } from './dto/cv.dto';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { ConfigService } from '@nestjs/config';
+
+// env
+const AWS_ACCESS_KEY = 'AKIAQKSEVUV3HYYNEI7P';
+const AWS_SECRET_ACCESS_KEY = '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';
+const AWS_S3_REGION = 'us-east-1';
+const BUCKET_NAME = 'nestjsdacnpm';
 
 @Injectable()
 export class CVService {
   private readonly db: sqlite3.Database;
 
-  constructor() {
+  private s3Client: S3Client;
+
+  constructor(private readonly config_service: ConfigService) {
+    this.s3Client = new S3Client({
+      region: 'us-east-1',
+      credentials: {
+        accessKeyId: 'AKIAQKSEVUV3HYYNEI7P',
+        secretAccessKey: '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',
+      },
+    });
+
     this.db = new sqlite3.Database('./apps/cv/table.sql');
     this.initializeDatabase();
   }
@@ -116,17 +133,29 @@ export class CVService {
       fs.mkdirSync(uploadPath, { recursive: true });
     }
 
+    const fileBuffer = await fs.promises.readFile(file.path);
+
     try {
       await fs.promises.rename(file.path, `${uploadPath}/${newFilename}`);
       const cvDto = new CVDto();
       cvDto.userId = Number(userId.userId);
       cvDto.templateId = 1;
-      cvDto.link = `localhost:3000/cv/${newFilename}`;
+      cvDto.link = `http://${BUCKET_NAME}.s3-website-${AWS_S3_REGION}.amazonaws.com/${newFilename}`;
       cvDto.creationAt = new Date();
       cvDto.isPublic = true;
       cvDto.lastModified = new Date();
 
-      console.log(JSON.stringify(cvDto));
+      console.log(JSON.stringify(file));
+
+      const putObjectCommand = new PutObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: newFilename,
+        Body: fileBuffer,
+        ContentDisposition: 'inline',
+        ContentType: 'application/pdf',
+      });
+
+      await this.s3Client.send(putObjectCommand);
 
       const result = await this.create(cvDto);
 

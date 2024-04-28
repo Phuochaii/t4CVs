@@ -8,6 +8,7 @@ import { GatewayService } from './gateway.service';
 import { CVModule } from './cv/cv.module';
 import { NotificationModule } from './notification/notification.module';
 import { UserModule } from './user/user.module';
+import { ConfigModule } from '@nestjs/config';
 import { EmployerModule } from './employer/employer.module';
 
 @Module({
@@ -19,6 +20,7 @@ import { EmployerModule } from './employer/employer.module';
     CompanyModule,
     UserModule,
     CVModule,
+    ConfigModule.forRoot({ envFilePath: '.env.example' }),
     // EmployerModule,
   ],
   controllers: [GatewayController],
