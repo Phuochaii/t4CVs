@@ -182,13 +182,13 @@ function ApplyCV() {
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
-                                stroke-width="1.5"
+                                strokeWidth="1.5"
                                 stroke="currentColor"
                                 className="w-6 h-6"
                               >
                                 <path
                                   strokeLinecap="round"
-                                  stroke-linejoin="round"
+                                  strokeLinejoin="round"
                                   d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                                 />
                               </svg>
@@ -346,7 +346,7 @@ function ApplyCV() {
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
-                          stroke-width="1.5"
+                          strokeWidth="1.5"
                           stroke="currentColor"
                           className="w-5 h-5 mr-2 font-bold"
                         >
@@ -1188,7 +1188,7 @@ function ApplyCV() {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke-width="1.5"
+                  strokeWidth="1.5"
                   stroke="currentColor"
                   className="w-6 h-6"
                 >
@@ -1254,23 +1254,49 @@ function ApplyCV() {
                   </div>
                   <div className="input-userInfo pt-3 mt-4 border-t flex flex-col gap-3">
                     <div className="input-userInfo__banner flex justify-between items-center">
-                      <div className="input-userInfo__banner-label text-green-500">Vui lòng nhập đầy đủ thông tin chi tiết:</div>
-                      <div className="input-userInfo__banner-required text-xs text-red-500">(*) Thông tin bắt buộc.</div>
+                      <div className="input-userInfo__banner-label text-green-500">
+                        Vui lòng nhập đầy đủ thông tin chi tiết:
+                      </div>
+                      <div className="input-userInfo__banner-required text-xs text-red-500">
+                        (*) Thông tin bắt buộc.
+                      </div>
                     </div>
 
                     <form className="input-userInfo__value flex flex-row flex-wrap gap-2 text-black text-start">
                       <div className="input-userInfo__value-username basis-full flex flex-col gap-1">
-                        <InputLabel >Họ và tên <span className="text-red-500"> *</span></InputLabel>
-                        <TextField className="input_item w-full" size="small" id="username" placeholder="Họ tên hiển thị với NTD" />
+                        <InputLabel>
+                          Họ và tên <span className="text-red-500"> *</span>
+                        </InputLabel>
+                        <TextField
+                          className="input_item w-full"
+                          size="small"
+                          id="username"
+                          placeholder="Họ tên hiển thị với NTD"
+                        />
                       </div>
                       <div className="flex flex-row gap-2 basis-full">
                         <div className="input-userInfo__value-email flex flex-col gap-1 w-full">
-                          <InputLabel >Email <span className="text-red-500"> *</span></InputLabel>
-                          <TextField className="input_item" size="small" id="email" placeholder="Email hiển thị với NTD" />
+                          <InputLabel>
+                            Email <span className="text-red-500"> *</span>
+                          </InputLabel>
+                          <TextField
+                            className="input_item"
+                            size="small"
+                            id="email"
+                            placeholder="Email hiển thị với NTD"
+                          />
                         </div>
                         <div className="input-userInfo__value-phone flex flex-col gap-1 w-full">
-                          <InputLabel >Số điện thoại <span className="text-red-500"> *</span></InputLabel>
-                          <TextField className="input_item" size="small" id="phone" placeholder="Số điện thoại hiển thị với NTD" />
+                          <InputLabel>
+                            Số điện thoại{" "}
+                            <span className="text-red-500"> *</span>
+                          </InputLabel>
+                          <TextField
+                            className="input_item"
+                            size="small"
+                            id="phone"
+                            placeholder="Số điện thoại hiển thị với NTD"
+                          />
                         </div>
                       </div>
                     </form>
