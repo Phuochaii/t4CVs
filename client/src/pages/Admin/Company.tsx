@@ -1,18 +1,27 @@
 import { Briefcase } from "../../layouts/HRLayout/components/Icons";
 import { ChevronDown, Search } from "lucide-react";
 
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import {
   Compaign,
   Compaign as CompaignType,
 } from "../../shared/types/Compaign.type";
 import { Link } from "react-router-dom";
 import Switch from "../../shared/components/CustomSwitch";
+import axios from "axios";
 
 interface CompaignTableProps {
   data: Compaign[];
   setData: React.Dispatch<SetStateAction<Compaign[]>>;
 }
+
+interface CompaignFromServer {
+  id: number;
+  employerId: number;
+  name: string;
+  createdAt: string;
+}
+
 const CompanyCompaignTableHeader = () => {
   return (
     <thead>
@@ -163,78 +172,84 @@ const CompanyCompaignTable = ({ data }: CompaignTableProps) => {
   );
 };
 
+interface CompanyFromServer {
+  id: number;
+  field: number;
+  taxCode: string;
+  name: string;
+  website: string;
+  image: string;
+  address: "88 Kingsford Junction";
+  phone: string;
+  companySize: number;
+  description: string;
+  status: boolean;
+}
+
+interface EmployerFromServer {
+  id: number;
+  fullname: string;
+  gender: string;
+  skype: string;
+  companyId: number;
+  license: string;
+  phoneNumber: string;
+  licenseStatus: boolean;
+  phoneNumberStatus: boolean;
+  image: string;
+}
+
 function Company() {
-  const [campaigns, setCompaigns] = useState<CompaignType[]>([
-    {
-      compaignName: "Tuyển Nhân viên Marketing",
-      compaignId: 407767,
-      cvs: [],
-      optimization: 54,
-      recruitment: "Tin tuyển dụng nhân viên Marketing",
-      recruimentId: 416527,
-      recruitmentStatus: "Dừng hiển thị",
-      isCompaignActive: false,
-      cvSystem: "Scout AI",
-      isCVSystemActive: false,
-      cvFiltered: 15,
-      company: "Google",
-      postDate: new Date(),
-      runningServices: [],
-    },
-    {
-      compaignName: "Tuyển Lập trình viên PHP",
-      compaignId: 407766,
-      cvs: [
-        {
-          candidateId: 1234,
-          candidateName: "Lil Wayne",
-          candidateImage:
-            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
-        },
-        {
-          candidateId: 1235,
-          candidateName: "Lil Wayne",
-          candidateImage:
-            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
-        },
-        {
-          candidateId: 1236,
-          candidateName: "Lil Wayne",
-          candidateImage:
-            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
-        },
-        {
-          candidateId: 1237,
-          candidateName: "Lil Wayne",
-          candidateImage:
-            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
-        },
-        {
-          candidateId: 1238,
-          candidateName: "Lil Wayne",
-          candidateImage:
-            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
-        },
-        {
-          candidateId: 1239,
-          candidateName: "Lil Wayne",
-          candidateImage:
-            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
-        },
-      ],
-      optimization: 36,
-      recruitment: "Lập trình viên PHP",
-      recruimentId: 416526,
-      recruitmentStatus: "Dừng hiển thị",
-      company: "Apple",
-      postDate: new Date(),
-      isCompaignActive: true,
-      cvSystem: "Scout AI",
-      isCVSystemActive: false,
-      cvFiltered: null,
-      runningServices: [],
-    },
-  ]);
+  const [campaigns, setCompaigns] = useState<CompaignType[]>([]);
+
+  useEffect(() => {
+    const getAllCompaigns = async () => {
+      const response = await axios.get(
+        "http://localhost:3000/company/campaign/all"
+      );
+      const responseCompany = await axios.get(
+        "http://localhost:3000/company/all"
+      );
+      const responseEmployer = await axios.get(
+        "http://localhost:3000/employer/all"
+      );
+
+      const rawEmployers: EmployerFromServer[] =
+        responseEmployer.data.data;
+
+      const rawsCompanies: CompanyFromServer[] =
+        responseCompany.data.data;
+
+      const data = response.data.data;
+      const rawCompaigns = data.map((item: CompaignFromServer) => {
+        const employer = rawEmployers.find(
+          (employer) => employer.id === item.employerId
+        );
+        const company = rawsCompanies.find(
+          (company) => company.id === employer?.companyId
+        );
+
+        const rawCompaign: CompaignType = {
+          compaignName: item.name,
+          compaignId: item.id,
+          recruimentId: item.id,
+          recruitment: item.name,
+          cvs: [],
+          recruitmentStatus: "Dừng hiển thị",
+          isCompaignActive: true,
+          cvSystem: "Scout AI",
+          isCVSystemActive: false,
+          cvFiltered: 0,
+          runningServices: [],
+          company: company?.name,
+          postDate: new Date(item.createdAt),
+        };
+        return rawCompaign;
+      });
+      setCompaigns(rawCompaigns);
+    };
+    getAllCompaigns();
+  }, []);
 
   return (
     <div className="flex flex-col items-center flex-grow bg-slate-200">
