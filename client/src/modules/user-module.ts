@@ -14,5 +14,17 @@ const getNotification = async ({
   return response.data;
 };
 
+const updateStatusNotification = async ({userId, notificationId}:{userId:string,  notificationId: number}) => {
+  const response = await axios.put(`http://localhost:3000/notification/user/${userId}/${notificationId}`, {
+    status: 1
+  }).then((res) => {
 
-export { getNotification };
+    // console.log(res);
+    return res
+  });
+  
+  return response;
+}
+
+
+export { getNotification, updateStatusNotification };

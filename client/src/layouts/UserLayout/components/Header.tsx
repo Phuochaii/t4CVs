@@ -870,15 +870,26 @@ function Header() {
                   <>
                     {notifications.map((item: any, index: number) => (
                       <a
-                        href={item.link}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          UserModule.updateStatusNotification({
+                            userId: userId,
+                            notificationId: item.id,
+                          });
+                          fetchNotification({ id: userId });
+                          window.open(item.link, "_blank", "noopener");
+                        }}
                         key={index}
                         className="px-4 py-2 border-b-gray-200 border  hover:text-green-500"
                       >
                         <span className="font-semibold cursor-pointer  hover:text-green-500">
                           {item.content}
                         </span>
-                        <p className="text-sm text-slate-500 text-right">
-                          {item.createdAt.split("T")[0]}
+                        <p className="text-sm text-slate-500 text-right mt-2">
+                          {item.createdAt.split("T")[0] + "  "}
+                          {item.status && (
+                            <span className="text-green-500">✓</span>
+                          )}
                         </p>
                       </a>
                     ))}

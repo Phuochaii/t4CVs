@@ -24,7 +24,7 @@ const getAllCompaignByHrId = async ({hrId}:{hrId: string}) => {
 // UPDATE APPLICATION STATUS
 const updateApplicationStatus = async ({applicationId}:{applicationId: number}) => {
   const response = await axios.patch(`http://localhost:3000/application/${applicationId}`);
-  console.log(response.data);
+  // console.log(response.data);
   
   return response.data;
 }
@@ -32,10 +32,36 @@ const updateApplicationStatus = async ({applicationId}:{applicationId: number}) 
 //GET CV BY APPLICATION ID
 const getCVByApplicationID = async ({applicationId}:{applicationId: number}) => {
   const response = await axios.get(`http://localhost:3000/application/${applicationId}/cv`);
-  console.log(response.data);
-  
+  // console.log(response.data);
   return response.data;
 }
 
+const getNotification = async ({
+  userId,
+  page = 1,
+  limit = 3
+}: {
+  userId: string;
+  page?: number;
+  limit?: number;
+}) => {
+  const response = await axios.get(`http://localhost:3000/notification/hr/${userId}?limit=${limit}&page=${page}`);
+  return response.data;
+};
 
-export { getApplicationByCampaignIdHRId, getCampaignById, getAllCompaignByHrId, updateApplicationStatus ,getCVByApplicationID} ;
+// UPDATE STATUS NOTIFICATION
+const updateStatusNotification = async ({userId, notificationId}:{userId:string,  notificationId: number}) => {
+  const response = await axios.put(`http://localhost:3000/notification/hr/${userId}/${notificationId}`, {
+    status: 1
+  }).then((res) => {
+
+    // console.log(`http://localhost:3000/notification/hr/${userId}/${notificationId}`);
+    console.log(res);
+    return res
+  });
+  
+  return response;
+}
+
+
+export { getApplicationByCampaignIdHRId, getCampaignById, getAllCompaignByHrId, updateApplicationStatus ,getCVByApplicationID, getNotification,updateStatusNotification} ;

@@ -16,7 +16,7 @@ function FollowingCV() {
       campaignId: "3",
       hrId: hrId,
     }).then((res) => {
-      console.log(res);
+      // console.log(res);
       setListCV(res.applications);
       setTotalPage(res.totalPage);
     });
