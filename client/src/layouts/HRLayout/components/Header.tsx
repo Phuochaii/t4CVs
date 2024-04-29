@@ -1,3 +1,4 @@
+import * as React from "react";
 import RoundedButton from "./RoundedButton";
 import {
   Bookmark,
@@ -10,56 +11,79 @@ import {
   LineChart,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-function Header({
-  collapedSidebar,
-}: {
-  collapedSidebar: () => void;
-}) {
-  const list_btn = [
-    {
-      name: "HR Insider",
-      link: "",
-      icon: Bookmark,
-    },
-    {
-      name: "Đăng tin",
-      link: "/hr/post-compaign",
-      icon: Pencil,
-    },
-    {
-      name: "Tìm CV",
-      link: "",
-      icon: Pencil,
-    },
-    {
-      name: "Connect",
-      link: "",
-      icon: MessageCircle,
-    },
+import * as HRModule from "../../../modules/hr-module";
 
-    {
-      name: "",
-      link: "",
-      icon: Bell,
-      iconSize: 20,
-    },
-    {
-      name: "Giỏ hàng",
-      link: "",
-      icon: ShoppingCart,
-      iconSize: 20,
-      numberNoti: 1,
-    },
-    {
-      name: "",
-      link: "",
-      icon: ChevronDown,
-      iconSize: 20,
-      image:
-        "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg",
-    },
-  ];
+const list_btn1 = [
+  {
+    name: "HR Insider",
+    link: "",
+    icon: Bookmark,
+  },
+  {
+    name: "Đăng tin",
+    link: "/hr/post-compaign",
+    icon: Pencil,
+  },
+  {
+    name: "Tìm CV",
+    link: "",
+    icon: Pencil,
+  },
+  {
+    name: "Connect",
+    link: "",
+    icon: MessageCircle,
+  },
+];
+
+const list_btn2 = [
+  {
+    name: "Giỏ hàng",
+    link: "",
+    icon: ShoppingCart,
+    iconSize: 20,
+    numberNoti: 1,
+  },
+
+  {
+    name: "",
+    link: "",
+    icon: ChevronDown,
+    iconSize: 20,
+    image:
+      "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg",
+  },
+];
+const notifyButton = {
+  name: "",
+  link: "",
+  icon: Bell,
+  iconSize: 20,
+};
+
+function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
+  const [displayNoti, setDisplayNoti] = React.useState(false);
+  const [notifications, setNotifications] = React.useState([]);
+  const [total, setTotal] = React.useState(0);
+  React.useEffect(() => {
+    fetchNotification({ id: hrId });
+  }, []);
+  const hrId = "9";
   const navigation = useNavigate();
+  const fetchNotification = ({
+    id,
+    limit = 3,
+  }: {
+    id: string;
+    limit?: number;
+  }) => {
+    HRModule.getNotification({ userId: id, limit: limit }).then((res) => {
+      // console.log(res.data);
+      setNotifications(res.data);
+      setTotal(res.pagination.total);
+    });
+  };
+
   return (
     <div
       className="text-white "
@@ -100,7 +124,95 @@ function Header({
             text="Tải báo cáo thị trường 2023-2024"
             backgroundImage="linear-gradient(90deg, #213142 .62%, #0a9c4b 99.38%)"
           />
-          {list_btn.map((btn, index) => (
+          {list_btn1.map((btn, index) => (
+            <RoundedButton
+              key={index}
+              text={btn.name}
+              icon={btn.icon}
+              onClick={() => {
+                navigation(btn.link);
+              }}
+            />
+          ))}
+          <li className="relative list-none">
+            <a
+              className="text-center inline-flex items-center bg-transparent"
+              onClick={() => setDisplayNoti(!displayNoti)}
+            >
+              <RoundedButton
+                text={notifyButton.name}
+                icon={notifyButton.icon}
+                onClick={() => {
+                  navigation(notifyButton.link);
+                }}
+              />
+            </a>
+            {/* <!-- Dropdown menu --> */}
+            {displayNoti ? (
+              <div className="pt-3 absolute top-8 right-0 z-50">
+                <ul
+                  className="max-h-[320px] overflow-y-scroll dropdown  w-96 z-50font-semibold text-base bg-white border border-slate-100 rounded-lg py-3 flex flex-col gap-3 shadow-lg"
+                  aria-labelledby="dropdownDividerButton"
+                >
+                  <div className="py-2 border-b-2 border-l-stone-900">
+                    <span className="block px-4 text-lg text-gray-700 font-bold">
+                      Thông báo
+                    </span>
+                  </div>
+                  {notifications && notifications.length == 0 ? (
+                    <p>Không có thông báo</p>
+                  ) : (
+                    <>
+                      {notifications.map((item: any, index: number) => (
+                        <li
+                          onClick={(e) => {
+                            e.preventDefault();
+                            HRModule.updateStatusNotification({
+                              userId: hrId,
+                              notificationId: item.id,
+                            });
+                            fetchNotification({ id: hrId });
+                            // window.open(item.link, "_blank", "noopener");
+                          }}
+                          key={index}
+                          className={`px-4 py-2 m-0 border-b-gray-200 border ${!item.status ? "text-black font-medium" : "text-gray-500"} hover:text-green-500`}
+                        >
+                          <span className="cursor-pointer  hover:text-green-500">
+                            {item.content}
+                          </span>
+                          <p className="text-sm text-slate-500 text-right">
+                            {item.createdAt.split("T")[0]}
+                          </p>
+                        </li>
+                      ))}
+                    </>
+                  )}
+                  {total > notifications.length ? (
+                    <button
+                      className="text-green-500 hover:underline font-semibold w-full mt-2"
+                      onClick={() => {
+                        fetchNotification({ id: hrId, limit: total });
+                      }}
+                    >
+                      Xem tất cả thông báo
+                    </button>
+                  ) : notifications.length > 3 ? (
+                    <button
+                      className="text-green-500 hover:underline font-semibold w-full mt-2"
+                      onClick={() => fetchNotification({ id: hrId })}
+                    >
+                      Ẩn bớt
+                    </button>
+                  ) : (
+                    <></>
+                  )}
+                </ul>
+              </div>
+            ) : (
+              <></>
+            )}
+          </li>
+          {list_btn2.map((btn, index) => (
             <RoundedButton
               key={index}
               text={btn.name}

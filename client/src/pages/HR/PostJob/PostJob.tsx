@@ -125,7 +125,7 @@ function PostJob() {
                   id="Capa_1"
                   viewBox="0 0 460.775 460.775"
                 >
-                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                   <g
                     id="SVGRepo_tracerCarrier"
                     strokeLinecap="round"

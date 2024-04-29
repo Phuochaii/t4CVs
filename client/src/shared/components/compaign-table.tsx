@@ -91,7 +91,9 @@ export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
         </div>
       </td>
       <td className="border">
-        <div className="p-2 font-bold text-blue-500">{`${compaign.optimization}%`}</div>
+        <div className="p-2 font-bold text-blue-500">{`${
+          compaign.optimization || 0
+        }%`}</div>
       </td>
       <td className="border max-w-[180px]">
         <div className="flex flex-col gap-2 p-2">

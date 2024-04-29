@@ -4,7 +4,7 @@ export interface Compaign {
   compaignName: string;
   compaignId: number;
   cvs: CV[];
-  optimization: number;
+  optimization?: number;
   recruitment: string;
   recruimentId: number;
   recruitmentStatus: string;

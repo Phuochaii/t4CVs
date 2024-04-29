@@ -1,78 +1,49 @@
 import { Briefcase } from "../../layouts/HRLayout/components/Icons";
 import { ChevronDown, Search } from "lucide-react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CompaignTable } from "../../shared/components/compaign-table";
 import { Compaign as CompaignType } from "../../shared/types/Compaign.type";
+import axios from "axios";
+
+interface CompaignFromServer {
+  id: number;
+  employerId: number;
+  name: string;
+  createdAt: string;
+}
 
 function Compaign() {
-  const [campaigns, setCompaigns] = useState<CompaignType[]>([
-    {
-      compaignName: "Tuyển Nhân viên Marketing",
-      compaignId: 407767,
-      cvs: [],
-      optimization: 54,
-      recruitment: "Tin tuyển dụng nhân viên Marketing",
-      recruimentId: 416527,
-      recruitmentStatus: "Dừng hiển thị",
-      isCompaignActive: false,
-      cvSystem: "Scout AI",
-      isCVSystemActive: false,
-      cvFiltered: 15,
-      runningServices: [],
-    },
-    {
-      compaignName: "Tuyển Lập trình viên PHP",
-      compaignId: 407766,
-      cvs: [
-        {
-          candidateId: 1234,
-          candidateName: "Lil Wayne",
-          candidateImage:
-            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
-        },
-        {
-          candidateId: 1235,
-          candidateName: "Lil Wayne",
-          candidateImage:
-            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
-        },
-        {
-          candidateId: 1236,
-          candidateName: "Lil Wayne",
-          candidateImage:
-            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
-        },
-        {
-          candidateId: 1237,
-          candidateName: "Lil Wayne",
-          candidateImage:
-            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
-        },
-        {
-          candidateId: 1238,
-          candidateName: "Lil Wayne",
-          candidateImage:
-            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
-        },
-        {
-          candidateId: 1239,
-          candidateName: "Lil Wayne",
-          candidateImage:
-            "https://images.unsplash.com/photo-1713747637487-0fbc89f8a4c8",
-        },
-      ],
-      optimization: 36,
-      recruitment: "Lập trình viên PHP",
-      recruimentId: 416526,
-      recruitmentStatus: "Dừng hiển thị",
-      isCompaignActive: true,
-      cvSystem: "Scout AI",
-      isCVSystemActive: false,
-      cvFiltered: null,
-      runningServices: [],
-    },
-  ]);
+  const [campaigns, setCompaigns] = useState<CompaignType[]>([]);
+
+  useEffect(() => {
+    const getAllCompaigns = async () => {
+      const response = await axios.get(
+        "http://localhost:3000/company/campaign/all"
+      );
+      if (response.status === 200) {
+        const data = response.data.data;
+        const rawCompaigns = data.map((item: CompaignFromServer) => {
+          const rawCompaign: CompaignType = {
+            compaignName: item.name,
+            compaignId: item.id,
+            recruimentId: item.id,
+            recruitment: item.name,
+            cvs: [],
+            recruitmentStatus: "Dừng hiển thị",
+            isCompaignActive: true,
+            cvSystem: "Scout AI",
+            isCVSystemActive: false,
+            cvFiltered: 0,
+            runningServices: [],
+          };
+          return rawCompaign;
+        });
+        setCompaigns(rawCompaigns);
+      }
+    };
+    getAllCompaigns();
+  }, []);
 
   return (
     <div className="flex flex-col items-center flex-grow w-full bg-slate-200">

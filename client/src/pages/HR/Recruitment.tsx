@@ -6,9 +6,10 @@ import {
   Search,
   Settings,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { statusColor } from "../../shared/types/RecruitmentStatus.type";
+import axios from "axios";
 
 interface RecruitmentJobPost {
   recruitmentName: string;
@@ -112,8 +113,73 @@ const filteredStatuses = [
   "Dừng hiển thị",
 ];
 
+interface CompaignFromServer {
+  id: number;
+  employerId: number;
+  name: string;
+  createdAt: string;
+}
+
+interface RecruitmentFromServer {
+  id: number;
+  titleRecruitment: string;
+  majorId: number;
+  campaignId: number;
+  typeId: number;
+  currencyId: number;
+  salaryMin: number;
+  salaryMax: number;
+  expId: number;
+  expiredDate: string;
+  createAt: string;
+  updateAt: string;
+  levelId: number;
+  status: boolean;
+  companyId: number;
+  major: {
+    id: number;
+    name: string;
+  };
+  level: {
+    id: number;
+    name: string;
+  };
+  currency: {
+    id: number;
+    name: string;
+  };
+  fields: [
+    {
+      id: number;
+      name: string;
+    },
+    {
+      id: number;
+      name: string;
+    }
+  ];
+  exp: {
+    id: number;
+    name: string;
+  };
+  type: {
+    id: number;
+    name: string;
+  };
+  locations: [
+    {
+      id: number;
+      name: string;
+    },
+    {
+      id: number;
+      name: string;
+    }
+  ];
+}
+
 function Recruitment() {
-  const data = [
+  const [data, setData] = useState<RecruitmentJobPost[]>([
     {
       recruitmentName: "Tin Tuyển dụng Nhân viên Marketing",
       recruitmentStatus: "Dừng hiển thị",
@@ -126,9 +192,44 @@ function Recruitment() {
       recruitmentId: 416524,
       compaignName: "Tuyển dụng Nhân viên Telesales",
     },
-  ];
+  ]);
   const [selectedStatus, setSelectedStatus] = useState(0);
   const [filterKeyword, setFilterKeyword] = useState("");
+
+  useEffect(() => {
+    const getAllRecruitments = async () => {
+      const response = await axios.get(
+        "http://localhost:3000/job/all"
+      );
+      const compaigns = await axios.get(
+        "http://localhost:3000/company/campaign/all"
+      );
+
+      const rawCompaigns: CompaignFromServer[] = compaigns.data.data;
+      const data = response.data.data;
+      const recruitments: RecruitmentJobPost[] = data.map(
+        (item: RecruitmentFromServer) => {
+          const comapaign = rawCompaigns.find(
+            (compaign) => compaign.id === item.campaignId
+          );
+          const recruitment: RecruitmentJobPost = {
+            recruitmentName: item.titleRecruitment,
+            recruitmentId: item.id,
+            recruitmentStatus:
+              item.status === false
+                ? "Dừng hiển thị"
+                : "Đang hiển thị",
+            compaignName: comapaign
+              ? comapaign.name
+              : item.titleRecruitment,
+          };
+          return recruitment;
+        }
+      );
+      setData(recruitments);
+    };
+    getAllRecruitments();
+  }, []);
   return (
     <div>
       <h1 className="p-4 text-xl font-bold text-black bg-white">
