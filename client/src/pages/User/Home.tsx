@@ -118,128 +118,108 @@ function Home() {
             </p>
           </div>
 
-          <form className="search-job flex flex-row justify-center gap-x-4">
-            <div className="group-search flex flex-row">
-              <div className="item item-search">
-                <FormControl>
-                  <OutlinedInput
-                    id="outlined-adornment-amount"
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <MagnifyingGlassIcon className="w-6" />
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
+          <div className="max-w-screen-lg mx-auto">
+            <form className="search-job grid grid-cols-7 justify-center gap-x-4">
+              <div className="group-search col-span-3 grid grid-cols-2">
+                <div className="item item-search">
+                  <FormControl>
+                    <OutlinedInput
+                      id="outlined-adornment-amount"
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <MagnifyingGlassIcon className="w-6" />
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                </div>
+                <div className="item search-city">
+                  <TextField
+                    id="outlined-select-currency"
+                    select
+                    defaultValue="0"
+                    className="w-full"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <MapPinIcon className="w-7" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  >
+                    {city.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </div>
               </div>
-              <div className="item search-city">
-                <TextField
-                  id="outlined-select-currency"
-                  select
-                  defaultValue="0"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <MapPinIcon className="w-7" />
-                      </InputAdornment>
-                    ),
-                  }}
-                >
-                  {city.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </div>
-            </div>
-            <div className="group flex flex-row gap-x-4">
-              <div className="item">
-                <TextField
-                  id="outlined-select-currency"
-                  select
-                  defaultValue="0"
-                  className="w-full"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <MapPinIcon className="w-7" />
-                      </InputAdornment>
-                    ),
-                  }}
-                >
-                  {city.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </div>
-            </div>
-            <div className="group col-span-3 grid grid-cols-2 gap-x-4">
-              {/* Số năm kinh nghiệm */}
-              <div className="item col-span-1">
-                <TextField
-                  id="outlined-select-currency"
-                  select
-                  defaultValue="0"
-                  className="w-full"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <StarIcon className="w-6 border-2 border-neutral-500 rounded-full" />
-                      </InputAdornment>
-                    ),
-                  }}
-                >
-                  {exp_year.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </div>
+              <div className="group col-span-3 grid grid-cols-2 gap-x-4">
+                {/* Số năm kinh nghiệm */}
+                <div className="item col-span-1">
+                  <TextField
+                    id="outlined-select-currency"
+                    select
+                    defaultValue="0"
+                    className="w-full"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <StarIcon className="w-6 border-2 border-neutral-500 rounded-full" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  >
+                    {exp_year.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </div>
 
-              {/* Lương */}
-              <div className="item col-span-1">
-                <TextField
-                  id="outlined-select-currency"
-                  select
-                  defaultValue="0"
-                  className="w-full"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
-                          className="w-6 h-6"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                          />
-                        </svg>
-                      </InputAdornment>
-                    ),
-                  }}
-                >
-                  {salary_range.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                {/* Lương */}
+                <div className="item col-span-1">
+                  <TextField
+                    id="outlined-select-currency"
+                    select
+                    defaultValue="0"
+                    className="w-full"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            className="w-6 h-6"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              stroke-linejoin="round"
+                              d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                            />
+                          </svg>
+                        </InputAdornment>
+                      ),
+                    }}
+                  >
+                    {salary_range.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </div>
               </div>
-            </div>
-            <Button className="btn-search" variant="contained">
-              Tìm kiếm
-            </Button>
-          </form>
+              <Button className="btn-search" variant="contained">
+                Tìm kiếm
+              </Button>
+            </form>
+          </div>
         </div>
 
         <div className="box-work-market flex flex-row justify-center gap-4 text-black my-8">
