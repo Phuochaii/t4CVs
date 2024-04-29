@@ -256,26 +256,6 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                       Đăng xuất
                     </span>
                   </li>
-
-                  {total > notifications.length ? (
-                    <button
-                      className="text-green-500 hover:underline font-semibold w-full mt-2"
-                      onClick={() => {
-                        fetchNotification({ id: hrId, limit: total });
-                      }}
-                    >
-                      Xem tất cả thông báo
-                    </button>
-                  ) : notifications.length > 3 ? (
-                    <button
-                      className="text-green-500 hover:underline font-semibold w-full mt-2"
-                      onClick={() => fetchNotification({ id: hrId })}
-                    >
-                      Ẩn bớt
-                    </button>
-                  ) : (
-                    <></>
-                  )}
                 </ul>
               </div>
             ) : (
