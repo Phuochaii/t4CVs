@@ -10,7 +10,11 @@ import {
   LineChart,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
+function Header({
+  collapedSidebar,
+}: {
+  collapedSidebar: () => void;
+}) {
   const list_btn = [
     {
       name: "HR Insider",
@@ -58,7 +62,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
   const navigation = useNavigate();
   return (
     <div
-      className=" text-white"
+      className="text-white "
       id="hr-header"
       style={{ padding: "16px 20px", backgroundColor: "#212F3F" }}
     >

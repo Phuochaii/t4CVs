@@ -4,11 +4,25 @@ import * as Admin from "../pages/Admin";
 import * as HR from "../pages/HR";
 import * as Error from "../pages/Error";
 
-import { UserLayout, AdminLayout, HRLayout, EmptyLayout } from "../layouts";
+import {
+  UserLayout,
+  AdminLayout,
+  HRLayout,
+  EmptyLayout,
+} from "../layouts";
+import { ReactElement } from "react";
 
+interface LayoutProp {
+  children: React.ReactNode | React.ReactElement<any>;
+}
 
-const routes = [
-  // 1st UI 
+interface RouteItem {
+  path: string;
+  component: () => ReactElement;
+  layout: ({ }:LayoutProp) => ReactElement;
+}
+
+const routes: RouteItem[] = [
   // AUTHENTICATION PAGES - Tiến
   {path: 'admin-login', component:Authentication.AdminLogIn, layout: EmptyLayout},
   {path: 'hr-login', component:Authentication.HRLogIn, layout: EmptyLayout},
@@ -34,8 +48,11 @@ const routes = [
   { path: "/admin", component: Admin.Overview, layout: AdminLayout },
 
 
-  // HR PAGES - Yến , Thịnh
-  { path: "/hr/approve", component: HR.ReceiveCV, layout: HRLayout }, // yến
+  // HR PAGES - Yến, Thịnh, Thức
+  { path: "/hr/approve", component: HR.ReceiveCV, layout: HRLayout }, // yến  { path:"/hr/compaign", component: HR.Compaign, layout: HRLayout},
+  { path:"/hr/compaign-edit/:id", component: HR.CompaignEdit, layout: HRLayout},
+  { path:"/hr/recruitment", component: HR.Recruitment, layout: HRLayout},
+
   // ERROR PAGES
   { path: "error-path", component: Error.ErrorPath, layout: EmptyLayout },
 
@@ -65,7 +82,7 @@ const routes = [
 
   { path: "/hr/compain-edit/:id", component: HR.CompaignEdit, layout: HRLayout }, // thuc
 
-  { path: "/hr/recruitment", component: HR.Recuitment, layout: HRLayout }, // thuc
+  { path: "/hr/recruitment", component: HR.Recruitment, layout: HRLayout },
 
   { path: "/hr/manage-cv", component: HR.ManageCV, layout: HRLayout }, // yen
 

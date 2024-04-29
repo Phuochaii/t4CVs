@@ -4,7 +4,7 @@ import Support from "./Support";
 import News from "./News";
 import Compaign from "./Compaign";
 import CompaignEdit from "./CompaignEdit";
-import Recuitment from "./Recuitment";
+import Recruitment from "./Recruitment";
 
 import ManageCV from "./manage-cv/index";
 import * as VerifyAccount from "./verify-account";
@@ -17,7 +17,7 @@ export {
   News,
   Compaign,
   CompaignEdit,
-  Recuitment,
+  Recruitment,
   ManageCV,
   VerifyAccount,
   PostCompaign,
