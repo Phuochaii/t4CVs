@@ -1,12 +1,16 @@
-import { useState } from "react";
-import "../../../App.css";
-import React from "react";
-import * as UserModule from "../../../modules/user-module";
+import { useState } from 'react';
+import '../../../App.css';
+import React from 'react';
+import { Button } from '@mui/material';
+import { useAuth0 } from '@auth0/auth0-react';
+import * as UserModule from '../../../modules/user-module';
+
 function Header() {
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
-  const userId = "1";
+  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const userId = '1';
   const fetchNotification = ({
     id,
     limit = 3,
@@ -24,11 +28,23 @@ function Header() {
   React.useEffect(() => {
     fetchNotification({ id: userId });
   }, []);
+
+  React.useEffect(() => {
+    console.log(user);
+  }, [user]);
+
   const [isJobsHovered, setIsJobsHovered] = useState(false);
   const [isCVsHovered, setIsCVsHovered] = useState(false);
   const [isCompaniesHovered, setIsCompaniesHovered] = useState(false);
   const [isToolsHovered, setIsToolsHovered] = useState(false);
   const [isSupportsHovered, setIsSupportsHovered] = useState(false);
+
+  const logoutWithRedirect = () =>
+    logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    });
 
   return (
     <header className="menu-top bg-white text-black">
@@ -877,7 +893,7 @@ function Header() {
                             notificationId: item.id,
                           });
                           fetchNotification({ id: userId });
-                          window.open(item.link, "_blank", "noopener");
+                          window.open(item.link, '_blank', 'noopener');
                         }}
                         key={index}
                         className="px-4 py-2 border-b-gray-200 border  hover:text-green-500"
@@ -886,7 +902,7 @@ function Header() {
                           {item.content}
                         </span>
                         <p className="text-sm text-slate-500 text-right mt-2">
-                          {item.createdAt.split("T")[0] + "  "}
+                          {item.createdAt.split('T')[0] + '  '}
                           {item.status && (
                             <span className="text-green-500">✓</span>
                           )}
@@ -929,7 +945,8 @@ function Header() {
               <path d="M15.75 7.5c-1.376 0-2.739.057-4.086.169C10.124 7.797 9 9.103 9 10.609v4.285c0 1.507 1.128 2.814 2.67 2.94 1.243.102 2.5.157 3.768.165l2.782 2.781a.75.75 0 0 0 1.28-.53v-2.39l.33-.026c1.542-.125 2.67-1.433 2.67-2.94v-4.286c0-1.505-1.125-2.811-2.664-2.94A49.392 49.392 0 0 0 15.75 7.5Z" />
             </svg>
           </span>
-          <span className="btn-user-info p-2 bg-slate-100 rounded-full cursor-pointer items-center flex flex-row gap-2 group/user">
+
+          {/* <span className="btn-user-info p-2 bg-slate-100 rounded-full cursor-pointer items-center flex flex-row gap-2 group/user">
             <img
               src="../../../images/user-logo.png"
               className="w-8 h-8"
@@ -950,7 +967,39 @@ function Header() {
                 />
               </svg>
             </span>
-          </span>
+          </span> */}
+
+          {/* Chưa đăng nhập */}
+          {!isAuthenticated && (
+            // <NavItem>
+            //   <Button
+            //     id="qsLoginBtn"
+            //     color="primary"
+            //     className="btn-margin"
+            //     onClick={() => loginWithRedirect()}
+            //   >
+            //     Log in
+            //   </Button>
+            // </NavItem>
+            <Button
+              className="btn-search"
+              variant="contained"
+              onClick={() => loginWithRedirect()}
+            >
+              Đăng nhập
+            </Button>
+          )}
+
+          {/* Đã đăng nhập */}
+          {isAuthenticated && (
+            <Button
+              className="btn-search"
+              variant="contained"
+              onClick={() => logoutWithRedirect()}
+            >
+              Đăng xuất
+            </Button>
+          )}
         </div>
       </div>
     </header>
