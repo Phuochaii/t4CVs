@@ -1,4 +1,24 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+
 function Company() {
+    let { id } = useParams();
+    const [companyInfo, setCompanyInfo] = useState();
+    useEffect(() => {
+        fetchCompanyInfo(id);
+    }, []);
+    const fetchCompanyInfo = async (id) => {
+        try {
+            const response = await axios.get(
+                `http://localhost:3000/company/${id}`
+            );
+            console.log(response.data);
+            setCompanyInfo(response.data);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
     return (
         <div className="bg-[#f3f5f7] text-black px-48">
             <div className="bg-transparent py-5">
@@ -11,9 +31,7 @@ function Company() {
                         </li>
                         <li className="">
                             <span className="text-[#b3b8bd] ml-2">{">"}</span>{" "}
-                            Thông tin công ty & tin tuyển dụng từ Công ty chuyển
-                            phát nhanh Thuận Phong chi nhánh Hồ Chí Minh (J&T
-                            Express)
+                            {companyInfo?.name ? companyInfo?.name : " "}
                         </li>
                     </ul>
                 </div>
@@ -21,7 +39,7 @@ function Company() {
             <div className="relative min-h-[360px] bg-gradient-to-r from-[#212f3f] to-[#00b14f] rounded-[10px] mb-6">
                 <div className="h-[224px] overflow-hidden">
                     <img
-                        src="https://static.topcv.vn/company_covers/dQFjm1Lkdg4k8uCSgX3v.jpg"
+                        src={companyInfo?.image ? companyInfo?.image : " "}
                         alt="company-banner"
                         className="h-full object-cover w-full object-center rounded-t-[10px]"
                     />
@@ -29,7 +47,7 @@ function Company() {
                 <div className="">
                     <div className="absolute items-center bg-white border-4 rounded-full flex h-[180px] justify-center left-[40px] overflow-hidden top-[136px] w-[180px]">
                         <img
-                            src="https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/cong-ty-chuyen-phat-nhanh-thuan-phong-chi-nhanh-ho-chi-minh-jt-express-5e1804e371f60.jpg"
+                            src={companyInfo?.image ? companyInfo?.image : " "}
                             alt="logo"
                             className="h-[80%] w-[80%] object-contain"
                         />
@@ -38,9 +56,7 @@ function Company() {
                 <div className="flex items-center gap-x-8 my-[30px] pl-[252px] pr-[40px] relative">
                     <div className="block basis-auto grow shrink max-w-full">
                         <h1 className="line-clamp-2 text-white text-xl font-semibold mb-4 max-w-full">
-                            Công ty chuyển phát nhanh Thuận Phong chi nhánh Hồ
-                            Chí Minh <br />
-                            (J&T Express)
+                            {companyInfo?.name ? companyInfo?.name : " "}
                         </h1>
                         <div className="flex flex-wrap items-center gap-x-5 gap-y-4 max-w-full">
                             <div className="flex items-center gap-4">
@@ -75,7 +91,10 @@ function Company() {
                                     <path d="M48 0C21.5 0 0 21.5 0 48V464c0 26.5 21.5 48 48 48h96V432c0-26.5 21.5-48 48-48s48 21.5 48 48v80h96c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48H48zM64 240c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V240zm112-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H176c-8.8 0-16-7.2-16-16V240c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H272c-8.8 0-16-7.2-16-16V240zM80 96h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H176c-8.8 0-16-7.2-16-16V112zM272 96h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H272c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16z" />
                                 </svg>
                                 <span className="text-white font-normal overflow-hidden text-ellipsis whitespace-nowrap">
-                                    1000+ nhân viên
+                                    {companyInfo?.companySize
+                                        ? companyInfo?.companySize
+                                        : "0"}
+                                    + nhân viên
                                 </span>
                             </div>
                             <div className="flex items-center gap-4">
@@ -91,7 +110,10 @@ function Company() {
                                     <path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z" />
                                 </svg>
                                 <span className="text-white font-normal overflow-hidden text-ellipsis whitespace-nowrap">
-                                    372 người theo dõi
+                                    {companyInfo?.field
+                                        ? companyInfo?.field
+                                        : "0"}{" "}
+                                    người theo dõi
                                 </span>
                             </div>
                         </div>
@@ -123,40 +145,11 @@ function Company() {
                             </h2>
                             <div className="px-5 pt-5 pb-7">
                                 <div className="content overflow-hidden">
-                                    J&T Express là thương hiệu chuyển phát nhanh
-                                    dựa trên sự phát triển của công nghệ và
-                                    Internet của Công ty TNHH MTV Chuyển phát
-                                    nhanh Thuận Phong có vốn đầu tư từ Hồng
-                                    Kông. Chúng tôi sở hữu một mạng lưới rộng
-                                    khắp nhằm hỗ trợ các hoạt động giao nhận
-                                    hàng hóa nhanh chóng không chỉ ở nội thành
-                                    mà còn ở ngoại thành và các vùng xa của các
-                                    tỉnh thành trong cả nước Việt Nam.
-                                    <br />
-                                    <br />
-                                    Đồng thời, trong tương lai J&T Express định
-                                    hướng mở rộng phạm vi cung cấp các dịch vụ
-                                    chuyển phát nhanh ra quốc tế.
-                                    <br />
-                                    <br />
-                                    J&T Express cam kết sử dụng hệ thống công
-                                    nghệ thông tin tiên tiến để nâng cao tính
-                                    kịp thời và chất lượng phục vụ, cũng như đáp
-                                    ứng những tiêu chí về sự tiện lợi, nhanh
-                                    chóng, hiệu quả trong các dịch vụ chuyển
-                                    phát đến khách hàng. J&T Express hiện tại đã
-                                    có mặt tại nhiều nước Đông Nam Á: Việt Nam,
-                                    Thái Lan, Indonesia, Malaysia, Philippines.
-                                    <br />
-                                    <br />
-                                    Với khẩu hiệu “Express your online
-                                    business”, J&T Express tập trung hỗ trợ cho
-                                    khách hàng kinh doanh trực tuyến dễ dàng và
-                                    hiệu quả hơn, cung cấp các tiện ích giúp
-                                    khách hàng mở rộng kinh doanh theo xu hướng
-                                    của ngành thương mại điện tử.
+                                    {companyInfo?.description
+                                        ? companyInfo?.description
+                                        : "Không có mô tả"}
                                 </div>
-                                <div className="text-[#00b14f] mt-[15px] font-medium flex items-center">
+                                {/* <div className="text-[#00b14f] mt-[15px] font-medium flex items-center">
                                     <a href="#!">Thu gọn</a>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -170,7 +163,7 @@ function Company() {
                                     >
                                         <path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z" />
                                     </svg>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
@@ -198,8 +191,9 @@ function Company() {
                                         <span>Địa chỉ công ty</span>
                                     </div>
                                     <div className="text-[#4d5965] font-normal">
-                                        84-86 D1, Khu Đô Thị mới Him Lam, Phường
-                                        Tân Hưng, Quận 7
+                                        {companyInfo?.address
+                                            ? companyInfo?.address
+                                            : "Không được cung cấp địa chỉ"}
                                     </div>
                                 </div>
                                 <div className="py-5 ">

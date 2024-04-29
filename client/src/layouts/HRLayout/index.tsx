@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "./components/Header";
-import Footer from "./components/Footer";
 import SideBar from "./components/SideBar";
 
 interface LayoutProp {
@@ -8,7 +7,7 @@ interface LayoutProp {
 }
 
 function HRLayout({ children }: LayoutProp) {
-  const [collapsedSidebar, setCollapsedSidebar] = React.useState(false);
+  const [collapsedSidebar, setCollapsedSidebar] = useState(false);
   const toggleCollopsedSidebar = () => {
     setCollapsedSidebar(!collapsedSidebar);
   };
@@ -18,7 +17,7 @@ function HRLayout({ children }: LayoutProp) {
       <Header collapedSidebar={toggleCollopsedSidebar} />
       <div className="flex" style={{ height: `calc(100vh - 63px)` }}>
         <SideBar isCollapsed={collapsedSidebar} />
-        <div className="flex-grow  overflow-y-scroll">
+        <div className="flex-grow overflow-y-scroll">
           {React.cloneElement(children as React.ReactElement<any>)}
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { Eye, CreditCard } from "lucide-react";
+import { Eye, CreditCard, Building2 } from "lucide-react";
 import GradientIcon from "./GradientIcon";
+import clsx from "clsx";
 
 interface SidebarProps {
   className: string;
@@ -9,7 +10,7 @@ interface SidebarProps {
 const links = [
   {
     name: "Overview",
-    path: "",
+    path: "/admin",
     icon: Eye,
     iconComponent: <Eye className="text-white" />,
   },
@@ -19,6 +20,12 @@ const links = [
     icon: CreditCard,
     iconComponent: <CreditCard className="text-white" />,
   },
+  {
+    name: "Company",
+    path: "/admin/company",
+    icon: Building2,
+    iconComponent: <Building2 className="text-white" />,
+  },
 ];
 
 function Sidebar({ className }: SidebarProps) {
@@ -26,21 +33,22 @@ function Sidebar({ className }: SidebarProps) {
   const pathname = location.pathname;
   return (
     <div
-      className={
-        className +
-        " sticky overflow-hidden min-h-[90vh] flex flex-col pt-4 gap-8 mr-4"
-      }
+      className={clsx(
+        className,
+        "sticky overflow-hidden min-h-[90vh] w-[12vw] flex flex-col pt-4 gap-8 mr-4"
+      )}
     >
       {links.map((item, index) => {
         return (
           <Link
             to={item.path}
             key={index}
-            className={`flex w-full gap-2  px-2 py-3  ${
+            className={clsx(
+              `flex w-full gap-2 px-2 py-3`,
               pathname == item.path
                 ? "bg-gradient-to-b from-green-500 to-blue-500 rounded-r-[4rem]"
                 : ""
-            }`}
+            )}
           >
             {pathname == item.path ? (
               item.iconComponent
@@ -49,7 +57,9 @@ function Sidebar({ className }: SidebarProps) {
             )}{" "}
             <span
               className={
-                pathname == item.path ? "text-white" : "text-slate-500"
+                pathname == item.path
+                  ? "text-white"
+                  : "text-slate-500"
               }
             >
               {item.name}
