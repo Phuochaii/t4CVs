@@ -17,14 +17,14 @@ const routes = [
   {path: 'user-signup', component:Authentication.UserSignUp, layout: EmptyLayout},
 
   // USER PAGES - Nguyên , Khoa, Hùng
-  { path: "/", component: User.Home, layout: UserLayout }, //khoa
-  { path: "/results", component: User.SearchJob, layout: UserLayout }, // khoa
+  { path: "/", component: User.Home, layout: UserLayout }, //khoa - > tiến
+  { path: "/results", component: User.SearchJob, layout: UserLayout }, // khoa -> tiến
   {
     path: "/your-application",
     component: User.YourApplications,
     layout: UserLayout,
   },// hùng
-  { path: "/detail-job", component: User.ApplyCV, layout: UserLayout },//khoa
+  { path: "/detail-job", component: User.ApplyCV, layout: UserLayout },//khoa -> tiến
   { path: "/create-cv", component: User.CreateCV, layout: UserLayout },//
   { path: "/edit-cv", component: User.EditCV, layout: UserLayout },//
   { path: "/template-cv", component: User.TemplateCV, layout: UserLayout }, //nguyên
