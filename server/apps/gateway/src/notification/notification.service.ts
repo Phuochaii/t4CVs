@@ -1,6 +1,4 @@
-import { request } from 'http';
 import {
-  GetUserNotificationsRequest,
   NOTIFICATION_PACKAGE_NAME,
   NOTIFICATION_SERVICE_NAME,
   NotificationServiceClient,
@@ -10,6 +8,8 @@ import {
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { PaginationRequest } from '@app/common';
+import { first, firstValueFrom, lastValueFrom, map } from 'rxjs';
+import { DateTimestampConverter } from '@app/common/conveters';
 
 export enum NotificationUserRole {
   USER = 'user',
@@ -19,7 +19,7 @@ export class NotificationUserId {
   constructor(
     private id: number,
     private role: NotificationUserRole,
-  ) {}
+  ) { }
   get userId() {
     return `${this.role}-${this.id}`;
   }
@@ -29,7 +29,7 @@ export class NotificationService implements OnModuleInit {
   private notificationServiceClient: NotificationServiceClient;
   constructor(
     @Inject(NOTIFICATION_PACKAGE_NAME) private readonly client: ClientGrpc,
-  ) {}
+  ) { }
   onModuleInit() {
     this.notificationServiceClient =
       this.client.getService<NotificationServiceClient>(
@@ -49,14 +49,24 @@ export class NotificationService implements OnModuleInit {
     });
   }
 
-  getAllOf(
+  async getAllOf(
     notificationUserId: NotificationUserId,
     paginationRequest: PaginationRequest,
   ) {
-    return this.notificationServiceClient.getNotifications({
-      user: { id: notificationUserId.userId },
-      paginationRequest,
-    });
+    const { pagination, data = [] } = await lastValueFrom(this.notificationServiceClient
+      .getNotifications({
+        user: { id: notificationUserId.userId },
+        paginationRequest,
+      }));
+    return {
+      pagination,
+      data: data.map((notification) => ({
+        ...notification,
+        createdAt: DateTimestampConverter.fromTimestamp(
+          notification.createdAt,
+        ),
+      })),
+    }
   }
 
   updateStatus(

@@ -11,8 +11,8 @@ import {
   ReadApplicationRequest,
   UpdateApplicationRequest,
   Pagination,
+  ReadAllApplicationByCampaignIdRequest,
 } from '@app/common/proto/application';
-import { Observable } from 'rxjs';
 
 @Controller()
 @ApplicationServiceControllerMethods()
@@ -26,13 +26,41 @@ export class ApplicationController implements ApplicationServiceController {
     return this.applicationService.findOneOrFail(request.id);
   }
 
+  async readAllApplicationByCampaignId(
+    request: ReadAllApplicationByCampaignIdRequest,
+  ): Promise<Applications> {
+    const data = await this.applicationService.findAllApplicationByCampaignId(
+      request.page,
+      request.limit,
+      request.campaignIds,
+      request.status,
+    );
+    const total = data.length;
+    const total_pages = Math.ceil(total / request.limit);
+    return {
+      page: request.page,
+      limit: request.limit,
+      total: total,
+      totalPage: total_pages,
+      applications: data,
+    };
+  }
+
   async readAllApplication(request: Pagination): Promise<Applications> {
-    // console.log(this.applicationService.findAll());
     const data = await this.applicationService.findAll(
       request.page,
       request.limit,
     );
-    return { applications: data };
+    // Calculate pagination metadata
+    const total = data.length;
+    const total_pages = Math.ceil(total / request.limit);
+    return {
+      page: request.page,
+      limit: request.limit,
+      total: total,
+      totalPage: total_pages,
+      applications: data,
+    };
   }
 
   updateApplication(request: UpdateApplicationRequest) {

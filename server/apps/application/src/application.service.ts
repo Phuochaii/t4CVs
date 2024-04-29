@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { Application } from './entities/application.entity';
@@ -15,7 +15,6 @@ export class ApplicationService {
     try {
       const application = this.applicationRepository.create(data);
       application.status = false;
-      console.log(data);
       const now = new Date();
       application.createdAt = now.toISOString().split('T')[0];
       application.updateAt = now.toISOString().split('T')[0];
@@ -30,7 +29,6 @@ export class ApplicationService {
       const guest = await this.applicationRepository.findOneBy({ id });
       return guest;
     } catch {
-      console.log(id);
       throw new NotFoundException();
     }
   }
@@ -38,6 +36,28 @@ export class ApplicationService {
   async findAll(page: number, limit: number) {
     const skip = (page - 1) * limit;
     const data = await this.applicationRepository.find({
+      skip: skip,
+      take: limit,
+      order: {
+        createdAt: 'DESC',
+        id: 'DESC',
+      },
+    });
+    return data;
+  }
+
+  async findAllApplicationByCampaignId(
+    page: number,
+    limit: number,
+    campaignIds: number[],
+    status: boolean | undefined,
+  ) {
+    const skip = (page - 1) * limit;
+    const data = await this.applicationRepository.find({
+      where: {
+        campaignId: In(campaignIds),
+        status,
+      },
       skip: skip,
       take: limit,
       order: {

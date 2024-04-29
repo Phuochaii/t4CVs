@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Position } from './position.entities';
@@ -18,11 +18,11 @@ export class Employer {
   @Column()
   gender: string;
 
-  @OneToOne(() => Position)
+  @ManyToOne(() => Position)
   @JoinColumn()
   positionId: number;
 
-  @Column()
+  @Column({ nullable: true })
   skype: string;
 
   // @OneToOne(() => Company)
@@ -34,10 +34,10 @@ export class Employer {
   license: string;
   @Column()
   phoneNumber: string;
-  @Column()
+  @Column({ default: false })
   licenseStatus: boolean;
-  @Column()
+  @Column({ default: false })
   phoneNumberStatus: boolean;
-  @Column()
-  imgae: string;
+  @Column({ nullable: true })
+  image: string;
 }

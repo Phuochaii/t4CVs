@@ -15,20 +15,23 @@ export class CampaignService {
 
   async createCampaign(createCampaignDto: CreateCampaignDto) {
     const now = new Date();
-    createCampaignDto.creatednAt = now;
+    createCampaignDto.createdAt = now;
     const campaign = await this.CampaignRepository.save(createCampaignDto);
 
     return await this.CampaignRepository.save(campaign);
   }
 
   // eslint-disable-next-line prettier/prettier
-  async findAllCampaigns(page: number, limit: number): Promise<FindCampaignDTOResponse[]> {
+  async findAllCampaigns(
+    page: number,
+    limit: number,
+  ): Promise<FindCampaignDTOResponse[]> {
     const skip = (page - 1) * limit;
     const campaigns = await this.CampaignRepository.find({
       skip: skip,
       take: limit,
       order: {
-        creatednAt: 'DESC',
+        createdAt: 'DESC',
       },
     });
     return campaigns;
@@ -46,17 +49,40 @@ export class CampaignService {
   async updateCampaign(data: UpdateCampaignDto) {
     return await this.CampaignRepository.update(data.id, {
       name: data.name,
-      creatednAt: data.creatednAt,
+      createdAt: data.createdAt,
       employerId: data.employerId,
     });
   }
 
-  // async findEmployerId(id: number) {
-  //   const result = await this.CampaignRepository.findOne({
-  //     where: {
-  //       id,
-  //     },
-  //   });
-  //   return result.employerId;
-  // }
+  async findCampaignByEmployerId(
+    employerId: number,
+    page: number,
+    limit: number,
+  ): Promise<FindCampaignDTOResponse[]> {
+    const skip = (page - 1) * limit;
+    const result = await this.CampaignRepository.find({
+      where: { employerId: employerId },
+      skip: skip,
+      take: limit,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    return result;
+  }
+
+  async getTotalCampaign(): Promise<number> {
+    const total = await this.CampaignRepository.count();
+
+    return total;
+  }
+
+  async getTotalCampaignByEmployerId(employerId: number): Promise<number> {
+    const total = await this.CampaignRepository.count({
+      where: { employerId: employerId },
+    });
+
+    return total;
+  }
 }

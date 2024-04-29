@@ -32,7 +32,7 @@ export class CompanyController {
   }
 
   @Get(':id')
-  findCompanyById(@Param('id') id: number): Observable<string> {
+  findCompanyById(@Param('id') id: number) {
     return this.companyService.findCompanyById(id);
   }
 
@@ -60,13 +60,26 @@ export class CompanyController {
   }
 
   @Get('campaign/:id')
-  findCampaignById(@Param('id') id: number): Observable<string> {
+  findCampaignById(@Param('id') id: number) {
     return this.companyService.findCampaignById(id);
   }
 
   @Post('campaign/update')
   updateCampaign(@Body() data: UpdateCampaignDto): Observable<string> {
     return this.companyService.updateCampaign(data);
+  }
+
+  @Get('campaign/employer/:employerId')
+  findCampaignByEmployerId(
+    @Param('employerId') employerId: number,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.companyService.findCampaignByEmployerId(
+      employerId,
+      page,
+      limit,
+    );
   }
 
   // @Get('campaign/:id/employer')

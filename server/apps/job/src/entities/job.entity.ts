@@ -26,6 +26,9 @@ export class Job {
   @Column()
   titleRecruitment: string;
 
+  @Column()
+  majorId: number;
+
   @ManyToOne(() => Major)
   @JoinColumn()
   major: Major;
@@ -38,10 +41,15 @@ export class Job {
   @Column()
   campaignId: number;
 
+  @Column()
+  typeId: number;
+
   @ManyToOne(() => Type)
   @JoinColumn()
   type: Type;
 
+  @Column()
+  currencyId: number;
   //currencyId
   @ManyToOne(() => Currency)
   @JoinColumn()
@@ -53,6 +61,9 @@ export class Job {
   @Column()
   salaryMax: number;
 
+  @Column()
+  expId: number;
+
   @ManyToOne(() => Experience)
   @JoinColumn()
   exp: Experience;
@@ -61,7 +72,7 @@ export class Job {
   // region: string[];
   //location
   @ManyToMany(() => Location)
-  @JoinColumn()
+  @JoinTable()
   locations: Location[];
 
   @Column()
@@ -73,6 +84,9 @@ export class Job {
   @Column({ default: new Date() })
   updateAt: Date;
 
+  @Column()
+  levelId: number;
+
   //level
   @ManyToOne(() => Level)
   @JoinColumn()
@@ -82,6 +96,8 @@ export class Job {
   status: boolean;
 
   //companyId
+  @Column()
+  companyId: number;
 
   //jobDetailId
   @OneToOne(() => JobDetail)

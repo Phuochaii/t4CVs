@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Company } from './entities/company.entity';
+import { Company } from '../entities/company.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateCompanyDto } from './dto/Req/create-company.dto';
-import { FindCompanyDTOResponse } from './dto/Res/find-company.dto';
-import { UpdateCompanyDto } from './dto/Req/update-company.dto';
+import { CreateCompanyDto } from '../dto/Req/create-company.dto';
+import { FindCompanyDTOResponse } from '../dto/Res/find-company.dto';
+import { UpdateCompanyDto } from '../dto/Req/update-company.dto';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -20,7 +20,10 @@ export class CompanyServiceService {
   }
 
   // eslint-disable-next-line prettier/prettier
-  async findAllCompanies(page: number, limit: number): Promise<FindCompanyDTOResponse[]> {
+  async findAllCompanies(
+    page: number,
+    limit: number,
+  ): Promise<FindCompanyDTOResponse[]> {
     const skip = (page - 1) * limit;
     const companies = await this.CompanyRepository.find({
       skip: skip,
@@ -53,5 +56,11 @@ export class CompanyServiceService {
 
   async removeCompany(id: number) {
     await this.CompanyRepository.delete(id);
+  }
+
+  async getTotalCompany(): Promise<number> {
+    const total = await this.CompanyRepository.count();
+
+    return total;
   }
 }
