@@ -83,9 +83,7 @@ export class ApplicationService implements OnModuleInit {
     const campany = await firstValueFrom(
       this.companyService.findCompanyById(employer.companyId),
     );
-    const job = await firstValueFrom(
-      this.jobService.findJobByCampaignId(campaign.id),
-    );
+    const job = await this.jobService.findJobByCampaignId(campaign.id);
     const notification = await firstValueFrom(
       this.notificationService.create(
         [new NotificationUserId(cv.userId, NotificationUserRole.USER)],
