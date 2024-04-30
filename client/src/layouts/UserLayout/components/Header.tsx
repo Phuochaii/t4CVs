@@ -7,9 +7,6 @@ import * as UserModule from '../../../modules/user-module';
 import { useNavigate } from 'react-router-dom';
 
 function Header() {
-  const navigation = useNavigate();
-  const [isLogIn, setisLogIn] = React.useState(false);
-
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
@@ -54,7 +51,7 @@ function Header() {
 
   return (
     <header className="menu-top bg-white text-black">
-      <div className=" px-8 flex flex-row justify-between items-center">
+      <div className="container px-8 flex flex-row justify-between items-center">
         <div className="main flex flex-row items-center gap-5">
           <div className="logo w-52">
             <img src="../../../images/topcv-logo.png" alt="" />
