@@ -44,15 +44,6 @@ const list_btn2 = [
     iconSize: 20,
     numberNoti: 1,
   },
-
-  {
-    name: "",
-    link: "",
-    icon: ChevronDown,
-    iconSize: 20,
-    image:
-      "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg",
-  },
 ];
 const notifyButton = {
   name: "",
@@ -60,9 +51,18 @@ const notifyButton = {
   icon: Bell,
   iconSize: 20,
 };
+const accountButton = {
+  name: "",
+  link: "",
+  icon: ChevronDown,
+  iconSize: 20,
+  image:
+    "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg",
+};
 
 function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
   const [displayNoti, setDisplayNoti] = React.useState(false);
+  const [displayAccountTab, setDisplayAccountTab] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
   React.useEffect(() => {
@@ -217,7 +217,6 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
               key={index}
               text={btn.name}
               icon={btn.icon}
-              image={btn.image}
               iconSize={btn.iconSize}
               numberNoti={btn.numberNoti}
               onClick={() => {
@@ -225,6 +224,44 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
               }}
             />
           ))}
+          <li className="relative list-none">
+            <a
+              className="text-center inline-flex items-center bg-transparent"
+              onClick={() => setDisplayAccountTab(!displayAccountTab)}
+            >
+              <RoundedButton
+                text={accountButton.name}
+                icon={accountButton.icon}
+                image={accountButton.image}
+                iconSize={accountButton.iconSize}
+                onClick={() => {
+                  navigation(accountButton.link);
+                }}
+              />
+            </a>
+            {/* <!-- Dropdown menu --> */}
+            {displayAccountTab ? (
+              <div className="pt-3 absolute top-8 right-0 z-50">
+                <ul
+                  className="max-h-[320px] overflow-y-scroll dropdown  hover:text-green-500 w-56 z-50font-semibold text-base bg-white border border-slate-100 rounded-lg py-2 flex flex-col gap-3 shadow-lg"
+                  aria-labelledby="dropdownDividerButton"
+                >
+                  <li
+                    className={`px-4 py-2 m-0 border-b-gray-200 border`}
+                    onClick={() => {
+                      navigation("/hr");
+                    }}
+                  >
+                    <span className="cursor-pointer text-black hover:text-green-500">
+                      Đăng xuất
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              <></>
+            )}
+          </li>
         </div>
       </div>
     </div>
