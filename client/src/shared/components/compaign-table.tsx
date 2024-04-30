@@ -1,5 +1,5 @@
 import { SetStateAction, useState } from "react";
-import Switch from "../../shared/components/CustomSwitch";
+// import Switch from "../../shared/components/CustomSwitch";
 import { Link } from "react-router-dom";
 import { Compaign } from "../types/Compaign.type";
 
@@ -32,7 +32,7 @@ interface CompaignTableRowProps {
 
 export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [compaign, setCompaign] = useState<Compaign>(data);
+  const [compaign] = useState<Compaign>(data);
   return (
     <tr
       className="align-top hover:bg-green-100 bg-slate-50"
@@ -41,7 +41,7 @@ export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
     >
       <td className="border">
         <div className="flex items-start gap-2 p-2">
-          <Switch
+          {/* <Switch
             checked={compaign.isCompaignActive}
             onClick={() => {
               setCompaign({
@@ -49,7 +49,7 @@ export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
                 isCompaignActive: !compaign.isCompaignActive,
               });
             }}
-          />
+          /> */}
           <div className="flex flex-col items-start gap-2 mb-12">
             <h3 className="font-bold">{compaign.compaignName}</h3>
             <span className="font-bold text-slate-400">
