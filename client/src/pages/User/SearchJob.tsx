@@ -36,12 +36,11 @@ const filterFromHomePage = {
   expId: Number(sessionStorage.getItem('expId'))
 }
 
-const searchJobFromHomePage = await JobService.searchJob(0,0,filterFromHomePage.titleRecruitment,0,0,0,filterFromHomePage.locationId,filterFromHomePage.expId);
+const searchJobFromHomePage = await JobService.searchJob(0, 0, filterFromHomePage.titleRecruitment, 0, 0, 0, filterFromHomePage.locationId, filterFromHomePage.expId);
 
 const cities = await JobService.getAllLocation();
 
 const exp_year = await JobService.getAllExp();
-
 
 const salary_range = [
   {
@@ -61,6 +60,7 @@ const salary_range = [
     label: "10 đến 15",
   },
 ];
+
 const job_name = [
   {
     value: "0",
@@ -79,60 +79,64 @@ const job_name = [
     label: "10 đến 15",
   },
 ];
-const job_field = [
-  {
-    value: "0",
-    label: "Tất cả lĩnh vực",
-  },
-  {
-    value: "1",
-    label: "Dưới 5 triệu",
-  },
-  {
-    value: "2",
-    label: "5 đến 10",
-  },
-  {
-    value: "3",
-    label: "10 đến 15",
-  },
-];
-const job_type = [
-  {
-    value: "0",
-    label: "Tất cả hình thức",
-  },
-  {
-    value: "1",
-    label: "Dưới 5 triệu",
-  },
-  {
-    value: "2",
-    label: "5 đến 10",
-  },
-  {
-    value: "3",
-    label: "10 đến 15",
-  },
-];
-const job_level = [
-  {
-    value: "0",
-    label: "Tất cả cấp bậc",
-  },
-  {
-    value: "1",
-    label: "Dưới 5 triệu",
-  },
-  {
-    value: "2",
-    label: "5 đến 10",
-  },
-  {
-    value: "3",
-    label: "10 đến 15",
-  },
-];
+//   {
+//     value: "0",
+//     label: "Tất cả lĩnh vực",
+//   },
+//   {
+//     value: "1",
+//     label: "Dưới 5 triệu",
+//   },
+//   {
+//     value: "2",
+//     label: "5 đến 10",
+//   },
+//   {
+//     value: "3",
+//     label: "10 đến 15",
+//   },
+// ];
+//   {
+//     value: "0",
+//     label: "Tất cả hình thức",
+//   },
+//   {
+//     value: "1",
+//     label: "Dưới 5 triệu",
+//   },
+//   {
+//     value: "2",
+//     label: "5 đến 10",
+//   },
+//   {
+//     value: "3",
+//     label: "10 đến 15",
+//   },
+// ];
+
+const job_field = await JobService.getAllField();
+
+const job_type = await JobService.getAllType();
+
+const job_level = await JobService.getAllLevel();
+
+//   {
+//     value: "0",
+//     label: "Tất cả cấp bậc",
+//   },
+//   {
+//     value: "1",
+//     label: "Dưới 5 triệu",
+//   },
+//   {
+//     value: "2",
+//     label: "5 đến 10",
+//   },
+//   {
+//     value: "3",
+//     label: "10 đến 15",
+//   },
+// ];
 const news_type = [
   {
     value: "0",
@@ -163,20 +167,52 @@ function SearchJob() {
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
 
-  // SetJobResult(searchJobFromHomePage.data);
-  // setTotalJob(searchJobFromHomePage.total);
-  // setTotalPage(searchJobFromHomePage.total_pages);
-  // setCurrentPage(searchJobFromHomePage.page);
+  SetJobResult(searchJobFromHomePage.data);
+  setTotalJob(searchJobFromHomePage.total);
+  setTotalPage(searchJobFromHomePage.total_pages);
+  setCurrentPage(searchJobFromHomePage.page);
 
   useEffect(() => {
-    console.log(searchJobFromHomePage);
-  }, [])
+    console.log(jobResult);
+  }, [1])
 
   const handleClick = () => {
     setIsActive(!isActive);
     setIconDirection(iconDirection === "down" ? "up" : "down");
     setBoxOptionShow(!boxOptionShow);
   };
+
+  const differenceInDays = (expiredDay: Date) => {
+    const today: Date = new Date();
+
+    const differenceInMilliseconds: number = expiredDay.getTime() - today.getTime();
+    const differenceInDays: number = differenceInMilliseconds / (1000 * 3600 * 24);
+
+    // Làm tròn kết quả (nếu cần)
+    const roundedDifferenceInDays: number = Math.round(differenceInDays);
+
+    return roundedDifferenceInDays;
+  }
+
+  const updateDaysBefore = (updateDay: Date) => {
+    const today: Date = new Date();
+
+    // Tính sự khác biệt trong số mili giây
+    const differenceInMilliseconds: number = updateDay.getTime() - today.getTime();
+
+    // Chuyển đổi thành số ngày
+    const differenceInDays: number = differenceInMilliseconds / (1000 * 3600 * 24);
+
+    // Kiểm tra nếu sự khác biệt lớn hơn hoặc bằng 1 ngày
+    if (differenceInDays >= 1) {
+      return differenceInDays;
+    } else {
+      // Chuyển đổi thành số giờ
+      const differenceInHours: number = differenceInMilliseconds / (1000 * 3600);
+      
+      return differenceInHours;
+    }
+  }
 
   return (
     <>
@@ -350,9 +386,9 @@ function SearchJob() {
                         ),
                       }}
                     >
-                      {job_field.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
+                      {job_field.map((field: any) => (
+                        <MenuItem key={field.id} value={field.id}>
+                          {field.name}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -371,9 +407,9 @@ function SearchJob() {
                         ),
                       }}
                     >
-                      {job_type.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
+                      {job_type.map((type: any) => (
+                        <MenuItem key={type.id} value={type.id}>
+                          {type.name}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -392,9 +428,9 @@ function SearchJob() {
                         ),
                       }}
                     >
-                      {job_level.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
+                      {job_level.map((level: any) => (
+                        <MenuItem key={level.id} value={level.id}>
+                          {level.name}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -436,52 +472,6 @@ function SearchJob() {
                   <div className="wrapper-content col-span-2">
                     <div className="job-list-search-result">
                       {/* job content */}
-                      {[...Array(10)].map(() => (
-                        <div
-                          onClick={() => {
-                            navigation("/detail-job");
-                          }}
-                          className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3"
-                        >
-                          <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                            <img src="../../../images/logo_company_1.png" />
-                          </div>
-                          <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
-                            <span className="job-title text-black font-semibold col-span-3">
-                              Nhân viên IT (PHP + JAVASCRIPT)
-                              {/* {job?.titleRecruitment ? job?.titleRecruitment : ""} */}
-                            </span>
-                            <span className="job-company-name text-slate-600 text-sm col-span-3">
-                              CÔNG TY TNHH CHYANG SHENG VIỆT NAM
-                            </span>
-                            <span className="row-start-4 col-span-3 flex items-center">
-                              <span className="job-sub-detail job-location text-xs">
-                                Hồ Chí Minh
-                              </span>
-                              <span className="job-sub-detail job-remaining-application-days text-xs">
-                                Còn <strong>19</strong> ngày để ứng tuyển
-                              </span>
-                              <span className="job-sub-detail job-update-time text-xs">
-                                Cập nhật 4 giờ trước
-                              </span>
-                            </span>
-                            <div className="job-salary col-start-4 flex items-center">
-                              <CurrencyDollarIcon className="w-5 mr-2" />
-                              <strong className="salary-count">
-                                Thỏa thuận
-                              </strong>
-                            </div>
-                            <div className="job-actions row-start-4 flex items-center justify-end">
-                              <span className="btn-apply mr-2">Ứng tuyển</span>
-                              <span className="btn-save">
-                                <Tooltip title="Lưu" placement="top">
-                                  <HeartIcon className="w-5" />
-                                </Tooltip>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
                     </div>
                   </div>
                   {/*  */}
