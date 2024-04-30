@@ -1,12 +1,17 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as sqlite3 from 'sqlite3';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 import { CV } from './entities/cv.entity';
 import { CVDto } from './dto/cv.dto';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
+import { Readable } from 'stream';
 
 // env
 const AWS_ACCESS_KEY = 'AKIAQKSEVUV3HYYNEI7P';
@@ -133,6 +138,8 @@ export class CVService {
       fs.mkdirSync(uploadPath, { recursive: true });
     }
 
+    console.log(JSON.stringify(file));
+
     const fileBuffer = await fs.promises.readFile(file.path);
 
     try {
@@ -152,7 +159,7 @@ export class CVService {
         Key: newFilename,
         Body: fileBuffer,
         ContentDisposition: 'inline',
-        ContentType: 'application/pdf',
+        ContentType: file.mimetype,
       });
 
       await this.s3Client.send(putObjectCommand);
@@ -217,30 +224,30 @@ export class CVService {
       const cv = await this.findOne(id);
 
       const linkParts = cv.link.split('/');
+      const bucketName = linkParts[2];
       const filename = linkParts[linkParts.length - 1];
-      const fileExtension = path.extname(filename);
 
-      const filePath = path.join('./uploads', filename);
-      const fileData = fs.readFileSync(filePath);
+      const getObjectCommand = new GetObjectCommand({
+        Bucket: 'nestjsdacnpm',
+        Key: filename,
+      });
+      const { Body } = await this.s3Client.send(getObjectCommand);
 
-      switch (fileExtension.toLowerCase()) {
-        case '.pdf':
-          return { data: fileData, contentType: 'application/pdf' };
-        case '.doc':
-          return { data: fileData, contentType: 'application/msword' };
-        case '.docx':
-          return {
-            data: fileData,
-            contentType:
-              'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-          };
-        default:
-          throw new HttpException(
-            'Unsupported file format',
-            HttpStatus.BAD_REQUEST,
-          );
-      }
+      const readableStream = Readable.from(Body as any);
+
+      const filePath = `D:\\${filename}`;
+      const fileStream = fs.createWriteStream(filePath);
+
+      readableStream.pipe(fileStream);
+
+      await new Promise((resolve, reject) => {
+        fileStream.on('finish', resolve);
+        fileStream.on('error', reject);
+      });
+
+      return filePath;
     } catch (error: any) {
+      console.error(error);
       throw new HttpException('CV not found', HttpStatus.NOT_FOUND);
     }
   }
