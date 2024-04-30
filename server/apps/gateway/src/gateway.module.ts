@@ -9,9 +9,14 @@ import { CVModule } from './cv/cv.module';
 import { NotificationModule } from './notification/notification.module';
 import { UserModule } from './user/user.module';
 import { EmployerModule } from './employer/employer.module';
+import { AuthorizationModule } from './authorization/authorization.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: './configs/.env',
+    }),
     ApplicationModule,
     NotificationModule,
     JobModule,
@@ -19,6 +24,7 @@ import { EmployerModule } from './employer/employer.module';
     CompanyModule,
     UserModule,
     CVModule,
+    AuthorizationModule,
     // EmployerModule,
   ],
   controllers: [GatewayController],
