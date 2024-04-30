@@ -102,7 +102,7 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
         to: "/hr/compaign",
         title: "Chiến dịch tuyển dụng",
       },
-      { _icon: File, to: "", title: "Tin tuyển dụng" },
+      { _icon: File, to: "/hr/recruitment", title: "Tin tuyển dụng" },
       {
         _icon: User,
         to: "/hr/approve",
