@@ -16,46 +16,53 @@ import {
 import {
   MapPinIcon,
   StarIcon,
-  CurrencyDollarIcon,
+  // CurrencyDollarIcon,
 } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
+import JobService from "../../modules/job-module";
 
-const city = [
-  {
-    value: "0",
-    label: "Tất cả tỉnh/thành phố",
-  },
-  {
-    value: "1",
-    label: "EUR",
-  },
-  {
-    value: "2",
-    label: "BTC",
-  },
-  {
-    value: "3",
-    label: "JPY",
-  },
-];
-const exp_year = [
-  {
-    value: "0",
-    label: "Tất cả kinh nghiệm",
-  },
-  {
-    value: "1",
-    label: "1 năm",
-  },
-  {
-    value: "2",
-    label: "2 năm",
-  },
-  {
-    value: "3",
-    label: "3 năm",
-  },
-];
+// const city = [
+//   {
+//     value: "0",
+//     label: "Tất cả tỉnh/thành phố",
+//   },
+//   {
+//     value: "1",
+//     label: "EUR",
+//   },
+//   {
+//     value: "2",
+//     label: "BTC",
+//   },
+//   {
+//     value: "3",
+//     label: "JPY",
+//   },
+// ];
+
+// const exp_year = [
+//   {
+//     value: "0",
+//     label: "Tất cả kinh nghiệm",
+//   },
+//   {
+//     value: "1",
+//     label: "1 năm",
+//   },
+//   {
+//     value: "2",
+//     label: "2 năm",
+//   },
+//   {
+//     value: "3",
+//     label: "3 năm",
+//   },
+// ];
+
+const cities = await JobService.getAllLocation();
+
+const exp_year = await JobService.getAllExp();
+
 const salary_range = [
   {
     value: "0",
@@ -74,6 +81,7 @@ const salary_range = [
     label: "10 đến 15",
   },
 ];
+
 const slides = [
   "../../../images/slide_1.png",
   "../../../images/slide_2.png",
@@ -85,6 +93,13 @@ const slides = [
 function Home() {
   const autoSlideInterval = 5000;
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  // const [position, setPosition] = useState("");
+  const [location, setLocation] = useState(0);
+  const [exp, setExp] = useState(0);
+  const [minSalary, setMinSalary] = useState(0);
+  const [maxSalary, setMaxSalary] = useState(0);
+
 
   const previous = () => {
     setCurrentSlide((current) =>
@@ -101,7 +116,27 @@ function Home() {
   useEffect(() => {
     setInterval(next, autoSlideInterval);
   }, []);
+
   const navigation = useNavigate();
+
+  const SelectLocation = (value: number) => {
+    if(value !== 0){
+      setLocation(value);
+    }
+  }
+
+  const SelectExp = (value: number) => {
+    if(value !== 0){
+      setExp(value);
+    }
+  }
+
+  const handleSearch = () => {
+    sessionStorage.setItem('locationId', String(location));
+    sessionStorage.setItem('expId', String(exp));
+
+    navigation("/results")
+  }
 
   return (
     <>
@@ -125,6 +160,7 @@ function Home() {
                   <FormControl>
                     <OutlinedInput
                       id="outlined-adornment-amount"
+                      placeholder="Vị trí tuyển dụng"
                       startAdornment={
                         <InputAdornment position="start">
                           <MagnifyingGlassIcon className="w-6" />
@@ -139,6 +175,7 @@ function Home() {
                     select
                     defaultValue="0"
                     className="w-full"
+                    onChange={(e) => SelectLocation(Number(e.target.value))}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -146,10 +183,22 @@ function Home() {
                         </InputAdornment>
                       ),
                     }}
+                    SelectProps={{
+                      MenuProps: {
+                        PaperProps: {
+                          style: {
+                            maxHeight: 200, // Đặt chiều cao tối đa cho danh sách dropdown ở đây
+                          },
+                        },
+                      },
+                    }}
                   >
-                    {city.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
+                    <MenuItem key="0" value="0">
+                      Tất cả tỉnh/thành phố
+                    </MenuItem>
+                    {cities.map((city: any) => (
+                      <MenuItem key={city.id} value={city.id}>
+                        {city.name}
                       </MenuItem>
                     ))}
                   </TextField>
@@ -163,6 +212,7 @@ function Home() {
                     select
                     defaultValue="0"
                     className="w-full"
+                    onChange={(e) => SelectExp(Number(e.target.value))}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -170,10 +220,22 @@ function Home() {
                         </InputAdornment>
                       ),
                     }}
+                    SelectProps={{
+                      MenuProps: {
+                        PaperProps: {
+                          style: {
+                            maxHeight: 200, // Đặt chiều cao tối đa cho danh sách dropdown ở đây
+                          },
+                        },
+                      },
+                    }}
                   >
-                    {exp_year.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
+                    <MenuItem key="0" value="0">
+                        Tất cả kinh nghiệm
+                      </MenuItem>
+                    {exp_year.map((exp: any) => (
+                      <MenuItem key={exp.id} value={exp.id}>
+                        {exp.name}
                       </MenuItem>
                     ))}
                   </TextField>
@@ -215,7 +277,7 @@ function Home() {
                   </TextField>
                 </div>
               </div>
-              <Button className="btn-search" variant="contained">
+              <Button className="btn-search" variant="contained" onClick={handleSearch}>
                 Tìm kiếm
               </Button>
             </form>

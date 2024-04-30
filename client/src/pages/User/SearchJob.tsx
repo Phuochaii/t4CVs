@@ -28,6 +28,9 @@ import {
 } from "@heroicons/react/24/outline";
 import { Tooltip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+// import JobService from "../../modules/job-module";
+
+// const searchJobFromHomePage = await JobService.searchJob();
 
 const city = [
   {
@@ -180,11 +183,23 @@ function SearchJob() {
   const [iconDirection, setIconDirection] = useState("down");
   const [boxOptionShow, setBoxOptionShow] = useState(false);
 
+  const [jobResult, SetJobResult] = useState([]);
+  const [totalJob, setTotalJob] = useState(0);
+  const [totalPage, setTotalPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // SetJobResult(searchJobFromHomePage.data);
+  // setTotalJob(searchJobFromHomePage.total);
+  // setTotalPage(searchJobFromHomePage.total_pages);
+  // setCurrentPage(searchJobFromHomePage.page);
+
   const handleClick = () => {
     setIsActive(!isActive);
     setIconDirection(iconDirection === "down" ? "up" : "down");
     setBoxOptionShow(!boxOptionShow);
   };
+
+
 
   return (
     <>
@@ -451,6 +466,7 @@ function SearchJob() {
                           <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
                             <span className="job-title text-black font-semibold col-span-3">
                               Nhân viên IT (PHP + JAVASCRIPT)
+                              {/* {job?.titleRecruitment ? job?.titleRecruitment : ""} */}
                             </span>
                             <span className="job-company-name text-slate-600 text-sm col-span-3">
                               CÔNG TY TNHH CHYANG SHENG VIỆT NAM
