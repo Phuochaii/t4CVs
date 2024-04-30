@@ -7,12 +7,10 @@ import { UpdateJobDto } from './dto/Req/update-job.dto';
 
 @Controller('job')
 export class JobController {
-  constructor(private readonly jobService: JobService) { }
+  constructor(private readonly jobService: JobService) {}
 
   @Get('')
-  findJobByCampaignId(
-    @Query('campaignId') campaignId: number,
-  ) {
+  findJobByCampaignId(@Query('campaignId') campaignId: number) {
     return this.jobService.findJobByCampaignId(campaignId);
   }
 
@@ -20,7 +18,7 @@ export class JobController {
   getAllJobs(
     @Query()
     queryParams: any,
-  ): Observable<string> {
+  ): Promise<string> {
     return this.jobService.getAllJobs(queryParams);
   }
 
@@ -28,7 +26,7 @@ export class JobController {
   getValidJobs(
     @Query()
     queryParams: any,
-  ): Observable<string> {
+  ): Promise<string> {
     return this.jobService.getValidJobs(queryParams);
   }
 
@@ -43,7 +41,7 @@ export class JobController {
   }
 
   @Get(':id')
-  findJobById(@Param('id') id: number): Observable<string> {
+  findJobById(@Param('id') id: number): Promise<any> {
     return this.jobService.findJobById(id);
   }
 
