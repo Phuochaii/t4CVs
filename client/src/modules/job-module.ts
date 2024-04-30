@@ -40,6 +40,7 @@ const getAllType = async () => {
 const searchJob = async (
   page: number=0,
   limit: number=0,
+  titleRecruitment: string="",
   salaryMin: number=0,
   salaryMax: number=0,
   fieldId: number=0,
@@ -52,6 +53,7 @@ const searchJob = async (
   if (
     page === 0 &&
     limit === 0 &&
+    titleRecruitment === "" &&
     salaryMin === 0 &&
     salaryMax === 0 &&
     fieldId === 0 &&
@@ -66,6 +68,7 @@ const searchJob = async (
       return response.data;
     } catch (error) {
       // Xử lý lỗi ở đây
+      console.log(titleRecruitment)
       console.error("Đã có lỗi xảy ra khi tìm kiếm công việc:", error);
       throw error; // Ném lỗi để cho người dùng của hàm biết rằng có lỗi xảy ra
     }
@@ -73,21 +76,30 @@ const searchJob = async (
   else
   {
     try {
-      const response = await axios.get(`${API_URL}/valid-jobs?
-          ${page !== 0 ? `page=${page}` : ""}
-          ${limit !== 0 ? `limit=${limit}`: ""}&
-          ${salaryMin !== 0 ? `salaryMin=${salaryMin}`: ""}&
-          ${salaryMax !== 0 ? `salaryMax=${salaryMax}`: ""}&
-          ${fieldId !== 0 ? `fieldId=${fieldId}`: ""}&
-          ${locationId !== 0 ? `locationId=${locationId}`: ""}&
-          ${expId !== 0 ? `expId=${expId}`: ""}&
-          ${majorId !== 0 ? `majorId=${majorId}`: ""}&
-          ${typeId !== 0 ? `typeId=${typeId}`: ""}&
-          ${levelId !== 0 ? `levelId=${levelId}`: ""}`);
-          
+      const queryParams = {
+        page: page !== 0 ? `page=${page}` : "",
+        limit: limit !== 0 ? `limit=${limit}` : "",
+        titleRecruitment: titleRecruitment !== "" ? `titleRecruitment=${titleRecruitment}` : "",
+        salaryMin: salaryMin !== 0 ? `salaryMin=${salaryMin}` : "",
+        salaryMax: salaryMax !== 0 ? `salaryMax=${salaryMax}` : "",
+        fieldId: fieldId !== 0 ? `fieldId=${fieldId}` : "",
+        locationId: locationId !== 0 ? `locationId=${locationId}` : "",
+        expId: expId !== 0 ? `expId=${expId}` : "",
+        majorId: majorId !== 0 ? `majorId=${majorId}` : "",
+        typeId: typeId !== 0 ? `typeId=${typeId}` : "",
+        levelId: levelId !== 0 ? `levelId=${levelId}` : ""
+      };
+      
+      const queryString = Object.values(queryParams).filter(param => param !== "").join("&");
+      
+      const url = `${API_URL}/valid-jobs?${queryString}`;
+      
+      const response = await axios.get(url);
+      
       return response.data;
     } catch (error) {
       // Xử lý lỗi ở đây
+      console.log(titleRecruitment);
       console.error("Đã có lỗi xảy ra khi tìm kiếm công việc:", error);
       throw error; // Ném lỗi để cho người dùng của hàm biết rằng có lỗi xảy ra
     }

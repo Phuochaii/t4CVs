@@ -47,8 +47,6 @@ function UserLogIn() {
       setEmailError(true);
     }
 
-    
-
     if (storedUser && storedUser.email === formData.email && storedUser.password === formData.password) {
       // Đăng nhập thành công
       console.log('Đăng nhập thành công với email:', formData.email);
@@ -62,8 +60,6 @@ function UserLogIn() {
       }
     }
   };
-
-
 
   return (
     <div className="grid grid-cols-3 gap-4 ">

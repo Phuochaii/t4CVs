@@ -1,5 +1,5 @@
 // khoa
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   TextField,
@@ -28,46 +28,21 @@ import {
 } from "@heroicons/react/24/outline";
 import { Tooltip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-// import JobService from "../../modules/job-module";
+import JobService from "../../modules/job-module";
 
-// const searchJobFromHomePage = await JobService.searchJob();
+const filterFromHomePage = {
+  titleRecruitment: String(sessionStorage.getItem('titleRecruitment')),
+  locationId: Number(sessionStorage.getItem('locationId')),
+  expId: Number(sessionStorage.getItem('expId'))
+}
 
-const city = [
-  {
-    value: "0",
-    label: "Tất cả tỉnh/thành phố",
-  },
-  {
-    value: "1",
-    label: "EUR",
-  },
-  {
-    value: "2",
-    label: "BTC",
-  },
-  {
-    value: "3",
-    label: "JPY",
-  },
-];
-const exp_year = [
-  {
-    value: "0",
-    label: "Tất cả kinh nghiệm",
-  },
-  {
-    value: "1",
-    label: "1 năm",
-  },
-  {
-    value: "2",
-    label: "2 năm",
-  },
-  {
-    value: "3",
-    label: "3 năm",
-  },
-];
+const searchJobFromHomePage = await JobService.searchJob(0,0,filterFromHomePage.titleRecruitment,0,0,0,filterFromHomePage.locationId,filterFromHomePage.expId);
+
+const cities = await JobService.getAllLocation();
+
+const exp_year = await JobService.getAllExp();
+
+
 const salary_range = [
   {
     value: "0",
@@ -193,13 +168,15 @@ function SearchJob() {
   // setTotalPage(searchJobFromHomePage.total_pages);
   // setCurrentPage(searchJobFromHomePage.page);
 
+  useEffect(() => {
+    console.log(searchJobFromHomePage);
+  }, [])
+
   const handleClick = () => {
     setIsActive(!isActive);
     setIconDirection(iconDirection === "down" ? "up" : "down");
     setBoxOptionShow(!boxOptionShow);
   };
-
-
 
   return (
     <>
@@ -235,9 +212,12 @@ function SearchJob() {
                         ),
                       }}
                     >
-                      {city.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
+                      <MenuItem key="0" value="0">
+                        Tất cả tỉnh/thành phố
+                      </MenuItem>
+                      {cities.map((city: any) => (
+                        <MenuItem key={city.id} value={city.id}>
+                          {city.name}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -259,9 +239,12 @@ function SearchJob() {
                         ),
                       }}
                     >
-                      {exp_year.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
+                      <MenuItem key="0" value="0">
+                        Tất cả kinh nghiệm
+                      </MenuItem>
+                      {exp_year.map((exp: any) => (
+                        <MenuItem key={exp.id} value={exp.id}>
+                          {exp.name}
                         </MenuItem>
                       ))}
                     </TextField>

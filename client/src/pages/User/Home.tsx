@@ -94,7 +94,7 @@ function Home() {
   const autoSlideInterval = 5000;
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // const [position, setPosition] = useState("");
+  const [titleRecruitment, setTitleRecruitment] = useState("");
   const [location, setLocation] = useState(0);
   const [exp, setExp] = useState(0);
   const [minSalary, setMinSalary] = useState(0);
@@ -134,6 +134,7 @@ function Home() {
   const handleSearch = () => {
     sessionStorage.setItem('locationId', String(location));
     sessionStorage.setItem('expId', String(exp));
+    sessionStorage.setItem('titleRecruitment', String(titleRecruitment))
 
     navigation("/results")
   }
@@ -161,6 +162,7 @@ function Home() {
                     <OutlinedInput
                       id="outlined-adornment-amount"
                       placeholder="Vị trí tuyển dụng"
+                      onChange={(e) => {setTitleRecruitment(e.target.value)}}
                       startAdornment={
                         <InputAdornment position="start">
                           <MagnifyingGlassIcon className="w-6" />
