@@ -1,30 +1,77 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateJobDto } from './dto/Req/createJob.dto';
-import { Observable } from 'rxjs';
+import { Observable, lastValueFrom } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateBaseDto } from './dto/Req/createBase.dto';
 import { UpdateJobDto } from './dto/Req/update-job.dto';
-import { FindJobResponse } from './dto/Res/find-job.reponse';
+import { CompanyService } from '../company/company.service';
 
 @Injectable()
 export class JobService {
-  constructor(@Inject('JOB') private readonly jobClient: ClientProxy) { }
-  findJobByCampaignId(campaignId: number) {
-    return this.jobClient.send<FindJobResponse>({ cmd: 'find_job_by_campaignId' }, campaignId);
+  constructor(
+    @Inject('JOB') private readonly jobClient: ClientProxy,
+    private readonly companyService: CompanyService,
+  ) {}
+
+  async getAllJobs(query: any) {
+    const res = this.jobClient.send({ cmd: 'get_all_jobs' }, query);
+    const lastRes = await lastValueFrom(res);
+    const jobs = lastRes.data.map(async (job) => {
+      const company = this.companyService.findCompanyById(job.companyId);
+      const lastCompany = await lastValueFrom(company);
+      delete job.companyId;
+      const result = { ...job, company: lastCompany };
+      return result;
+    });
+    lastRes.data = await Promise.all(jobs);
+    return lastRes;
   }
-  getAllJobs(query: any): Observable<string> {
-    return this.jobClient.send({ cmd: 'get_all_jobs' }, query);
-  }
-  getValidJobs(query: any): Observable<string> {
-    return this.jobClient.send({ cmd: 'get_valid_jobs' }, query);
+  async getValidJobs(query: any) {
+    const res = this.jobClient.send({ cmd: 'get_valid_jobs' }, query);
+    const lastRes = await lastValueFrom(res);
+    const jobs = lastRes.data.map(async (job) => {
+      const company = this.companyService.findCompanyById(job.companyId);
+      const lastCompany = await lastValueFrom(company);
+      delete job.companyId;
+      const result = { ...job, company: lastCompany };
+      return result;
+    });
+    lastRes.data = await Promise.all(jobs);
+    return lastRes;
   }
 
   createJob(createJobDTO: CreateJobDto): Observable<string> {
     return this.jobClient.send({ cmd: 'create_job' }, createJobDTO);
   }
 
-  findJobById(id: number): Observable<string> {
-    return this.jobClient.send({ cmd: 'find_job_by_id' }, id);
+  async findJobById(id: number) {
+    // return this.jobClient.send({ cmd: 'find_job_by_id' }, id);
+    const job = this.jobClient.send({ cmd: 'find_job_by_id' }, id);
+    const lastJob = await lastValueFrom(job);
+    if (lastJob === null) {
+      throw new BadRequestException(`Job doesn't exit!`);
+    }
+    const company = this.companyService.findCompanyById(lastJob.companyId);
+    const lastCompany = await lastValueFrom(company);
+    delete lastJob.companyId;
+    const result = { ...lastJob, company: lastCompany };
+    return result;
+  }
+
+  async findJobByCampaignId(campaignId: number) {
+    const job = this.jobClient.send(
+      { cmd: 'find_job_by_campaignId' },
+      campaignId,
+    );
+    const lastJob = await lastValueFrom(job);
+    if (lastJob === null) {
+      throw new BadRequestException(`Job doesn't exit!`);
+    }
+    const company = this.companyService.findCompanyById(lastJob.companyId);
+    const lastCompany = await lastValueFrom(company);
+    delete lastJob.companyId;
+    const result = { ...lastJob, company: lastCompany };
+    return result;
   }
 
   updateJobStatus(data: UpdateJobDto): Observable<string> {
