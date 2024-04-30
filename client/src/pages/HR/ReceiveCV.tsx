@@ -17,11 +17,12 @@ function ReceiveCV() {
   const [totalPage, setTotalPage] = React.useState<number>(1);
   const [compaignList, setCompaignList] = React.useState<any>([]);
 
-  const fetchApplication = async (hrId: string) => {
+  const fetchApplication = (hrId: string) => {
     HRModule.getApplicationByCampaignIdHRId({
       campaignId: campaign != undefined ? campaign.id : "",
       hrId: hrId,
       status: receivedCvState ? receivedCvState.value : undefined,
+      page: page,
     }).then((res) => {
       setListCV(res.applications);
       setTotalPage(res.totalPage);
@@ -42,20 +43,14 @@ function ReceiveCV() {
 
   React.useEffect(() => {
     fetchApplication(hrId);
-  }, [campaign, receivedCvState]);
+  }, [campaign, receivedCvState, page]);
 
   const cvState = [
     { name: "Tất cả", value: undefined },
     { name: "Đã xem", value: true },
     { name: "Chưa xem", value: false },
   ];
-  // const cvSource = [
-  //   { name: "Ứng tuyển", value: "1" },
-  //   { name: "Tìm CV", value: "2" },
-  //   { name: "Việc làm siêu tốc", value: "3" },
-  //   { name: "Exclusive CV", value: "4" },
-  //   { name: "CV đề xuất", value: "5" },
-  // ];
+
   const cvLabel = [
     { name: "Chưa gắn nhãn", value: "1" },
     { name: "Ưu tiên", value: "2" },

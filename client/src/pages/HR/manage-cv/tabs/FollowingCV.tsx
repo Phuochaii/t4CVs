@@ -15,6 +15,7 @@ function FollowingCV() {
     HRModule.getApplicationByCampaignIdHRId({
       campaignId: "3",
       hrId: hrId,
+      page: page,
     }).then((res) => {
       // console.log(res);
       setListCV(res.applications);
@@ -25,6 +26,10 @@ function FollowingCV() {
   React.useEffect(() => {
     fetchApplication(hrId);
   }, []);
+
+  React.useEffect(() => {
+    fetchApplication(hrId);
+  }, [page]);
 
   return (
     <div>

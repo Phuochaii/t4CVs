@@ -19,8 +19,8 @@ import {
   HeartIcon,
 } from "@heroicons/react/24/outline";
 import { Tooltip } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import moment from 'moment';
+import { useNavigate, useLocation } from "react-router-dom";
+import moment from "moment";
 
 const city = [
   {
@@ -90,7 +90,8 @@ const modalApplyStyle = {
 };
 
 function ApplyCV() {
-  const jobId = "3";
+  const { state } = useLocation();
+  const jobId = state.id;
 
   const [showModal, setShowModal] = useState(false);
   const handleOpen = () => setShowModal(true);
@@ -110,17 +111,19 @@ function ApplyCV() {
 
   const fetchJobCompany = async (idCompany: string) => {
     try {
-      const response = await fetch(`http://localhost:3000/company/${idCompany}`);
+      const response = await fetch(
+        `http://localhost:3000/company/${idCompany}`
+      );
       if (!response.ok) {
-        throw new Error('Failed to fetch data');
+        throw new Error("Failed to fetch data");
       }
       const data = await response.json();
       console.log(data);
       setJobCompany(data);
     } catch (error) {
-      console.log('Error fetching data. Please try again.');
+      console.log("Error fetching data. Please try again.");
     }
-  }
+  };
 
   // const fetchRelatedJob = async () => {
   //   try {
@@ -141,14 +144,14 @@ function ApplyCV() {
       try {
         const response = await fetch(`http://localhost:3000/job/${jobId}`);
         if (!response.ok) {
-          throw new Error('Failed to fetch data');
+          throw new Error("Failed to fetch data");
         }
         const data = await response.json();
         console.log(data);
         setJobData(data);
         fetchJobCompany(data.companyId);
       } catch (error) {
-        console.log('Error fetching data. Please try again.');
+        console.log("Error fetching data. Please try again.");
       }
     };
 
@@ -274,7 +277,9 @@ function ApplyCV() {
                 <div className="job-detail__body-left col-span-2 flex flex-col gap-4">
                   <div className="job-detail__info mt-4 bg-white text-black rounded-lg py-2 px-4 grid grid-rows-4 items-center">
                     <h1 className="job-detail__info--title text-2xl font-bold">
-                      {jobData?.titleRecruitment ? jobData?.titleRecruitment : ""}
+                      {jobData?.titleRecruitment
+                        ? jobData?.titleRecruitment
+                        : ""}
                     </h1>
                     <div className="job-detail__info--sections grid grid-cols-3 gap-x-4 justify-center">
                       <div className="job-detail__info--section flex flex-row items-center gap-x-4">
@@ -299,7 +304,13 @@ function ApplyCV() {
                             Mức lương
                           </span>
                           <strong className="job-detail__info--section-content-value">
-                            {jobData?.salaryMin ? jobData?.salaryMin : ""} - {jobData?.salaryMax ? jobData?.salaryMax : ""} { jobData?.currency ? (jobData?.currency?.name ? jobData?.currency?.name : "") : "" }
+                            {jobData?.salaryMin ? jobData?.salaryMin : ""} -{" "}
+                            {jobData?.salaryMax ? jobData?.salaryMax : ""}{" "}
+                            {jobData?.currency
+                              ? jobData?.currency?.name
+                                ? jobData?.currency?.name
+                                : ""
+                              : ""}
                           </strong>
                         </div>
                       </div>
@@ -347,7 +358,11 @@ function ApplyCV() {
                             Kinh nghiệm
                           </span>
                           <strong className="job-detail__info--section-content-value">
-                          {jobData?.exp ? (jobData?.exp?.name ? jobData?.exp?.name : "") : ""}
+                            {jobData?.exp
+                              ? jobData?.exp?.name
+                                ? jobData?.exp?.name
+                                : ""
+                              : ""}
                           </strong>
                         </div>
                       </div>
@@ -369,7 +384,8 @@ function ApplyCV() {
                           </svg>
                         </div>
                         <div className="quantity-applied-user__text">
-                          TopCV chưa hỗ trợ xem số lượt ứng tuyển cho việc làm này
+                          TopCV chưa hỗ trợ xem số lượt ứng tuyển cho việc làm
+                          này
                         </div>
                       </div>
                       <div className="job-detail__info--deadline max-h-8 col-span-2 flex flex-rows items-center text-sm text-slate-500 p-2 bg-slate-100 rounded-lg">
@@ -387,7 +403,8 @@ function ApplyCV() {
                             />
                           </svg>
                         </div>
-                        Hạn nộp hồ sơ: {moment(jobData?.expiredDate).format('DD/MM/YYYY')}
+                        Hạn nộp hồ sơ:{" "}
+                        {moment(jobData?.expiredDate).format("DD/MM/YYYY")}
                       </div>
                     </div>
                     <div className="job-detail__info--actions grid grid-cols-5 gap-x-3">
@@ -428,7 +445,13 @@ function ApplyCV() {
                             Yêu cầu ứng viên
                           </h3>
                           <div className="job-description__item--content flex flex-col gap-y-2">
-                            <p>{ jobData?.jobDetail ? ( jobData?.jobDetail?.requirement ? jobData?.jobDetail?.requirement : "" ) : "" }</p>
+                            <p>
+                              {jobData?.jobDetail
+                                ? jobData?.jobDetail?.requirement
+                                  ? jobData?.jobDetail?.requirement
+                                  : ""
+                                : ""}
+                            </p>
                           </div>
                         </div>
                         <div className="job-description__item">
@@ -436,12 +459,15 @@ function ApplyCV() {
                             Kỹ năng cần thiết
                           </h3>
                           <div className="job-description__item--content flex flex-col gap-y-2">
-                            
-                            {jobData?.jobDetail ? (jobData?.jobDetail?.skills ? 
-                              (jobData?.jobDetail?.skills.split(', ')).map((skill, index) => (
-                                <p key={index}>- {skill}</p>
-                              ))
-                            : "") : ""}
+                            {jobData?.jobDetail
+                              ? jobData?.jobDetail?.skills
+                                ? jobData?.jobDetail?.skills
+                                    .split(", ")
+                                    .map((skill, index) => (
+                                      <p key={index}>- {skill}</p>
+                                    ))
+                                : ""
+                              : ""}
                           </div>
                         </div>
                         <div className="job-description__item">
@@ -449,7 +475,13 @@ function ApplyCV() {
                             Mô tả công việc
                           </h3>
                           <div className="job-description__item--content flex flex-col gap-y-2">
-                            <p>{ jobData?.jobDetail ? ( jobData?.jobDetail?.description ? jobData?.jobDetail?.description : "" ) : "" }</p>
+                            <p>
+                              {jobData?.jobDetail
+                                ? jobData?.jobDetail?.description
+                                  ? jobData?.jobDetail?.description
+                                  : ""
+                                : ""}
+                            </p>
                           </div>
                         </div>
                         <div className="job-description__item">
@@ -457,7 +489,13 @@ function ApplyCV() {
                             Quyền lợi
                           </h3>
                           <div className="job-description__item--content flex flex-col gap-y-2">
-                            <p>{ jobData?.jobDetail ? ( jobData?.jobDetail?.benefit ? jobData?.jobDetail?.benefit : "" ) : "" }</p>
+                            <p>
+                              {jobData?.jobDetail
+                                ? jobData?.jobDetail?.benefit
+                                  ? jobData?.jobDetail?.benefit
+                                  : ""
+                                : ""}
+                            </p>
                           </div>
                         </div>
                         <div className="job-description__item">
@@ -593,10 +631,13 @@ function ApplyCV() {
                     <div className="job-detail__company--information p-4 rounded-lg bg-white flex flex-col gap-4">
                       <div className="job-detail__company--information-item company-name grid grid-cols-3 gap-3">
                         <div className="job-detail__company--information-item__logo w-24 h-24 min-w-24 min-h-24 flex items-center bg-white rounded-lg border border-slate-300 overflow-hidden">
-                          <img src={ jobCompany?.image ? jobCompany?.image : "" } alt="" />
+                          <img
+                            src={jobCompany?.image ? jobCompany?.image : ""}
+                            alt=""
+                          />
                         </div>
                         <span className="job-detail__company--information-item__name col-span-2 text-lg font-bold">
-                          { jobCompany?.name ? jobCompany?.name : ""}
+                          {jobCompany?.name ? jobCompany?.name : ""}
                         </span>
                       </div>
                       <div className="job-detail__company--information-item company-scale grid grid-cols-3 gap-3">
@@ -612,7 +653,10 @@ function ApplyCV() {
                           Quy mô:
                         </div>
                         <span className="company-scale__info col-span-2 font-semibold">
-                          { jobCompany?.companySize ? jobCompany?.companySize : ""} nhân viên
+                          {jobCompany?.companySize
+                            ? jobCompany?.companySize
+                            : ""}{" "}
+                          nhân viên
                         </span>
                       </div>
                       <div className="job-detail__company--information-item company-address grid grid-cols-3 gap-3">
@@ -632,11 +676,15 @@ function ApplyCV() {
                           Địa điểm:
                         </div>
                         <span className="company-scale__info col-span-2 font-semibold">
-                          { jobCompany?.address ? jobCompany?.address : ""}
+                          {jobCompany?.address ? jobCompany?.address : ""}
                         </span>
                       </div>
                       <div
-                        onClick={() => navigation(`/companies/${ jobData?.companyId ? jobData?.companyId : ""}`)}
+                        onClick={() =>
+                          navigation(
+                            `/companies/${jobData?.companyId ? jobData?.companyId : ""}`
+                          )
+                        }
                         className="job-detail__company--action font-bold text-green-500 flex flex-row gap-2 items-center justify-center cursor-pointer hover:underline"
                       >
                         Xem trang công ty
@@ -710,7 +758,11 @@ function ApplyCV() {
                             Kinh nghiệm
                           </span>
                           <span className="box-general-group-info-value font-bold">
-                            { jobData?.exp ? ( jobData?.exp?.name ? jobData?.exp?.name : "") : ""}
+                            {jobData?.exp
+                              ? jobData?.exp?.name
+                                ? jobData?.exp?.name
+                                : ""
+                              : ""}
                           </span>
                         </div>
                       </div>
@@ -745,7 +797,11 @@ function ApplyCV() {
                             Số lượng tuyển
                           </span>
                           <span className="box-general-group-info-value font-bold">
-                            { jobData?.jobDetail ? ( jobData?.jobDetail?.quantity ? jobData?.jobDetail?.quantity : "") : "" }
+                            {jobData?.jobDetail
+                              ? jobData?.jobDetail?.quantity
+                                ? jobData?.jobDetail?.quantity
+                                : ""
+                              : ""}
                           </span>
                         </div>
                       </div>
@@ -772,7 +828,11 @@ function ApplyCV() {
                             Hình thức làm việc
                           </span>
                           <span className="box-general-group-info-value font-bold">
-                            {jobData?.jobDetail ? ( jobData?.jobDetail?.jobSchedule ? jobData?.jobDetail?.jobSchedule : "") : ""}
+                            {jobData?.jobDetail
+                              ? jobData?.jobDetail?.jobSchedule
+                                ? jobData?.jobDetail?.jobSchedule
+                                : ""
+                              : ""}
                           </span>
                         </div>
                       </div>
@@ -799,7 +859,13 @@ function ApplyCV() {
                             Giới tính
                           </span>
                           <span className="box-general-group-info-value font-bold">
-                            {(jobData?.jobDetail ? ( jobData?.jobDetail?.gender ? jobData?.jobDetail?.gender : "") : "") == "Male" ? "Nam" : "Nữ"}
+                            {(jobData?.jobDetail
+                              ? jobData?.jobDetail?.gender
+                                ? jobData?.jobDetail?.gender
+                                : ""
+                              : "") == "Male"
+                              ? "Nam"
+                              : "Nữ"}
                           </span>
                         </div>
                       </div>
@@ -811,11 +877,17 @@ function ApplyCV() {
                         Ngành nghề
                       </div>
                       <div className="box-category-tags flex flex-row flex-wrap gap-3">
-                        {jobData?.fields ? (jobData?.fields.map((field, index) => (
-                          <span key={index} id={field.id} className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500">
-                            {field.name}
-                          </span>
-                        ))) : ""}
+                        {jobData?.fields
+                          ? jobData?.fields.map((field, index) => (
+                              <span
+                                key={index}
+                                id={field.id}
+                                className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500"
+                              >
+                                {field.name}
+                              </span>
+                            ))
+                          : ""}
                       </div>
                     </div>
                     <div className="box-category">

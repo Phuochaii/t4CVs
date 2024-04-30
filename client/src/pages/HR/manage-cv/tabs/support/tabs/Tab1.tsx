@@ -19,6 +19,7 @@ function Tab1() {
       campaignId: "3",
       hrId: hrId,
       status: statusMode,
+      page: page,
     }).then((res) => {
       console.log(res);
       setListCV(res.applications);
@@ -31,7 +32,7 @@ function Tab1() {
   }, []);
   React.useEffect(() => {
     fetchApplication(hrId);
-  }, [statusMode]);
+  }, [statusMode, page]);
   return (
     <div>
       <div className="flex justify-end px-4">

@@ -1,6 +1,8 @@
 // khoa
 import { useState } from "react";
-
+import React from "react";
+import JobService from "../../modules/job-module";
+import * as CompanyService from "../../modules/company-module";
 import {
   TextField,
   FormControl,
@@ -28,6 +30,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Tooltip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { DefaultPagination } from "../../shared/components/default-pagination";
 // import JobService from "../../modules/job-module";
 
 // const searchJobFromHomePage = await JobService.searchJob();
@@ -183,23 +186,58 @@ function SearchJob() {
   const [iconDirection, setIconDirection] = useState("down");
   const [boxOptionShow, setBoxOptionShow] = useState(false);
 
-  const [jobResult, SetJobResult] = useState([]);
-  const [totalJob, setTotalJob] = useState(0);
-  const [totalPage, setTotalPage] = useState(0);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [jobResult, setJobResult] = useState([]);
+  const [companyResult, setCompanyResult] = useState<any[]>([]);
+  const [companyid, setCompanyid] = useState([]);
+  const [totalJob, setTotalJob] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+  const [page, setPage] = useState(1);
 
-  // SetJobResult(searchJobFromHomePage.data);
-  // setTotalJob(searchJobFromHomePage.total);
-  // setTotalPage(searchJobFromHomePage.total_pages);
-  // setCurrentPage(searchJobFromHomePage.page);
+  const getAllCompany = () => {
+    setCompanyResult([]);
+
+    Promise.all(
+      companyid.map((item: number) => {
+        return CompanyService.getCampaignById({ id: item });
+      })
+    )
+      .then((responses) => {
+        console.log(responses);
+        setCompanyResult(responses);
+      })
+      .catch((error) => {
+        console.error("Error fetching campaigns:", error);
+      });
+
+    console.log(companyid);
+  };
+  React.useEffect(() => {
+    getAllCompany();
+  }, [companyid]);
+
+  const searchJob = () => {
+    JobService.getAllJob({ page: page }).then((response) => {
+      console.log(response);
+      setJobResult(response.data);
+      setTotalJob(response.total);
+      setTotalPage(response.total_pages);
+      setCompanyid(response.data.map((item: any) => item.companyId));
+      console.log(response.data);
+    });
+  };
+
+  React.useEffect(() => {
+    searchJob();
+  }, []);
+  React.useEffect(() => {
+    searchJob();
+  }, [page]);
 
   const handleClick = () => {
     setIsActive(!isActive);
     setIconDirection(iconDirection === "down" ? "up" : "down");
     setBoxOptionShow(!boxOptionShow);
   };
-
-
 
   return (
     <>
@@ -453,52 +491,73 @@ function SearchJob() {
                   <div className="wrapper-content col-span-2">
                     <div className="job-list-search-result">
                       {/* job content */}
-                      {[...Array(10)].map(() => (
-                        <div
-                          onClick={() => {
-                            navigation("/detail-job");
-                          }}
-                          className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3"
-                        >
-                          <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                            <img src="../../../images/logo_company_1.png" />
-                          </div>
-                          <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
-                            <span className="job-title text-black font-semibold col-span-3">
-                              Nhân viên IT (PHP + JAVASCRIPT)
-                              {/* {job?.titleRecruitment ? job?.titleRecruitment : ""} */}
-                            </span>
-                            <span className="job-company-name text-slate-600 text-sm col-span-3">
-                              CÔNG TY TNHH CHYANG SHENG VIỆT NAM
-                            </span>
-                            <span className="row-start-4 col-span-3 flex items-center">
-                              <span className="job-sub-detail job-location text-xs">
-                                Hồ Chí Minh
-                              </span>
-                              <span className="job-sub-detail job-remaining-application-days text-xs">
-                                Còn <strong>19</strong> ngày để ứng tuyển
-                              </span>
-                              <span className="job-sub-detail job-update-time text-xs">
-                                Cập nhật 4 giờ trước
-                              </span>
-                            </span>
-                            <div className="job-salary col-start-4 flex items-center">
-                              <CurrencyDollarIcon className="w-5 mr-2" />
-                              <strong className="salary-count">
-                                Thỏa thuận
-                              </strong>
+                      {jobResult.length > 0 && companyResult.length > 0 ? (
+                        jobResult.map((item: any, index: number) => {
+                          return (
+                            <div
+                              key={index}
+                              onClick={() => {
+                                navigation("/detail-job", {
+                                  state: { id: item.id },
+                                });
+                              }}
+                              className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3"
+                            >
+                              <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
+                                <img src={companyResult[index].image} />
+                              </div>
+                              <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
+                                <span className="job-title text-black font-semibold col-span-3">
+                                  {item.titleRecruitment}
+                                </span>
+                                <span className="job-company-name text-slate-600 text-sm col-span-3">
+                                  {companyResult[index].name}
+                                </span>
+                                <span className="row-start-4 col-span-3 flex items-center">
+                                  {item.fields.map((e, index) => (
+                                    <span
+                                      className="job-sub-detail job-location text-xs"
+                                      key={index}
+                                    >
+                                      {e.name}
+                                    </span>
+                                  ))}
+                                  <span className="job-sub-detail job-remaining-application-days text-xs">
+                                    Hạn nộp: {item.expiredDate.split("T")[0]}
+                                  </span>
+                                  <span className="job-sub-detail job-update-time text-xs">
+                                    Cập nhật {item.updateAt.split("T")[0]}
+                                  </span>
+                                </span>
+                                <div className="job-salary col-start-4 flex items-center">
+                                  <CurrencyDollarIcon className="w-5 mr-2" />
+                                  <strong className="salary-count">
+                                    {item.salaryMin} - {item.salaryMax}{" "}
+                                    {item.currency.name}
+                                  </strong>
+                                </div>
+                                <div className="job-actions row-start-4 flex items-center justify-end">
+                                  <span className="btn-apply mr-2">
+                                    Ứng tuyển
+                                  </span>
+                                  <span className="btn-save">
+                                    <Tooltip title="Lưu" placement="top">
+                                      <HeartIcon className="w-5" />
+                                    </Tooltip>
+                                  </span>
+                                </div>
+                              </div>
                             </div>
-                            <div className="job-actions row-start-4 flex items-center justify-end">
-                              <span className="btn-apply mr-2">Ứng tuyển</span>
-                              <span className="btn-save">
-                                <Tooltip title="Lưu" placement="top">
-                                  <HeartIcon className="w-5" />
-                                </Tooltip>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                          );
+                        })
+                      ) : (
+                        <div>Không có dữ liệu</div>
+                      )}
+                      <DefaultPagination
+                        totalPage={totalPage}
+                        active={page}
+                        setActive={setPage}
+                      />
                     </div>
                   </div>
                   {/*  */}
