@@ -1,5 +1,5 @@
 // khoa
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   TextField,
   FormControl,
@@ -20,6 +20,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Tooltip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import moment from 'moment';
 
 const city = [
   {
@@ -89,6 +90,8 @@ const modalApplyStyle = {
 };
 
 function ApplyCV() {
+  const jobId = "3";
+
   const [showModal, setShowModal] = useState(false);
   const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
@@ -100,6 +103,57 @@ function ApplyCV() {
     }
   };
   const navigation = useNavigate();
+
+  const [jobData, setJobData] = useState({});
+  const [jobCompany, setJobCompany] = useState({});
+  const [jobRelated, setJobRelated] = useState({});
+
+  const fetchJobCompany = async (idCompany: string) => {
+    try {
+      const response = await fetch(`http://localhost:3000/company/${idCompany}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const data = await response.json();
+      console.log(data);
+      setJobCompany(data);
+    } catch (error) {
+      console.log('Error fetching data. Please try again.');
+    }
+  }
+
+  // const fetchRelatedJob = async () => {
+  //   try {
+  //     const response = await fetch(`http://localhost:3000/job/all`);
+  //     if (!response.ok) {
+  //       throw new Error('Failed to fetch data');
+  //     }
+  //     const data = await response.json();
+  //     console.log(data);
+  //     setJobRelated(data);
+  //   } catch (error) {
+  //     console.log('Error fetching data. Please try again.');
+  //   }
+  // }
+
+  useEffect(() => {
+    const fetchJobData = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/job/${jobId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        console.log(data);
+        setJobData(data);
+        fetchJobCompany(data.companyId);
+      } catch (error) {
+        console.log('Error fetching data. Please try again.');
+      }
+    };
+
+    fetchJobData();
+  }, []);
 
   return (
     <>
@@ -220,7 +274,7 @@ function ApplyCV() {
                 <div className="job-detail__body-left col-span-2 flex flex-col gap-4">
                   <div className="job-detail__info mt-4 bg-white text-black rounded-lg py-2 px-4 grid grid-rows-4 items-center">
                     <h1 className="job-detail__info--title text-2xl font-bold">
-                      Nhân viên IT (PHP + JAVASCRIPT)
+                      {jobData?.titleRecruitment ? jobData?.titleRecruitment : ""}
                     </h1>
                     <div className="job-detail__info--sections grid grid-cols-3 gap-x-4 justify-center">
                       <div className="job-detail__info--section flex flex-row items-center gap-x-4">
@@ -245,7 +299,7 @@ function ApplyCV() {
                             Mức lương
                           </span>
                           <strong className="job-detail__info--section-content-value">
-                            Thỏa thuận
+                            {jobData?.salaryMin ? jobData?.salaryMin : ""} - {jobData?.salaryMax ? jobData?.salaryMax : ""} { jobData?.currency ? (jobData?.currency?.name ? jobData?.currency?.name : "") : "" }
                           </strong>
                         </div>
                       </div>
@@ -267,7 +321,7 @@ function ApplyCV() {
                             Địa điểm
                           </span>
                           <strong className="job-detail__info--section-content-value">
-                            Bình Dương
+                            Chưa có trong API
                           </strong>
                         </div>
                       </div>
@@ -293,7 +347,7 @@ function ApplyCV() {
                             Kinh nghiệm
                           </span>
                           <strong className="job-detail__info--section-content-value">
-                            1 năm
+                          {jobData?.exp ? (jobData?.exp?.name ? jobData?.exp?.name : "") : ""}
                           </strong>
                         </div>
                       </div>
@@ -315,8 +369,7 @@ function ApplyCV() {
                           </svg>
                         </div>
                         <div className="quantity-applied-user__text">
-                          TopCV chưa hỗ trợ xem số lượt ứng tuyển cho việc làm
-                          này
+                          TopCV chưa hỗ trợ xem số lượt ứng tuyển cho việc làm này
                         </div>
                       </div>
                       <div className="job-detail__info--deadline max-h-8 col-span-2 flex flex-rows items-center text-sm text-slate-500 p-2 bg-slate-100 rounded-lg">
@@ -334,7 +387,7 @@ function ApplyCV() {
                             />
                           </svg>
                         </div>
-                        Hạn nộp hồ sơ: 26/04/2024
+                        Hạn nộp hồ sơ: {moment(jobData?.expiredDate).format('DD/MM/YYYY')}
                       </div>
                     </div>
                     <div className="job-detail__info--actions grid grid-cols-5 gap-x-3">
@@ -375,15 +428,28 @@ function ApplyCV() {
                             Yêu cầu ứng viên
                           </h3>
                           <div className="job-description__item--content flex flex-col gap-y-2">
-                            <p>
-                              - Có kiến thức cơ bản về lập trình WEB (PHP,
-                              JAVASCRIPT) để tạo trang web
-                            </p>
-                            <p>
-                              - Có kiến thức về các hệ quản trị cơ sở dữ liệu
-                              MARIADB
-                            </p>
-                            <p>- Trao đổi thêm khi phỏng vấn</p>
+                            <p>{ jobData?.jobDetail ? ( jobData?.jobDetail?.requirement ? jobData?.jobDetail?.requirement : "" ) : "" }</p>
+                          </div>
+                        </div>
+                        <div className="job-description__item">
+                          <h3 className="text-base font-bold mb-2">
+                            Kỹ năng cần thiết
+                          </h3>
+                          <div className="job-description__item--content flex flex-col gap-y-2">
+                            
+                            {jobData?.jobDetail ? (jobData?.jobDetail?.skills ? 
+                              (jobData?.jobDetail?.skills.split(', ')).map((skill, index) => (
+                                <p key={index}>- {skill}</p>
+                              ))
+                            : "") : ""}
+                          </div>
+                        </div>
+                        <div className="job-description__item">
+                          <h3 className="text-base font-bold mb-2">
+                            Mô tả công việc
+                          </h3>
+                          <div className="job-description__item--content flex flex-col gap-y-2">
+                            <p>{ jobData?.jobDetail ? ( jobData?.jobDetail?.description ? jobData?.jobDetail?.description : "" ) : "" }</p>
                           </div>
                         </div>
                         <div className="job-description__item">
@@ -391,16 +457,7 @@ function ApplyCV() {
                             Quyền lợi
                           </h3>
                           <div className="job-description__item--content flex flex-col gap-y-2">
-                            <p>- Lương thỏa thuận theo khả năng. </p>
-                            <p>
-                              - Bảo hiểm và các chính sách khác theo quy định
-                              của pháp luật.
-                            </p>
-                            <p>
-                              - Thưởng, phụ cấp và các phúc lợi khác theo quy
-                              định chung của công ty.
-                            </p>
-                            <p>- Có cơ chế thăng tiến cho nhân viên xuất sắc</p>
+                            <p>{ jobData?.jobDetail ? ( jobData?.jobDetail?.benefit ? jobData?.jobDetail?.benefit : "" ) : "" }</p>
                           </div>
                         </div>
                         <div className="job-description__item">
@@ -409,8 +466,7 @@ function ApplyCV() {
                           </h3>
                           <div className="job-description__item--content">
                             <p>
-                              - Bình Dương: 150/3 KP2, An Phú, Thuận An, Bình
-                              Dương, Thuận An
+                              {jobCompany?.address ? jobCompany?.address : ""}
                             </p>
                           </div>
                         </div>
@@ -528,247 +584,19 @@ function ApplyCV() {
                             </div>
                           </div>
                         </div>
-                        <div className="job-item-search-result max-h-40 bg-slate-100 p-3 border border-transparent rounded-lg shadow-md flex items-center gap-3 hover:border-green-400 cursor-pointer">
-                          <div className="job-logo-company w-32 h-32 min-w-32 bg-white flex items-center border rounded-lg">
-                            <img src="../../../images/logo_company_1.png" />
-                          </div>
-                          <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
-                            <span className="job-title text-black font-semibold col-span-3">
-                              Nhân viên IT (PHP + JAVASCRIPT)
-                            </span>
-                            <span className="job-company-name text-slate-600 text-sm col-span-3">
-                              CÔNG TY TNHH CHYANG SHENG VIỆT NAM
-                            </span>
-                            <span className="row-start-4 col-span-3 flex items-center">
-                              <span className="job-sub-detail job-location text-xs">
-                                Hồ Chí Minh
-                              </span>
-                              <span className="job-sub-detail job-remaining-application-days text-xs">
-                                Còn <strong>19</strong> ngày để ứng tuyển
-                              </span>
-                              <span className="job-sub-detail job-update-time text-xs">
-                                Cập nhật 4 giờ trước
-                              </span>
-                            </span>
-                            <div className="job-salary col-start-4 flex items-center">
-                              <CurrencyDollarIcon className="w-5 mr-2" />
-                              <strong className="salary-count">
-                                Thỏa thuận
-                              </strong>
-                            </div>
-                            <div className="job-actions row-start-4 flex items-center justify-end">
-                              <span className="btn-apply mr-2">Ứng tuyển</span>
-                              <span className="btn-save">
-                                <Tooltip title="Lưu" placement="top">
-                                  <HeartIcon className="w-5" />
-                                </Tooltip>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="job-item-search-result max-h-40 bg-slate-100 p-3 border border-transparent rounded-lg shadow-md flex items-center gap-3 hover:border-green-400 cursor-pointer">
-                          <div className="job-logo-company w-32 h-32 min-w-32 bg-white flex items-center border rounded-lg">
-                            <img src="../../../images/logo_company_1.png" />
-                          </div>
-                          <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
-                            <span className="job-title text-black font-semibold col-span-3">
-                              Nhân viên IT (PHP + JAVASCRIPT)
-                            </span>
-                            <span className="job-company-name text-slate-600 text-sm col-span-3">
-                              CÔNG TY TNHH CHYANG SHENG VIỆT NAM
-                            </span>
-                            <span className="row-start-4 col-span-3 flex items-center">
-                              <span className="job-sub-detail job-location text-xs">
-                                Hồ Chí Minh
-                              </span>
-                              <span className="job-sub-detail job-remaining-application-days text-xs">
-                                Còn <strong>19</strong> ngày để ứng tuyển
-                              </span>
-                              <span className="job-sub-detail job-update-time text-xs">
-                                Cập nhật 4 giờ trước
-                              </span>
-                            </span>
-                            <div className="job-salary col-start-4 flex items-center">
-                              <CurrencyDollarIcon className="w-5 mr-2" />
-                              <strong className="salary-count">
-                                Thỏa thuận
-                              </strong>
-                            </div>
-                            <div className="job-actions row-start-4 flex items-center justify-end">
-                              <span className="btn-apply mr-2">Ứng tuyển</span>
-                              <span className="btn-save">
-                                <Tooltip title="Lưu" placement="top">
-                                  <HeartIcon className="w-5" />
-                                </Tooltip>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="job-item-search-result max-h-40 bg-slate-100 p-3 border border-transparent rounded-lg shadow-md flex items-center gap-3 hover:border-green-400 cursor-pointer">
-                          <div className="job-logo-company w-32 h-32 min-w-32 bg-white flex items-center border rounded-lg">
-                            <img src="../../../images/logo_company_1.png" />
-                          </div>
-                          <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
-                            <span className="job-title text-black font-semibold col-span-3">
-                              Nhân viên IT (PHP + JAVASCRIPT)
-                            </span>
-                            <span className="job-company-name text-slate-600 text-sm col-span-3">
-                              CÔNG TY TNHH CHYANG SHENG VIỆT NAM
-                            </span>
-                            <span className="row-start-4 col-span-3 flex items-center">
-                              <span className="job-sub-detail job-location text-xs">
-                                Hồ Chí Minh
-                              </span>
-                              <span className="job-sub-detail job-remaining-application-days text-xs">
-                                Còn <strong>19</strong> ngày để ứng tuyển
-                              </span>
-                              <span className="job-sub-detail job-update-time text-xs">
-                                Cập nhật 4 giờ trước
-                              </span>
-                            </span>
-                            <div className="job-salary col-start-4 flex items-center">
-                              <CurrencyDollarIcon className="w-5 mr-2" />
-                              <strong className="salary-count">
-                                Thỏa thuận
-                              </strong>
-                            </div>
-                            <div className="job-actions row-start-4 flex items-center justify-end">
-                              <span className="btn-apply mr-2">Ứng tuyển</span>
-                              <span className="btn-save">
-                                <Tooltip title="Lưu" placement="top">
-                                  <HeartIcon className="w-5" />
-                                </Tooltip>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="job-item-search-result max-h-40 bg-slate-100 p-3 border border-transparent rounded-lg shadow-md flex items-center gap-3 hover:border-green-400 cursor-pointer">
-                          <div className="job-logo-company w-32 h-32 min-w-32 bg-white flex items-center border rounded-lg">
-                            <img src="../../../images/logo_company_1.png" />
-                          </div>
-                          <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
-                            <span className="job-title text-black font-semibold col-span-3">
-                              Nhân viên IT (PHP + JAVASCRIPT)
-                            </span>
-                            <span className="job-company-name text-slate-600 text-sm col-span-3">
-                              CÔNG TY TNHH CHYANG SHENG VIỆT NAM
-                            </span>
-                            <span className="row-start-4 col-span-3 flex items-center">
-                              <span className="job-sub-detail job-location text-xs">
-                                Hồ Chí Minh
-                              </span>
-                              <span className="job-sub-detail job-remaining-application-days text-xs">
-                                Còn <strong>19</strong> ngày để ứng tuyển
-                              </span>
-                              <span className="job-sub-detail job-update-time text-xs">
-                                Cập nhật 4 giờ trước
-                              </span>
-                            </span>
-                            <div className="job-salary col-start-4 flex items-center">
-                              <CurrencyDollarIcon className="w-5 mr-2" />
-                              <strong className="salary-count">
-                                Thỏa thuận
-                              </strong>
-                            </div>
-                            <div className="job-actions row-start-4 flex items-center justify-end">
-                              <span className="btn-apply mr-2">Ứng tuyển</span>
-                              <span className="btn-save">
-                                <Tooltip title="Lưu" placement="top">
-                                  <HeartIcon className="w-5" />
-                                </Tooltip>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="job-item-search-result max-h-40 bg-slate-100 p-3 border border-transparent rounded-lg shadow-md flex items-center gap-3 hover:border-green-400 cursor-pointer">
-                          <div className="job-logo-company w-32 h-32 min-w-32 bg-white flex items-center border rounded-lg">
-                            <img src="../../../images/logo_company_1.png" />
-                          </div>
-                          <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
-                            <span className="job-title text-black font-semibold col-span-3">
-                              Nhân viên IT (PHP + JAVASCRIPT)
-                            </span>
-                            <span className="job-company-name text-slate-600 text-sm col-span-3">
-                              CÔNG TY TNHH CHYANG SHENG VIỆT NAM
-                            </span>
-                            <span className="row-start-4 col-span-3 flex items-center">
-                              <span className="job-sub-detail job-location text-xs">
-                                Hồ Chí Minh
-                              </span>
-                              <span className="job-sub-detail job-remaining-application-days text-xs">
-                                Còn <strong>19</strong> ngày để ứng tuyển
-                              </span>
-                              <span className="job-sub-detail job-update-time text-xs">
-                                Cập nhật 4 giờ trước
-                              </span>
-                            </span>
-                            <div className="job-salary col-start-4 flex items-center">
-                              <CurrencyDollarIcon className="w-5 mr-2" />
-                              <strong className="salary-count">
-                                Thỏa thuận
-                              </strong>
-                            </div>
-                            <div className="job-actions row-start-4 flex items-center justify-end">
-                              <span className="btn-apply mr-2">Ứng tuyển</span>
-                              <span className="btn-save">
-                                <Tooltip title="Lưu" placement="top">
-                                  <HeartIcon className="w-5" />
-                                </Tooltip>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="job-item-search-result max-h-40 bg-slate-100 p-3 border border-transparent rounded-lg shadow-md flex items-center gap-3 hover:border-green-400 cursor-pointer">
-                          <div className="job-logo-company w-32 h-32 min-w-32 bg-white flex items-center border rounded-lg">
-                            <img src="../../../images/logo_company_1.png" />
-                          </div>
-                          <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
-                            <span className="job-title text-black font-semibold col-span-3">
-                              Nhân viên IT (PHP + JAVASCRIPT)
-                            </span>
-                            <span className="job-company-name text-slate-600 text-sm col-span-3">
-                              CÔNG TY TNHH CHYANG SHENG VIỆT NAM
-                            </span>
-                            <span className="row-start-4 col-span-3 flex items-center">
-                              <span className="job-sub-detail job-location text-xs">
-                                Hồ Chí Minh
-                              </span>
-                              <span className="job-sub-detail job-remaining-application-days text-xs">
-                                Còn <strong>19</strong> ngày để ứng tuyển
-                              </span>
-                              <span className="job-sub-detail job-update-time text-xs">
-                                Cập nhật 4 giờ trước
-                              </span>
-                            </span>
-                            <div className="job-salary col-start-4 flex items-center">
-                              <CurrencyDollarIcon className="w-5 mr-2" />
-                              <strong className="salary-count">
-                                Thỏa thuận
-                              </strong>
-                            </div>
-                            <div className="job-actions row-start-4 flex items-center justify-end">
-                              <span className="btn-apply mr-2">Ứng tuyển</span>
-                              <span className="btn-save">
-                                <Tooltip title="Lưu" placement="top">
-                                  <HeartIcon className="w-5" />
-                                </Tooltip>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="job-detail__body-right col-span-1 text-black flex flex-col gap-4">
-                  <div className="job-detail__box--right job-detail__company mt-4">
+                <div className="job-detail__body-right col-span-1 text-black flex flex-col gap-4 my-4">
+                  <div className="job-detail__box--right job-detail__company">
                     <div className="job-detail__company--information p-4 rounded-lg bg-white flex flex-col gap-4">
                       <div className="job-detail__company--information-item company-name grid grid-cols-3 gap-3">
                         <div className="job-detail__company--information-item__logo w-24 h-24 min-w-24 min-h-24 flex items-center bg-white rounded-lg border border-slate-300 overflow-hidden">
-                          <img src="../../../images/logo_company_1.png" />
+                          <img src={ jobCompany?.image ? jobCompany?.image : "" } alt="" />
                         </div>
                         <span className="job-detail__company--information-item__name col-span-2 text-lg font-bold">
-                          CÔNG TY TNHH CHYANG SHENG VIỆT NAM
+                          { jobCompany?.name ? jobCompany?.name : ""}
                         </span>
                       </div>
                       <div className="job-detail__company--information-item company-scale grid grid-cols-3 gap-3">
@@ -784,7 +612,7 @@ function ApplyCV() {
                           Quy mô:
                         </div>
                         <span className="company-scale__info col-span-2 font-semibold">
-                          500-1000 nhân viên
+                          { jobCompany?.companySize ? jobCompany?.companySize : ""} nhân viên
                         </span>
                       </div>
                       <div className="job-detail__company--information-item company-address grid grid-cols-3 gap-3">
@@ -804,11 +632,11 @@ function ApplyCV() {
                           Địa điểm:
                         </div>
                         <span className="company-scale__info col-span-2 font-semibold">
-                          150/3 KP2, An Phú, Thuận An, Bình Dương
+                          { jobCompany?.address ? jobCompany?.address : ""}
                         </span>
                       </div>
                       <div
-                        onClick={() => navigation("/companies/123")}
+                        onClick={() => navigation(`/companies/${ jobData?.companyId ? jobData?.companyId : ""}`)}
                         className="job-detail__company--action font-bold text-green-500 flex flex-row gap-2 items-center justify-center cursor-pointer hover:underline"
                       >
                         Xem trang công ty
@@ -882,7 +710,7 @@ function ApplyCV() {
                             Kinh nghiệm
                           </span>
                           <span className="box-general-group-info-value font-bold">
-                            1 năm
+                            { jobData?.exp ? ( jobData?.exp?.name ? jobData?.exp?.name : "") : ""}
                           </span>
                         </div>
                       </div>
@@ -917,7 +745,7 @@ function ApplyCV() {
                             Số lượng tuyển
                           </span>
                           <span className="box-general-group-info-value font-bold">
-                            2 người
+                            { jobData?.jobDetail ? ( jobData?.jobDetail?.quantity ? jobData?.jobDetail?.quantity : "") : "" }
                           </span>
                         </div>
                       </div>
@@ -944,7 +772,7 @@ function ApplyCV() {
                             Hình thức làm việc
                           </span>
                           <span className="box-general-group-info-value font-bold">
-                            Toàn thời gian
+                            {jobData?.jobDetail ? ( jobData?.jobDetail?.jobSchedule ? jobData?.jobDetail?.jobSchedule : "") : ""}
                           </span>
                         </div>
                       </div>
@@ -971,7 +799,7 @@ function ApplyCV() {
                             Giới tính
                           </span>
                           <span className="box-general-group-info-value font-bold">
-                            Nam
+                            {(jobData?.jobDetail ? ( jobData?.jobDetail?.gender ? jobData?.jobDetail?.gender : "") : "") == "Male" ? "Nam" : "Nữ"}
                           </span>
                         </div>
                       </div>
@@ -983,18 +811,11 @@ function ApplyCV() {
                         Ngành nghề
                       </div>
                       <div className="box-category-tags flex flex-row flex-wrap gap-3">
-                        <span className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500">
-                          IT Phần cứng / Mạng
-                        </span>
-                        <span className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500">
-                          IT Phần mềm
-                        </span>
-                        <span className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500">
-                          Công nghệ thông tin
-                        </span>
-                        <span className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500">
-                          Việc làm IT
-                        </span>
+                        {jobData?.fields ? (jobData?.fields.map((field, index) => (
+                          <span key={index} id={field.id} className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500">
+                            {field.name}
+                          </span>
+                        ))) : ""}
                       </div>
                     </div>
                     <div className="box-category">
@@ -1003,10 +824,7 @@ function ApplyCV() {
                       </div>
                       <div className="box-category-tags flex flex-row flex-wrap gap-3">
                         <span className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500">
-                          Thuận An
-                        </span>
-                        <span className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500">
-                          Bình Dương
+                          Chưa có trong API
                         </span>
                       </div>
                     </div>
