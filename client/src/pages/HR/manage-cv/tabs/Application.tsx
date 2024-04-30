@@ -14,6 +14,7 @@ function Application() {
     HRModule.getApplicationByCampaignIdHRId({
       campaignId: "3",
       hrId: hrId,
+      page: page,
     }).then((res) => {
       // console.log(res);
       setListCV(res.applications);
@@ -24,6 +25,9 @@ function Application() {
   React.useEffect(() => {
     fetchApplication(hrId);
   }, []);
+  React.useEffect(() => {
+    fetchApplication(hrId);
+  }, [page]);
 
   return listCV.length == 0 ? (
     <div className="flex justify-center items-center flex-col p-5">

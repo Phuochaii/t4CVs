@@ -100,7 +100,6 @@ function Home() {
   const [minSalary, setMinSalary] = useState(0);
   const [maxSalary, setMaxSalary] = useState(0);
 
-
   const previous = () => {
     setCurrentSlide((current) =>
       current == 0 ? slides.length - 1 : current - 1
@@ -120,24 +119,24 @@ function Home() {
   const navigation = useNavigate();
 
   const SelectLocation = (value: number) => {
-    if(value !== 0){
+    if (value !== 0) {
       setLocation(value);
     }
-  }
+  };
 
   const SelectExp = (value: number) => {
-    if(value !== 0){
+    if (value !== 0) {
       setExp(value);
     }
-  }
+  };
 
   const handleSearch = () => {
     sessionStorage.setItem('locationId', String(location));
     sessionStorage.setItem('expId', String(exp));
     sessionStorage.setItem('titleRecruitment', String(titleRecruitment))
 
-    navigation("/results")
-  }
+    navigation("/results");
+  };
 
   return (
     <>
@@ -233,8 +232,8 @@ function Home() {
                     }}
                   >
                     <MenuItem key="0" value="0">
-                        Tất cả kinh nghiệm
-                      </MenuItem>
+                      Tất cả kinh nghiệm
+                    </MenuItem>
                     {exp_year.map((exp: any) => (
                       <MenuItem key={exp.id} value={exp.id}>
                         {exp.name}
@@ -279,7 +278,11 @@ function Home() {
                   </TextField>
                 </div>
               </div>
-              <Button className="btn-search" variant="contained" onClick={handleSearch}>
+              <Button
+                className="btn-search"
+                variant="contained"
+                onClick={handleSearch}
+              >
                 Tìm kiếm
               </Button>
             </form>

@@ -107,6 +107,22 @@ const searchJob = async (
   
 };
 
+// get all job
+const getAllJob = async ({page=1}:{page?: number}) => {
+  try{
+    console.log(123);
+    console.log(page);
+    
+    
+    const response = await axios.get(`${API_URL}/all?page=${page}`);
+      return response.data;
+  }catch(error){
+    console.error("Đã có lỗi xảy ra khi tìm kiếm công việc:", error);
+    throw error;
+  }
+}
+
+
 const JobService = {
   getAllMajor,
   getAllCurrency,
@@ -116,6 +132,7 @@ const JobService = {
   getAllLocation,
   getAllType,
   searchJob,
+  getAllJob
 };
 
 export default JobService;

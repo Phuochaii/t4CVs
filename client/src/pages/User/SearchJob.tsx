@@ -1,6 +1,8 @@
 // khoa
-import { useEffect, useState } from "react";
-
+import { useState } from "react";
+import React from "react";
+import JobService from "../../modules/job-module";
+import * as CompanyService from "../../modules/company-module";
 import {
   TextField,
   FormControl,
@@ -28,20 +30,47 @@ import {
 } from "@heroicons/react/24/outline";
 import { Tooltip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import JobService from "../../modules/job-module";
+import { DefaultPagination } from "../../shared/components/default-pagination";
+// import JobService from "../../modules/job-module";
 
-const filterFromHomePage = {
-  titleRecruitment: String(sessionStorage.getItem('titleRecruitment')),
-  locationId: Number(sessionStorage.getItem('locationId')),
-  expId: Number(sessionStorage.getItem('expId'))
-}
+// const searchJobFromHomePage = await JobService.searchJob();
 
-const searchJobFromHomePage = await JobService.searchJob(0, 0, filterFromHomePage.titleRecruitment, 0, 0, 0, filterFromHomePage.locationId, filterFromHomePage.expId);
-
-const cities = await JobService.getAllLocation();
-
-const exp_year = await JobService.getAllExp();
-
+const city = [
+  {
+    value: "0",
+    label: "Tất cả tỉnh/thành phố",
+  },
+  {
+    value: "1",
+    label: "EUR",
+  },
+  {
+    value: "2",
+    label: "BTC",
+  },
+  {
+    value: "3",
+    label: "JPY",
+  },
+];
+const exp_year = [
+  {
+    value: "0",
+    label: "Tất cả kinh nghiệm",
+  },
+  {
+    value: "1",
+    label: "1 năm",
+  },
+  {
+    value: "2",
+    label: "2 năm",
+  },
+  {
+    value: "3",
+    label: "3 năm",
+  },
+];
 const salary_range = [
   {
     value: "0",
@@ -60,7 +89,6 @@ const salary_range = [
     label: "10 đến 15",
   },
 ];
-
 const job_name = [
   {
     value: "0",
@@ -79,64 +107,60 @@ const job_name = [
     label: "10 đến 15",
   },
 ];
-//   {
-//     value: "0",
-//     label: "Tất cả lĩnh vực",
-//   },
-//   {
-//     value: "1",
-//     label: "Dưới 5 triệu",
-//   },
-//   {
-//     value: "2",
-//     label: "5 đến 10",
-//   },
-//   {
-//     value: "3",
-//     label: "10 đến 15",
-//   },
-// ];
-//   {
-//     value: "0",
-//     label: "Tất cả hình thức",
-//   },
-//   {
-//     value: "1",
-//     label: "Dưới 5 triệu",
-//   },
-//   {
-//     value: "2",
-//     label: "5 đến 10",
-//   },
-//   {
-//     value: "3",
-//     label: "10 đến 15",
-//   },
-// ];
-
-const job_field = await JobService.getAllField();
-
-const job_type = await JobService.getAllType();
-
-const job_level = await JobService.getAllLevel();
-
-//   {
-//     value: "0",
-//     label: "Tất cả cấp bậc",
-//   },
-//   {
-//     value: "1",
-//     label: "Dưới 5 triệu",
-//   },
-//   {
-//     value: "2",
-//     label: "5 đến 10",
-//   },
-//   {
-//     value: "3",
-//     label: "10 đến 15",
-//   },
-// ];
+const job_field = [
+  {
+    value: "0",
+    label: "Tất cả lĩnh vực",
+  },
+  {
+    value: "1",
+    label: "Dưới 5 triệu",
+  },
+  {
+    value: "2",
+    label: "5 đến 10",
+  },
+  {
+    value: "3",
+    label: "10 đến 15",
+  },
+];
+const job_type = [
+  {
+    value: "0",
+    label: "Tất cả hình thức",
+  },
+  {
+    value: "1",
+    label: "Dưới 5 triệu",
+  },
+  {
+    value: "2",
+    label: "5 đến 10",
+  },
+  {
+    value: "3",
+    label: "10 đến 15",
+  },
+];
+const job_level = [
+  {
+    value: "0",
+    label: "Tất cả cấp bậc",
+  },
+  {
+    value: "1",
+    label: "Dưới 5 triệu",
+  },
+  {
+    value: "2",
+    label: "5 đến 10",
+  },
+  {
+    value: "3",
+    label: "10 đến 15",
+  },
+];
 const news_type = [
   {
     value: "0",
@@ -162,57 +186,58 @@ function SearchJob() {
   const [iconDirection, setIconDirection] = useState("down");
   const [boxOptionShow, setBoxOptionShow] = useState(false);
 
-  const [jobResult, SetJobResult] = useState([]);
-  const [totalJob, setTotalJob] = useState(0);
-  const [totalPage, setTotalPage] = useState(0);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [jobResult, setJobResult] = useState([]);
+  const [companyResult, setCompanyResult] = useState<any[]>([]);
+  const [companyid, setCompanyid] = useState([]);
+  const [totalJob, setTotalJob] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+  const [page, setPage] = useState(1);
 
-  SetJobResult(searchJobFromHomePage.data);
-  setTotalJob(searchJobFromHomePage.total);
-  setTotalPage(searchJobFromHomePage.total_pages);
-  setCurrentPage(searchJobFromHomePage.page);
+  const getAllCompany = () => {
+    setCompanyResult([]);
 
-  useEffect(() => {
-    console.log(jobResult);
-  }, [1])
+    Promise.all(
+      companyid.map((item: number) => {
+        return CompanyService.getCampaignById({ id: item });
+      })
+    )
+      .then((responses) => {
+        console.log(responses);
+        setCompanyResult(responses);
+      })
+      .catch((error) => {
+        console.error("Error fetching campaigns:", error);
+      });
+
+    console.log(companyid);
+  };
+  React.useEffect(() => {
+    getAllCompany();
+  }, [companyid]);
+
+  const searchJob = () => {
+    JobService.getAllJob({ page: page }).then((response) => {
+      console.log(response);
+      setJobResult(response.data);
+      setTotalJob(response.total);
+      setTotalPage(response.total_pages);
+      setCompanyid(response.data.map((item: any) => item.companyId));
+      console.log(response.data);
+    });
+  };
+
+  React.useEffect(() => {
+    searchJob();
+  }, []);
+  React.useEffect(() => {
+    searchJob();
+  }, [page]);
 
   const handleClick = () => {
     setIsActive(!isActive);
     setIconDirection(iconDirection === "down" ? "up" : "down");
     setBoxOptionShow(!boxOptionShow);
   };
-
-  const differenceInDays = (expiredDay: Date) => {
-    const today: Date = new Date();
-
-    const differenceInMilliseconds: number = expiredDay.getTime() - today.getTime();
-    const differenceInDays: number = differenceInMilliseconds / (1000 * 3600 * 24);
-
-    // Làm tròn kết quả (nếu cần)
-    const roundedDifferenceInDays: number = Math.round(differenceInDays);
-
-    return roundedDifferenceInDays;
-  }
-
-  const updateDaysBefore = (updateDay: Date) => {
-    const today: Date = new Date();
-
-    // Tính sự khác biệt trong số mili giây
-    const differenceInMilliseconds: number = updateDay.getTime() - today.getTime();
-
-    // Chuyển đổi thành số ngày
-    const differenceInDays: number = differenceInMilliseconds / (1000 * 3600 * 24);
-
-    // Kiểm tra nếu sự khác biệt lớn hơn hoặc bằng 1 ngày
-    if (differenceInDays >= 1) {
-      return differenceInDays;
-    } else {
-      // Chuyển đổi thành số giờ
-      const differenceInHours: number = differenceInMilliseconds / (1000 * 3600);
-      
-      return differenceInHours;
-    }
-  }
 
   return (
     <>
@@ -248,12 +273,9 @@ function SearchJob() {
                         ),
                       }}
                     >
-                      <MenuItem key="0" value="0">
-                        Tất cả tỉnh/thành phố
-                      </MenuItem>
-                      {cities.map((city: any) => (
-                        <MenuItem key={city.id} value={city.id}>
-                          {city.name}
+                      {city.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -275,12 +297,9 @@ function SearchJob() {
                         ),
                       }}
                     >
-                      <MenuItem key="0" value="0">
-                        Tất cả kinh nghiệm
-                      </MenuItem>
-                      {exp_year.map((exp: any) => (
-                        <MenuItem key={exp.id} value={exp.id}>
-                          {exp.name}
+                      {exp_year.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -386,9 +405,9 @@ function SearchJob() {
                         ),
                       }}
                     >
-                      {job_field.map((field: any) => (
-                        <MenuItem key={field.id} value={field.id}>
-                          {field.name}
+                      {job_field.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -407,9 +426,9 @@ function SearchJob() {
                         ),
                       }}
                     >
-                      {job_type.map((type: any) => (
-                        <MenuItem key={type.id} value={type.id}>
-                          {type.name}
+                      {job_type.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -428,9 +447,9 @@ function SearchJob() {
                         ),
                       }}
                     >
-                      {job_level.map((level: any) => (
-                        <MenuItem key={level.id} value={level.id}>
-                          {level.name}
+                      {job_level.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -472,6 +491,73 @@ function SearchJob() {
                   <div className="wrapper-content col-span-2">
                     <div className="job-list-search-result">
                       {/* job content */}
+                      {jobResult.length > 0 && companyResult.length > 0 ? (
+                        jobResult.map((item: any, index: number) => {
+                          return (
+                            <div
+                              key={index}
+                              onClick={() => {
+                                navigation("/detail-job", {
+                                  state: { id: item.id },
+                                });
+                              }}
+                              className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3"
+                            >
+                              <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
+                                <img src={companyResult[index].image} />
+                              </div>
+                              <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
+                                <span className="job-title text-black font-semibold col-span-3">
+                                  {item.titleRecruitment}
+                                </span>
+                                <span className="job-company-name text-slate-600 text-sm col-span-3">
+                                  {companyResult[index].name}
+                                </span>
+                                <span className="row-start-4 col-span-3 flex items-center">
+                                  {item.fields.map((e: any, index: number) => (
+                                    <span
+                                      className="job-sub-detail job-location text-xs"
+                                      key={index}
+                                    >
+                                      {e.name}
+                                    </span>
+                                  ))}
+                                  <span className="job-sub-detail job-remaining-application-days text-xs">
+                                    Hạn nộp: {item.expiredDate.split("T")[0]}
+                                  </span>
+                                  <span className="job-sub-detail job-update-time text-xs">
+                                    Cập nhật {item.updateAt.split("T")[0]}
+                                  </span>
+                                </span>
+                                <div className="job-salary col-start-4 flex items-center">
+                                  <CurrencyDollarIcon className="w-5 mr-2" />
+                                  <strong className="salary-count">
+                                    {item.salaryMin} - {item.salaryMax}{" "}
+                                    {item.currency.name}
+                                  </strong>
+                                </div>
+                                <div className="job-actions row-start-4 flex items-center justify-end">
+                                  <span className="btn-apply mr-2">
+                                    Ứng tuyển
+                                  </span>
+                                  <span className="btn-save">
+                                    <Tooltip title="Lưu" placement="top">
+                                      <HeartIcon className="w-5" />
+                                    </Tooltip>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <div>Không có dữ liệu</div>
+                      )}
+                      <DefaultPagination
+                        totalPage={totalPage}
+                        active={page}
+                        setActive={setPage}
+                      />
                     </div>
                   </div>
                   {/*  */}

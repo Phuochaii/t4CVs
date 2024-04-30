@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import '../../../App.css';
-import React from 'react';
+import { useState } from "react";
+import "../../../App.css";
+import React from "react";
 // import { Button } from '@mui/material';
-import { useAuth0 } from '@auth0/auth0-react';
-import * as UserModule from '../../../modules/user-module';
-import { useNavigate } from 'react-router-dom';
+import { useAuth0 } from "@auth0/auth0-react";
+import * as UserModule from "../../../modules/user-module";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const navigation = useNavigate();
@@ -14,7 +14,7 @@ function Header() {
   const [total, setTotal] = React.useState(0);
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
-  const userId = '1';
+  const userId = "1";
   const fetchNotification = ({
     id,
     limit = 3,
@@ -220,7 +220,7 @@ function Header() {
                         />
                         <path
                           fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                           d="M7 2.25C5.48122 2.25 4.25 3.48122 4.25 5V19C4.25 20.5188 5.48122 21.75 7 21.75H17C18.5188 21.75 19.75 20.5188 19.75 19V8.1979C19.75 7.83178 19.6352 7.47488 19.4217 7.17745L16.4085 2.97955C16.0798 2.52157 15.5506 2.25 14.9868 2.25H7ZM5.75 5C5.75 4.30964 6.30964 3.75 7 3.75H14.25V8.14705C14.25 8.56126 14.5858 8.89705 15 8.89705H18.25V19C18.25 19.6904 17.6904 20.25 17 20.25H7C6.30964 20.25 5.75 19.6904 5.75 19V5Z"
                           fill="rgb(34 197 94)"
                         />
@@ -269,7 +269,7 @@ function Header() {
                         />
                         <path
                           fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                           d="M7 2.25C5.48122 2.25 4.25 3.48122 4.25 5V19C4.25 20.5188 5.48122 21.75 7 21.75H17C18.5188 21.75 19.75 20.5188 19.75 19V8.1979C19.75 7.83178 19.6352 7.47488 19.4217 7.17745L16.4085 2.97955C16.0798 2.52157 15.5506 2.25 14.9868 2.25H7ZM5.75 5C5.75 4.30964 6.30964 3.75 7 3.75H14.25V8.14705C14.25 8.56126 14.5858 8.89705 15 8.89705H18.25V19C18.25 19.6904 17.6904 20.25 17 20.25H7C6.30964 20.25 5.75 19.6904 5.75 19V5Z"
                           fill="rgb(34 197 94)"
                         />
@@ -307,7 +307,7 @@ function Header() {
                         />
                         <path
                           fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                           d="M7 2.25C5.48122 2.25 4.25 3.48122 4.25 5V19C4.25 20.5188 5.48122 21.75 7 21.75H17C18.5188 21.75 19.75 20.5188 19.75 19V8.1979C19.75 7.83178 19.6352 7.47488 19.4217 7.17745L16.4085 2.97955C16.0798 2.52157 15.5506 2.25 14.9868 2.25H7ZM5.75 5C5.75 4.30964 6.30964 3.75 7 3.75H14.25V8.14705C14.25 8.56126 14.5858 8.89705 15 8.89705H18.25V19C18.25 19.6904 17.6904 20.25 17 20.25H7C6.30964 20.25 5.75 19.6904 5.75 19V5Z"
                           fill="rgb(34 197 94)"
                         />
@@ -515,21 +515,21 @@ function Header() {
                             d="M4 13L24 8L44 13L24 18L4 13Z"
                             stroke="rgb(34 197 94)"
                             stroke-width="4"
-                            stroke-linecap="round"
+                            strokeLinecap="round"
                             stroke-linejoin="round"
                           />
                           <path
                             d="M13 16V25.9706C13 25.9706 18 29 24 29C30 29 35 25.9706 35 25.9706V16"
                             stroke="rgb(34 197 94)"
                             stroke-width="4"
-                            stroke-linecap="round"
+                            strokeLinecap="round"
                             stroke-linejoin="round"
                           />
                           <path
                             d="M7 14V36"
                             stroke="rgb(34 197 94)"
                             stroke-width="4"
-                            stroke-linecap="round"
+                            strokeLinecap="round"
                             stroke-linejoin="round"
                           />
                           <rect
@@ -540,7 +540,7 @@ function Header() {
                             fill="none"
                             stroke="rgb(34 197 94)"
                             stroke-width="4"
-                            stroke-linecap="round"
+                            strokeLinecap="round"
                             stroke-linejoin="round"
                           />
                         </svg>
@@ -686,7 +686,7 @@ function Header() {
                             d="M13 5C13 6.10457 10.5376 7 7.5 7C4.46243 7 2 6.10457 2 5M13 5C13 3.89543 10.5376 3 7.5 3C4.46243 3 2 3.89543 2 5M13 5V6.5M2 5V17C2 18.1046 4.46243 19 7.5 19M7.5 11C7.33145 11 7.16468 10.9972 7 10.9918C4.19675 10.9 2 10.0433 2 9M7.5 15C4.46243 15 2 14.1046 2 13M22 11.5C22 12.6046 19.5376 13.5 16.5 13.5C13.4624 13.5 11 12.6046 11 11.5M22 11.5C22 10.3954 19.5376 9.5 16.5 9.5C13.4624 9.5 11 10.3954 11 11.5M22 11.5V19C22 20.1046 19.5376 21 16.5 21C13.4624 21 11 20.1046 11 19V11.5M22 15.25C22 16.3546 19.5376 17.25 16.5 17.25C13.4624 17.25 11 16.3546 11 15.25"
                             stroke="rgb(34 197 94)"
                             stroke-width="2"
-                            stroke-linecap="round"
+                            strokeLinecap="round"
                             stroke-linejoin="round"
                           />
                         </svg>
@@ -763,7 +763,7 @@ function Header() {
                           d="M13 7L11.8845 4.76892C11.5634 4.1268 11.4029 3.80573 11.1634 3.57116C10.9516 3.36373 10.6963 3.20597 10.4161 3.10931C10.0992 3 9.74021 3 9.02229 3H5.2C4.0799 3 3.51984 3 3.09202 3.21799C2.71569 3.40973 2.40973 3.71569 2.21799 4.09202C2 4.51984 2 5.0799 2 6.2V7M2 7H17.2C18.8802 7 19.7202 7 20.362 7.32698C20.9265 7.6146 21.3854 8.07354 21.673 8.63803C22 9.27976 22 10.1198 22 11.8V16.2C22 17.8802 22 18.7202 21.673 19.362C21.3854 19.9265 20.9265 20.3854 20.362 20.673C19.7202 21 18.8802 21 17.2 21H6.8C5.11984 21 4.27976 21 3.63803 20.673C3.07354 20.3854 2.6146 19.9265 2.32698 19.362C2 18.7202 2 17.8802 2 16.2V7ZM15.5 17.5L14 16M15 13.5C15 15.433 13.433 17 11.5 17C9.567 17 8 15.433 8 13.5C8 11.567 9.567 10 11.5 10C13.433 10 15 11.567 15 13.5Z"
                           stroke="rgb(34 197 94)"
                           stroke-width="2"
-                          stroke-linecap="round"
+                          strokeLinecap="round"
                           stroke-linejoin="round"
                         />
                       </svg>
@@ -901,7 +901,7 @@ function Header() {
                                 notificationId: item.id,
                               });
                               fetchNotification({ id: userId });
-                              window.open(item.link, '_blank', 'noopener');
+                              window.open(item.link, "_blank", "noopener");
                             }}
                             key={index}
                             className="px-4 py-2 border-b-gray-200 border  hover:text-green-500"
@@ -910,7 +910,7 @@ function Header() {
                               {item.content}
                             </span>
                             <p className="text-sm text-slate-500 text-right mt-2">
-                              {item.createdAt.split('T')[0] + '  '}
+                              {item.createdAt.split("T")[0] + "  "}
                               {item.status && (
                                 <span className="text-green-500">✓</span>
                               )}
@@ -1157,7 +1157,7 @@ function Header() {
               <li>
                 <button
                   onClick={() => {
-                    navigation('/user-signup');
+                    navigation("/user-signup");
                   }}
                   className="py-2 px-4 rounded-md mx-2 bg-[#00A74B] hover:bg-green-800 text-white"
                 >
@@ -1167,7 +1167,7 @@ function Header() {
               <li>
                 <button
                   onClick={() => {
-                    navigation('/hr-login');
+                    navigation("/hr-login");
                   }}
                   className="py-2 px-4 rounded-md mx-2 bg-black hover:bg-gray-800 text-white"
                 >
