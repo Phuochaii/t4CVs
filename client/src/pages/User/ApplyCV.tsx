@@ -105,25 +105,8 @@ function ApplyCV() {
   };
   const navigation = useNavigate();
 
-  const [jobData, setJobData] = useState({});
-  const [jobCompany, setJobCompany] = useState({});
-  const [jobRelated, setJobRelated] = useState({});
-
-  const fetchJobCompany = async (idCompany: string) => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/company/${idCompany}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-      const data = await response.json();
-      console.log(data);
-      setJobCompany(data);
-    } catch (error) {
-      console.log("Error fetching data. Please try again.");
-    }
-  };
+  const [jobData, setJobData] = useState<any>({});
+  // const [jobRelated, setJobRelated] = useState({});
 
   // const fetchRelatedJob = async () => {
   //   try {
@@ -149,7 +132,6 @@ function ApplyCV() {
         const data = await response.json();
         console.log(data);
         setJobData(data);
-        fetchJobCompany(data.companyId);
       } catch (error) {
         console.log("Error fetching data. Please try again.");
       }
@@ -463,7 +445,7 @@ function ApplyCV() {
                               ? jobData?.jobDetail?.skills
                                 ? jobData?.jobDetail?.skills
                                     .split(", ")
-                                    .map((skill, index) => (
+                                    .map((skill: any, index: number) => (
                                       <p key={index}>- {skill}</p>
                                     ))
                                 : ""
@@ -504,7 +486,9 @@ function ApplyCV() {
                           </h3>
                           <div className="job-description__item--content">
                             <p>
-                              {jobCompany?.address ? jobCompany?.address : ""}
+                              {jobData.company?.address
+                                ? jobData.company?.address
+                                : ""}
                             </p>
                           </div>
                         </div>
@@ -632,12 +616,16 @@ function ApplyCV() {
                       <div className="job-detail__company--information-item company-name grid grid-cols-3 gap-3">
                         <div className="job-detail__company--information-item__logo w-24 h-24 min-w-24 min-h-24 flex items-center bg-white rounded-lg border border-slate-300 overflow-hidden">
                           <img
-                            src={jobCompany?.image ? jobCompany?.image : ""}
+                            src={
+                              jobData.company?.image
+                                ? jobData.company?.image
+                                : ""
+                            }
                             alt=""
                           />
                         </div>
                         <span className="job-detail__company--information-item__name col-span-2 text-lg font-bold">
-                          {jobCompany?.name ? jobCompany?.name : ""}
+                          {jobData.company?.name ? jobData.company?.name : ""}
                         </span>
                       </div>
                       <div className="job-detail__company--information-item company-scale grid grid-cols-3 gap-3">
@@ -653,8 +641,8 @@ function ApplyCV() {
                           Quy mô:
                         </div>
                         <span className="company-scale__info col-span-2 font-semibold">
-                          {jobCompany?.companySize
-                            ? jobCompany?.companySize
+                          {jobData.company?.companySize
+                            ? jobData.company?.companySize
                             : ""}{" "}
                           nhân viên
                         </span>
@@ -676,7 +664,9 @@ function ApplyCV() {
                           Địa điểm:
                         </div>
                         <span className="company-scale__info col-span-2 font-semibold">
-                          {jobCompany?.address ? jobCompany?.address : ""}
+                          {jobData.company?.address
+                            ? jobData.company?.address
+                            : ""}
                         </span>
                       </div>
                       <div
@@ -878,7 +868,7 @@ function ApplyCV() {
                       </div>
                       <div className="box-category-tags flex flex-row flex-wrap gap-3">
                         {jobData?.fields
-                          ? jobData?.fields.map((field, index) => (
+                          ? jobData?.fields.map((field: any, index: number) => (
                               <span
                                 key={index}
                                 id={field.id}
@@ -1067,7 +1057,7 @@ function ApplyCV() {
                 Ứng tuyển
                 <span className="text-green-500">
                   {" "}
-                  Nhân viên IT (PHP +JAVASCRIPT)
+                  {jobData?.titleRecruitment}
                 </span>
               </div>
               <div

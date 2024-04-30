@@ -2,7 +2,6 @@
 import { useState } from "react";
 import React from "react";
 import JobService from "../../modules/job-module";
-import * as CompanyService from "../../modules/company-module";
 import {
   TextField,
   FormControl,
@@ -187,33 +186,9 @@ function SearchJob() {
   const [boxOptionShow, setBoxOptionShow] = useState(false);
 
   const [jobResult, setJobResult] = useState([]);
-  const [companyResult, setCompanyResult] = useState<any[]>([]);
-  const [companyid, setCompanyid] = useState([]);
   const [totalJob, setTotalJob] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [page, setPage] = useState(1);
-
-  const getAllCompany = () => {
-    setCompanyResult([]);
-
-    Promise.all(
-      companyid.map((item: number) => {
-        return CompanyService.getCampaignById({ id: item });
-      })
-    )
-      .then((responses) => {
-        console.log(responses);
-        setCompanyResult(responses);
-      })
-      .catch((error) => {
-        console.error("Error fetching campaigns:", error);
-      });
-
-    console.log(companyid);
-  };
-  React.useEffect(() => {
-    getAllCompany();
-  }, [companyid]);
 
   const searchJob = () => {
     JobService.getAllJob({ page: page }).then((response) => {
@@ -221,7 +196,6 @@ function SearchJob() {
       setJobResult(response.data);
       setTotalJob(response.total);
       setTotalPage(response.total_pages);
-      setCompanyid(response.data.map((item: any) => item.companyId));
       console.log(response.data);
     });
   };
@@ -491,7 +465,7 @@ function SearchJob() {
                   <div className="wrapper-content col-span-2">
                     <div className="job-list-search-result">
                       {/* job content */}
-                      {jobResult.length > 0 && companyResult.length > 0 ? (
+                      {jobResult.length > 0 ? (
                         jobResult.map((item: any, index: number) => {
                           return (
                             <div
@@ -504,17 +478,25 @@ function SearchJob() {
                               className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3"
                             >
                               <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                                <img src={companyResult[index].image} />
+                                <img
+                                  src={
+                                    item.company?.image
+                                      ? item.company?.image
+                                      : "no "
+                                  }
+                                />
                               </div>
                               <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
                                 <span className="job-title text-black font-semibold col-span-3">
                                   {item.titleRecruitment}
                                 </span>
                                 <span className="job-company-name text-slate-600 text-sm col-span-3">
-                                  {companyResult[index].name}
+                                  {item.company?.name
+                                    ? item.company?.name
+                                    : "no name"}
                                 </span>
                                 <span className="row-start-4 col-span-3 flex items-center">
-                                  {item.fields.map((e, index) => (
+                                  {item.fields.map((e: any, index: number) => (
                                     <span
                                       className="job-sub-detail job-location text-xs"
                                       key={index}
