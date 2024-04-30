@@ -23,6 +23,13 @@ interface RouteItem {
 }
 
 const routes: RouteItem[] = [
+  // 
+  // HR INIT PAGES 
+  {path: 'hr', component:Authentication.HRInit, layout: EmptyLayout},
+
+// HR INIT PAGES 
+  {path: 'admin', component:Authentication.AdminInit, layout: EmptyLayout},
+
   // AUTHENTICATION PAGES - Tiến
   {path: 'admin-login', component:Authentication.AdminLogIn, layout: EmptyLayout},
   {path: 'hr-login', component:Authentication.HRLogIn, layout: EmptyLayout},
@@ -45,7 +52,7 @@ const routes: RouteItem[] = [
   {path: "/list-cv", component: User.ListCV, layout: UserLayout}, // nguyên
 
   // ADMIN PAGES - Thức
-  { path: "/admin", component: Admin.Overview, layout: AdminLayout },
+  { path: "/admin/overview", component: Admin.Overview, layout: AdminLayout },
 
 
   // HR PAGES - Yến, Thịnh, Thức

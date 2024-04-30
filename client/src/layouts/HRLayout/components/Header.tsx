@@ -249,7 +249,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                   <li
                     className={`px-4 py-2 m-0 border-b-gray-200 border`}
                     onClick={() => {
-                      navigation("/hr-login");
+                      navigation("/hr");
                     }}
                   >
                     <span className="cursor-pointer text-black hover:text-green-500">
