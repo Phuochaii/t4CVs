@@ -7,6 +7,8 @@ import {
   MoreThanOrEqual,
   LessThanOrEqual,
   MoreThan,
+  Like,
+  ILike,
 } from 'typeorm';
 import { JobDetailService } from './job-detail/job-detail.service';
 import { MajorService } from './major/major.service';
@@ -37,6 +39,7 @@ export class JobService {
   async findJobByCampaignId(campaignId: number) {
     const result = await this.jobRepository.findOne({
       where: {
+        status: true,
         campaignId,
       },
       relations: [
@@ -47,6 +50,7 @@ export class JobService {
         'fields',
         'exp',
         'type',
+        'locations',
       ],
     });
     //await result.jobDetail;
@@ -97,12 +101,16 @@ export class JobService {
     const skip = (page - 1) * limit;
     const fieldId = query.fieldId ?? null;
     const locationId = query.locationId ?? null;
+    const titleRecruitment = query.titleRecruitment ?? null;
     delete query.locationId;
     delete query.fieldId;
     delete query.page;
     delete query.limit;
     delete query.salaryMin;
     delete query.salaryMax;
+    if (titleRecruitment) {
+      query.titleRecruitment = ILike(`%${titleRecruitment}%`);
+    }
     let jobs = await this.jobRepository.find({
       where: {
         ...query,
@@ -161,12 +169,16 @@ export class JobService {
     const skip = (page - 1) * limit;
     const fieldId = query.fieldId ?? null;
     const locationId = query.locationId ?? null;
+    const titleRecruitment = query.titleRecruitment ?? null;
     delete query.locationId;
     delete query.fieldId;
     delete query.page;
     delete query.limit;
     delete query.salaryMin;
     delete query.salaryMax;
+    if (titleRecruitment) {
+      query.titleRecruitment = ILike(`%${titleRecruitment}%`);
+    }
     let jobs = await this.jobRepository.find({
       where: {
         ...query,
@@ -247,6 +259,7 @@ export class JobService {
         'fields',
         'exp',
         'type',
+        'locations',
       ],
     });
     //await result.jobDetail;
