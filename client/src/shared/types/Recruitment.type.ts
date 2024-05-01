@@ -1,3 +1,6 @@
+import { CampaignFromServer } from "./Campaign.type";
+import { CompanyFromServer } from "./Company.type";
+
 export interface Major {
     id: number;
     name: string;
@@ -53,13 +56,14 @@ export interface RecruitmentFromServer {
     fields: Field[];
     exp: Experience;
     type: Type;
+    company: CompanyFromServer;
     locations: Location[];
 }
 
 
-export interface RecruitmentJobPost {
-    recruitmentName: string;
-    recruitmentStatus: string;
-    recruitmentId: number;
-    compaignName: string;
+export interface RecruitmentJobPost extends Omit<RecruitmentFromServer, 'expiredDate'> {
+    createdAt: Date;
+    updatedAt: Date;
+    expiredDate: Date;
+    campaign: CampaignFromServer;
 }

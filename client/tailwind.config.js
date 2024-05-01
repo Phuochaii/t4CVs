@@ -1,9 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 /*eslint-env es6*/
 
-const withMT = require("@material-tailwind/react/utils/withMT");
-
-module.exports = withMT({
+module.exports = {
   darkMode: "class",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -28,4 +26,4 @@ module.exports = withMT({
     },
   },
   plugins: [],
-});
+};

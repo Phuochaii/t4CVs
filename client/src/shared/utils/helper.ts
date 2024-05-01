@@ -12,6 +12,13 @@ export async function getAllCampaigns() {
     return rawCampaigns;
 }
 
+export async function getCampaignById(id: number) {
+    const response = await axios.get(`${serverURL}/company/campaign/${id}`)
+    const rawCampaign: CampaignFromServer = response.data;
+    return rawCampaign;
+}
+
+
 export async function getAllCompanies() {
     const response = await axios.get(`${serverURL}/company/all`)
     const rawCompanies: CompanyFromServer[] = response.data.data;
@@ -36,11 +43,11 @@ export async function getEmployerById(id: number) {
     return rawEmployer;
 }
 
-export async function getAllJobs(page:number = 1, limit:number = 5) {
-    const response = await axios.get(`${serverURL}/job/all?page=${page}&limit=${limit}`)
+export async function getAllJobs(page:number = 1) {
+    const response = await axios.get(`${serverURL}/job/all?page=${page}`)
     const rawJobs: RecruitmentFromServer[] = response.data.data;
     const totalPages = response.data.total_pages;
-    return [rawJobs, totalPages];
+    return { allJobs: rawJobs, totalPages: totalPages };
 }
 
 export async function getJobByCampaignId(campaignId: number) {

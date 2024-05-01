@@ -218,7 +218,7 @@ function Recruitment() {
     getAllRecruitments();
   }, []);
   return (
-    <div className="flex-grow bg-green-400">
+    <div className="flex-grow">
       <h1 className="p-4 text-xl font-bold text-black bg-white">
         Quản lý Tin tuyển dụng
       </h1>
