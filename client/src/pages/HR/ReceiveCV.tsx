@@ -292,8 +292,8 @@ function ReceiveCV() {
                               });
 
                               // fetchApplication(hrId);
-                              await HRModule.getCVByApplicationID({
-                                applicationId: 3,
+                              HRModule.getCVByApplicationID({
+                                applicationId: item.id,
                               }).then((res) => {
                                 window.open(res.link, "_blank", "noopener");
                               });

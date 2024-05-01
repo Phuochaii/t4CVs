@@ -122,8 +122,9 @@ function Application({
                       fetchApplication();
                       await HRModule.getCVByApplicationID({
                         applicationId: 3,
-                      }).then((res) => {
-                        window.open(res.link, "_blank", "noopener");
+                      }).then(async (res) => {
+                        console.log(res);
+                        await window.open(res.link, "_blank", "noopener");
                       });
                     }}
                     className="btn px-3 py-1 text-white rounded-md ml-5 bg-[#5EE199] hover:bg-green-500 transition ease-out duration-100"
