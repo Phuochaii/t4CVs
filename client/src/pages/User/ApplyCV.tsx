@@ -501,7 +501,7 @@ function ApplyCV() {
                       </div>
                     </div>
                     <div className="job-detail__info--sub-details flex flex-rows gap-x-4">
-                      <div className="quantity-applied-user max-h-8 col-span-2 flex flex-rows items-center text-sm text-slate-500 p-2 bg-slate-100 rounded-lg">
+                      {/* <div className="quantity-applied-user max-h-8 col-span-2 flex flex-rows items-center text-sm text-slate-500 p-2 bg-slate-100 rounded-lg">
                         <div className="quantity-applied-user__icon mr-2">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -516,11 +516,7 @@ function ApplyCV() {
                             />
                           </svg>
                         </div>
-                        <div className="quantity-applied-user__text">
-                          TopCV chưa hỗ trợ xem số lượt ứng tuyển cho việc làm
-                          này
-                        </div>
-                      </div>
+                      </div> */}
                       <div className="job-detail__info--deadline max-h-8 col-span-2 flex flex-rows items-center text-sm text-slate-500 p-2 bg-slate-100 rounded-lg">
                         <div className="quantity-applied-user__icon mr-2">
                           <svg
