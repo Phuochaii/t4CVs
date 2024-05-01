@@ -24,7 +24,7 @@ function Header() {
   const [displayAccountTab, setDisplayAccountTab] = React.useState(false);
 
   return (
-    <div className="px-4 flex justify-between items-center h-[10vh] gap-6">
+    <div className="px-4 flex justify-between items-center h-16 gap-6">
       <div className="flex-1 h-full">
         <img src="/topcv-logo-6.webp" className="object-contain h-full"></img>
       </div>

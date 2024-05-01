@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FormControlLabel, Checkbox } from "@mui/material";
 import { Mail, ShieldCheck, Eye, EyeOff } from "lucide-react";
@@ -29,6 +29,13 @@ function UserLogIn() {
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
   };
+
+  React.useEffect(() => {
+    if (localStorage.getItem("user") !== null) {
+      navigation("/");
+      return;
+    }
+  }, []);
 
   const isEmailValid = (email: string) => {
     // Biểu thức chính quy để kiểm tra định dạng email

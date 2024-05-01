@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate, useNavigation } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import "../../shared/assets/styles/hr-signup.css";
@@ -25,6 +25,12 @@ const images = [
 function HRLogIn() {
   const { accountList } = useContext(MyContext);
   const navigation = useNavigate();
+  React.useEffect(() => {
+    if (localStorage.getItem("hr") !== null) {
+      navigation("/hr/news");
+      return;
+    }
+  }, []);
 
   const [formData, setFormData] = useState({
     email: "",
