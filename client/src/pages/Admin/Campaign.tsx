@@ -192,9 +192,9 @@ function Campaign() {
       );
       const rawCampaigns = await allCampaigns.map(async (item) => {
         const employer = await getEmployerById(item.employerId);
-        console.log(employer);
-        const company = await getCompanyById(employer.companyId);
-        console.log(company);
+        const company = employer.companyId
+          ? await getCompanyById(employer.companyId)
+          : null;
         const job = await getJobByCampaignId(item.id);
         const rawCampaign: CampaignType = {
           campaignName: item.name,

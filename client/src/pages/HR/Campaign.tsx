@@ -1,17 +1,55 @@
 import { Briefcase } from "../../layouts/HRLayout/components/Icons";
-import { ChevronDown, Search } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronLeftCircle,
+  ChevronRightCircle,
+  Search,
+} from "lucide-react";
 
 import { useState, useEffect } from "react";
 import { CampaignTable } from "../../shared/components/compaign-table";
 import { Campaign as CampaignType } from "../../shared/types/Campaign.type";
+import {
+  getCampaignByHRId,
+  getCompanyById,
+  getEmployerById,
+  getJobByCampaignId,
+} from "../../shared/utils/helper";
 
 function Campaign() {
-  const [campaigns, setCompaigns] = useState<CampaignType[]>([]);
+  const [campaigns, setCampaigns] = useState<CampaignType[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    const getAllCompaigns = async () => {};
+    const getAllCompaigns = async () => {
+      const { allCampaigns, totalPages } = await getCampaignByHRId(
+        1,
+        1
+      );
+      setTotalPages(totalPages);
+      const rawCampaigns = await allCampaigns.map(async (item) => {
+        const employer = await getEmployerById(item.employerId);
+        const company = employer.companyId
+          ? await getCompanyById(employer.companyId)
+          : null;
+        const job = await getJobByCampaignId(item.id);
+        const rawCampaign: CampaignType = {
+          campaignName: item.name,
+          campaignId: item.id,
+          employer: employer,
+          company: company,
+          postDate: new Date(item.createdAt),
+          recruitment: job,
+          applications: [],
+          applicants: [],
+        };
+        return rawCampaign;
+      });
+      setCampaigns(await Promise.all(rawCampaigns));
+    };
     getAllCompaigns();
-  }, []);
+  }, [page]);
 
   return (
     <div className="flex flex-col items-center flex-grow w-full bg-slate-200">
@@ -36,7 +74,27 @@ function Campaign() {
             </div>
           </div>
         </div>
-        <CampaignTable data={campaigns} setData={setCompaigns} />
+        <CampaignTable data={campaigns} setData={setCampaigns} />
+        <div className="flex items-center self-center justify-center gap-2">
+          <ChevronLeftCircle
+            className="cursor-pointer"
+            stroke="green"
+            strokeWidth={1}
+            onClick={() => {
+              setPage(page - 1 > 0 ? page - 1 : page);
+            }}
+          />
+          <span className="font-bold text-green-600">{page}</span>/
+          <span>{totalPages}</span>
+          <ChevronRightCircle
+            stroke="green"
+            className="cursor-pointer"
+            strokeWidth={1}
+            onClick={() =>
+              setPage(page + 1 <= totalPages ? page + 1 : page)
+            }
+          />
+        </div>
       </div>
     </div>
   );

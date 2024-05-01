@@ -1,6 +1,8 @@
 import clsx from "clsx";
 import {
   ArrowUp,
+  ChevronLeftCircle,
+  ChevronRightCircle,
   Pause,
   Pencil,
   Search,
@@ -9,14 +11,11 @@ import {
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { statusColor } from "../../shared/types/RecruitmentStatus.type";
-import axios from "axios";
-
-interface RecruitmentJobPost {
-  recruitmentName: string;
-  recruitmentStatus: string;
-  recruitmentId: number;
-  compaignName: string;
-}
+import { RecruitmentJobPost } from "../../shared/types/Recruitment.type";
+import {
+  getAllJobs,
+  getCampaignById,
+} from "../../shared/utils/helper";
 
 interface RecruitmentTableProps {
   data: RecruitmentJobPost[];
@@ -33,11 +32,8 @@ function RecruitmentTable({ data }: RecruitmentTableProps) {
               <Settings size={16} />
             </div>
           </td>
-          <td className="font-bold border">Top Jobs chạy gần đây</td>
-          <td className="font-bold border">Đợt hiển thị gần nhất</td>
-          <td className="font-bold border">
-            Toàn bộ thời gian hiển thị
-          </td>
+          <td className="font-bold border">Công ty</td>
+          <td className="font-bold border">Ngày tạo</td>
         </tr>
       </thead>
       <tbody>
@@ -51,19 +47,29 @@ function RecruitmentTable({ data }: RecruitmentTableProps) {
                     <span
                       className={clsx(
                         "p-1 font-semibold",
-                        statusColor[jobPost.recruitmentStatus].bg,
-                        statusColor[jobPost.recruitmentStatus].text
+                        statusColor[
+                          jobPost.status
+                            ? "Đang hiển thị"
+                            : "Dừng hiển thị"
+                        ].bg,
+                        statusColor[
+                          jobPost.status
+                            ? "Đang hiển thị"
+                            : "Dừng hiển thị"
+                        ].text
                       )}
                     >
-                      {jobPost.recruitmentStatus}
+                      {jobPost.status
+                        ? "Đang hiển thị"
+                        : "Dừng hiển thị"}
                     </span>{" "}
                     <span className="font-bold capitalize">
-                      {jobPost.recruitmentName}
+                      {jobPost.titleRecruitment}
                     </span>{" "}
-                    <span className="text-slate-500">{`#${jobPost.recruitmentId}`}</span>
+                    <span className="text-slate-500">{`#${jobPost.id}`}</span>
                   </div>
                   <span>
-                    Chiến dịch tuyển dụng: {jobPost.compaignName}
+                    Chiến dịch tuyển dụng: {jobPost.campaign.name}
                   </span>
                   <button className="p-2 font-bold text-green-500 bg-green-50">
                     Xem CV ứng tuyển
@@ -74,7 +80,7 @@ function RecruitmentTable({ data }: RecruitmentTableProps) {
                 <div className="flex flex-col items-center justify-center gap-4">
                   <Link
                     className="p-2 rounded-full"
-                    to={`/hr/compaign-edit/${jobPost.recruitmentId}`}
+                    to={`/hr/compaign-edit/${jobPost.id}`}
                     state={jobPost}
                   >
                     <Pencil
@@ -91,9 +97,12 @@ function RecruitmentTable({ data }: RecruitmentTableProps) {
                   </button>
                 </div>
               </td>
-              <td className="border">Chưa kích hoạt dịch vụ</td>
-              <td className="border">Tin chưa hiển thị</td>
-              <td className="border">Tin chưa hiển thị</td>
+              <td className="border w-[360px]">
+                {jobPost.company?.name}
+              </td>
+              <td className="border">
+                {jobPost.createdAt.toLocaleDateString("vi-VN")}
+              </td>
             </tr>
           );
         })}
@@ -102,128 +111,41 @@ function RecruitmentTable({ data }: RecruitmentTableProps) {
   );
 }
 
-const filteredStatuses = [
-  "Tất cả",
-  "Đang chạy Top Jobs",
-  "Đang hiển thị",
-  "Đang xét duyệt",
-  "Bị từ chối",
-  "Không công khai",
-  "Hết hạn hiển thị",
-  "Dừng hiển thị",
-];
-
-interface CompaignFromServer {
-  id: number;
-  employerId: number;
-  name: string;
-  createdAt: string;
-}
-
-interface RecruitmentFromServer {
-  id: number;
-  titleRecruitment: string;
-  majorId: number;
-  campaignId: number;
-  typeId: number;
-  currencyId: number;
-  salaryMin: number;
-  salaryMax: number;
-  expId: number;
-  expiredDate: string;
-  createAt: string;
-  updateAt: string;
-  levelId: number;
-  status: boolean;
-  companyId: number;
-  major: {
-    id: number;
-    name: string;
-  };
-  level: {
-    id: number;
-    name: string;
-  };
-  currency: {
-    id: number;
-    name: string;
-  };
-  fields: [
-    {
-      id: number;
-      name: string;
-    },
-    {
-      id: number;
-      name: string;
-    }
-  ];
-  exp: {
-    id: number;
-    name: string;
-  };
-  type: {
-    id: number;
-    name: string;
-  };
-  locations: [
-    {
-      id: number;
-      name: string;
-    },
-    {
-      id: number;
-      name: string;
-    }
-  ];
-}
+const filteredStatuses = ["Tất cả", "Đang hiển thị", "Dừng hiển thị"];
 
 function Recruitment() {
   const [data, setData] = useState<RecruitmentJobPost[]>([]);
   const [selectedStatus, setSelectedStatus] = useState(0);
   const [filterKeyword, setFilterKeyword] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const getAllRecruitments = async () => {
-      const response = await axios.get(
-        "http://localhost:3000/job/all"
-      );
-      const compaigns = await axios.get(
-        "http://localhost:3000/company/campaign/all"
-      );
-
-      const rawCompaigns: CompaignFromServer[] = compaigns.data.data;
-      const data = response.data.data;
-      const recruitments: RecruitmentJobPost[] = data.map(
-        (item: RecruitmentFromServer) => {
-          const comapaign = rawCompaigns.find(
-            (compaign) => compaign.id === item.campaignId
-          );
-          const recruitment: RecruitmentJobPost = {
-            recruitmentName: item.titleRecruitment,
-            recruitmentId: item.id,
-            recruitmentStatus:
-              item.status === false
-                ? "Dừng hiển thị"
-                : "Đang hiển thị",
-            compaignName: comapaign
-              ? comapaign.name
-              : item.titleRecruitment,
-          };
-          return recruitment;
-        }
-      );
-      setData(recruitments);
+      const { allJobs, totalPages } = await getAllJobs(page);
+      const rawRecruitments = allJobs.map(async (item) => {
+        const campaign = await getCampaignById(item.campaignId);
+        const rawRecruitment = {
+          ...item,
+          createdAt: new Date(item.createAt),
+          updatedAt: new Date(item.updateAt),
+          expiredDate: new Date(item.expiredDate),
+          campaign: campaign,
+        };
+        return rawRecruitment;
+      });
+      setData(await Promise.all(rawRecruitments));
+      setTotalPages(totalPages);
     };
     getAllRecruitments();
-  }, []);
+  }, [page]);
   return (
     <div className="flex-grow">
       <h1 className="p-4 text-xl font-bold text-black bg-white">
         Quản lý Tin tuyển dụng
       </h1>
       <div className="flex flex-col items-start justify-center gap-8 p-4">
-        <div className="flex items-start w-full gap-1">
+        <div className="flex items-start w-full gap-4">
           {filteredStatuses.map((status, key) => {
             return (
               <div
@@ -241,8 +163,9 @@ function Recruitment() {
                   {data.reduce(
                     (accumulator, currentJobPost) =>
                       (accumulator +=
-                        currentJobPost.recruitmentStatus ===
-                        filteredStatuses[key]
+                        (currentJobPost.status
+                          ? "Đang hiển thị"
+                          : "Dừng hiển thị") === filteredStatuses[key]
                           ? 1
                           : 0),
                     0
@@ -267,17 +190,39 @@ function Recruitment() {
           data={data
             .filter(
               (jobPost) =>
-                jobPost.recruitmentStatus ===
+                (jobPost.status
+                  ? "Đang hiển thị"
+                  : "Dừng hiển thị") ===
                   filteredStatuses[selectedStatus] ||
                 (filteredStatuses[selectedStatus] === "Tất cả" &&
                   jobPost)
             )
             .filter(
               (jobPost) =>
-                jobPost.recruitmentName.includes(filterKeyword) ||
-                jobPost.compaignName.includes(filterKeyword)
+                jobPost.titleRecruitment.includes(filterKeyword) ||
+                jobPost.campaign.name.includes(filterKeyword)
             )}
         />
+        <div className="flex items-center self-center justify-center gap-2">
+          <ChevronLeftCircle
+            className="cursor-pointer"
+            stroke="green"
+            strokeWidth={1}
+            onClick={() => {
+              setPage(page - 1 > 0 ? page - 1 : page);
+            }}
+          />
+          <span className="font-bold text-green-600">{page}</span>/
+          <span>{totalPages}</span>
+          <ChevronRightCircle
+            stroke="green"
+            className="cursor-pointer"
+            strokeWidth={1}
+            onClick={() =>
+              setPage(page + 1 <= totalPages ? page + 1 : page)
+            }
+          />
+        </div>
       </div>
     </div>
   );

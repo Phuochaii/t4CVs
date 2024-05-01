@@ -19,6 +19,13 @@ export async function getCampaignById(id: number) {
     return rawCampaign;
 }
 
+export async function getCampaignByHRId(id: number, page:number = 1) {
+     const response = await axios.get(`${serverURL}/company/campaign/employer/${id}?page=${page}`)
+    const rawCampaigns: CampaignFromServer[] = response.data.data;
+    const totalPages = response.data.total_page;
+    return {allCampaigns: rawCampaigns, totalPages:totalPages};
+}
+
 
 export async function getAllCompanies() {
     const response = await axios.get(`${serverURL}/company/all`)
