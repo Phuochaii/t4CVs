@@ -148,8 +148,8 @@ function PostCompaign1({
       updatedItem.levelId = Number.parseInt(levelOptions?.value!);
       updatedItem.campaignId = 123;
       updatedItem.companyId = 1;
-      updatedItem.salaryMin = Number.parseInt(salary);
-      updatedItem.salaryMax = Number.parseInt(salaryMax);
+      updatedItem.salaryMin = salary!=='' ? Number.parseInt(salary):0;
+      updatedItem.salaryMax = salaryMax!=='' ? Number.parseInt(salaryMax):0;
       updatedItem.expId = Number.parseInt(expOptions?.value!);
       updatedItem.locationsId = cityOption ? cityOption.map(option => parseInt(option.value)) : []; // Replace [4, 5] with your desired array of location IDs
       updatedItem.expiredDate = date;
