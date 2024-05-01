@@ -203,11 +203,10 @@ function SearchJob() {
       expId: expId
     }).then((response) => {
       console.log(response);
+      
       setJobResult(response.data);
       setTotalPage(response.total_pages);
       setTotalJob(response.total);
-      
-      console.log(jobResult);
     });
   };
 

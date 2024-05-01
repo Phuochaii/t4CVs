@@ -21,51 +21,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import JobService from "../../modules/job-module";
 
-// const city = [
-//   {
-//     value: "0",
-//     label: "Tất cả tỉnh/thành phố",
-//   },
-//   {
-//     value: "1",
-//     label: "EUR",
-//   },
-//   {
-//     value: "2",
-//     label: "BTC",
-//   },
-//   {
-//     value: "3",
-//     label: "JPY",
-//   },
-// ];
-
-// const exp_year = [
-//   {
-//     value: "0",
-//     label: "Tất cả kinh nghiệm",
-//   },
-//   {
-//     value: "1",
-//     label: "1 năm",
-//   },
-//   {
-//     value: "2",
-//     label: "2 năm",
-//   },
-//   {
-//     value: "3",
-//     label: "3 năm",
-//   },
-// ];
-
-// const cities = await JobService.getAllLocation();
-
-// const exp_year = await JobService.getAllExp();
-
-// const cities = null;
-// const exp_year = null;
-
 const salary_range = [
   {
     value: "0",
