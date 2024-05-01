@@ -65,18 +65,12 @@ function PostCompaign1({
     value: string;
     label: string;
   }> | null>(null);
-  const [emailOptions, setEmailOptions] = useState<MultiValue<{
-    value: string;
-    label: string;
-  }> | null>(null);
+  const [emailOption, setEmailOption] = useState('');
   const [fieldOptions, setFieldOptions] = useState<MultiValue<{
     value: string;
     label: string;
   }> | null>(null);
-  const [skillOptions, setSkillOptions] = useState<MultiValue<{
-    value: string;
-    label: string;
-  }> | null>(null);
+  const [skill, setSkill] = useState('');
   const [careerError, setCareerError] = useState(true);
   const [skillError, setSkillError] = useState(true);
   const [nameError, setNameError] = useState(true);
@@ -91,6 +85,8 @@ function PostCompaign1({
   const [currencyError, setCurrencyError] = useState(true);
   const [quantityError, setQuantityError] = useState(true);
   const [salaryError, setSalaryError] = useState(true);
+  const [salaryMaxError, setSalaryMaxError] = useState(true);
+  const [scheduleError, setScheduleError] = useState(true);
   const [cityError, setCityError] = useState(true);
   const [districtError, setDistrictError] = useState(true);
   const [addressError, setAddressError] = useState(true);
@@ -103,7 +99,9 @@ function PostCompaign1({
   const [description, setDescription] = useState('');
   const [requirement, setRequirement] = useState('');
   const [quantity, setQuantity] = useState('');
+  const [schedule, setSchedule] = useState('');
   const [salary, setSalary] = useState('');
+  const [salaryMax, setSalaryMax] = useState('');
   const [title, setTitle] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -138,7 +136,7 @@ function PostCompaign1({
       && !fieldError && !careerError &&
       !quantityError && !jobTypeError && !genderError && !levelError && !expError && !currencyError
       && !salaryError && !cityError && !districtError && !addressError &&
-      !dateError && !nameError && !phoneError && !emailError && !skillError) {
+      !dateError && !nameError && !phoneError && !emailError && !skillError && !salaryMaxError && !scheduleError) {
       let updatedItem = { ...item };
 
       // Modify each property
@@ -150,13 +148,13 @@ function PostCompaign1({
       updatedItem.levelId = Number.parseInt(levelOptions?.value!);
       updatedItem.campaignId = 123;
       updatedItem.companyId = 1;
-      updatedItem.salaryMin = Number.parseInt(salary);
-      updatedItem.salaryMax = Number.parseInt(salary);
+      updatedItem.salaryMin = salary!=='' ? Number.parseInt(salary):0;
+      updatedItem.salaryMax = salaryMax!=='' ? Number.parseInt(salaryMax):0;
       updatedItem.expId = Number.parseInt(expOptions?.value!);
       updatedItem.locationsId = cityOption ? cityOption.map(option => parseInt(option.value)) : []; // Replace [4, 5] with your desired array of location IDs
       updatedItem.expiredDate = date;
       updatedItem.quantity = Number.parseInt(quantity);
-      updatedItem.jobSchedule = "8:00am-17:00pm T2-T6";
+      updatedItem.jobSchedule = schedule;
       updatedItem.gender = genderOptions?.value!;
       updatedItem.description =
         jobDescription;
@@ -164,7 +162,7 @@ function PostCompaign1({
         description;
       updatedItem.requirement =
         requirement;
-      updatedItem.skills = "Java, Python, JavaScript, SQL";
+      updatedItem.skills = skill;
 
       // Log the updated item
       console.log(updatedItem);
@@ -240,12 +238,28 @@ function PostCompaign1({
       setQuantityError(false);
     }
   }
+  const handleScheduleError = (value: SetStateAction<string>) => {
+    setSchedule(value);
+    if (value.length === 0) {
+      setScheduleError(true);
+    } else {
+      setScheduleError(false);
+    }
+  }
   const handleSalaryError = (value: SetStateAction<string>) => {
     setSalary(value);
     if (value.length === 0) {
       setSalaryError(true);
     } else {
       setSalaryError(false);
+    }
+  }
+  const handleSalaryMaxError = (value: SetStateAction<string>) => {
+    setSalaryMax(value);
+    if (value.length === 0) {
+      setSalaryMaxError(true);
+    } else {
+      setSalaryMaxError(false);
     }
   }
   const handleJobTypeError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
@@ -256,12 +270,12 @@ function PostCompaign1({
       setJobTypeError(true);
     }
   }
-  const handleEmailError = (value: SetStateAction<MultiValue<{ value: string; label: string }> | null>) => {
-    setEmailOptions(value)
-    if (value?.length !== 0) {
-      setEmailError(false);
-    } else {
+  const handleEmailError = (value: SetStateAction<string>) => {
+    setEmailOption(value)
+    if (value?.length === 0) {
       setEmailError(true);
+    } else {
+      setEmailError(false);
     }
   }
   const handleCityError = (value: SetStateAction<MultiValue<{ value: string; label: string }> | null>) => {
@@ -331,12 +345,12 @@ function PostCompaign1({
       setFieldError(true);
     }
   }
-  const handleSkillError = (value: SetStateAction<MultiValue<{ value: string; label: string }> | null>) => {
-    setSkillOptions(value)
-    if (value?.length !== 0) {
-      setSkillError(false);
-    } else {
+  const handleSkillError = (value: SetStateAction<string>) => {
+    setSkill(value)
+    if (value?.length === 0) {
       setSkillError(true);
+    } else {
+      setSkillError(false);
     }
   }
   const handleRequirementValidation = (value: SetStateAction<string>) => {
@@ -402,37 +416,41 @@ function PostCompaign1({
   const field = convertToOptions(fields?.field);
   const exp = convertToOptions(fields?.exp);
   const typeOptions = convertToOptions(fields?.type);
-
-  // console.log(city);
-  // console.log(level);
-  // console.log(currency);
-  // console.log(field);
-  // console.log(exp);
-  // console.log(typeOptions);
   const togglePopup = (
     choice: SetStateAction<SingleValue<{ value: string; label: string }>>
   ) => {
     if (choice !== null) {
-      setShowPopup(true);
+      if (typeof choice !== 'function' && choice.value === 'Trong khoảng') {
+        setShowPopup(true);
+        setSalaryError(true);
+        setSalaryMaxError(true);
+      }
+      else {
+        setShowPopup(false);
+        setSalaryError(false);
+        setSalaryMaxError(false);
+      }
     } else {
       setShowPopup(false);
+      setSalaryError(true);
+      setSalaryMaxError(true);
     }
     setUserChoice(choice);
   };
-  const gender =[
-    {value:"Nam", label:"Nam"},
-    {value:"Nữ", label:"Nữ"}
+  const gender = [
+    { value: "Nam", label: "Nam" },
+    { value: "Nữ", label: "Nữ" }
   ]
   const skills = [
-    {value:"SQL", label:"SQL"},
-    {value:"Java", label:"Java"},
-    {value:"Python", label:"Python"},
-    {value:"JavaScript", label:"JavaScript"},
+    { value: "SQL", label: "SQL" },
+    { value: "Java", label: "Java" },
+    { value: "Python", label: "Python" },
+    { value: "JavaScript", label: "JavaScript" },
   ]
   const email = [
-    {value:"hr@gmail.com", label:"hr@gmail.com"},
-    {value:"tuyendung@gmail.com", label:"tuyendung@gmail.com"},
-    {value:"example@email.com", label:"example@email.com"},
+    { value: "hr@gmail.com", label: "hr@gmail.com" },
+    { value: "tuyendung@gmail.com", label: "tuyendung@gmail.com" },
+    { value: "example@email.com", label: "example@email.com" },
   ]
   const cityOptions = [
     { value: "Hồ Chí Minh", label: "Hồ Chí Minh" },
@@ -444,8 +462,6 @@ function PostCompaign1({
     { value: "Đà Nẵng", label: "Đà Nẵng" },
   ];
   const salaryOptions = [
-    { value: "Từ", label: "Từ" },
-    { value: "Đến", label: "Đến" },
     { value: "Trong khoảng", label: "Trong khoảng" },
     { value: "Thỏa thuận", label: "Thỏa thuận" },
   ];
@@ -712,6 +728,18 @@ function PostCompaign1({
                     />
                   </div>
                 </div>
+                <div className="space-y-2 w-3/12">
+                  <span className="text-base font-semibold">
+                    Thời gian làm việc
+                  </span>
+                  <input
+                    type="text"
+                    className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
+                    placeholder="Nhập thời gian làm việc"
+                    value={schedule}
+                    onChange={(e) => handleScheduleError(e.target.value)}
+                  />
+                </div>
               </div>
               <div className="flex flex-row space-x-10">
                 <div className="space-y-2 w-3/12">
@@ -966,7 +994,6 @@ function PostCompaign1({
                       }}
                       isClearable
                       placeholder="-- Kiểu lương --"
-                      name="cities"
                       options={salaryOptions}
                       className="basic-multi-select"
                       classNamePrefix="select"
@@ -975,18 +1002,33 @@ function PostCompaign1({
                   </div>
                 </div>
                 {showPopup && (
-                  <div className="space-y-2 w-3/12 bg-red">
-                    <span className="text-base font-semibold">
-                      {userChoice?.value!}
-                    </span>
-                    <input
-                      type="text"
-                      className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
-                      placeholder="0 VND"
-                      value={salary}
-                      onChange={(e) => handleSalaryError(e.target.value)}
-                    />
+                  <div className='flex flex-row space-x-5 w-3/12'>
+                    <div className="space-y-2 w-1/2 bg-red">
+                      <span className="text-base font-semibold">
+                        Từ
+                      </span>
+                      <input
+                        type="text"
+                        className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
+                        placeholder="0 VND"
+                        value={salary}
+                        onChange={(e) => handleSalaryError(e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2 w-1/2 bg-red">
+                      <span className="text-base font-semibold">
+                        Đến
+                      </span>
+                      <input
+                        type="text"
+                        className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
+                        placeholder="0 VND"
+                        value={salaryMax}
+                        onChange={(e) => handleSalaryMaxError(e.target.value)}
+                      />
+                    </div>
                   </div>
+
                 )}
               </div>
               <div className="text-base font-semibold mt-4">Khu vực</div>
@@ -1124,7 +1166,7 @@ function PostCompaign1({
             </div>
           </div>
         </div>
-        {(quantityError || jobTypeError || genderError || levelError || expError || currencyError || salaryError || cityError || districtError || addressError) && (<div className="ml-14 text-red-700">
+        {(quantityError || jobTypeError || genderError || levelError || expError || currencyError || salaryMaxError || salaryError || cityError || scheduleError || districtError || addressError) && (<div className="ml-14 text-red-700">
           Vui lòng điền đầy đủ thông tin
         </div>)}
       </div>
@@ -1386,43 +1428,14 @@ function PostCompaign1({
               />
 
               <div className="text-slate-600 mb-1">Kỹ năng liên quan</div>
-              <div className="w-4/5">
-                <Select
-                  styles={{
-                    control: (base) => ({
-                      ...base,
-                      boxShadow: "none",
-                      borderColor: "#6B728064",
-                      "&:hover": {
-                        borderColor: "green",
-                      },
-                    }),
-                    option: (base) => ({
-                      ...base,
-                      backgroundColor: "white",
-                      "&:hover": {
-                        backgroundColor: "lightgrey",
-                        fontWeight: "bold",
-                      },
-                    }),
-                    multiValue: (base) => ({
-                      ...base,
-                      backgroundColor: "#C4F0D5",
-                    }),
-                    multiValueLabel: (base) => ({
-                      ...base,
-                      color: "black",
-                    }),
-                  }}
-                  menuPlacement="top"
-                  placeholder="-- Chọn kỹ năng liên quan --"
-                  isMulti
-                  name="cities"
-                  options={skills}
-                  classNamePrefix="select"
-                  value={skillOptions}
-                  onChange={(e) => handleSkillError(e)}
-                />
+              <div className="w-ful">
+              <input
+                    type="text"
+                    className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
+                    placeholder="Nhập kỹ năng liên quan"
+                    value={skill}
+                    onChange={(e) => handleSkillError(e.target.value)}
+                  />
               </div>
               {(showRequirement || skillError) && (<div className="text-red-700 mb-5">
                 Vui lòng điền đầy đủ thông tin
@@ -1583,56 +1596,13 @@ function PostCompaign1({
               </div>
               <div className="space-y-2 w-3/12">
                 <span className="text-base font-semibold">Email</span>
-                <div>
-                  <Select
-                    styles={{
-                      control: (base) => ({
-                        ...base,
-                        boxShadow: "none",
-                        borderColor: "#6B728064",
-                        "&:hover": {
-                          borderColor: "green",
-                        },
-                      }),
-                      option: (base) => ({
-                        ...base,
-                        backgroundColor: "white",
-                        "&:hover": {
-                          backgroundColor: "lightgrey",
-                          fontWeight: "bold",
-                        },
-                      }),
-                      multiValue: (base) => ({
-                        ...base,
-                        backgroundColor: "#C4F0D5",
-                      }),
-                      multiValueLabel: (base) => ({
-                        ...base,
-                        color: "black",
-                      }),
-
-                      placeholder: (base) => ({
-                        ...base,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                      }),
-                      menu: (base) => ({
-                        ...base,
-                        maxHeight: "200px", // Set maximum height for the dropdown menu
-                        overflowY: "auto",
-                      }),
-                    }}
-                    isClearable
-                    isMulti
-                    placeholder="Email"
-                    options={email}
-                    className="basic-multi-select"
-                    classNamePrefix="select"
-                    value={emailOptions}
-                    onChange={(e) => handleEmailError(e)}
-                  />
-                </div>
+                <input
+                  type="text"
+                  className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
+                  placeholder="Email"
+                  value={emailOption}
+                  onChange={(e) => handleEmailError(e.target.value)}
+                />
               </div>
             </div>
           </div>
