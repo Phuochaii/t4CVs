@@ -497,38 +497,48 @@ function SearchJob() {
                                   }
                                 />
                               </div>
-                              <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
-                                <span className="job-title text-black font-semibold col-span-3">
-                                  {item.titleRecruitment}
-                                </span>
-                                <span className="job-company-name text-slate-600 text-sm col-span-3">
-                                  {item.company?.name
-                                    ? item.company?.name
-                                    : "no name"}
-                                </span>
-                                <span className="row-start-4 col-span-3 flex items-center">
-                                  {item.fields.map((e: any, index: number) => (
-                                    <span
-                                      className="job-sub-detail job-location text-xs"
-                                      key={index}
-                                    >
-                                      {e.name}
+                              <div className="job-detail w-full h-full">
+                                <div className="flex flex-col">
+                                  <div className="flex flex-row justify-between">
+                                    <span className="job-title text-black font-semibold col-span-3">
+                                      {item.titleRecruitment}
                                     </span>
-                                  ))}
-                                  <span className="job-sub-detail job-remaining-application-days text-xs">
-                                    Hạn nộp: {item.expiredDate.split("T")[0]}
+                                    <div className="job-salary col-start-4 flex items-center">
+                                      <CurrencyDollarIcon className="w-5 mr-2" />
+                                      <strong className="salary-count">
+                                        {item.salaryMin} - {item.salaryMax}{" "}
+                                        {item.currency.name}
+                                      </strong>
+                                    </div>
+                                  </div>
+                                  <span className="job-company-name text-slate-600 text-sm col-span-3">
+                                    {item.company?.name
+                                      ? item.company?.name
+                                      : "no name"}
                                   </span>
-                                  <span className="job-sub-detail job-update-time text-xs">
-                                    Cập nhật {item.updateAt.split("T")[0]}
-                                  </span>
-                                </span>
-                                <div className="job-salary col-start-4 flex items-center">
-                                  <CurrencyDollarIcon className="w-5 mr-2" />
-                                  <strong className="salary-count">
-                                    {item.salaryMin} - {item.salaryMax}{" "}
-                                    {item.currency.name}
-                                  </strong>
                                 </div>
+                                <div className="flex flex-col space-y-2">
+                                  <div className="flex flex-row">
+                                    {item.fields.map((e: any, index: number) => (
+                                      <div
+                                        className="job-sub-detail job-location text-xs"
+                                        key={index}
+                                      >
+                                        {e.name}
+                                      </div>
+                                    ))}
+                                  </div>
+                                  <div className="flex flex-row space-x-1">
+                                    <span className="job-sub-detail job-remaining-application-days text-xs">
+                                      Hạn nộp: {item.expiredDate.split("T")[0]}
+                                    </span>
+                                    <span className="job-sub-detail job-update-time text-xs">
+                                      Cập nhật {item.updateAt.split("T")[0]}
+                                    </span>
+                                  </div>
+                                </div>
+
+
                                 <div className="job-actions row-start-4 flex items-center justify-end">
                                   <span className="btn-apply mr-2">
                                     Ứng tuyển
