@@ -39,7 +39,6 @@ export class JobService {
   async findJobByCampaignId(campaignId: number) {
     const result = await this.jobRepository.findOne({
       where: {
-        status: true,
         campaignId,
       },
       relations: [
@@ -248,7 +247,6 @@ export class JobService {
   async findJobById(id: number) {
     const result = await this.jobRepository.findOne({
       where: {
-        status: true,
         id,
       },
       relations: [
