@@ -94,7 +94,13 @@ function ApplyCV() {
   const jobId = state.id;
 
   const [showModal, setShowModal] = useState(false);
-  const handleOpen = () => setShowModal(true);
+  const handleOpen = () => {
+    if (localStorage.getItem("user") === null) {
+      navigation("/user-login");
+      return;
+    }
+    setShowModal(true);
+  };
   const handleClose = () => setShowModal(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -106,21 +112,6 @@ function ApplyCV() {
   const navigation = useNavigate();
 
   const [jobData, setJobData] = useState<any>({});
-  // const [jobRelated, setJobRelated] = useState({});
-
-  // const fetchRelatedJob = async () => {
-  //   try {
-  //     const response = await fetch(`http://localhost:3000/job/all`);
-  //     if (!response.ok) {
-  //       throw new Error('Failed to fetch data');
-  //     }
-  //     const data = await response.json();
-  //     console.log(data);
-  //     setJobRelated(data);
-  //   } catch (error) {
-  //     console.log('Error fetching data. Please try again.');
-  //   }
-  // }
 
   useEffect(() => {
     const fetchJobData = async () => {
