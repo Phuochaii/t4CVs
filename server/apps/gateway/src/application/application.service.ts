@@ -67,13 +67,17 @@ export class ApplicationService implements OnModuleInit {
   }
 
   async update(id: number) {
-    const data = await firstValueFrom(this.applicationServiceClient.updateApplication({ id }));
+    const data = await firstValueFrom(
+      this.applicationServiceClient.updateApplication({ id }),
+    );
     return data;
   }
 
   async hrGetCv(id: number) {
     const application = await this.update(id);
-    const cv = (await firstValueFrom(this.cvService.getCVById(application.cvId))) as CVDto;
+    const cv = (await firstValueFrom(
+      this.cvService.getCVById(application.cvId),
+    )) as CVDto;
     const campaign = await firstValueFrom(
       this.companyService.findCampaignById(application.campaignId),
     );
@@ -84,6 +88,7 @@ export class ApplicationService implements OnModuleInit {
       this.companyService.findCompanyById(employer.companyId),
     );
     const job = await this.jobService.findJobByCampaignId(campaign.id);
+
     const notification = await firstValueFrom(
       this.notificationService.create(
         [new NotificationUserId(cv.userId, NotificationUserRole.USER)],
