@@ -2,7 +2,7 @@
 import { useState } from "react";
 import React from "react";
 import JobService from "../../modules/job-module";
-import * as CompanyService from "../../modules/company-module";
+// import * as CompanyService from "../../modules/company-module";
 import {
   TextField,
   FormControl,
@@ -29,11 +29,8 @@ import {
   Bars3Icon,
 } from "@heroicons/react/24/outline";
 import { Tooltip } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { DefaultPagination } from "../../shared/components/default-pagination";
-// import JobService from "../../modules/job-module";
-
-// const searchJobFromHomePage = await JobService.searchJob();
 
 const city = [
   {
@@ -182,53 +179,69 @@ const news_type = [
 
 function SearchJob() {
   const navigation = useNavigate();
+
+  const url = useLocation();
+  const searchParams = new URLSearchParams(url.search);
+
+  const locationId = Number(searchParams.get('locationId')) ?? 0;
+  const expId = Number(searchParams.get('expId')) ?? 0;
+  const titleRecruitment = searchParams.get('titleRecruitment') ?? "";
+
   const [isActive, setIsActive] = useState(false);
   const [iconDirection, setIconDirection] = useState("down");
   const [boxOptionShow, setBoxOptionShow] = useState(false);
 
-  const [jobResult, setJobResult] = useState([]);
-  const [companyResult, setCompanyResult] = useState<any[]>([]);
-  const [companyid, setCompanyid] = useState([]);
+
+
+  // const [companyResult, setCompanyResult] = useState<any[]>([]);
+  // const [companyid, setCompanyid] = useState([]);
+  // const getAllCompany = () => { 
+  //   setCompanyResult([]);
+
+  //   Promise.all(
+  //     companyid.map((item: number) => {
+  //       return CompanyService.getCampaignById({ id: item });
+  //     })
+  //   )
+  //     .then((responses) => {
+  //       console.log(responses);
+  //       setCompanyResult(responses);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching campaigns:", error);
+  //     });
+
+  //   console.log(companyid);
+  // };
+  // React.useEffect(() => {
+  //   getAllCompany();
+  // }, [companyid]);
+
   const [totalJob, setTotalJob] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [page, setPage] = useState(1);
-
-  const getAllCompany = () => {
-    setCompanyResult([]);
-
-    Promise.all(
-      companyid.map((item: number) => {
-        return CompanyService.getCampaignById({ id: item });
-      })
-    )
-      .then((responses) => {
-        console.log(responses);
-        setCompanyResult(responses);
-      })
-      .catch((error) => {
-        console.error("Error fetching campaigns:", error);
-      });
-
-    console.log(companyid);
-  };
-  React.useEffect(() => {
-    getAllCompany();
-  }, [companyid]);
+  const [jobResult, setJobResult] = useState([]);
 
   const searchJob = () => {
-    JobService.getAllJob({ page: page }).then((response) => {
+    JobService.searchJob({
+      page: page,
+      titleRecruitment: titleRecruitment,
+      locationId: locationId,
+      expId: expId
+    }).then((response) => {
       console.log(response);
       setJobResult(response.data);
-      setTotalJob(response.total);
       setTotalPage(response.total_pages);
-      setCompanyid(response.data.map((item: any) => item.companyId));
-      console.log(response.data);
+      setTotalJob(response.total);
+
+      console.log(jobResult);
     });
   };
 
   React.useEffect(() => {
     searchJob();
   }, []);
+
   React.useEffect(() => {
     searchJob();
   }, [page]);
@@ -350,7 +363,7 @@ function SearchJob() {
                 <div className="search-result-text font-bold text-white flex items-center mr-28 px-4 rounded-md">
                   <span>
                     <span className="high-light">Tổng</span>
-                    <span className="total-job-search mx-1">117</span>
+                    <span className="total-job-search mx-1">{totalJob}</span>
                     <span className="high-light">kết quả</span>
                   </span>
                 </div>
@@ -491,11 +504,11 @@ function SearchJob() {
                   <div className="wrapper-content col-span-2">
                     <div className="job-list-search-result">
                       {/* job content */}
-                      {jobResult.length > 0 && companyResult.length > 0 ? (
-                        jobResult.map((item: any, index: number) => {
+                      {jobResult.length > 0 ? (
+                        jobResult.map((item: any) => {
                           return (
                             <div
-                              key={index}
+                              key={item.id}
                               onClick={() => {
                                 navigation("/detail-job", {
                                   state: { id: item.id },
@@ -504,14 +517,14 @@ function SearchJob() {
                               className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3"
                             >
                               <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
-                                <img src={companyResult[index].image} />
+                                <img src={item.company.image} />
                               </div>
                               <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
                                 <span className="job-title text-black font-semibold col-span-3">
                                   {item.titleRecruitment}
                                 </span>
                                 <span className="job-company-name text-slate-600 text-sm col-span-3">
-                                  {companyResult[index].name}
+                                  {item.company.name}
                                 </span>
                                 <span className="row-start-4 col-span-3 flex items-center">
                                   {item.fields.map((e: any, index: number) => (

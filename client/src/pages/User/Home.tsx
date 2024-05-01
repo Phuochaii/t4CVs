@@ -59,9 +59,12 @@ import JobService from "../../modules/job-module";
 //   },
 // ];
 
-const cities = await JobService.getAllLocation();
+// const cities = await JobService.getAllLocation();
 
-const exp_year = await JobService.getAllExp();
+// const exp_year = await JobService.getAllExp();
+
+// const cities = null;
+// const exp_year = null;
 
 const salary_range = [
   {
@@ -93,6 +96,9 @@ const slides = [
 function Home() {
   const autoSlideInterval = 5000;
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  const [cities, setCities] = useState<any[]>([]);
+  const [exp_year, setExpYear] = useState<any[]>([]);
 
   const [titleRecruitment, setTitleRecruitment] = useState("");
   const [location, setLocation] = useState(0);
@@ -130,12 +136,29 @@ function Home() {
     }
   };
 
-  const handleSearch = () => {
-    sessionStorage.setItem('locationId', String(location));
-    sessionStorage.setItem('expId', String(exp));
-    sessionStorage.setItem('titleRecruitment', String(titleRecruitment))
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const locationResponse = await JobService.getAllLocation();
+        setCities(locationResponse);
 
-    navigation("/results");
+        const expResponse = await JobService.getAllExp();
+        setExpYear(expResponse);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+
+  }, []);
+
+  const handleSearch = () => {
+    // sessionStorage.setItem('locationId', String(location));
+    // sessionStorage.setItem('expId', String(exp));
+    // sessionStorage.setItem('titleRecruitment', String(titleRecruitment))
+
+    navigation(`/results?locationId=${location}&expId=${exp}`);
   };
 
   return (
@@ -161,7 +184,7 @@ function Home() {
                     <OutlinedInput
                       id="outlined-adornment-amount"
                       placeholder="Vị trí tuyển dụng"
-                      onChange={(e) => {setTitleRecruitment(e.target.value)}}
+                      onChange={(e) => { setTitleRecruitment(e.target.value) }}
                       startAdornment={
                         <InputAdornment position="start">
                           <MagnifyingGlassIcon className="w-6" />
@@ -197,11 +220,11 @@ function Home() {
                     <MenuItem key="0" value="0">
                       Tất cả tỉnh/thành phố
                     </MenuItem>
-                    {cities.map((city: any) => (
+                    {cities ? cities.map((city: any) => (
                       <MenuItem key={city.id} value={city.id}>
                         {city.name}
                       </MenuItem>
-                    ))}
+                    )) : "Error to fetch cities"}
                   </TextField>
                 </div>
               </div>
@@ -234,11 +257,11 @@ function Home() {
                     <MenuItem key="0" value="0">
                       Tất cả kinh nghiệm
                     </MenuItem>
-                    {exp_year.map((exp: any) => (
+                    {exp_year ? exp_year.map((exp: any) => (
                       <MenuItem key={exp.id} value={exp.id}>
                         {exp.name}
                       </MenuItem>
-                    ))}
+                    )) : "Error to fetch experience"}
                   </TextField>
                 </div>
 

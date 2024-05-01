@@ -3,55 +3,102 @@ import axios from "axios";
 const API_URL = "http://localhost:3000/job";
 
 const getAllMajor = async () => {
-  const response = await axios.get(`${API_URL}/major/all`);
-  return response.data;
+  try {
+    const response = await axios.get(`${API_URL}/major/all`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllMajor:", error);
+    throw error; // Re-throw the error to be handled by the caller
+  }
 };
 
 const getAllCurrency = async () => {
-  const response = await axios.get(`${API_URL}/currency/all`);
-  return response.data;
+  try {
+    const response = await axios.get(`${API_URL}/currency/all`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllCurrency:", error);
+    throw error;
+  }
 };
 
 const getAllField = async () => {
-  const response = await axios.get(`${API_URL}/field/all`);
-  return response.data;
+  try {
+    const response = await axios.get(`${API_URL}/field/all`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllField:", error);
+    throw error;
+  }
 };
 
-const getAllExp = async () => {
-  const response = await axios.get(`${API_URL}/exp/all`);
-  return response.data;
+const getAllExp = async (): Promise<any[]> => {
+  try {
+    const response = await axios.get(`${API_URL}/exp/all`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllExp:", error);
+    throw error;
+  }
 };
 
 const getAllLevel = async () => {
-  const response = await axios.get(`${API_URL}/level/all`);
-  return response.data;
+  try {
+    const response = await axios.get(`${API_URL}/level/all`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllLevel:", error);
+    throw error;
+  }
 };
 
-const getAllLocation = async () => {
-  const response = await axios.get(`${API_URL}/location/all`);
-  return response.data;
+const getAllLocation = async (): Promise<any[]> => {
+  try {
+    const response = await axios.get(`${API_URL}/location/all`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllLocation:", error);
+    throw error;
+  }
 };
 
 const getAllType = async () => {
-  const response = await axios.get(`${API_URL}/type/all`);
-  return response.data;
+  try {
+    const response = await axios.get(`${API_URL}/type/all`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllType:", error);
+    throw error;
+  }
 };
 
-const searchJob = async (
-  page: number=0,
-  limit: number=0,
-  titleRecruitment: string="",
-  salaryMin: number=0,
-  salaryMax: number=0,
-  fieldId: number=0,
-  locationId: number=0,
-  expId: number=0,
-  majorId: number=0,
-  typeId: number=0,
-  levelId: number=0
-) => {
+
+const searchJob = async ({
+  page = 1,
+  limit = 0,
+  titleRecruitment = "",
+  salaryMin = 0,
+  salaryMax = 0,
+  fieldId = 0,
+  locationId = 0,
+  expId = 0,
+  majorId = 0,
+  typeId = 0,
+  levelId = 0
+} : {
+  page?: number
+  limit?: number
+  titleRecruitment?: string
+  salaryMin?: number
+  salaryMax?: number
+  fieldId?: number
+  locationId?: number
+  expId?: number
+  majorId?: number
+  typeId?: number
+  levelId?: number}) => {
   if (
-    page === 0 &&
+    page === 1 &&
     limit === 0 &&
     titleRecruitment === "" &&
     salaryMin === 0 &&
@@ -104,16 +151,11 @@ const searchJob = async (
       throw error; // Ném lỗi để cho người dùng của hàm biết rằng có lỗi xảy ra
     }
   }
-  
 };
 
 // get all job
 const getAllJob = async ({page=1}:{page?: number}) => {
   try{
-    console.log(123);
-    console.log(page);
-    
-    
     const response = await axios.get(`${API_URL}/all?page=${page}`);
       return response.data;
   }catch(error){
