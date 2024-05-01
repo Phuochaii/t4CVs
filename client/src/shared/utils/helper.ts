@@ -6,10 +6,11 @@ import { RecruitmentFromServer } from "../types/Recruitment.type"
 
 const serverURL = 'http://localhost:3000'
 
-export async function getAllCampaigns() {
-    const response = await axios.get(`${serverURL}/company/campaign/all`)
+export async function getAllCampaigns(page:number = 1) {
+    const response = await axios.get(`${serverURL}/company/campaign/all?page=${page}`)
     const rawCampaigns: CampaignFromServer[] = response.data.data;
-    return rawCampaigns;
+    const totalPages = response.data.total_page;
+    return {allCampaigns: rawCampaigns, totalPages: totalPages};
 }
 
 export async function getCampaignById(id: number) {

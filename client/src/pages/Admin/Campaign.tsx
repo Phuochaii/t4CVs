@@ -1,5 +1,10 @@
 import { Briefcase } from "../../layouts/HRLayout/components/Icons";
-import { ChevronDown, Search } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronLeftCircle,
+  ChevronRightCircle,
+  Search,
+} from "lucide-react";
 
 import { SetStateAction, useEffect, useState } from "react";
 import { Campaign as CampaignType } from "../../shared/types/Campaign.type";
@@ -175,11 +180,15 @@ const CompanyCampaignTable = ({ data }: CampaignTableProps) => {
 
 function Campaign() {
   const [campaigns, setCampaigns] = useState<CampaignType[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     async function getData() {
-      const campaignData = await getAllCampaigns();
-      const rawCampaigns = await campaignData.map(async (item) => {
+      const { allCampaigns, totalPages } = await getAllCampaigns(
+        page
+      );
+      const rawCampaigns = await allCampaigns.map(async (item) => {
         const employer = await getEmployerById(item.employerId);
         const company = await getCompanyById(employer.companyId);
         const job = await getJobByCampaignId(item.id);
@@ -196,9 +205,10 @@ function Campaign() {
         return rawCampaign;
       });
       setCampaigns(await Promise.all(rawCampaigns));
+      setTotalPages(totalPages);
     }
     getData();
-  }, []);
+  }, [page]);
 
   return (
     <div className="flex flex-col items-center flex-grow bg-slate-200">
@@ -227,6 +237,26 @@ function Campaign() {
           data={campaigns}
           setData={setCampaigns}
         />
+        <div className="flex items-center self-center justify-center gap-2">
+          <ChevronLeftCircle
+            className="cursor-pointer"
+            stroke="green"
+            strokeWidth={1}
+            onClick={() => {
+              setPage(page - 1 > 0 ? page - 1 : page);
+            }}
+          />
+          <span className="font-bold text-green-600">{page}</span>/
+          <span>{totalPages}</span>
+          <ChevronRightCircle
+            stroke="green"
+            className="cursor-pointer"
+            strokeWidth={1}
+            onClick={() =>
+              setPage(page + 1 <= totalPages ? page + 1 : page)
+            }
+          />
+        </div>
       </div>
     </div>
   );
