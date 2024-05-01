@@ -994,7 +994,7 @@ function Header() {
                   </span>
                 </a>
                 {isAccountHovered ? (
-                  <ul className="sub-menu absolute z-50 top-full right-0 font-semibold text-base bg-white border border-slate-100 rounded-lg p-3 flex flex-col gap-3 shadow-lg">
+                  <ul className="sub-menu absolute h-80 overflow-y-scroll z-50 top-full right-0 font-semibold text-base bg-white border border-slate-100 rounded-lg p-3 flex flex-col gap-3 shadow-lg">
                     <li>
                       <hr />
                     </li>
