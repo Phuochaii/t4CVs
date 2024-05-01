@@ -114,9 +114,7 @@ function Overview() {
           {data.map((item, index) => {
             return (
               <div key={index} className="flex flex-col gap-2">
-                <h3 className="font-bold text-green-500">
-                  {item.title}
-                </h3>
+                <h3 className="font-bold text-green-500">{item.title}</h3>
                 {item.rows.map((row, index) => {
                   return (
                     <div

@@ -105,7 +105,6 @@ function Home() {
     };
 
     fetchData();
-
   }, []);
 
   const handleSearch = () => {
@@ -113,7 +112,9 @@ function Home() {
     // sessionStorage.setItem('expId', String(exp));
     // sessionStorage.setItem('titleRecruitment', String(titleRecruitment))
 
-    navigation(`/results?locationId=${location}&expId=${exp}&titleRecruitment=${titleRecruitment}`);
+    navigation(
+      `/results?locationId=${location}&expId=${exp}&titleRecruitment=${titleRecruitment}`
+    );
   };
 
   return (
@@ -139,7 +140,9 @@ function Home() {
                     <OutlinedInput
                       id="outlined-adornment-amount"
                       placeholder="Vị trí tuyển dụng"
-                      onChange={(e) => { setTitleRecruitment(e.target.value) }}
+                      onChange={(e) => {
+                        setTitleRecruitment(e.target.value);
+                      }}
                       startAdornment={
                         <InputAdornment position="start">
                           <MagnifyingGlassIcon className="w-6" />
@@ -175,11 +178,13 @@ function Home() {
                     <MenuItem key="0" value="0">
                       Tất cả tỉnh/thành phố
                     </MenuItem>
-                    {cities ? cities.map((city: any) => (
-                      <MenuItem key={city.id} value={city.id}>
-                        {city.name}
-                      </MenuItem>
-                    )) : "Error to fetch cities"}
+                    {cities
+                      ? cities.map((city: any) => (
+                          <MenuItem key={city.id} value={city.id}>
+                            {city.name}
+                          </MenuItem>
+                        ))
+                      : "Error to fetch cities"}
                   </TextField>
                 </div>
               </div>
@@ -212,11 +217,13 @@ function Home() {
                     <MenuItem key="0" value="0">
                       Tất cả kinh nghiệm
                     </MenuItem>
-                    {exp_year ? exp_year.map((exp: any) => (
-                      <MenuItem key={exp.id} value={exp.id}>
-                        {exp.name}
-                      </MenuItem>
-                    )) : "Error to fetch experience"}
+                    {exp_year
+                      ? exp_year.map((exp: any) => (
+                          <MenuItem key={exp.id} value={exp.id}>
+                            {exp.name}
+                          </MenuItem>
+                        ))
+                      : "Error to fetch experience"}
                   </TextField>
                 </div>
 

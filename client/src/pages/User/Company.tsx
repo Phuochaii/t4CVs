@@ -6,9 +6,10 @@ function Company() {
   let { id } = useParams();
   const [companyInfo, setCompanyInfo] = useState<any>();
   useEffect(() => {
+    if (!id) return;
     fetchCompanyInfo(id);
   }, []);
-  const fetchCompanyInfo = async (id) => {
+  const fetchCompanyInfo = async (id: string) => {
     try {
       const response = await axios.get(`http://localhost:3000/company/${id}`);
       console.log(response.data);

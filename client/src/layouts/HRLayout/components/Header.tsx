@@ -61,15 +61,24 @@ const accountButton = {
 };
 
 function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
+  const navigation = useNavigate();
+
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [displayAccountTab, setDisplayAccountTab] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
   React.useEffect(() => {
+    // console.log(JSON.parse(localStorage.getItem("hr") as string).role);
+    if (localStorage.getItem("hr") === null) {
+      navigation("/hr-login");
+      return;
+    }
     fetchNotification({ id: hrId });
   }, []);
-  const hrId = "9";
-  const navigation = useNavigate();
+  const hrId =
+    localStorage.getItem("hr") == null
+      ? ""
+      : JSON.parse(localStorage.getItem("hr") as string).id;
   const fetchNotification = ({
     id,
     limit = 3,
@@ -83,7 +92,9 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
       setTotal(res.pagination.total);
     });
   };
-
+  const notiLength = notifications.filter(
+    (item: any) => item.status === 0
+  ).length;
   return (
     <div
       className="text-white "
@@ -142,6 +153,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
               <RoundedButton
                 text={notifyButton.name}
                 icon={notifyButton.icon}
+                numberNoti={notiLength > 0 ? notiLength : undefined}
                 onClick={() => {
                   navigation(notifyButton.link);
                 }}
@@ -250,6 +262,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                     className={`px-4 py-2 m-0 border-b-gray-200 border`}
                     onClick={() => {
                       navigation("/hr");
+                      localStorage.removeItem("hr");
                     }}
                   >
                     <span className="cursor-pointer text-black hover:text-green-500">

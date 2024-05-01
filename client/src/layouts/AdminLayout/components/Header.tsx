@@ -1,5 +1,5 @@
 import { Bell, ChevronDown } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import SearchBar from "./SearchBar";
 import { useNavigate } from "react-router-dom";
 import RoundedButton from "../../HRLayout/components/RoundedButton";
@@ -14,10 +14,17 @@ const accountButton = {
 
 function Header() {
   const navigation = useNavigate();
+
+  useEffect(() => {
+    console.log(JSON.parse(localStorage.getItem("admin") as string).role);
+    if (localStorage.getItem("admin") === null) {
+      navigation("/admin-login");
+    }
+  }, []);
   const [displayAccountTab, setDisplayAccountTab] = React.useState(false);
 
   return (
-    <div className="px-4 flex justify-between items-center h-[10vh] gap-6">
+    <div className="px-4 flex justify-between items-center h-16 gap-6">
       <div className="flex-1 h-full">
         <img src="/topcv-logo-6.webp" className="object-contain h-full"></img>
       </div>
@@ -50,6 +57,7 @@ function Header() {
                 className={`px-4 py-2 m-0 border-b-gray-200 border`}
                 onClick={() => {
                   navigation("/admin");
+                  localStorage.removeItem("admin");
                 }}
               >
                 <span className="cursor-pointer text-black hover:text-green-500">

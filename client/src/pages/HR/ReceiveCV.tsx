@@ -208,7 +208,10 @@ function ReceiveCV() {
             </div>
           ) : (
             <div className="p-5">
-              <table className="p-5" style={{ width: "100%" }}>
+              <table
+                className="p-5 border-spacing-y-3 border-separate"
+                style={{ width: "100%" }}
+              >
                 <thead>
                   <tr>
                     <th className="text-left">Ứng viên</th>
@@ -224,7 +227,7 @@ function ReceiveCV() {
                     listCV.map((item: any, index: number) => (
                       <tr
                         key={index}
-                        className="font-medium my-5 mx-3"
+                        className="font-medium py-5 mx-3"
                         style={{ fontSize: "13px" }}
                       >
                         <td>
@@ -285,7 +288,7 @@ function ReceiveCV() {
                                 applicationId: item.id,
                               });
 
-                              fetchApplication(hrId);
+                              // fetchApplication(hrId);
                               await HRModule.getCVByApplicationID({
                                 applicationId: 3,
                               }).then((res) => {

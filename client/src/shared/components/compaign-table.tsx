@@ -1,6 +1,6 @@
 import { SetStateAction, useState } from "react";
 // import Switch from "../../shared/components/CustomSwitch";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Campaign } from "../types/Campaign.type";
 
 export interface CompaignTableProps {
@@ -31,10 +31,17 @@ interface CompaignTableRowProps {
 }
 
 export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
+  const navigation = useNavigate();
+
   const [isHovered, setIsHovered] = useState(false);
   const [compaign] = useState<Campaign>(data);
   return (
     <tr
+      onClick={() => {
+        console.log(data.compaignId);
+
+        navigation(`/hr/manage-cv/${data.compaignId}`);
+      }}
       className="align-top hover:bg-green-100 bg-slate-50"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

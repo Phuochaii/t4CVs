@@ -57,9 +57,7 @@ function Sidebar({ className }: SidebarProps) {
             )}{" "}
             <span
               className={
-                pathname == item.path
-                  ? "text-white"
-                  : "text-slate-500"
+                pathname == item.path ? "text-white" : "text-slate-500"
               }
             >
               {item.name}
