@@ -16,3 +16,10 @@ export interface Campaign {
   company?: string;
   postDate?: Date;
 }
+
+export interface CampaignFromServer {
+  id: number;
+  employerId: number;
+  name: string;
+  createdAt: string;
+}

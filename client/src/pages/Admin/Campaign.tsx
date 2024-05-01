@@ -2,21 +2,20 @@ import { Briefcase } from "../../layouts/HRLayout/components/Icons";
 import { ChevronDown, Search } from "lucide-react";
 
 import { SetStateAction, useEffect, useState } from "react";
-import { Campaign as CampaignType } from "../../shared/types/Campaign.type";
+import {
+  CampaignFromServer,
+  Campaign as CampaignType,
+} from "../../shared/types/Campaign.type";
+import { EmployerFromServer } from "../../shared/types/Employer.type";
 import { Link } from "react-router-dom";
 import Switch from "../../shared/components/CustomSwitch";
 import axios from "axios";
+import { CompanyFromServer } from "../../shared/types/Company.type";
+import { RecruitmentFromServer } from "../../shared/types/Recruitment.type";
 
 interface CompaignTableProps {
   data: CampaignType[];
   setData: React.Dispatch<SetStateAction<CampaignType[]>>;
-}
-
-interface CompaignFromServer {
-  id: number;
-  employerId: number;
-  name: string;
-  createdAt: string;
 }
 
 const CompanyCompaignTableHeader = () => {
@@ -169,33 +168,6 @@ const CompanyCompaignTable = ({ data }: CompaignTableProps) => {
   );
 };
 
-interface CompanyFromServer {
-  id: number;
-  field: number;
-  taxCode: string;
-  name: string;
-  website: string;
-  image: string;
-  address: "88 Kingsford Junction";
-  phone: string;
-  companySize: number;
-  description: string;
-  status: boolean;
-}
-
-interface EmployerFromServer {
-  id: number;
-  fullname: string;
-  gender: string;
-  skype: string;
-  companyId: number;
-  license: string;
-  phoneNumber: string;
-  licenseStatus: boolean;
-  phoneNumberStatus: boolean;
-  image: string;
-}
-
 function Campaign() {
   const [campaigns, setCompaigns] = useState<CampaignType[]>([]);
 
@@ -220,8 +192,10 @@ function Campaign() {
       const rawsCompanies: CompanyFromServer[] =
         responseCompany.data.data;
 
+      const rawJob: RecruitmentFromServer[] = responseJob.data.data;
+
       const data = response.data.data;
-      const rawCompaigns = data.map((item: CompaignFromServer) => {
+      const rawCompaigns = data.map((item: CampaignFromServer) => {
         const employer = rawEmployers.find(
           (employer) => employer.id === item.employerId
         );

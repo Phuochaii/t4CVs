@@ -10,13 +10,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { statusColor } from "../../shared/types/RecruitmentStatus.type";
 import axios from "axios";
-
-interface RecruitmentJobPost {
-  recruitmentName: string;
-  recruitmentStatus: string;
-  recruitmentId: number;
-  compaignName: string;
-}
+import {
+  RecruitmentFromServer,
+  RecruitmentJobPost,
+} from "../../shared/types/Recruitment.type";
+import { CampaignFromServer } from "../../shared/types/Campaign.type";
 
 interface RecruitmentTableProps {
   data: RecruitmentJobPost[];
@@ -113,71 +111,6 @@ const filteredStatuses = [
   "Dừng hiển thị",
 ];
 
-interface CompaignFromServer {
-  id: number;
-  employerId: number;
-  name: string;
-  createdAt: string;
-}
-
-interface RecruitmentFromServer {
-  id: number;
-  titleRecruitment: string;
-  majorId: number;
-  campaignId: number;
-  typeId: number;
-  currencyId: number;
-  salaryMin: number;
-  salaryMax: number;
-  expId: number;
-  expiredDate: string;
-  createAt: string;
-  updateAt: string;
-  levelId: number;
-  status: boolean;
-  companyId: number;
-  major: {
-    id: number;
-    name: string;
-  };
-  level: {
-    id: number;
-    name: string;
-  };
-  currency: {
-    id: number;
-    name: string;
-  };
-  fields: [
-    {
-      id: number;
-      name: string;
-    },
-    {
-      id: number;
-      name: string;
-    }
-  ];
-  exp: {
-    id: number;
-    name: string;
-  };
-  type: {
-    id: number;
-    name: string;
-  };
-  locations: [
-    {
-      id: number;
-      name: string;
-    },
-    {
-      id: number;
-      name: string;
-    }
-  ];
-}
-
 function Recruitment() {
   const [data, setData] = useState<RecruitmentJobPost[]>([]);
   const [selectedStatus, setSelectedStatus] = useState(0);
@@ -192,7 +125,7 @@ function Recruitment() {
         "http://localhost:3000/company/campaign/all"
       );
 
-      const rawCompaigns: CompaignFromServer[] = compaigns.data.data;
+      const rawCompaigns: CampaignFromServer[] = compaigns.data.data;
       const data = response.data.data;
       const recruitments: RecruitmentJobPost[] = data.map(
         (item: RecruitmentFromServer) => {

@@ -99,7 +99,7 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
     [
       {
         _icon: BriefcaseBusiness,
-        to: "/hr/compaign",
+        to: "/hr/campaign",
         title: "Chiến dịch tuyển dụng",
       },
       { _icon: File, to: "/hr/recruitment", title: "Tin tuyển dụng" },
