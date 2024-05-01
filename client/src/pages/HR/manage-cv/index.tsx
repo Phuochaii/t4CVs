@@ -27,6 +27,7 @@ function NumberLabelWidget(item: NumberLabelWidgetProps) {
   );
 }
 function ManageCV() {
+  const navigation = useNavigate();
   const hrId = JSON.parse(localStorage.getItem("hr") as string).id;
   const { id } = useParams();
 
@@ -86,7 +87,10 @@ function ManageCV() {
         className="bg-white w-full flex items-center text-xm py-4"
         style={{ marginLeft: "1px", paddingLeft: "20px" }}
       >
-        <button className="flex items-center bg-slate-100 px-3 py-1 font-medium">
+        <button
+          className="flex items-center bg-slate-100 px-3 py-1 font-medium"
+          onClick={() => navigation("/hr/compaign")}
+        >
           <ArrowLeft size={16} className="mr-1" />
           Quay lại
         </button>

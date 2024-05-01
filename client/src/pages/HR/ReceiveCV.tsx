@@ -1,10 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import CustomSelectOption from "../../layouts/HRLayout/components/CustomSelectOption";
 import { ChevronRight, Mail, Phone, Clock, Search } from "lucide-react";
 import * as HRModule from "../../modules/hr-module";
 import { DefaultPagination } from "../../shared/components/default-pagination";
-import { MyContext } from "../../App";
-import { useNavigate } from "react-router-dom";
 
 function ReceiveCV() {
   const hrId = "1";
@@ -290,7 +288,7 @@ function ReceiveCV() {
                                 applicationId: item.id,
                               });
 
-                              fetchApplication(hrId);
+                              // fetchApplication(hrId);
                               await HRModule.getCVByApplicationID({
                                 applicationId: 3,
                               }).then((res) => {

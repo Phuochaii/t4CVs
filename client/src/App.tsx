@@ -20,7 +20,7 @@ export const MyContext = createContext({
 function App() {
   const accountList = [
     { role: "admin", id: "", email: "admin@gmail.com", password: "123456" },
-    { role: "hr", id: "2", email: "hr@gmail.com", password: "123456" },
+    { role: "hr", id: "1", email: "hr@gmail.com", password: "123456" },
     { role: "user", id: "1", email: "user@gmail.com", password: "123456" },
   ];
 

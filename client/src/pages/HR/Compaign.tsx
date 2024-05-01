@@ -19,11 +19,11 @@ function Compaign() {
   const [campaigns, setCompaigns] = useState<CompaignType[]>([]);
 
   const hrId = JSON.parse(localStorage.getItem("hr") as string).id;
-
+  console.log(753, hrId);
   useEffect(() => {
     const getAllCompaigns = async () => {
       const response = await axios.get(
-        "http://localhost:3000/company/campaign/employer/" + hrId
+        `http://localhost:3000/company/campaign/employer/${hrId}`
       );
       if (response.status === 200) {
         const data = response.data.data;
@@ -46,7 +46,9 @@ function Compaign() {
         setCompaigns(rawCompaigns);
       }
     };
-    getAllCompaigns();
+    if (hrId != "") {
+      getAllCompaigns();
+    }
   }, []);
 
   return (
