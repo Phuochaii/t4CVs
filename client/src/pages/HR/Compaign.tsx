@@ -23,7 +23,7 @@ function Compaign() {
   useEffect(() => {
     const getAllCompaigns = async () => {
       const response = await axios.get(
-        `http://localhost:3000/company/campaign/employer/${hrId}`
+        `http://localhost:3000/company/campaign/employer/${hrId}?limit=50`
       );
       if (response.status === 200) {
         const data = response.data.data;

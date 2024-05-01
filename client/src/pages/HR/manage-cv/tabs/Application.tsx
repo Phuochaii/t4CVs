@@ -23,7 +23,7 @@ function Application({
       page: page,
     }).then((res) => {
       // console.log(res);
-      setListCV(res.applications);
+      setListCV(res.applications || []);
       setTotalPage(res.totalPage);
     });
   };

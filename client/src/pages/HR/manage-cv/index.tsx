@@ -213,10 +213,10 @@ function ManageCV() {
                   Item Three
                 </TabPanel>
                 <TabPanel sx={{ padding: "12px 0" }} value="6">
-                  {tabs.CV()}
+                  {tabs.CV({ compaignId: compaignId, hrId: hrId })}
                 </TabPanel>
                 <TabPanel sx={{ padding: "12px 0" }} value="7">
-                  {tabs.Support()}
+                  {tabs.Support({ compaignId: compaignId, hrId: hrId })}
                 </TabPanel>
                 <TabPanel sx={{ padding: "12px 0" }} value="8">
                   Item Three

@@ -5,7 +5,7 @@ import * as HRModule from "../../modules/hr-module";
 import { DefaultPagination } from "../../shared/components/default-pagination";
 
 function ReceiveCV() {
-  const hrId = "1";
+  const hrId = JSON.parse(localStorage.getItem("hr") as string).id;
 
   const [campaign, setCampaign] = React.useState<any>();
   const [receivedCvState, setReceivedCvState] = React.useState<any>(undefined);
@@ -17,9 +17,9 @@ function ReceiveCV() {
   const [totalPage, setTotalPage] = React.useState<number>(1);
   const [compaignList, setCompaignList] = React.useState<any>([]);
 
-  const fetchApplication = (hrId: string) => {
+  const fetchApplication = (hrId: string, compaignId: string) => {
     HRModule.getApplicationByCampaignIdHRId({
-      campaignId: campaign != undefined ? campaign.id : "",
+      campaignId: compaignId,
       hrId: hrId,
       status: receivedCvState ? receivedCvState.value : undefined,
       page: page,
@@ -28,21 +28,23 @@ function ReceiveCV() {
       setTotalPage(res.totalPage);
     });
   };
+  const fetchAllCompaign = async () => {
+    HRModule.getAllCompaignByHrId({ hrId: hrId }).then((res) => {
+      // console.log(res.data);
+      setCompaignList([
+        { id: "", name: "Tất cả" },
+        ...res.data.filter((item: any) => item.name != ""),
+      ]);
+    });
+  };
 
   React.useEffect(() => {
-    const fetchAllCompaign = async () => {
-      HRModule.getAllCompaignByHrId({ hrId: "1" }).then((res) => {
-        console.log(res.data);
-        setCompaignList([{ id: "", name: "Tất cả" }, ...res.data]);
-      });
-    };
-
     fetchAllCompaign();
-    fetchApplication(hrId);
+    fetchApplication(hrId, "");
   }, []);
 
   React.useEffect(() => {
-    fetchApplication(hrId);
+    fetchApplication(hrId, !campaign ? "" : campaign.id);
   }, [campaign, receivedCvState, page]);
 
   const cvState = [
@@ -67,6 +69,7 @@ function ReceiveCV() {
   function getCompaignName(id: string) {
     // console.log(id);
     // console.log(compaignList);
+    return 123;
 
     if (compaignList != undefined && id != "") {
       return compaignList.filter((item: any) => {

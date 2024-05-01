@@ -1,11 +1,5 @@
 import clsx from "clsx";
-import {
-  ArrowUp,
-  Pause,
-  Pencil,
-  Search,
-  Settings,
-} from "lucide-react";
+import { ArrowUp, Pause, Pencil, Search, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { statusColor } from "../../shared/types/RecruitmentStatus.type";
@@ -35,9 +29,7 @@ function RecruitmentTable({ data }: RecruitmentTableProps) {
           </td>
           <td className="font-bold border">Top Jobs chạy gần đây</td>
           <td className="font-bold border">Đợt hiển thị gần nhất</td>
-          <td className="font-bold border">
-            Toàn bộ thời gian hiển thị
-          </td>
+          <td className="font-bold border">Toàn bộ thời gian hiển thị</td>
         </tr>
       </thead>
       <tbody>
@@ -62,9 +54,7 @@ function RecruitmentTable({ data }: RecruitmentTableProps) {
                     </span>{" "}
                     <span className="text-slate-500">{`#${jobPost.recruitmentId}`}</span>
                   </div>
-                  <span>
-                    Chiến dịch tuyển dụng: {jobPost.compaignName}
-                  </span>
+                  <span>Chiến dịch tuyển dụng: {jobPost.compaignName}</span>
                   <button className="p-2 font-bold text-green-500 bg-green-50">
                     Xem CV ứng tuyển
                   </button>
@@ -77,11 +67,7 @@ function RecruitmentTable({ data }: RecruitmentTableProps) {
                     to={`/hr/compaign-edit/${jobPost.recruitmentId}`}
                     state={jobPost}
                   >
-                    <Pencil
-                      fill="black"
-                      stroke="white"
-                      strokeWidth={1}
-                    />
+                    <Pencil fill="black" stroke="white" strokeWidth={1} />
                   </Link>
                   <button className="p-2 rounded-full">
                     <Pause fill="gray" stroke="transparent" />
@@ -156,7 +142,7 @@ interface RecruitmentFromServer {
     {
       id: number;
       name: string;
-    }
+    },
   ];
   exp: {
     id: number;
@@ -174,7 +160,7 @@ interface RecruitmentFromServer {
     {
       id: number;
       name: string;
-    }
+    },
   ];
 }
 
@@ -198,9 +184,7 @@ function Recruitment() {
 
   useEffect(() => {
     const getAllRecruitments = async () => {
-      const response = await axios.get(
-        "http://localhost:3000/job/all"
-      );
+      const response = await axios.get("http://localhost:3000/job/all");
       const compaigns = await axios.get(
         "http://localhost:3000/company/campaign/all"
       );
@@ -216,12 +200,8 @@ function Recruitment() {
             recruitmentName: item.titleRecruitment,
             recruitmentId: item.id,
             recruitmentStatus:
-              item.status === false
-                ? "Dừng hiển thị"
-                : "Đang hiển thị",
-            compaignName: comapaign
-              ? comapaign.name
-              : item.titleRecruitment,
+              item.status === false ? "Dừng hiển thị" : "Đang hiển thị",
+            compaignName: comapaign ? comapaign.name : item.titleRecruitment,
           };
           return recruitment;
         }
@@ -282,8 +262,7 @@ function Recruitment() {
               (jobPost) =>
                 jobPost.recruitmentStatus ===
                   filteredStatuses[selectedStatus] ||
-                (filteredStatuses[selectedStatus] === "Tất cả" &&
-                  jobPost)
+                (filteredStatuses[selectedStatus] === "Tất cả" && jobPost)
             )
             .filter(
               (jobPost) =>
