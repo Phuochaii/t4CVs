@@ -158,7 +158,7 @@ function Home() {
     // sessionStorage.setItem('expId', String(exp));
     // sessionStorage.setItem('titleRecruitment', String(titleRecruitment))
 
-    navigation(`/results?locationId=${location}&expId=${exp}`);
+    navigation(`/results?locationId=${location}&expId=${exp}&titleRecruitment=${titleRecruitment}`);
   };
 
   return (
