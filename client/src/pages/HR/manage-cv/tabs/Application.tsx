@@ -15,7 +15,13 @@ function Application({
   const [listCV, setListCV] = React.useState([]);
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
+  const [campaign, setCampaign] = React.useState<{name:string} | null>(null);
 
+  const fetchCompaign = async () => {
+    HRModule.getCampaignById({ id: compaignId }).then((res) => {
+      setCampaign(res);
+    });
+  }
   const fetchApplication = async () => {
     HRModule.getApplicationByCampaignIdHRId({
       campaignId: compaignId,
@@ -30,6 +36,7 @@ function Application({
 
   React.useEffect(() => {
     fetchApplication();
+    fetchCompaign();
   }, []);
   React.useEffect(() => {
     fetchApplication();
@@ -65,7 +72,7 @@ function Application({
                   <p className="font-semibold">{item.fullname}</p>
                 </td>
                 <td>
-                  <p>fgvdfhujvhdfuicv</p>
+                  <p>{campaign?.name}</p>
                   <span>#{item.campaignId}</span>
                 </td>
                 <td>

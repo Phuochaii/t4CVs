@@ -286,15 +286,11 @@ function ReceiveCV() {
                         <td>
                           <button
                             onClick={async () => {
-                              console.log(item);
-                              HRModule.updateApplicationStatus({
-                                applicationId: item.id,
-                              });
-
                               // fetchApplication(hrId);
                               HRModule.getCVByApplicationID({
                                 applicationId: item.id,
                               }).then((res) => {
+                                console.log(res);
                                 window.open(res.link, "_blank", "noopener");
                               });
                             }}
