@@ -205,9 +205,8 @@ function SearchJob() {
       console.log(response);
       setJobResult(response.data);
       setTotalPage(response.total_pages);
-      console.log(response.data);
       setTotalJob(response.total);
-
+      
       console.log(jobResult);
     });
   };
@@ -479,7 +478,7 @@ function SearchJob() {
                     <div className="job-list-search-result">
                       {/* job content */}
                       {jobResult.length > 0 ? (
-                        jobResult.map((item: any, index: number) => {
+                        jobResult.map((item: any) => {
                           return (
                             <div
                               key={item.id}
