@@ -121,18 +121,14 @@ function Application({
                 <td>
                   <button
                     onClick={async () => {
-                      console.log(item);
-                      HRModule.updateApplicationStatus({
+                      fetchApplication();
+                      const cv : {
+                        link: string;
+                      } = await HRModule.getCVByApplicationID({
                         applicationId: item.id,
                       });
-
+                      window.open(cv.link, "_blank", "noopener");
                       fetchApplication();
-                      await HRModule.getCVByApplicationID({
-                        applicationId: 3,
-                      }).then(async (res) => {
-                        console.log(res);
-                        await window.open(res.link, "_blank", "noopener");
-                      });
                     }}
                     className="btn px-3 py-1 text-white rounded-md ml-5 bg-[#5EE199] hover:bg-green-500 transition ease-out duration-100"
                   >
