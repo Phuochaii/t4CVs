@@ -31,42 +31,6 @@ import { Tooltip } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DefaultPagination } from "../../shared/components/default-pagination";
 
-const city = [
-  {
-    value: "0",
-    label: "Tất cả tỉnh/thành phố",
-  },
-  {
-    value: "1",
-    label: "EUR",
-  },
-  {
-    value: "2",
-    label: "BTC",
-  },
-  {
-    value: "3",
-    label: "JPY",
-  },
-];
-const exp_year = [
-  {
-    value: "0",
-    label: "Tất cả kinh nghiệm",
-  },
-  {
-    value: "1",
-    label: "1 năm",
-  },
-  {
-    value: "2",
-    label: "2 năm",
-  },
-  {
-    value: "3",
-    label: "3 năm",
-  },
-];
 const salary_range = [
   {
     value: "0",
@@ -178,13 +142,19 @@ const news_type = [
 
 function SearchJob() {
   const navigation = useNavigate();
-
   const url = useLocation();
-  const searchParams = new URLSearchParams(url.search);
 
-  const locationId = Number(searchParams.get('locationId')) ?? 0;
-  const expId = Number(searchParams.get('expId')) ?? 0;
-  const titleRecruitment = searchParams.get('titleRecruitment') ?? "";
+  const searchParams = new URLSearchParams(url.search);
+  const newLocationId = Number(searchParams.get('locationId')) ?? 0;
+  const newExpId = Number(searchParams.get('expId')) ?? 0;
+  const newTitleRecruitment = searchParams.get('titleRecruitment') ?? "";
+
+  const [cities, setCities] = useState<any[]>([]);
+  const [exp_year, setExpYear] = useState<any[]>([]);
+
+  const [locationId, setLocationId] = useState(newLocationId);
+  const [expId, setExpId] = useState(newExpId);
+  const [titleRecruitment, setTitleRecruitment] = useState(newTitleRecruitment)
 
   const [isActive, setIsActive] = useState(false);
   const [iconDirection, setIconDirection] = useState("down");
@@ -195,6 +165,27 @@ function SearchJob() {
   const [totalPage, setTotalPage] = useState(1);
   const [page, setPage] = useState(1);
 
+  const fetchData = async () => {
+    try {
+      const locationResponse = await JobService.getAllLocation();
+      setCities(locationResponse);
+
+      const expResponse = await JobService.getAllExp();
+      setExpYear(expResponse);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchData();
+    searchJob();
+  }, []);
+
+  React.useEffect(() => {
+    searchJob();
+  }, [page]);
+
   const searchJob = () => {
     JobService.searchJob({
       page: page,
@@ -203,26 +194,26 @@ function SearchJob() {
       expId: expId
     }).then((response) => {
       console.log(response);
-      
+
       setJobResult(response.data);
       setTotalPage(response.total_pages);
       setTotalJob(response.total);
     });
   };
 
-  React.useEffect(() => {
-    searchJob();
-  }, []);
-
-  React.useEffect(() => {
-    searchJob();
-  }, [page]);
-
   const handleClick = () => {
     setIsActive(!isActive);
     setIconDirection(iconDirection === "down" ? "up" : "down");
     setBoxOptionShow(!boxOptionShow);
   };
+
+  const handleSearch = () => {
+    navigation(
+      `/results?locationId=${locationId}&expId=${expId}&titleRecruitment=${titleRecruitment}`
+    );
+
+    searchJob();
+  }
 
   return (
     <>
@@ -236,11 +227,14 @@ function SearchJob() {
                     <FormControl>
                       <OutlinedInput
                         id="outlined-adornment-amount"
+                        placeholder="Vị trí công việc"
+                        value={titleRecruitment}
                         startAdornment={
                           <InputAdornment position="start">
                             <MagnifyingGlassIcon className="w-6" />
                           </InputAdornment>
                         }
+                        onChange={(e) => setTitleRecruitment(e.target.value)}
                       />
                     </FormControl>
                   </div>
@@ -248,7 +242,7 @@ function SearchJob() {
                     <TextField
                       id="outlined-select-currency"
                       select
-                      defaultValue="0"
+                      defaultValue={String(locationId)}
                       className="w-full"
                       InputProps={{
                         startAdornment: (
@@ -257,12 +251,27 @@ function SearchJob() {
                           </InputAdornment>
                         ),
                       }}
+                      SelectProps={{
+                        MenuProps: {
+                          PaperProps: {
+                            style: {
+                              maxHeight: 200,
+                            },
+                          },
+                        },
+                      }}
+                      onChange={(e) => setLocationId(Number(e.target.value))}
                     >
-                      {city.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
+                      <MenuItem key="0" value="0">
+                        Tất cả tỉnh/thành phố
+                      </MenuItem>
+                      {cities
+                        ? cities.map((city: any) => (
+                          <MenuItem key={city.id} value={city.id}>
+                            {city.name}
+                          </MenuItem>
+                        ))
+                        : "Error to fetch cities"}
                     </TextField>
                   </div>
                 </div>
@@ -272,7 +281,7 @@ function SearchJob() {
                     <TextField
                       id="outlined-select-currency"
                       select
-                      defaultValue="0"
+                      defaultValue={String(expId)}
                       className="w-full"
                       InputProps={{
                         startAdornment: (
@@ -281,12 +290,27 @@ function SearchJob() {
                           </InputAdornment>
                         ),
                       }}
+                      SelectProps={{
+                        MenuProps: {
+                          PaperProps: {
+                            style: {
+                              maxHeight: 200,
+                            },
+                          },
+                        },
+                      }}
+                      onChange={(e) => setExpId(Number(e.target.value))}
                     >
-                      {exp_year.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
+                      <MenuItem key="0" value="0">
+                        Tất cả kinh nghiệm
+                      </MenuItem>
+                      {exp_year
+                        ? exp_year.map((exp: any) => (
+                          <MenuItem key={exp.id} value={exp.id}>
+                            {exp.name}
+                          </MenuItem>
+                        ))
+                        : "Error to fetch experience"}
                     </TextField>
                   </div>
 
@@ -326,7 +350,7 @@ function SearchJob() {
                     </TextField>
                   </div>
                 </div>
-                <Button className="btn-search" variant="contained">
+                <Button className="btn-search" variant="contained" onClick={handleSearch}>
                   Tìm kiếm
                 </Button>
               </form>
