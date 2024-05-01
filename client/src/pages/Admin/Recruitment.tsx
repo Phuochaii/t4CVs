@@ -218,17 +218,17 @@ function Recruitment() {
     getAllRecruitments();
   }, []);
   return (
-    <div className="flex-grow bg-green-400">
+    <div className="flex-grow">
       <h1 className="p-4 text-xl font-bold text-black bg-white">
         Quản lý Tin tuyển dụng
       </h1>
-      <div className="flex flex-col items-start justify-center gap-8 p-4">
-        <div className="flex items-start w-full gap-1">
+      <div className="flex flex-col items-start justify-center gap-8 p-8">
+        <div className="flex items-start w-full gap-2">
           {filteredStatuses.map((status, key) => {
             return (
               <div
                 className={clsx(
-                  "px-2 py-1 rounded-full items-center text-[12px] cursor-pointer flex gap-[4px]",
+                  "px-2 py-1 rounded-full items-center text-[12px] cursor-pointer flex gap-[6px]",
                   selectedStatus === key
                     ? "bg-green-500 text-white"
                     : "bg-slate-300"
@@ -237,7 +237,7 @@ function Recruitment() {
                 onClick={() => setSelectedStatus(key)}
               >
                 {status}
-                <span className="flex items-center justify-center w-5 h-5 text-white bg-red-500 rounded-full">
+                <span className="flex items-center justify-center w-6 h-6 text-white bg-red-500 rounded-full">
                   {data.reduce(
                     (accumulator, currentJobPost) =>
                       (accumulator +=

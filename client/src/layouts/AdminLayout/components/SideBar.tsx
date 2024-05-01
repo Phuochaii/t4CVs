@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Eye, CreditCard, Building2 } from "lucide-react";
+import { Eye, CreditCard, File } from "lucide-react";
 import GradientIcon from "./GradientIcon";
 import clsx from "clsx";
 
@@ -10,21 +10,21 @@ interface SidebarProps {
 const links = [
   {
     name: "Overview",
-    path: "/admin",
+    path: "/admin/overview",
     icon: Eye,
     iconComponent: <Eye className="text-white" />,
   },
   {
     name: "Campaign",
-    path: "/admin/compaign",
+    path: "/admin/campaign",
     icon: CreditCard,
     iconComponent: <CreditCard className="text-white" />,
   },
   {
-    name: "Company",
-    path: "/admin/company",
-    icon: Building2,
-    iconComponent: <Building2 className="text-white" />,
+    name: "Recruitment",
+    path: "/admin/recruitment",
+    icon: File,
+    iconComponent: <File className="text-white" />,
   },
 ];
 

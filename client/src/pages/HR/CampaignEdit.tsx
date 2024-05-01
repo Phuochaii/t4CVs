@@ -109,7 +109,7 @@ function RecruitmentDisplaySection() {
   );
 }
 
-function CompaignEdit() {
+function CampaignEdit() {
   const { state } = useLocation();
   const compaign: CampaignType = state;
   const [openSection, setOpenSection] = useState(-1);
@@ -189,4 +189,4 @@ function CompaignEdit() {
   );
 }
 
-export default CompaignEdit;
+export default CampaignEdit;
