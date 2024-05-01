@@ -182,9 +182,9 @@ function SearchJob() {
   const url = useLocation();
   const searchParams = new URLSearchParams(url.search);
 
-  const locationId = Number(searchParams.get('locationId')) ?? 0;
-  const expId = Number(searchParams.get('expId')) ?? 0;
-  const titleRecruitment = searchParams.get('titleRecruitment') ?? "";
+  const locationId = Number(searchParams.get("locationId")) ?? 0;
+  const expId = Number(searchParams.get("expId")) ?? 0;
+  const titleRecruitment = searchParams.get("titleRecruitment") ?? "";
 
   const [isActive, setIsActive] = useState(false);
   const [iconDirection, setIconDirection] = useState("down");
@@ -200,10 +200,10 @@ function SearchJob() {
       page: page,
       titleRecruitment: titleRecruitment,
       locationId: locationId,
-      expId: expId
+      expId: expId,
     }).then((response) => {
       console.log(response);
-      
+
       setJobResult(response.data);
       setTotalPage(response.total_pages);
       setTotalJob(response.total);
@@ -482,9 +482,7 @@ function SearchJob() {
                             <div
                               key={item.id}
                               onClick={() => {
-                                navigation("/detail-job", {
-                                  state: { id: item.id },
-                                });
+                                navigation(`/detail-job/${item.id}`);
                               }}
                               className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3"
                             >
@@ -519,14 +517,16 @@ function SearchJob() {
                                 </div>
                                 <div className="flex flex-col space-y-2">
                                   <div className="flex flex-row">
-                                    {item.fields.map((e: any, index: number) => (
-                                      <div
-                                        className="job-sub-detail job-location text-xs"
-                                        key={index}
-                                      >
-                                        {e.name}
-                                      </div>
-                                    ))}
+                                    {item.fields.map(
+                                      (e: any, index: number) => (
+                                        <div
+                                          className="job-sub-detail job-location text-xs"
+                                          key={index}
+                                        >
+                                          {e.name}
+                                        </div>
+                                      )
+                                    )}
                                   </div>
                                   <div className="flex flex-row space-x-1">
                                     <span className="job-sub-detail job-remaining-application-days text-xs">
@@ -537,7 +537,6 @@ function SearchJob() {
                                     </span>
                                   </div>
                                 </div>
-
 
                                 <div className="job-actions row-start-4 flex items-center justify-end">
                                   <span className="btn-apply mr-2">

@@ -45,7 +45,7 @@ const routes: RouteItem[] = [
     component: User.YourApplications,
     layout: UserLayout,
   },// hùng
-  { path: "/detail-job", component: User.ApplyCV, layout: UserLayout },//khoa
+  { path: "/detail-job/:id", component: User.ApplyCV, layout: UserLayout },//khoa
   { path: "/create-cv", component: User.CreateCV, layout: UserLayout },//
   { path: "/edit-cv", component: User.EditCV, layout: UserLayout },//
   { path: "/template-cv", component: User.TemplateCV, layout: UserLayout }, //nguyên
