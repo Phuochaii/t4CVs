@@ -15,7 +15,7 @@ const links = [
     iconComponent: <Eye className="text-white" />,
   },
   {
-    name: "Compaign",
+    name: "Campaign",
     path: "/admin/compaign",
     icon: CreditCard,
     iconComponent: <CreditCard className="text-white" />,

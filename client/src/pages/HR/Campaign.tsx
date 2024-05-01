@@ -3,7 +3,7 @@ import { ChevronDown, Search } from "lucide-react";
 
 import { useState, useEffect } from "react";
 import { CompaignTable } from "../../shared/components/compaign-table";
-import { Compaign as CompaignType } from "../../shared/types/Compaign.type";
+import { Campaign as CampaignType } from "../../shared/types/Campaign.type";
 import axios from "axios";
 
 interface CompaignFromServer {
@@ -13,8 +13,8 @@ interface CompaignFromServer {
   createdAt: string;
 }
 
-function Compaign() {
-  const [campaigns, setCompaigns] = useState<CompaignType[]>([]);
+function Campaign() {
+  const [campaigns, setCompaigns] = useState<CampaignType[]>([]);
 
   useEffect(() => {
     const getAllCompaigns = async () => {
@@ -24,7 +24,7 @@ function Compaign() {
       if (response.status === 200) {
         const data = response.data.data;
         const rawCompaigns = data.map((item: CompaignFromServer) => {
-          const rawCompaign: CompaignType = {
+          const rawCompaign: CampaignType = {
             compaignName: item.name,
             compaignId: item.id,
             recruimentId: item.id,
@@ -74,4 +74,4 @@ function Compaign() {
   );
 }
 
-export default Compaign;
+export default Campaign;

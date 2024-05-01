@@ -95,7 +95,7 @@ function Overview() {
           percent={11.8}
         />
         <OverviewCard
-          title="Total Number of Compaign"
+          title="Total Number of Campaign"
           number={40000}
           percent={11.8}
         />

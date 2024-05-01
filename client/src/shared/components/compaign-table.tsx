@@ -1,11 +1,11 @@
 import { SetStateAction, useState } from "react";
 // import Switch from "../../shared/components/CustomSwitch";
 import { Link } from "react-router-dom";
-import { Compaign } from "../types/Compaign.type";
+import { Campaign } from "../types/Campaign.type";
 
 export interface CompaignTableProps {
-  data: Compaign[];
-  setData: React.Dispatch<SetStateAction<Compaign[]>>;
+  data: Campaign[];
+  setData: React.Dispatch<SetStateAction<Campaign[]>>;
 }
 export const CompaignTableHeaders = () => {
   return (
@@ -27,12 +27,12 @@ export const CompaignTableHeaders = () => {
 };
 
 interface CompaignTableRowProps {
-  data: Compaign;
+  data: Campaign;
 }
 
 export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [compaign] = useState<Compaign>(data);
+  const [compaign] = useState<Campaign>(data);
   return (
     <tr
       className="align-top hover:bg-green-100 bg-slate-50"

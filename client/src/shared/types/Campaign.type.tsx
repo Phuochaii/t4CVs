@@ -1,6 +1,6 @@
 import { CV } from "./CV.type";
 
-export interface Compaign {
+export interface Campaign {
   compaignName: string;
   compaignId: number;
   cvs: CV[];

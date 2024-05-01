@@ -56,7 +56,7 @@ const routes: RouteItem[] = [
 
 
   // HR PAGES - Yến, Thịnh, Thức
-  { path: "/hr/approve", component: HR.ReceiveCV, layout: HRLayout }, // yến  { path:"/hr/compaign", component: HR.Compaign, layout: HRLayout},
+  { path: "/hr/approve", component: HR.ReceiveCV, layout: HRLayout }, // yến  { path:"/hr/compaign", component: HR.Campaign, layout: HRLayout},
   { path:"/hr/compaign-edit/:id", component: HR.CompaignEdit, layout: HRLayout},
   { path:"/hr/recruitment", component: HR.Recruitment, layout: HRLayout},
 
@@ -72,7 +72,7 @@ const routes: RouteItem[] = [
   
   // ADMIN
   { path: "/admin/company", component: Admin.Company, layout: AdminLayout }, // thuc
-  {path: "/admin/compaign",component: Admin.Compaign,layout: AdminLayout,}, // thuc
+  {path: "/admin/compaign",component: Admin.Campaign,layout: AdminLayout,}, // thuc
 
 
   // HR
@@ -85,7 +85,7 @@ const routes: RouteItem[] = [
   { path: "/hr/verify-account/1", component: HR.VerifyAccount.Page1, layout: HRLayout }, // thinh
   { path: "/hr/verify-account/2", component: HR.VerifyAccount.Page2, layout: HRLayout }, // thinh
 
-  { path: "/hr/compaign", component: HR.Compaign, layout: HRLayout }, // thuc
+  { path: "/hr/compaign", component: HR.Campaign, layout: HRLayout }, // thuc
 
   { path: "/hr/compain-edit/:id", component: HR.CompaignEdit, layout: HRLayout }, // thuc
 

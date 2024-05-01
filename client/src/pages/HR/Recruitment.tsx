@@ -179,20 +179,7 @@ interface RecruitmentFromServer {
 }
 
 function Recruitment() {
-  const [data, setData] = useState<RecruitmentJobPost[]>([
-    {
-      recruitmentName: "Tin Tuyển dụng Nhân viên Marketing",
-      recruitmentStatus: "Dừng hiển thị",
-      recruitmentId: 416527,
-      compaignName: "Tuyển dụng Nhân viên Marketing",
-    },
-    {
-      recruitmentName: "Tuyển dụng Nhân viên Telesales",
-      recruitmentStatus: "Đang xét duyệt",
-      recruitmentId: 416524,
-      compaignName: "Tuyển dụng Nhân viên Telesales",
-    },
-  ]);
+  const [data, setData] = useState<RecruitmentJobPost[]>([]);
   const [selectedStatus, setSelectedStatus] = useState(0);
   const [filterKeyword, setFilterKeyword] = useState("");
 

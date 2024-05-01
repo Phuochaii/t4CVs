@@ -6,7 +6,7 @@ import {
   CircleAlert,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Compaign } from "../../shared/types/Compaign.type";
+import { Campaign as CampaignType } from "../../shared/types/Campaign.type";
 import { useState } from "react";
 import { statusColor } from "../../shared/types/RecruitmentStatus.type";
 import clsx from "clsx";
@@ -111,7 +111,7 @@ function RecruitmentDisplaySection() {
 
 function CompaignEdit() {
   const { state } = useLocation();
-  const compaign: Compaign = state;
+  const compaign: CampaignType = state;
   const [openSection, setOpenSection] = useState(-1);
   const sections = [
     {
