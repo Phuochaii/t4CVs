@@ -6,10 +6,12 @@ import {
   CircleAlert,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Campaign as CampaignType } from "../../shared/types/Campaign.type";
-import { useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { statusColor } from "../../shared/types/RecruitmentStatus.type";
 import clsx from "clsx";
+import { RecruitmentJobPost } from "../../shared/types/Recruitment.type";
+import axios from "axios";
+import { getJobById } from "../../shared/utils/helper";
 
 function RecruitmentDisplayTable() {
   return (
@@ -34,7 +36,17 @@ function RecruitmentDisplayTable() {
   );
 }
 
-function RecruitmentDisplaySection() {
+interface RecruitmentDisplayProps {
+  recruitment: RecruitmentJobPost;
+  refresh: boolean;
+  setRefresh: React.Dispatch<SetStateAction<boolean>>;
+}
+
+function RecruitmentDisplaySection({
+  recruitment,
+  refresh,
+  setRefresh,
+}: RecruitmentDisplayProps) {
   const [isDisplay, setIsDisplay] = useState(true);
   return (
     <div className="flex flex-col gap-4 p-4 bg-white">
@@ -50,7 +62,17 @@ function RecruitmentDisplaySection() {
       <div className="flex flex-col gap-2">
         <div
           className="flex items-center gap-2 cursor-pointer"
-          onClick={() => setIsDisplay(true)}
+          onClick={async () => {
+            const response = await axios.post(
+              "http://localhost:3000/job/update-status",
+              {
+                id: recruitment.id,
+                status: true,
+              }
+            );
+            if (response.status === 201) setIsDisplay(true);
+            setRefresh(!refresh);
+          }}
         >
           {isDisplay ? (
             <div className="bg-green-500 border rounded-full">
@@ -68,8 +90,16 @@ function RecruitmentDisplaySection() {
         </div>
         <div
           className="flex items-center gap-2 cursor-pointer"
-          onClick={() => {
-            setIsDisplay(false);
+          onClick={async () => {
+            const response = await axios.post(
+              "http://localhost:3000/job/update-status",
+              {
+                id: recruitment.id,
+                status: false,
+              }
+            );
+            if (response.status === 201) setIsDisplay(false);
+            setRefresh(!refresh);
           }}
         >
           {!isDisplay ? (
@@ -111,28 +141,54 @@ function RecruitmentDisplaySection() {
 
 function CampaignEdit() {
   const { state } = useLocation();
-  const compaign: CampaignType = state;
+  const [recruitment, setRecruitment] =
+    useState<RecruitmentJobPost>(state);
   const [openSection, setOpenSection] = useState(-1);
+  const [refresh, setRefresh] = useState(false);
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await getJobById(recruitment.id);
+      setRecruitment({
+        ...response,
+        createdAt: new Date(response.createAt),
+        updatedAt: new Date(response.updateAt),
+        expiredDate: new Date(response.expiredDate),
+        campaign: recruitment.campaign,
+      });
+    };
+    getData();
+  }, [refresh]);
   const sections = [
     {
       title: "Nội dung tuyển dụng",
       sectionComponent: <></>,
       subtitle: (
-        <h2 className="text-black ">{compaign.compaignName}</h2>
+        <h2 className="text-black ">{recruitment.campaign.name}</h2>
       ),
     },
     {
       title: "Hiển thị tin tuyển dụng",
-      sectionComponent: <RecruitmentDisplaySection />,
+      sectionComponent: (
+        <RecruitmentDisplaySection
+          recruitment={recruitment}
+          refresh={refresh}
+          setRefresh={setRefresh}
+        />
+      ),
       subtitle: (
         <span
           className={clsx(
             "p-1 font-semibold",
-            statusColor[compaign.recruitmentStatus].bg,
-            statusColor[compaign.recruitmentStatus].text
+            statusColor[
+              recruitment.status ? "Đang hiển thị" : "Dừng hiển thị"
+            ].bg,
+            statusColor[
+              recruitment.status ? "Đang hiển thị" : "Dừng hiển thị"
+            ].text
           )}
         >
-          {compaign.recruitmentStatus}
+          {recruitment.status ? "Đang hiển thị" : "Dừng hiển thị"}
         </span>
       ),
     },
@@ -153,7 +209,7 @@ function CampaignEdit() {
           <ArrowLeft size={16} /> Quay lại
         </button>
         <h2 className="font-bold capitalize">
-          {compaign.recruitment}
+          {recruitment.titleRecruitment}
         </h2>
       </div>
       <div className="w-[90%] flex flex-col gap-8 p-4 justify-center">

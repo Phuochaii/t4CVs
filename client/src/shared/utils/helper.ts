@@ -64,3 +64,9 @@ export async function getJobByCampaignId(campaignId: number) {
     const rawJob: RecruitmentFromServer = response.data;
     return rawJob;
 }
+
+export async function getJobById(id: number) {
+    const response = await axios.get(`${serverURL}/job/${id}`);
+    const rawJob: RecruitmentFromServer = response.data;
+    return rawJob;
+}
