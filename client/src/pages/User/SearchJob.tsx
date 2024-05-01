@@ -31,42 +31,6 @@ import { Tooltip } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DefaultPagination } from "../../shared/components/default-pagination";
 
-const city = [
-  {
-    value: "0",
-    label: "Tất cả tỉnh/thành phố",
-  },
-  {
-    value: "1",
-    label: "EUR",
-  },
-  {
-    value: "2",
-    label: "BTC",
-  },
-  {
-    value: "3",
-    label: "JPY",
-  },
-];
-const exp_year = [
-  {
-    value: "0",
-    label: "Tất cả kinh nghiệm",
-  },
-  {
-    value: "1",
-    label: "1 năm",
-  },
-  {
-    value: "2",
-    label: "2 năm",
-  },
-  {
-    value: "3",
-    label: "3 năm",
-  },
-];
 const salary_range = [
   {
     value: "0",
@@ -178,13 +142,19 @@ const news_type = [
 
 function SearchJob() {
   const navigation = useNavigate();
-
   const url = useLocation();
-  const searchParams = new URLSearchParams(url.search);
 
-  const locationId = Number(searchParams.get('locationId')) ?? 0;
-  const expId = Number(searchParams.get('expId')) ?? 0;
-  const titleRecruitment = searchParams.get('titleRecruitment') ?? "";
+  const searchParams = new URLSearchParams(url.search);
+  const newLocationId = Number(searchParams.get("locationId")) ?? 0;
+  const newExpId = Number(searchParams.get("expId")) ?? 0;
+  const newTitleRecruitment = searchParams.get("titleRecruitment") ?? "";
+
+  const [cities, setCities] = useState<any[]>([]);
+  const [exp_year, setExpYear] = useState<any[]>([]);
+
+  const [locationId, setLocationId] = useState(newLocationId);
+  const [expId, setExpId] = useState(newExpId);
+  const [titleRecruitment, setTitleRecruitment] = useState(newTitleRecruitment);
 
   const [isActive, setIsActive] = useState(false);
   const [iconDirection, setIconDirection] = useState("down");
@@ -195,22 +165,20 @@ function SearchJob() {
   const [totalPage, setTotalPage] = useState(1);
   const [page, setPage] = useState(1);
 
-  const searchJob = () => {
-    JobService.searchJob({
-      page: page,
-      titleRecruitment: titleRecruitment,
-      locationId: locationId,
-      expId: expId
-    }).then((response) => {
-      console.log(response);
-      
-      setJobResult(response.data);
-      setTotalPage(response.total_pages);
-      setTotalJob(response.total);
-    });
+  const fetchData = async () => {
+    try {
+      const locationResponse = await JobService.getAllLocation();
+      setCities(locationResponse);
+
+      const expResponse = await JobService.getAllExp();
+      setExpYear(expResponse);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   React.useEffect(() => {
+    fetchData();
     searchJob();
   }, []);
 
@@ -218,10 +186,33 @@ function SearchJob() {
     searchJob();
   }, [page]);
 
+  const searchJob = () => {
+    JobService.searchJob({
+      page: page,
+      titleRecruitment: titleRecruitment,
+      locationId: locationId,
+      expId: expId,
+    }).then((response) => {
+      console.log(response);
+
+      setJobResult(response.data);
+      setTotalPage(response.total_pages);
+      setTotalJob(response.total);
+    });
+  };
+
   const handleClick = () => {
     setIsActive(!isActive);
     setIconDirection(iconDirection === "down" ? "up" : "down");
     setBoxOptionShow(!boxOptionShow);
+  };
+
+  const handleSearch = () => {
+    navigation(
+      `/results?locationId=${locationId}&expId=${expId}&titleRecruitment=${titleRecruitment}`
+    );
+
+    searchJob();
   };
 
   return (
@@ -236,11 +227,14 @@ function SearchJob() {
                     <FormControl>
                       <OutlinedInput
                         id="outlined-adornment-amount"
+                        placeholder="Vị trí công việc"
+                        value={titleRecruitment}
                         startAdornment={
                           <InputAdornment position="start">
                             <MagnifyingGlassIcon className="w-6" />
                           </InputAdornment>
                         }
+                        onChange={(e) => setTitleRecruitment(e.target.value)}
                       />
                     </FormControl>
                   </div>
@@ -248,7 +242,7 @@ function SearchJob() {
                     <TextField
                       id="outlined-select-currency"
                       select
-                      defaultValue="0"
+                      defaultValue={String(locationId)}
                       className="w-full"
                       InputProps={{
                         startAdornment: (
@@ -257,12 +251,27 @@ function SearchJob() {
                           </InputAdornment>
                         ),
                       }}
+                      SelectProps={{
+                        MenuProps: {
+                          PaperProps: {
+                            style: {
+                              maxHeight: 200,
+                            },
+                          },
+                        },
+                      }}
+                      onChange={(e) => setLocationId(Number(e.target.value))}
                     >
-                      {city.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
+                      <MenuItem key="0" value="0">
+                        Tất cả tỉnh/thành phố
+                      </MenuItem>
+                      {cities
+                        ? cities.map((city: any) => (
+                            <MenuItem key={city.id} value={city.id}>
+                              {city.name}
+                            </MenuItem>
+                          ))
+                        : "Error to fetch cities"}
                     </TextField>
                   </div>
                 </div>
@@ -272,7 +281,7 @@ function SearchJob() {
                     <TextField
                       id="outlined-select-currency"
                       select
-                      defaultValue="0"
+                      defaultValue={String(expId)}
                       className="w-full"
                       InputProps={{
                         startAdornment: (
@@ -281,12 +290,27 @@ function SearchJob() {
                           </InputAdornment>
                         ),
                       }}
+                      SelectProps={{
+                        MenuProps: {
+                          PaperProps: {
+                            style: {
+                              maxHeight: 200,
+                            },
+                          },
+                        },
+                      }}
+                      onChange={(e) => setExpId(Number(e.target.value))}
                     >
-                      {exp_year.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
+                      <MenuItem key="0" value="0">
+                        Tất cả kinh nghiệm
+                      </MenuItem>
+                      {exp_year
+                        ? exp_year.map((exp: any) => (
+                            <MenuItem key={exp.id} value={exp.id}>
+                              {exp.name}
+                            </MenuItem>
+                          ))
+                        : "Error to fetch experience"}
                     </TextField>
                   </div>
 
@@ -326,7 +350,11 @@ function SearchJob() {
                     </TextField>
                   </div>
                 </div>
-                <Button className="btn-search" variant="contained">
+                <Button
+                  className="btn-search"
+                  variant="contained"
+                  onClick={handleSearch}
+                >
                   Tìm kiếm
                 </Button>
               </form>
@@ -482,9 +510,7 @@ function SearchJob() {
                             <div
                               key={item.id}
                               onClick={() => {
-                                navigation("/detail-job", {
-                                  state: { id: item.id },
-                                });
+                                navigation(`/detail-job/${item.id}`);
                               }}
                               className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3"
                             >
@@ -497,38 +523,49 @@ function SearchJob() {
                                   }
                                 />
                               </div>
-                              <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
-                                <span className="job-title text-black font-semibold col-span-3">
-                                  {item.titleRecruitment}
-                                </span>
-                                <span className="job-company-name text-slate-600 text-sm col-span-3">
-                                  {item.company?.name
-                                    ? item.company?.name
-                                    : "no name"}
-                                </span>
-                                <span className="row-start-4 col-span-3 flex items-center">
-                                  {item.fields.map((e: any, index: number) => (
-                                    <span
-                                      className="job-sub-detail job-location text-xs"
-                                      key={index}
-                                    >
-                                      {e.name}
+                              <div className="job-detail w-full h-full">
+                                <div className="flex flex-col">
+                                  <div className="flex flex-row justify-between">
+                                    <span className="job-title text-black font-semibold col-span-3">
+                                      {item.titleRecruitment}
                                     </span>
-                                  ))}
-                                  <span className="job-sub-detail job-remaining-application-days text-xs">
-                                    Hạn nộp: {item.expiredDate.split("T")[0]}
+                                    <div className="job-salary col-start-4 flex items-center">
+                                      <CurrencyDollarIcon className="w-5 mr-2" />
+                                      <strong className="salary-count">
+                                        {item.salaryMin} - {item.salaryMax}{" "}
+                                        {item.currency.name}
+                                      </strong>
+                                    </div>
+                                  </div>
+                                  <span className="job-company-name text-slate-600 text-sm col-span-3">
+                                    {item.company?.name
+                                      ? item.company?.name
+                                      : "no name"}
                                   </span>
-                                  <span className="job-sub-detail job-update-time text-xs">
-                                    Cập nhật {item.updateAt.split("T")[0]}
-                                  </span>
-                                </span>
-                                <div className="job-salary col-start-4 flex items-center">
-                                  <CurrencyDollarIcon className="w-5 mr-2" />
-                                  <strong className="salary-count">
-                                    {item.salaryMin} - {item.salaryMax}{" "}
-                                    {item.currency.name}
-                                  </strong>
                                 </div>
+                                <div className="flex flex-col space-y-2">
+                                  <div className="flex flex-row">
+                                    {item.fields.map(
+                                      (e: any, index: number) => (
+                                        <div
+                                          className="job-sub-detail job-location text-xs"
+                                          key={index}
+                                        >
+                                          {e.name}
+                                        </div>
+                                      )
+                                    )}
+                                  </div>
+                                  <div className="flex flex-row space-x-1">
+                                    <span className="job-sub-detail job-remaining-application-days text-xs">
+                                      Hạn nộp: {item.expiredDate.split("T")[0]}
+                                    </span>
+                                    <span className="job-sub-detail job-update-time text-xs">
+                                      Cập nhật {item.updateAt.split("T")[0]}
+                                    </span>
+                                  </div>
+                                </div>
+
                                 <div className="job-actions row-start-4 flex items-center justify-end">
                                   <span className="btn-apply mr-2">
                                     Ứng tuyển

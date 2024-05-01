@@ -4,9 +4,7 @@ import { Clock, Mail, Phone } from "lucide-react";
 import * as HRModule from "../../../../../../modules/hr-module";
 import { DefaultPagination } from "../../../../../../shared/components/default-pagination";
 
-function Tab1() {
-  const hrId = "1";
-
+function Tab1({ compaignId, hrId }: { compaignId: string; hrId: string }) {
   const [listCV, setListCV] = React.useState([]);
   const [statusMode, setStatusMode] = React.useState<boolean | undefined>(
     undefined
@@ -14,24 +12,24 @@ function Tab1() {
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
 
-  const fetchApplication = async (hrId: string) => {
+  const fetchApplication = async () => {
     HRModule.getApplicationByCampaignIdHRId({
-      campaignId: "3",
+      campaignId: compaignId,
       hrId: hrId,
       status: statusMode,
       page: page,
     }).then((res) => {
       console.log(res);
-      setListCV(res.applications);
+      setListCV(res.applications || []);
       setTotalPage(res.totalPage);
     });
   };
 
   React.useEffect(() => {
-    fetchApplication(hrId);
+    fetchApplication();
   }, []);
   React.useEffect(() => {
-    fetchApplication(hrId);
+    fetchApplication();
   }, [statusMode, page]);
   return (
     <div>
@@ -142,7 +140,7 @@ function Tab1() {
                             applicationId: item.id,
                           });
 
-                          fetchApplication(hrId);
+                          fetchApplication();
                           await HRModule.getCVByApplicationID({
                             applicationId: 3,
                           }).then((res) => {

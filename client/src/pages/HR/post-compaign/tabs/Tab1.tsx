@@ -461,6 +461,7 @@ function PostCompaign1({
     setUserChoice(choice);
   };
   const gender = [
+    { value: "Không quan trọng", label: "Không quan trọng" },
     { value: "Nam", label: "Nam" },
     { value: "Nữ", label: "Nữ" }
   ]

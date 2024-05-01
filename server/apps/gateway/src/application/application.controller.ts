@@ -76,7 +76,7 @@ export class ApplicationController {
     return 'Success';
   }
 
-  @Get('/hr/:hrId')
+ @Get('/hr/:hrId')
   async findAll(
     @Param('hrId') hrId: number,
     @Query('page') page: number = 1,
@@ -111,7 +111,14 @@ export class ApplicationController {
     if (campaignId) {
       campaignIds = [campaignId];
     }
-    return this.applicationService.findAll(page, limit, campaignIds, status);
+    const { applications = [], ...data } = await firstValueFrom(
+      this.applicationService.findAll(page, limit, campaignIds, status),
+    );
+
+    return {
+      ...data,
+      applications,
+    };
   }
 
   @Get(':id/cv')

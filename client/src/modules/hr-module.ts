@@ -4,12 +4,12 @@ import axios from 'axios';
 const getApplicationByCampaignIdHRId = async ({campaignId, hrId, status, page=1 }: {campaignId : string,
 hrId: string,
 status?: boolean, page?: number}) => {
-  // hrId=""
+  console.log(hrId, !!hrId);
+  
   console.log(`http://localhost:3000/application/hr/${hrId}?page=${page}&limit=5&campaignId=${campaignId}${status!=undefined ? `&status=${status}`: ""}`);
   
   
-  const response = await axios.get(`http://localhost:3000/application?page=${page}&limit=5&campaignId=${campaignId}${status!=undefined ? `&status=${status}`: ""}`);
-  // const response = await axios.get(`http://localhost:3000/application/hr/${hrId}?page=${page}&limit=5&campaignId=${campaignId}${status!=undefined ? `&status=${status}`: ""}`);
+  const response = await axios.get(`http://localhost:3000/application/${hrId?`hr/${hrId}`:''}?page=${page}&limit=5&campaignId=${campaignId}${status!=undefined ? `&status=${status}`: ""}`);
   return response.data;
 };
 

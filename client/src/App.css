@@ -189,9 +189,9 @@
 .job-item-search-result .job-detail .job-sub-detail{
   padding: 5px;
   margin: 0 5px 0 0;
-  background-color: #E9EAEC;
+  background-color:rgb(187 247 208);
   border-radius: 5px;
-  color: rgba(0, 0, 0, 0.696);
+  color: rgb(21 128 61);
 }
 
 .job-item-search-result .job-detail .job-salary{

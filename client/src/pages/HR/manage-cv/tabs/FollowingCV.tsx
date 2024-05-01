@@ -3,8 +3,14 @@ import * as React from "react";
 import { DefaultPagination } from "../../../../shared/components/default-pagination";
 import * as HRModule from "../../../../modules/hr-module";
 
-function FollowingCV() {
-  const hrId = "1";
+function FollowingCV({
+  compaignId,
+  hrId,
+}: {
+  compaignId: string;
+  hrId: string;
+}) {
+  // const hrId = "1";
 
   const [listCV, setListCV] = React.useState<any>([]);
 
@@ -13,12 +19,12 @@ function FollowingCV() {
 
   const fetchApplication = async (hrId: string) => {
     HRModule.getApplicationByCampaignIdHRId({
-      campaignId: "3",
+      campaignId: compaignId,
       hrId: hrId,
       page: page,
     }).then((res) => {
       // console.log(res);
-      setListCV(res.applications);
+      setListCV(res.applications || []);
       setTotalPage(res.totalPage);
     });
   };

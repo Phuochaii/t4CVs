@@ -15,7 +15,13 @@ function Application({
   const [listCV, setListCV] = React.useState([]);
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
+  const [campaign, setCampaign] = React.useState<{name:string} | null>(null);
 
+  const fetchCompaign = async () => {
+    HRModule.getCampaignById({ id: compaignId }).then((res) => {
+      setCampaign(res);
+    });
+  }
   const fetchApplication = async () => {
     HRModule.getApplicationByCampaignIdHRId({
       campaignId: compaignId,
@@ -23,13 +29,14 @@ function Application({
       page: page,
     }).then((res) => {
       // console.log(res);
-      setListCV(res.applications);
+      setListCV(res.applications || []);
       setTotalPage(res.totalPage);
     });
   };
 
   React.useEffect(() => {
     fetchApplication();
+    fetchCompaign();
   }, []);
   React.useEffect(() => {
     fetchApplication();
@@ -65,7 +72,7 @@ function Application({
                   <p className="font-semibold">{item.fullname}</p>
                 </td>
                 <td>
-                  <p>fgvdfhujvhdfuicv</p>
+                  <p>{campaign?.name}</p>
                   <span>#{item.campaignId}</span>
                 </td>
                 <td>
@@ -114,17 +121,14 @@ function Application({
                 <td>
                   <button
                     onClick={async () => {
-                      console.log(item);
-                      HRModule.updateApplicationStatus({
+                      fetchApplication();
+                      const cv : {
+                        link: string;
+                      } = await HRModule.getCVByApplicationID({
                         applicationId: item.id,
                       });
-
+                      window.open(cv.link, "_blank", "noopener");
                       fetchApplication();
-                      await HRModule.getCVByApplicationID({
-                        applicationId: 3,
-                      }).then((res) => {
-                        window.open(res.link, "_blank", "noopener");
-                      });
                     }}
                     className="btn px-3 py-1 text-white rounded-md ml-5 bg-[#5EE199] hover:bg-green-500 transition ease-out duration-100"
                   >

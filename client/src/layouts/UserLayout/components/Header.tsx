@@ -58,7 +58,7 @@ function Header() {
     <header className="menu-top bg-white text-black">
       <div className=" px-8 flex flex-row justify-between items-center">
         <div className="main flex flex-row items-center gap-5">
-          <div className="logo w-52">
+          <div className="logo w-52" onClick={() => navigation("/")}>
             <img src="../../../images/topcv-logo.png" alt="" />
           </div>
           <nav className="nav-menu">

@@ -54,12 +54,10 @@ function UserLogIn() {
         account.role === "user"
       ) {
         console.log("Đăng nhập thành công với email:", formData.email);
-        // store in local storage
         localStorage.setItem("user", JSON.stringify(account));
-        navigation("/");
-        // setError("");
-        // setShowError(false);
-        // setIsLoggedIn(true);
+        // navigation("/");
+        navigation(-1);
+        return;
       }
     });
 

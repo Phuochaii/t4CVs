@@ -39,7 +39,6 @@ export class JobService {
   async findJobByCampaignId(campaignId: number) {
     const result = await this.jobRepository.findOne({
       where: {
-        status: true,
         campaignId,
       },
       relations: [
@@ -116,12 +115,12 @@ export class JobService {
         ...query,
         salaryMin: MoreThanOrEqual(min),
         salaryMax: LessThanOrEqual(max),
-        expiredDate: MoreThan(new Date()),
+        expiredDate: MoreThanOrEqual(new Date()),
       },
       // skip,
       // take: limit,
       order: {
-        updateAt: 'ASC',
+        updateAt: 'DESC',
       },
       relations: [
         'major',
@@ -151,8 +150,8 @@ export class JobService {
     }
 
     const result: FindJobRespDTO = {
-      page,
-      limit,
+      page: parseInt(page),
+      limit: parseInt(limit),
       total: jobs.length,
       total_pages: Math.ceil(jobs.length / limit),
       data: jobs.slice(skip, skip + limit),
@@ -184,12 +183,12 @@ export class JobService {
         ...query,
         salaryMin: MoreThanOrEqual(min),
         salaryMax: LessThanOrEqual(max),
-        expiredDate: MoreThan(new Date()),
+        expiredDate: MoreThanOrEqual(new Date()),
       },
       // skip,
       // take: limit,
       order: {
-        updateAt: 'ASC',
+        updateAt: 'DESC',
       },
       relations: [
         'major',
@@ -217,8 +216,8 @@ export class JobService {
       jobs = jobLocation;
     }
     const result: FindJobRespDTO = {
-      page,
-      limit,
+      page: parseInt(page),
+      limit: parseInt(limit),
       total: jobs.length,
       total_pages: Math.ceil(jobs.length / limit),
       data: jobs.slice(skip, skip + limit),
@@ -248,7 +247,6 @@ export class JobService {
   async findJobById(id: number) {
     const result = await this.jobRepository.findOne({
       where: {
-        status: true,
         id,
       },
       relations: [
