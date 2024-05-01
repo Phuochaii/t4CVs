@@ -79,7 +79,7 @@ const routes: RouteItem[] = [
   { path: "/hr/news", component: HR.News, layout: HRLayout }, //khoa
 
   { path: "/hr/post-compaign", component: HR.PostJob, layout: HRLayout }, // thinh
-  { path: "/hr/post-compaign/data", component: HR.PostCompaign, layout: HRLayout }, // khoa + hùng
+  { path: "/hr/post-compaign/data/:id", component: HR.PostCompaign, layout: HRLayout }, // khoa + hùng
 
 
   { path: "/hr/verify-account/1", component: HR.VerifyAccount.Page1, layout: HRLayout }, // thinh
@@ -91,7 +91,7 @@ const routes: RouteItem[] = [
 
   { path: "/hr/recruitment", component: HR.Recruitment, layout: HRLayout },
 
-  { path: "/hr/manage-cv", component: HR.ManageCV, layout: HRLayout }, // yen
+  { path: "/hr/manage-cv/:id", component: HR.ManageCV, layout: HRLayout }, // yen
 
 
   { path: "/hr/help", component: HR.Support, layout: EmptyLayout }, // thinh

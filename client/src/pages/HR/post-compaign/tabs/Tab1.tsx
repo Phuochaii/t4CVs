@@ -16,6 +16,7 @@ import {
   Video,
 } from "lucide-react";
 import { SetStateAction, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import Select, { MultiValue, SingleValue } from "react-select";
 function PostCompaign1({
@@ -25,6 +26,7 @@ function PostCompaign1({
   next: React.MouseEventHandler<HTMLButtonElement>;
   previous: React.MouseEventHandler<HTMLButtonElement>;
 }) {
+  const { id: compaignId } = useParams();
   const [selectedOptions, setSelectedOptions] = useState<MultiValue<{
     value: string;
     label: string;
@@ -98,16 +100,16 @@ function PostCompaign1({
   const [showError, setShowError] = useState(true);
   const [showDescriptionError, setDescritionError] = useState(true);
   const [showRequirement, setRequirementError] = useState(true);
-  const [address, setAddress] = useState('');
-  const [jobDescription, setJobDescription] = useState('');
-  const [description, setDescription] = useState('');
-  const [requirement, setRequirement] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [salary, setSalary] = useState('');
-  const [title, setTitle] = useState('');
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [date, setDate] = useState('');
+  const [address, setAddress] = useState("");
+  const [jobDescription, setJobDescription] = useState("");
+  const [description, setDescription] = useState("");
+  const [requirement, setRequirement] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [salary, setSalary] = useState("");
+  const [title, setTitle] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [date, setDate] = useState("");
   const [titleError, setTitleError] = useState(true);
   const [item, setItem] = useState({
     titleRecruitment: "",
@@ -131,63 +133,83 @@ function PostCompaign1({
     requirement: "",
     skills: "",
   });
-  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
-    console.log(fieldOptions)
+  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = async (
+    event
+  ) => {
+    console.log(fieldOptions);
     event.preventDefault();
-    if (!titleError && !showError && !showDescriptionError && !showRequirement
-      && !fieldError && !careerError &&
-      !quantityError && !jobTypeError && !genderError && !levelError && !expError && !currencyError
-      && !salaryError && !cityError && !districtError && !addressError &&
-      !dateError && !nameError && !phoneError && !emailError && !skillError) {
+    if (
+      !titleError &&
+      !showError &&
+      !showDescriptionError &&
+      !showRequirement &&
+      !fieldError &&
+      !careerError &&
+      !quantityError &&
+      !jobTypeError &&
+      !genderError &&
+      !levelError &&
+      !expError &&
+      !currencyError &&
+      !salaryError &&
+      !cityError &&
+      !districtError &&
+      !addressError &&
+      !dateError &&
+      !nameError &&
+      !phoneError &&
+      !emailError &&
+      !skillError
+    ) {
       let updatedItem = { ...item };
 
       // Modify each property
       updatedItem.titleRecruitment = title;
       updatedItem.majorId = Number.parseInt(careerOptions?.value!);
-      updatedItem.fieldsId = fieldOptions ? fieldOptions.map(option => parseInt(option.value)) : []; // Replace [2, 3] with your desired array of field IDs
+      updatedItem.fieldsId = fieldOptions
+        ? fieldOptions.map((option) => parseInt(option.value))
+        : []; // Replace [2, 3] with your desired array of field IDs
       updatedItem.typeId = Number.parseInt(jobTypeOptions?.value!);
       updatedItem.currencyId = Number.parseInt(currencyOptions?.value!);
       updatedItem.levelId = Number.parseInt(levelOptions?.value!);
-      updatedItem.campaignId = 123;
+      updatedItem.campaignId = Number.parseInt(compaignId as string) as number;
       updatedItem.companyId = 1;
       updatedItem.salaryMin = Number.parseInt(salary);
       updatedItem.salaryMax = Number.parseInt(salary);
       updatedItem.expId = Number.parseInt(expOptions?.value!);
-      updatedItem.locationsId = cityOption ? cityOption.map(option => parseInt(option.value)) : []; // Replace [4, 5] with your desired array of location IDs
+      updatedItem.locationsId = cityOption
+        ? cityOption.map((option) => parseInt(option.value))
+        : []; // Replace [4, 5] with your desired array of location IDs
       updatedItem.expiredDate = date;
       updatedItem.quantity = Number.parseInt(quantity);
       updatedItem.jobSchedule = "8:00am-17:00pm T2-T6";
       updatedItem.gender = genderOptions?.value!;
-      updatedItem.description =
-        jobDescription;
-      updatedItem.benefit =
-        description;
-      updatedItem.requirement =
-        requirement;
+      updatedItem.description = jobDescription;
+      updatedItem.benefit = description;
+      updatedItem.requirement = requirement;
       updatedItem.skills = "Java, Python, JavaScript, SQL";
 
       // Log the updated item
       console.log(updatedItem);
       try {
-        const response = await fetch('http://localhost:3000/job/create', {
-          method: 'POST',
+        const response = await fetch("http://localhost:3000/job/create", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             // Add any other headers if needed
           },
           body: JSON.stringify(updatedItem), // Convert item to JSON string
         });
 
         if (!response.ok) {
-          throw new Error('Failed to post data to API');
+          throw new Error("Failed to post data to API");
         }
 
-        console.log('Data posted successfully');
+        console.log("Data posted successfully");
       } catch (error) {
-        console.error('Error posting data:', error);
+        console.error("Error posting data:", error);
       }
-      next(event)
-
+      next(event);
     } else {
       //Do nothing
     }
@@ -199,7 +221,7 @@ function PostCompaign1({
     } else {
       setTitleError(false);
     }
-  }
+  };
   const handleDateError = (value: SetStateAction<string>) => {
     setDate(value);
     if (value.length === 0) {
@@ -207,7 +229,7 @@ function PostCompaign1({
     } else {
       setDateError(false);
     }
-  }
+  };
   const handleNameError = (value: SetStateAction<string>) => {
     setName(value);
     if (value.length === 0) {
@@ -215,7 +237,7 @@ function PostCompaign1({
     } else {
       setNameError(false);
     }
-  }
+  };
   const handlePhoneError = (value: SetStateAction<string>) => {
     setPhone(value);
     if (value.length === 0) {
@@ -223,7 +245,7 @@ function PostCompaign1({
     } else {
       setPhoneError(false);
     }
-  }
+  };
   const handleAddressError = (value: SetStateAction<string>) => {
     setAddress(value);
     if (value.length === 0) {
@@ -231,7 +253,7 @@ function PostCompaign1({
     } else {
       setAddressError(false);
     }
-  }
+  };
   const handleQuantityError = (value: SetStateAction<string>) => {
     setQuantity(value);
     if (value.length === 0) {
@@ -239,7 +261,7 @@ function PostCompaign1({
     } else {
       setQuantityError(false);
     }
-  }
+  };
   const handleSalaryError = (value: SetStateAction<string>) => {
     setSalary(value);
     if (value.length === 0) {
@@ -247,98 +269,120 @@ function PostCompaign1({
     } else {
       setSalaryError(false);
     }
-  }
-  const handleJobTypeError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
-    setjobTypeOptions(value)
+  };
+  const handleJobTypeError = (
+    value: SetStateAction<SingleValue<{ value: string; label: string }>>
+  ) => {
+    setjobTypeOptions(value);
     if (value !== null) {
       setJobTypeError(false);
     } else {
       setJobTypeError(true);
     }
-  }
-  const handleEmailError = (value: SetStateAction<MultiValue<{ value: string; label: string }> | null>) => {
-    setEmailOptions(value)
+  };
+  const handleEmailError = (
+    value: SetStateAction<MultiValue<{ value: string; label: string }> | null>
+  ) => {
+    setEmailOptions(value);
     if (value?.length !== 0) {
       setEmailError(false);
     } else {
       setEmailError(true);
     }
-  }
-  const handleCityError = (value: SetStateAction<MultiValue<{ value: string; label: string }> | null>) => {
-    setCityOptions(value)
+  };
+  const handleCityError = (
+    value: SetStateAction<MultiValue<{ value: string; label: string }> | null>
+  ) => {
+    setCityOptions(value);
     if (value?.length !== 0) {
       setCityError(false);
     } else {
       setCityError(true);
     }
-  }
-  const handleDistrictError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
-    setDistrictOptions(value)
+  };
+  const handleDistrictError = (
+    value: SetStateAction<SingleValue<{ value: string; label: string }>>
+  ) => {
+    setDistrictOptions(value);
     if (value !== null) {
       setDistrictError(false);
     } else {
       setDistrictError(true);
     }
-  }
+  };
   //
-  const handleGenderError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
-    setGenderOptions(value)
+  const handleGenderError = (
+    value: SetStateAction<SingleValue<{ value: string; label: string }>>
+  ) => {
+    setGenderOptions(value);
     if (false !== null) {
       setGenderError(false);
     } else {
       setGenderError(true);
     }
-  }
-  const handleLevelError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
-    setLevelOptions(value)
+  };
+  const handleLevelError = (
+    value: SetStateAction<SingleValue<{ value: string; label: string }>>
+  ) => {
+    setLevelOptions(value);
     if (value !== null) {
       setLevelError(false);
     } else {
       setLevelError(true);
     }
-  }
-  const handleExpError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
-    setExpOptions(value)
+  };
+  const handleExpError = (
+    value: SetStateAction<SingleValue<{ value: string; label: string }>>
+  ) => {
+    setExpOptions(value);
     if (value !== null) {
       setExpError(false);
     } else {
       setExpError(true);
     }
-  }
-  const handleCurrencyError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
-    setCurrencyOptions(value)
+  };
+  const handleCurrencyError = (
+    value: SetStateAction<SingleValue<{ value: string; label: string }>>
+  ) => {
+    setCurrencyOptions(value);
     if (value !== null) {
       setCurrencyError(false);
     } else {
       setCurrencyError(true);
     }
-  }
-  const handleCareerError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
-    setCareerOptions(value)
+  };
+  const handleCareerError = (
+    value: SetStateAction<SingleValue<{ value: string; label: string }>>
+  ) => {
+    setCareerOptions(value);
     if (value !== null) {
       setCareerError(false);
     } else {
       setCareerError(true);
     }
-  }
+  };
   //
-  const handleFieldError = (value: SetStateAction<MultiValue<{ value: string; label: string }> | null>) => {
-    setFieldOptions(value)
-    console.log(fieldOptions)
+  const handleFieldError = (
+    value: SetStateAction<MultiValue<{ value: string; label: string }> | null>
+  ) => {
+    setFieldOptions(value);
+    console.log(fieldOptions);
     if (value?.length !== 0) {
       setFieldError(false);
     } else {
       setFieldError(true);
     }
-  }
-  const handleSkillError = (value: SetStateAction<MultiValue<{ value: string; label: string }> | null>) => {
-    setSkillOptions(value)
+  };
+  const handleSkillError = (
+    value: SetStateAction<MultiValue<{ value: string; label: string }> | null>
+  ) => {
+    setSkillOptions(value);
     if (value?.length !== 0) {
       setSkillError(false);
     } else {
       setSkillError(true);
     }
-  }
+  };
   const handleRequirementValidation = (value: SetStateAction<string>) => {
     setRequirement(value);
     if (value.length === 0) {
@@ -346,7 +390,7 @@ function PostCompaign1({
     } else {
       setRequirementError(false);
     }
-  }
+  };
   const handleDescriptionValidation = (value: SetStateAction<string>) => {
     setDescription(value);
     if (value.length === 0) {
@@ -354,7 +398,7 @@ function PostCompaign1({
     } else {
       setDescritionError(false);
     }
-  }
+  };
   const handleJobValidation = (value: SetStateAction<string>) => {
     setJobDescription(value);
     if (value.length === 0) {
@@ -362,7 +406,7 @@ function PostCompaign1({
     } else {
       setShowError(false);
     }
-  }
+  };
   //
   const [fields, setFields] = useState<any>(null);
 
@@ -370,20 +414,20 @@ function PostCompaign1({
     // Fetch data from your API
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/job/create-info', {
-          method: 'GET',
+        const response = await fetch("http://localhost:3000/job/create-info", {
+          method: "GET",
           headers: {
             "Access-control-allow-origin": "http://localhost:3000",
-            "Content-type": "application/json"
+            "Content-type": "application/json",
           },
         }); // Modify the URL to match your API endpoint
         if (!response.ok) {
-          throw new Error('Failed to fetch data');
+          throw new Error("Failed to fetch data");
         }
         const data = await response.json();
         setFields(data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -391,7 +435,7 @@ function PostCompaign1({
   }, []);
 
   // Convert each field to the desired format
-  const convertToOptions = (data: { id: any; name: any; }[]) => {
+  const convertToOptions = (data: { id: any; name: any }[]) => {
     if (!data) return [];
     return data.map(({ id, name }) => ({ value: id.toString(), label: name }));
   };
@@ -419,21 +463,21 @@ function PostCompaign1({
     }
     setUserChoice(choice);
   };
-  const gender =[
-    {value:"Nam", label:"Nam"},
-    {value:"Nữ", label:"Nữ"}
-  ]
+  const gender = [
+    { value: "Nam", label: "Nam" },
+    { value: "Nữ", label: "Nữ" },
+  ];
   const skills = [
-    {value:"SQL", label:"SQL"},
-    {value:"Java", label:"Java"},
-    {value:"Python", label:"Python"},
-    {value:"JavaScript", label:"JavaScript"},
-  ]
+    { value: "SQL", label: "SQL" },
+    { value: "Java", label: "Java" },
+    { value: "Python", label: "Python" },
+    { value: "JavaScript", label: "JavaScript" },
+  ];
   const email = [
-    {value:"hr@gmail.com", label:"hr@gmail.com"},
-    {value:"tuyendung@gmail.com", label:"tuyendung@gmail.com"},
-    {value:"example@email.com", label:"example@email.com"},
-  ]
+    { value: "hr@gmail.com", label: "hr@gmail.com" },
+    { value: "tuyendung@gmail.com", label: "tuyendung@gmail.com" },
+    { value: "example@email.com", label: "example@email.com" },
+  ];
   const cityOptions = [
     { value: "Hồ Chí Minh", label: "Hồ Chí Minh" },
     { value: "Bình Dương", label: "Bình Dương" },
@@ -485,9 +529,9 @@ function PostCompaign1({
               value={title}
               onChange={(e) => handleTitleError(e.target.value)}
             />
-            {titleError && (<div className="text-red-700">
-              Tiêu đề không được để trống
-            </div>)}
+            {titleError && (
+              <div className="text-red-700">Tiêu đề không được để trống</div>
+            )}
           </div>
         </div>
       </div>
@@ -615,14 +659,15 @@ function PostCompaign1({
                     isOptionDisabled={() => fieldOptions?.length! >= 2}
                   />
                 </div>
-
               </div>
             </div>
           </div>
         </div>
-        {(fieldError || careerError) && (<div className="ml-14 text-red-700">
-          Ngành nghề và lĩnh vực không được để trống
-        </div>)}
+        {(fieldError || careerError) && (
+          <div className="ml-14 text-red-700">
+            Ngành nghề và lĩnh vực không được để trống
+          </div>
+        )}
         <span className="ml-14 text-red-600 text-base ">
           *Nội dung được đề xuất bởi Toppy AI
         </span>
@@ -1124,9 +1169,20 @@ function PostCompaign1({
             </div>
           </div>
         </div>
-        {(quantityError || jobTypeError || genderError || levelError || expError || currencyError || salaryError || cityError || districtError || addressError) && (<div className="ml-14 text-red-700">
-          Vui lòng điền đầy đủ thông tin
-        </div>)}
+        {(quantityError ||
+          jobTypeError ||
+          genderError ||
+          levelError ||
+          expError ||
+          currencyError ||
+          salaryError ||
+          cityError ||
+          districtError ||
+          addressError) && (
+          <div className="ml-14 text-red-700">
+            Vui lòng điền đầy đủ thông tin
+          </div>
+        )}
       </div>
       <div className="bg-white p-4 rounded-sm mb-5">
         <div className="flex flex-row space-x-5 mb-4">
@@ -1279,9 +1335,11 @@ function PostCompaign1({
                 onChange={(e) => handleJobValidation(e.target.value)}
                 value={jobDescription}
               />
-              {showError && (<div className="text-red-700">
-                Mô tả công việc không được để trống
-              </div>)}
+              {showError && (
+                <div className="text-red-700">
+                  Mô tả công việc không được để trống
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1424,9 +1482,11 @@ function PostCompaign1({
                   onChange={(e) => handleSkillError(e)}
                 />
               </div>
-              {(showRequirement || skillError) && (<div className="text-red-700 mb-5">
-                Vui lòng điền đầy đủ thông tin
-              </div>)}
+              {(showRequirement || skillError) && (
+                <div className="text-red-700 mb-5">
+                  Vui lòng điền đầy đủ thông tin
+                </div>
+              )}
               <div className="text-base text-red-600">
                 *Nội dung được đề xuất bởi ToppyAI
               </div>
@@ -1530,9 +1590,11 @@ function PostCompaign1({
                 onChange={(e) => handleDescriptionValidation(e.target.value)}
                 value={description}
               />
-              {showDescriptionError && (<div className="text-red-700">
-                Quyền lợi công việc không được để trống
-              </div>)}
+              {showDescriptionError && (
+                <div className="text-red-700">
+                  Quyền lợi công việc không được để trống
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1637,9 +1699,11 @@ function PostCompaign1({
             </div>
           </div>
         </div>
-        {(dateError || nameError || phoneError || emailError) && (<div className="ml-14 text-red-700">
-          Vui lòng điền đầy đủ thông tin
-        </div>)}
+        {(dateError || nameError || phoneError || emailError) && (
+          <div className="ml-14 text-red-700">
+            Vui lòng điền đầy đủ thông tin
+          </div>
+        )}
       </div>
       <div className="bg-white p-4 rounded-sm mb-5">
         <div className="flex flex-row space-x-5 mb-4">

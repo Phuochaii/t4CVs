@@ -12,9 +12,12 @@ function Header() {
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
-  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-
-  const userId = "1";
+  // const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const userId =
+    localStorage.getItem("user") == null
+      ? ""
+      : JSON.parse(localStorage.getItem("user") as string).id;
+  const [isAuthenticated, setIsAuthenticated] = React.useState(userId != "");
   const fetchNotification = ({
     id,
     limit = 3,
@@ -30,12 +33,12 @@ function Header() {
     });
   };
   React.useEffect(() => {
-    fetchNotification({ id: userId });
+    if (userId != "") fetchNotification({ id: userId });
   }, []);
 
-  React.useEffect(() => {
-    console.log(user);
-  }, [user]);
+  // React.useEffect(() => {
+  //   console.log(user);
+  // }, [user]);
 
   const [isJobsHovered, setIsJobsHovered] = useState(false);
   const [isCVsHovered, setIsCVsHovered] = useState(false);
@@ -44,12 +47,12 @@ function Header() {
   const [isSupportsHovered, setIsSupportsHovered] = useState(false);
   const [isAccountHovered, setIsAccountHovered] = useState(false);
 
-  const logoutWithRedirect = () =>
-    logout({
-      logoutParams: {
-        returnTo: window.location.origin,
-      },
-    });
+  // const logoutWithRedirect = () =>
+  //   logout({
+  //     logoutParams: {
+  //       returnTo: window.location.origin,
+  //     },
+  //   });
 
   return (
     <header className="menu-top bg-white text-black">
@@ -1125,7 +1128,11 @@ function Header() {
                       Đổi mật khẩu
                     </li>
                     <li
-                      onClick={() => logoutWithRedirect()}
+                      onClick={() => {
+                        // logoutWithRedirect();
+                        setIsAuthenticated(false);
+                        localStorage.removeItem("user");
+                      }}
                       className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer"
                     >
                       <svg
@@ -1148,7 +1155,10 @@ function Header() {
             <div className="list-none flex items-center">
               <li>
                 <button
-                  onClick={() => loginWithRedirect()}
+                  onClick={() => {
+                    // loginWithRedirect();
+                    navigation("/user-login");
+                  }}
                   className="py-2 px-4 rounded-md mx-2 border border-[#00A74B] hover:border-green-800 bg-white"
                 >
                   Đăng nhập

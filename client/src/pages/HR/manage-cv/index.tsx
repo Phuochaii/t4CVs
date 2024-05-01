@@ -7,6 +7,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import { useParams, useNavigate } from "react-router-dom";
 
 interface NumberLabelWidgetProps {
   title: string;
@@ -26,6 +27,10 @@ function NumberLabelWidget(item: NumberLabelWidgetProps) {
   );
 }
 function ManageCV() {
+  const hrId = JSON.parse(localStorage.getItem("hr") as string).id;
+  const { id } = useParams();
+
+  const compaignId = id as string;
   const numberData = [
     {
       title: "Tổng số CV ứng tuyển",
@@ -194,7 +199,7 @@ function ManageCV() {
                   {tabs.Recuitment()}
                 </TabPanel>
                 <TabPanel sx={{ padding: "12px 0" }} value="2">
-                  {tabs.Application()}
+                  {tabs.Application({ compaignId: compaignId, hrId: hrId })}
                 </TabPanel>
                 <TabPanel sx={{ padding: "12px 0" }} value="3">
                   Item Three

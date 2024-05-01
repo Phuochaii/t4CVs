@@ -6,11 +6,19 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import * as HRModule from "../../../modules/hr-module";
 
 function PostCompaign() {
+  const { id } = useParams();
   const navigation = useNavigate();
   const [value, setValue] = React.useState("1");
+  const [compaign, setCompaign] = React.useState<any>({});
+  React.useEffect(() => {
+    HRModule.getCampaignById({ id: id as string }).then((res) =>
+      setCompaign(res)
+    );
+  }, []);
 
   const next = () => {
     if (value === "3") {
@@ -59,7 +67,7 @@ function PostCompaign() {
           >
             <p className="font-semibold mr-10">Đăng tin tuyển dụng</p>
             <p className="text-slate-500 font-medium mr-2">Chiến dịch: </p>
-            <p className="font-semibold">Tuyển nhân viên kinh doanh</p>
+            <p className="font-semibold">{compaign?.name}</p>
           </div>
           <Box sx={{ width: "100%", typography: "body1" }}>
             <TabContext value={value}>

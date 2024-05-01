@@ -1,6 +1,6 @@
 import { SetStateAction, useState } from "react";
 // import Switch from "../../shared/components/CustomSwitch";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Compaign } from "../types/Compaign.type";
 
 export interface CompaignTableProps {
@@ -11,16 +11,12 @@ export const CompaignTableHeaders = () => {
   return (
     <thead>
       <tr>
-        <td className="px-2 py-1 font-bold border">
-          Chiến dịch tuyển dụng
-        </td>
+        <td className="px-2 py-1 font-bold border">Chiến dịch tuyển dụng</td>
         <td className="px-2 py-1 font-bold border">Tối ưu</td>
         <td className="px-2 py-1 font-bold border">Tin tuyển dụng</td>
         <td className="px-2 py-1 font-bold border">CV từ hệ thống</td>
         <td className="px-2 py-1 font-bold border">Lọc CV</td>
-        <td className="px-2 py-1 font-bold border">
-          Dịch vụ đang chạy
-        </td>
+        <td className="px-2 py-1 font-bold border">Dịch vụ đang chạy</td>
       </tr>
     </thead>
   );
@@ -31,10 +27,17 @@ interface CompaignTableRowProps {
 }
 
 export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
+  const navigation = useNavigate();
+
   const [isHovered, setIsHovered] = useState(false);
   const [compaign] = useState<Compaign>(data);
   return (
     <tr
+      onClick={() => {
+        console.log(data.compaignId);
+
+        navigation(`/hr/manage-cv/${data.compaignId}`);
+      }}
       className="align-top hover:bg-green-100 bg-slate-50"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -97,9 +100,7 @@ export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
       </td>
       <td className="border max-w-[180px]">
         <div className="flex flex-col gap-2 p-2">
-          <h3 className="font-bold capitalize">
-            {compaign.recruitment}
-          </h3>
+          <h3 className="font-bold capitalize">{compaign.recruitment}</h3>
           <div className="flex gap-2">
             <span className="font-bold bg-slate-200 text-slate-400">
               {`#${compaign.recruimentId}`}
@@ -131,12 +132,10 @@ export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
             {!compaign.isCompaignActive
               ? "Chiến dịch đang tắt"
               : compaign.isCVSystemActive
-              ? "Đã kích hoạt"
-              : "Chưa kích hoạt Scout AI"}
+                ? "Đã kích hoạt"
+                : "Chưa kích hoạt Scout AI"}
           </h3>
-          <button
-            className={`${isHovered ? "visible" : "invisible"}`}
-          >
+          <button className={`${isHovered ? "visible" : "invisible"}`}>
             Xem chi tiết
           </button>
         </div>

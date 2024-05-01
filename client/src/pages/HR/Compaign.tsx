@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { CompaignTable } from "../../shared/components/compaign-table";
 import { Compaign as CompaignType } from "../../shared/types/Compaign.type";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface CompaignFromServer {
   id: number;
@@ -14,12 +15,15 @@ interface CompaignFromServer {
 }
 
 function Compaign() {
+  const navigation = useNavigate();
   const [campaigns, setCompaigns] = useState<CompaignType[]>([]);
+
+  const hrId = JSON.parse(localStorage.getItem("hr") as string).id;
 
   useEffect(() => {
     const getAllCompaigns = async () => {
       const response = await axios.get(
-        "http://localhost:3000/company/campaign/all"
+        "http://localhost:3000/company/campaign/employer/" + hrId
       );
       if (response.status === 200) {
         const data = response.data.data;
@@ -52,7 +56,10 @@ function Compaign() {
       </div>
       <div className="flex flex-col items-center justify-between gap-2 py-8 w-[90%]">
         <div className="flex items-center justify-between w-full gap-2">
-          <button className="flex items-center h-full gap-2 px-4 py-2 text-white bg-green-600 rounded-sm">
+          <button
+            onClick={() => navigation("/hr/post-compaign")}
+            className="flex items-center h-full gap-2 px-4 py-2 text-white bg-green-600 rounded-sm"
+          >
             <Briefcase stroke="white" /> Chiến dịch mới
           </button>
           <div className="flex items-center flex-grow divide-x-2">

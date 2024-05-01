@@ -92,7 +92,8 @@ function HRSignUp() {
   const [phoneErrorMessage, setPhoneErrorMessage] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
-  const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState("");
+  const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] =
+    useState("");
 
   const [sexError, setSexError] = useState(false);
   const [nameError, setNameError] = useState(false);
@@ -313,9 +314,10 @@ function HRSignUp() {
         (province) => province.code === hrData.address_work
       );
 
-      setHrData(prevHrData => ({ ...prevHrData, address_work: foundProvince?.name_with_type || "" }));
-      // localStorage.setItem('account', JSON.stringify(formData));
-      // localStorage.setItem('hr_info', JSON.stringify(hrData));
+      setHrData((prevHrData) => ({
+        ...prevHrData,
+        address_work: foundProvince?.name_with_type || "",
+      }));
 
       console.log("Đăng ký thành công.");
       setShowSuccessMessage(true); // Hiển thị thông báo khi đăng ký thành công
@@ -732,7 +734,10 @@ function HRSignUp() {
                       Chọn quận/ huyện
                     </MenuItem>
                     {filteredDistricts.map((district) => (
-                      <MenuItem key={district.code} value={district.name_with_type}>
+                      <MenuItem
+                        key={district.code}
+                        value={district.name_with_type}
+                      >
                         {district.name_with_type}
                       </MenuItem>
                     ))}

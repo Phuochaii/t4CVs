@@ -3,16 +3,22 @@ import { Mail, Phone, Clock } from "lucide-react";
 import { DefaultPagination } from "../../../../shared/components/default-pagination";
 import * as HRModule from "../../../../modules/hr-module";
 
-function Application() {
-  const hrId = "1";
+function Application({
+  compaignId,
+  hrId,
+}: {
+  compaignId: string;
+  hrId: string;
+}) {
+  // const compaignId = "1";
 
   const [listCV, setListCV] = React.useState([]);
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
 
-  const fetchApplication = async (hrId: string) => {
+  const fetchApplication = async () => {
     HRModule.getApplicationByCampaignIdHRId({
-      campaignId: "3",
+      campaignId: compaignId,
       hrId: hrId,
       page: page,
     }).then((res) => {
@@ -23,10 +29,10 @@ function Application() {
   };
 
   React.useEffect(() => {
-    fetchApplication(hrId);
+    fetchApplication();
   }, []);
   React.useEffect(() => {
-    fetchApplication(hrId);
+    fetchApplication();
   }, [page]);
 
   return listCV.length == 0 ? (
@@ -113,7 +119,7 @@ function Application() {
                         applicationId: item.id,
                       });
 
-                      fetchApplication(hrId);
+                      fetchApplication();
                       await HRModule.getCVByApplicationID({
                         applicationId: 3,
                       }).then((res) => {

@@ -1,11 +1,11 @@
-import { createRoot } from 'react-dom/client';
-import App from './App';
-import './index.css';
-import './shared/i18n/index.ts';
-import './shared/hooks/useTheme.tsx';
-import { Auth0Provider } from '@auth0/auth0-react';
-import history from './shared/utils/history.ts';
-import { getConfig } from './config.ts';
+import { createRoot } from "react-dom/client";
+import App from "./App";
+import "./index.css";
+import "./shared/i18n/index.ts";
+import "./shared/hooks/useTheme.tsx";
+import { Auth0Provider } from "@auth0/auth0-react";
+import history from "./shared/utils/history.ts";
+import { getConfig } from "./config.ts";
 
 const onRedirectCallback = (appState) => {
   history.push(
@@ -27,7 +27,7 @@ const providerConfig = {
   },
 };
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <Auth0Provider {...providerConfig}>
     <App />
   </Auth0Provider>

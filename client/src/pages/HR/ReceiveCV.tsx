@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import CustomSelectOption from "../../layouts/HRLayout/components/CustomSelectOption";
 import { ChevronRight, Mail, Phone, Clock, Search } from "lucide-react";
 import * as HRModule from "../../modules/hr-module";
 import { DefaultPagination } from "../../shared/components/default-pagination";
+import { MyContext } from "../../App";
+import { useNavigate } from "react-router-dom";
 
 function ReceiveCV() {
   const hrId = "1";
@@ -208,7 +210,10 @@ function ReceiveCV() {
             </div>
           ) : (
             <div className="p-5">
-              <table className="p-5" style={{ width: "100%" }}>
+              <table
+                className="p-5 border-spacing-y-3 border-separate"
+                style={{ width: "100%" }}
+              >
                 <thead>
                   <tr>
                     <th className="text-left">Ứng viên</th>
@@ -224,7 +229,7 @@ function ReceiveCV() {
                     listCV.map((item: any, index: number) => (
                       <tr
                         key={index}
-                        className="font-medium my-5 mx-3"
+                        className="font-medium py-5 mx-3"
                         style={{ fontSize: "13px" }}
                       >
                         <td>

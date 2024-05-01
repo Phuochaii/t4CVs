@@ -10,7 +10,7 @@ interface SidebarProps {
 const links = [
   {
     name: "Overview",
-    path: "/admin",
+    path: "/admin/overview",
     icon: Eye,
     iconComponent: <Eye className="text-white" />,
   },
@@ -57,9 +57,7 @@ function Sidebar({ className }: SidebarProps) {
             )}{" "}
             <span
               className={
-                pathname == item.path
-                  ? "text-white"
-                  : "text-slate-500"
+                pathname == item.path ? "text-white" : "text-slate-500"
               }
             >
               {item.name}

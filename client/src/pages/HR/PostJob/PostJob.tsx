@@ -1,8 +1,9 @@
 // Thịnh
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./PostJob.css";
+import * as HRModule from "../../../modules/hr-module";
 
 const plans = [
   {
@@ -24,9 +25,14 @@ const plans = [
 ];
 
 function PostJob() {
+  const navigation = useNavigate();
+  const hrId = "1";
   const [modal, setModal] = useState(false);
+  const [compaignName, setcompaignName] = useState("");
+  // const [compaignId, setcompaignId] = useState("");
   const [chosenPlan, setChosenPlan] = useState(plans[0]);
   const toggleModal = () => {
+    // nay xu li sau
     setModal((prev) => !prev);
   };
   // return <p>123</p>
@@ -75,16 +81,33 @@ function PostJob() {
               <div className="item_label">Tên chiến dịch tuyển dụng *</div>
               <div className="item_input">
                 <input
+                  onChange={(e) => setcompaignName(e.target.value)}
                   autoFocus
                   type="text"
                   placeholder="VD: Tuyển dụng nhân viên Marketing tháng 10..."
                 />
               </div>
-              <div className="item_error mt-2 font-medium">
-                Tên chiến dịch tuyển dụng không được để trống
-              </div>
+              {!compaignName && (
+                <div className="item_error mt-2 font-medium">
+                  Tên chiến dịch tuyển dụng không được để trống
+                </div>
+              )}
             </div>
-            <div onClick={toggleModal} className="form_button mt-2">
+            <div
+              onClick={async () => {
+                if (compaignName.length <= 5) {
+                  alert("Tên chiến dịch tuyển dụng length > 5");
+                  return;
+                }
+                await HRModule.createCompaign({
+                  employerId: hrId,
+                  name: compaignName,
+                });
+                navigation("/hr/compaign");
+                // toggleModal();
+              }}
+              className="form_button mt-2"
+            >
               Tiếp theo
             </div>
           </div>

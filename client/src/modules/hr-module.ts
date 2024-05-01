@@ -4,6 +4,9 @@ import axios from 'axios';
 const getApplicationByCampaignIdHRId = async ({campaignId, hrId, status, page=1 }: {campaignId : string,
 hrId: string,
 status?: boolean, page?: number}) => {
+  hrId=""
+  console.log(`http://localhost:3000/application/hr/${hrId}?page=${page}&limit=5&campaignId=${campaignId}${status!=undefined ? `&status=${status}`: ""}`);
+  
   
   const response = await axios.get(`http://localhost:3000/application/hr/${hrId}?page=${page}&limit=5&campaignId=${campaignId}${status!=undefined ? `&status=${status}`: ""}`);
   return response.data;
@@ -59,9 +62,23 @@ const updateStatusNotification = async ({userId, notificationId}:{userId:string,
     console.log(res);
     return res
   });
-  
+  return response;
+}
+
+// CREATE COMPAIGN
+const createCompaign = async ({employerId, name}:{employerId:string,  name: string}) => {
+  const response = await axios.post(`http://localhost:3000/company/campaign/create`, {
+    name,
+    employerId
+  }).then((res) => {
+
+    console.log(res);
+    return res
+  });
   return response;
 }
 
 
-export { getApplicationByCampaignIdHRId, getCampaignById, getAllCompaignByHrId, updateApplicationStatus ,getCVByApplicationID, getNotification,updateStatusNotification} ;
+
+
+export { getApplicationByCampaignIdHRId, getCampaignById, getAllCompaignByHrId, updateApplicationStatus ,getCVByApplicationID, getNotification,updateStatusNotification,createCompaign} ;
