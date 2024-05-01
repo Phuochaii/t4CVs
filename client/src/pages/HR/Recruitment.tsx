@@ -222,13 +222,13 @@ function Recruitment() {
       <h1 className="p-4 text-xl font-bold text-black bg-white">
         Quản lý Tin tuyển dụng
       </h1>
-      <div className="flex flex-col items-start justify-center gap-8 p-12">
-        <div className="flex justify-between gap-4">
+      <div className="flex flex-col items-start justify-center gap-8 p-8">
+        <div className="flex justify-between gap-2">
           {filteredStatuses.map((status, key) => {
             return (
               <div
                 className={clsx(
-                  "px-4 py-1 rounded-full items-center text-sm cursor-pointer flex gap-2",
+                  "px-2 py-1 rounded-full items-center text-[10px] cursor-pointer flex gap-[6px]",
                   selectedStatus === key
                     ? "bg-green-500 text-white"
                     : "bg-slate-300"
