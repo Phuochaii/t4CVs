@@ -29,9 +29,9 @@ const CompanyCompaignTableHeader = () => {
         <td className="px-2 py-1 font-bold border">Công ty</td>
         <td className="px-2 py-1 font-bold border">Ngày đăng</td>
         <td className="px-2 py-1 font-bold border">Tin tuyển dụng</td>
-        <td className="px-2 py-1 font-bold border">
+        {/* <td className="px-2 py-1 font-bold border">
           Dịch vụ đang chạy
-        </td>
+        </td> */}
       </tr>
     </thead>
   );
@@ -141,7 +141,7 @@ const CompanyCompaignTableRow = ({
         </div>
       </td>
 
-      <td className="border">
+      {/* <td className="border">
         <div className="p-2">
           {compaign.isCompaignActive ? (
             <span className="px-2 py-1 font-bold text-green-500 rounded-sm bg-slate-100">
@@ -151,7 +151,7 @@ const CompanyCompaignTableRow = ({
             <>Chiến dịch đang tắt</>
           )}
         </div>
-      </td>
+      </td> */}
     </tr>
   );
 };
@@ -209,6 +209,9 @@ function Campaign() {
       );
       const responseEmployer = await axios.get(
         "http://localhost:3000/employer/all"
+      );
+      const responseJob = await axios.get(
+        "http://localhost:3000/job/all"
       );
 
       const rawEmployers: EmployerFromServer[] =
