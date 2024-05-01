@@ -2,31 +2,31 @@ import { Briefcase } from "../../layouts/HRLayout/components/Icons";
 import { ChevronDown, Search } from "lucide-react";
 
 import { SetStateAction, useEffect, useState } from "react";
-import {
-  CampaignFromServer,
-  Campaign as CampaignType,
-} from "../../shared/types/Campaign.type";
-import { EmployerFromServer } from "../../shared/types/Employer.type";
+import { Campaign as CampaignType } from "../../shared/types/Campaign.type";
 import { Link } from "react-router-dom";
-import Switch from "../../shared/components/CustomSwitch";
-import axios from "axios";
-import { CompanyFromServer } from "../../shared/types/Company.type";
-import { RecruitmentFromServer } from "../../shared/types/Recruitment.type";
+// import Switch from "../../shared/components/CustomSwitch";
+import {
+  getAllCampaigns,
+  getCompanyById,
+  getEmployerById,
+  getJobByCampaignId,
+} from "../../shared/utils/helper";
 
-interface CompaignTableProps {
+interface CampaignTableProps {
   data: CampaignType[];
   setData: React.Dispatch<SetStateAction<CampaignType[]>>;
 }
 
-const CompanyCompaignTableHeader = () => {
+const CompanyCampaignTableHeader = () => {
   return (
     <thead>
       <tr>
         <td className="px-2 py-1 font-bold border">
           Chiến dịch tuyển dụng
         </td>
+        <td className="px-2 py-1 font-bold border">Người tạo</td>
+        <td className="px-2 py-1 font-bold border">Ngày tạo</td>
         <td className="px-2 py-1 font-bold border">Công ty</td>
-        <td className="px-2 py-1 font-bold border">Ngày đăng</td>
         <td className="px-2 py-1 font-bold border">Tin tuyển dụng</td>
         {/* <td className="px-2 py-1 font-bold border">
           Dịch vụ đang chạy
@@ -36,15 +36,15 @@ const CompanyCompaignTableHeader = () => {
   );
 };
 
-interface CompanyCompaignTableRowProps {
+interface CompanyCampaignTableRowProps {
   data: CampaignType;
 }
 
-const CompanyCompaignTableRow = ({
+const CompanyCampaignTableRow = ({
   data,
-}: CompanyCompaignTableRowProps) => {
+}: CompanyCampaignTableRowProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [compaign, setCompaign] = useState<CampaignType>(data);
+  const [campaign] = useState<CampaignType>(data);
   return (
     <tr
       className="align-top hover:bg-green-100 bg-slate-50"
@@ -53,23 +53,23 @@ const CompanyCompaignTableRow = ({
     >
       <td className="border">
         <div className="flex items-start gap-2 p-2">
-          <Switch
-            checked={compaign.isCompaignActive}
+          {/* <Switch
+            checked={campaign.isCampaignActive}
             onClick={() => {
-              setCompaign({
-                ...compaign,
-                isCompaignActive: !compaign.isCompaignActive,
+              setCampaign({
+                ...campaign,
+                isCampaignActive: !campaign.isCampaignActive,
               });
             }}
-          />
+          /> */}
           <div className="flex flex-col items-start gap-2 mb-12">
-            <h3 className="font-bold">{compaign.compaignName}</h3>
-            <span className="font-bold text-slate-400">
-              {compaign.cvs.length === 0 ? (
+            <h3 className="font-bold">{campaign.campaignName}</h3>
+            {/* <span className="font-bold text-slate-400">
+              {campaign.cvs.length === 0 ? (
                 "Chưa có CV nào"
               ) : (
                 <div className="flex items-center gap-1">
-                  {compaign.cvs.slice(0, 5).map((candidate, item) => {
+                  {campaign.cvs.slice(0, 5).map((candidate, item) => {
                     return (
                       <img
                         key={item}
@@ -78,16 +78,16 @@ const CompanyCompaignTableRow = ({
                       />
                     );
                   })}
-                  {compaign.cvs.length > 5 ? (
+                  {campaign.cvs.length > 5 ? (
                     <span className="p-1 font-normal text-green-500 bg-green-100 rounded-full">{`+${
-                      compaign.cvs.length - 5
+                      campaign.cvs.length - 5
                     } hồ sơ khác`}</span>
                   ) : null}
                 </div>
               )}
-            </span>
+            </span> */}
             <span className="font-bold bg-slate-200 text-zinc-400">
-              {`#${compaign.compaignId}`}
+              {`#${campaign.campaignId}`}
             </span>
             {
               <div
@@ -103,24 +103,29 @@ const CompanyCompaignTableRow = ({
         </div>
       </td>
       <td className="border">
-        <div className="p-2 font-bold text-blue-500">{`${compaign.company}`}</div>
+        <div className="p-2 font-bold text-blue-500">{`${campaign.employer.fullname}`}</div>
       </td>
       <td className="border">
-        <div className="p-2 font-bold text-blue-500">{`${compaign.postDate?.toLocaleDateString(
+        <div className="p-2 font-bold text-blue-500">{`${campaign.postDate?.toLocaleDateString(
           "vi-VN"
         )}`}</div>
+      </td>
+      <td className="border">
+        <div className="p-2 font-bold text-blue-500">{`${campaign.company.name}`}</div>
       </td>
       <td className="border max-w-[180px]">
         <div className="flex flex-col gap-2 p-2">
           <h3 className="font-bold capitalize">
-            {compaign.recruitment}
+            {campaign.recruitment.titleRecruitment}
           </h3>
           <div className="flex gap-2">
             <span className="font-bold bg-slate-200 text-slate-400">
-              {`#${compaign.recruimentId}`}
+              {`#${campaign.recruitment.id}`}
             </span>
             <span className="font-bold text-slate-400">
-              {compaign.recruitmentStatus}
+              {campaign.recruitment.status
+                ? "Đang hiển thị"
+                : "Dừng hiển thị"}
             </span>
           </div>
           <div
@@ -130,8 +135,8 @@ const CompanyCompaignTableRow = ({
           >
             <Link
               className="font-bold text-green-500"
-              to={`/hr/compaign-edit/${compaign.recruimentId}`}
-              state={compaign}
+              to={`/hr/campaign-edit/${campaign.recruitment.id}`}
+              state={campaign}
             >
               Chỉnh sửa
             </Link>
@@ -142,7 +147,7 @@ const CompanyCompaignTableRow = ({
 
       {/* <td className="border">
         <div className="p-2">
-          {compaign.isCompaignActive ? (
+          {campaign.isCampaignActive ? (
             <span className="px-2 py-1 font-bold text-green-500 rounded-sm bg-slate-100">
               Thêm
             </span>
@@ -155,13 +160,13 @@ const CompanyCompaignTableRow = ({
   );
 };
 
-const CompanyCompaignTable = ({ data }: CompaignTableProps) => {
+const CompanyCampaignTable = ({ data }: CampaignTableProps) => {
   return (
     <table className="w-full text-sm bg-white">
-      <CompanyCompaignTableHeader />
+      <CompanyCampaignTableHeader />
       <tbody>
         {data.map((item, index) => (
-          <CompanyCompaignTableRow data={item} key={index} />
+          <CompanyCampaignTableRow data={item} key={index} />
         ))}
       </tbody>
     </table>
@@ -169,60 +174,30 @@ const CompanyCompaignTable = ({ data }: CompaignTableProps) => {
 };
 
 function Campaign() {
-  const [campaigns, setCompaigns] = useState<CampaignType[]>([]);
+  const [campaigns, setCampaigns] = useState<CampaignType[]>([]);
 
   useEffect(() => {
-    const getAllCompaigns = async () => {
-      const response = await axios.get(
-        "http://localhost:3000/company/campaign/all"
-      );
-      const responseCompany = await axios.get(
-        "http://localhost:3000/company/all"
-      );
-      const responseEmployer = await axios.get(
-        "http://localhost:3000/employer/all"
-      );
-      const responseJob = await axios.get(
-        "http://localhost:3000/job/all"
-      );
-
-      const rawEmployers: EmployerFromServer[] =
-        responseEmployer.data.data;
-
-      const rawsCompanies: CompanyFromServer[] =
-        responseCompany.data.data;
-
-      const rawJob: RecruitmentFromServer[] = responseJob.data.data;
-
-      const data = response.data.data;
-      const rawCompaigns = data.map((item: CampaignFromServer) => {
-        const employer = rawEmployers.find(
-          (employer) => employer.id === item.employerId
-        );
-        const company = rawsCompanies.find(
-          (company) => company.id === employer?.companyId
-        );
-
-        const rawCompaign: CampaignType = {
-          compaignName: item.name,
-          compaignId: item.id,
-          recruimentId: item.id,
-          recruitment: item.name,
-          cvs: [],
-          recruitmentStatus: "Dừng hiển thị",
-          isCompaignActive: true,
-          cvSystem: "Scout AI",
-          isCVSystemActive: false,
-          cvFiltered: 0,
-          runningServices: [],
-          company: company?.name,
+    async function getData() {
+      const campaignData = await getAllCampaigns();
+      const rawCampaigns = await campaignData.map(async (item) => {
+        const employer = await getEmployerById(item.employerId);
+        const company = await getCompanyById(employer.companyId);
+        const job = await getJobByCampaignId(item.id);
+        const rawCampaign: CampaignType = {
+          campaignName: item.name,
+          campaignId: item.id,
+          employer: employer,
+          company: company,
           postDate: new Date(item.createdAt),
+          recruitment: job,
+          applications: [],
+          applicants: [],
         };
-        return rawCompaign;
+        return rawCampaign;
       });
-      setCompaigns(rawCompaigns);
-    };
-    getAllCompaigns();
+      setCampaigns(await Promise.all(rawCampaigns));
+    }
+    getData();
   }, []);
 
   return (
@@ -248,9 +223,9 @@ function Campaign() {
             </div>
           </div>
         </div>
-        <CompanyCompaignTable
+        <CompanyCampaignTable
           data={campaigns}
-          setData={setCompaigns}
+          setData={setCampaigns}
         />
       </div>
     </div>

@@ -2,46 +2,14 @@ import { Briefcase } from "../../layouts/HRLayout/components/Icons";
 import { ChevronDown, Search } from "lucide-react";
 
 import { useState, useEffect } from "react";
-import { CompaignTable } from "../../shared/components/compaign-table";
+import { CampaignTable } from "../../shared/components/compaign-table";
 import { Campaign as CampaignType } from "../../shared/types/Campaign.type";
-import axios from "axios";
-
-interface CompaignFromServer {
-  id: number;
-  employerId: number;
-  name: string;
-  createdAt: string;
-}
 
 function Campaign() {
   const [campaigns, setCompaigns] = useState<CampaignType[]>([]);
 
   useEffect(() => {
-    const getAllCompaigns = async () => {
-      const response = await axios.get(
-        "http://localhost:3000/company/campaign/all"
-      );
-      if (response.status === 200) {
-        const data = response.data.data;
-        const rawCompaigns = data.map((item: CompaignFromServer) => {
-          const rawCompaign: CampaignType = {
-            compaignName: item.name,
-            compaignId: item.id,
-            recruimentId: item.id,
-            recruitment: item.name,
-            cvs: [],
-            recruitmentStatus: "Dừng hiển thị",
-            isCompaignActive: true,
-            cvSystem: "Scout AI",
-            isCVSystemActive: false,
-            cvFiltered: 0,
-            runningServices: [],
-          };
-          return rawCompaign;
-        });
-        setCompaigns(rawCompaigns);
-      }
-    };
+    const getAllCompaigns = async () => {};
     getAllCompaigns();
   }, []);
 
@@ -68,7 +36,7 @@ function Campaign() {
             </div>
           </div>
         </div>
-        <CompaignTable data={campaigns} setData={setCompaigns} />
+        <CampaignTable data={campaigns} setData={setCompaigns} />
       </div>
     </div>
   );

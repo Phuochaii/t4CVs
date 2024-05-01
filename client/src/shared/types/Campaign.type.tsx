@@ -1,20 +1,18 @@
-import { CV } from "./CV.type";
+import { ApplicationFromServer } from "./Application.type";
+import { CompanyFromServer } from "./Company.type";
+import { EmployerFromServer } from "./Employer.type";
+import { RecruitmentFromServer } from "./Recruitment.type";
+import { UserFromServer } from "./User.type";
 
 export interface Campaign {
-  compaignName: string;
-  compaignId: number;
-  cvs: CV[];
-  optimization?: number;
-  recruitment: string;
-  recruimentId: number;
-  recruitmentStatus: string;
-  isCompaignActive: boolean;
-  cvSystem: string;
-  isCVSystemActive: boolean;
-  cvFiltered: number | null;
-  runningServices: string[];
-  company?: string;
-  postDate?: Date;
+  campaignName: string;
+  campaignId: number;
+  company: CompanyFromServer;
+  postDate: Date;
+  employer: EmployerFromServer;
+  recruitment: RecruitmentFromServer;
+  applications: ApplicationFromServer[];
+  applicants: UserFromServer[];
 }
 
 export interface CampaignFromServer {

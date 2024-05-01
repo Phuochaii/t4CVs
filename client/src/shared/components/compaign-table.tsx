@@ -3,44 +3,42 @@ import { SetStateAction, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Campaign } from "../types/Campaign.type";
 
-export interface CompaignTableProps {
+export interface CampaignTableProps {
   data: Campaign[];
   setData: React.Dispatch<SetStateAction<Campaign[]>>;
 }
-export const CompaignTableHeaders = () => {
+export const CampaignTableHeaders = () => {
   return (
     <thead>
       <tr>
         <td className="px-2 py-1 font-bold border">
           Chiến dịch tuyển dụng
         </td>
-        <td className="px-2 py-1 font-bold border">Tối ưu</td>
+        {/* <td className="px-2 py-1 font-bold border">Tối ưu</td> */}
         <td className="px-2 py-1 font-bold border">Tin tuyển dụng</td>
-        <td className="px-2 py-1 font-bold border">CV từ hệ thống</td>
-        <td className="px-2 py-1 font-bold border">Lọc CV</td>
-        <td className="px-2 py-1 font-bold border">
+        {/* <td className="px-2 py-1 font-bold border">CV từ hệ thống</td> */}
+        {/* <td className="px-2 py-1 font-bold border">Lọc CV</td> */}
+        {/* <td className="px-2 py-1 font-bold border">
           Dịch vụ đang chạy
-        </td>
+        </td> */}
       </tr>
     </thead>
   );
 };
 
-interface CompaignTableRowProps {
+interface CampaignTableRowProps {
   data: Campaign;
 }
 
-export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
+export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
   const navigation = useNavigate();
 
   const [isHovered, setIsHovered] = useState(false);
-  const [compaign] = useState<Campaign>(data);
+  const [campaign] = useState<Campaign>(data);
   return (
     <tr
       onClick={() => {
-        console.log(data.compaignId);
-
-        navigation(`/hr/manage-cv/${data.compaignId}`);
+        navigation(`/hr/manage-cv/${data.campaignId}`);
       }}
       className="align-top hover:bg-green-100 bg-slate-50"
       onMouseEnter={() => setIsHovered(true)}
@@ -49,40 +47,46 @@ export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
       <td className="border">
         <div className="flex items-start gap-2 p-2">
           {/* <Switch
-            checked={compaign.isCompaignActive}
+            checked={campaign.isCampaignActive}
             onClick={() => {
-              setCompaign({
-                ...compaign,
-                isCompaignActive: !compaign.isCompaignActive,
+              setCampaign({
+                ...campaign,
+                isCampaignActive: !campaign.isCampaignActive,
               });
             }}
           /> */}
           <div className="flex flex-col items-start gap-2 mb-12">
-            <h3 className="font-bold">{compaign.compaignName}</h3>
+            <h3 className="font-bold">{campaign.campaignName}</h3>
             <span className="font-bold text-slate-400">
-              {compaign.cvs.length === 0 ? (
+              {campaign.applicants.length === 0 ? (
                 "Chưa có CV nào"
               ) : (
                 <div className="flex items-center gap-1">
-                  {compaign.cvs.slice(0, 5).map((candidate, item) => {
-                    return (
-                      <img
-                        key={item}
-                        src={candidate.candidateImage}
-                        className="w-8 h-8 rounded-full"
-                      />
-                    );
-                  })}
-                  {compaign.cvs.length > 5 ? (
+                  {campaign.applicants
+                    .slice(0, 5)
+                    .map((candidate, item) => {
+                      return (
+                        <img
+                          key={item}
+                          src={candidate.image}
+                          className="w-8 h-8 rounded-full"
+                          onError={(e) =>
+                            (e.currentTarget.src =
+                              "https://images.unsplash.com/photo-1438761681033-6461ffad8d80")
+                          }
+                        />
+                      );
+                    })}
+                  {campaign.applicants.length > 5 ? (
                     <span className="p-1 font-normal text-green-500 bg-green-100 rounded-full">{`+${
-                      compaign.cvs.length - 5
+                      campaign.applicants.length - 5
                     } hồ sơ khác`}</span>
                   ) : null}
                 </div>
               )}
             </span>
             <span className="font-bold bg-slate-200 text-zinc-400">
-              {`#${compaign.compaignId}`}
+              {`#${campaign.campaignId}`}
             </span>
             {
               <div
@@ -97,22 +101,22 @@ export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
           </div>
         </div>
       </td>
-      <td className="border">
+      {/* <td className="border">
         <div className="p-2 font-bold text-blue-500">{`${
-          compaign.optimization || 0
+          campaign.optimization || 0
         }%`}</div>
-      </td>
+      </td> */}
       <td className="border max-w-[180px]">
         <div className="flex flex-col gap-2 p-2">
           <h3 className="font-bold capitalize">
-            {compaign.recruitment}
+            {campaign.recruitment.titleRecruitment}
           </h3>
           <div className="flex gap-2">
             <span className="font-bold bg-slate-200 text-slate-400">
-              {`#${compaign.recruimentId}`}
+              {`#${campaign.recruitment.id}`}
             </span>
             <span className="font-bold text-slate-400">
-              {compaign.recruitmentStatus}
+              {campaign.recruitment.status}
             </span>
           </div>
           <div
@@ -122,8 +126,8 @@ export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
           >
             <Link
               className="font-bold text-green-500"
-              to={`/hr/compaign-edit/${compaign.recruimentId}`}
-              state={compaign}
+              to={`/hr/campaign-edit/${campaign.recruitment.id}`}
+              state={campaign}
             >
               Chỉnh sửa
             </Link>
@@ -131,13 +135,13 @@ export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
           </div>
         </div>
       </td>
-      <td className="border">
+      {/* <td className="border">
         <div className="flex flex-col items-start gap-2 p-2">
-          <h3 className="font-bold">{compaign.cvSystem}</h3>
+          <h3 className="font-bold">{campaign.cvSystem}</h3>
           <h3 className="text-slate-500">
-            {!compaign.isCompaignActive
+            {!campaign.isCampaignActive
               ? "Chiến dịch đang tắt"
-              : compaign.isCVSystemActive
+              : campaign.isCVSystemActive
               ? "Đã kích hoạt"
               : "Chưa kích hoạt Scout AI"}
           </h3>
@@ -147,24 +151,24 @@ export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
             Xem chi tiết
           </button>
         </div>
-      </td>
-      <td className="border">
+      </td> */}
+      {/* <td className="border">
         <div className="flex flex-col items-start justify-start gap-1 p-2">
-          {compaign.cvFiltered && (
+          {campaign.cvFiltered && (
             <span className="px-[3px] text-yellow-400 border border-yellow-400 rounded-sm">
-              {`${compaign.cvFiltered} CP`}
+              {`${campaign.cvFiltered} CP`}
             </span>
           )}
-          {compaign.isCompaignActive && (
+          {campaign.isCampaignActive && (
             <span className="px-2 py-1 font-bold text-green-500 rounded-sm bg-slate-100">
               Tìm CV
             </span>
           )}
         </div>
-      </td>
-      <td className="border">
+      </td> */}
+      {/* <td className="border">
         <div className="p-2">
-          {compaign.isCompaignActive ? (
+          {campaign.isCampaignActive ? (
             <span className="px-2 py-1 font-bold text-green-500 rounded-sm bg-slate-100">
               Thêm
             </span>
@@ -172,18 +176,18 @@ export const CompaignTableRow = ({ data }: CompaignTableRowProps) => {
             <>Chiến dịch đang tắt</>
           )}
         </div>
-      </td>
+      </td> */}
     </tr>
   );
 };
 
-export const CompaignTable = ({ data }: CompaignTableProps) => {
+export const CampaignTable = ({ data }: CampaignTableProps) => {
   return (
     <table className="w-full text-sm bg-white">
-      <CompaignTableHeaders />
+      <CampaignTableHeaders />
       <tbody>
         {data.map((item, index) => (
-          <CompaignTableRow data={item} key={index} />
+          <CampaignTableRow data={item} key={index} />
         ))}
       </tbody>
     </table>
