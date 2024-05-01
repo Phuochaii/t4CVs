@@ -60,8 +60,7 @@ export class CompanyServiceController {
 
   @MessagePattern({ cmd: 'create_campaign' })
   createCampaign(campaign: CreateCampaignDto) {
-    this.campaignService.createCampaign(campaign);
-    return 'Campaign created successfully!';
+    return this.campaignService.createCampaign(campaign);
   }
 
   @MessagePattern({ cmd: 'get_all_campaigns' })
