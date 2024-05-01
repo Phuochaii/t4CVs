@@ -29,7 +29,7 @@ function PostJob() {
   const hrId = "1";
   const [modal, setModal] = useState(false);
   const [compaignName, setcompaignName] = useState("");
-  // const [compaignId, setcompaignId] = useState("");
+  const [compaignId, setcompaignId] = useState("");
   const [chosenPlan, setChosenPlan] = useState(plans[0]);
   const toggleModal = () => {
     // nay xu li sau
@@ -102,9 +102,9 @@ function PostJob() {
                 await HRModule.createCompaign({
                   employerId: hrId,
                   name: compaignName,
-                });
-                navigation("/hr/compaign");
-                // toggleModal();
+                }).then((res) => setcompaignId(res.id));
+                // navigation("/hr/compaign");
+                toggleModal();
               }}
               className="form_button mt-2"
             >
