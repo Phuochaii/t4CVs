@@ -1,9 +1,18 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function VerifyAccount1() {
     const navigate = useNavigate();
+    const [isAccepted, setIsAccepted] = useState(false);
+    const toggleAccept = () => {
+        setIsAccepted((prev) => !prev);
+    };
     const handleAccept = () => {
-        navigate("/hr/verify-account/2");
+        if (isAccepted === true) {
+            navigate("/hr/verify-account/2");
+        } else {
+            return;
+        }
     };
     return (
         <div>
@@ -46,7 +55,10 @@ function VerifyAccount1() {
                     Tìm hiểu thêm
                 </a>
                 <div className="text-black mt-4 ">
-                    <span className="absolute l-0 h-6 w-6 rounded-[10%] border border-[#303235] cursor-pointer"></span>
+                    <span
+                        onClick={toggleAccept}
+                        className={`absolute ${isAccepted && "bg-[#00b14f] border-none"} l-0 h-6 w-6 rounded-[10%] border border-[#303235] cursor-pointer after:content-[""] after:absolute after:left-[7px] after:top-[2px] after:w-[7px] after:h-[13px] after:border-white after:border-b-[3px] after:border-r-[3px] after:rotate-[38deg]	`}
+                    ></span>
                     <span className="ml-10">
                         Tôi đồng ý TopCV được sử dụng thông tin định danh của
                         tôi để xác thực tài khoản theo{" "}
@@ -60,7 +72,7 @@ function VerifyAccount1() {
                     </span>
                 </div>
                 <button
-                    className="w-[313px] px-[10px] py-4 font-bold text-white mt-4 bg-[#00b14f] opacity-65 rounded-[5px]"
+                    className={`w-[313px] px-[10px] py-4 font-bold text-white mt-4 bg-[#00b14f] ${isAccepted ? "opacity-100" : "opacity-65 cursor-default"} rounded-[5px]`}
                     onClick={handleAccept}
                 >
                     Xác thực eKYC

@@ -165,7 +165,7 @@ function VerifyAccount2() {
                     </span>
                 </div>
                 <button
-                    className={`cursor-pointer text-white bg-[#00b14f] rounded-[5px] py-4 px-16 text-base ${firstImage && secondImage ? "opacity-100" : "opacity-65"}`}
+                    className={`cursor-pointer text-white bg-[#00b14f] rounded-[5px] py-4 px-16 text-base ${firstImage && secondImage ? "opacity-100" : "opacity-65 cursor-default"}`}
                 >
                     Tiếp tục
                 </button>
