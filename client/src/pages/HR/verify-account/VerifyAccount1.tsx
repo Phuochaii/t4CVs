@@ -54,12 +54,12 @@ function VerifyAccount1() {
                 >
                     Tìm hiểu thêm
                 </a>
-                <div className="text-black mt-4 ">
+                <div className="text-black mt-4 flex items-center">
                     <span
                         onClick={toggleAccept}
-                        className={`absolute ${isAccepted && "bg-[#00b14f] border-none"} l-0 h-6 w-6 rounded-[10%] border border-[#303235] cursor-pointer after:content-[""] after:absolute after:left-[7px] after:top-[2px] after:w-[7px] after:h-[13px] after:border-white after:border-b-[3px] after:border-r-[3px] after:rotate-[38deg]	`}
+                        className={`relative inline-block content-[""] ${isAccepted && "bg-[#00b14f] border-none"} l-0 h-6 w-6 rounded-[10%] border border-[#303235] cursor-pointer after:content-[""] after:absolute after:left-[7px] after:top-[2px] after:w-[7px] after:h-[13px] after:border-white after:border-b-[3px] after:border-r-[3px] after:rotate-[38deg]	`}
                     ></span>
-                    <span className="ml-10">
+                    <span className="ml-5">
                         Tôi đồng ý TopCV được sử dụng thông tin định danh của
                         tôi để xác thực tài khoản theo{" "}
                         <a
