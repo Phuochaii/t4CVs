@@ -21,48 +21,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import JobService from "../../modules/job-module";
 
-// const city = [
-//   {
-//     value: "0",
-//     label: "Tất cả tỉnh/thành phố",
-//   },
-//   {
-//     value: "1",
-//     label: "EUR",
-//   },
-//   {
-//     value: "2",
-//     label: "BTC",
-//   },
-//   {
-//     value: "3",
-//     label: "JPY",
-//   },
-// ];
-
-// const exp_year = [
-//   {
-//     value: "0",
-//     label: "Tất cả kinh nghiệm",
-//   },
-//   {
-//     value: "1",
-//     label: "1 năm",
-//   },
-//   {
-//     value: "2",
-//     label: "2 năm",
-//   },
-//   {
-//     value: "3",
-//     label: "3 năm",
-//   },
-// ];
-
-const cities = await JobService.getAllLocation();
-
-const exp_year = await JobService.getAllExp();
-
 const salary_range = [
   {
     value: "0",
@@ -93,6 +51,9 @@ const slides = [
 function Home() {
   const autoSlideInterval = 5000;
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  const [cities, setCities] = useState<any[]>([]);
+  const [exp_year, setExpYear] = useState<any[]>([]);
 
   const [titleRecruitment, setTitleRecruitment] = useState("");
   const [location, setLocation] = useState(0);
@@ -130,12 +91,30 @@ function Home() {
     }
   };
 
-  const handleSearch = () => {
-    sessionStorage.setItem("locationId", String(location));
-    sessionStorage.setItem("expId", String(exp));
-    sessionStorage.setItem("titleRecruitment", String(titleRecruitment));
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const locationResponse = await JobService.getAllLocation();
+        setCities(locationResponse);
 
-    navigation("/results");
+        const expResponse = await JobService.getAllExp();
+        setExpYear(expResponse);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleSearch = () => {
+    // sessionStorage.setItem('locationId', String(location));
+    // sessionStorage.setItem('expId', String(exp));
+    // sessionStorage.setItem('titleRecruitment', String(titleRecruitment))
+
+    navigation(
+      `/results?locationId=${location}&expId=${exp}&titleRecruitment=${titleRecruitment}`
+    );
   };
 
   return (
@@ -199,11 +178,13 @@ function Home() {
                     <MenuItem key="0" value="0">
                       Tất cả tỉnh/thành phố
                     </MenuItem>
-                    {cities.map((city: any) => (
-                      <MenuItem key={city.id} value={city.id}>
-                        {city.name}
-                      </MenuItem>
-                    ))}
+                    {cities
+                      ? cities.map((city: any) => (
+                          <MenuItem key={city.id} value={city.id}>
+                            {city.name}
+                          </MenuItem>
+                        ))
+                      : "Error to fetch cities"}
                   </TextField>
                 </div>
               </div>
@@ -236,11 +217,13 @@ function Home() {
                     <MenuItem key="0" value="0">
                       Tất cả kinh nghiệm
                     </MenuItem>
-                    {exp_year.map((exp: any) => (
-                      <MenuItem key={exp.id} value={exp.id}>
-                        {exp.name}
-                      </MenuItem>
-                    ))}
+                    {exp_year
+                      ? exp_year.map((exp: any) => (
+                          <MenuItem key={exp.id} value={exp.id}>
+                            {exp.name}
+                          </MenuItem>
+                        ))
+                      : "Error to fetch experience"}
                   </TextField>
                 </div>
 
