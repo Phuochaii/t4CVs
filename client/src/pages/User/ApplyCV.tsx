@@ -21,43 +21,8 @@ import {
 import { Tooltip } from "@mui/material";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import moment from "moment";
+import JobService from "../../modules/job-module";
 
-const city = [
-  {
-    value: "0",
-    label: "Tất cả tỉnh/thành phố",
-  },
-  {
-    value: "1",
-    label: "EUR",
-  },
-  {
-    value: "2",
-    label: "BTC",
-  },
-  {
-    value: "3",
-    label: "JPY",
-  },
-];
-const exp_year = [
-  {
-    value: "0",
-    label: "Tất cả kinh nghiệm",
-  },
-  {
-    value: "1",
-    label: "1 năm",
-  },
-  {
-    value: "2",
-    label: "2 năm",
-  },
-  {
-    value: "3",
-    label: "3 năm",
-  },
-];
 const salary_range = [
   {
     value: "0",
@@ -116,6 +81,24 @@ function ApplyCV() {
 
   const [jobData, setJobData] = useState<any>({});
 
+  const [cities, setCities] = useState<any[]>([]);
+  const [exp_year, setExpYear] = useState<any[]>([]);
+
+  const [locationId, setLocationId] = useState(0);
+  const [expId, setExpId] = useState(0);
+
+  const fetchDataFilter = async () => {
+    try {
+      const locationResponse = await JobService.getAllLocation();
+      setCities(locationResponse);
+
+      const expResponse = await JobService.getAllExp();
+      setExpYear(expResponse);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchJobData = async () => {
       try {
@@ -132,6 +115,7 @@ function ApplyCV() {
     };
 
     fetchJobData();
+    fetchDataFilter();
   }, []);
 
   // Handle Modal
@@ -155,7 +139,7 @@ function ApplyCV() {
       if (
         fileType === "application/msword" || // .doc
         fileType ===
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || // .docx
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || // .docx
         fileType === "application/pdf"
       ) {
         // pdf
@@ -300,6 +284,7 @@ function ApplyCV() {
                       <FormControl>
                         <OutlinedInput
                           id="outlined-adornment-amount"
+                          placeholder="Vị trí công việc"
                           startAdornment={
                             <InputAdornment position="start">
                               <MagnifyingGlassIcon className="w-6" />
@@ -312,7 +297,7 @@ function ApplyCV() {
                       <TextField
                         id="outlined-select-currency"
                         select
-                        defaultValue="0"
+                        defaultValue={String(locationId)}
                         className="w-full"
                         InputProps={{
                           startAdornment: (
@@ -321,12 +306,27 @@ function ApplyCV() {
                             </InputAdornment>
                           ),
                         }}
+                        SelectProps={{
+                          MenuProps: {
+                            PaperProps: {
+                              style: {
+                                maxHeight: 200,
+                              },
+                            },
+                          },
+                        }}
+                        onChange={(e) => setLocationId(Number(e.target.value))}
                       >
-                        {city.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        ))}
+                        <MenuItem key="0" value="0">
+                          Tất cả tỉnh/thành phố
+                        </MenuItem>
+                        {cities
+                          ? cities.map((city: any) => (
+                            <MenuItem key={city.id} value={city.id}>
+                              {city.name}
+                            </MenuItem>
+                          ))
+                          : "Error to fetch cities"}
                       </TextField>
                     </div>
                   </div>
@@ -336,7 +336,7 @@ function ApplyCV() {
                       <TextField
                         id="outlined-select-currency"
                         select
-                        defaultValue="0"
+                        defaultValue={String(expId)}
                         className="w-full"
                         InputProps={{
                           startAdornment: (
@@ -345,12 +345,27 @@ function ApplyCV() {
                             </InputAdornment>
                           ),
                         }}
+                        SelectProps={{
+                          MenuProps: {
+                            PaperProps: {
+                              style: {
+                                maxHeight: 200,
+                              },
+                            },
+                          },
+                        }}
+                        onChange={(e) => setExpId(Number(e.target.value))}
                       >
-                        {exp_year.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        ))}
+                        <MenuItem key="0" value="0">
+                          Tất cả kinh nghiệm
+                        </MenuItem>
+                        {exp_year
+                          ? exp_year.map((exp: any) => (
+                            <MenuItem key={exp.id} value={exp.id}>
+                              {exp.name}
+                            </MenuItem>
+                          ))
+                          : "Error to fetch experience"}
                       </TextField>
                     </div>
 
@@ -593,10 +608,10 @@ function ApplyCV() {
                             {jobData?.jobDetail
                               ? jobData?.jobDetail?.skills
                                 ? jobData?.jobDetail?.skills
-                                    .split(", ")
-                                    .map((skill: any, index: number) => (
-                                      <p key={index}>- {skill}</p>
-                                    ))
+                                  .split(", ")
+                                  .map((skill: any, index: number) => (
+                                    <p key={index}>- {skill}</p>
+                                  ))
                                 : ""
                               : ""}
                           </div>
@@ -1021,14 +1036,14 @@ function ApplyCV() {
                       <div className="box-category-tags flex flex-row flex-wrap gap-3">
                         {jobData?.fields
                           ? jobData?.fields.map((field: any, index: number) => (
-                              <span
-                                key={index}
-                                id={field.id}
-                                className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500"
-                              >
-                                {field.name}
-                              </span>
-                            ))
+                            <span
+                              key={index}
+                              id={field.id}
+                              className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500"
+                            >
+                              {field.name}
+                            </span>
+                          ))
                           : ""}
                       </div>
                     </div>
