@@ -35,7 +35,6 @@ function PostJob() {
     // nay xu li sau
     setModal((prev) => !prev);
   };
-  // return <p>123</p>
   return (
     <div>
       <div className="bg-white p-7 m-5 flex">
@@ -285,7 +284,11 @@ function PostJob() {
                     {chosenPlan.description}
                   </div>
                   <Link
-                    to={chosenPlan == plans[0] ? "data" : "/"}
+                    to={
+                      chosenPlan == plans[0]
+                        ? `/hr/post-compaign/data/${compaignId}`
+                        : ""
+                    }
                     className="absolute cursor-pointer font-medium text-white hover:text-white bottom-28 py-2 px-4 rounded-md bg-[#00b14f] "
                   >
                     {chosenPlan.button} -&gt;
