@@ -28,6 +28,7 @@ export async function getAllCompanies() {
 
 export async function getCompanyById(id:number) {
     const response = await axios.get(`${serverURL}/company/${id}`);
+    if (response.status != 200) return null;
     const rawCompany: CompanyFromServer = response.data;
     return rawCompany;
 }

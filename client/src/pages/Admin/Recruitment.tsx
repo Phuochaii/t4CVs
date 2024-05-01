@@ -131,6 +131,7 @@ function Recruitment() {
     };
     getAllRecruitments();
   }, [page]);
+
   return (
     <div className="flex-grow bg-slate-200">
       <h1 className="p-2 font-bold text-black bg-white">

@@ -116,7 +116,9 @@ const CompanyCampaignTableRow = ({
         )}`}</div>
       </td>
       <td className="border">
-        <div className="p-2 font-bold text-blue-500">{`${campaign.company.name}`}</div>
+        <div className="p-2 font-bold text-blue-500">{`${
+          campaign.company ? campaign.company.name : ""
+        }`}</div>
       </td>
       <td className="border max-w-[180px]">
         <div className="flex flex-col gap-2 p-2">
@@ -190,7 +192,9 @@ function Campaign() {
       );
       const rawCampaigns = await allCampaigns.map(async (item) => {
         const employer = await getEmployerById(item.employerId);
+        console.log(employer);
         const company = await getCompanyById(employer.companyId);
+        console.log(company);
         const job = await getJobByCampaignId(item.id);
         const rawCampaign: CampaignType = {
           campaignName: item.name,

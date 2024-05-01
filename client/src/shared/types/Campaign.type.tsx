@@ -7,7 +7,7 @@ import { UserFromServer } from "./User.type";
 export interface Campaign {
   campaignName: string;
   campaignId: number;
-  company: CompanyFromServer;
+  company: CompanyFromServer | null;
   postDate: Date;
   employer: EmployerFromServer;
   recruitment: RecruitmentFromServer;
