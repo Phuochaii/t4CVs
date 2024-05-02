@@ -24,8 +24,10 @@ function Campaign() {
   const navigation = useNavigate();
 
   useEffect(() => {
+    const hrId = JSON.parse(localStorage.getItem("hr") as string).id;
+
     const getAllCompaigns = async () => {
-      const { allCampaigns, totalPages } = await getCampaignByHRId(1, 1);
+      const { allCampaigns, totalPages } = await getCampaignByHRId(hrId, 1);
       setTotalPages(totalPages);
       const rawCampaigns = await allCampaigns.map(async (item) => {
         const employer = await getEmployerById(item.employerId);
