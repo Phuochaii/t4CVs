@@ -34,7 +34,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
   const navigation = useNavigate();
 
   const [isHovered, setIsHovered] = useState(false);
-  const [campaign] = useState<Campaign>(data);
+  const campaign = data;
   return (
     <tr
       onClick={() => {
