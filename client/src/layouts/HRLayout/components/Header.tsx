@@ -42,7 +42,7 @@ const list_btn2 = [
     link: "",
     icon: ShoppingCart,
     iconSize: 20,
-    numberNoti: 1,
+    // numberNoti: 1,
   },
 ];
 const notifyButton = {
@@ -116,6 +116,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
               marginRight: "20px",
               marginTop: "4px",
             }}
+            onClick={() => navigation("/hr/news")}
           >
             <img
               src="https://tuyendung.topcv.vn/app/_nuxt/img/logo_topcv_dark.ee0b56e.png"

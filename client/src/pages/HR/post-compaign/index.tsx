@@ -22,7 +22,7 @@ function PostCompaign() {
 
   const next = () => {
     if (value === "3") {
-      navigation("/hr/compaign");
+      navigation("/hr/campaign");
       return;
     }
     setValue((current) => (parseInt(current) + 1).toString());

@@ -81,12 +81,12 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
                         key={item}
                         src={
                           candidate?.image ||
-                          "https://images.unsplash.com/photo-1438761681033-6461ffad8d80"
+                          "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg"
                         }
                         className="object-cover rounded-full w-9 h-9"
                         onError={(e) =>
                           (e.currentTarget.src =
-                            "https://images.unsplash.com/photo-1438761681033-6461ffad8d80")
+                            "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg")
                         }
                       />
                     );

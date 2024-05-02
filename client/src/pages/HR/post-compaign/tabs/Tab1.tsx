@@ -67,12 +67,12 @@ function PostCompaign1({
     value: string;
     label: string;
   }> | null>(null);
-  const [emailOption, setEmailOption] = useState('');
+  const [emailOption, setEmailOption] = useState("");
   const [fieldOptions, setFieldOptions] = useState<MultiValue<{
     value: string;
     label: string;
   }> | null>(null);
-  const [skill, setSkill] = useState('');
+  const [skill, setSkill] = useState("");
   const [careerError, setCareerError] = useState(true);
   const [skillError, setSkillError] = useState(true);
   const [nameError, setNameError] = useState(true);
@@ -96,18 +96,18 @@ function PostCompaign1({
   const [showError, setShowError] = useState(true);
   const [showDescriptionError, setDescritionError] = useState(true);
   const [showRequirement, setRequirementError] = useState(true);
-  const [address, setAddress] = useState('');
-  const [jobDescription, setJobDescription] = useState('');
-  const [description, setDescription] = useState('');
-  const [requirement, setRequirement] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [schedule, setSchedule] = useState('');
-  const [salary, setSalary] = useState('');
-  const [salaryMax, setSalaryMax] = useState('');
-  const [title, setTitle] = useState('');
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [date, setDate] = useState('');
+  const [address, setAddress] = useState("");
+  const [jobDescription, setJobDescription] = useState("");
+  const [description, setDescription] = useState("");
+  const [requirement, setRequirement] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [schedule, setSchedule] = useState("");
+  const [salary, setSalary] = useState("");
+  const [salaryMax, setSalaryMax] = useState("");
+  const [title, setTitle] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [date, setDate] = useState("");
   const [titleError, setTitleError] = useState(true);
   const [item, setItem] = useState({
     titleRecruitment: "",
@@ -136,11 +136,31 @@ function PostCompaign1({
   ) => {
     console.log(fieldOptions);
     event.preventDefault();
-    if (!titleError && !showError && !showDescriptionError && !showRequirement
-      && !fieldError && !careerError &&
-      !quantityError && !jobTypeError && !genderError && !levelError && !expError && !currencyError
-      && !salaryError && !cityError && !districtError && !addressError &&
-      !dateError && !nameError && !phoneError && !emailError && !skillError && !salaryMaxError && !scheduleError) {
+    if (
+      !titleError &&
+      !showError &&
+      !showDescriptionError &&
+      !showRequirement &&
+      !fieldError &&
+      !careerError &&
+      !quantityError &&
+      !jobTypeError &&
+      !genderError &&
+      !levelError &&
+      !expError &&
+      !currencyError &&
+      !salaryError &&
+      !cityError &&
+      !districtError &&
+      !addressError &&
+      !dateError &&
+      !nameError &&
+      !phoneError &&
+      !emailError &&
+      !skillError &&
+      !salaryMaxError &&
+      !scheduleError
+    ) {
       let updatedItem = { ...item };
 
       // Modify each property
@@ -154,8 +174,8 @@ function PostCompaign1({
       updatedItem.levelId = Number.parseInt(levelOptions?.value!);
       updatedItem.campaignId = Number.parseInt(compaignId as string) as number;
       updatedItem.companyId = 1;
-      updatedItem.salaryMin = salary!=='' ? Number.parseInt(salary):0;
-      updatedItem.salaryMax = salaryMax!=='' ? Number.parseInt(salaryMax):0;
+      updatedItem.salaryMin = salary !== "" ? Number.parseInt(salary) : 0;
+      updatedItem.salaryMax = salaryMax !== "" ? Number.parseInt(salaryMax) : 0;
       updatedItem.expId = Number.parseInt(expOptions?.value!);
       updatedItem.locationsId = cityOption
         ? cityOption.map((option) => parseInt(option.value))
@@ -164,12 +184,9 @@ function PostCompaign1({
       updatedItem.quantity = Number.parseInt(quantity);
       updatedItem.jobSchedule = schedule;
       updatedItem.gender = genderOptions?.value!;
-      updatedItem.description =
-        jobDescription;
-      updatedItem.benefit =
-        description;
-      updatedItem.requirement =
-        requirement;
+      updatedItem.description = jobDescription;
+      updatedItem.benefit = description;
+      updatedItem.requirement = requirement;
       updatedItem.skills = skill;
 
       // Log the updated item
@@ -244,7 +261,7 @@ function PostCompaign1({
     } else {
       setQuantityError(false);
     }
-  }
+  };
   const handleScheduleError = (value: SetStateAction<string>) => {
     setSchedule(value);
     if (value.length === 0) {
@@ -252,7 +269,7 @@ function PostCompaign1({
     } else {
       setScheduleError(false);
     }
-  }
+  };
   const handleSalaryError = (value: SetStateAction<string>) => {
     setSalary(value);
     if (value.length === 0) {
@@ -260,7 +277,7 @@ function PostCompaign1({
     } else {
       setSalaryError(false);
     }
-  }
+  };
   const handleSalaryMaxError = (value: SetStateAction<string>) => {
     setSalaryMax(value);
     if (value.length === 0) {
@@ -268,17 +285,19 @@ function PostCompaign1({
     } else {
       setSalaryMaxError(false);
     }
-  }
-  const handleJobTypeError = (value: SetStateAction<SingleValue<{ value: string; label: string }>>) => {
-    setjobTypeOptions(value)
+  };
+  const handleJobTypeError = (
+    value: SetStateAction<SingleValue<{ value: string; label: string }>>
+  ) => {
+    setjobTypeOptions(value);
     if (value !== null) {
       setJobTypeError(false);
     } else {
       setJobTypeError(true);
     }
-  }
+  };
   const handleEmailError = (value: SetStateAction<string>) => {
-    setEmailOption(value)
+    setEmailOption(value);
     if (value?.length === 0) {
       setEmailError(true);
     } else {
@@ -367,9 +386,9 @@ function PostCompaign1({
     } else {
       setFieldError(true);
     }
-  }
+  };
   const handleSkillError = (value: SetStateAction<string>) => {
-    setSkill(value)
+    setSkill(value);
     if (value?.length === 0) {
       setSkillError(true);
     } else {
@@ -443,12 +462,11 @@ function PostCompaign1({
     choice: SetStateAction<SingleValue<{ value: string; label: string }>>
   ) => {
     if (choice !== null) {
-      if (typeof choice !== 'function' && choice.value === 'Trong khoảng') {
+      if (typeof choice !== "function" && choice.value === "Trong khoảng") {
         setShowPopup(true);
         setSalaryError(true);
         setSalaryMaxError(true);
-      }
-      else {
+      } else {
         setShowPopup(false);
         setSalaryError(false);
         setSalaryMaxError(false);
@@ -463,19 +481,19 @@ function PostCompaign1({
   const gender = [
     { value: "Không quan trọng", label: "Không quan trọng" },
     { value: "Nam", label: "Nam" },
-    { value: "Nữ", label: "Nữ" }
-  ]
+    { value: "Nữ", label: "Nữ" },
+  ];
   const skills = [
     { value: "SQL", label: "SQL" },
     { value: "Java", label: "Java" },
     { value: "Python", label: "Python" },
     { value: "JavaScript", label: "JavaScript" },
-  ]
+  ];
   const email = [
     { value: "hr@gmail.com", label: "hr@gmail.com" },
     { value: "tuyendung@gmail.com", label: "tuyendung@gmail.com" },
     { value: "example@email.com", label: "example@email.com" },
-  ]
+  ];
   const cityOptions = [
     { value: "Hồ Chí Minh", label: "Hồ Chí Minh" },
     { value: "Bình Dương", label: "Bình Dương" },
@@ -1027,11 +1045,9 @@ function PostCompaign1({
                   </div>
                 </div>
                 {showPopup && (
-                  <div className='flex flex-row space-x-5 w-3/12'>
+                  <div className="flex flex-row space-x-5 w-3/12">
                     <div className="space-y-2 w-1/2 bg-red">
-                      <span className="text-base font-semibold">
-                        Từ
-                      </span>
+                      <span className="text-base font-semibold">Từ</span>
                       <input
                         type="text"
                         className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
@@ -1041,9 +1057,7 @@ function PostCompaign1({
                       />
                     </div>
                     <div className="space-y-2 w-1/2 bg-red">
-                      <span className="text-base font-semibold">
-                        Đến
-                      </span>
+                      <span className="text-base font-semibold">Đến</span>
                       <input
                         type="text"
                         className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
@@ -1053,7 +1067,6 @@ function PostCompaign1({
                       />
                     </div>
                   </div>
-
                 )}
               </div>
               <div className="text-base font-semibold mt-4">Khu vực</div>
@@ -1191,9 +1204,22 @@ function PostCompaign1({
             </div>
           </div>
         </div>
-        {(quantityError || jobTypeError || genderError || levelError || expError || currencyError || salaryMaxError || salaryError || cityError || scheduleError || districtError || addressError) && (<div className="ml-14 text-red-700">
-          Vui lòng điền đầy đủ thông tin
-        </div>)}
+        {(quantityError ||
+          jobTypeError ||
+          genderError ||
+          levelError ||
+          expError ||
+          currencyError ||
+          salaryMaxError ||
+          salaryError ||
+          cityError ||
+          scheduleError ||
+          districtError ||
+          addressError) && (
+          <div className="ml-14 text-red-700">
+            Vui lòng điền đầy đủ thông tin
+          </div>
+        )}
       </div>
       <div className="bg-white p-4 rounded-sm mb-5">
         <div className="flex flex-row space-x-5 mb-4">
@@ -1258,7 +1284,7 @@ function PostCompaign1({
             ></AlignLeft>
           </div>
           <div className="w-full space-y-8">
-            <span className="font-bold">Tiêu đề tuyển dụng</span>
+            <span className="font-bold">Mô tả công việc</span>
             <button
               className="btn text-base p-1 flex flex-row items-center w-fit"
               style={{
@@ -1282,7 +1308,7 @@ function PostCompaign1({
             </button>
 
             <div>
-              <span className="text-slate-600">Mô tả công việc</span>
+              {/* <span className="text-slate-600">Mô tả công việc</span> */}
               <div className="px-1 py-2 flex flex-row items-center bg-gray-300 space-x-1">
                 <button className="bg-gray-300">
                   <Bold
@@ -1456,13 +1482,13 @@ function PostCompaign1({
 
               <div className="text-slate-600 mb-1">Kỹ năng liên quan</div>
               <div className="w-ful">
-              <input
-                    type="text"
-                    className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
-                    placeholder="Nhập kỹ năng liên quan"
-                    value={skill}
-                    onChange={(e) => handleSkillError(e.target.value)}
-                  />
+                <input
+                  type="text"
+                  className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
+                  placeholder="Nhập kỹ năng liên quan"
+                  value={skill}
+                  onChange={(e) => handleSkillError(e.target.value)}
+                />
               </div>
               {(showRequirement || skillError) && (
                 <div className="text-red-700 mb-5">
