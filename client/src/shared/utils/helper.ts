@@ -70,9 +70,16 @@ export async function getJobsStat(limit: number = 1000) {
 }
 
 export async function getJobByCampaignId(campaignId: number) {
-    const response = await axios.get(`${serverURL}/job?campaignId=${campaignId}`);
-    const rawJob: RecruitmentFromServer = response.data;
-    return rawJob;
+    try {
+
+        const response = await axios.get(`${serverURL}/job?campaignId=${campaignId}`);
+        if (response.status != 200) return null;
+        const rawJob: RecruitmentFromServer = response.data;
+        return rawJob;
+    }
+    catch (e) {
+        return null;
+    }
 }
 
 export async function getJobById(id: number) {

@@ -105,33 +105,42 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
         <div className="p-2 font-bold text-blue-500">{`${69}%`}</div>
       </td>
       <td className="border max-w-[180px]">
-        <div className="flex flex-col gap-2 p-2">
-          <h3 className="font-bold capitalize">
-            {campaign.recruitment.titleRecruitment}
-          </h3>
-          <div className="flex gap-2">
-            <span className="font-bold bg-slate-200 text-slate-400">
-              {`#${campaign.recruitment.id}`}
-            </span>
-            <span className="font-bold text-slate-400">
-              {campaign.recruitment.status}
-            </span>
-          </div>
-          <div
-            className={`flex items-center gap-2 ${
-              isHovered ? "visible" : "invisible"
-            }`}
-          >
-            <Link
-              className="font-bold text-green-500"
-              to={`/hr/campaign-edit/${campaign.recruitment.id}`}
-              state={campaign}
+        {campaign.recruitment ? (
+          <div className="flex flex-col gap-2 p-2">
+            <h3 className="font-bold capitalize">
+              {campaign.recruitment.titleRecruitment}
+            </h3>
+            <div className="flex gap-2">
+              <span className="font-bold bg-slate-200 text-slate-400">
+                {`#${campaign.recruitment.id}`}
+              </span>
+              <span className="font-bold text-slate-400">
+                {campaign.recruitment.status}
+              </span>
+            </div>
+            <div
+              className={`flex items-center gap-2 ${
+                isHovered ? "visible" : "invisible"
+              }`}
             >
-              Chỉnh sửa
-            </Link>
-            <button> Yêu cầu hiển thị </button>
+              <Link
+                className="font-bold text-green-500"
+                to={`/hr/campaign-edit/${campaign.recruitment.id}`}
+                state={campaign}
+              >
+                Chỉnh sửa
+              </Link>
+              <button> Yêu cầu hiển thị </button>
+            </div>
           </div>
-        </div>
+        ) : (
+          <Link
+            to={`/hr/post-compaign/data/${campaign.campaignId}`}
+            className="p-2 rounded-sm bg-slate-200 hover:bg-slate-100"
+          >
+            Thêm tin tuyển dụng
+          </Link>
+        )}
       </td>
       <td className="border">
         <div className="flex flex-col items-start gap-2 p-2">
