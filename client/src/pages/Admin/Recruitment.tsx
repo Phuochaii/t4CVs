@@ -14,6 +14,7 @@ import { RecruitmentJobPost } from "../../shared/types/Recruitment.type";
 import {
   getAllJobs,
   getCampaignById,
+  getJobsStat,
 } from "../../shared/utils/helper";
 import Switch from "../../shared/components/CustomSwitch";
 import axios from "axios";
@@ -21,9 +22,16 @@ import axios from "axios";
 interface RecruitmentTableProps {
   data: RecruitmentJobPost[];
   setData: React.Dispatch<SetStateAction<RecruitmentJobPost[]>>;
+  refresh: boolean;
+  setRefresh: React.Dispatch<SetStateAction<boolean>>;
 }
 
-function RecruitmentTable({ data, setData }: RecruitmentTableProps) {
+function RecruitmentTable({
+  data,
+  setData,
+  refresh,
+  setRefresh,
+}: RecruitmentTableProps) {
   return (
     <table className="w-full bg-white">
       <thead>
@@ -60,6 +68,7 @@ function RecruitmentTable({ data, setData }: RecruitmentTableProps) {
                           status: !jobPost.status,
                         }
                       );
+                      setRefresh(!refresh);
                     }}
                   />
                   <div>
@@ -132,10 +141,18 @@ function Recruitment() {
   const [filterKeyword, setFilterKeyword] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [jobStats, setJobStats] = useState({
+    isActive: 0,
+    total: 0,
+    isNotActive: 0,
+  });
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const getAllRecruitments = async () => {
       const { allJobs, totalPages } = await getAllJobs(page);
+      const stats = await getJobsStat();
+      setJobStats(stats);
       const rawRecruitments = allJobs.map(async (item) => {
         const campaign = await getCampaignById(item.campaignId);
         const rawRecruitment = {
@@ -151,7 +168,7 @@ function Recruitment() {
       setTotalPages(totalPages);
     };
     getAllRecruitments();
-  }, [page]);
+  }, [page, refresh]);
 
   return (
     <div className="flex-grow bg-slate-200">
@@ -174,25 +191,11 @@ function Recruitment() {
               >
                 {status}
                 <span className="flex items-center justify-center w-6 h-6 text-white bg-red-500 rounded-full">
-                  {data.reduce(function reducer(
-                    accumulator,
-                    currentValue
-                  ) {
-                    let addedValue = 1;
-                    if (filteredStatuses[key] === "Tất cả")
-                      return accumulator + addedValue;
-                    else {
-                      const status = currentValue.status
-                        ? "Đang hiển thị"
-                        : "Dừng hiển thị";
-
-                      return (
-                        accumulator +
-                        (status === filteredStatuses[key] ? 1 : 0)
-                      );
-                    }
-                  },
-                  0)}
+                  {status === "Tất cả"
+                    ? jobStats.total
+                    : status === "Đang hiển thị"
+                    ? jobStats.isActive
+                    : jobStats.isNotActive}
                 </span>
               </div>
             );
@@ -210,6 +213,8 @@ function Recruitment() {
           <Search className="px-2" size={32} />
         </div>
         <RecruitmentTable
+          refresh={refresh}
+          setRefresh={setRefresh}
           setData={setData}
           data={data
             .filter(
