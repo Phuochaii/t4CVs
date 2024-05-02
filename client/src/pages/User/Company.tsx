@@ -25,7 +25,7 @@ function Company() {
           <ul className="flex items-center">
             <li className="">
               <a className="text-[#212F3F] inline-block font-normal cursor-pointer">
-                Danh sách Công ty <span>{">"}</span>
+                Danh sách Công ty <span>{""}</span>
               </a>
             </li>
             <li className="">

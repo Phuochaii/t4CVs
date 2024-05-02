@@ -10,7 +10,9 @@ function UserLayout({ children }: LayoutProp) {
   return (
     <>
       <Header />
-      {React.cloneElement(children as React.ReactElement<any>)}
+      <div className="mt-24">
+        {React.cloneElement(children as React.ReactElement<any>)}
+      </div>
       <Footer />
     </>
   );

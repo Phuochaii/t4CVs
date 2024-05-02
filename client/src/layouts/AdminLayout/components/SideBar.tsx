@@ -15,13 +15,13 @@ const links = [
     iconComponent: <Eye className="text-white" />,
   },
   {
-    name: "Compaign",
+    name: "Company",
     path: "/admin/compaign",
     icon: CreditCard,
     iconComponent: <CreditCard className="text-white" />,
   },
   {
-    name: "Company",
+    name: "Compaign",
     path: "/admin/company",
     icon: Building2,
     iconComponent: <Building2 className="text-white" />,

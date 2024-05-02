@@ -4,37 +4,28 @@ import { useState } from "react";
 import SearchBar from "../../layouts/AdminLayout/components/SearchBar";
 import { MoreHorizontal } from "lucide-react";
 
-const columns = [
-  "Status",
-  "Company Name",
-  "Experience Level",
-  "Job",
-  "Action",
-];
+const columns = ["Status", "Company Name", "Experience Level", "Job", "Action"];
 
 function Compaign() {
   const [openDialog, setOpenDialog] = useState(-1);
   const [mockUsers, setMockUsers] = useState([
     {
       status: "accepted",
-      imageUrl:
-        "https://images.unsplash.com/photo-1711580377289-eecd23d00370",
+      imageUrl: "https://images.unsplash.com/photo-1711580377289-eecd23d00370",
       companyName: "Meta",
       experienceLevel: "Junior",
       job: "Quality Assurance",
     },
     {
       status: "declined",
-      imageUrl:
-        "https://images.unsplash.com/photo-1711580377289-eecd23d00370",
+      imageUrl: "https://images.unsplash.com/photo-1711580377289-eecd23d00370",
       companyName: "Apple",
       experienceLevel: "Senior",
       job: "Software Engineer",
     },
     {
       status: "pending",
-      imageUrl:
-        "https://images.unsplash.com/photo-1711580377289-eecd23d00370",
+      imageUrl: "https://images.unsplash.com/photo-1711580377289-eecd23d00370",
       companyName: "Netflix",
       experienceLevel: "Mid-level",
       job: "Software Tester",
@@ -50,11 +41,9 @@ function Compaign() {
       }}
     >
       <div className="flex justify-between w-full gap-12 my-4">
-        <h1 className="text-2xl font-bold text-slate-500">
-          Compaign
-        </h1>
+        <h1 className="text-2xl font-bold text-slate-500">Compaign</h1>
         <div className="">
-          <SearchBar placeholder="Search Compaign" />
+          <SearchBar placeholder="Search Company" />
         </div>
       </div>
 
@@ -89,8 +78,8 @@ function Compaign() {
                       user.status === "accepted"
                         ? "bg-green-500"
                         : user.status === "pending"
-                        ? "bg-gradient-to-b from-green-500 to-blue-500"
-                        : "bg-red-500"
+                          ? "bg-gradient-to-b from-green-500 to-blue-500"
+                          : "bg-red-500"
                     }`}
                   >
                     {user.status}
@@ -107,9 +96,7 @@ function Compaign() {
                 <td className="flex justify-center w-1/5">
                   {user.experienceLevel}
                 </td>
-                <td className="flex justify-center w-1/5">
-                  {user.job}
-                </td>
+                <td className="flex justify-center w-1/5">{user.job}</td>
                 <td className="relative flex justify-center w-1/5">
                   <MoreHorizontal
                     className="hover:bg-slate-400 rounded-[24rem] hover:text-white hover:cursor-pointer"

@@ -28,7 +28,7 @@ function Header() {
       <div className="flex-1 h-full">
         <img src="/topcv-logo-6.webp" className="object-contain h-full"></img>
       </div>
-      <SearchBar placeholder="Search e.g card" />
+      <SearchBar placeholder="Search " />
 
       <Bell className="mx-2 text-slate-500" />
       <li className="relative list-none">
