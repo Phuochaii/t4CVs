@@ -93,7 +93,7 @@ export class Job {
   level: Level;
 
   // Demo , ve sau sua ai default là false
-  @Column({ default: true })
+  @Column({ default: false })
   status: boolean;
 
   //companyId
