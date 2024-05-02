@@ -52,53 +52,49 @@ function RecruitmentTable({
             <tr key={key}>
               <td className="border w-[360px] ">
                 <div className="flex flex-col items-start gap-1">
-                  <Switch
-                    checked={jobPost.status}
-                    onClick={async () => {
-                      const newJobPost = {
-                        ...jobPost,
-                        status: !jobPost.status,
-                      };
-                      data[key] = newJobPost;
-                      setData([...data]);
-                      await axios.post(
-                        "http://localhost:3000/job/update-status",
-                        {
-                          id: newJobPost.id,
+                  <div className="flex items-start">
+                    <Switch
+                      checked={jobPost.status}
+                      onClick={async () => {
+                        const newJobPost = {
+                          ...jobPost,
                           status: !jobPost.status,
-                        }
-                      );
-                      setRefresh(!refresh);
-                    }}
-                  />
-                  <div>
-                    <span
-                      className={clsx(
-                        "p-1 font-semibold",
-                        statusColor[
-                          jobPost.status
-                            ? "Đang hiển thị"
-                            : "Dừng hiển thị"
-                        ].bg,
-                        statusColor[
-                          jobPost.status
-                            ? "Đang hiển thị"
-                            : "Dừng hiển thị"
-                        ].text
-                      )}
-                    >
-                      {jobPost.status
-                        ? "Đang hiển thị"
-                        : "Dừng hiển thị"}
-                    </span>{" "}
-                    <span className="font-bold capitalize">
-                      {jobPost.titleRecruitment}
-                    </span>{" "}
-                    <span className="text-slate-500">{`#${jobPost.id}`}</span>
+                        };
+                        data[key] = newJobPost;
+                        setData([...data]);
+                        await axios.post(
+                          "http://localhost:3000/job/update-status",
+                          {
+                            id: newJobPost.id,
+                            status: !jobPost.status,
+                          }
+                        );
+                        setRefresh(!refresh);
+                      }}
+                    />
+                    <div className="mt-1">
+                      <div className="font-bold capitalize">
+                        {jobPost.titleRecruitment}
+                        {"    "}
+                        <span
+                          className={clsx(
+                            "p-1 font-semibold",
+                            statusColor[
+                              jobPost.status ? "Đang hiển thị" : "Dừng hiển thị"
+                            ].bg,
+                            statusColor[
+                              jobPost.status ? "Đang hiển thị" : "Dừng hiển thị"
+                            ].text
+                          )}
+                        >
+                          {jobPost.status ? "Đang hiển thị" : "Dừng hiển thị"}
+                        </span>
+                      </div>
+                      <span className="text-slate-500">{`#${jobPost.id}`}</span>
+                    </div>
                   </div>
-                  <span>
-                    Chiến dịch tuyển dụng: {jobPost.campaign.name}
-                  </span>
+                  <div></div>
+                  <span>Chiến dịch tuyển dụng: {jobPost.campaign.name}</span>
                   <button className="p-2 font-bold text-green-500 bg-green-50">
                     Xem CV ứng tuyển
                   </button>
@@ -106,11 +102,7 @@ function RecruitmentTable({
               </td>
               <td className="p-2 border w-[64px]">
                 <div className="flex flex-col items-center justify-center gap-4">
-                  <Pencil
-                    fill="gray"
-                    stroke="white"
-                    strokeWidth={1}
-                  />
+                  <Pencil fill="gray" stroke="white" strokeWidth={1} />
                   <button className="p-2 rounded-full">
                     <Pause fill="gray" stroke="transparent" />
                   </button>
@@ -119,9 +111,7 @@ function RecruitmentTable({
                   </button>
                 </div>
               </td>
-              <td className="border w-[360px]">
-                {jobPost.company?.name}
-              </td>
+              <td className="border w-[360px]">{jobPost.company?.name}</td>
               <td className="border">
                 {jobPost.createdAt.toLocaleDateString("vi-VN")}
               </td>
@@ -194,8 +184,8 @@ function Recruitment() {
                   {status === "Tất cả"
                     ? jobStats.total
                     : status === "Đang hiển thị"
-                    ? jobStats.isActive
-                    : jobStats.isNotActive}
+                      ? jobStats.isActive
+                      : jobStats.isNotActive}
                 </span>
               </div>
             );
@@ -219,12 +209,9 @@ function Recruitment() {
           data={data
             .filter(
               (jobPost) =>
-                (jobPost.status
-                  ? "Đang hiển thị"
-                  : "Dừng hiển thị") ===
+                (jobPost.status ? "Đang hiển thị" : "Dừng hiển thị") ===
                   filteredStatuses[selectedStatus] ||
-                (filteredStatuses[selectedStatus] === "Tất cả" &&
-                  jobPost)
+                (filteredStatuses[selectedStatus] === "Tất cả" && jobPost)
             )
             .filter(
               (jobPost) =>
@@ -247,9 +234,7 @@ function Recruitment() {
             stroke="green"
             className="cursor-pointer"
             strokeWidth={1}
-            onClick={() =>
-              setPage(page + 1 <= totalPages ? page + 1 : page)
-            }
+            onClick={() => setPage(page + 1 <= totalPages ? page + 1 : page)}
           />
         </div>
       </div>

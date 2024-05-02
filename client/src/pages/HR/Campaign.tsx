@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { CampaignTable } from "../../shared/components/compaign-table";
 import { Campaign as CampaignType } from "../../shared/types/Campaign.type";
 import {
@@ -20,13 +21,11 @@ function Campaign() {
   const [campaigns, setCampaigns] = useState<CampaignType[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const navigation = useNavigate();
 
   useEffect(() => {
     const getAllCompaigns = async () => {
-      const { allCampaigns, totalPages } = await getCampaignByHRId(
-        1,
-        1
-      );
+      const { allCampaigns, totalPages } = await getCampaignByHRId(1, 1);
       setTotalPages(totalPages);
       const rawCampaigns = await allCampaigns.map(async (item) => {
         const employer = await getEmployerById(item.employerId);
@@ -58,7 +57,10 @@ function Campaign() {
       </div>
       <div className="flex flex-col items-center justify-between gap-2 py-8 w-[90%]">
         <div className="flex items-center justify-between w-full gap-2">
-          <button className="flex items-center h-full gap-2 px-4 py-2 text-white bg-green-600 rounded-sm">
+          <button
+            onClick={() => navigation("/hr/post-compaign")}
+            className="flex items-center h-full gap-2 px-4 py-2 text-white bg-green-600 rounded-sm"
+          >
             <Briefcase stroke="white" /> Chiến dịch mới
           </button>
           <div className="flex items-center flex-grow divide-x-2">
@@ -90,9 +92,7 @@ function Campaign() {
             stroke="green"
             className="cursor-pointer"
             strokeWidth={1}
-            onClick={() =>
-              setPage(page + 1 <= totalPages ? page + 1 : page)
-            }
+            onClick={() => setPage(page + 1 <= totalPages ? page + 1 : page)}
           />
         </div>
       </div>
