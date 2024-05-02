@@ -59,6 +59,16 @@ export async function getAllJobs(page:number = 1) {
     return { allJobs: rawJobs, totalPages: totalPages };
 }
 
+export async function getJobsStat(limit: number = 1000) {
+    let response = await axios.get(`${serverURL}/job/all?limit=${limit}`)
+    const total = response.data.total;
+    response = await axios.get(`${serverURL}/job/all?limit=${limit}&status=true`);
+    const isActive = response.data.total;
+    response = await axios.get(`${serverURL}/job/all?limit=${limit}&status=false`);
+    const isNotActive = response.data.total;
+    return { total: total, isActive: isActive, isNotActive: isNotActive };
+}
+
 export async function getJobByCampaignId(campaignId: number) {
     const response = await axios.get(`${serverURL}/job?campaignId=${campaignId}`);
     const rawJob: RecruitmentFromServer = response.data;

@@ -15,6 +15,7 @@ import { RecruitmentJobPost } from "../../shared/types/Recruitment.type";
 import {
   getAllJobs,
   getCampaignById,
+  getJobsStat,
 } from "../../shared/utils/helper";
 
 interface RecruitmentTableProps {
@@ -119,10 +120,17 @@ function Recruitment() {
   const [filterKeyword, setFilterKeyword] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [jobStats, setJobStats] = useState({
+    isActive: 0,
+    total: 0,
+    isNotActive: 0,
+  });
 
   useEffect(() => {
     const getAllRecruitments = async () => {
       const { allJobs, totalPages } = await getAllJobs(page);
+      const stats = await getJobsStat();
+      setJobStats(stats);
       const rawRecruitments = allJobs.map(async (item) => {
         const campaign = await getCampaignById(item.campaignId);
         const rawRecruitment = {
@@ -161,25 +169,11 @@ function Recruitment() {
               >
                 {status}
                 <span className="flex items-center justify-center w-5 h-5 text-white bg-red-500 rounded-full">
-                  {data.reduce(function reducer(
-                    accumulator,
-                    currentValue
-                  ) {
-                    let addedValue = 1;
-                    if (filteredStatuses[key] === "Tất cả")
-                      return accumulator + addedValue;
-                    else {
-                      const status = currentValue.status
-                        ? "Đang hiển thị"
-                        : "Dừng hiển thị";
-
-                      return (
-                        accumulator +
-                        (status === filteredStatuses[key] ? 1 : 0)
-                      );
-                    }
-                  },
-                  0)}
+                  {status === "Tất cả"
+                    ? jobStats.total
+                    : status === "Đang hiển thị"
+                    ? jobStats.isActive
+                    : jobStats.isNotActive}
                 </span>
               </div>
             );
