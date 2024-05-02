@@ -14,13 +14,13 @@ export const CampaignTableHeaders = () => {
         <td className="px-2 py-1 font-bold border">
           Chiến dịch tuyển dụng
         </td>
-        {/* <td className="px-2 py-1 font-bold border">Tối ưu</td> */}
+        <td className="px-2 py-1 font-bold border">Tối ưu</td>
         <td className="px-2 py-1 font-bold border">Tin tuyển dụng</td>
-        {/* <td className="px-2 py-1 font-bold border">CV từ hệ thống</td> */}
-        {/* <td className="px-2 py-1 font-bold border">Lọc CV</td> */}
-        {/* <td className="px-2 py-1 font-bold border">
+        <td className="px-2 py-1 font-bold border">CV từ hệ thống</td>
+        <td className="px-2 py-1 font-bold border">Lọc CV</td>
+        <td className="px-2 py-1 font-bold border">
           Dịch vụ đang chạy
-        </td> */}
+        </td>
       </tr>
     </thead>
   );
@@ -101,11 +101,9 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
           </div>
         </div>
       </td>
-      {/* <td className="border">
-        <div className="p-2 font-bold text-blue-500">{`${
-          campaign.optimization || 0
-        }%`}</div>
-      </td> */}
+      <td className="border">
+        <div className="p-2 font-bold text-blue-500">{`${69}%`}</div>
+      </td>
       <td className="border max-w-[180px]">
         <div className="flex flex-col gap-2 p-2">
           <h3 className="font-bold capitalize">
@@ -135,48 +133,40 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
           </div>
         </div>
       </td>
-      {/* <td className="border">
+      <td className="border">
         <div className="flex flex-col items-start gap-2 p-2">
-          <h3 className="font-bold">{campaign.cvSystem}</h3>
-          <h3 className="text-slate-500">
+          <h3 className="font-bold">Scout AI</h3>
+          {/* <h3 className="text-slate-500">
             {!campaign.isCampaignActive
               ? "Chiến dịch đang tắt"
               : campaign.isCVSystemActive
               ? "Đã kích hoạt"
               : "Chưa kích hoạt Scout AI"}
-          </h3>
+          </h3> */}
           <button
             className={`${isHovered ? "visible" : "invisible"}`}
           >
             Xem chi tiết
           </button>
         </div>
-      </td> */}
-      {/* <td className="border">
+      </td>
+      <td className="border">
         <div className="flex flex-col items-start justify-start gap-1 p-2">
-          {campaign.cvFiltered && (
-            <span className="px-[3px] text-yellow-400 border border-yellow-400 rounded-sm">
-              {`${campaign.cvFiltered} CP`}
-            </span>
-          )}
-          {campaign.isCampaignActive && (
-            <span className="px-2 py-1 font-bold text-green-500 rounded-sm bg-slate-100">
-              Tìm CV
-            </span>
-          )}
+          <span className="px-[3px] text-yellow-400 border border-yellow-400 rounded-sm">
+            {`${15} CP`}
+          </span>
+          <span className="px-2 py-1 font-bold text-green-500 rounded-sm bg-slate-100">
+            Tìm CV
+          </span>
         </div>
-      </td> */}
-      {/* <td className="border">
+      </td>
+      <td className="border">
         <div className="p-2">
-          {campaign.isCampaignActive ? (
-            <span className="px-2 py-1 font-bold text-green-500 rounded-sm bg-slate-100">
-              Thêm
-            </span>
-          ) : (
-            <>Chiến dịch đang tắt</>
-          )}
+          <span className="px-2 py-1 font-bold text-green-500 rounded-sm bg-slate-100">
+            Thêm
+          </span>
         </div>
-      </td> */}
+      </td>
     </tr>
   );
 };
