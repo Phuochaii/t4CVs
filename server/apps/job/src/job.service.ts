@@ -2,14 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateJobDto } from './dto/Req/create-job.dto';
 import { Job } from './entities/job.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  Repository,
-  MoreThanOrEqual,
-  LessThanOrEqual,
-  MoreThan,
-  Like,
-  ILike,
-} from 'typeorm';
+import { Repository, MoreThanOrEqual, LessThanOrEqual, ILike } from 'typeorm';
 import { JobDetailService } from './job-detail/job-detail.service';
 import { MajorService } from './major/major.service';
 import { LevelService } from './level/level.service';
@@ -200,8 +193,8 @@ export class JobService {
         'locations',
       ],
     });
-    // get the list of job have fieldId
 
+    // get the list of job have fieldId
     if (fieldId) {
       const jobField = jobs.filter((job) => {
         return job.fields.some((field) => field.id == fieldId);

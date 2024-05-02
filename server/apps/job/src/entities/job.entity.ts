@@ -92,7 +92,8 @@ export class Job {
   @JoinColumn()
   level: Level;
 
-  @Column({ default: false })
+  // Demo , ve sau sua ai default là false
+  @Column({ default: true })
   status: boolean;
 
   //companyId
