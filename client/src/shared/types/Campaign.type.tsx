@@ -10,7 +10,7 @@ export interface Campaign {
   company: CompanyFromServer | null;
   postDate: Date;
   employer: EmployerFromServer;
-  recruitment: RecruitmentFromServer;
+  recruitment: RecruitmentFromServer | null;
   applications: ApplicationFromServer[];
   applicants: UserFromServer[];
 }

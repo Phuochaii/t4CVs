@@ -35,6 +35,7 @@ function Campaign() {
           ? await getCompanyById(employer.companyId)
           : null;
         const job = await getJobByCampaignId(item.id);
+        console.log(job);
         const rawCampaign: CampaignType = {
           campaignName: item.name,
           campaignId: item.id,
