@@ -13,16 +13,12 @@ export const CampaignTableHeaders = () => {
   return (
     <thead>
       <tr>
-        <td className="px-2 py-1 font-bold border">
-          Chiến dịch tuyển dụng
-        </td>
+        <td className="px-2 py-1 font-bold border">Chiến dịch tuyển dụng</td>
         <td className="px-2 py-1 font-bold border">Tối ưu</td>
         <td className="px-2 py-1 font-bold border">Tin tuyển dụng</td>
         <td className="px-2 py-1 font-bold border">CV từ hệ thống</td>
         <td className="px-2 py-1 font-bold border">Lọc CV</td>
-        <td className="px-2 py-1 font-bold border">
-          Dịch vụ đang chạy
-        </td>
+        <td className="px-2 py-1 font-bold border">Dịch vụ đang chạy</td>
       </tr>
     </thead>
   );
@@ -36,10 +32,10 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
   const navigation = useNavigate();
 
   const [isHovered, setIsHovered] = useState(false);
-  const [applicants, setApplicants] = useState<
-    (UserFromServer | null)[]
-  >([]);
+  const [applicants, setApplicants] = useState<(UserFromServer | null)[]>([]);
   const campaign = data;
+  // console.log(campaign);
+
   useEffect(() => {
     async function getUsers() {
       const applicantPromises = campaign.applications.map(
@@ -155,9 +151,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              navigation(
-                `/hr/post-compaign/data/${campaign.campaignId}`
-              );
+              navigation(`/hr/post-compaign/data/${campaign.campaignId}`);
             }}
             className="p-2 rounded-sm bg-slate-200 hover:bg-slate-100"
           >
@@ -175,9 +169,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
               ? "Đã kích hoạt"
               : "Chưa kích hoạt Scout AI"}
           </h3> */}
-          <button
-            className={`${isHovered ? "visible" : "invisible"}`}
-          >
+          <button className={`${isHovered ? "visible" : "invisible"}`}>
             Xem chi tiết
           </button>
         </div>

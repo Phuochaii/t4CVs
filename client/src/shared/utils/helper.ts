@@ -91,7 +91,9 @@ export async function getJobById(id: number) {
 }
 
 export async function getApplicationsByCampaignId(hrId:number, campaignId: number) {
-    const response = await axios.get(`${serverURL}/application/hr/${hrId}?page=1&limit=100&campaignId=${campaignId}&status=true`)
+    // console.log(`${serverURL}/application/hr/${hrId}?page=1&limit=100&campaignId=${campaignId}&status=true`);
+    
+    const response = await axios.get(`${serverURL}/application/hr/${hrId}?page=1&limit=100&campaignId=${campaignId}`)
     const rawApplications: ApplicationFromServer[] = response.data.applications;
     const total = response.data.total;
     return {total: total, applications: rawApplications}

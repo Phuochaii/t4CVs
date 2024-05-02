@@ -28,10 +28,8 @@ function Campaign() {
     const hrId = JSON.parse(localStorage.getItem("hr") as string).id;
 
     const getAllCompaigns = async () => {
-      const { allCampaigns, totalPages } = await getCampaignByHRId(
-        hrId,
-        1
-      );
+      const { allCampaigns, totalPages } = await getCampaignByHRId(hrId, 1);
+
       setTotalPages(totalPages);
       const rawCampaigns = await allCampaigns.map(async (item) => {
         const employer = await getEmployerById(item.employerId);
@@ -39,6 +37,7 @@ function Campaign() {
           ? await getCompanyById(employer.companyId)
           : null;
         const job = await getJobByCampaignId(item.id);
+
         const { applications } = await getApplicationsByCampaignId(
           item.employerId,
           item.id
@@ -56,6 +55,7 @@ function Campaign() {
         return rawCampaign;
       });
       setCampaigns(await Promise.all(rawCampaigns));
+      // await console.log(campaigns);
     };
     getAllCompaigns();
   }, [page]);
@@ -102,9 +102,7 @@ function Campaign() {
             stroke="green"
             className="cursor-pointer"
             strokeWidth={1}
-            onClick={() =>
-              setPage(page + 1 <= totalPages ? page + 1 : page)
-            }
+            onClick={() => setPage(page + 1 <= totalPages ? page + 1 : page)}
           />
         </div>
       </div>
