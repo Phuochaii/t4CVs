@@ -40,7 +40,6 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
     (UserFromServer | null)[]
   >([]);
   const campaign = data;
-  console.log("campaign", campaign);
   useEffect(() => {
     async function getUsers() {
       const applicantPromises = campaign.applications.map(
@@ -51,7 +50,6 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
       );
       setApplicants(await Promise.all(applicantPromises));
     }
-    console.log("LOL");
     getUsers();
   }, []);
   return (

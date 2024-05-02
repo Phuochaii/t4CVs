@@ -8,14 +8,17 @@ import {
 
 import { SetStateAction, useEffect, useState } from "react";
 import { Campaign as CampaignType } from "../../shared/types/Campaign.type";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 // import Switch from "../../shared/components/CustomSwitch";
 import {
   getAllCampaigns,
+  getApplicationsByCampaignId,
   getCompanyById,
   getEmployerById,
   getJobByCampaignId,
+  getUserById,
 } from "../../shared/utils/helper";
+import { UserFromServer } from "../../shared/types/User.type";
 
 interface CampaignTableProps {
   data: CampaignType[];
@@ -26,6 +29,9 @@ const CompanyCampaignTableHeader = () => {
   return (
     <thead>
       <tr>
+        <td className="px-2 py-1 font-bold border">
+          Chiến dịch tuyển dụng
+        </td>
         <td className="px-2 py-1 font-bold border">
           Chiến dịch tuyển dụng
         </td>
@@ -48,9 +54,26 @@ interface CompanyCampaignTableRowProps {
 const CompanyCampaignTableRow = ({
   data,
 }: CompanyCampaignTableRowProps) => {
-  const navigation = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
+  const [applicants, setApplicants] = useState<
+    (UserFromServer | null)[]
+  >([]);
   const campaign = data;
+  console.log(data);
+  useEffect(() => {
+    async function getUsers() {
+      const applicantPromises = campaign.applications.map(
+        async (application) => {
+          console.log("Applications", application);
+          const applicant = await getUserById(application.userId);
+          return applicant;
+        }
+      );
+      setApplicants(await Promise.all(applicantPromises));
+    }
+    getUsers();
+  }, []);
+  console.log("Applicants", applicants);
   return (
     <tr
       className="align-top hover:bg-green-100 bg-slate-50"
@@ -70,28 +93,31 @@ const CompanyCampaignTableRow = ({
           /> */}
           <div className="flex flex-col items-start gap-2 mb-12">
             <h3 className="font-bold">{data.campaignName}</h3>
-            {/* <span className="font-bold text-slate-400">
-              {campaign.cvs.length === 0 ? (
+            <span className="font-bold text-slate-400">
+              {applicants.length === 0 ? (
                 "Chưa có CV nào"
               ) : (
                 <div className="flex items-center gap-1">
-                  {campaign.cvs.slice(0, 5).map((candidate, item) => {
+                  {applicants.slice(0, 5).map((candidate, item) => {
                     return (
                       <img
                         key={item}
-                        src={candidate.candidateImage}
-                        className="w-8 h-8 rounded-full"
+                        src={
+                          candidate?.image ||
+                          "https://images.unsplash.com/photo-1438761681033-6461ffad8d80"
+                        }
+                        className="object-cover w-8 h-8 rounded-full"
                       />
                     );
                   })}
-                  {campaign.cvs.length > 5 ? (
+                  {applicants.length > 5 ? (
                     <span className="p-1 font-normal text-green-500 bg-green-100 rounded-full">{`+${
-                      campaign.cvs.length - 5
+                      applicants.length - 5
                     } hồ sơ khác`}</span>
                   ) : null}
                 </div>
               )}
-            </span> */}
+            </span>
             <span className="font-bold bg-slate-200 text-zinc-400">
               {`#${data.campaignId}`}
             </span>
@@ -151,17 +177,7 @@ const CompanyCampaignTableRow = ({
             </div>
           </div>
         ) : (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              navigation(
-                `/hr/post-compaign/data/${campaign.campaignId}`
-              );
-            }}
-            className="p-2 rounded-sm bg-slate-200 hover:bg-slate-100"
-          >
-            Thêm tin tuyển dụng
-          </button>
+          <>Không có tin tuyển dụng</>
         )}
       </td>
 
@@ -181,7 +197,6 @@ const CompanyCampaignTableRow = ({
 };
 
 const CompanyCampaignTable = ({ data }: CampaignTableProps) => {
-  console.log("New data", data);
   return (
     <table className="w-full text-sm bg-white">
       <CompanyCampaignTableHeader />
@@ -210,6 +225,10 @@ function Campaign() {
           ? await getCompanyById(employer.companyId)
           : await null;
         const job = await getJobByCampaignId(item.id);
+        const { applications } = await getApplicationsByCampaignId(
+          item.employerId,
+          item.id
+        );
         const rawCampaign: CampaignType = {
           campaignName: item.name,
           campaignId: item.id,
@@ -217,7 +236,7 @@ function Campaign() {
           company: company,
           postDate: new Date(item.createdAt),
           recruitment: job,
-          applications: [],
+          applications: applications,
           applicants: [],
         };
         return rawCampaign;
@@ -252,6 +271,10 @@ function Campaign() {
             </div>
           </div>
         </div>
+        <CompanyCampaignTable
+          data={campaigns}
+          setData={setCampaigns}
+        />
         <CompanyCampaignTable
           data={campaigns}
           setData={setCampaigns}
