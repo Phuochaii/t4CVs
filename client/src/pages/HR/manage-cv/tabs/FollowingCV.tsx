@@ -82,24 +82,30 @@ function FollowingCV({
                   </td>
 
                   <td>
-                    <p className="flex">
+                    <a
+                      href={`mailto:${item.email}`}
+                      className="flex hover:text-green-500 text-sm"
+                    >
                       <Mail
                         size={15}
                         color="#38A34D"
                         style={{ marginRight: "5px" }}
                       />
                       {item.email}
-                    </p>
-                    <p className="flex">
+                    </a>
+                    <a
+                      href={`tel:${item.phone}`}
+                      className="flex hover:text-green-500 text-sm"
+                    >
                       <Phone
                         color="#38A34D"
                         size={18}
                         style={{ marginRight: "5px" }}
                       />
                       {item.phone}
-                    </p>
+                    </a>
                   </td>
-                  <td>
+                  <td className="" style={{ maxWidth: "200px" }}>
                     <p className="flex">
                       <Mail
                         size={15}
@@ -115,6 +121,9 @@ function FollowingCV({
                         style={{ marginRight: "5px" }}
                       />
                       {item.updateAt}
+                    </p>
+                    <p className="flex px-3 py-1 bg-[#b7c1d12f]">
+                      {item.coverLetter}
                     </p>
                   </td>
                   <td>

@@ -55,7 +55,7 @@ function Header() {
   //   });
 
   return (
-    <header className="menu-top bg-white text-black">
+    <header className="menu-top bg-white text-black border border-1 border-slate-300 fixed z-50 top-0 left-0 right-0">
       <div className=" px-8 flex flex-row justify-between items-center">
         <div className="main flex flex-row items-center gap-5">
           <div className="logo w-52" onClick={() => navigation("/")}>
@@ -405,7 +405,10 @@ function Header() {
                 </a>
                 {isCompaniesHovered ? (
                   <ul className="sub-menu absolute z-50 top-full left-0 font-semibold text-base bg-white border border-slate-100 rounded-lg p-3 flex flex-col gap-3 shadow-lg">
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li
+                      onClick={() => navigation("/companies")}
+                      className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer"
+                    >
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"

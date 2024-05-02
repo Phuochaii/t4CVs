@@ -31,7 +31,7 @@ function Header() {
           className="object-contain h-full"
         ></img>
       </div>
-      <SearchBar placeholder="Search e.g card" />
+      <SearchBar placeholder="Search " />
 
       <Bell className="mx-2 text-slate-500" />
       <li className="relative list-none">

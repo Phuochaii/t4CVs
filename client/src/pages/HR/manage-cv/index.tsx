@@ -8,6 +8,8 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { useParams, useNavigate } from "react-router-dom";
+import * as HRModule from "../../../modules/hr-module";
+import { Compaign } from "..";
 
 interface NumberLabelWidgetProps {
   title: string;
@@ -30,6 +32,7 @@ function ManageCV() {
   const navigation = useNavigate();
   const hrId = JSON.parse(localStorage.getItem("hr") as string).id;
   const { id } = useParams();
+  const [campaign, setCampaign] = React.useState({} as any);
 
   const compaignId = id as string;
   const numberData = [
@@ -64,6 +67,11 @@ function ManageCV() {
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+  React.useEffect(() => {
+    HRModule.getCampaignById({ id: compaignId }).then((res) => {
+      setCampaign(res);
+    });
+  }, []);
 
   const tabSx = {
     "& .MuiTabs-indicator": {
@@ -95,7 +103,7 @@ function ManageCV() {
           Quay lại
         </button>
         <p className="text-slate-500 font-medium mx-5">Chi tiết chiến dịch: </p>
-        <p className="font-semibold">Tuyển nhân viên kinh doanh</p>
+        <p className="font-semibold">{campaign.name}</p>
       </div>
 
       {/*  */}
