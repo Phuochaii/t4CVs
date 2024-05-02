@@ -139,6 +139,7 @@ function Recruitment() {
     };
     getAllRecruitments();
   }, [page]);
+
   return (
     <div className="flex-grow">
       <h1 className="p-4 text-xl font-bold text-black bg-white">
@@ -160,16 +161,25 @@ function Recruitment() {
               >
                 {status}
                 <span className="flex items-center justify-center w-5 h-5 text-white bg-red-500 rounded-full">
-                  {data.reduce(
-                    (accumulator, currentJobPost) =>
-                      (accumulator +=
-                        (currentJobPost.status
-                          ? "Đang hiển thị"
-                          : "Dừng hiển thị") === filteredStatuses[key]
-                          ? 1
-                          : 0),
-                    0
-                  )}
+                  {data.reduce(function reducer(
+                    accumulator,
+                    currentValue
+                  ) {
+                    let addedValue = 1;
+                    if (filteredStatuses[key] === "Tất cả")
+                      return accumulator + addedValue;
+                    else {
+                      const status = currentValue.status
+                        ? "Đang hiển thị"
+                        : "Dừng hiển thị";
+
+                      return (
+                        accumulator +
+                        (status === filteredStatuses[key] ? 1 : 0)
+                      );
+                    }
+                  },
+                  0)}
                 </span>
               </div>
             );
