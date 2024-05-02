@@ -86,6 +86,7 @@ function ApplyCV() {
 
   const [locationId, setLocationId] = useState(0);
   const [expId, setExpId] = useState(0);
+  const [titleRecruitment, setTitleRecruitment] = useState("");
 
   const fetchDataFilter = async () => {
     try {
@@ -271,6 +272,12 @@ function ApplyCV() {
     }
   };
 
+  const handleSearch = () => {
+    navigation(
+      `/results?locationId=${locationId}&expId=${expId}&titleRecruitment=${titleRecruitment}`
+    );
+  };
+
   return (
     <>
       <div className="apply-cv">
@@ -290,6 +297,9 @@ function ApplyCV() {
                               <MagnifyingGlassIcon className="w-6" />
                             </InputAdornment>
                           }
+                          onChange={(e) => {
+                            setTitleRecruitment(e.target.value);
+                          }}
                         />
                       </FormControl>
                     </div>
@@ -405,7 +415,11 @@ function ApplyCV() {
                       </TextField>
                     </div>
                   </div>
-                  <Button className="btn-search" variant="contained">
+                  <Button
+                    className="btn-search"
+                    variant="contained"
+                    onClick={handleSearch}
+                  >
                     Tìm kiếm
                   </Button>
                 </form>
