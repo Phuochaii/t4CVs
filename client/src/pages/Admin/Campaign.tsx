@@ -49,7 +49,6 @@ const CompanyCampaignTableRow = ({
   data,
 }: CompanyCampaignTableRowProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [campaign] = useState<CampaignType>(data);
   return (
     <tr
       className="align-top hover:bg-green-100 bg-slate-50"
@@ -68,7 +67,7 @@ const CompanyCampaignTableRow = ({
             }}
           /> */}
           <div className="flex flex-col items-start gap-2 mb-12">
-            <h3 className="font-bold">{campaign.campaignName}</h3>
+            <h3 className="font-bold">{data.campaignName}</h3>
             {/* <span className="font-bold text-slate-400">
               {campaign.cvs.length === 0 ? (
                 "Chưa có CV nào"
@@ -92,7 +91,7 @@ const CompanyCampaignTableRow = ({
               )}
             </span> */}
             <span className="font-bold bg-slate-200 text-zinc-400">
-              {`#${campaign.campaignId}`}
+              {`#${data.campaignId}`}
             </span>
             {
               <div
@@ -108,29 +107,29 @@ const CompanyCampaignTableRow = ({
         </div>
       </td>
       <td className="border">
-        <div className="p-2 font-bold text-blue-500">{`${campaign.employer.fullname}`}</div>
+        <div className="p-2 font-bold text-blue-500">{`${data.employer.fullname}`}</div>
       </td>
       <td className="border">
-        <div className="p-2 font-bold text-blue-500">{`${campaign.postDate?.toLocaleDateString(
+        <div className="p-2 font-bold text-blue-500">{`${data.postDate?.toLocaleDateString(
           "vi-VN"
         )}`}</div>
       </td>
       <td className="border">
         <div className="p-2 font-bold text-blue-500">{`${
-          campaign.company ? campaign.company.name : ""
+          data.company ? data.company.name : ""
         }`}</div>
       </td>
       <td className="border max-w-[180px]">
         <div className="flex flex-col gap-2 p-2">
           <h3 className="font-bold capitalize">
-            {campaign.recruitment.titleRecruitment}
+            {data.recruitment.titleRecruitment}
           </h3>
           <div className="flex gap-2">
             <span className="font-bold bg-slate-200 text-slate-400">
-              {`#${campaign.recruitment.id}`}
+              {`#${data.recruitment.id}`}
             </span>
             <span className="font-bold text-slate-400">
-              {campaign.recruitment.status
+              {data.recruitment.status
                 ? "Đang hiển thị"
                 : "Dừng hiển thị"}
             </span>
@@ -142,8 +141,8 @@ const CompanyCampaignTableRow = ({
           >
             <Link
               className="font-bold text-green-500"
-              to={`/hr/campaign-edit/${campaign.recruitment.id}`}
-              state={campaign}
+              to={`/hr/campaign-edit/${data.recruitment.id}`}
+              state={data}
             >
               Chỉnh sửa
             </Link>
@@ -168,6 +167,7 @@ const CompanyCampaignTableRow = ({
 };
 
 const CompanyCampaignTable = ({ data }: CampaignTableProps) => {
+  console.log("New data", data);
   return (
     <table className="w-full text-sm bg-white">
       <CompanyCampaignTableHeader />
@@ -212,6 +212,7 @@ function Campaign() {
       setTotalPages(totalPages);
     }
     getData();
+    console.log("GO");
   }, [page]);
 
   return (
