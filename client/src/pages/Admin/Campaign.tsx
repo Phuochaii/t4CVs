@@ -1,4 +1,4 @@
-import { Briefcase } from "../../layouts/HRLayout/components/Icons";
+// import { Briefcase } from "../../layouts/HRLayout/components/Icons";
 import {
   ChevronDown,
   ChevronLeftCircle,
@@ -221,9 +221,9 @@ function Campaign() {
       </div>
       <div className="flex flex-col items-center justify-between gap-2 py-8 w-[90%]">
         <div className="flex items-center justify-between w-full gap-2">
-          <button className="flex items-center h-full gap-2 px-4 py-2 text-white bg-green-600 rounded-sm">
+          {/* <button className="flex items-center h-full gap-2 px-4 py-2 text-white bg-green-600 rounded-sm">
             <Briefcase stroke="white" /> Chiến dịch mới
-          </button>
+          </button> */}
           <div className="flex items-center flex-grow divide-x-2">
             <div className="flex items-center justify-between h-full p-2 text-sm bg-white">
               <span className="text-gray-400">Tất cả chiến dịch</span>

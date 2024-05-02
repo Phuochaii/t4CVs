@@ -8,19 +8,22 @@ import {
   Search,
   Settings,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { statusColor } from "../../shared/types/RecruitmentStatus.type";
 import { RecruitmentJobPost } from "../../shared/types/Recruitment.type";
 import {
   getAllJobs,
   getCampaignById,
 } from "../../shared/utils/helper";
+import Switch from "../../shared/components/CustomSwitch";
+import axios from "axios";
 
 interface RecruitmentTableProps {
   data: RecruitmentJobPost[];
+  setData: React.Dispatch<SetStateAction<RecruitmentJobPost[]>>;
 }
 
-function RecruitmentTable({ data }: RecruitmentTableProps) {
+function RecruitmentTable({ data, setData }: RecruitmentTableProps) {
   return (
     <table className="w-full bg-white">
       <thead>
@@ -41,6 +44,24 @@ function RecruitmentTable({ data }: RecruitmentTableProps) {
             <tr key={key}>
               <td className="border w-[360px] ">
                 <div className="flex flex-col items-start gap-1">
+                  <Switch
+                    checked={jobPost.status}
+                    onClick={async () => {
+                      const newJobPost = {
+                        ...jobPost,
+                        status: !jobPost.status,
+                      };
+                      data[key] = newJobPost;
+                      setData([...data]);
+                      await axios.post(
+                        "http://localhost:3000/job/update-status",
+                        {
+                          id: newJobPost.id,
+                          status: !jobPost.status,
+                        }
+                      );
+                    }}
+                  />
                   <div>
                     <span
                       className={clsx(
@@ -153,16 +174,25 @@ function Recruitment() {
               >
                 {status}
                 <span className="flex items-center justify-center w-6 h-6 text-white bg-red-500 rounded-full">
-                  {data.reduce(
-                    (accumulator, currentJobPost) =>
-                      (accumulator +=
-                        (currentJobPost.status
-                          ? "Đang hiển thị"
-                          : "Dừng hiển thị") === filteredStatuses[key]
-                          ? 1
-                          : 0),
-                    0
-                  )}
+                  {data.reduce(function reducer(
+                    accumulator,
+                    currentValue
+                  ) {
+                    let addedValue = 1;
+                    if (filteredStatuses[key] === "Tất cả")
+                      return accumulator + addedValue;
+                    else {
+                      const status = currentValue.status
+                        ? "Đang hiển thị"
+                        : "Dừng hiển thị";
+
+                      return (
+                        accumulator +
+                        (status === filteredStatuses[key] ? 1 : 0)
+                      );
+                    }
+                  },
+                  0)}
                 </span>
               </div>
             );
@@ -180,6 +210,7 @@ function Recruitment() {
           <Search className="px-2" size={32} />
         </div>
         <RecruitmentTable
+          setData={setData}
           data={data
             .filter(
               (jobPost) =>
