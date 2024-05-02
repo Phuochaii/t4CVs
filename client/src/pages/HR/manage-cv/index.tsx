@@ -97,7 +97,7 @@ function ManageCV() {
       >
         <button
           className="flex items-center bg-slate-100 px-3 py-1 font-medium"
-          onClick={() => navigation("/hr/compaign")}
+          onClick={() => navigation("/hr/campaign")}
         >
           <ArrowLeft size={16} className="mr-1" />
           Quay lại

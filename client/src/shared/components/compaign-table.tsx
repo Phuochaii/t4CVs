@@ -11,16 +11,12 @@ export const CampaignTableHeaders = () => {
   return (
     <thead>
       <tr>
-        <td className="px-2 py-1 font-bold border">
-          Chiến dịch tuyển dụng
-        </td>
+        <td className="px-2 py-1 font-bold border">Chiến dịch tuyển dụng</td>
         <td className="px-2 py-1 font-bold border">Tối ưu</td>
         <td className="px-2 py-1 font-bold border">Tin tuyển dụng</td>
         <td className="px-2 py-1 font-bold border">CV từ hệ thống</td>
         <td className="px-2 py-1 font-bold border">Lọc CV</td>
-        <td className="px-2 py-1 font-bold border">
-          Dịch vụ đang chạy
-        </td>
+        <td className="px-2 py-1 font-bold border">Dịch vụ đang chạy</td>
       </tr>
     </thead>
   );
@@ -62,21 +58,19 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
                 "Chưa có CV nào"
               ) : (
                 <div className="flex items-center gap-1">
-                  {campaign.applicants
-                    .slice(0, 5)
-                    .map((candidate, item) => {
-                      return (
-                        <img
-                          key={item}
-                          src={candidate.image}
-                          className="w-8 h-8 rounded-full"
-                          onError={(e) =>
-                            (e.currentTarget.src =
-                              "https://images.unsplash.com/photo-1438761681033-6461ffad8d80")
-                          }
-                        />
-                      );
-                    })}
+                  {campaign.applicants.slice(0, 5).map((candidate, item) => {
+                    return (
+                      <img
+                        key={item}
+                        src={candidate.image}
+                        className="w-8 h-8 rounded-full"
+                        onError={(e) =>
+                          (e.currentTarget.src =
+                            "https://images.unsplash.com/photo-1438761681033-6461ffad8d80")
+                        }
+                      />
+                    );
+                  })}
                   {campaign.applicants.length > 5 ? (
                     <span className="p-1 font-normal text-green-500 bg-green-100 rounded-full">{`+${
                       campaign.applicants.length - 5
@@ -134,12 +128,15 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
             </div>
           </div>
         ) : (
-          <Link
-            to={`/hr/post-compaign/data/${campaign.campaignId}`}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              navigation(`/hr/post-compaign/data/${campaign.campaignId}`);
+            }}
             className="p-2 rounded-sm bg-slate-200 hover:bg-slate-100"
           >
             Thêm tin tuyển dụng
-          </Link>
+          </button>
         )}
       </td>
       <td className="border">
@@ -152,9 +149,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
               ? "Đã kích hoạt"
               : "Chưa kích hoạt Scout AI"}
           </h3> */}
-          <button
-            className={`${isHovered ? "visible" : "invisible"}`}
-          >
+          <button className={`${isHovered ? "visible" : "invisible"}`}>
             Xem chi tiết
           </button>
         </div>
