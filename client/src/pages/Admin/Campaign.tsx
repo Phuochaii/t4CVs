@@ -6,7 +6,7 @@ import { MoreHorizontal } from "lucide-react";
 
 const columns = ["Status", "Company Name", "Experience Level", "Job", "Action"];
 
-function Compaign() {
+function Campaign() {
   const [openDialog, setOpenDialog] = useState(-1);
   const [mockUsers, setMockUsers] = useState([
     {
@@ -151,4 +151,4 @@ function Compaign() {
   );
 }
 
-export default Compaign;
+export default Campaign;

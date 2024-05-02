@@ -72,7 +72,7 @@ const routes: RouteItem[] = [
   
   // ADMIN
   { path: "/admin/company", component: Admin.Company, layout: AdminLayout }, // thuc
-  {path: "/admin/compaign",component: Admin.Compaign,layout: AdminLayout,}, // thuc
+  {path: "/admin/compaign",component: Admin.Campaign,layout: AdminLayout,}, // thuc
 
 
   // HR
