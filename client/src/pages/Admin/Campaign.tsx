@@ -32,9 +32,6 @@ const CompanyCampaignTableHeader = () => {
         <td className="px-2 py-1 font-bold border">
           Chiến dịch tuyển dụng
         </td>
-        <td className="px-2 py-1 font-bold border">
-          Chiến dịch tuyển dụng
-        </td>
         <td className="px-2 py-1 font-bold border">Người tạo</td>
         <td className="px-2 py-1 font-bold border">Ngày tạo</td>
         <td className="px-2 py-1 font-bold border">Công ty</td>
@@ -271,10 +268,6 @@ function Campaign() {
             </div>
           </div>
         </div>
-        <CompanyCampaignTable
-          data={campaigns}
-          setData={setCampaigns}
-        />
         <CompanyCampaignTable
           data={campaigns}
           setData={setCampaigns}
