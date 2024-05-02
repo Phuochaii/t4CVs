@@ -512,7 +512,7 @@ function SearchJob() {
                               onClick={() => {
                                 navigation(`/detail-job/${item.id}`);
                               }}
-                              className="job-item-search-result max-h-40 bg-white p-3 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3"
+                              className="job-item-search-result max-h-60 bg-white px-3 py-3.5 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3"
                             >
                               <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
                                 <img
@@ -526,18 +526,20 @@ function SearchJob() {
                               <div className="job-detail w-full h-full">
                                 <div className="flex flex-col">
                                   <div className="flex flex-row justify-between">
-                                    <span className="job-title text-black font-semibold col-span-3">
+                                    <span className="job-title text-black font-semibold col-span-3 text-lg">
                                       {item.titleRecruitment}
                                     </span>
                                     <div className="job-salary col-start-4 flex items-center">
                                       <CurrencyDollarIcon className="w-5 mr-2" />
                                       <strong className="salary-count">
-                                        {item.salaryMin} - {item.salaryMax}{" "}
-                                        {item.currency.name}
+                                        {item.salaryMin == 0 &&
+                                        item.salaryMax == 0
+                                          ? "Thoả thuận"
+                                          : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{" "}
                                       </strong>
                                     </div>
                                   </div>
-                                  <span className="job-company-name text-slate-600 text-sm col-span-3">
+                                  <span className="job-company-name text-slate-600 text-sm col-span-3 mb-2">
                                     {item.company?.name
                                       ? item.company?.name
                                       : "no name"}

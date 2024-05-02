@@ -100,6 +100,7 @@ function ApplyCV() {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchJobData = async () => {
       try {
         const response = await fetch(`http://localhost:3000/job/${jobId}`);
@@ -139,7 +140,7 @@ function ApplyCV() {
       if (
         fileType === "application/msword" || // .doc
         fileType ===
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || // .docx
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || // .docx
         fileType === "application/pdf"
       ) {
         // pdf
@@ -322,10 +323,10 @@ function ApplyCV() {
                         </MenuItem>
                         {cities
                           ? cities.map((city: any) => (
-                            <MenuItem key={city.id} value={city.id}>
-                              {city.name}
-                            </MenuItem>
-                          ))
+                              <MenuItem key={city.id} value={city.id}>
+                                {city.name}
+                              </MenuItem>
+                            ))
                           : "Error to fetch cities"}
                       </TextField>
                     </div>
@@ -361,10 +362,10 @@ function ApplyCV() {
                         </MenuItem>
                         {exp_year
                           ? exp_year.map((exp: any) => (
-                            <MenuItem key={exp.id} value={exp.id}>
-                              {exp.name}
-                            </MenuItem>
-                          ))
+                              <MenuItem key={exp.id} value={exp.id}>
+                                {exp.name}
+                              </MenuItem>
+                            ))
                           : "Error to fetch experience"}
                       </TextField>
                     </div>
@@ -448,13 +449,16 @@ function ApplyCV() {
                             Mức lương
                           </span>
                           <strong className="job-detail__info--section-content-value">
-                            {jobData?.salaryMin ? jobData?.salaryMin : ""} -{" "}
+                            {/* {jobData?.salaryMin ? jobData?.salaryMin : ""} -{" "}
                             {jobData?.salaryMax ? jobData?.salaryMax : ""}{" "}
                             {jobData?.currency
                               ? jobData?.currency?.name
                                 ? jobData?.currency?.name
                                 : ""
-                              : ""}
+                              : ""} */}
+                            {jobData?.salaryMin && jobData?.salaryMax
+                              ? ` ${jobData?.salaryMin} - ${jobData?.salaryMax} ${jobData?.currency?.name}`
+                              : "Thỏa thuận"}
                           </strong>
                         </div>
                       </div>
@@ -608,10 +612,10 @@ function ApplyCV() {
                             {jobData?.jobDetail
                               ? jobData?.jobDetail?.skills
                                 ? jobData?.jobDetail?.skills
-                                  .split(", ")
-                                  .map((skill: any, index: number) => (
-                                    <p key={index}>- {skill}</p>
-                                  ))
+                                    .split(", ")
+                                    .map((skill: any, index: number) => (
+                                      <p key={index}>- {skill}</p>
+                                    ))
                                 : ""
                               : ""}
                           </div>
@@ -1036,14 +1040,14 @@ function ApplyCV() {
                       <div className="box-category-tags flex flex-row flex-wrap gap-3">
                         {jobData?.fields
                           ? jobData?.fields.map((field: any, index: number) => (
-                            <span
-                              key={index}
-                              id={field.id}
-                              className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500"
-                            >
-                              {field.name}
-                            </span>
-                          ))
+                              <span
+                                key={index}
+                                id={field.id}
+                                className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500"
+                              >
+                                {field.name}
+                              </span>
+                            ))
                           : ""}
                       </div>
                     </div>
