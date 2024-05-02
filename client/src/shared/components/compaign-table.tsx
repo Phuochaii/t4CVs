@@ -1,7 +1,9 @@
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 // import Switch from "../../shared/components/CustomSwitch";
 import { Link, useNavigate } from "react-router-dom";
 import { Campaign } from "../types/Campaign.type";
+import { getUserById } from "../utils/helper";
+import { UserFromServer } from "../types/User.type";
 
 export interface CampaignTableProps {
   data: Campaign[];
@@ -11,12 +13,16 @@ export const CampaignTableHeaders = () => {
   return (
     <thead>
       <tr>
-        <td className="px-2 py-1 font-bold border">Chiến dịch tuyển dụng</td>
+        <td className="px-2 py-1 font-bold border">
+          Chiến dịch tuyển dụng
+        </td>
         <td className="px-2 py-1 font-bold border">Tối ưu</td>
         <td className="px-2 py-1 font-bold border">Tin tuyển dụng</td>
         <td className="px-2 py-1 font-bold border">CV từ hệ thống</td>
         <td className="px-2 py-1 font-bold border">Lọc CV</td>
-        <td className="px-2 py-1 font-bold border">Dịch vụ đang chạy</td>
+        <td className="px-2 py-1 font-bold border">
+          Dịch vụ đang chạy
+        </td>
       </tr>
     </thead>
   );
@@ -30,7 +36,24 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
   const navigation = useNavigate();
 
   const [isHovered, setIsHovered] = useState(false);
+  const [applicants, setApplicants] = useState<
+    (UserFromServer | null)[]
+  >([]);
   const campaign = data;
+  console.log("campaign", campaign);
+  useEffect(() => {
+    async function getUsers() {
+      const applicantPromises = campaign.applications.map(
+        async (application) => {
+          const applicant = await getUserById(application.userId);
+          return applicant;
+        }
+      );
+      setApplicants(await Promise.all(applicantPromises));
+    }
+    console.log("LOL");
+    getUsers();
+  }, []);
   return (
     <tr
       onClick={() => {
@@ -54,16 +77,19 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
           <div className="flex flex-col items-start gap-2 mb-12">
             <h3 className="font-bold">{campaign.campaignName}</h3>
             <span className="font-bold text-slate-400">
-              {campaign.applicants.length === 0 ? (
+              {applicants.length === 0 ? (
                 "Chưa có CV nào"
               ) : (
                 <div className="flex items-center gap-1">
-                  {campaign.applicants.slice(0, 5).map((candidate, item) => {
+                  {applicants.slice(0, 5).map((candidate, item) => {
                     return (
                       <img
                         key={item}
-                        src={candidate.image}
-                        className="w-8 h-8 rounded-full"
+                        src={
+                          candidate?.image ||
+                          "https://images.unsplash.com/photo-1438761681033-6461ffad8d80"
+                        }
+                        className="object-cover rounded-full w-9 h-9"
                         onError={(e) =>
                           (e.currentTarget.src =
                             "https://images.unsplash.com/photo-1438761681033-6461ffad8d80")
@@ -71,9 +97,9 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
                       />
                     );
                   })}
-                  {campaign.applicants.length > 5 ? (
+                  {applicants.length > 5 ? (
                     <span className="p-1 font-normal text-green-500 bg-green-100 rounded-full">{`+${
-                      campaign.applicants.length - 5
+                      applicants.length - 5
                     } hồ sơ khác`}</span>
                   ) : null}
                 </div>
@@ -131,7 +157,9 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              navigation(`/hr/post-compaign/data/${campaign.campaignId}`);
+              navigation(
+                `/hr/post-compaign/data/${campaign.campaignId}`
+              );
             }}
             className="p-2 rounded-sm bg-slate-200 hover:bg-slate-100"
           >
@@ -149,7 +177,9 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
               ? "Đã kích hoạt"
               : "Chưa kích hoạt Scout AI"}
           </h3> */}
-          <button className={`${isHovered ? "visible" : "invisible"}`}>
+          <button
+            className={`${isHovered ? "visible" : "invisible"}`}
+          >
             Xem chi tiết
           </button>
         </div>

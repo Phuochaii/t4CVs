@@ -8,7 +8,7 @@ import {
 
 import { SetStateAction, useEffect, useState } from "react";
 import { Campaign as CampaignType } from "../../shared/types/Campaign.type";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import Switch from "../../shared/components/CustomSwitch";
 import {
   getAllCampaigns,
@@ -26,7 +26,9 @@ const CompanyCampaignTableHeader = () => {
   return (
     <thead>
       <tr>
-        <td className="px-2 py-1 font-bold border">Chiến dịch tuyển dụng</td>
+        <td className="px-2 py-1 font-bold border">
+          Chiến dịch tuyển dụng
+        </td>
         <td className="px-2 py-1 font-bold border">Người tạo</td>
         <td className="px-2 py-1 font-bold border">Ngày tạo</td>
         <td className="px-2 py-1 font-bold border">Công ty</td>
@@ -43,8 +45,12 @@ interface CompanyCampaignTableRowProps {
   data: CampaignType;
 }
 
-const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
+const CompanyCampaignTableRow = ({
+  data,
+}: CompanyCampaignTableRowProps) => {
+  const navigation = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
+  const campaign = data;
   return (
     <tr
       className="align-top hover:bg-green-100 bg-slate-50"
@@ -116,33 +122,47 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
         }`}</div>
       </td>
       <td className="border max-w-[180px]">
-        <div className="flex flex-col gap-2 p-2">
-          <h3 className="font-bold capitalize">
-            {data.recruitment.titleRecruitment}
-          </h3>
-          <div className="flex gap-2">
-            <span className="font-bold bg-slate-200 text-slate-400">
-              {`#${data.recruitment.id}`}
-            </span>
-            <span className="font-bold text-slate-400">
-              {data.recruitment.status ? "Đang hiển thị" : "Dừng hiển thị"}
-            </span>
-          </div>
-          <div
-            className={`flex items-center gap-2 ${
-              isHovered ? "visible" : "invisible"
-            }`}
-          >
-            <Link
-              className="font-bold text-green-500"
-              to={`/hr/campaign-edit/${data.recruitment.id}`}
-              state={data}
+        {campaign.recruitment ? (
+          <div className="flex flex-col gap-2 p-2">
+            <h3 className="font-bold capitalize">
+              {campaign.recruitment.titleRecruitment}
+            </h3>
+            <div className="flex gap-2">
+              <span className="font-bold bg-slate-200 text-slate-400">
+                {`#${campaign.recruitment.id}`}
+              </span>
+              <span className="font-bold text-slate-400">
+                {campaign.recruitment.status}
+              </span>
+            </div>
+            <div
+              className={`flex items-center gap-2 ${
+                isHovered ? "visible" : "invisible"
+              }`}
             >
-              Chỉnh sửa
-            </Link>
-            <button> Yêu cầu hiển thị </button>
+              <Link
+                className="font-bold text-green-500"
+                to={`/hr/campaign-edit/${campaign.recruitment.id}`}
+                state={campaign}
+              >
+                Chỉnh sửa
+              </Link>
+              <button> Yêu cầu hiển thị </button>
+            </div>
           </div>
-        </div>
+        ) : (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              navigation(
+                `/hr/post-compaign/data/${campaign.campaignId}`
+              );
+            }}
+            className="p-2 rounded-sm bg-slate-200 hover:bg-slate-100"
+          >
+            Thêm tin tuyển dụng
+          </button>
+        )}
       </td>
 
       {/* <td className="border">
@@ -181,7 +201,9 @@ function Campaign() {
 
   useEffect(() => {
     async function getData() {
-      const { allCampaigns, totalPages } = await getAllCampaigns(page);
+      const { allCampaigns, totalPages } = await getAllCampaigns(
+        page
+      );
       const rawCampaigns = await allCampaigns.map(async (item) => {
         const employer = await getEmployerById(item.employerId);
         const company = employer.companyId
@@ -230,7 +252,10 @@ function Campaign() {
             </div>
           </div>
         </div>
-        <CompanyCampaignTable data={campaigns} setData={setCampaigns} />
+        <CompanyCampaignTable
+          data={campaigns}
+          setData={setCampaigns}
+        />
         <div className="flex items-center self-center justify-center gap-2">
           <ChevronLeftCircle
             className="cursor-pointer"
@@ -246,7 +271,9 @@ function Campaign() {
             stroke="green"
             className="cursor-pointer"
             strokeWidth={1}
-            onClick={() => setPage(page + 1 <= totalPages ? page + 1 : page)}
+            onClick={() =>
+              setPage(page + 1 <= totalPages ? page + 1 : page)
+            }
           />
         </div>
       </div>

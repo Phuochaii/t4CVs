@@ -3,6 +3,8 @@ import { CampaignFromServer } from "../types/Campaign.type"
 import { CompanyFromServer } from "../types/Company.type"
 import { EmployerFromServer } from "../types/Employer.type"
 import { RecruitmentFromServer } from "../types/Recruitment.type"
+import { ApplicationFromServer } from "../types/Application.type"
+import { UserFromServer } from "../types/User.type"
 
 const serverURL = 'http://localhost:3000'
 
@@ -86,4 +88,22 @@ export async function getJobById(id: number) {
     const response = await axios.get(`${serverURL}/job/${id}`);
     const rawJob: RecruitmentFromServer = response.data;
     return rawJob;
+}
+
+export async function getApplicationsByCampaignId(hrId:number, campaignId: number) {
+    const response = await axios.get(`${serverURL}/application/hr/${hrId}?page=1&limit=100&campaignId=${campaignId}&status=true`)
+    const rawApplications: ApplicationFromServer[] = response.data.applications;
+    const total = response.data.total;
+    return {total: total, applications: rawApplications}
+}
+
+export async function getUserById(userId: number) {
+    try {
+        const response = await axios.get(`${serverURL}/user/${userId}`);
+        const user: UserFromServer = response.data;
+        return user;
+    }
+    catch (e) {
+        return null;
+    }
 }

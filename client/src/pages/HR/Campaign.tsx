@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { CampaignTable } from "../../shared/components/compaign-table";
 import { Campaign as CampaignType } from "../../shared/types/Campaign.type";
 import {
+  getApplicationsByCampaignId,
   getCampaignByHRId,
   getCompanyById,
   getEmployerById,
@@ -27,7 +28,10 @@ function Campaign() {
     const hrId = JSON.parse(localStorage.getItem("hr") as string).id;
 
     const getAllCompaigns = async () => {
-      const { allCampaigns, totalPages } = await getCampaignByHRId(hrId, 1);
+      const { allCampaigns, totalPages } = await getCampaignByHRId(
+        hrId,
+        1
+      );
       setTotalPages(totalPages);
       const rawCampaigns = await allCampaigns.map(async (item) => {
         const employer = await getEmployerById(item.employerId);
@@ -35,7 +39,10 @@ function Campaign() {
           ? await getCompanyById(employer.companyId)
           : null;
         const job = await getJobByCampaignId(item.id);
-        console.log(job);
+        const { applications } = await getApplicationsByCampaignId(
+          item.employerId,
+          item.id
+        );
         const rawCampaign: CampaignType = {
           campaignName: item.name,
           campaignId: item.id,
@@ -43,7 +50,7 @@ function Campaign() {
           company: company,
           postDate: new Date(item.createdAt),
           recruitment: job,
-          applications: [],
+          applications: applications,
           applicants: [],
         };
         return rawCampaign;
@@ -95,7 +102,9 @@ function Campaign() {
             stroke="green"
             className="cursor-pointer"
             strokeWidth={1}
-            onClick={() => setPage(page + 1 <= totalPages ? page + 1 : page)}
+            onClick={() =>
+              setPage(page + 1 <= totalPages ? page + 1 : page)
+            }
           />
         </div>
       </div>
