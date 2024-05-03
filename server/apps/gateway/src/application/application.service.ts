@@ -66,6 +66,16 @@ export class ApplicationService implements OnModuleInit {
     return applications$;
   }
 
+  findAllByUserId(page: number, limit: number, userId: number) {
+    const applications$ =
+      this.applicationServiceClient.readAllApplicationByUserId({
+        page,
+        limit,
+        userId,
+      });
+    return applications$;
+  }
+
   async update(id: number) {
     const data = await firstValueFrom(
       this.applicationServiceClient.updateApplication({ id }),

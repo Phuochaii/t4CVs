@@ -68,6 +68,26 @@ export class ApplicationService {
     return data;
   }
 
+  async findAllApplicationByUserId(
+    page: number,
+    limit: number,
+    userId: number,
+  ) {
+    const skip = (page - 1) * limit;
+    const data = await this.applicationRepository.find({
+      where: {
+        userId: userId,
+      },
+      skip: skip,
+      take: limit,
+      order: {
+        createdAt: 'DESC',
+        id: 'DESC',
+      },
+    });
+    return data;
+  }
+
   async delete(id: number) {
     await this.applicationRepository.delete(id);
   }
