@@ -12,6 +12,12 @@ export interface ReadApplicationRequest {
   id: number;
 }
 
+export interface ReadAllApplicationByUserIdRequest {
+  page: number;
+  limit: number;
+  userId: number;
+}
+
 export interface ReadAllApplicationByCampaignIdRequest {
   page: number;
   limit: number;
@@ -78,6 +84,8 @@ export interface ApplicationServiceClient {
 
   readAllApplicationByCampaignId(request: ReadAllApplicationByCampaignIdRequest): Observable<Applications>;
 
+  readAllApplicationByUserId(request: ReadAllApplicationByUserIdRequest): Observable<Applications>;
+
   updateApplication(request: UpdateApplicationRequest): Observable<Application>;
 
   deleteApplication(request: DeleteApplicationRequest): Observable<Empty>;
@@ -96,6 +104,10 @@ export interface ApplicationServiceController {
     request: ReadAllApplicationByCampaignIdRequest,
   ): Promise<Applications> | Observable<Applications> | Applications;
 
+  readAllApplicationByUserId(
+    request: ReadAllApplicationByUserIdRequest,
+  ): Promise<Applications> | Observable<Applications> | Applications;
+
   updateApplication(request: UpdateApplicationRequest): Promise<Application> | Observable<Application> | Application;
 
   deleteApplication(request: DeleteApplicationRequest): Promise<Empty> | Observable<Empty> | Empty;
@@ -108,6 +120,7 @@ export function ApplicationServiceControllerMethods() {
       "readApplication",
       "readAllApplication",
       "readAllApplicationByCampaignId",
+      "readAllApplicationByUserId",
       "updateApplication",
       "deleteApplication",
     ];
