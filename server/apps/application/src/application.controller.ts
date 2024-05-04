@@ -12,6 +12,7 @@ import {
   UpdateApplicationRequest,
   Pagination,
   ReadAllApplicationByCampaignIdRequest,
+  ReadAllApplicationByUserIdRequest,
 } from '@app/common/proto/application';
 
 @Controller()
@@ -34,6 +35,25 @@ export class ApplicationController implements ApplicationServiceController {
       request.limit,
       request.campaignIds,
       request.status,
+    );
+    const total = data.length;
+    const total_pages = Math.ceil(total / request.limit);
+    return {
+      page: request.page,
+      limit: request.limit,
+      total: total,
+      totalPage: total_pages,
+      applications: data,
+    };
+  }
+
+  async readAllApplicationByUserId(
+    request: ReadAllApplicationByUserIdRequest,
+  ): Promise<Applications> {
+    const data = await this.applicationService.findAllApplicationByUserId(
+      request.page,
+      request.limit,
+      request.userId,
     );
     const total = data.length;
     const total_pages = Math.ceil(total / request.limit);

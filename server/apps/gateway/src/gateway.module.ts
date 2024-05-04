@@ -21,7 +21,7 @@ import { EmployerModule } from './employer/employer.module';
     UserModule,
     CVModule,
     ConfigModule.forRoot({ envFilePath: '.env.example' }),
-    // EmployerModule,
+    EmployerModule,
   ],
   controllers: [GatewayController],
   providers: [GatewayService],
