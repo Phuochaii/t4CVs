@@ -9,7 +9,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { useParams, useNavigate } from "react-router-dom";
 import * as HRModule from "../../../modules/hr-module";
-import { Compaign } from "..";
+// import { Compaign } from "..";
 
 interface NumberLabelWidgetProps {
   title: string;

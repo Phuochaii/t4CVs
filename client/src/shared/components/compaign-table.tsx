@@ -144,7 +144,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
               >
                 Chỉnh sửa
               </Link>
-              <button> Yêu cầu hiển thị </button>
+              {/* <button> Yêu cầu hiển thị </button> */}
             </div>
           </div>
         ) : (
