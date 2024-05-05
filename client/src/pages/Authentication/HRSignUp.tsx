@@ -21,13 +21,14 @@ import {
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { User, Mail, Lock, Phone, Building, Eye, EyeOff } from "lucide-react";
+import { User, Mail, Lock, Phone, Building } from "lucide-react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import { styled } from "@mui/material/styles";
 import "../../shared/assets/styles/hr-signup.css";
 import { data_provinces } from "../auth-page/signup-page/provinces-data";
 import { data_districts } from "../auth-page/signup-page/districts-data";
+import Input from "../auth-page/signup-page/Input";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -59,48 +60,70 @@ const images = [
   },
 ];
 
+interface FormData {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  agreeToTerms: boolean;
+  role: string;
+  name: string;
+  sex: string;
+  phone: string;
+  company: string;
+  position: string;
+  address_work: string; // này là hiện code
+  address: string; // này là hiện tên
+  district: string;
+  skype_account: string;
+}
+
+interface ValidateMessages {
+  phone: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  company: string;
+  sex: string;
+  name: string;
+  address: string;
+  position: string;
+}
+
+
 function HRSignUp() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
     confirmPassword: "",
     agreeToTerms: false,
     role: "",
-  });
-
-  const [hrData, setHrData] = useState({
     name: "",
     sex: "",
     phone: "",
     company: "",
     position: "",
     address_work: "",
+    address: "",
     district: "",
-    skype_account: "",
+    skype_account: ""
   });
-
-  // const [provinces, setProvinces] = useState([]);
+  
+  const [validateMessages, setValidateMessages] = useState<ValidateMessages>({
+    phone: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    company: "",
+    sex: "",
+    name: "",
+    address: "",
+    position: ""
+  });
 
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [expanded, setExpanded] = useState(true);
 
   const [openDialog, setOpenDialog] = useState(true);
-
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const [phoneErrorMessage, setPhoneErrorMessage] = useState("");
-  const [emailErrorMessage, setEmailErrorMessage] = useState("");
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
-  const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] =
-    useState("");
-
-  const [sexError, setSexError] = useState(false);
-  const [nameError, setNameError] = useState(false);
-  const [companyError, setCompanyError] = useState(false);
-  const [addressWorkError, setAddressWorkError] = useState(false);
-  const [positionError, setPositionError] = useState(false);
-
   const [errorMessage, setErrorMessage] = useState("");
 
   const settings = {
@@ -112,19 +135,27 @@ function HRSignUp() {
   };
 
   const filteredDistricts = data_districts.data.filter(
-    (district) => district.parent_code === hrData.address_work
+    (district) => district.parent_code === formData.address_work
   );
 
   const isEmailValid = (email: string) => {
-    // Biểu thức chính quy để kiểm tra định dạng email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setEmailErrorMessage("");
+    setValidateMessages(prevState => ({
+      ...prevState,
+      email: ""
+    }));
 
     if (!email) {
-      setEmailErrorMessage("Email đăng nhập không được để trống");
+      setValidateMessages(prevState => ({
+        ...prevState,
+        email: "Email đăng nhập không được để trống"
+      }));
       return false;
     } else if (!emailRegex.test(email)) {
-      setEmailErrorMessage("Định dạng email không phù hợp");
+      setValidateMessages(prevState => ({
+        ...prevState,
+        email: "Định dạng email không phù hợp"
+      }));
       return false;
     } else {
       return true;
@@ -132,48 +163,68 @@ function HRSignUp() {
   };
 
   const isPasswordValid = (password: string) => {
-    setPasswordErrorMessage("");
-    //const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,25}$/;
+    setValidateMessages(prevState => ({
+      ...prevState,
+      password: ""
+    }));
+
     const passwordRegexOnlyNumber = /^(?=.*\d)[0-9]{6,25}$/;
     const passwordRegexOnlyLowcase = /^[a-z]{6,25}$/;
     const passwordRegexOnlyUppcase = /^[A-Z]{6,25}$/;
     const passwordRegexNumberandLowcase =
-      /^(?=.*[a-z])(?=.*\d)[a-zA-Z\d]{6,25}$/;
+      /^(?=.*[a-z])(?=.*\d)[a-z\d]{6,25}$/;
     const passwordRegexNumberandUpcase =
-      /^(?=.*\d)(?=.*[A-Z])[A-Za-z\d]{6,25}$/;
+      /^(?=.*\d)(?=.*[A-Z])[A-Z\d]{6,25}$/;
     const passwordRegexNoNumber = /^[a-zA-Z]{6,25}$/;
 
     const passwordLength = password.length;
-    console.log(passwordLength);
     if (!password) {
-      setPasswordErrorMessage("Mật khẩu không được để trống");
+      setValidateMessages(prevState => ({
+        ...prevState,
+        password: "Mật khẩu không được để trống"
+      }));
       return false;
     } else if (passwordLength < 6 || passwordLength > 25) {
-      setPasswordErrorMessage("Mật khẩu từ 6 đến 25 ký tự");
+      setValidateMessages(prevState => ({
+        ...prevState,
+        password: "Mật khẩu từ 6 đến 25 ký tự"
+      }));
       return false;
     } else if (passwordRegexOnlyNumber.test(password)) {
-      setPasswordErrorMessage(
-        "Mật khẩu phải chứa ít nhất một chữ hoa và một chữ thường."
-      );
+      setValidateMessages(prevState => ({
+        ...prevState,
+        password: "Mật khẩu phải chứa ít nhất một chữ hoa và một chữ thường"
+      }));
       return false;
     } else if (passwordRegexOnlyLowcase.test(password)) {
-      setPasswordErrorMessage(
-        "Mật khẩu phải chứa ít nhất một chữ số và một chữ hoa."
-      );
+      setValidateMessages(prevState => ({
+        ...prevState,
+        password: "Mật khẩu phải chứa ít nhất một chữ số và một chữ hoa"
+      }));
       return false;
     } else if (passwordRegexOnlyUppcase.test(password)) {
-      setPasswordErrorMessage(
-        "Mật khẩu phải chứa ít nhất một chữ số và một chữ thường."
-      );
+      setValidateMessages(prevState => ({
+        ...prevState,
+        password: "Mật khẩu phải chứa ít nhất một chữ số và một chữ thường"
+      }));
       return false;
     } else if (passwordRegexNumberandLowcase.test(password)) {
-      setPasswordErrorMessage("Mật khẩu phải chứa ít nhất một chữ hoa.");
+      setValidateMessages(prevState => ({
+        ...prevState,
+        password: "Mật khẩu phải chứa ít nhất một chữ hoa"
+      }));
       return false;
     } else if (passwordRegexNumberandUpcase.test(password)) {
-      setPasswordErrorMessage("Mật khẩu phải chứa ít nhất một chữ thường.");
+      setValidateMessages(prevState => ({
+        ...prevState,
+        password: "Mật khẩu phải chứa ít nhất một chữ thường"
+      }));
       return false;
     } else if (passwordRegexNoNumber.test(password)) {
-      setPasswordErrorMessage("Mật khẩu phải chứa ít nhất một chữ số.");
+      setValidateMessages(prevState => ({
+        ...prevState,
+        password: "Mật khẩu phải chứa ít nhất một chữ số"
+      }));
       return false;
     } else {
       return true;
@@ -184,13 +235,22 @@ function HRSignUp() {
     confirmpassword: string,
     password: string
   ) => {
-    setConfirmPasswordErrorMessage("");
+    setValidateMessages(prevState => ({
+      ...prevState,
+      confirmPassword: ""
+    }));
 
     if (!confirmpassword) {
-      setConfirmPasswordErrorMessage("Nhập lại mật khẩu không được để trống");
+      setValidateMessages(prevState => ({
+        ...prevState,
+        confirmPassword: "Nhập lại mật khẩu không được để trống"
+      }));
       return false;
     } else if (confirmpassword !== password) {
-      setConfirmPasswordErrorMessage("Nhập lại mật khẩu không đúng");
+      setValidateMessages(prevState => ({
+        ...prevState,
+        confirmPassword: "Nhập lại mật khẩu không đúng"
+      }));
       return false;
     } else {
       return true;
@@ -198,25 +258,26 @@ function HRSignUp() {
   };
 
   const isPhoneValid = (phone: string) => {
-    setPhoneErrorMessage("");
+    setValidateMessages(prevState => ({
+      ...prevState,
+      phone: ""
+    }));
 
     if (!phone) {
-      setPhoneErrorMessage("Số điện thoại cá nhân không được để trống");
+      setValidateMessages(prevState => ({
+        ...prevState,
+        phone: "Số điện thoại cá nhân không được để trống"
+      }));
       return false;
     } else if (phone.length !== 10) {
-      setPhoneErrorMessage("Số điện thoại phải có 10 ký tự");
+      setValidateMessages(prevState => ({
+        ...prevState,
+        phone: "Số điện thoại phải có 10 ký tự"
+      }));
       return false;
     } else {
       return true;
     }
-  };
-
-  const handlePasswordToggle = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleConfirmPasswordToggle = () => {
-    setShowConfirmPassword(!showConfirmPassword);
   };
 
   const handleExpandClick = () => {
@@ -229,48 +290,63 @@ function HRSignUp() {
   };
 
   const handleSignUp = (e: { preventDefault: () => void }) => {
-    e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
+    e.preventDefault();
 
     let error = false;
 
     const validations = [
       {
-        check: !hrData.address_work,
+        check: !formData.address_work,
         action: () => {
-          setAddressWorkError(true);
-          setErrorMessage("Địa chỉ làm việc không được để trống");
+          setValidateMessages(prevState => ({
+            ...prevState,
+            address: "Địa chỉ làm việc không được để trống"
+          }));
+          setErrorMessage(validateMessages.address);
         },
       },
       {
-        check: !hrData.position,
+        check: !formData.position,
         action: () => {
-          setPositionError(true);
-          setErrorMessage("Vị trí công tác không được để trống");
+          setValidateMessages(prevState => ({
+            ...prevState,
+            position: "Vị trí công tác không được để trống"
+          }));
+          setErrorMessage(validateMessages.position);
         },
       },
       {
-        check: !hrData.company,
+        check: !formData.company,
         action: () => {
-          setCompanyError(true);
-          setErrorMessage("Tên công ty không được để trống");
+          setValidateMessages(prevState => ({
+            ...prevState,
+            company: "Tên công ty không được để trống"
+          }));
+          setErrorMessage(validateMessages.company);
         },
       },
       {
-        check: !isPhoneValid(hrData.phone),
-        action: () => setErrorMessage(phoneErrorMessage),
+        check: !isPhoneValid(formData.phone),
+        action: () => setErrorMessage(validateMessages.phone),
       },
       {
-        check: !hrData.sex,
+        check: !formData.sex,
         action: () => {
-          setSexError(true);
-          setErrorMessage("Giới tính không được để trống");
+          setValidateMessages(prevState => ({
+            ...prevState,
+            sex: "Giới tính không được để trống"
+          }));
+          setErrorMessage(validateMessages.sex);
         },
       },
       {
-        check: !hrData.name,
+        check: !formData.name,
         action: () => {
-          setNameError(true);
-          setErrorMessage("Họ tên không được để trống");
+          setValidateMessages(prevState => ({
+            ...prevState,
+            name: "Họ tên không được để trống"
+          }));
+          setErrorMessage(validateMessages.name);
         },
       },
       {
@@ -278,17 +354,17 @@ function HRSignUp() {
           formData.confirmPassword,
           formData.password
         ),
-        action: () => setErrorMessage(confirmPasswordErrorMessage),
+        action: () => setErrorMessage(validateMessages.confirmPassword),
       },
       {
         check: !isPasswordValid(formData.password),
         action: () => {
-          setErrorMessage(passwordErrorMessage);
+          setErrorMessage(validateMessages.password);
         },
       },
       {
         check: !isEmailValid(formData.email),
-        action: () => setErrorMessage(emailErrorMessage),
+        action: () => setErrorMessage(validateMessages.email),
       },
       {
         check: !formData.agreeToTerms,
@@ -308,19 +384,8 @@ function HRSignUp() {
       setErrorMessage("");
     }, 3000);
 
-    // Lưu thông tin tài khoản vào Local Storage hoặc gửi đến server
     if (!error) {
-      const foundProvince = data_provinces.data.find(
-        (province) => province.code === hrData.address_work
-      );
-
-      setHrData((prevHrData) => ({
-        ...prevHrData,
-        address_work: foundProvince?.name_with_type || "",
-      }));
-
-      console.log("Đăng ký thành công.");
-      setShowSuccessMessage(true); // Hiển thị thông báo khi đăng ký thành công
+      setShowSuccessMessage(true);
     }
   };
 
@@ -396,159 +461,73 @@ function HRSignUp() {
             <h4 className="text-gray-700 font-bold">
               Email đăng nhập <span className="text-red-500">*</span>
             </h4>
-            <div className="relative">
-              <Mail className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500" />
-              <input
-                id="email"
-                name="email"
-                type="text"
-                placeholder="Email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                className={`text-black mt-1 bg-white w-full pl-12 pr-3 py-2 border rounded-md
-                focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
-                ${emailErrorMessage && "border-red-500"}
-                `}
-                onFocus={() => setEmailErrorMessage("")}
-              />
-            </div>
-            <div className="text-red-500 text-sm">
-              Trường hợp bạn đăng ký tài khoản bằng email không phải email tên
-              miền công ty, một số dịch vụ trên tài khoản có thể sẽ bị giới hạn
-              quyền mua hoặc sử dụng.
-            </div>
-            {emailErrorMessage && (
-              <div className="text-red-500 font-semibold">
-                {emailErrorMessage}
-              </div>
-            )}
+            <Input
+              id="email"
+              name="email"
+              type="text"
+              placeholder="Email"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData(prevFormData => ({ ...prevFormData, email: e.target.value }))
+              }
+              errorMessage={validateMessages.email}
+              icon={Mail}
+            />
 
             <h4 className="text-gray-700 font-bold">
               Mật khẩu <span className="text-red-500">*</span>
             </h4>
-            <div className="relative">
-              <div className="flex items-center">
-                <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                  <Lock className="w-5 h-5 text-green-500" />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Mật khẩu (6 đến 25 ký tự)"
-                  value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
-                  className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
-                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
-                  ${passwordErrorMessage && "border-red-500"}
-                  `}
-                  onFocus={() => setPasswordErrorMessage("")}
-                />
-                <div className="absolute right-3 top-7 transform -translate-y-1/2">
-                  <button
-                    type="button"
-                    onClick={handlePasswordToggle}
-                    className="focus:outline-none"
-                  >
-                    {showPassword ? (
-                      <Eye className="w-5 h-5 text-gray-500" />
-                    ) : (
-                      <EyeOff className="w-5 h-5 text-gray-500" />
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-            {passwordErrorMessage && (
-              <div className="text-red-500 font-semibold">
-                {passwordErrorMessage}
-              </div>
-            )}
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Nhập mật khẩu"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData(prevFormData => ({ ...prevFormData, password: e.target.value }))
+              }
+              errorMessage={validateMessages.password}
+              icon={Lock}
+            />
 
             <h4 className="text-gray-700 font-bold">
               Nhập lại mật khẩu <span className="text-red-500">*</span>
             </h4>
-            <div className="relative">
-              <div className="flex items-center">
-                <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                  <Lock className="w-5 h-5 text-green-500" />
-                </div>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Nhập lại mật khẩu"
-                  value={formData.confirmPassword}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      confirmPassword: e.target.value,
-                    })
-                  }
-                  className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
-                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
-                  ${confirmPasswordErrorMessage && "border-red-500"}
-                  `}
-                  onFocus={() => setConfirmPasswordErrorMessage("")}
-                />
-                <div className="absolute right-3 top-7 transform -translate-y-1/2">
-                  <button
-                    type="button"
-                    onClick={handleConfirmPasswordToggle}
-                    className="focus:outline-none"
-                  >
-                    {showConfirmPassword ? (
-                      <Eye className="w-5 h-5 text-gray-500" />
-                    ) : (
-                      <EyeOff className="w-5 h-5 text-gray-500" />
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-            {confirmPasswordErrorMessage && (
-              <div className="text-red-500 font-semibold">
-                {confirmPasswordErrorMessage}
-              </div>
-            )}
+            <Input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              placeholder="Nhập lại mật khẩu"
+              value={formData.confirmPassword}
+              onChange={(e) =>
+                setFormData(prevFormData => ({ ...prevFormData, confirmPassword: e.target.value }))
+              }
+              errorMessage={validateMessages.confirmPassword}
+              icon={Lock}
+            />
 
             <div className="border-l-4 border-green-500">
               <span className="text-2xl font-bold ml-2 text-black">
                 Thông tin nhà tuyển dụng
               </span>
             </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-1">
                 <h4 className="text-gray-700 font-bold">
                   Họ và tên <span className="text-red-500">*</span>
                 </h4>
-                <div className="relative">
-                  <User className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500" />
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    placeholder="Họ và tên"
-                    value={hrData.name}
-                    onChange={(e) =>
-                      setHrData({ ...hrData, name: e.target.value })
-                    }
-                    className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
-                      focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
-                      ${nameError && "border-red-500"} 
-                      `}
-                    onFocus={() => setNameError(false)}
-                  />
-                </div>
-                {nameError && (
-                  <div className="text-red-500 font-semibold">
-                    Họ tên không được để trống
-                  </div>
-                )}
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Họ và tên"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData(prevFormData => ({ ...prevFormData, name: e.target.value }))}
+                  errorMessage={validateMessages.name}
+                  icon={User}
+                />
               </div>
 
               <div className="col-span-1 justify-self-end">
@@ -561,27 +540,30 @@ function HRSignUp() {
                     name="sex"
                     id="sex"
                     onChange={(e) => {
-                      setHrData({ ...hrData, sex: e.target.value });
-                      setSexError(false);
+                      setFormData(prevFormData => ({ ...prevFormData, sex: e.target.value }));
+                      setValidateMessages(prevState => ({
+                        ...prevState,
+                        sex: ""
+                      }));
                     }}
                   >
                     <FormControlLabel
                       value="Nam"
                       control={<Radio />}
                       label="Nam"
-                      className={`text-black ${hrData.sex === "Nam" ? "green-radio" : ""}`}
+                      className={`text-black ${formData.sex === "Nam" ? "green-radio" : ""}`}
                     />
                     <FormControlLabel
                       value="Nữ"
                       control={<Radio />}
                       label="Nữ"
-                      className={`text-black ${hrData.sex === "Nữ" ? "green-radio" : ""}`}
+                      className={`text-black ${formData.sex === "Nữ" ? "green-radio" : ""}`}
                     />
                   </RadioGroup>
                 </FormControl>
-                {sexError && (
+                {validateMessages.sex && (
                   <div className="text-red-500 font-semibold">
-                    Giới tính không được để trống
+                    {validateMessages.sex}
                   </div>
                 )}
               </div>
@@ -590,58 +572,35 @@ function HRSignUp() {
             <h4 className="text-gray-700 font-bold">
               Số điện thoại cá nhân <span className="text-red-500">*</span>
             </h4>
-            <div className="relative">
-              <Phone className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500" />
-              <input
-                id="phone"
-                name="phone"
-                type="text"
-                placeholder="Số điện thoại cá nhân"
-                value={hrData.phone}
-                onChange={(e) =>
-                  setHrData({ ...hrData, phone: e.target.value })
-                }
-                className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
-                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
-                  ${phoneErrorMessage && "border-red-500"}
-                  `}
-                onFocus={() => setPhoneErrorMessage("")}
-              />
-            </div>
-            {phoneErrorMessage && (
-              <div className="text-red-500 font-semibold">
-                {phoneErrorMessage}
-              </div>
-            )}
+            <Input
+              id="phone"
+              name="phone"
+              type="text"
+              placeholder="Số điện thoại cá nhân"
+              value={formData.phone}
+              onChange={(e) =>
+                setFormData(prevFormData => ({ ...prevFormData, phone: e.target.value }))
+              }
+              errorMessage={validateMessages.phone}
+              icon={Phone}
+            />
 
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-1">
                 <h4 className="text-gray-700 font-bold">
                   Công ty <span className="text-red-500">*</span>
                 </h4>
-                <div className="relative">
-                  <Building className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500" />
-                  <input
-                    id="name_company"
-                    name="name_company"
-                    type="text"
-                    placeholder="Tên công ty"
-                    value={hrData.company}
-                    onChange={(e) =>
-                      setHrData({ ...hrData, company: e.target.value })
-                    }
-                    className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
-                    focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
-                    ${companyError && "border-red-500"} 
-                    `}
-                    onFocus={() => setCompanyError(false)}
-                  />
-                </div>
-                {companyError && (
-                  <div className="text-red-500 font-semibold">
-                    Tên công ty không được để trống
-                  </div>
-                )}
+                <Input
+                  id="name_company"
+                  name="name_company"
+                  type="text"
+                  placeholder="Tên công ty"
+                  value={formData.company}
+                  onChange={(e) =>
+                    setFormData(prevFormData => ({ ...prevFormData, company: e.target.value }))}
+                  errorMessage={validateMessages.company}
+                  icon={Building}
+                />
               </div>
 
               <div className="col-span-1">
@@ -651,11 +610,14 @@ function HRSignUp() {
                 <FormControl fullWidth>
                   <Select
                     id="Position"
-                    value={hrData.position}
+                    value={formData.position}
                     displayEmpty
                     onChange={(e) => {
-                      setHrData({ ...hrData, position: e.target.value });
-                      setPositionError(false);
+                      setFormData(prevFormData => ({ ...prevFormData, position: e.target.value }));
+                      setValidateMessages(prevState => ({
+                        ...prevState,
+                        position: ""
+                      }));
                     }}
                     placeholder="Chọn vị trí công tác"
                     className="mt-2 h-9"
@@ -672,9 +634,9 @@ function HRSignUp() {
                     <MenuItem value={"Tổng giám đốc"}>Tổng giám đốc</MenuItem>
                   </Select>
                 </FormControl>
-                {positionError && (
+                {validateMessages.position && (
                   <div className="text-red-500 font-semibold">
-                    Vị trí công tác không được để trống
+                    {validateMessages.position}
                   </div>
                 )}
               </div>
@@ -688,11 +650,25 @@ function HRSignUp() {
                 <FormControl fullWidth>
                   <Select
                     id="Address"
-                    value={hrData.address_work}
+                    value={formData.address_work}
                     displayEmpty
                     onChange={(e) => {
-                      setHrData({ ...hrData, address_work: e.target.value });
-                      setAddressWorkError(false);
+                      setFormData(prevFormData => ({ ...prevFormData, address_work: e.target.value }));
+
+                      const foundProvince = data_provinces.data.find(
+                        (province) => province.code === e.target.value
+                      );
+                
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        address: foundProvince?.name_with_type || "",
+                      }));
+
+                      setValidateMessages(prevState => ({
+                        ...prevState,
+                        address: ""
+                      }));
+
                     }}
                     placeholder="Chọn tỉnh/ thành phố"
                     className="mt-2 h-9"
@@ -708,9 +684,9 @@ function HRSignUp() {
                     ))}
                   </Select>
                 </FormControl>
-                {addressWorkError && (
+                {validateMessages.address && (
                   <div className="text-red-500 font-semibold">
-                    Địa chỉ làm việc không được để trống
+                    {validateMessages.address}
                   </div>
                 )}
               </div>
@@ -720,14 +696,14 @@ function HRSignUp() {
                 <FormControl fullWidth>
                   <Select
                     id="District"
-                    value={hrData.district}
+                    value={formData.district}
                     displayEmpty
                     onChange={(e) =>
-                      setHrData({ ...hrData, district: e.target.value })
+                      setFormData(prevFormData => ({ ...prevFormData, district: e.target.value }))
                     }
                     placeholder="Chọn quận/ huyện"
                     className="mt-2 h-9"
-                    disabled={!hrData.address_work}
+                    disabled={!formData.address_work}
                     MenuProps={{ PaperProps: { style: { maxHeight: 200 } } }}
                   >
                     <MenuItem value="" disabled>
@@ -752,9 +728,9 @@ function HRSignUp() {
               name="skype_account"
               type="text"
               placeholder="Tài khoản skype"
-              value={hrData.skype_account}
+              value={formData.skype_account}
               onChange={(e) =>
-                setHrData({ ...hrData, skype_account: e.target.value })
+                setFormData(prevFormData => ({ ...prevFormData, skype_account: e.target.value }))
               }
               className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
                   focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 
@@ -848,7 +824,7 @@ function HRSignUp() {
         fullWidth
         PaperProps={{
           style: {
-            borderRadius: "20px", // Đặt giá trị border radius ở đây
+            borderRadius: "20px",
           },
         }}
       >
@@ -918,4 +894,3 @@ function HRSignUp() {
 }
 
 export default HRSignUp;
-// làm tương tự tạo ra những page đăng nhập, đăng kí khác
