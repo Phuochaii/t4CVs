@@ -1,18 +1,21 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { FormControlLabel, Checkbox } from "@mui/material";
-import { User, Mail, ShieldCheck, Eye, EyeOff } from "lucide-react";
-import GoogleIcon from "@mui/icons-material/Google";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import img from "../../shared/assets/images/Sign-up user.png";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { FormControlLabel, Checkbox } from '@mui/material';
+import { User, Mail, ShieldCheck, Eye, EyeOff } from 'lucide-react';
+import GoogleIcon from '@mui/icons-material/Google';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import img from '../../shared/assets/images/Sign-up user.png';
+import { auth } from '../../shared/services/auth0.service';
+import { AUTH0_REALM } from '../../shared/services/config';
+import { Auth0Error } from 'auth0-js';
 
 function UserSignUp() {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
     agreeToTerms: true,
   });
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -26,7 +29,7 @@ function UserSignUp() {
   const [passwordError, setPasswordError] = useState(false);
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
@@ -34,6 +37,7 @@ function UserSignUp() {
 
   const isPasswordValid = (password: string) => {
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,25}$/;
+    console.log(passwordRegex.test(password));
     return passwordRegex.test(password);
   };
 
@@ -45,7 +49,7 @@ function UserSignUp() {
 
   const handleSignUp = (e: { preventDefault: () => void }) => {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
-    setErrorMessage("");
+    setErrorMessage('');
     setEmailError(false);
     setNameError(false);
     setPasswordError(false);
@@ -56,36 +60,37 @@ function UserSignUp() {
     // Kiểm tra các trường có dữ liệu đầy đủ không
     if (!formData.confirmPassword) {
       errorCount++;
-      setErrorMessage("Mật khẩu xác nhập chưa đúng 2");
+      setErrorMessage('Mật khẩu xác nhập chưa đúng 2');
       setConfirmPasswordError(true);
       setPasswordError(true);
     }
     if (!formData.password) {
       errorCount++;
-      setErrorMessage("Hãy cho chúng tôi biết mật khẩu của bạn");
+      setErrorMessage('Hãy cho chúng tôi biết mật khẩu của bạn');
       setPasswordError(true);
     }
     if (!formData.email) {
       errorCount++;
-      setErrorMessage("Hãy cho chúng tôi biết địa chỉ email của bạn");
+      setErrorMessage('Hãy cho chúng tôi biết địa chỉ email của bạn');
       setEmailError(true);
     }
     if (!formData.name) {
       errorCount++;
-      setErrorMessage("Hãy cho chúng tôi biết họ tên của bạn");
+      setErrorMessage('Hãy cho chúng tôi biết họ tên của bạn');
       setNameError(true);
     }
 
     if (formData.email && !isEmailValid(formData.email)) {
       errorCount++;
-      setErrorMessage("Định dạng email không đúng");
+      setErrorMessage('Định dạng email không đúng');
       setEmailError(true);
     }
 
     if (formData.password && !isPasswordValid(formData.password)) {
       errorCount++;
-      setErrorMessage("Định dạng mật khẩu không đúng");
+      setErrorMessage('Định dạng mật khẩu không đúng');
       setEmailError(true);
+      console.log(formData);
     }
 
     if (
@@ -94,15 +99,32 @@ function UserSignUp() {
       formData.confirmPassword !== formData.password
     ) {
       errorCount++;
-      setErrorMessage("Mật khẩu xác nhập chưa đúng");
+      setErrorMessage('Mật khẩu xác nhập chưa đúng');
       setConfirmPasswordError(true);
       setPasswordError(true);
     }
 
     if (errorCount === 0) {
       // Lưu thông tin tài khoản vào Local Storage hoặc gửi đến server
-      console.log("Đăng ký thành công.");
+      // console.log('Đăng ký thành công.');
       setShowSuccessMessage(true); // Hiển thị thông báo khi đăng ký thành công
+      auth.signup(
+        {
+          email: formData.email,
+          password: formData.password,
+          // name : formData.name,
+          connection: AUTH0_REALM,
+        },
+        function (error: Auth0Error | null, result: any) {
+          if (error) {
+            console.log('dk err');
+            console.log(error);
+            return;
+          }
+          console.log('Đăng ký thành công.');
+          console.log(result);
+        }
+      );
     }
   };
 
@@ -120,19 +142,19 @@ function UserSignUp() {
           {errorMessage ? (
             <div
               className="text-red-500 py-2"
-              style={{ backgroundColor: "rgba(255, 69, 58, 0.05)" }}
+              style={{ backgroundColor: 'rgba(255, 69, 58, 0.05)' }}
             >
               <span className="px-4 py-4">{errorMessage}</span>
             </div>
           ) : (
-            ""
+            ''
           )}
           <h4 className="text-gray-700">Họ và tên</h4>
           <div className="relative">
             <User
               className={`
                             w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 
-                            ${nameError ? "text-red-500" : "text-green-500"}  
+                            ${nameError ? 'text-red-500' : 'text-green-500'}  
                             `}
             />
             <input
@@ -147,7 +169,7 @@ function UserSignUp() {
               className={`
                                 text-black bg-white pl-12 pr-3 py-3 border-gray-200 border rounded-md w-full
                                 focus:border-gray-400 focus:outline-none focus:border-gray-400
-                                ${nameError ? "border-red-500" : ""}
+                                ${nameError ? 'border-red-500' : ''}
                             `}
             />
           </div>
@@ -157,7 +179,7 @@ function UserSignUp() {
             <Mail
               className={`
                             w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 
-                            ${emailError ? "text-red-500" : "text-green-500"}  
+                            ${emailError ? 'text-red-500' : 'text-green-500'}  
                             `}
             />
             <input
@@ -172,7 +194,7 @@ function UserSignUp() {
               className={`
                                 text-black bg-white pl-12 pr-3 py-3 border-gray-200 border rounded-md w-full
                                 focus:border-gray-400 focus:outline-none focus:border-gray-400
-                                ${emailError ? "border-red-500" : ""}
+                                ${emailError ? 'border-red-500' : ''}
                             `}
             />
           </div>
@@ -182,13 +204,13 @@ function UserSignUp() {
             <div className="flex items-center">
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                 <ShieldCheck
-                  className={`w-5 h-5 ${passwordError ? "text-red-500" : "text-green-500"}`}
+                  className={`w-5 h-5 ${passwordError ? 'text-red-500' : 'text-green-500'}`}
                 />
               </div>
               <input
                 id="password"
                 name="password"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 placeholder="Nhập mật khẩu"
                 value={formData.password}
                 onChange={(e) =>
@@ -197,7 +219,7 @@ function UserSignUp() {
                 className={`
                                     text-black bg-white pl-12 pr-3 py-3 border-gray-200 border rounded-md w-full
                                     focus:border-gray-400 focus:outline-none focus:border-gray-400
-                                    ${passwordError ? "border-red-500" : ""}
+                                    ${passwordError ? 'border-red-500' : ''}
                                 `}
                 onFocus={() => setShowGuide(true)}
                 onBlur={() => setShowGuide(false)}
@@ -229,13 +251,13 @@ function UserSignUp() {
             <div className="flex items-center">
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                 <ShieldCheck
-                  className={`w-5 h-5 ${confirmPasswordError ? "text-red-500" : "text-green-500"}`}
+                  className={`w-5 h-5 ${confirmPasswordError ? 'text-red-500' : 'text-green-500'}`}
                 />
               </div>
               <input
                 id="confirmPassword"
                 name="confirmPassword"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 placeholder="Nhập lại mật khẩu"
                 value={formData.confirmPassword}
                 onChange={(e) =>
@@ -244,7 +266,7 @@ function UserSignUp() {
                 className={`
                                     text-black bg-white pl-12 pr-3 py-3 border-gray-200 border rounded-md w-full
                                     focus:border-gray-400 focus:outline-none focus:border-gray-400
-                                    ${confirmPasswordError ? "border-red-500" : ""}
+                                    ${confirmPasswordError ? 'border-red-500' : ''}
                                 `}
               />
               <div className="absolute right-3 top-8 transform -translate-y-1/2">
@@ -276,27 +298,27 @@ function UserSignUp() {
             }
             label={
               <span className="text-gray-700">
-                Tôi đã đọc và đồng ý với{" "}
+                Tôi đã đọc và đồng ý với{' '}
                 <Link
                   to="/"
                   className="text-green-500 hover:underline hover:text-green-500"
                 >
                   Điều khoản dịch vụ
                 </Link>
-                {" và "}
+                {' và '}
                 <Link
                   to="/"
                   className="text-green-500 hover:underline hover:text-green-500"
                 >
                   Chính sách bảo mật
                 </Link>
-                {" của TopCV."}
+                {' của TopCV.'}
               </span>
             }
           />
           <button
             type="submit"
-            className={`py-2 px-4 w-full focus:outline-none text-white rounded-md ${!formData.agreeToTerms ? "bg-green-400" : "bg-green-600 hover:bg-green-500 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"}`}
+            className={`py-2 px-4 w-full focus:outline-none text-white rounded-md ${!formData.agreeToTerms ? 'bg-green-400' : 'bg-green-600 hover:bg-green-500 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50'}`}
             disabled={!formData.agreeToTerms}
           >
             Đăng ký
@@ -313,19 +335,19 @@ function UserSignUp() {
           <div className="flex fullwidth">
             <button
               disabled={!socialAgree}
-              className={`flex-grow rounded-md py-2 px-4 mr-2 mb-4 text-white ${!socialAgree ? "bg-red-400" : "bg-red-500 hover:bg-red-600"}`}
+              className={`flex-grow rounded-md py-2 px-4 mr-2 mb-4 text-white ${!socialAgree ? 'bg-red-400' : 'bg-red-500 hover:bg-red-600'}`}
             >
               <GoogleIcon></GoogleIcon> Google
             </button>
             <button
               disabled={!socialAgree}
-              className={`flex-grow rounded-md py-2 px-4 mx-2 mb-4 text-white ${!socialAgree ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-500"}`}
+              className={`flex-grow rounded-md py-2 px-4 mx-2 mb-4 text-white ${!socialAgree ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-500'}`}
             >
               <FacebookIcon></FacebookIcon> Facebook
             </button>
             <button
               disabled={!socialAgree}
-              className={`flex-grow rounded-md py-2 px-4 ml-2 mb-4 text-white ${!socialAgree ? "bg-blue-500" : "bg-blue-800 hover:bg-blue-700"}`}
+              className={`flex-grow rounded-md py-2 px-4 ml-2 mb-4 text-white ${!socialAgree ? 'bg-blue-500' : 'bg-blue-800 hover:bg-blue-700'}`}
             >
               <LinkedInIcon></LinkedInIcon> Linkedin
             </button>
@@ -342,28 +364,28 @@ function UserSignUp() {
             label={
               <span className="text-gray-700">
                 Bằng việc đăng nhập bằng tài khoản mạng xã hội, tôi đã đọc và
-                đồng ý với{" "}
+                đồng ý với{' '}
                 <Link
                   to="/"
                   className="text-green-500 hover:underline hover:text-green-500"
                 >
                   Điều khoản dịch vụ
                 </Link>
-                {" và "}
+                {' và '}
                 <Link
                   to="/"
                   className="text-green-500 hover:underline hover:text-green-500"
                 >
                   Chính sách bảo mật
                 </Link>
-                {" của TopCV."}
+                {' của TopCV.'}
               </span>
             }
             className="mb-4"
           />
 
           <p className="text-center text-gray-600">
-            Bạn đã có tài khoản?{" "}
+            Bạn đã có tài khoản?{' '}
             <Link
               to="/user-login"
               className="text-green-500 hover:underline hover:text-green-500"
@@ -375,8 +397,8 @@ function UserSignUp() {
           <div className="flex flex-col items-center">
             <b className="text-gray-700">Bạn gặp khó khăn khi tạo tài khoản?</b>
             <div className="text-gray-700">
-              Vui lòng gọi tới số{" "}
-              <span className="text-green-500 font-bold">(024) 6680 5588</span>{" "}
+              Vui lòng gọi tới số{' '}
+              <span className="text-green-500 font-bold">(024) 6680 5588</span>{' '}
               (giờ hành chính).
             </div>
           </div>
