@@ -7,7 +7,6 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
-  OneToMany,
 } from 'typeorm';
 import { JobDetail } from './job-detail.entity';
 import { Major } from './major.entity';
