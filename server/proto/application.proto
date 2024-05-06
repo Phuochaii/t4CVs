@@ -8,6 +8,7 @@ service ApplicationService {
   rpc ReadApplication (ReadApplicationRequest) returns (Application) {}
   rpc ReadAllApplication (Pagination) returns (Applications) {}
   rpc ReadAllApplicationByCampaignId (ReadAllApplicationByCampaignIdRequest) returns (Applications) {}
+  rpc ReadAllApplicationByUserId (ReadAllApplicationByUserIdRequest) returns (Applications) {}
   rpc UpdateApplication (UpdateApplicationRequest) returns (Application) {}
   rpc DeleteApplication (DeleteApplicationRequest) returns (Empty) {}
 }
@@ -18,6 +19,12 @@ message DeleteApplicationRequest {
 
 message ReadApplicationRequest {
     int32 id = 1;
+}
+
+message ReadAllApplicationByUserIdRequest {
+  int32 page = 1;
+  int32 limit = 2;
+  int32 userId = 3;
 }
 
 message ReadAllApplicationByCampaignIdRequest {

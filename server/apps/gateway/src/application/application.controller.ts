@@ -33,28 +33,6 @@ export class ApplicationController {
 
   @Post()
   async create(@Body() createApplicationRequest: CreateApplicationRequest) {
-    //application campagin  user notification
-    // this.applicationService
-    //   .create(createApplicationRequest)
-    //   .subscribe((application: any) => {
-    //     this.companyService
-    //       .findCampaignById(createApplicationRequest.campaignId)
-    //       .subscribe((campaign: any) => {
-    //         const employerId = campaign.employerId;
-    //         this.userService
-    //           .findJobById(createApplicationRequest.userId)
-    //           .subscribe((user: any) => {
-    //             this.notificationService.create(
-    //               [new NotificationUserId(employerId, NotificationUserRole.HR)],
-    //               {
-    //                 content: `Ứng viên ${user.fullname} - ${campaign.name}`,
-    //                 link: `application/${application.id}`,
-    //                 title: `CV mới ứng tuyển`,
-    //               },
-    //             );
-    //           });
-    //       });
-    //   });
     const application = await firstValueFrom(
       this.applicationService.create(createApplicationRequest),
     );
@@ -65,18 +43,20 @@ export class ApplicationController {
     const employerId = campaign.employerId;
 
     // console.log(employerId);
-    const notification = await firstValueFrom(this.notificationService.create(
-      [new NotificationUserId(employerId, NotificationUserRole.HR)],
-      {
-        content: `Ứng viên ${application.fullname}- ${campaign.name}`,
-        link: `application/${application.id}`,
-        title: `CV mới ứng tuyển`,
-      },
-    ));
+    const notification = await firstValueFrom(
+      this.notificationService.create(
+        [new NotificationUserId(employerId, NotificationUserRole.HR)],
+        {
+          content: `Ứng viên ${application.fullname}- ${campaign.name}`,
+          link: `application/${application.id}`,
+          title: `CV mới ứng tuyển`,
+        },
+      ),
+    );
     return 'Success';
   }
 
- @Get('/hr/:hrId')
+  @Get('/hr/:hrId')
   async findAll(
     @Param('hrId') hrId: number,
     @Query('page') page: number = 1,
@@ -90,19 +70,6 @@ export class ApplicationController {
     )
     status: boolean | null, //truyen vao false or null //filter
   ) {
-    // const campaignRes = await firstValueFrom(
-    //   this.companyService.findCampaignByEmployerId(hrId, 1, 100),
-    // );
-    // console.log(campaignRes);
-    // let campaignIds = campaignRes.data.map((campaign) => campaign.id);
-    // if (campaignId) {
-    //   if (campaignIds.includes(campaignId)) campaignIds = [campaignId];
-    //   else throw new ForbiddenException();
-    // }
-
-    // return this.applicationService.findAll(page, limit, campaignIds, status);
-    // // return 'success';
-
     const campaignRes = await firstValueFrom(
       this.companyService.findCampaignByEmployerId(hrId, 1, 100),
     );
@@ -113,6 +80,22 @@ export class ApplicationController {
     }
     const { applications = [], ...data } = await firstValueFrom(
       this.applicationService.findAll(page, limit, campaignIds, status),
+    );
+
+    return {
+      ...data,
+      applications,
+    };
+  }
+
+  @Get('/user/:userId')
+  async findAllByUserId(
+    @Param('userId') userId: number,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    const { applications = [], ...data } = await firstValueFrom(
+      this.applicationService.findAllByUserId(page, limit, userId),
     );
 
     return {

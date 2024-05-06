@@ -1,5 +1,5 @@
 import { Bell, ChevronDown } from "lucide-react";
-import React, { useEffect } from "react";
+import { useState, useEffect } from "react";
 import SearchBar from "./SearchBar";
 import { useNavigate } from "react-router-dom";
 import RoundedButton from "../../HRLayout/components/RoundedButton";
@@ -16,24 +16,27 @@ function Header() {
   const navigation = useNavigate();
 
   useEffect(() => {
-    console.log(JSON.parse(localStorage.getItem("admin") as string).role);
+    // console.log(JSON.parse(localStorage.getItem("admin") as string).role);
     if (localStorage.getItem("admin") === null) {
       navigation("/admin-login");
     }
   }, []);
-  const [displayAccountTab, setDisplayAccountTab] = React.useState(false);
+  const [displayAccountTab, setDisplayAccountTab] = useState(false);
 
   return (
-    <div className="px-4 flex justify-between items-center h-16 gap-6">
+    <div className="flex items-center justify-between h-16 gap-6 px-4">
       <div className="flex-1 h-full">
-        <img src="/topcv-logo-6.webp" className="object-contain h-full"></img>
+        <img
+          src="/topcv-logo-6.webp"
+          className="object-contain h-full"
+        ></img>
       </div>
       <SearchBar placeholder="Search " />
 
       <Bell className="mx-2 text-slate-500" />
       <li className="relative list-none">
         <a
-          className="text-center inline-flex items-center bg-transparent"
+          className="inline-flex items-center text-center bg-transparent"
           onClick={() => setDisplayAccountTab(!displayAccountTab)}
         >
           <RoundedButton
@@ -48,7 +51,7 @@ function Header() {
         </a>
         {/* <!-- Dropdown menu --> */}
         {displayAccountTab ? (
-          <div className="pt-3 absolute top-8 right-0 z-50">
+          <div className="absolute right-0 z-50 pt-3 top-8">
             <ul
               className="max-h-[320px] overflow-y-scroll dropdown  hover:text-green-500 w-56 z-50font-semibold text-base bg-white border border-slate-100 rounded-lg py-2 flex flex-col gap-3 shadow-lg"
               aria-labelledby="dropdownDividerButton"
@@ -60,7 +63,7 @@ function Header() {
                   localStorage.removeItem("admin");
                 }}
               >
-                <span className="cursor-pointer text-black hover:text-green-500">
+                <span className="text-black cursor-pointer hover:text-green-500">
                   Đăng xuất
                 </span>
               </li>

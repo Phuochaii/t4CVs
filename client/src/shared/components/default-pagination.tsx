@@ -1,5 +1,8 @@
-import { Button, IconButton } from "@material-tailwind/react";
-import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { Button } from "@material-tailwind/react";
+import {
+  ArrowRightIcon,
+  ArrowLeftIcon,
+} from "@heroicons/react/24/outline";
 
 export function DefaultPagination({
   active,
@@ -30,7 +33,7 @@ export function DefaultPagination({
         onClick={prev}
         disabled={active === 1}
       >
-        <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
+        <ArrowLeftIcon strokeWidth={2} className="w-4 h-4" /> Previous
       </Button>
       <div className="flex items-center gap-2">
         {[...Array(totalPage).keys()].map((i) => {
@@ -38,7 +41,11 @@ export function DefaultPagination({
             <button
               key={i}
               onClick={() => setActive(i + 1)}
-              className={`py-1 px-3 bg-slate-400 ${i + 1 == active ? "bg-[#22C55E] text-white" : "bg-white border border-[#22C55E]"}  rounded-md`}
+              className={`py-1 px-3 bg-slate-400 ${
+                i + 1 == active
+                  ? "bg-[#22C55E] text-white"
+                  : "bg-white border border-[#22C55E]"
+              }  rounded-md`}
             >
               {i + 1}
             </button>
@@ -52,7 +59,7 @@ export function DefaultPagination({
         disabled={active === 5}
       >
         Next
-        <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+        <ArrowRightIcon strokeWidth={2} className="w-4 h-4" />
       </Button>
     </div>
   );

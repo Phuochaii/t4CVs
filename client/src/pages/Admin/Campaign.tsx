@@ -1,152 +1,285 @@
-// thuc
+// import { Briefcase } from "../../layouts/HRLayout/components/Icons";
+import {
+  ChevronDown,
+  ChevronLeftCircle,
+  ChevronRightCircle,
+  Search,
+} from "lucide-react";
 
-import { useState } from "react";
-import SearchBar from "../../layouts/AdminLayout/components/SearchBar";
-import { MoreHorizontal } from "lucide-react";
+import { SetStateAction, useEffect, useState } from "react";
+import { Campaign as CampaignType } from "../../shared/types/Campaign.type";
+import { Link } from "react-router-dom";
+// import Switch from "../../shared/components/CustomSwitch";
+import {
+  getAllCampaigns,
+  getApplicationsByCampaignId,
+  getCompanyById,
+  getEmployerById,
+  getJobByCampaignId,
+  getUserById,
+} from "../../shared/utils/helper";
+import { UserFromServer } from "../../shared/types/User.type";
 
-const columns = ["Status", "Company Name", "Experience Level", "Job", "Action"];
+interface CampaignTableProps {
+  data: CampaignType[];
+  setData: React.Dispatch<SetStateAction<CampaignType[]>>;
+}
+
+const CompanyCampaignTableHeader = () => {
+  return (
+    <thead>
+      <tr>
+        <td className="px-2 py-1 font-bold border">Chiến dịch tuyển dụng</td>
+        <td className="px-2 py-1 font-bold border">Người tạo</td>
+        <td className="px-2 py-1 font-bold border">Ngày tạo</td>
+        <td className="px-2 py-1 font-bold border">Công ty</td>
+        <td className="px-2 py-1 font-bold border">Tin tuyển dụng</td>
+        {/* <td className="px-2 py-1 font-bold border">
+          Dịch vụ đang chạy
+        </td> */}
+      </tr>
+    </thead>
+  );
+};
+
+interface CompanyCampaignTableRowProps {
+  data: CampaignType;
+}
+
+const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [applicants, setApplicants] = useState<(UserFromServer | null)[]>([]);
+  const campaign = data;
+  console.log(data);
+  useEffect(() => {
+    async function getUsers() {
+      const applicantPromises = campaign.applications.map(
+        async (application) => {
+          console.log("Applications", application);
+          const applicant = await getUserById(application.userId);
+          return applicant;
+        }
+      );
+      setApplicants(await Promise.all(applicantPromises));
+    }
+    getUsers();
+  }, []);
+  console.log("Applicants", applicants);
+  return (
+    <tr
+      className="align-top hover:bg-green-100 bg-slate-50"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <td className="border">
+        <div className="flex items-start gap-2 p-2">
+          {/* <Switch
+            checked={campaign.isCampaignActive}
+            onClick={() => {
+              setCampaign({
+                ...campaign,
+                isCampaignActive: !campaign.isCampaignActive,
+              });
+            }}
+          /> */}
+          <div className="flex flex-col items-start gap-2 mb-12">
+            <h3 className="font-bold">{data.campaignName}</h3>
+            <span className="font-bold text-slate-400">
+              {applicants.length === 0 ? (
+                "Chưa có CV nào"
+              ) : (
+                <div className="flex items-center gap-1">
+                  {applicants.slice(0, 5).map((candidate, item) => {
+                    return (
+                      <img
+                        key={item}
+                        src={
+                          // candidate?.image ||
+                          "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg"
+                        }
+                        className="object-cover w-8 h-8 rounded-full"
+                      />
+                    );
+                  })}
+                  {applicants.length > 5 ? (
+                    <span className="p-1 font-normal text-green-500 bg-green-100 rounded-full">{`+${
+                      applicants.length - 5
+                    } hồ sơ khác`}</span>
+                  ) : null}
+                </div>
+              )}
+            </span>
+            <span className="font-bold bg-slate-200 text-zinc-400">
+              {`#${data.campaignId}`}
+            </span>
+            {
+              <div
+                className={`flex items-center gap-2 font-bold ${
+                  isHovered ? "visible" : "invisible"
+                }`}
+              >
+                <a href="#">Sửa chiến dịch</a>
+                <a href="#">Xem báo cáo</a>
+              </div>
+            }
+          </div>
+        </div>
+      </td>
+      <td className="border">
+        <div className="p-2 font-bold text-blue-500">{`${data.employer.fullname}`}</div>
+      </td>
+      <td className="border">
+        <div className="p-2 font-bold text-blue-500">{`${data.postDate?.toLocaleDateString(
+          "vi-VN"
+        )}`}</div>
+      </td>
+      <td className="border">
+        <div className="p-2 font-bold text-blue-500">{`${
+          data.company ? data.company.name : ""
+        }`}</div>
+      </td>
+      <td className="border max-w-[180px]">
+        {campaign.recruitment ? (
+          <div className="flex flex-col gap-2 p-2">
+            <h3 className="font-bold capitalize">
+              {campaign.recruitment.titleRecruitment}
+            </h3>
+            <div className="flex gap-2">
+              <span className="font-bold bg-slate-200 text-slate-400">
+                {`#${campaign.recruitment.id}`}
+              </span>
+              <span className="font-bold text-slate-400">
+                {campaign.recruitment.status}
+              </span>
+            </div>
+            <div
+              className={`flex items-center gap-2 ${
+                isHovered ? "visible" : "invisible"
+              }`}
+            >
+              <Link
+                className="font-bold text-green-500"
+                to={`/hr/campaign-edit/${campaign.recruitment.id}`}
+                state={campaign}
+              >
+                Chỉnh sửa
+              </Link>
+              <button> Yêu cầu hiển thị </button>
+            </div>
+          </div>
+        ) : (
+          <>Không có tin tuyển dụng</>
+        )}
+      </td>
+
+      {/* <td className="border">
+        <div className="p-2">
+          {campaign.isCampaignActive ? (
+            <span className="px-2 py-1 font-bold text-green-500 rounded-sm bg-slate-100">
+              Thêm
+            </span>
+          ) : (
+            <>Chiến dịch đang tắt</>
+          )}
+        </div>
+      </td> */}
+    </tr>
+  );
+};
+
+const CompanyCampaignTable = ({ data }: CampaignTableProps) => {
+  return (
+    <table className="w-full text-sm bg-white">
+      <CompanyCampaignTableHeader />
+      <tbody>
+        {data.map((item, index) => (
+          <CompanyCampaignTableRow data={item} key={index} />
+        ))}
+      </tbody>
+    </table>
+  );
+};
 
 function Campaign() {
-  const [openDialog, setOpenDialog] = useState(-1);
-  const [mockUsers, setMockUsers] = useState([
-    {
-      status: "accepted",
-      imageUrl: "https://images.unsplash.com/photo-1711580377289-eecd23d00370",
-      companyName: "Meta",
-      experienceLevel: "Junior",
-      job: "Quality Assurance",
-    },
-    {
-      status: "declined",
-      imageUrl: "https://images.unsplash.com/photo-1711580377289-eecd23d00370",
-      companyName: "Apple",
-      experienceLevel: "Senior",
-      job: "Software Engineer",
-    },
-    {
-      status: "pending",
-      imageUrl: "https://images.unsplash.com/photo-1711580377289-eecd23d00370",
-      companyName: "Netflix",
-      experienceLevel: "Mid-level",
-      job: "Software Tester",
-    },
-  ]);
+  const [campaigns, setCampaigns] = useState<CampaignType[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
+  useEffect(() => {
+    async function getData() {
+      const { allCampaigns, totalPages } = await getAllCampaigns(page);
+      const rawCampaigns = await allCampaigns.map(async (item) => {
+        const employer = await getEmployerById(item.employerId);
+        const company = employer.companyId
+          ? await getCompanyById(employer.companyId)
+          : await null;
+        const job = await getJobByCampaignId(item.id);
+        const { applications } = await getApplicationsByCampaignId(
+          item.employerId,
+          item.id
+        );
+        const rawCampaign: CampaignType = {
+          campaignName: item.name,
+          campaignId: item.id,
+          employer: employer,
+          company: company,
+          postDate: new Date(item.createdAt),
+          recruitment: job,
+          applications: applications,
+          applicants: [],
+        };
+        return rawCampaign;
+      });
+      setCampaigns(await Promise.all(rawCampaigns));
+      setTotalPages(totalPages);
+    }
+    getData();
+    console.log("GO");
+  }, [page]);
 
   return (
-    <div
-      className="z-0 flex-grow px-10 py-4 bg-slate-100"
-      onClick={(event) => {
-        event.preventDefault();
-        setOpenDialog(-1);
-      }}
-    >
-      <div className="flex justify-between w-full gap-12 my-4">
-        <h1 className="text-2xl font-bold text-slate-500">Compaign</h1>
-        <div className="">
-          <SearchBar placeholder="Search Company" />
+    <div className="flex flex-col items-center flex-grow bg-slate-200">
+      <div className="w-full p-2 bg-white">
+        <h2 className="font-bold">Quản lý chiến dịch tuyển dụng</h2>
+      </div>
+      <div className="flex flex-col items-center justify-between gap-2 py-8 w-[90%]">
+        <div className="flex items-center justify-between w-full gap-2">
+          {/* <button className="flex items-center h-full gap-2 px-4 py-2 text-white bg-green-600 rounded-sm">
+            <Briefcase stroke="white" /> Chiến dịch mới
+          </button> */}
+          <div className="flex items-center flex-grow divide-x-2">
+            <div className="flex items-center justify-between h-full p-2 text-sm bg-white">
+              <span className="text-gray-400">Tất cả chiến dịch</span>
+              <ChevronDown stroke="#9ca3af" size={16} />
+            </div>
+            <div className="flex items-center justify-between flex-grow p-2 text-sm bg-white ">
+              <span className="text-gray-400">
+                Tìm chiến dịch (Nhấn enter để tìm kiếm)
+              </span>
+              <Search stroke="#9ca3af" size={16} />
+            </div>
+          </div>
+        </div>
+        <CompanyCampaignTable data={campaigns} setData={setCampaigns} />
+        <div className="flex items-center self-center justify-center gap-2">
+          <ChevronLeftCircle
+            className="cursor-pointer"
+            stroke="green"
+            strokeWidth={1}
+            onClick={() => {
+              setPage(page - 1 > 0 ? page - 1 : page);
+            }}
+          />
+          <span className="font-bold text-green-600">{page}</span>/
+          <span>{totalPages}</span>
+          <ChevronRightCircle
+            stroke="green"
+            className="cursor-pointer"
+            strokeWidth={1}
+            onClick={() => setPage(page + 1 <= totalPages ? page + 1 : page)}
+          />
         </div>
       </div>
-
-      {/* Table */}
-      <table className="flex flex-col w-full gap-10 px-10 py-12 bg-white border-slate-500 rounded-2xl">
-        <thead className="w-full">
-          <tr className="flex text-center justify-evenly">
-            {columns.map((item, index) => {
-              return (
-                <td
-                  key={"header-" + index}
-                  className="flex items-center justify-center w-1/5 p-12 font-bold text-slate-500"
-                >
-                  {item}
-                </td>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody className="flex flex-col w-full gap-10 bg-white border-slate-500 rounded-2xl">
-          {mockUsers.map((user, index) => {
-            return (
-              <tr
-                className="flex items-center py-4 justify-evenly text-slate-500 border-slate-300 rounded-[24rem] border"
-                key={"row-" + index}
-              >
-                <td
-                  className={`flex justify-center  capitalize font-bold text-white w-1/5`}
-                >
-                  <span
-                    className={`rounded-[24rem] px-4 py-2 ${
-                      user.status === "accepted"
-                        ? "bg-green-500"
-                        : user.status === "pending"
-                          ? "bg-gradient-to-b from-green-500 to-blue-500"
-                          : "bg-red-500"
-                    }`}
-                  >
-                    {user.status}
-                  </span>
-                </td>
-                <td className="flex items-center justify-center w-1/5 gap-6">
-                  <img
-                    src={user.imageUrl}
-                    alt="User image"
-                    className="object-cover object-left-top w-16 h-16 rounded-[24rem]"
-                  />
-                  {user.companyName}
-                </td>
-                <td className="flex justify-center w-1/5">
-                  {user.experienceLevel}
-                </td>
-                <td className="flex justify-center w-1/5">{user.job}</td>
-                <td className="relative flex justify-center w-1/5">
-                  <MoreHorizontal
-                    className="hover:bg-slate-400 rounded-[24rem] hover:text-white hover:cursor-pointer"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      setOpenDialog(index);
-                    }}
-                  />
-                  {openDialog === index && (
-                    <div className="absolute flex flex-col translate-x-16 translate-y-2 bg-white">
-                      <div
-                        className="flex items-center justify-center px-4 py-2 border-t border-l border-r rounded-t-lg hover:bg-gradient-to-r from-blue-500 to-green-500 hover:text-white"
-                        onClick={() => {
-                          const newUser = {
-                            ...user,
-                            status: "accepted",
-                          };
-                          const newMockUsers = [...mockUsers];
-                          newMockUsers[index] = newUser;
-                          setMockUsers(newMockUsers);
-                        }}
-                      >
-                        Accept
-                      </div>
-                      <div
-                        className="flex items-center justify-center px-4 py-2 border-b border-l border-r rounded-b-lg hover:bg-gradient-to-r from-blue-500 to-green-500 hover:text-white"
-                        onClick={() => {
-                          const newUser = {
-                            ...user,
-                            status: "declined",
-                          };
-                          const newMockUsers = [...mockUsers];
-                          newMockUsers[index] = newUser;
-                          setMockUsers(newMockUsers);
-                        }}
-                      >
-                        Decline
-                      </div>
-                      <div className="flex flex-col items-center justify-center py-2 border rounded-xl border-slate-200 hover:bg-gradient-to-r from-blue-500 to-green-500 hover:text-white">
-                        Details
-                      </div>
-                    </div>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
     </div>
   );
 }

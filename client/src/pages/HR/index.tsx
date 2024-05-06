@@ -2,8 +2,8 @@ import PostJob from "./PostJob/PostJob";
 import ReceiveCV from "./ReceiveCV";
 import Support from "./Support";
 import News from "./News";
-import Compaign from "./Compaign";
-import CompaignEdit from "./CompaignEdit";
+import Campaign from "./Campaign";
+import CompaignEdit from "./CampaignEdit";
 import Recruitment from "./Recruitment";
 
 import ManageCV from "./manage-cv/index";
@@ -15,7 +15,7 @@ export {
   ReceiveCV,
   Support,
   News,
-  Compaign,
+  Campaign,
   CompaignEdit,
   Recruitment,
   ManageCV,

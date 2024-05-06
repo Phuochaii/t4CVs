@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Icon from "../../../shared/components/regular-icon";
 import {
   CircleHelp,
@@ -27,10 +27,12 @@ const Item = ({
   iconSize = 16,
   title,
   onClick = () => {},
+  isChosen = false,
 }: {
   _icon?: React.FC<LucideProps>;
   iconSize?: number;
   title: string;
+  isChosen?: boolean;
   onClick?: () => void;
 
   // subItems?: { icon?: string; title: string }[];
@@ -38,7 +40,7 @@ const Item = ({
   return (
     <li
       onClick={onClick}
-      className="flex items-center space-x-2 cursor-pointer hover:text-green-500 active:text-green-500"
+      className={`${isChosen ? "text-green-500" : ""} flex items-center space-x-2 cursor-pointer hover:text-green-500 active:text-green-500`}
       style={{
         padding: " 12px 14px",
         // color: "black",
@@ -75,6 +77,8 @@ const Item = ({
 };
 
 const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
+  const location = useLocation();
+  const pathname = location.pathname;
   const navigation = useNavigate();
 
   React.useEffect(() => {}, [isCollapsed]);
@@ -99,7 +103,7 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
     [
       {
         _icon: BriefcaseBusiness,
-        to: "/hr/compaign",
+        to: "/hr/campaign",
         title: "Chiến dịch tuyển dụng",
       },
       { _icon: File, to: "/hr/recruitment", title: "Tin tuyển dụng" },
@@ -180,10 +184,7 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
         transition: "width .2s ease",
       }}
     >
-      <div
-        className="flex"
-        style={{ padding: " 10px 14px", margin: 0 }}
-      >
+      <div className="flex" style={{ padding: " 10px 14px", margin: 0 }}>
         <div className="flex items-center space-x-2">
           <img
             src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg"
@@ -223,9 +224,7 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                 navigation("/hr/verify-account/1");
               }}
             >
-              <span className="ml-1 mr-1">
-                Xác nhận tài khoản điện tử
-              </span>
+              <span className="ml-1 mr-1">Xác nhận tài khoản điện tử</span>
             </button>
             <ChevronsRight className="slide-animation" />
           </>
@@ -244,6 +243,7 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                   _icon={item._icon}
                   title={isCollapsed ? "" : item.title}
                   key={index_1}
+                  isChosen={pathname == item.to}
                   onClick={() => {
                     navigation(item.to);
                   }}

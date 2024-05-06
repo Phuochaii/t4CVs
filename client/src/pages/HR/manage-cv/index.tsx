@@ -9,7 +9,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { useParams, useNavigate } from "react-router-dom";
 import * as HRModule from "../../../modules/hr-module";
-import { Compaign } from "..";
+// import { Compaign } from "..";
 
 interface NumberLabelWidgetProps {
   title: string;
@@ -97,7 +97,7 @@ function ManageCV() {
       >
         <button
           className="flex items-center bg-slate-100 px-3 py-1 font-medium"
-          onClick={() => navigation("/hr/compaign")}
+          onClick={() => navigation("/hr/campaign")}
         >
           <ArrowLeft size={16} className="mr-1" />
           Quay lại

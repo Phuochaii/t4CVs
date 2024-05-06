@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Eye, CreditCard, Building2 } from "lucide-react";
+import { Eye, CreditCard, File } from "lucide-react";
 import GradientIcon from "./GradientIcon";
 import clsx from "clsx";
 
@@ -15,16 +15,16 @@ const links = [
     iconComponent: <Eye className="text-white" />,
   },
   {
-    name: "Company",
-    path: "/admin/compaign",
+    name: "Campaign",
+    path: "/admin/campaign",
     icon: CreditCard,
     iconComponent: <CreditCard className="text-white" />,
   },
   {
-    name: "Compaign",
-    path: "/admin/company",
-    icon: Building2,
-    iconComponent: <Building2 className="text-white" />,
+    name: "Recruitment",
+    path: "/admin/recruitment",
+    icon: File,
+    iconComponent: <File className="text-white" />,
   },
 ];
 

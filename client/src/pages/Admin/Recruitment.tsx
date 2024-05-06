@@ -8,8 +8,7 @@ import {
   Search,
   Settings,
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { statusColor } from "../../shared/types/RecruitmentStatus.type";
 import { RecruitmentJobPost } from "../../shared/types/Recruitment.type";
 import {
@@ -17,12 +16,22 @@ import {
   getCampaignById,
   getJobsStat,
 } from "../../shared/utils/helper";
+import Switch from "../../shared/components/CustomSwitch";
+import axios from "axios";
 
 interface RecruitmentTableProps {
   data: RecruitmentJobPost[];
+  setData: React.Dispatch<SetStateAction<RecruitmentJobPost[]>>;
+  refresh: boolean;
+  setRefresh: React.Dispatch<SetStateAction<boolean>>;
 }
 
-function RecruitmentTable({ data }: RecruitmentTableProps) {
+function RecruitmentTable({
+  data,
+  setData,
+  refresh,
+  setRefresh,
+}: RecruitmentTableProps) {
   return (
     <table className="w-full bg-white">
       <thead>
@@ -41,55 +50,59 @@ function RecruitmentTable({ data }: RecruitmentTableProps) {
         {data.map((jobPost, key) => {
           return (
             <tr key={key}>
-              <td className="border max-w-[240px] ">
+              <td className="border w-[360px] ">
                 <div className="flex flex-col items-start gap-1">
-                  <div>
-                    {" "}
-                    <span
-                      className={clsx(
-                        "p-1 font-semibold",
-                        statusColor[
-                          jobPost.status
-                            ? "Đang hiển thị"
-                            : "Dừng hiển thị"
-                        ].bg,
-                        statusColor[
-                          jobPost.status
-                            ? "Đang hiển thị"
-                            : "Dừng hiển thị"
-                        ].text
-                      )}
-                    >
-                      {jobPost.status
-                        ? "Đang hiển thị"
-                        : "Dừng hiển thị"}
-                    </span>{" "}
-                    <span className="font-bold capitalize">
-                      {jobPost.titleRecruitment}
-                    </span>{" "}
-                    <span className="text-slate-500">{`#${jobPost.id}`}</span>
+                  <div className="flex items-start">
+                    <Switch
+                      checked={jobPost.status}
+                      onClick={async () => {
+                        const newJobPost = {
+                          ...jobPost,
+                          status: !jobPost.status,
+                        };
+                        data[key] = newJobPost;
+                        setData([...data]);
+                        await axios.post(
+                          "http://localhost:3000/job/update-status",
+                          {
+                            id: newJobPost.id,
+                            status: !jobPost.status,
+                          }
+                        );
+                        setRefresh(!refresh);
+                      }}
+                    />
+                    <div className="mt-1">
+                      <div className="font-bold capitalize">
+                        {jobPost.titleRecruitment}
+                        {"    "}
+                        <span
+                          className={clsx(
+                            "p-1 font-semibold",
+                            statusColor[
+                              jobPost.status ? "Đang hiển thị" : "Dừng hiển thị"
+                            ].bg,
+                            statusColor[
+                              jobPost.status ? "Đang hiển thị" : "Dừng hiển thị"
+                            ].text
+                          )}
+                        >
+                          {jobPost.status ? "Đang hiển thị" : "Dừng hiển thị"}
+                        </span>
+                      </div>
+                      <span className="text-slate-500">{`#${jobPost.id}`}</span>
+                    </div>
                   </div>
-                  <span>
-                    Chiến dịch tuyển dụng: {jobPost.campaign.name}
-                  </span>
+                  <div></div>
+                  <span>Chiến dịch tuyển dụng: {jobPost.campaign.name}</span>
                   <button className="p-2 font-bold text-green-500 bg-green-50">
                     Xem CV ứng tuyển
                   </button>
                 </div>
               </td>
-              <td className="p-2 border">
+              <td className="p-2 border w-[64px]">
                 <div className="flex flex-col items-center justify-center gap-4">
-                  <Link
-                    className="p-2 rounded-full"
-                    to={`/hr/compaign-edit/${jobPost.id}`}
-                    state={jobPost}
-                  >
-                    <Pencil
-                      fill="black"
-                      stroke="white"
-                      strokeWidth={1}
-                    />
-                  </Link>
+                  <Pencil fill="gray" stroke="white" strokeWidth={1} />
                   <button className="p-2 rounded-full">
                     <Pause fill="gray" stroke="transparent" />
                   </button>
@@ -98,9 +111,7 @@ function RecruitmentTable({ data }: RecruitmentTableProps) {
                   </button>
                 </div>
               </td>
-              <td className="border w-[360px]">
-                {jobPost.company?.name}
-              </td>
+              <td className="border w-[360px]">{jobPost.company?.name}</td>
               <td className="border">
                 {jobPost.createdAt.toLocaleDateString("vi-VN")}
               </td>
@@ -119,12 +130,13 @@ function Recruitment() {
   const [selectedStatus, setSelectedStatus] = useState(0);
   const [filterKeyword, setFilterKeyword] = useState("");
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const [jobStats, setJobStats] = useState({
     isActive: 0,
     total: 0,
     isNotActive: 0,
   });
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const getAllRecruitments = async () => {
@@ -146,20 +158,20 @@ function Recruitment() {
       setTotalPages(totalPages);
     };
     getAllRecruitments();
-  }, [page]);
+  }, [page, refresh]);
 
   return (
-    <div className="flex-grow">
-      <h1 className="p-4 text-xl font-bold text-black bg-white">
+    <div className="flex-grow bg-slate-200">
+      <h1 className="p-2 font-bold text-black bg-white">
         Quản lý Tin tuyển dụng
       </h1>
-      <div className="flex flex-col items-start justify-center gap-8 p-4">
-        <div className="flex items-start w-full gap-4">
+      <div className="flex flex-col items-start justify-center gap-8 p-12">
+        <div className="flex items-start w-full gap-2">
           {filteredStatuses.map((status, key) => {
             return (
               <div
                 className={clsx(
-                  "px-2 py-1 rounded-full items-center text-[12px] cursor-pointer flex gap-[4px]",
+                  "px-2 py-1 rounded-full items-center text-[12px] cursor-pointer flex gap-[6px]",
                   selectedStatus === key
                     ? "bg-green-500 text-white"
                     : "bg-slate-300"
@@ -168,12 +180,12 @@ function Recruitment() {
                 onClick={() => setSelectedStatus(key)}
               >
                 {status}
-                <span className="flex items-center justify-center w-5 h-5 text-white bg-red-500 rounded-full">
+                <span className="flex items-center justify-center w-6 h-6 text-white bg-red-500 rounded-full">
                   {status === "Tất cả"
                     ? jobStats.total
                     : status === "Đang hiển thị"
-                    ? jobStats.isActive
-                    : jobStats.isNotActive}
+                      ? jobStats.isActive
+                      : jobStats.isNotActive}
                 </span>
               </div>
             );
@@ -191,15 +203,15 @@ function Recruitment() {
           <Search className="px-2" size={32} />
         </div>
         <RecruitmentTable
+          refresh={refresh}
+          setRefresh={setRefresh}
+          setData={setData}
           data={data
             .filter(
               (jobPost) =>
-                (jobPost.status
-                  ? "Đang hiển thị"
-                  : "Dừng hiển thị") ===
+                (jobPost.status ? "Đang hiển thị" : "Dừng hiển thị") ===
                   filteredStatuses[selectedStatus] ||
-                (filteredStatuses[selectedStatus] === "Tất cả" &&
-                  jobPost)
+                (filteredStatuses[selectedStatus] === "Tất cả" && jobPost)
             )
             .filter(
               (jobPost) =>
@@ -222,9 +234,7 @@ function Recruitment() {
             stroke="green"
             className="cursor-pointer"
             strokeWidth={1}
-            onClick={() =>
-              setPage(page + 1 <= totalPages ? page + 1 : page)
-            }
+            onClick={() => setPage(page + 1 <= totalPages ? page + 1 : page)}
           />
         </div>
       </div>
