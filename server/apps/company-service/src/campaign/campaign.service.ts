@@ -72,6 +72,19 @@ export class CampaignService {
     return result;
   }
 
+  async findAllCampaignByEmployerId(
+    employerId: number,
+  ): Promise<FindCampaignDTOResponse[]> {
+    const result = await this.CampaignRepository.find({
+      where: { employerId: employerId },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    return result;
+  }
+
   async getTotalCampaign(): Promise<number> {
     const total = await this.CampaignRepository.count();
 

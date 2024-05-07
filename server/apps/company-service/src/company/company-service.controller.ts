@@ -123,8 +123,8 @@ export class CompanyServiceController {
     // return this.campaignService.findCampaignByEmployerId(employerId);
   }
 
-  // @MessagePattern({ cmd: 'find_employerid' })
-  // findEmployerId(id: number) {
-  //   return this.campaignService.findEmployerId(id);
-  // }
+  @MessagePattern({ cmd: 'find_all_campaign_by_employerid' })
+  findAllCampaignByEmployerId(employerId: number) {
+    return this.campaignService.findAllCampaignByEmployerId(employerId);
+  }
 }
