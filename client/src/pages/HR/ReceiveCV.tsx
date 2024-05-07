@@ -4,7 +4,7 @@ import { ChevronRight, Search } from "lucide-react";
 import * as HRModule from "../../modules/hr-module";
 import { DefaultPagination } from "../../shared/components/default-pagination";
 import { ApplicationFromServer } from "../../shared/types/Application.type";
-import { cvState, cvLabel } from "../../constant";
+import { cvState, cvLabel } from "../../shared/utils/constant";
 import ReceivedCVTable from "../../shared/components/ReceivedCVTable";
 
 function ReceiveCV() {
@@ -43,7 +43,7 @@ function ReceiveCV() {
         ...res.data
           .filter((item: any) => item.name != "")
           .map((item: any) => {
-            return { value: item.id, name: item.name };
+            return { value: item.id, name: item.name } as NameValue;
           }),
       ]);
     });

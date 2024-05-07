@@ -4,15 +4,16 @@ import * as HRModule from "../../modules/hr-module";
 
 interface ApplicationProps {
   data: ApplicationFromServer[];
-  compaigns: NameValue[];
+  compaigns?: NameValue[];
+  hasCampaignColumn: boolean;
 }
 
-function TableHeader() {
+function TableHeader({ hasCampaignColumn }: { hasCampaignColumn: boolean }) {
   return (
     <thead>
       <tr>
         <th className="text-left">Ứng viên</th>
-        <th className="text-left">Chiến dịch</th>
+        {hasCampaignColumn && <th className="text-left">Chiến dịch</th>}
         <th className="text-left">Thông tin liên hệ</th>
         <th className="text-left">Insighs</th>
         <th className="text-left">Trạng thái</th>
@@ -22,10 +23,10 @@ function TableHeader() {
   );
 }
 
-function TableBody({ data, compaigns }: ApplicationProps) {
+function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
   function getCompaignName(id: string | number) {
     // console.log(id);
-    return compaigns.filter((item) => item.value == id)[0].name;
+    return compaigns?.filter((item) => item.value == id)[0].name;
   }
   return (
     <tbody className="bg-[#F8F8F8C9]">
@@ -38,10 +39,12 @@ function TableBody({ data, compaigns }: ApplicationProps) {
           <td>
             <p className="font-semibold">{item.fullname}</p>
           </td>
-          <td>
-            <p>{getCompaignName(item.campaignId)}</p>
-            <span>#{item.campaignId}</span>
-          </td>
+          {hasCampaignColumn && (
+            <td>
+              <p>{getCompaignName(item.campaignId)}</p>
+              <span>#{item.campaignId}</span>
+            </td>
+          )}
           <td>
             <p className="flex">
               <Mail size={15} color="#38A34D" style={{ marginRight: "5px" }} />
@@ -93,17 +96,26 @@ function TableBody({ data, compaigns }: ApplicationProps) {
 
 interface ReceivedCVTableProps {
   data: ApplicationFromServer[];
-  compaigns: NameValue[];
+  compaigns?: NameValue[];
+  hasCampaignColumn?: boolean;
 }
 
-function ReceivedCVTable({ data, compaigns }: ReceivedCVTableProps) {
+function ReceivedCVTable({
+  data,
+  compaigns,
+  hasCampaignColumn = true,
+}: ReceivedCVTableProps) {
   return (
     <table
       className="p-5 border-spacing-y-3 border-separate"
       style={{ width: "100%" }}
     >
-      <TableHeader />
-      <TableBody data={data} compaigns={compaigns} />
+      <TableHeader hasCampaignColumn={hasCampaignColumn} />
+      <TableBody
+        hasCampaignColumn={hasCampaignColumn}
+        data={data}
+        compaigns={compaigns}
+      />
     </table>
   );
 }

@@ -1,4 +1,4 @@
 interface NameValue {
   name: string;
-  value: string | boolean;
+  value: string | boolean|number | undefined;
 }
