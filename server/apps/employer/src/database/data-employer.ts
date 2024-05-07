@@ -13,7 +13,7 @@ export const employers: Employer[] = [
     license:
       'https://file.thanhtravietnam.vn/data/0/images/2023/09/18/upload_2143/giay-chung-nhan-ho-kinh-doanh.jpg?dpi=150&quality=100&w=780',
     licenseStatus: true,
-    image: 'https://img.png',
+    image: 'https://cdn-icons-png.freepik.com/512/6596/6596121.png',
   },
   {
     id: 2,
@@ -27,7 +27,7 @@ export const employers: Employer[] = [
     license:
       'https://file.thanhtravietnam.vn/data/0/images/2023/09/18/upload_2143/giay-chung-nhan-ho-kinh-doanh.jpg?dpi=150&quality=100&w=780',
     licenseStatus: true,
-    image: 'https://img.png',
+    image: 'https://cdn-icons-png.freepik.com/512/6596/6596121.png',
   },
   {
     id: 3,
@@ -41,7 +41,7 @@ export const employers: Employer[] = [
     license:
       'https://file.thanhtravietnam.vn/data/0/images/2023/09/18/upload_2143/giay-chung-nhan-ho-kinh-doanh.jpg?dpi=150&quality=100&w=780',
     licenseStatus: false,
-    image: 'https://img.png',
+    image: 'https://cdn-icons-png.freepik.com/512/6596/6596121.png',
   },
   {
     id: 4,
@@ -55,7 +55,7 @@ export const employers: Employer[] = [
     license:
       'https://file.thanhtravietnam.vn/data/0/images/2023/09/18/upload_2143/giay-chung-nhan-ho-kinh-doanh.jpg?dpi=150&quality=100&w=780',
     licenseStatus: true,
-    image: 'https://img.png',
+    image: 'https://cdn-icons-png.freepik.com/512/6596/6596121.png',
   },
   {
     id: 5,
@@ -69,7 +69,7 @@ export const employers: Employer[] = [
     license:
       'https://file.thanhtravietnam.vn/data/0/images/2023/09/18/upload_2143/giay-chung-nhan-ho-kinh-doanh.jpg?dpi=150&quality=100&w=780',
     licenseStatus: true,
-    image: 'https://img.png',
+    image: 'https://cdn-icons-png.freepik.com/512/6596/6596121.png',
   },
   {
     id: 6,
@@ -83,7 +83,7 @@ export const employers: Employer[] = [
     license:
       'https://file.thanhtravietnam.vn/data/0/images/2023/09/18/upload_2143/giay-chung-nhan-ho-kinh-doanh.jpg?dpi=150&quality=100&w=780',
     licenseStatus: false,
-    image: 'https://img.png',
+    image: 'https://cdn-icons-png.freepik.com/512/6596/6596121.png',
   },
   {
     id: 7,
@@ -97,7 +97,7 @@ export const employers: Employer[] = [
     license:
       'https://file.thanhtravietnam.vn/data/0/images/2023/09/18/upload_2143/giay-chung-nhan-ho-kinh-doanh.jpg?dpi=150&quality=100&w=780',
     licenseStatus: true,
-    image: 'https://img.png',
+    image: 'https://cdn-icons-png.freepik.com/512/6596/6596121.png',
   },
   {
     id: 8,
@@ -111,7 +111,7 @@ export const employers: Employer[] = [
     license:
       'https://file.thanhtravietnam.vn/data/0/images/2023/09/18/upload_2143/giay-chung-nhan-ho-kinh-doanh.jpg?dpi=150&quality=100&w=780',
     licenseStatus: true,
-    image: 'https://img.png',
+    image: 'https://cdn-icons-png.freepik.com/512/6596/6596121.png',
   },
   {
     id: 9,
@@ -125,7 +125,7 @@ export const employers: Employer[] = [
     license:
       'https://file.thanhtravietnam.vn/data/0/images/2023/09/18/upload_2143/giay-chung-nhan-ho-kinh-doanh.jpg?dpi=150&quality=100&w=780',
     licenseStatus: false,
-    image: 'https://img.png',
+    image: 'https://cdn-icons-png.freepik.com/512/6596/6596121.png',
   },
   {
     id: 10,
@@ -139,7 +139,7 @@ export const employers: Employer[] = [
     license:
       'https://file.thanhtravietnam.vn/data/0/images/2023/09/18/upload_2143/giay-chung-nhan-ho-kinh-doanh.jpg?dpi=150&quality=100&w=780',
     licenseStatus: false,
-    image: 'https://img.png',
+    image: 'https://cdn-icons-png.freepik.com/512/6596/6596121.png',
   },
   {
     id: 11,
@@ -153,6 +153,6 @@ export const employers: Employer[] = [
     license:
       'https://file.thanhtravietnam.vn/data/0/images/2023/09/18/upload_2143/giay-chung-nhan-ho-kinh-doanh.jpg?dpi=150&quality=100&w=780',
     licenseStatus: true,
-    image: 'https://img.png',
+    image: 'https://cdn-icons-png.freepik.com/512/6596/6596121.png',
   },
 ];
