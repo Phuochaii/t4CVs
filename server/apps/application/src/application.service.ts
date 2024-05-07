@@ -46,7 +46,16 @@ export class ApplicationService {
     return data;
   }
 
-  async findAllApplicationByCampaignId(
+  async findAllApplicationByCampaignId(campaignIds: number[]) {
+    const data = await this.applicationRepository.find({
+      where: {
+        campaignId: In(campaignIds),
+      },
+    });
+    return data;
+  }
+
+  async findAllApplicationByCampaignIdPagination(
     page: number,
     limit: number,
     campaignIds: number[],
