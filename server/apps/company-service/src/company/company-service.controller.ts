@@ -17,8 +17,7 @@ export class CompanyServiceController {
 
   @MessagePattern({ cmd: 'create_company' })
   createCompany(company: CreateCompanyDto) {
-    this.companyServiceService.createCompany(company);
-    return 'Company created successfully!';
+    return this.companyServiceService.createCompany(company);
   }
 
   @MessagePattern({ cmd: 'get_all_companies' })
@@ -89,8 +88,7 @@ export class CompanyServiceController {
 
   @MessagePattern({ cmd: 'update_campaign' })
   updateCampaign(data: UpdateCampaignDto) {
-    this.campaignService.updateCampaign(data);
-    return 'Company update successfully!';
+    return this.campaignService.updateCampaign(data);
   }
 
   @MessagePattern({ cmd: 'find_campaign_by_employerId' })
