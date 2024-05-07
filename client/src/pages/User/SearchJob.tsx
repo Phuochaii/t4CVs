@@ -35,18 +35,56 @@ const salary_range = [
   {
     value: "0",
     label: "Tất cả mức lương",
+    minSalary: 0,
+    maxSalary: 0,
   },
   {
     value: "1",
-    label: "Dưới 5 triệu",
+    label: "Dưới 10 triệu",
+    minSalary: 0,
+    maxSalary: 10,
   },
   {
     value: "2",
-    label: "5 đến 10",
+    label: "10 - 15 triệu",
+    minSalary: 10,
+    maxSalary: 15,
   },
   {
     value: "3",
-    label: "10 đến 15",
+    label: "15 - 20 triệu",
+    minSalary: 15,
+    maxSalary: 20,
+  },
+  {
+    value: "4",
+    label: "20 - 25 triệu",
+    minSalary: 20,
+    maxSalary: 25,
+  },
+  {
+    value: "5",
+    label: "25 - 30 triệu",
+    minSalary: 25,
+    maxSalary: 30,
+  },
+  {
+    value: "6",
+    label: "30 - 50 triệu",
+    minSalary: 30,
+    maxSalary: 50,
+  },
+  {
+    value: "7",
+    label: "Trên 50 triệu",
+    minSalary: 50,
+    maxSalary: 0,
+  },
+  {
+    value: "8",
+    label: "Thỏa thuận",
+    minSalary: 0,
+    maxSalary: 0,
   },
 ];
 const job_name = [
@@ -140,6 +178,14 @@ const news_type = [
   },
 ];
 
+interface filterSearch {
+  titleRecruitment: string
+  salaryMin: number
+  salaryMax: number
+  locationId: number
+  expId: number
+}
+
 function SearchJob() {
   const navigation = useNavigate();
   const url = useLocation();
@@ -148,9 +194,19 @@ function SearchJob() {
   const newLocationId = Number(searchParams.get("locationId")) ?? 0;
   const newExpId = Number(searchParams.get("expId")) ?? 0;
   const newTitleRecruitment = searchParams.get("titleRecruitment") ?? "";
+  const newSalaryMin = Number(searchParams.get("salaryMin")) ?? 0;
+  const newSalaryMax = Number(searchParams.get("salaryMax")) ?? 0;
 
   const [cities, setCities] = useState<any[]>([]);
   const [exp_year, setExpYear] = useState<any[]>([]);
+
+  const [filter, setFilter] = useState<filterSearch>({
+    titleRecruitment: newTitleRecruitment,
+    salaryMin: newSalaryMin,
+    salaryMax: newSalaryMax,
+    locationId: newLocationId,
+    expId: newExpId,
+  });
 
   const [locationId, setLocationId] = useState(newLocationId);
   const [expId, setExpId] = useState(newExpId);
@@ -192,6 +248,8 @@ function SearchJob() {
       titleRecruitment: titleRecruitment,
       locationId: locationId,
       expId: expId,
+      salaryMin: filter.salaryMin,
+      salaryMax: filter.salaryMax,
     }).then((response) => {
       console.log(response);
 
