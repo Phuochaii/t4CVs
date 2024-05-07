@@ -56,12 +56,17 @@ export class ApplicationController implements ApplicationServiceController {
   async readAllApplicationByUserId(
     request: ReadAllApplicationByUserIdRequest,
   ): Promise<Applications> {
-    const data = await this.applicationService.findAllApplicationByUserId(
-      request.page,
-      request.limit,
+    const total_data = await this.applicationService.findAllApplicationByUserId(
       request.userId,
     );
-    const total = data.length;
+
+    const data =
+      await this.applicationService.findAllApplicationByUserIdPagination(
+        request.page,
+        request.limit,
+        request.userId,
+      );
+    const total = total_data.length;
     const total_pages = Math.ceil(total / request.limit);
     return {
       page: request.page,

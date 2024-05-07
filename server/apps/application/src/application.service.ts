@@ -77,7 +77,16 @@ export class ApplicationService {
     return data;
   }
 
-  async findAllApplicationByUserId(
+  async findAllApplicationByUserId(userId: number) {
+    const data = await this.applicationRepository.find({
+      where: {
+        userId: userId,
+      },
+    });
+    return data;
+  }
+
+  async findAllApplicationByUserIdPagination(
     page: number,
     limit: number,
     userId: number,
