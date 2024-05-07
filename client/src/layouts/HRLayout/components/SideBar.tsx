@@ -27,12 +27,14 @@ const Item = ({
   iconSize = 16,
   title,
   onClick = () => {},
+  available = false,
   isChosen = false,
 }: {
   _icon?: React.FC<LucideProps>;
   iconSize?: number;
   title: string;
   isChosen?: boolean;
+  available?: boolean;
   onClick?: () => void;
 
   // subItems?: { icon?: string; title: string }[];
@@ -40,7 +42,7 @@ const Item = ({
   return (
     <li
       onClick={onClick}
-      className={`${isChosen ? "text-green-500" : ""} flex items-center space-x-2 cursor-pointer hover:text-green-500 active:text-green-500`}
+      className={`${isChosen ? "text-green-500" : ""} ${!available ? "text-slate-400" : ""}  flex items-center space-x-2 cursor-pointer hover:text-green-500 active:text-green-500`}
       style={{
         padding: " 12px 14px",
         // color: "black",
@@ -57,21 +59,10 @@ const Item = ({
           }}
         >
           <Icon icon={_icon} size={iconSize} />
-          {/* <i
-              className={icon}
-              style={{
-                fontSize: "16px",
-              }}
-            ></i> */}
         </div>
       )}
 
       <span>{title}</span>
-      {/* {subItems.length > 0 && (
-          <div className="flex justify-end flex-grow">
-            <i className="fa-solid fa-angle-right"></i>
-          </div>
-        )} */}
     </li>
   );
 };
@@ -85,7 +76,7 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
   //
   const sidebar_items = [
     [
-      { _icon: LayoutGrid, title: "Bảng tin", to: "/hr/news" },
+      { _icon: LayoutGrid, title: "Bảng tin", to: "/hr/news", available: true },
       {
         _icon: Gem,
         to: "",
@@ -105,12 +96,20 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
         _icon: BriefcaseBusiness,
         to: "/hr/campaign",
         title: "Chiến dịch tuyển dụng",
+        available: true,
       },
-      { _icon: File, to: "/hr/recruitment", title: "Tin tuyển dụng" },
+      {
+        _icon: File,
+        to: "/hr/recruitment",
+        title: "Tin tuyển dụng",
+        available: true,
+      },
       {
         _icon: User,
         to: "/hr/approve",
         title: "Quản lí CV",
+        available: true,
+
         sub_items: [{ icon: "", to: "", title: "Quản lí nhãn CV" }],
       },
       {
@@ -247,6 +246,7 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                   onClick={() => {
                     navigation(item.to);
                   }}
+                  available={item.available}
 
                   // subItems={item.sub_items}
                 />

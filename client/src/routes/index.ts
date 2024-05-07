@@ -56,7 +56,7 @@ const routes: RouteItem[] = [
 
 
   // HR PAGES - Yến, Thịnh, Thức
-  { path: "/hr/approve", component: HR.ReceiveCV, layout: HRLayout }, // yến  { path:"/hr/compaign", component: HR.Campaign, layout: HRLayout},
+  { path: "/hr/approve", component: HR.ReceiveCV, layout: HRLayout }, // yến
   { path:"/hr/compaign-edit/:id", component: HR.CompaignEdit, layout: HRLayout},
   { path:"/hr/recruitment", component: HR.Recruitment, layout: HRLayout},
 
