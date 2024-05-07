@@ -77,6 +77,25 @@ export class ApplicationController implements ApplicationServiceController {
     };
   }
 
+  async readAllApplicationByUserId(
+    request: ReadAllApplicationByUserIdRequest,
+  ): Promise<Applications> {
+    const data = await this.applicationService.findAllApplicationByUserId(
+      request.page,
+      request.limit,
+      request.userId,
+    );
+    const total = data.length;
+    const total_pages = Math.ceil(total / request.limit);
+    return {
+      page: request.page,
+      limit: request.limit,
+      total: total,
+      totalPage: total_pages,
+      applications: data,
+    };
+  }
+
   async readAllApplication(request: Pagination): Promise<Applications> {
     const data = await this.applicationService.findAll(
       request.page,

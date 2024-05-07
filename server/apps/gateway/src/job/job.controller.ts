@@ -4,6 +4,7 @@ import { CreateJobDto } from './dto/Req/createJob.dto';
 import { JobService } from './job.service';
 import { CreateBaseDto } from './dto/Req/createBase.dto';
 import { UpdateJobDto } from './dto/Req/update-job.dto';
+import { QueryDTO } from './dto/Req/query.dto';
 
 @Controller('job')
 export class JobController {
@@ -17,7 +18,7 @@ export class JobController {
   @Get('all')
   getAllJobs(
     @Query()
-    queryParams: any,
+    queryParams: QueryDTO,
   ): Promise<string> {
     return this.jobService.getAllJobs(queryParams);
   }
@@ -25,7 +26,7 @@ export class JobController {
   @Get('valid-jobs')
   getValidJobs(
     @Query()
-    queryParams: any,
+    queryParams: QueryDTO,
   ): Promise<string> {
     return this.jobService.getValidJobs(queryParams);
   }
