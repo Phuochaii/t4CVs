@@ -1,74 +1,23 @@
-import { Profiler, useState } from 'react';
-import '../../../App.css';
-import React from 'react';
+import { useState } from "react";
+import "../../../App.css";
+import React from "react";
 // import { Button } from '@mui/material';
-// import { useAuth0 } from "@auth0/auth0-react";
-import * as UserModule from '../../../modules/user-module';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { auth } from '../../../shared/services/auth0.service';
-import {
-  Auth0DecodedHash,
-  Auth0Error,
-  Auth0ParseHashError,
-  Auth0UserProfile,
-} from 'auth0-js';
+import { useAuth0 } from "@auth0/auth0-react";
+import * as UserModule from "../../../modules/user-module";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const navigation = useNavigate();
-  // const location = useLocation();
 
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
   // const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-
-  // const [userProfile, setUserProfile] = React.useState<Auth0UserProfile>();
-
   const userId =
-    localStorage.getItem('user') == null
-      ? ''
-      : JSON.parse(localStorage.getItem('user') as string).id;
-
-  const [isAuthenticated, setIsAuthenticated] = React.useState(userId != '');
-
-  // const processHash = (hash: string) => {
-  //   auth.parseHash(
-  //     {
-  //       hash,
-  //     },
-  //     function (
-  //       error: Auth0ParseHashError | null,
-  //       result: Auth0DecodedHash | null
-  //     ) {
-  //       if (error) {
-  //         console.log('something wrong');
-  //         console.log(error);
-  //         return;
-  //       }
-  //       if (result) {
-  //         const { accessToken } = result;
-  //         console.log(accessToken);
-  //         if (accessToken) {
-  //           auth.client.userInfo(
-  //             accessToken,
-  //             function (error: Auth0Error | null, result: Auth0UserProfile) {
-  //               if (error) {
-  //                 console.log('something wrong in fetching profile');
-  //                 console.log(error);
-  //                 return;
-  //               }
-  //               console.log('login success');
-  //               console.log(result.email);
-  //               setUserProfile(result);
-  //               setIsAuthenticated(true);
-  //             }
-  //           );
-  //         }
-  //       }
-  //     }
-  //   );
-  // };
-
+    localStorage.getItem("user") == null
+      ? ""
+      : JSON.parse(localStorage.getItem("user") as string).id;
+  const [isAuthenticated, setIsAuthenticated] = React.useState(userId != "");
   const fetchNotification = ({
     id,
     limit = 3,
@@ -83,16 +32,9 @@ function Header() {
       setTotal(res.pagination.total);
     });
   };
-
   React.useEffect(() => {
-    if (userId != '') fetchNotification({ id: userId });
+    if (userId != "") fetchNotification({ id: userId });
   }, []);
-
-  // React.useEffect(() => {
-  //   if (location.hash) {
-  //     processHash(location.hash);
-  //   }
-  // }, [location]);
 
   // React.useEffect(() => {
   //   console.log(user);
@@ -116,7 +58,7 @@ function Header() {
     <header className="menu-top bg-white text-black border border-1 border-slate-300 fixed z-50 top-0 left-0 right-0">
       <div className=" px-8 flex flex-row justify-between items-center">
         <div className="main flex flex-row items-center gap-5">
-          <div className="logo w-52" onClick={() => navigation('/')}>
+          <div className="logo w-52" onClick={() => navigation("/")}>
             <img src="../../../images/topcv-logo.png" alt="" />
           </div>
           <nav className="nav-menu">
@@ -464,7 +406,7 @@ function Header() {
                 {isCompaniesHovered ? (
                   <ul className="sub-menu absolute z-50 top-full left-0 font-semibold text-base bg-white border border-slate-100 rounded-lg p-3 flex flex-col gap-3 shadow-lg">
                     <li
-                      onClick={() => navigation('/companies')}
+                      onClick={() => navigation("/companies")}
                       className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer"
                     >
                       <svg
@@ -965,7 +907,7 @@ function Header() {
                                 notificationId: item.id,
                               });
                               fetchNotification({ id: userId });
-                              window.open(item.link, '_blank', 'noopener');
+                              window.open(item.link, "_blank", "noopener");
                             }}
                             key={index}
                             className="px-4 py-2 border-b-gray-200 border  hover:text-green-500"
@@ -974,7 +916,7 @@ function Header() {
                               {item.content}
                             </span>
                             <p className="text-sm text-slate-500 text-right mt-2">
-                              {item.createdAt.split('T')[0] + '  '}
+                              {item.createdAt.split("T")[0] + "  "}
                               {item.status && (
                                 <span className="text-green-500">✓</span>
                               )}
@@ -1192,7 +1134,7 @@ function Header() {
                       onClick={() => {
                         // logoutWithRedirect();
                         setIsAuthenticated(false);
-                        localStorage.removeItem('user');
+                        localStorage.removeItem("user");
                       }}
                       className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer"
                     >
@@ -1218,7 +1160,7 @@ function Header() {
                 <button
                   onClick={() => {
                     // loginWithRedirect();
-                    navigation('/user-login');
+                    navigation("/user-login");
                   }}
                   className="py-2 px-4 rounded-md mx-2 border border-[#00A74B] hover:border-green-800 bg-white"
                 >
@@ -1228,7 +1170,7 @@ function Header() {
               <li>
                 <button
                   onClick={() => {
-                    navigation('/user-signup');
+                    navigation("/user-signup");
                   }}
                   className="py-2 px-4 rounded-md mx-2 bg-[#00A74B] hover:bg-green-800 text-white"
                 >
@@ -1238,7 +1180,7 @@ function Header() {
               <li>
                 <button
                   onClick={() => {
-                    navigation('/hr-login');
+                    navigation("/hr-login");
                   }}
                   className="py-2 px-4 rounded-md mx-2 bg-black hover:bg-gray-800 text-white"
                 >
