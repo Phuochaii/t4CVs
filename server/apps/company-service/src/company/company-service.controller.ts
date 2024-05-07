@@ -49,8 +49,7 @@ export class CompanyServiceController {
 
   @MessagePattern({ cmd: 'update_company' })
   updateCompany(data: UpdateCompanyDto) {
-    this.companyServiceService.updateCompany(data);
-    return 'Company update successfully!';
+    return this.companyServiceService.updateCompany(data);
   }
 
   @MessagePattern({ cmd: 'remove_company' })
