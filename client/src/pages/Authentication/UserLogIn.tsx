@@ -54,20 +54,20 @@ function UserLogIn() {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
 
     let errorCount = 0;
-    // accountList.forEach((account) => {
-    //   console.log(account);
-    //   if (
-    //     account.email === formData.email &&
-    //     account.password === formData.password &&
-    //     account.role === "user"
-    //   ) {
-    //     console.log("Đăng nhập thành công với email:", formData.email);
-    //     localStorage.setItem("user", JSON.stringify(account));
-    //     // navigation("/");
-    //     navigation(-1);
-    //     return;
-    //   }
-    // });
+    accountList.forEach((account) => {
+      console.log(account);
+      if (
+        account.email === formData.email &&
+        account.password === formData.password &&
+        account.role === "user"
+      ) {
+        console.log("Đăng nhập thành công với email:", formData.email);
+        localStorage.setItem("user", JSON.stringify(account));
+        // navigation("/");
+        navigation(-1);
+        return;
+      }
+    });
 
     if (!formData.password) {
       setErrorMessage('Hãy cho chúng tôi biết mật khẩu của bạn');
@@ -86,24 +86,24 @@ function UserLogIn() {
     }
 
     if (errorCount === 0) {
-      auth.login(
-        {
-          username: formData.email,
-          password: formData.password,
-          realm: AUTH0_REALM,
-          redirectUri: AUTH0_LOGIN_REDIRECT_URL,
-          responseType: AUTH0_LOGIN_RESPONSE_TYPE,
-        },
-        function (error: Auth0Error | null, result: any) {
-          if (error) {
-            console.log('login fail');
-            console.log(error);
-            return;
-          }
-          console.log('login success');
-          console.log(result);
-        }
-      );
+      // auth.login(
+      //   {
+      //     username: formData.email,
+      //     password: formData.password,
+      //     realm: AUTH0_REALM,
+      //     redirectUri: AUTH0_LOGIN_REDIRECT_URL,
+      //     responseType: AUTH0_LOGIN_RESPONSE_TYPE,
+      //   },
+      //   function (error: Auth0Error | null, result: any) {
+      //     if (error) {
+      //       console.log('login fail');
+      //       console.log(error);
+      //       return;
+      //     }
+      //     console.log('login success');
+      //     console.log(result);
+      //   }
+      // );
     }
   };
 

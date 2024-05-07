@@ -15,59 +15,59 @@ import {
 
 function Header() {
   const navigation = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
 
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
   // const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
-  const [userProfile, setUserProfile] = React.useState<Auth0UserProfile>();
+  // const [userProfile, setUserProfile] = React.useState<Auth0UserProfile>();
 
   const userId =
     localStorage.getItem('user') == null
       ? ''
       : JSON.parse(localStorage.getItem('user') as string).id;
 
-  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  const [isAuthenticated, setIsAuthenticated] = React.useState(userId != '');
 
-  const processHash = (hash: string) => {
-    auth.parseHash(
-      {
-        hash,
-      },
-      function (
-        error: Auth0ParseHashError | null,
-        result: Auth0DecodedHash | null
-      ) {
-        if (error) {
-          console.log('something wrong');
-          console.log(error);
-          return;
-        }
-        if (result) {
-          const { accessToken } = result;
-          console.log(accessToken);
-          if (accessToken) {
-            auth.client.userInfo(
-              accessToken,
-              function (error: Auth0Error | null, result: Auth0UserProfile) {
-                if (error) {
-                  console.log('something wrong in fetching profile');
-                  console.log(error);
-                  return;
-                }
-                console.log('login success');
-                console.log(result.email);
-                setUserProfile(result);
-                setIsAuthenticated(true);
-              }
-            );
-          }
-        }
-      }
-    );
-  };
+  // const processHash = (hash: string) => {
+  //   auth.parseHash(
+  //     {
+  //       hash,
+  //     },
+  //     function (
+  //       error: Auth0ParseHashError | null,
+  //       result: Auth0DecodedHash | null
+  //     ) {
+  //       if (error) {
+  //         console.log('something wrong');
+  //         console.log(error);
+  //         return;
+  //       }
+  //       if (result) {
+  //         const { accessToken } = result;
+  //         console.log(accessToken);
+  //         if (accessToken) {
+  //           auth.client.userInfo(
+  //             accessToken,
+  //             function (error: Auth0Error | null, result: Auth0UserProfile) {
+  //               if (error) {
+  //                 console.log('something wrong in fetching profile');
+  //                 console.log(error);
+  //                 return;
+  //               }
+  //               console.log('login success');
+  //               console.log(result.email);
+  //               setUserProfile(result);
+  //               setIsAuthenticated(true);
+  //             }
+  //           );
+  //         }
+  //       }
+  //     }
+  //   );
+  // };
 
   const fetchNotification = ({
     id,
@@ -83,15 +83,16 @@ function Header() {
       setTotal(res.pagination.total);
     });
   };
-  // React.useEffect(() => {
-  //   if (userId != '') fetchNotification({ id: userId });
-  // }, []);
 
   React.useEffect(() => {
-    if (location.hash) {
-      processHash(location.hash);
-    }
-  }, [location]);
+    if (userId != '') fetchNotification({ id: userId });
+  }, []);
+
+  // React.useEffect(() => {
+  //   if (location.hash) {
+  //     processHash(location.hash);
+  //   }
+  // }, [location]);
 
   // React.useEffect(() => {
   //   console.log(user);
