@@ -5,6 +5,7 @@ import News from "./News";
 import Campaign from "./Campaign";
 import CompaignEdit from "./CampaignEdit";
 import Recruitment from "./Recruitment";
+import Settings from "./Settings";
 
 import ManageCV from "./manage-cv/index";
 import * as VerifyAccount from "./verify-account";
@@ -21,4 +22,5 @@ export {
   ManageCV,
   VerifyAccount,
   PostCompaign,
+  Settings,
 };

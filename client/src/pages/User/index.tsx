@@ -9,6 +9,8 @@ import SearchJob from "./SearchJob";
 import CV from "./CV";
 import Company from "./Company";
 import Companies from "./Companies";
+import SavedJobs from "./SavedJobs";
+import UserInformation from "./UserInformation";
 
 export {
   ApplyCV,
@@ -22,4 +24,6 @@ export {
   CV,
   Company,
   Companies,
+  SavedJobs,
+  UserInformation,
 };
