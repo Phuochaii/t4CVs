@@ -16,4 +16,9 @@ export class UserController {
   create(user: CreateUserDTO) {
     return this.userService.createUser(user);
   }
+
+  @MessagePattern({ cmd: 'find_all_users' })
+  findAll() {
+    return this.userService.findAll();
+  }
 }

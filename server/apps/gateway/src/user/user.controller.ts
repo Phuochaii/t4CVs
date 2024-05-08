@@ -16,17 +16,22 @@ import { CreateUserDTO } from './dto/Req/createUser.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get(':id')
-  findUserById(@Param('id') id: number): Observable<string> {
-    return this.userService.findJobById(id);
+  @Get('all')
+  findAllUsers(): Observable<string> {
+    return this.userService.findAllUsers();
   }
 
-  // @Post('create')
+  @Get(':id')
+  findUserById(@Param('id') id: number): Observable<string> {
+    return this.userService.findUserById(id);
+  }
+
+  @Post('create')
   // @UseInterceptors(FileInterceptor('image'))
-  // createUser(
-  //   @UploadedFile() image: Express.Multer.File,
-  //   @Body() user: CreateUserDTO,
-  // ): Observable<string> {
-  //   return this.userService.createUser(user, image);
-  // }
+  createUser(
+    // @UploadedFile() image: Express.Multer.File,
+    @Body() user: CreateUserDTO,
+  ): Observable<string> {
+    return this.userService.createUser(user);
+  }
 }

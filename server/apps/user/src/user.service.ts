@@ -19,9 +19,17 @@ export class UserService {
     return user;
   }
 
+  async findAll() {
+    return await this.userRepository.find();
+  }
+
   async createUser(user: CreateUserDTO) {
-    await this.userRepository.save(user);
-    return 'User created successfully!';
+    try {
+      await this.userRepository.save(user);
+      return 'User created successfully!';
+    } catch (error) {
+      throw new RpcException('User not created');
+    }
     // const userEntity = await this.userRepository.save({
     //   ...user,
     //   image: `${filename}`,

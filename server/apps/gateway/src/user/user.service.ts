@@ -7,17 +7,21 @@ import { CreateUserDTO } from './dto/Req/createUser.dto';
 export class UserService {
   constructor(@Inject('USER') private readonly userClient: ClientProxy) {}
 
-  // async createUser(
-  //   user: CreateUserDTO,
-  //   image: Express.Multer.File,
-  // ): Observable<string> {
-  //   const linkImage = 'https://s3.com/demo.jpg'; // call file service
-  //   const lastLinkImage: string = await lastValueFrom(linkImage);
-  //   user.image = lastLinkImage;
-  //   return this.userClient.send({ cmd: 'create_user' }, user);
-  // }
+  findAllUsers(): Observable<string> {
+    return this.userClient.send({ cmd: 'find_all_users' }, {});
+  }
 
-  findJobById(id: number): Observable<string> {
+  createUser(
+    user: CreateUserDTO,
+    // image: Express.Multer.File,
+  ): Observable<string> {
+    //  const linkImage = 'https://s3.com/demo.jpg'; // call file service
+    //   const lastLinkImage: string = await lastValueFrom(linkImage);
+    //   user.image = lastLinkImage;
+    return this.userClient.send({ cmd: 'create_user' }, user);
+  }
+
+  findUserById(id: number): Observable<string> {
     return this.userClient.send({ cmd: 'find_user_by_id' }, id);
   }
 }
