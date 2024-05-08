@@ -25,18 +25,56 @@ const salary_range = [
   {
     value: "0",
     label: "Tất cả mức lương",
+    minSalary: 0,
+    maxSalary: 0,
   },
   {
     value: "1",
-    label: "Dưới 5 triệu",
+    label: "Dưới 10 triệu",
+    minSalary: 0,
+    maxSalary: 10,
   },
   {
     value: "2",
-    label: "5 đến 10",
+    label: "10 - 15 triệu",
+    minSalary: 10,
+    maxSalary: 15,
   },
   {
     value: "3",
-    label: "10 đến 15",
+    label: "15 - 20 triệu",
+    minSalary: 15,
+    maxSalary: 20,
+  },
+  {
+    value: "4",
+    label: "20 - 25 triệu",
+    minSalary: 20,
+    maxSalary: 25,
+  },
+  {
+    value: "5",
+    label: "25 - 30 triệu",
+    minSalary: 25,
+    maxSalary: 30,
+  },
+  {
+    value: "6",
+    label: "30 - 50 triệu",
+    minSalary: 30,
+    maxSalary: 50,
+  },
+  {
+    value: "7",
+    label: "Trên 50 triệu",
+    minSalary: 50,
+    maxSalary: 0,
+  },
+  {
+    value: "8",
+    label: "Thỏa thuận",
+    minSalary: 0,
+    maxSalary: 0,
   },
 ];
 
@@ -48,6 +86,14 @@ const slides = [
   "../../../images/slide_5.png",
 ];
 
+interface filterSearch {
+  titleRecruitment: string
+  salaryMin: number
+  salaryMax: number
+  locationId: number
+  expId: number
+}
+
 function Home() {
   const autoSlideInterval = 5000;
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -55,11 +101,17 @@ function Home() {
   const [cities, setCities] = useState<any[]>([]);
   const [exp_year, setExpYear] = useState<any[]>([]);
 
-  const [titleRecruitment, setTitleRecruitment] = useState("");
-  const [location, setLocation] = useState(0);
-  const [exp, setExp] = useState(0);
-  const [minSalary, setMinSalary] = useState(0);
-  const [maxSalary, setMaxSalary] = useState(0);
+  const [filter, setFilter] = useState<filterSearch>({
+    titleRecruitment: "",
+    salaryMin: 0,
+    salaryMax: 0,
+    locationId: 0,
+    expId: 0,
+  });
+
+  // const [titleRecruitment, setTitleRecruitment] = useState("");
+  // const [location, setLocation] = useState(0);
+  // const [exp, setExp] = useState(0);
 
   const previous = () => {
     setCurrentSlide((current) =>
@@ -80,16 +132,33 @@ function Home() {
   const navigation = useNavigate();
 
   const SelectLocation = (value: number) => {
-    if (value !== 0) {
-      setLocation(value);
-    }
+    setFilter((prevState) => ({ ...prevState, locationId: value }));
   };
 
   const SelectExp = (value: number) => {
-    if (value !== 0) {
-      setExp(value);
-    }
+    setFilter((prevState) => ({ ...prevState, expId: value }));
   };
+
+  const SelectSalary = (value: number) => {
+    if (value !== 0) {
+      const foundRange = salary_range.find((range) => Number(range.value) === value);
+      if (foundRange) {
+        setFilter((prevFilter) => ({
+          ...prevFilter,
+          salaryMin: foundRange.minSalary,
+          salaryMax: foundRange.maxSalary,
+        }));
+      }
+    }
+    else
+    {
+      setFilter((prevFilter) => ({
+        ...prevFilter,
+        salaryMin: 0,
+        salaryMax: 0,
+      }));
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -108,12 +177,18 @@ function Home() {
   }, []);
 
   const handleSearch = () => {
-    // sessionStorage.setItem('locationId', String(location));
-    // sessionStorage.setItem('expId', String(exp));
-    // sessionStorage.setItem('titleRecruitment', String(titleRecruitment))
+    const queryParams = {
+      titleRecruitment: filter.titleRecruitment !== "" ? `titleRecruitment=${filter.titleRecruitment}` : "",
+      salaryMin: filter.salaryMin !== 0 ? `salaryMin=${filter.salaryMin}` : "",
+      salaryMax: filter.salaryMax !== 0 ? `salaryMax=${filter.salaryMax}` : "",
+      locationId: filter.locationId !== 0 ? `locationId=${filter.locationId}` : "",
+      expId: filter.expId !== 0 ? `expId=${filter.expId}` : "",
+    };
+    
+    const queryString = Object.values(queryParams).filter(param => param !== "").join("&");
 
     navigation(
-      `/results?locationId=${location}&expId=${exp}&titleRecruitment=${titleRecruitment}`
+      `/results?${queryString}`
     );
   };
 
@@ -141,7 +216,8 @@ function Home() {
                       id="outlined-adornment-amount"
                       placeholder="Vị trí tuyển dụng"
                       onChange={(e) => {
-                        setTitleRecruitment(e.target.value);
+                        // setTitleRecruitment(e.target.value);
+                        setFilter(prevState => ({ ...prevState, titleRecruitment: e.target.value }));
                       }}
                       startAdornment={
                         <InputAdornment position="start">
@@ -180,10 +256,10 @@ function Home() {
                     </MenuItem>
                     {cities
                       ? cities.map((city: any) => (
-                          <MenuItem key={city.id} value={city.id}>
-                            {city.name}
-                          </MenuItem>
-                        ))
+                        <MenuItem key={city.id} value={city.id}>
+                          {city.name}
+                        </MenuItem>
+                      ))
                       : "Error to fetch cities"}
                   </TextField>
                 </div>
@@ -219,10 +295,10 @@ function Home() {
                     </MenuItem>
                     {exp_year
                       ? exp_year.map((exp: any) => (
-                          <MenuItem key={exp.id} value={exp.id}>
-                            {exp.name}
-                          </MenuItem>
-                        ))
+                        <MenuItem key={exp.id} value={exp.id}>
+                          {exp.name}
+                        </MenuItem>
+                      ))
                       : "Error to fetch experience"}
                   </TextField>
                 </div>
@@ -234,6 +310,7 @@ function Home() {
                     select
                     defaultValue="0"
                     className="w-full"
+                    onChange={(e) => SelectSalary(Number(e.target.value))}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">

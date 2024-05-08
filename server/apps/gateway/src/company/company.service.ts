@@ -69,4 +69,11 @@ export class CompanyService {
       { employerId, page, limit },
     );
   }
+
+  findAllCampaignByEmployerId(employerId: number) {
+    return this.companyClient.send<{ data: FindCampaignDTOResponse[] }>(
+      { cmd: 'find_all_campaign_by_employerid' },
+      employerId,
+    );
+  }
 }

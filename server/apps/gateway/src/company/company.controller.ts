@@ -82,6 +82,11 @@ export class CompanyController {
     );
   }
 
+  @Get('campaign/employer/all/:employerId')
+  findAllCampaignByEmployerId(@Param('employerId') employerId: number) {
+    return this.companyService.findAllCampaignByEmployerId(employerId);
+  }
+
   // @Get('campaign/:id/employer')
   // findEmployerId(@Param('id') id: number): Observable<string> {
   //   return this.companyService.findEmployerId(id);
