@@ -87,78 +87,79 @@ const salary_range = [
     maxSalary: 0,
   },
 ];
-const job_name = [
-  {
-    value: "0",
-    label: "Tất cả ngành nghề",
-  },
-  {
-    value: "1",
-    label: "Dưới 5 triệu",
-  },
-  {
-    value: "2",
-    label: "5 đến 10",
-  },
-  {
-    value: "3",
-    label: "10 đến 15",
-  },
-];
-const job_field = [
-  {
-    value: "0",
-    label: "Tất cả lĩnh vực",
-  },
-  {
-    value: "1",
-    label: "Dưới 5 triệu",
-  },
-  {
-    value: "2",
-    label: "5 đến 10",
-  },
-  {
-    value: "3",
-    label: "10 đến 15",
-  },
-];
-const job_type = [
-  {
-    value: "0",
-    label: "Tất cả hình thức",
-  },
-  {
-    value: "1",
-    label: "Dưới 5 triệu",
-  },
-  {
-    value: "2",
-    label: "5 đến 10",
-  },
-  {
-    value: "3",
-    label: "10 đến 15",
-  },
-];
-const job_level = [
-  {
-    value: "0",
-    label: "Tất cả cấp bậc",
-  },
-  {
-    value: "1",
-    label: "Dưới 5 triệu",
-  },
-  {
-    value: "2",
-    label: "5 đến 10",
-  },
-  {
-    value: "3",
-    label: "10 đến 15",
-  },
-];
+// const job_name = [
+//   {
+//     value: "0",
+//     label: "Tất cả ngành nghề",
+//   },
+//   {
+//     value: "1",
+//     label: "Dưới 5 triệu",
+//   },
+//   {
+//     value: "2",
+//     label: "5 đến 10",
+//   },
+//   {
+//     value: "3",
+//     label: "10 đến 15",
+//   },
+// ];
+// const job_field = [
+//   {
+//     value: "0",
+//     label: "Tất cả lĩnh vực",
+//   },
+//   {
+//     value: "1",
+//     label: "Dưới 5 triệu",
+//   },
+//   {
+//     value: "2",
+//     label: "5 đến 10",
+//   },
+//   {
+//     value: "3",
+//     label: "10 đến 15",
+//   },
+// ];
+// const job_type = [
+//   {
+//     value: "0",
+//     label: "Tất cả hình thức",
+//   },
+//   {
+//     value: "1",
+//     label: "Dưới 5 triệu",
+//   },
+//   {
+//     value: "2",
+//     label: "5 đến 10",
+//   },
+//   {
+//     value: "3",
+//     label: "10 đến 15",
+//   },
+// ];
+// const job_level = [
+//   {
+//     value: "0",
+//     label: "Tất cả cấp bậc",
+//   },
+//   {
+//     value: "1",
+//     label: "Dưới 5 triệu",
+//   },
+//   {
+//     value: "2",
+//     label: "5 đến 10",
+//   },
+//   {
+//     value: "3",
+//     label: "10 đến 15",
+//   },
+// ];
+
 const news_type = [
   {
     value: "0",
@@ -166,15 +167,11 @@ const news_type = [
   },
   {
     value: "1",
-    label: "Dưới 5 triệu",
+    label: "Tin đăng NTD tương tác thường xuyên",
   },
   {
     value: "2",
-    label: "5 đến 10",
-  },
-  {
-    value: "3",
-    label: "10 đến 15",
+    label: "Tin đăng thường",
   },
 ];
 
@@ -184,6 +181,10 @@ interface filterSearch {
   salaryMax: number
   locationId: number
   expId: number
+  majorId: number
+  fieldId: number
+  typeId: number
+  levelId: number
 }
 
 function SearchJob() {
@@ -197,8 +198,21 @@ function SearchJob() {
   const newSalaryMin = Number(searchParams.get("salaryMin")) ?? 0;
   const newSalaryMax = Number(searchParams.get("salaryMax")) ?? 0;
 
+  function findSalaryRangeValue(minSalary: number, maxSalary: number, salaryRanges: any[]) {
+    if (minSalary === 0 && maxSalary === 0) {
+      return "0";
+    }
+
+    const selectedRange = salaryRanges.find(range => range.minSalary === minSalary && range.maxSalary === maxSalary);
+    return selectedRange ? selectedRange.value : "0";
+  }
+
   const [cities, setCities] = useState<any[]>([]);
   const [exp_year, setExpYear] = useState<any[]>([]);
+  const [majors, setMajor] = useState<any[]>([]);
+  const [fields, setField] = useState<any[]>([]);
+  const [types, setType] = useState<any[]>([]);
+  const [levels, setLevel] = useState<any[]>([]);
 
   const [filter, setFilter] = useState<filterSearch>({
     titleRecruitment: newTitleRecruitment,
@@ -206,11 +220,15 @@ function SearchJob() {
     salaryMax: newSalaryMax,
     locationId: newLocationId,
     expId: newExpId,
+    majorId: 0,
+    fieldId: 0,
+    typeId: 0,
+    levelId: 0,
   });
 
-  const [locationId, setLocationId] = useState(newLocationId);
-  const [expId, setExpId] = useState(newExpId);
-  const [titleRecruitment, setTitleRecruitment] = useState(newTitleRecruitment);
+  // const [locationId, setLocationId] = useState(newLocationId);
+  // const [expId, setExpId] = useState(newExpId);
+  // const [titleRecruitment, setTitleRecruitment] = useState(newTitleRecruitment);
 
   const [isActive, setIsActive] = useState(false);
   const [iconDirection, setIconDirection] = useState("down");
@@ -228,6 +246,18 @@ function SearchJob() {
 
       const expResponse = await JobService.getAllExp();
       setExpYear(expResponse);
+
+      const majorResponse = await JobService.getAllMajor();
+      setMajor(majorResponse);
+
+      const fieldResponse = await JobService.getAllField();
+      setField(fieldResponse);
+
+      const typeResponse = await JobService.getAllType();
+      setType(typeResponse);
+
+      const levelResponse = await JobService.getAllLevel();
+      setLevel(levelResponse);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -245,19 +275,44 @@ function SearchJob() {
   const searchJob = () => {
     JobService.searchJob({
       page: page,
-      titleRecruitment: titleRecruitment,
-      locationId: locationId,
-      expId: expId,
+      titleRecruitment: filter.titleRecruitment,
+      locationId: filter.locationId,
+      expId: filter.expId,
       salaryMin: filter.salaryMin,
       salaryMax: filter.salaryMax,
+      fieldId: filter.fieldId,
+      majorId: filter.majorId,
+      levelId: filter.levelId,
+      typeId: filter.typeId,
     }).then((response) => {
-      console.log(response);
+      // console.log(response);
 
       setJobResult(response.data);
       setTotalPage(response.total_pages);
       setTotalJob(response.total);
     });
   };
+
+  const SelectSalary = (value: number) => {
+    if (value !== 0) {
+      const foundRange = salary_range.find((range) => Number(range.value) === value);
+      if (foundRange) {
+        setFilter((prevFilter) => ({
+          ...prevFilter,
+          salaryMin: foundRange.minSalary,
+          salaryMax: foundRange.maxSalary,
+        }));
+      }
+    }
+    else
+    {
+      setFilter((prevFilter) => ({
+        ...prevFilter,
+        salaryMin: 0,
+        salaryMax: 0,
+      }));
+    }
+  }
 
   const handleClick = () => {
     setIsActive(!isActive);
@@ -266,8 +321,22 @@ function SearchJob() {
   };
 
   const handleSearch = () => {
+    const queryParams = {
+      titleRecruitment: filter.titleRecruitment !== "" ? `titleRecruitment=${filter.titleRecruitment}` : "",
+      salaryMin: filter.salaryMin !== 0 ? `salaryMin=${filter.salaryMin}` : "",
+      salaryMax: filter.salaryMax !== 0 ? `salaryMax=${filter.salaryMax}` : "",
+      locationId: filter.locationId !== 0 ? `locationId=${filter.locationId}` : "",
+      expId: filter.expId !== 0 ? `expId=${filter.expId}` : "",
+      majorId: filter.majorId !== 0 ? `majorId=${filter.majorId}` : "",
+      levelId: filter.levelId !== 0 ? `levelId=${filter.levelId}` : "",
+      typeId: filter.typeId !== 0 ? `typeId=${filter.typeId}` : "",
+      fieldId: filter.fieldId !== 0 ? `fielId=${filter.fieldId}` : "",
+    };
+    
+    const queryString = Object.values(queryParams).filter(param => param !== "").join("&");
+
     navigation(
-      `/results?locationId=${locationId}&expId=${expId}&titleRecruitment=${titleRecruitment}`
+      `/results?${queryString}`
     );
 
     searchJob();
@@ -286,13 +355,15 @@ function SearchJob() {
                       <OutlinedInput
                         id="outlined-adornment-amount"
                         placeholder="Vị trí công việc"
-                        value={titleRecruitment}
+                        value={filter.titleRecruitment}
                         startAdornment={
                           <InputAdornment position="start">
                             <MagnifyingGlassIcon className="w-6" />
                           </InputAdornment>
                         }
-                        onChange={(e) => setTitleRecruitment(e.target.value)}
+                        onChange={(e) => {
+                          setFilter(prevState => ({ ...prevState, titleRecruitment: e.target.value }));
+                        }}
                       />
                     </FormControl>
                   </div>
@@ -300,7 +371,7 @@ function SearchJob() {
                     <TextField
                       id="outlined-select-currency"
                       select
-                      defaultValue={String(locationId)}
+                      defaultValue={String(filter.locationId)}
                       className="w-full"
                       InputProps={{
                         startAdornment: (
@@ -318,17 +389,19 @@ function SearchJob() {
                           },
                         },
                       }}
-                      onChange={(e) => setLocationId(Number(e.target.value))}
+                      onChange={(e) => {
+                        setFilter(prevState => ({ ...prevState, locationId: Number(e.target.value) }));
+                      }}
                     >
                       <MenuItem key="0" value="0">
                         Tất cả tỉnh/thành phố
                       </MenuItem>
                       {cities
                         ? cities.map((city: any) => (
-                            <MenuItem key={city.id} value={city.id}>
-                              {city.name}
-                            </MenuItem>
-                          ))
+                          <MenuItem key={city.id} value={city.id}>
+                            {city.name}
+                          </MenuItem>
+                        ))
                         : "Error to fetch cities"}
                     </TextField>
                   </div>
@@ -339,7 +412,7 @@ function SearchJob() {
                     <TextField
                       id="outlined-select-currency"
                       select
-                      defaultValue={String(expId)}
+                      defaultValue={String(filter.expId)}
                       className="w-full"
                       InputProps={{
                         startAdornment: (
@@ -357,17 +430,19 @@ function SearchJob() {
                           },
                         },
                       }}
-                      onChange={(e) => setExpId(Number(e.target.value))}
+                      onChange={(e) => {
+                        setFilter(prevState => ({ ...prevState, expId: Number(e.target.value) }));
+                      }}
                     >
                       <MenuItem key="0" value="0">
                         Tất cả kinh nghiệm
                       </MenuItem>
                       {exp_year
                         ? exp_year.map((exp: any) => (
-                            <MenuItem key={exp.id} value={exp.id}>
-                              {exp.name}
-                            </MenuItem>
-                          ))
+                          <MenuItem key={exp.id} value={exp.id}>
+                            {exp.name}
+                          </MenuItem>
+                        ))
                         : "Error to fetch experience"}
                     </TextField>
                   </div>
@@ -377,8 +452,9 @@ function SearchJob() {
                     <TextField
                       id="outlined-select-currency"
                       select
-                      defaultValue="0"
+                      defaultValue={findSalaryRangeValue(newSalaryMin, newSalaryMax, salary_range)}
                       className="w-full"
+                      onChange={(e) => SelectSalary(Number(e.target.value))}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
@@ -454,12 +530,20 @@ function SearchJob() {
                           </InputAdornment>
                         ),
                       }}
+                      onChange={(e) => {
+                        setFilter(prevState => ({ ...prevState, majorId: Number(e.target.value) }));
+                      }}
                     >
-                      {job_name.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
+                      <MenuItem key="0" value="0">
+                        Tất cả ngành nghề
+                      </MenuItem>
+                      {majors
+                        ? majors.map((major: any) => (
+                          <MenuItem key={major.id} value={major.id}>
+                            {major.name}
+                          </MenuItem>
+                        ))
+                        : "Error to fetch majors"}
                     </TextField>
                   </div>
                   <div className="item">
@@ -475,12 +559,20 @@ function SearchJob() {
                           </InputAdornment>
                         ),
                       }}
+                      onChange={(e) => {
+                        setFilter(prevState => ({ ...prevState, fieldId: Number(e.target.value) }));
+                      }}
                     >
-                      {job_field.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
+                      <MenuItem key="0" value="0">
+                        Tất cả lĩnh vực
+                      </MenuItem>
+                      {fields
+                        ? fields.map((field: any) => (
+                          <MenuItem key={field.id} value={field.id}>
+                            {field.name}
+                          </MenuItem>
+                        ))
+                        : "Error to fetch fields"}
                     </TextField>
                   </div>
                   <div className="item">
@@ -496,12 +588,20 @@ function SearchJob() {
                           </InputAdornment>
                         ),
                       }}
+                      onChange={(e) => {
+                        setFilter(prevState => ({ ...prevState, typeId: Number(e.target.value) }));
+                      }}
                     >
-                      {job_type.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
+                      <MenuItem key="0" value="0">
+                        Tất cả hình thức
+                      </MenuItem>
+                      {types
+                        ? types.map((type: any) => (
+                          <MenuItem key={type.id} value={type.id}>
+                            {type.name}
+                          </MenuItem>
+                        ))
+                        : "Error to fetch types"}
                     </TextField>
                   </div>
                   <div className="item">
@@ -517,12 +617,20 @@ function SearchJob() {
                           </InputAdornment>
                         ),
                       }}
+                      onChange={(e) => {
+                        setFilter(prevState => ({ ...prevState, levelId: Number(e.target.value) }));
+                      }}
                     >
-                      {job_level.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
+                      <MenuItem key="0" value="0">
+                        Tất cả cấp bậc
+                      </MenuItem>
+                      {levels
+                        ? levels.map((level: any) => (
+                          <MenuItem key={level.id} value={level.id}>
+                            {level.name}
+                          </MenuItem>
+                        ))
+                        : "Error to fetch levels"}
                     </TextField>
                   </div>
                   <div className="item">
@@ -591,7 +699,7 @@ function SearchJob() {
                                       <CurrencyDollarIcon className="w-5 mr-2" />
                                       <strong className="salary-count">
                                         {item.salaryMin == 0 &&
-                                        item.salaryMax == 0
+                                          item.salaryMax == 0
                                           ? "Thoả thuận"
                                           : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{" "}
                                       </strong>

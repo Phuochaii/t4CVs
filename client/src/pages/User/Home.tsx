@@ -132,17 +132,11 @@ function Home() {
   const navigation = useNavigate();
 
   const SelectLocation = (value: number) => {
-    if (value !== 0) {
-      // setLocation(value);
-      setFilter((prevState) => ({ ...prevState, locationId: value }));
-    }
+    setFilter((prevState) => ({ ...prevState, locationId: value }));
   };
 
   const SelectExp = (value: number) => {
-    if (value !== 0) {
-      // setExp(value);
-      setFilter((prevState) => ({ ...prevState, expId: value }));
-    }
+    setFilter((prevState) => ({ ...prevState, expId: value }));
   };
 
   const SelectSalary = (value: number) => {
@@ -155,6 +149,14 @@ function Home() {
           salaryMax: foundRange.maxSalary,
         }));
       }
+    }
+    else
+    {
+      setFilter((prevFilter) => ({
+        ...prevFilter,
+        salaryMin: 0,
+        salaryMax: 0,
+      }));
     }
   }
 

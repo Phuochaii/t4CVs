@@ -27,21 +27,58 @@ const salary_range = [
   {
     value: "0",
     label: "Tất cả mức lương",
+    minSalary: 0,
+    maxSalary: 0,
   },
   {
     value: "1",
-    label: "Dưới 5 triệu",
+    label: "Dưới 10 triệu",
+    minSalary: 0,
+    maxSalary: 10,
   },
   {
     value: "2",
-    label: "5 đến 10",
+    label: "10 - 15 triệu",
+    minSalary: 10,
+    maxSalary: 15,
   },
   {
     value: "3",
-    label: "10 đến 15",
+    label: "15 - 20 triệu",
+    minSalary: 15,
+    maxSalary: 20,
+  },
+  {
+    value: "4",
+    label: "20 - 25 triệu",
+    minSalary: 20,
+    maxSalary: 25,
+  },
+  {
+    value: "5",
+    label: "25 - 30 triệu",
+    minSalary: 25,
+    maxSalary: 30,
+  },
+  {
+    value: "6",
+    label: "30 - 50 triệu",
+    minSalary: 30,
+    maxSalary: 50,
+  },
+  {
+    value: "7",
+    label: "Trên 50 triệu",
+    minSalary: 50,
+    maxSalary: 0,
+  },
+  {
+    value: "8",
+    label: "Thỏa thuận",
+    minSalary: 0,
+    maxSalary: 0,
   },
 ];
-
 const modalApplyStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -53,6 +90,14 @@ const modalApplyStyle = {
   boxShadow: 24,
   color: "black",
 };
+
+interface filterSearch {
+  titleRecruitment: string
+  salaryMin: number
+  salaryMax: number
+  locationId: number
+  expId: number
+}
 
 function ApplyCV() {
   const { id: jobId } = useParams();
@@ -80,13 +125,41 @@ function ApplyCV() {
   const navigation = useNavigate();
 
   const [jobData, setJobData] = useState<any>({});
-
   const [cities, setCities] = useState<any[]>([]);
   const [exp_year, setExpYear] = useState<any[]>([]);
 
-  const [locationId, setLocationId] = useState(0);
-  const [expId, setExpId] = useState(0);
-  const [titleRecruitment, setTitleRecruitment] = useState("");
+  const [filter, setFilter] = useState<filterSearch>({
+    titleRecruitment: "",
+    salaryMin: 0,
+    salaryMax: 0,
+    locationId: 0,
+    expId: 0,
+  });
+
+  const SelectSalary = (value: number) => {
+    if (value !== 0) {
+      const foundRange = salary_range.find((range) => Number(range.value) === value);
+      if (foundRange) {
+        setFilter((prevFilter) => ({
+          ...prevFilter,
+          salaryMin: foundRange.minSalary,
+          salaryMax: foundRange.maxSalary,
+        }));
+      }
+    }
+    else
+    {
+      setFilter((prevFilter) => ({
+        ...prevFilter,
+        salaryMin: 0,
+        salaryMax: 0,
+      }));
+    }
+  }
+
+  // const [locationId, setLocationId] = useState(0);
+  // const [expId, setExpId] = useState(0);
+  // const [titleRecruitment, setTitleRecruitment] = useState("");
 
   const fetchDataFilter = async () => {
     try {
@@ -274,8 +347,18 @@ function ApplyCV() {
   };
 
   const handleSearch = () => {
+    const queryParams = {
+      titleRecruitment: filter.titleRecruitment !== "" ? `titleRecruitment=${filter.titleRecruitment}` : "",
+      salaryMin: filter.salaryMin !== 0 ? `salaryMin=${filter.salaryMin}` : "",
+      salaryMax: filter.salaryMax !== 0 ? `salaryMax=${filter.salaryMax}` : "",
+      locationId: filter.locationId !== 0 ? `locationId=${filter.locationId}` : "",
+      expId: filter.expId !== 0 ? `expId=${filter.expId}` : "",
+    };
+    
+    const queryString = Object.values(queryParams).filter(param => param !== "").join("&");
+
     navigation(
-      `/results?locationId=${locationId}&expId=${expId}&titleRecruitment=${titleRecruitment}`
+      `/results?${queryString}`
     );
   };
 
@@ -292,14 +375,14 @@ function ApplyCV() {
                       <FormControl>
                         <OutlinedInput
                           id="outlined-adornment-amount"
-                          placeholder="Vị trí công việc"
+                          placeholder="Vị trí tuyển dụng"
                           startAdornment={
                             <InputAdornment position="start">
                               <MagnifyingGlassIcon className="w-6" />
                             </InputAdornment>
                           }
                           onChange={(e) => {
-                            setTitleRecruitment(e.target.value);
+                            setFilter(prevState => ({ ...prevState, titleRecruitment: e.target.value }));
                           }}
                         />
                       </FormControl>
@@ -308,7 +391,7 @@ function ApplyCV() {
                       <TextField
                         id="outlined-select-currency"
                         select
-                        defaultValue={String(locationId)}
+                        defaultValue="0"
                         className="w-full"
                         InputProps={{
                           startAdornment: (
@@ -326,7 +409,9 @@ function ApplyCV() {
                             },
                           },
                         }}
-                        onChange={(e) => setLocationId(Number(e.target.value))}
+                        onChange={(e) => {
+                          setFilter(prevState => ({ ...prevState, locationId: Number(e.target.value) }));
+                        }}
                       >
                         <MenuItem key="0" value="0">
                           Tất cả tỉnh/thành phố
@@ -347,7 +432,7 @@ function ApplyCV() {
                       <TextField
                         id="outlined-select-currency"
                         select
-                        defaultValue={String(expId)}
+                        defaultValue="0"
                         className="w-full"
                         InputProps={{
                           startAdornment: (
@@ -365,7 +450,9 @@ function ApplyCV() {
                             },
                           },
                         }}
-                        onChange={(e) => setExpId(Number(e.target.value))}
+                        onChange={(e) => {
+                          setFilter(prevState => ({ ...prevState, expId: Number(e.target.value) }));
+                        }}
                       >
                         <MenuItem key="0" value="0">
                           Tất cả kinh nghiệm
@@ -387,6 +474,7 @@ function ApplyCV() {
                         select
                         defaultValue="0"
                         className="w-full"
+                        onChange={(e) => SelectSalary(Number(e.target.value))}
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
