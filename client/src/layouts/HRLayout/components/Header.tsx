@@ -87,7 +87,6 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
     limit?: number;
   }) => {
     HRModule.getNotification({ userId: id, limit: limit }).then((res) => {
-      // console.log(res.data);
       setNotifications(res.data);
       setTotal(res.pagination.total);
     });

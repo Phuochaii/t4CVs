@@ -9,6 +9,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { useParams, useNavigate } from "react-router-dom";
 import * as HRModule from "../../../modules/hr-module";
+import { numberData } from "../../../shared/utils/constant";
 // import { Compaign } from "..";
 
 interface NumberLabelWidgetProps {
@@ -35,32 +36,6 @@ function ManageCV() {
   const [campaign, setCampaign] = React.useState({} as any);
 
   const compaignId = id as string;
-  const numberData = [
-    {
-      title: "Tổng số CV ứng tuyển",
-      number: 10,
-    },
-    {
-      title: "CV ứng tuyển ",
-      number: 5,
-      color: "green",
-    },
-    {
-      title: "CV mở liên hệ",
-      number: 3,
-      color: "red",
-    },
-    {
-      title: "Số Credit đã sử dụng",
-      number: 2,
-      color: "#E5B83F",
-    },
-    {
-      title: "Số lượt mở CV đã dùng",
-      number: 1,
-      color: "#4B71DA",
-    },
-  ];
 
   const [value, setValue] = React.useState("1");
 
@@ -73,7 +48,7 @@ function ManageCV() {
     });
   }, []);
 
-  const tabSx = {
+  const tabListSx = {
     "& .MuiTabs-indicator": {
       backgroundColor: "black",
     },
@@ -88,6 +63,13 @@ function ManageCV() {
         color: "black",
       },
     },
+  };
+
+  const tabSx = {
+    paddingRight: 0,
+    paddingLeft: 0,
+    marginRight: 2,
+    fontWeight: "bold",
   };
   return (
     <>
@@ -133,78 +115,15 @@ function ManageCV() {
                   <TabList
                     onChange={handleChange}
                     aria-label="lab API tabs example"
-                    sx={tabSx}
+                    sx={tabListSx}
                   >
-                    <Tab
-                      sx={{
-                        paddingRight: 0,
-                        paddingLeft: 0,
-                        marginRight: 2,
-                        fontWeight: "bold",
-                      }}
-                      label="Tin tuyển dụng"
-                      value="1"
-                    />
-                    <Tab
-                      sx={{
-                        paddingRight: 0,
-                        paddingLeft: 0,
-                        marginRight: 2,
-                        fontWeight: "bold",
-                      }}
-                      label="CV ứng tuyển"
-                      value="2"
-                    />
-                    <Tab
-                      sx={{
-                        paddingRight: 0,
-                        paddingLeft: 0,
-                        marginRight: 2,
-                        fontWeight: "bold",
-                      }}
-                      label="Ứng viên đã xem tin"
-                      value="3"
-                    />
-                    <Tab
-                      sx={{
-                        paddingRight: 0,
-                        paddingLeft: 0,
-                        marginRight: 2,
-                        fontWeight: "bold",
-                      }}
-                      label="CV tìm kiếm"
-                      value="5"
-                    />
-                    <Tab
-                      sx={{
-                        paddingRight: 0,
-                        paddingLeft: 0,
-                        marginRight: 2,
-                        fontWeight: "bold",
-                      }}
-                      label="CV đang theo dõi"
-                      value="6"
-                    />
-                    <Tab
-                      sx={{
-                        paddingRight: 0,
-                        paddingLeft: 0,
-                        marginRight: 2,
-                        fontWeight: "bold",
-                      }}
-                      label="CV được hỗ trợ"
-                      value="7"
-                    />
-                    <Tab
-                      sx={{
-                        paddingRight: 0,
-                        paddingLeft: 0,
-                        marginRight: 2,
-                        fontWeight: "bold",
-                      }}
-                      label="Dịch vụ"
-                      value="8"
-                    />
+                    <Tab sx={tabSx} label="Tin tuyển dụng" value="1" />
+                    <Tab sx={tabSx} label="CV ứng tuyển" value="2" />
+                    <Tab sx={tabSx} label="Ứng viên đã xem tin" value="3" />
+                    <Tab sx={tabSx} label="CV tìm kiếm" value="5" />
+                    <Tab sx={tabSx} label="CV đang theo dõi" value="6" />
+                    <Tab sx={tabSx} label="CV được hỗ trợ" value="7" />
+                    <Tab sx={tabSx} label="Dịch vụ" value="8" />
                   </TabList>
                 </Box>
                 <TabPanel sx={{ padding: "12px 0" }} value="1">
