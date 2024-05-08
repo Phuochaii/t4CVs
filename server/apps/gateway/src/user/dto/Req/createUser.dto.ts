@@ -1,5 +1,5 @@
 export class CreateUserDTO {
   fullname: string;
-  phone: string;
+  phone?: string;
   image?: string;
 }
