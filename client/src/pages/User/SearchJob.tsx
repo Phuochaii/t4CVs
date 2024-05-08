@@ -530,6 +530,15 @@ function SearchJob() {
                           </InputAdornment>
                         ),
                       }}
+                      SelectProps={{
+                        MenuProps: {
+                          PaperProps: {
+                            style: {
+                              maxHeight: 200,
+                            },
+                          },
+                        },
+                      }}
                       onChange={(e) => {
                         setFilter(prevState => ({ ...prevState, majorId: Number(e.target.value) }));
                       }}
@@ -558,6 +567,15 @@ function SearchJob() {
                             <CubeIcon className="w-7" />
                           </InputAdornment>
                         ),
+                      }}
+                      SelectProps={{
+                        MenuProps: {
+                          PaperProps: {
+                            style: {
+                              maxHeight: 200,
+                            },
+                          },
+                        },
                       }}
                       onChange={(e) => {
                         setFilter(prevState => ({ ...prevState, fieldId: Number(e.target.value) }));
@@ -616,6 +634,15 @@ function SearchJob() {
                             <AcademicCapIcon className="w-7" />
                           </InputAdornment>
                         ),
+                      }}
+                      SelectProps={{
+                        MenuProps: {
+                          PaperProps: {
+                            style: {
+                              maxHeight: 200,
+                            },
+                          },
+                        },
                       }}
                       onChange={(e) => {
                         setFilter(prevState => ({ ...prevState, levelId: Number(e.target.value) }));
