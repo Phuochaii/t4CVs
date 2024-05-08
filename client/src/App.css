@@ -155,11 +155,11 @@
 
 .search-job .header .search-result .search-result-tool{
   background-color: #00b752;
-  transition: 0.3s;
-  cursor: pointer;
+  pointer-events: none;
+  opacity: 0.5;
 }
 
-.search-job .header .search-result .search-result-tool:hover{
+/* .search-job .header .search-result .search-result-tool:hover{
   background-color: #00a048;
   box-shadow: 1px 1px 5px 1px rgba(128, 128, 128, 0.233);
 }
@@ -167,7 +167,7 @@
 .search-job .header .search-result .search-result-tool.active{
   background-color: #19734e;
   border: 1px solid #15bf61;
-}
+} */
 
 .search-job .header .box-option{
   border-radius: 8px;

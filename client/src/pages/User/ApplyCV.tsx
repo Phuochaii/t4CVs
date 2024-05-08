@@ -2,45 +2,19 @@
 import { useState, useRef, useEffect } from "react";
 import {
   TextField,
-  FormControl,
   InputLabel,
-  OutlinedInput,
-  InputAdornment,
-  MenuItem,
-  Button,
   Modal,
   Box,
 } from "@mui/material";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import {
-  MapPinIcon,
-  StarIcon,
-  CurrencyDollarIcon,
-  HeartIcon,
+  HeartIcon
 } from "@heroicons/react/24/outline";
-import { Tooltip } from "@mui/material";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import JobService from "../../modules/job-module";
-
-const salary_range = [
-  {
-    value: "0",
-    label: "Tất cả mức lương",
-  },
-  {
-    value: "1",
-    label: "Dưới 5 triệu",
-  },
-  {
-    value: "2",
-    label: "5 đến 10",
-  },
-  {
-    value: "3",
-    label: "10 đến 15",
-  },
-];
+import SearchBoxComponent from "../../layouts/UserLayout/components/SearchBoxComponent";
+import RelatedJobComponent from "../../layouts/UserLayout/components/RelatedJobComponent";
+import InterestedJobComponent from "../../layouts/UserLayout/components/InterestedJobComponent";
 
 const modalApplyStyle = {
   position: "absolute" as "absolute",
@@ -55,20 +29,21 @@ const modalApplyStyle = {
 };
 
 function ApplyCV() {
-  const { id: jobId } = useParams();
+  // const { id: jobId } = useParams();
   // const jobId = state.id;
-  const userId =
-    localStorage.getItem("user") == null
-      ? ""
-      : JSON.parse(localStorage.getItem("user") as string).id;
-  // const jobId = "3";
+  // const userId =
+  //   localStorage.getItem("user") == null
+  //     ? ""
+  //     : JSON.parse(localStorage.getItem("user") as string).id;
+  const jobId = "3";
+  const userId = "2";
 
   const [showModal, setShowModal] = useState(false);
   const handleBeforeApply = () => {
-    if (localStorage.getItem("user") === null) {
-      navigation("/user-login");
-      return;
-    }
+    // if (localStorage.getItem("user") === null) {
+    //   navigation("/user-login");
+    //   return;
+    // }
   };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -286,149 +261,23 @@ function ApplyCV() {
           <div className="header">
             <div className="container">
               <div className="max-w-screen-lg mx-auto">
-                <form className="search-job grid grid-cols-7 justify-center gap-x-4">
-                  <div className="group-search col-span-3 grid grid-cols-2">
-                    <div className="item item-search">
-                      <FormControl>
-                        <OutlinedInput
-                          id="outlined-adornment-amount"
-                          placeholder="Vị trí công việc"
-                          startAdornment={
-                            <InputAdornment position="start">
-                              <MagnifyingGlassIcon className="w-6" />
-                            </InputAdornment>
-                          }
-                          onChange={(e) => {
-                            setTitleRecruitment(e.target.value);
-                          }}
-                        />
-                      </FormControl>
-                    </div>
-                    <div className="item search-city">
-                      <TextField
-                        id="outlined-select-currency"
-                        select
-                        defaultValue={String(locationId)}
-                        className="w-full"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <MapPinIcon className="w-7" />
-                            </InputAdornment>
-                          ),
-                        }}
-                        SelectProps={{
-                          MenuProps: {
-                            PaperProps: {
-                              style: {
-                                maxHeight: 200,
-                              },
-                            },
-                          },
-                        }}
-                        onChange={(e) => setLocationId(Number(e.target.value))}
-                      >
-                        <MenuItem key="0" value="0">
-                          Tất cả tỉnh/thành phố
-                        </MenuItem>
-                        {cities
-                          ? cities.map((city: any) => (
-                              <MenuItem key={city.id} value={city.id}>
-                                {city.name}
-                              </MenuItem>
-                            ))
-                          : "Error to fetch cities"}
-                      </TextField>
-                    </div>
-                  </div>
-                  <div className="group col-span-3 grid grid-cols-2 gap-x-4">
-                    {/* Số năm kinh nghiệm */}
-                    <div className="item col-span-1">
-                      <TextField
-                        id="outlined-select-currency"
-                        select
-                        defaultValue={String(expId)}
-                        className="w-full"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <StarIcon className="w-6 border-2 border-neutral-500 rounded-full" />
-                            </InputAdornment>
-                          ),
-                        }}
-                        SelectProps={{
-                          MenuProps: {
-                            PaperProps: {
-                              style: {
-                                maxHeight: 200,
-                              },
-                            },
-                          },
-                        }}
-                        onChange={(e) => setExpId(Number(e.target.value))}
-                      >
-                        <MenuItem key="0" value="0">
-                          Tất cả kinh nghiệm
-                        </MenuItem>
-                        {exp_year
-                          ? exp_year.map((exp: any) => (
-                              <MenuItem key={exp.id} value={exp.id}>
-                                {exp.name}
-                              </MenuItem>
-                            ))
-                          : "Error to fetch experience"}
-                      </TextField>
-                    </div>
-
-                    {/* Lương */}
-                    <div className="item col-span-1">
-                      <TextField
-                        id="outlined-select-currency"
-                        select
-                        defaultValue="0"
-                        className="w-full"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="w-6 h-6"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                                />
-                              </svg>
-                            </InputAdornment>
-                          ),
-                        }}
-                      >
-                        {salary_range.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    </div>
-                  </div>
-                  <Button
-                    className="btn-search"
-                    variant="contained"
-                    onClick={handleSearch}
-                  >
-                    Tìm kiếm
-                  </Button>
-                </form>
+                <SearchBoxComponent
+                  cities={cities}
+                  setCities={setCities}
+                  exp_year={exp_year}
+                  setExpYear={setExpYear}
+                  locationId={locationId}
+                  setLocationId={setLocationId}
+                  expId={expId}
+                  setExpId={setExpId}
+                  titleRecruitment={titleRecruitment}
+                  setTitleRecruitment={setTitleRecruitment}
+                  handleSearch={handleSearch}
+                />
               </div>
             </div>
           </div>
         </div>
-
         <div className="container job-detail">
           <div className="max-w-screen-lg mx-auto">
             <div className="list-job">
@@ -748,51 +597,7 @@ function ApplyCV() {
                       </span>
                     </div>
 
-                    <div className="related-job">
-                      <h2 className="related-job-item__title border-l-4 border-green-500 pl-4 my-4 text-2xl font-bold">
-                        Việc làm liên quan
-                      </h2>
-                      <div className="related-job-item__job-list flex flex-col gap-5">
-                        <div className="job-item-search-result max-h-40 bg-slate-100 p-3 border border-transparent rounded-lg shadow-md flex items-center gap-3 hover:border-green-400 cursor-pointer">
-                          <div className="job-logo-company w-32 h-32 min-w-32 bg-white flex items-center border rounded-lg">
-                            <img src="../../../images/logo_company_1.png" />
-                          </div>
-                          <div className="job-detail w-full h-full grid grid-rows-4 grid-cols-4 grid-flow-col">
-                            <span className="job-title text-black font-semibold col-span-3">
-                              Nhân viên IT (PHP + JAVASCRIPT)
-                            </span>
-                            <span className="job-company-name text-slate-600 text-sm col-span-3">
-                              CÔNG TY TNHH CHYANG SHENG VIỆT NAM
-                            </span>
-                            <span className="row-start-4 col-span-3 flex items-center">
-                              <span className="job-sub-detail job-location text-xs">
-                                Hồ Chí Minh
-                              </span>
-                              <span className="job-sub-detail job-remaining-application-days text-xs">
-                                Còn <strong>19</strong> ngày để ứng tuyển
-                              </span>
-                              <span className="job-sub-detail job-update-time text-xs">
-                                Cập nhật 4 giờ trước
-                              </span>
-                            </span>
-                            <div className="job-salary col-start-4 flex items-center">
-                              <CurrencyDollarIcon className="w-5 mr-2" />
-                              <strong className="salary-count">
-                                Thỏa thuận
-                              </strong>
-                            </div>
-                            <div className="job-actions row-start-4 flex items-center justify-end">
-                              <span className="btn-apply mr-2">Ứng tuyển</span>
-                              <span className="btn-save">
-                                <Tooltip title="Lưu" placement="top">
-                                  <HeartIcon className="w-5" />
-                                </Tooltip>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <RelatedJobComponent />
                   </div>
                 </div>
                 <div className="job-detail__body-right col-span-1 text-black flex flex-col gap-4 my-4">
@@ -1081,149 +886,7 @@ function ApplyCV() {
                     </div>
                   </div>
                   <div className="job-detail__box--right job-detail__body-right--item job-detail__body-right--box-interested">
-                    <div className="box-maybe-interested mb-3">
-                      <h3 className="box-maybe-interested__title text-2xl font-bold mb-3">
-                        Có thể bạn quan tâm
-                      </h3>
-                      <div className="box-maybe-interested__company border border-green-400 rounded-lg overflow-hidden">
-                        <div className="box-maybe-interested__company--image">
-                          <img src="../../../images/right-box-interested-logo.png" />
-                        </div>
-                        <div className="box-maybe-interested__company--content company p-5 bg-[#FAFEFD]">
-                          <div className="company__info flex flex-row gap-5 pb-4 border-b border-slate-200">
-                            <div className="company__info--logo w-24 h-24 min-w-24 min-h-24 flex items-center bg-white rounded-full border-2 border-slate-300 overflow-hidden">
-                              <img src="../../../images/right-box-interested-company-logo.png" />
-                            </div>
-                            <div className="company__info--name text-xl font-bold flex flex-col gap-3">
-                              Công ty TNHH Sailun Việt Nam
-                              <img
-                                src="../../../images/right-box-interested-spotlight-company-logo.png"
-                                className="max-w-32 max-h-5"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="company__job mt-3">
-                            <div className="job job-ta py-4 text-sm font-semibold border-b border-slate-200">
-                              <span className="job__name text-lg">
-                                Phiên Dịch Viên Tiếng Indonesia (Làm Việc Tại
-                                Kota Semarang){" "}
-                              </span>
-                              <div className="job__info mt-3 flex flex-row gap-5">
-                                <div className="job__info--salary flex flex-row items-center gap-2 text-green-500">
-                                  <CurrencyDollarIcon className="w-4 h-4" />
-                                  <span>Thoả thuận</span>
-                                </div>
-                                <div className="job__info--address flex flex-row items-center gap-2">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="rgb(34 197 94)"
-                                    className="w-4 h-4"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                  <Tooltip
-                                    title="Tây Ninh: Gò Dầu"
-                                    placement="top"
-                                  >
-                                    <span className="font-normal">
-                                      Tây Ninh
-                                    </span>
-                                  </Tooltip>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="company__job mt-3">
-                            <div className="job job-ta py-4 text-sm font-semibold border-b border-slate-200">
-                              <span className="job__name text-lg">
-                                Phiên Dịch Viên Tiếng Indonesia (Làm Việc Tại
-                                Kota Semarang){" "}
-                              </span>
-                              <div className="job__info mt-3 flex flex-row gap-5">
-                                <div className="job__info--salary flex flex-row items-center gap-2 text-green-500">
-                                  <CurrencyDollarIcon className="w-4 h-4" />
-                                  <span>Thoả thuận</span>
-                                </div>
-                                <div className="job__info--address flex flex-row items-center gap-2">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="rgb(34 197 94)"
-                                    className="w-4 h-4"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                  <Tooltip
-                                    title="Tây Ninh: Gò Dầu"
-                                    placement="top"
-                                  >
-                                    <span className="font-normal">
-                                      Tây Ninh
-                                    </span>
-                                  </Tooltip>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="company__job mt-3">
-                            <div className="job job-ta py-4 text-sm font-semibold border-b border-slate-200">
-                              <span className="job__name text-lg">
-                                Phiên Dịch Viên Tiếng Indonesia (Làm Việc Tại
-                                Kota Semarang){" "}
-                              </span>
-                              <div className="job__info mt-3 flex flex-row gap-5">
-                                <div className="job__info--salary flex flex-row items-center gap-2 text-green-500">
-                                  <CurrencyDollarIcon className="w-4 h-4" />
-                                  <span>Thoả thuận</span>
-                                </div>
-                                <div className="job__info--address flex flex-row items-center gap-2">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="rgb(34 197 94)"
-                                    className="w-4 h-4"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                  <Tooltip
-                                    title="Tây Ninh: Gò Dầu"
-                                    placement="top"
-                                  >
-                                    <span className="font-normal">
-                                      Tây Ninh
-                                    </span>
-                                  </Tooltip>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="company__link mt-5 px-7 py-3 bg-green-500 rounded-lg text-white font-bold text-center cursor-pointer">
-                            Tìm hiểu ngay
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="box-maybe-interested__banner">
-                      <img
-                        src="../../../images/right-box-interested-banner.png"
-                        className="max-w-full rounded-lg"
-                      />
-                    </div>
+                    <InterestedJobComponent />
                   </div>
                 </div>
               </div>
