@@ -33,14 +33,13 @@ export class UploadService {
 
       this.httpService.post('http://localhost:3000/cv', cvDto).subscribe(
         (response) => {
-          console.log(response);
+          return response;
         },
         (error) => {
-          console.error('Error:', error);
+          throw new Error(error);
         },
       );
 
-      return 'Hello';
     } catch (error: any) {
       console.error('Error uploading file:', error);
       throw new Error(error);
