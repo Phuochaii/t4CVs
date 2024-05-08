@@ -2,12 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateJobDto } from './dto/Req/create-job.dto';
 import { Job } from './entities/job.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  Repository,
-  MoreThanOrEqual,
-  LessThanOrEqual,
-  MoreThan,
-} from 'typeorm';
+import { Repository, MoreThanOrEqual, LessThanOrEqual, ILike } from 'typeorm';
 import { JobDetailService } from './job-detail/job-detail.service';
 import { MajorService } from './major/major.service';
 import { LevelService } from './level/level.service';
@@ -19,6 +14,7 @@ import { LocationService } from './location/location.service';
 import { ExperienceService } from './experience/experience.service';
 import { TypeService } from './type/type.service';
 import { FindJobRespDTO } from './dto/Resp/findJobResp.dto';
+import { QueryDTO } from './dto/Req/query.dto';
 @Injectable()
 export class JobService {
   constructor(
@@ -47,9 +43,9 @@ export class JobService {
         'fields',
         'exp',
         'type',
+        'locations',
       ],
     });
-    //await result.jobDetail;
     return result;
   }
 
@@ -89,31 +85,29 @@ export class JobService {
     return await this.jobRepository.save(job);
   }
 
-  async findAll(query: any): Promise<FindJobRespDTO> {
-    const page = query.page ?? 1;
-    const limit = query.limit ?? 10;
-    const min = query.salaryMin ?? 0;
-    const max = query.salaryMax ?? 1000000000;
+  async findAll(query: QueryDTO): Promise<FindJobRespDTO> {
+    const {
+      locationId = null,
+      fieldId = null,
+      page = 1,
+      limit = 10,
+      salaryMin = 0,
+      salaryMax = 1000000000,
+      ...newQuery
+    } = query;
     const skip = (page - 1) * limit;
-    const fieldId = query.fieldId ?? null;
-    const locationId = query.locationId ?? null;
-    delete query.locationId;
-    delete query.fieldId;
-    delete query.page;
-    delete query.limit;
-    delete query.salaryMin;
-    delete query.salaryMax;
+    if (newQuery.titleRecruitment) {
+      newQuery.titleRecruitment = ILike(`%${newQuery.titleRecruitment}%`);
+    }
     let jobs = await this.jobRepository.find({
       where: {
-        ...query,
-        salaryMin: MoreThanOrEqual(min),
-        salaryMax: LessThanOrEqual(max),
-        expiredDate: MoreThan(new Date()),
+        ...newQuery,
+        salaryMin: MoreThanOrEqual(salaryMin),
+        salaryMax: LessThanOrEqual(salaryMax),
+        expiredDate: MoreThanOrEqual(new Date()),
       },
-      // skip,
-      // take: limit,
       order: {
-        updateAt: 'ASC',
+        updateAt: 'DESC',
       },
       relations: [
         'major',
@@ -127,13 +121,13 @@ export class JobService {
     });
 
     // get the list of job have fieldId
-
     if (fieldId) {
       const jobField = jobs.filter((job) => {
         return job.fields.some((field) => field.id == fieldId);
       });
       jobs = jobField;
     }
+
     // get the list of job have locationId
     if (locationId) {
       const jobLocation = jobs.filter((job) => {
@@ -143,8 +137,8 @@ export class JobService {
     }
 
     const result: FindJobRespDTO = {
-      page,
-      limit,
+      page: parseInt(String(page)),
+      limit: parseInt(String(limit)),
       total: jobs.length,
       total_pages: Math.ceil(jobs.length / limit),
       data: jobs.slice(skip, skip + limit),
@@ -152,32 +146,30 @@ export class JobService {
     return result;
   }
 
-  async findValidJobs(query: any): Promise<FindJobRespDTO> {
-    const page = query.page ?? 1;
-    const limit = query.limit ?? 10;
-    query.status = true;
-    const min = query.salaryMin ?? 0;
-    const max = query.salaryMax ?? 1000000000;
+  async findValidJobs(query: QueryDTO): Promise<FindJobRespDTO> {
+    const {
+      locationId = null,
+      fieldId = null,
+      page = 1,
+      limit = 10,
+      salaryMin = 0,
+      salaryMax = 1000000000,
+      ...newQuery
+    } = query;
+    newQuery.status = true;
     const skip = (page - 1) * limit;
-    const fieldId = query.fieldId ?? null;
-    const locationId = query.locationId ?? null;
-    delete query.locationId;
-    delete query.fieldId;
-    delete query.page;
-    delete query.limit;
-    delete query.salaryMin;
-    delete query.salaryMax;
+    if (newQuery.titleRecruitment) {
+      newQuery.titleRecruitment = ILike(`%${newQuery.titleRecruitment}%`);
+    }
     let jobs = await this.jobRepository.find({
       where: {
-        ...query,
-        salaryMin: MoreThanOrEqual(min),
-        salaryMax: LessThanOrEqual(max),
-        expiredDate: MoreThan(new Date()),
+        ...newQuery,
+        salaryMin: MoreThanOrEqual(salaryMin),
+        salaryMax: LessThanOrEqual(salaryMax),
+        expiredDate: MoreThanOrEqual(new Date()),
       },
-      // skip,
-      // take: limit,
       order: {
-        updateAt: 'ASC',
+        updateAt: 'DESC',
       },
       relations: [
         'major',
@@ -189,14 +181,15 @@ export class JobService {
         'locations',
       ],
     });
-    // get the list of job have fieldId
 
+    // get the list of job have fieldId
     if (fieldId) {
       const jobField = jobs.filter((job) => {
         return job.fields.some((field) => field.id == fieldId);
       });
       jobs = jobField;
     }
+
     // get the list of job have locationId
     if (locationId) {
       const jobLocation = jobs.filter((job) => {
@@ -204,9 +197,10 @@ export class JobService {
       });
       jobs = jobLocation;
     }
+
     const result: FindJobRespDTO = {
-      page,
-      limit,
+      page: parseInt(String(page)),
+      limit: parseInt(String(limit)),
       total: jobs.length,
       total_pages: Math.ceil(jobs.length / limit),
       data: jobs.slice(skip, skip + limit),
@@ -236,7 +230,6 @@ export class JobService {
   async findJobById(id: number) {
     const result = await this.jobRepository.findOne({
       where: {
-        status: true,
         id,
       },
       relations: [
@@ -247,6 +240,7 @@ export class JobService {
         'fields',
         'exp',
         'type',
+        'locations',
       ],
     });
     //await result.jobDetail;

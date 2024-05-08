@@ -13,8 +13,7 @@ export class EmployerController {
 
   @MessagePattern({ cmd: 'create_employer' })
   createEmployer(employer: CreateEmployerDto) {
-    this.employerService.createEmployer(employer);
-    return 'Employer created successfully!';
+    return this.employerService.createEmployer(employer);
   }
 
   @MessagePattern({ cmd: 'get_all_employers' })

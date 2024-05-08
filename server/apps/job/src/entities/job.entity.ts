@@ -7,7 +7,6 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
-  OneToMany,
 } from 'typeorm';
 import { JobDetail } from './job-detail.entity';
 import { Major } from './major.entity';
@@ -92,6 +91,7 @@ export class Job {
   @JoinColumn()
   level: Level;
 
+  // Demo , ve sau sua ai default là false
   @Column({ default: false })
   status: boolean;
 

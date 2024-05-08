@@ -46,7 +46,16 @@ export class ApplicationService {
     return data;
   }
 
-  async findAllApplicationByCampaignId(
+  async findAllApplicationByCampaignId(campaignIds: number[]) {
+    const data = await this.applicationRepository.find({
+      where: {
+        campaignId: In(campaignIds),
+      },
+    });
+    return data;
+  }
+
+  async findAllApplicationByCampaignIdPagination(
     page: number,
     limit: number,
     campaignIds: number[],
@@ -57,6 +66,35 @@ export class ApplicationService {
       where: {
         campaignId: In(campaignIds),
         status,
+      },
+      skip: skip,
+      take: limit,
+      order: {
+        createdAt: 'DESC',
+        id: 'DESC',
+      },
+    });
+    return data;
+  }
+
+  async findAllApplicationByUserId(userId: number) {
+    const data = await this.applicationRepository.find({
+      where: {
+        userId: userId,
+      },
+    });
+    return data;
+  }
+
+  async findAllApplicationByUserIdPagination(
+    page: number,
+    limit: number,
+    userId: number,
+  ) {
+    const skip = (page - 1) * limit;
+    const data = await this.applicationRepository.find({
+      where: {
+        userId: userId,
       },
       skip: skip,
       take: limit,

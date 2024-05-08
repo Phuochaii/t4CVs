@@ -12,6 +12,7 @@ import {
   UpdateApplicationRequest,
   Pagination,
   ReadAllApplicationByCampaignIdRequest,
+  ReadAllApplicationByUserIdRequest,
 } from '@app/common/proto/application';
 
 @Controller()
@@ -29,11 +30,60 @@ export class ApplicationController implements ApplicationServiceController {
   async readAllApplicationByCampaignId(
     request: ReadAllApplicationByCampaignIdRequest,
   ): Promise<Applications> {
-    const data = await this.applicationService.findAllApplicationByCampaignId(
+    const total_data =
+      await this.applicationService.findAllApplicationByCampaignId(
+        request.campaignIds,
+      );
+    const data =
+      await this.applicationService.findAllApplicationByCampaignIdPagination(
+        request.page,
+        request.limit,
+        request.campaignIds,
+        request.status,
+      );
+    const total = total_data.length;
+    // console.log(total);
+    const total_pages = Math.ceil(total / request.limit);
+    return {
+      page: request.page,
+      limit: request.limit,
+      total: total,
+      totalPage: total_pages,
+      applications: data,
+    };
+  }
+
+  async readAllApplicationByUserId(
+    request: ReadAllApplicationByUserIdRequest,
+  ): Promise<Applications> {
+    const total_data = await this.applicationService.findAllApplicationByUserId(
+      request.userId,
+    );
+
+    const data =
+      await this.applicationService.findAllApplicationByUserIdPagination(
+        request.page,
+        request.limit,
+        request.userId,
+      );
+    const total = total_data.length;
+    const total_pages = Math.ceil(total / request.limit);
+    return {
+      page: request.page,
+      limit: request.limit,
+      total: total,
+      totalPage: total_pages,
+      applications: data,
+    };
+  }
+
+  async readAllApplicationByUserId(
+    request: ReadAllApplicationByUserIdRequest,
+  ): Promise<Applications> {
+    const data = await this.applicationService.findAllApplicationByUserId(
       request.page,
       request.limit,
-      request.campaignIds,
-      request.status,
+      request.userId,
     );
     const total = data.length;
     const total_pages = Math.ceil(total / request.limit);

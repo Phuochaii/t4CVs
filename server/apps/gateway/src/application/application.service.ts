@@ -66,14 +66,28 @@ export class ApplicationService implements OnModuleInit {
     return applications$;
   }
 
+  findAllByUserId(page: number, limit: number, userId: number) {
+    const applications$ =
+      this.applicationServiceClient.readAllApplicationByUserId({
+        page,
+        limit,
+        userId,
+      });
+    return applications$;
+  }
+
   async update(id: number) {
-    const data = await firstValueFrom(this.applicationServiceClient.updateApplication({ id }));
+    const data = await firstValueFrom(
+      this.applicationServiceClient.updateApplication({ id }),
+    );
     return data;
   }
 
   async hrGetCv(id: number) {
     const application = await this.update(id);
-    const cv = (await firstValueFrom(this.cvService.getCVById(application.cvId))) as CVDto;
+    const cv = (await firstValueFrom(
+      this.cvService.getCVById(application.cvId),
+    )) as CVDto;
     const campaign = await firstValueFrom(
       this.companyService.findCampaignById(application.campaignId),
     );
@@ -83,9 +97,8 @@ export class ApplicationService implements OnModuleInit {
     const campany = await firstValueFrom(
       this.companyService.findCompanyById(employer.companyId),
     );
-    const job = await firstValueFrom(
-      this.jobService.findJobByCampaignId(campaign.id),
-    );
+    const job = await this.jobService.findJobByCampaignId(campaign.id);
+
     const notification = await firstValueFrom(
       this.notificationService.create(
         [new NotificationUserId(cv.userId, NotificationUserRole.USER)],
