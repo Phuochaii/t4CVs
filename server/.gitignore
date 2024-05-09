@@ -3,6 +3,7 @@
 /node_modules
 /build
 apps/*/src/proto/
+table.sql
 
 # Logs
 logs
