@@ -17,8 +17,10 @@ import {
 } from "lucide-react";
 import { SetStateAction, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Select, { MultiValue, SingleValue } from "react-select";
+import SingleDropdown from "../../../../shared/components/SingleDropDown";
+import MultiDropdown from "../../../../shared/components/MultiDropDown";
 function PostCompaign1({
   next,
   previous,
@@ -68,52 +70,20 @@ function PostCompaign1({
     value: string;
     label: string;
   }> | null>(null);
-  // const [emailOption, setEmailOption] = useState("");
   const [fieldOptions, setFieldOptions] = useState<MultiValue<{
     value: string;
     label: string;
   }> | null>(null);
-  // const [skill, setSkill] = useState("");
-  // const [careerError, setCareerError] = useState(true);
-  // const [skillError, setSkillError] = useState(true);
-  // const [nameError, setNameError] = useState(true);
-  // const [phoneError, setPhoneError] = useState(true);
-  // const [emailError, setEmailError] = useState(true);
-  // const [fieldError, setFieldError] = useState(true);
-  // const [dateError, setDateError] = useState(true);
-  // const [jobTypeError, setJobTypeError] = useState(true);
-  // const [genderError, setGenderError] = useState(true);
-  // const [levelError, setLevelError] = useState(true);
-  // const [expError, setExpError] = useState(true);
-  // const [currencyError, setCurrencyError] = useState(true);
-  // const [quantityError, setQuantityError] = useState(true);
   const [salaryError, setSalaryError] = useState(true);
   const [salaryMaxError, setSalaryMaxError] = useState(false);
-  // const [scheduleError, setScheduleError] = useState(true);
-  // const [cityError, setCityError] = useState(true);
-  // const [districtError, setDistrictError] = useState(true);
-  // const [addressError, setAddressError] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-  // const [showError, setShowError] = useState(true);
-  // const [showDescriptionError, setDescritionError] = useState(true);
-  // const [showRequirement, setRequirementError] = useState(true);
-  // const [address, setAddress] = useState("");
-  // const [jobDescription, setJobDescription] = useState("");
-  // const [description, setDescription] = useState("");
-  // const [requirement, setRequirement] = useState("");
-  // const [quantity, setQuantity] = useState("");
-  // const [schedule, setSchedule] = useState("");
   const [salary, setSalary] = useState("");
   const [salaryMax, setSalaryMax] = useState("");
-  // const [title, setTitle] = useState("");
-  // const [name, setName] = useState("");
-  // const [phone, setPhone] = useState("");
   const [date, setDate] = useState("");
-  // const [titleError, setTitleError] = useState(true);
   const [item, setItem] = useState({
     titleRecruitment: "",
     majorId: 0,
-    fieldsId: [] as number[], // Specify the type explicitly
+    fieldsId: [] as number[],
     typeId: 0,
     currencyId: 0,
     levelId: 0,
@@ -167,17 +137,15 @@ function PostCompaign1({
       updatedItem.benefit = data.benefit;
       updatedItem.requirement = data.requirement;
       updatedItem.skills = data.skill;
-
-      // Log the updated item
+      //debug line
       console.log(updatedItem);
       try {
         const response = await fetch("http://localhost:3000/job/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            // Add any other headers if needed
           },
-          body: JSON.stringify(updatedItem), // Convert item to JSON string
+          body: JSON.stringify(updatedItem),
         });
 
         if (!response.ok) {
@@ -193,62 +161,6 @@ function PostCompaign1({
       //Do nothing
     }
   };
-  // const handleTitleError = (value: SetStateAction<string>) => {
-  //   setTitle(value);
-  //   if (value.length === 0) {
-  //     setTitleError(true);
-  //   } else {
-  //     setTitleError(false);
-  //   }
-  // };
-  // const handleDateError = (value: SetStateAction<string>) => {
-  //   setDate(value);
-  //   if (value.length === 0) {
-  //     setDateError(true);
-  //   } else {
-  //     setDateError(false);
-  //   }
-  // };
-  // const handleNameError = (value: SetStateAction<string>) => {
-  //   setName(value);
-  //   if (value.length === 0) {
-  //     setNameError(true);
-  //   } else {
-  //     setNameError(false);
-  //   }
-  // };
-  // const handlePhoneError = (value: SetStateAction<string>) => {
-  //   setPhone(value);
-  //   if (value.length === 0) {
-  //     setPhoneError(true);
-  //   } else {
-  //     setPhoneError(false);
-  //   }
-  // };
-  // const handleAddressError = (value: SetStateAction<string>) => {
-  //   setAddress(value);
-  //   if (value.length === 0) {
-  //     setAddressError(true);
-  //   } else {
-  //     setAddressError(false);
-  //   }
-  // };
-  // const handleQuantityError = (value: SetStateAction<string>) => {
-  //   setQuantity(value);
-  //   if (value.length === 0) {
-  //     setQuantityError(true);
-  //   } else {
-  //     setQuantityError(false);
-  //   }
-  // };
-  // const handleScheduleError = (value: SetStateAction<string>) => {
-  //   setSchedule(value);
-  //   if (value.length === 0) {
-  //     setScheduleError(true);
-  //   } else {
-  //     setScheduleError(false);
-  //   }
-  // };
   const handleSalaryError = (value: SetStateAction<string>) => {
     setSalary(value);
     if (value.length === 0) {
@@ -265,140 +177,6 @@ function PostCompaign1({
       setSalaryMaxError(false);
     }
   };
-  // const handleJobTypeError = (
-  //   value: SetStateAction<SingleValue<{ value: string; label: string }>>
-  // ) => {
-  //   setjobTypeOptions(value);
-  //   if (value !== null) {
-  //     setJobTypeError(false);
-  //   } else {
-  //     setJobTypeError(true);
-  //   }
-  // };
-  // const handleEmailError = (value: SetStateAction<string>) => {
-  //   setEmailOption(value);
-  //   if (value?.length === 0) {
-  //     setEmailError(true);
-  //   } else {
-  //     setEmailError(false);
-  //   }
-  // };
-  // const handleCityError = (
-  //   value: SetStateAction<MultiValue<{ value: string; label: string }> | null>
-  // ) => {
-  //   setCityOptions(value);
-  //   if (value?.length !== 0) {
-  //     setCityError(false);
-  //   } else {
-  //     setCityError(true);
-  //   }
-  // };
-  // const handleDistrictError = (
-  //   value: SetStateAction<SingleValue<{ value: string; label: string }>>
-  // ) => {
-  //   setDistrictOptions(value);
-  //   if (value !== null) {
-  //     setDistrictError(false);
-  //   } else {
-  //     setDistrictError(true);
-  //   }
-  // };
-  // //
-  // const handleGenderError = (
-  //   value: SetStateAction<SingleValue<{ value: string; label: string }>>
-  // ) => {
-  //   setGenderOptions(value);
-  //   if (false !== null) {
-  //     setGenderError(false);
-  //   } else {
-  //     setGenderError(true);
-  //   }
-  // };
-  // const handleLevelError = (
-  //   value: SetStateAction<SingleValue<{ value: string; label: string }>>
-  // ) => {
-  //   setLevelOptions(value);
-  //   if (value !== null) {
-  //     setLevelError(false);
-  //   } else {
-  //     setLevelError(true);
-  //   }
-  // };
-  // const handleExpError = (
-  //   value: SetStateAction<SingleValue<{ value: string; label: string }>>
-  // ) => {
-  //   setExpOptions(value);
-  //   if (value !== null) {
-  //     setExpError(false);
-  //   } else {
-  //     setExpError(true);
-  //   }
-  // };
-  // const handleCurrencyError = (
-  //   value: SetStateAction<SingleValue<{ value: string; label: string }>>
-  // ) => {
-  //   setCurrencyOptions(value);
-  //   if (value !== null) {
-  //     setCurrencyError(false);
-  //   } else {
-  //     setCurrencyError(true);
-  //   }
-  // };
-  // const handleCareerError = (
-  //   value: SetStateAction<SingleValue<{ value: string; label: string }>>
-  // ) => {
-  //   setCareerOptions(value);
-  //   // if (value !== null) {
-  //   //   setCareerError(false);
-  //   // } else {
-  //   //   setCareerError(true);
-  //   // }
-  // };
-  // //
-  // const handleFieldError = (
-  //   value: SetStateAction<MultiValue<{ value: string; label: string }> | null>
-  // ) => {
-  //   setFieldOptions(value);
-  //   console.log(fieldOptions);
-  //   if (value?.length !== 0) {
-  //     setFieldError(false);
-  //   } else {
-  //     setFieldError(true);
-  //   }
-  // };
-  // const handleSkillError = (value: SetStateAction<string>) => {
-  //   setSkill(value);
-  //   if (value?.length === 0) {
-  //     setSkillError(true);
-  //   } else {
-  //     setSkillError(false);
-  //   }
-  // };
-  // const handleRequirementValidation = (value: SetStateAction<string>) => {
-  //   setRequirement(value);
-  //   if (value.length === 0) {
-  //     setRequirementError(true);
-  //   } else {
-  //     setRequirementError(false);
-  //   }
-  // };
-  // const handleDescriptionValidation = (value: SetStateAction<string>) => {
-  //   setDescription(value);
-  //   if (value.length === 0) {
-  //     setDescritionError(true);
-  //   } else {
-  //     setDescritionError(false);
-  //   }
-  // };
-  // const handleJobValidation = (value: SetStateAction<string>) => {
-  //   setJobDescription(value);
-  //   if (value.length === 0) {
-  //     setShowError(true);
-  //   } else {
-  //     setShowError(false);
-  //   }
-  // };
-  //
   const [fields, setFields] = useState<any>(null);
 
   useEffect(() => {
@@ -411,7 +189,7 @@ function PostCompaign1({
             "Access-control-allow-origin": "http://localhost:3000",
             "Content-type": "application/json",
           },
-        }); // Modify the URL to match your API endpoint
+        }); 
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -425,7 +203,6 @@ function PostCompaign1({
     fetchData();
   }, []);
 
-  // Convert each field to the desired format
   const convertToOptions = (data: { id: any; name: any }[]) => {
     if (!data) return [];
     return data.map(({ id, name }) => ({ value: id.toString(), label: name }));
@@ -540,52 +317,7 @@ function PostCompaign1({
                     Ngành nghề chính
                   </span>
                   <div>
-                    <Select
-                      styles={{
-                        control: (base) => ({
-                          ...base,
-                          boxShadow: "none",
-                          borderColor: "#6B728064",
-                          "&:hover": {
-                            borderColor: "green",
-                          },
-                        }),
-                        option: (base, state) => ({
-                          ...base,
-                          backgroundColor: state.isSelected
-                            ? "lightgrey"
-                            : "white",
-                          color: "black",
-                          "&:hover": {
-                            backgroundColor: "lightgrey",
-                            fontWeight: "bold",
-                            color: "black",
-                          },
-                        }),
-                        singleValue: (base) => ({
-                          ...base,
-                          color: "black",
-                        }),
-                        placeholder: (base) => ({
-                          ...base,
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }),
-                        menu: (base) => ({
-                          ...base,
-                          maxHeight: "200px",
-                          overflowY: "auto",
-                        }),
-                      }}
-                      isClearable
-                      placeholder="Lựa chọn tối đa một ngành nghề chính cho tin tuyển dụng"
-                      options={major}
-                      className="basic-multi-select"
-                      classNamePrefix="select"
-                      onChange={(e) => setCareerOptions(e)}
-                      required
-                    />
+                    <SingleDropdown placeholder="Lựa chọn tối đa một ngành nghề chính cho tin tuyển dụng" options={major} onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setCareerOptions(e)} />
                   </div>
                 </div>
                 <div className="w-8/12 space-y-2">
@@ -628,7 +360,7 @@ function PostCompaign1({
                         }),
                         menu: (base) => ({
                           ...base,
-                          maxHeight: "200px", // Set maximum height for the dropdown menu
+                          maxHeight: "200px",
                           overflowY: "auto",
                         }),
                       }}
@@ -685,54 +417,11 @@ function PostCompaign1({
                         style={{ width: 14, height: 14 }}
                       />
                     </div>
-
                     <div>
-                      <Select
-                        styles={{
-                          control: (base) => ({
-                            ...base,
-                            boxShadow: "none",
-                            borderColor: "#6B728064",
-                            "&:hover": {
-                              borderColor: "green",
-                            },
-                          }),
-                          option: (base, state) => ({
-                            ...base,
-                            backgroundColor: state.isSelected
-                              ? "lightgrey"
-                              : "white",
-                            color: "black",
-                            "&:hover": {
-                              backgroundColor: "lightgrey",
-                              fontWeight: "bold",
-                              color: "black",
-                            },
-                          }),
-                          singleValue: (base) => ({
-                            ...base,
-                            color: "black",
-                          }),
-                          placeholder: (base) => ({
-                            ...base,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }),
-                          menu: (base) => ({
-                            ...base,
-                            maxHeight: "200px",
-                            overflowY: "auto",
-                          }),
-                        }}
-                        isClearable
+                      <SingleDropdown
                         placeholder="-- Chọn loại công việc --"
-                        name="cities"
                         options={typeOptions}
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                        onChange={(e) => setjobTypeOptions(e)}
-                        required
+                        onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setjobTypeOptions(e)}
                       />
                     </div>
                   </div>
@@ -754,156 +443,30 @@ function PostCompaign1({
                   <div className="space-y-2 w-3/12">
                     <span className="text-base font-semibold">Giới tính</span>
                     <div>
-                      <Select
-                        styles={{
-                          control: (base) => ({
-                            ...base,
-                            boxShadow: "none",
-                            borderColor: "#6B728064",
-                            "&:hover": {
-                              borderColor: "green",
-                            },
-                          }),
-                          option: (base, state) => ({
-                            ...base,
-                            backgroundColor: state.isSelected
-                              ? "lightgrey"
-                              : "white",
-                            color: "black",
-                            "&:hover": {
-                              backgroundColor: "lightgrey",
-                              fontWeight: "bold",
-                              color: "black",
-                            },
-                          }),
-                          singleValue: (base) => ({
-                            ...base,
-                            color: "black",
-                          }),
-                          placeholder: (base) => ({
-                            ...base,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }),
-                          menu: (base) => ({
-                            ...base,
-                            maxHeight: "200px",
-                            overflowY: "auto",
-                          }),
-                        }}
-                        isClearable
+                      <SingleDropdown
                         placeholder="-- Chọn giới tính --"
-                        name="cities"
                         options={gender}
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                        onChange={(e) => setGenderOptions(e)}
-                        required
+                        onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setGenderOptions(e)}
                       />
                     </div>
                   </div>
                   <div className="space-y-2 w-3/12">
                     <span className="text-base font-semibold">Cấp bậc</span>
                     <div>
-                      <Select
-                        styles={{
-                          control: (base) => ({
-                            ...base,
-                            boxShadow: "none",
-                            borderColor: "#6B728064",
-                            "&:hover": {
-                              borderColor: "green",
-                            },
-                          }),
-                          option: (base, state) => ({
-                            ...base,
-                            backgroundColor: state.isSelected
-                              ? "lightgrey"
-                              : "white",
-                            color: "black",
-                            "&:hover": {
-                              backgroundColor: "lightgrey",
-                              fontWeight: "bold",
-                              color: "black",
-                            },
-                          }),
-                          singleValue: (base) => ({
-                            ...base,
-                            color: "black",
-                          }),
-                          placeholder: (base) => ({
-                            ...base,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }),
-                          menu: (base) => ({
-                            ...base,
-                            maxHeight: "200px",
-                            overflowY: "auto",
-                          }),
-                        }}
-                        isClearable
+                      <SingleDropdown
                         placeholder="-- Chọn cấp bậc --"
-                        name="cities"
                         options={level}
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                        onChange={(e) => setLevelOptions(e)}
-                        required
+                        onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setLevelOptions(e)}
                       />
                     </div>
                   </div>
                   <div className="space-y-2 w-3/12">
                     <span className="text-base font-semibold">Kinh nghiệm</span>
                     <div>
-                      <Select
-                        styles={{
-                          control: (base) => ({
-                            ...base,
-                            boxShadow: "none",
-                            borderColor: "#6B728064",
-                            "&:hover": {
-                              borderColor: "green",
-                            },
-                          }),
-                          option: (base, state) => ({
-                            ...base,
-                            backgroundColor: state.isSelected
-                              ? "lightgrey"
-                              : "white",
-                            color: "black",
-                            "&:hover": {
-                              backgroundColor: "lightgrey",
-                              fontWeight: "bold",
-                              color: "black",
-                            },
-                          }),
-                          singleValue: (base) => ({
-                            ...base,
-                            color: "black",
-                          }),
-                          placeholder: (base) => ({
-                            ...base,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }),
-                          menu: (base) => ({
-                            ...base,
-                            maxHeight: "200px",
-                            overflowY: "auto",
-                          }),
-                        }}
-                        isClearable
+                      <SingleDropdown
                         placeholder="-- Chọn kinh nghiệm --"
-                        name="cities"
                         options={exp}
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                        onChange={(e) => setExpOptions(e)}
-                        required
+                        onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setExpOptions(e)}
                       />
                     </div>
                   </div>
@@ -913,52 +476,10 @@ function PostCompaign1({
                   <div className="space-y-2 w-3/12">
                     <span className="text-base font-semibold">Loại tiền tệ</span>
                     <div>
-                      <Select
-                        styles={{
-                          control: (base) => ({
-                            ...base,
-                            boxShadow: "none",
-                            borderColor: "#6B728064",
-                            "&:hover": {
-                              borderColor: "green",
-                            },
-                          }),
-                          option: (base, state) => ({
-                            ...base,
-                            backgroundColor: state.isSelected
-                              ? "lightgrey"
-                              : "white",
-                            color: "black",
-                            "&:hover": {
-                              backgroundColor: "lightgrey",
-                              fontWeight: "bold",
-                              color: "black",
-                            },
-                          }),
-                          singleValue: (base) => ({
-                            ...base,
-                            color: "black",
-                          }),
-                          placeholder: (base) => ({
-                            ...base,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }),
-                          menu: (base) => ({
-                            ...base,
-                            maxHeight: "200px",
-                            overflowY: "auto",
-                          }),
-                        }}
-                        isClearable
+                      <SingleDropdown
                         placeholder="-- Chọn loại tiền tệ --"
-                        name="cities"
                         options={currency}
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                        onChange={(e) => setCurrencyOptions(e)}
-                        required
+                        onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setCurrencyOptions(e)}
                       />
                     </div>
                   </div>
@@ -967,51 +488,10 @@ function PostCompaign1({
                       <span className="text-base font-semibold">Kiểu lương</span>
                     </div>
                     <div>
-                      <Select
-                        styles={{
-                          control: (base) => ({
-                            ...base,
-                            boxShadow: "none",
-                            borderColor: "#6B728064",
-                            "&:hover": {
-                              borderColor: "green",
-                            },
-                          }),
-                          option: (base, state) => ({
-                            ...base,
-                            backgroundColor: state.isSelected
-                              ? "lightgrey"
-                              : "white",
-                            color: "black",
-                            "&:hover": {
-                              backgroundColor: "lightgrey",
-                              fontWeight: "bold",
-                              color: "black",
-                            },
-                          }),
-                          singleValue: (base) => ({
-                            ...base,
-                            color: "black",
-                          }),
-                          placeholder: (base) => ({
-                            ...base,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }),
-                          menu: (base) => ({
-                            ...base,
-                            maxHeight: "200px",
-                            overflowY: "auto",
-                          }),
-                        }}
-                        isClearable
+                      <SingleDropdown
                         placeholder="-- Kiểu lương --"
                         options={salaryOptions}
-                        className="basic-multi-select"
-                        classNamePrefix="select"
                         onChange={togglePopup}
-                        required
                       />
                     </div>
                   </div>
@@ -1054,108 +534,15 @@ function PostCompaign1({
                     ></MapPin>
                     <div className="font-bold text-base mr-10">Khu vực 1: </div>
                     <div className="w-5/12">
-                      <Select
-                        styles={{
-                          control: (base) => ({
-                            ...base,
-                            boxShadow: "none",
-                            borderColor: "#6B728064",
-                            "&:hover": {
-                              borderColor: "green",
-                            },
-                          }),
-                          option: (base) => ({
-                            ...base,
-                            backgroundColor: "white",
-                            "&:hover": {
-                              backgroundColor: "lightgrey",
-                              fontWeight: "bold",
-                            },
-                          }),
-                          multiValue: (base) => ({
-                            ...base,
-                            backgroundColor: "#C4F0D5",
-                          }),
-                          multiValueLabel: (base) => ({
-                            ...base,
-                            color: "black",
-                          }),
-
-                          placeholder: (base) => ({
-                            ...base,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }),
-                          menu: (base) => ({
-                            ...base,
-                            maxHeight: "200px", // Set maximum height for the dropdown menu
-                            overflowY: "auto",
-                          }),
-                        }}
-                        isClearable
-                        placeholder="Chọn Tỉnh/ Thành phố"
-                        name="cities"
-                        options={city}
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                        value={cityOption}
-                        isMulti
-                        onChange={(e) => setCityOptions(e)}
-                        required
-                      />
+                      <MultiDropdown placeholder="Chọn Tỉnh/ Thành phố" onChange={(e: SetStateAction<MultiValue<{ value: string; label: string; }> | null>) => setCityOptions(e)} options={city}/>
                     </div>
                   </div>
                   <div className="flex flex-row space-x-10">
                     <div className="w-3/12">
-                      <Select
-                        styles={{
-                          control: (base) => ({
-                            ...base,
-                            boxShadow: "none",
-                            borderColor: "#6B728064",
-                            "&:hover": {
-                              borderColor: "green",
-                            },
-                          }),
-                          option: (base, state) => ({
-                            ...base,
-                            backgroundColor: state.isSelected
-                              ? "lightgrey"
-                              : "white",
-                            color: "black",
-                            "&:hover": {
-                              backgroundColor: "lightgrey",
-                              fontWeight: "bold",
-                              color: "black",
-                            },
-                          }),
-                          singleValue: (base) => ({
-                            ...base,
-                            color: "black",
-                          }),
-                          placeholder: (base) => ({
-                            ...base,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }),
-                          menu: (base) => ({
-                            ...base,
-                            maxHeight: "200px",
-                            overflowY: "auto",
-                          }),
-                        }}
-                        isClearable
+                      <SingleDropdown
                         placeholder="Chọn Quận/ Huyện"
-                        name="cities"
                         options={cityOptions}
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                        value={district}
-                        onChange={(e) => setDistrictOptions(e)}
-                        required
-                      />
+                        onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setDistrictOptions(e)} />
                     </div>
                     <div className="w-8/12">
                       <input
@@ -1179,16 +566,9 @@ function PostCompaign1({
             </div>
           </div>
           {(errors.quantity ||
-            // jobTypeError ||
-            // genderError ||
-            // levelError ||
-            // expError ||
-            // currencyError ||
             salaryMaxError ||
             salaryError ||
-            // cityError ||
             errors.schedule ||
-            // districtError ||
             errors.address) && (
               <div className="ml-14 text-red-700">
                 Vui lòng điền đầy đủ thông tin
