@@ -6,11 +6,11 @@ import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import img from '../../shared/assets/images/Sign-up user.png';
-import { useAuthen } from '../../shared/services/auth0.service';
+import { useAuthen } from '../../shared/services/authen';
 
 function UserLogIn() {
   const navigation = useNavigate();
-  const {usernamePasswordLogin, googleLogin} = useAuthen();
+  const {usernamePasswordLogin, googleLogin, linkedInLogin} = useAuthen();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -90,6 +90,10 @@ function UserLogIn() {
 
   const handleGoogleLogin = () => {
     googleLogin();
+  }
+
+  const handleLinkedInLogin = () => {
+    linkedInLogin();
   }
 
   return (
@@ -220,6 +224,7 @@ function UserLogIn() {
               <FacebookIcon></FacebookIcon> Facebook
             </button>
             <button
+              onClick={handleLinkedInLogin}
               disabled={!socialAgree}
               className={`flex-grow rounded-md py-2 px-4 ml-2 mb-4 text-white ${!socialAgree ? 'bg-blue-500' : 'bg-blue-800 hover:bg-blue-700'}`}
             >
