@@ -11,5 +11,6 @@ export interface AuthenUseCase {
   usernamePasswordLogin: (credentials: UsernamePasswordLoginCredentials) => void;
   googleLogin: SocialLogin;
   linkedInLogin: SocialLogin;
+  facebookLogin: SocialLogin;
   register: (credentials: RegisterCredentials) => void;
 }

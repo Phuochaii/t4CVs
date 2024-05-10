@@ -1,5 +1,5 @@
 import { AuthenUseCase, RegisterCredentials, SocialLogin, UsernamePasswordLoginCredentials } from "../domain";
-import { GoogleLoginUseCase, LinkedInLoginUsecase, UsernamePasswordLoginUseCase } from "./login";
+import { FaceBookLoginUseCase, GoogleLoginUseCase, LinkedInLoginUsecase, UsernamePasswordLoginUseCase } from "./login";
 
 export class Auth0UseCase implements AuthenUseCase {
     constructor() { }
@@ -14,6 +14,10 @@ export class Auth0UseCase implements AuthenUseCase {
     
     linkedInLogin: SocialLogin = () => {
         new LinkedInLoginUsecase().login();
+    }
+
+    facebookLogin: SocialLogin = () => {
+        new FaceBookLoginUseCase().login();
     }
 
     register(credentials: RegisterCredentials) {

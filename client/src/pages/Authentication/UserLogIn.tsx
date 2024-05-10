@@ -10,7 +10,7 @@ import { useAuthen } from '../../shared/services/authen';
 
 function UserLogIn() {
   const navigation = useNavigate();
-  const {usernamePasswordLogin, googleLogin, linkedInLogin} = useAuthen();
+  const {usernamePasswordLogin, googleLogin, linkedInLogin, facebookLogin} = useAuthen();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -94,6 +94,10 @@ function UserLogIn() {
 
   const handleLinkedInLogin = () => {
     linkedInLogin();
+  }
+
+  const handleFacebookLogin = () => {
+    facebookLogin();
   }
 
   return (
@@ -218,6 +222,7 @@ function UserLogIn() {
               <GoogleIcon></GoogleIcon> Google
             </button>
             <button
+            onClick={handleFacebookLogin}
               disabled={!socialAgree}
               className={`flex-grow rounded-md py-2 px-4 mx-2 mb-4 text-white ${!socialAgree ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-500'}`}
             >
