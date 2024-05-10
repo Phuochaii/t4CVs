@@ -1,5 +1,5 @@
 import { WebAuth } from "auth0-js";
-import { AUTH0_CLIENT_ID, AUTH0_DOMAIN, AUTH0_LOGIN_REDIRECT_URL, AUTH0_LOGIN_RESPONSE_TYPE, AUTH0_REALM, AUTH0_SCOPE } from "../../config";
+import { AUTH0_CLIENT_ID, AUTH0_DOMAIN, AUTH0_LOGIN_REDIRECT_URL, AUTH0_LOGIN_RESPONSE_TYPE, AUTH0_REALM, AUTH0_SCOPE } from "./config";
 
 interface Transaction {
     state: string,
@@ -44,14 +44,14 @@ interface Auth0Config {
     responseType: string,
 }
 
-export interface LoginCallCredentials {
+export interface Auth0CallCredentials {
     realm: AUTH0_REALM,
     auht0Config: Auth0Config,
     transaction: Transaction,
     auth: WebAuth
 }
 
-export abstract class Auth0LoginUseCase {
+export abstract class Auth0OperationUseCase {
     constructor(
         private realm: AUTH0_REALM,
         private auth: WebAuth = new WebAuth({
@@ -72,13 +72,13 @@ export abstract class Auth0LoginUseCase {
         return transaction;
     }
 
-    abstract authLoginCall(
-        credentials: LoginCallCredentials
+    abstract auth0Call(
+        credentials: Auth0CallCredentials
     ): void;
 
-    login() {
+    call() {
         const transaction = this.initLoginTransaction();
-        this.authLoginCall({
+        this.auth0Call({
             auht0Config: this.config,
             realm: this.realm,
             transaction,

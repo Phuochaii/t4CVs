@@ -9,7 +9,7 @@ import routes from "./routes";
 import EmptyLayout from "./layouts/EmptyLayout";
 import { createContext } from "react";
 import { Auth0Provider } from "@auth0/auth0-react";
-import { AUTH0_CLIENT_ID, AUTH0_DOMAIN } from "./shared/services/authen/config";
+import { AUTH0_CLIENT_ID, AUTH0_DOMAIN } from "./shared/services/authen/infrastructure/config";
 
 export const MyContext = createContext({
   accountList: [

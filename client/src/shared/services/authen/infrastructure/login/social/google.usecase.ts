@@ -1,4 +1,4 @@
-import { AUTH0_REALM } from "../../../config";
+import { AUTH0_REALM } from "../../config";
 import { SocialLoginUseCase } from "./base.usecase";
 
 export class GoogleLoginUseCase extends SocialLoginUseCase {

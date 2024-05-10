@@ -1,27 +1,28 @@
 import { AuthenUseCase, RegisterCredentials, SocialLogin, UsernamePasswordLoginCredentials } from "../domain";
 import { FaceBookLoginUseCase, GoogleLoginUseCase, LinkedInLoginUsecase, UsernamePasswordLoginUseCase } from "./login";
+import { RegisterUseCase } from "./register";
 
 export class Auth0UseCase implements AuthenUseCase {
     constructor() { }
-    
+
     usernamePasswordLogin(credentials: UsernamePasswordLoginCredentials) {
-        new UsernamePasswordLoginUseCase(credentials).login();
+        new UsernamePasswordLoginUseCase(credentials).call();
     }
-    
+
     googleLogin() {
-        new GoogleLoginUseCase().login();
+        new GoogleLoginUseCase().call();
     }
-    
+
     linkedInLogin: SocialLogin = () => {
-        new LinkedInLoginUsecase().login();
+        new LinkedInLoginUsecase().call();
     }
 
     facebookLogin: SocialLogin = () => {
-        new FaceBookLoginUseCase().login();
+        new FaceBookLoginUseCase().call();
     }
 
     register(credentials: RegisterCredentials) {
-        throw new Error('Not implemented');
+        new RegisterUseCase(credentials).call();
     }
-    
+
 }

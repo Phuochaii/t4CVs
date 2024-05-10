@@ -1,15 +1,15 @@
-import { AUTH0_REALM } from "../../../config";
+import { AUTH0_REALM } from "../../config";
 import { UsernamePasswordLoginCredentials } from "../../../domain";
-import { Auth0LoginUseCase, LoginCallCredentials } from "../base.usecase";
+import { Auth0OperationUseCase, Auth0CallCredentials } from "../../base.usecase";
 
-export class UsernamePasswordLoginUseCase extends Auth0LoginUseCase {
+export class UsernamePasswordLoginUseCase extends Auth0OperationUseCase {
     constructor(
         private credentials: UsernamePasswordLoginCredentials
     ) {
         super(AUTH0_REALM.UsernamePassword);
     }
 
-    authLoginCall(credentials: LoginCallCredentials) {
+    auth0Call(credentials: Auth0CallCredentials) {
         const { realm, transaction, auth, auht0Config } = credentials;
         const { username, password } = this.credentials;
         auth.login({

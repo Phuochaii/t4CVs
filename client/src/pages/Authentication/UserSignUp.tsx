@@ -6,6 +6,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import img from '../../shared/assets/images/Sign-up user.png';
+import { useAuthen } from '../../shared/services/authen';
 
 function UserSignUp() {
   const [formData, setFormData] = useState({
@@ -27,6 +28,8 @@ function UserSignUp() {
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState('');
+
+  const {register} = useAuthen();
 
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
@@ -105,6 +108,11 @@ function UserSignUp() {
       // Lưu thông tin tài khoản vào Local Storage hoặc gửi đến server
       // console.log('Đăng ký thành công.');
       setShowSuccessMessage(true); // Hiển thị thông báo khi đăng ký thành công
+      register({
+        username: formData.email,
+        password: formData.password,
+        fullname: formData.name,
+      });
     }
   };
 
