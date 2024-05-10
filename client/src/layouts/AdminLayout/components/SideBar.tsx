@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Eye, CreditCard, File } from "lucide-react";
+import { Eye, CreditCard, File, Building2 } from "lucide-react";
 import GradientIcon from "./GradientIcon";
 import clsx from "clsx";
 
@@ -25,6 +25,12 @@ const links = [
     path: "/admin/recruitment",
     icon: File,
     iconComponent: <File className="text-white" />,
+  },
+  {
+    name: "Company",
+    path: "/admin/company",
+    icon: Building2,
+    iconComponent: <Building2 className="text-white" />,
   },
 ];
 
@@ -57,7 +63,9 @@ function Sidebar({ className }: SidebarProps) {
             )}{" "}
             <span
               className={
-                pathname == item.path ? "text-white" : "text-slate-500"
+                pathname == item.path
+                  ? "text-white"
+                  : "text-slate-500"
               }
             >
               {item.name}

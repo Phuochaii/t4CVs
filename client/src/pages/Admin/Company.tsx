@@ -1,161 +1,187 @@
-import { useState } from "react";
-import SearchBar from "../../layouts/AdminLayout/components/SearchBar";
-import { MoreHorizontal } from "lucide-react";
-
-const columns = [
-  "Status",
-  "Company Name",
-  "Experience Level",
-  "Job",
-  "Action",
-];
+import {
+  Check,
+  ChevronDown,
+  ChevronLeftCircle,
+  ChevronRightCircle,
+  Search,
+  X,
+} from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  getAllCompanies,
+  getAllFields,
+} from "../../shared/utils/helper";
+import { CompanyFromServer } from "../../shared/types/Company.type";
+import BasicTable, {
+  BasicColumnProps,
+  ObjectFromServer,
+} from "../../shared/components/basic-table";
+import { Field } from "../../shared/types/Recruitment.type";
 
 function Company() {
-  const [openDialog, setOpenDialog] = useState(-1);
-  const [mockUsers, setMockUsers] = useState([
-    {
-      status: "accepted",
-      imageUrl:
-        "https://images.unsplash.com/photo-1711580377289-eecd23d00370",
-      companyName: "Meta",
-      experienceLevel: "Junior",
-      job: "Quality Assurance",
-    },
-    {
-      status: "declined",
-      imageUrl:
-        "https://images.unsplash.com/photo-1711580377289-eecd23d00370",
-      companyName: "Apple",
-      experienceLevel: "Senior",
-      job: "Software Engineer",
-    },
-    {
-      status: "pending",
-      imageUrl:
-        "https://images.unsplash.com/photo-1711580377289-eecd23d00370",
-      companyName: "Netflix",
-      experienceLevel: "Mid-level",
-      job: "Software Tester",
-    },
-  ]);
+  const [companies, setCompanies] = useState<CompanyFromServer[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [fields, setField] = useState<Field[]>([]);
+
+  useEffect(() => {
+    async function getData() {
+      const {
+        allCompanies,
+        // total,
+        totalPages,
+      }: {
+        allCompanies: CompanyFromServer[];
+        total: number;
+        totalPages: number;
+      } = await getAllCompanies(page);
+      const fields = await getAllFields();
+      setCompanies(allCompanies);
+      setTotalPages(totalPages);
+      setField(fields);
+    }
+    getData();
+  }, [page]);
+
+  const columns: BasicColumnProps[] = useMemo(
+    () => [
+      {
+        name: "ID",
+        field: "id",
+        tableCellClassname: "w-24",
+        cell: (data: ObjectFromServer) => {
+          const company = data as CompanyFromServer;
+          return <div>{company.id}</div>;
+        },
+      },
+      {
+        name: "Thông tin công ty",
+        field: "name",
+        tableCellClassname: "w-[480px]",
+        cell: (data: ObjectFromServer) => {
+          const company = data as CompanyFromServer;
+          return (
+            <div className="flex items-center gap-4">
+              <img
+                src={company.image}
+                className="object-cover w-24 h-24 rounded-full"
+              ></img>
+              <div>
+                <div className="font-bold">{company.name}</div>
+                <div>{company.address}</div>
+                <div>{company.phone}</div>
+                <a
+                  className="font-bold text-blue-400"
+                  href={company.website}
+                >
+                  Link
+                </a>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        name: "Mô tả",
+        field: "description",
+        tableCellClassname: "w-[560px]",
+        cell: (data: ObjectFromServer) => {
+          const company = data as CompanyFromServer;
+          return (
+            <div className="w-full px-2">{company.description}</div>
+          );
+        },
+      },
+      {
+        name: "Số lượng nhân viên",
+        field: "description",
+        tableCellClassname: "w-[160px]",
+        cell: (data: ObjectFromServer) => {
+          const company = data as CompanyFromServer;
+          return <div>{company.companySize}</div>;
+        },
+      },
+      {
+        name: "Mã số thuế",
+        field: "taxCode",
+        tableCellClassname: "w-[160px]",
+        cell: (data: ObjectFromServer) => {
+          const company = data as CompanyFromServer;
+          return <div>{company.taxCode}</div>;
+        },
+      },
+      {
+        name: "Lĩnh vực",
+        field: "field",
+        tableCellClassname: "w-[160px]",
+        cell: (data: ObjectFromServer) => {
+          const company = data as CompanyFromServer;
+          const field = fields.find(
+            (item) => item.id === company.field
+          );
+          return <div>{field?.name}</div>;
+        },
+      },
+      {
+        name: "Trạng thái",
+        field: "status",
+        tableCellClassname: "w-[160px]",
+        cell: (data: ObjectFromServer) => {
+          const company = data as CompanyFromServer;
+          return company.status ? (
+            <Check className="text-green-500" />
+          ) : (
+            <X className="text-red-500" />
+          );
+        },
+      },
+    ],
+    [fields]
+  );
 
   return (
-    <div
-      className="z-0 flex-grow px-10 py-4 bg-slate-100"
-      onClick={(event) => {
-        event.preventDefault();
-        setOpenDialog(-1);
-      }}
-    >
-      <div className="flex justify-between w-full gap-12 my-4">
-        <h1 className="text-2xl font-bold text-slate-500">Company</h1>
-        <div className="">
-          <SearchBar placeholder="Search Campaign" />
+    <div className="flex flex-col items-center flex-grow bg-slate-200">
+      <div className="w-full p-2 bg-white">
+        <h2 className="font-bold">Quản lý công ty tuyển dụng</h2>
+      </div>
+      <div className="flex flex-col items-center justify-between gap-2 py-8 w-[90%]">
+        <div className="flex items-center justify-between w-full gap-2">
+          <div className="flex items-center flex-grow divide-x-2">
+            <div className="flex items-center justify-between h-full p-2 text-sm bg-white">
+              <span className="text-gray-400">Tất cả công ty</span>
+              <ChevronDown stroke="#9ca3af" size={16} />
+            </div>
+            <div className="flex items-center justify-between flex-grow p-2 text-sm bg-white ">
+              <input
+                className="w-full text-gray-400"
+                placeholder="Tìm công ty (nhấn Enter để tìm kiếm)"
+              ></input>
+              <Search stroke="#9ca3af" size={16} />
+            </div>
+          </div>
+        </div>
+        <BasicTable data={companies} columns={columns} />
+        <div className="flex items-center self-center justify-center gap-2">
+          <ChevronLeftCircle
+            className="cursor-pointer"
+            stroke="green"
+            strokeWidth={1}
+            onClick={() => {
+              setPage(page - 1 > 0 ? page - 1 : page);
+            }}
+          />
+          <span className="font-bold text-green-600">{page}</span>/
+          <span>{totalPages}</span>
+          <ChevronRightCircle
+            stroke="green"
+            className="cursor-pointer"
+            strokeWidth={1}
+            onClick={() =>
+              setPage(page + 1 <= totalPages ? page + 1 : page)
+            }
+          />
         </div>
       </div>
-
-      {/* Table */}
-      <table className="flex flex-col w-full gap-10 px-10 py-12 bg-white border-slate-500 rounded-2xl">
-        <thead className="w-full">
-          <tr className="flex text-center justify-evenly">
-            {columns.map((item, index) => {
-              return (
-                <td
-                  key={"header-" + index}
-                  className="flex items-center justify-center w-1/5 p-12 font-bold text-slate-500"
-                >
-                  {item}
-                </td>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody className="flex flex-col w-full gap-10 bg-white border-slate-500 rounded-2xl">
-          {mockUsers.map((user, index) => {
-            return (
-              <tr
-                className="flex items-center py-4 justify-evenly text-slate-500 border-slate-300 rounded-[24rem] border"
-                key={"row-" + index}
-              >
-                <td
-                  className={`flex justify-center  capitalize font-bold text-white w-1/5`}
-                >
-                  <span
-                    className={`rounded-[24rem] px-4 py-2 ${
-                      user.status === "accepted"
-                        ? "bg-green-500"
-                        : user.status === "pending"
-                        ? "bg-gradient-to-b from-green-500 to-blue-500"
-                        : "bg-red-500"
-                    }`}
-                  >
-                    {user.status}
-                  </span>
-                </td>
-                <td className="flex items-center justify-center w-1/5 gap-6">
-                  <img
-                    src={user.imageUrl}
-                    alt="User image"
-                    className="object-cover object-left-top w-16 h-16 rounded-[24rem]"
-                  />
-                  {user.companyName}
-                </td>
-                <td className="flex justify-center w-1/5">
-                  {user.experienceLevel}
-                </td>
-                <td className="flex justify-center w-1/5">
-                  {user.job}
-                </td>
-                <td className="relative flex justify-center w-1/5">
-                  <MoreHorizontal
-                    className="hover:bg-slate-400 rounded-[24rem] hover:text-white hover:cursor-pointer"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      setOpenDialog(index);
-                    }}
-                  />
-                  {openDialog === index && (
-                    <div className="absolute flex flex-col translate-x-16 translate-y-2 bg-white">
-                      <div
-                        className="flex items-center justify-center px-4 py-2 border-t border-l border-r rounded-t-lg hover:bg-gradient-to-r from-blue-500 to-green-500 hover:text-white"
-                        onClick={() => {
-                          const newUser = {
-                            ...user,
-                            status: "accepted",
-                          };
-                          const newMockUsers = [...mockUsers];
-                          newMockUsers[index] = newUser;
-                          setMockUsers(newMockUsers);
-                        }}
-                      >
-                        Accept
-                      </div>
-                      <div
-                        className="flex items-center justify-center px-4 py-2 border-b border-l border-r rounded-b-lg hover:bg-gradient-to-r from-blue-500 to-green-500 hover:text-white"
-                        onClick={() => {
-                          const newUser = {
-                            ...user,
-                            status: "declined",
-                          };
-                          const newMockUsers = [...mockUsers];
-                          newMockUsers[index] = newUser;
-                          setMockUsers(newMockUsers);
-                        }}
-                      >
-                        Decline
-                      </div>
-                      <div className="flex flex-col items-center justify-center py-2 border rounded-xl border-slate-200 hover:bg-gradient-to-r from-blue-500 to-green-500 hover:text-white">
-                        Details
-                      </div>
-                    </div>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
     </div>
   );
 }
