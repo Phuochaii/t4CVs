@@ -6,9 +6,6 @@ import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import img from '../../shared/assets/images/Sign-up user.png';
-import { auth } from '../../shared/services/auth0.service';
-import { AUTH0_REALM } from '../../shared/services/config';
-import { Auth0Error } from 'auth0-js';
 
 function UserSignUp() {
   const [formData, setFormData] = useState({
@@ -108,23 +105,6 @@ function UserSignUp() {
       // Lưu thông tin tài khoản vào Local Storage hoặc gửi đến server
       // console.log('Đăng ký thành công.');
       setShowSuccessMessage(true); // Hiển thị thông báo khi đăng ký thành công
-      auth.signup(
-        {
-          email: formData.email,
-          password: formData.password,
-          // name : formData.name,
-          connection: AUTH0_REALM,
-        },
-        function (error: Auth0Error | null, result: any) {
-          if (error) {
-            console.log('dk err');
-            console.log(error);
-            return;
-          }
-          console.log('Đăng ký thành công.');
-          console.log(result);
-        }
-      );
     }
   };
 

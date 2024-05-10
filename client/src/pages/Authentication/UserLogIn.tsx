@@ -10,7 +10,7 @@ import { useAuthen } from '../../shared/services/auth0.service';
 
 function UserLogIn() {
   const navigation = useNavigate();
-  const {login} = useAuthen();
+  const {usernamePasswordLogin, googleLogin} = useAuthen();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -81,11 +81,16 @@ function UserLogIn() {
     if (errorCount > 0) {
       return;
     }
-    login({
+    
+    usernamePasswordLogin({
       username: formData.email,
       password: formData.password,
     });
   };
+
+  const handleGoogleLogin = () => {
+    googleLogin();
+  }
 
   return (
     <div className="grid grid-cols-3 gap-4 ">
@@ -203,6 +208,7 @@ function UserLogIn() {
           <div className="flex fullwidth">
             <button
               disabled={!socialAgree}
+              onClick={handleGoogleLogin}
               className={`flex-grow rounded-md py-2 px-4 mr-2 mb-4 text-white ${!socialAgree ? 'bg-red-400' : 'bg-red-500 hover:bg-red-600'}`}
             >
               <GoogleIcon></GoogleIcon> Google

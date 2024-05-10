@@ -8,12 +8,6 @@ import {
   AUTH0_LOGIN_REDIRECT_URL,
 } from './config.ts';
 
-export const auth = new WebAuth({
-  domain: AUTH0_DOMAIN,
-  clientID: AUTH0_CLIENT_ID,
-  scope: AUTH0_SCOPE,
-  response_type: AUTH0_LOGIN_RESPONSE_TYPE,
-});
 
 interface Transaction {
   state: string,
@@ -53,49 +47,132 @@ const setAuth0Transaction = (transation: Transaction) => {
   sessionStorage.setItem(key, JSON.stringify(data));
 }
 
-interface LoginCredentials {
+interface Auth0Config {
+  redirectUri: string,
+  responseType: string,
+}
+
+interface LoginCallCredentials {
+  realm: AUTH0_REALM,
+  auht0Config: Auth0Config,
+  transaction: Transaction,
+  auth: WebAuth
+}
+
+abstract class Auth0LoginUseCase {
+  constructor(
+    private realm: AUTH0_REALM,
+    private auth: WebAuth = new WebAuth({
+      domain: AUTH0_DOMAIN,
+      clientID: AUTH0_CLIENT_ID,
+      scope: AUTH0_SCOPE,
+      response_type: AUTH0_LOGIN_RESPONSE_TYPE,
+    }),
+    private config: Auth0Config = {
+      redirectUri: AUTH0_LOGIN_REDIRECT_URL,
+      responseType: AUTH0_LOGIN_RESPONSE_TYPE,
+    }
+  ) { }
+
+  initLoginTransaction() {
+    const transaction = generateTransaction();
+    setAuth0Transaction(transaction);
+    return transaction;
+  }
+
+  abstract authLoginCall(
+    credentials: LoginCallCredentials
+  ): void;
+
+  login() {
+    const transaction = this.initLoginTransaction();
+    this.authLoginCall({
+      auht0Config: this.config,
+      realm: this.realm,
+      transaction,
+      auth: this.auth,
+    });
+  }
+}
+
+class UsernamePasswordLoginUseCase extends Auth0LoginUseCase {
+  constructor(
+    private credentials: UsernamePasswordLoginCredentials
+  ) {
+    super(AUTH0_REALM.UsernamePassword);
+  }
+
+  authLoginCall(credentials: LoginCallCredentials) {
+    const { realm, transaction, auth, auht0Config } = credentials;
+    const { username, password } = this.credentials;
+    auth.login({
+      realm: realm,
+      username: username,
+      password: password,
+      redirectUri: transaction.redirect_uri,
+      responseType: auht0Config.responseType,
+      state: transaction.state,
+      nonce: transaction.nonce,
+      scope: transaction.scope,
+    }, (err, authResult) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log("authResult:", authResult);
+    });
+  }
+}
+
+class GoogleLoginUseCase extends Auth0LoginUseCase {
+  constructor() {
+    super(AUTH0_REALM.Google);
+  }
+  authLoginCall(credentials: LoginCallCredentials) {
+    const { realm, transaction, auth, auht0Config } = credentials;
+    auth.authorize({
+      connection: realm,
+      redirectUri: transaction.redirect_uri,
+      responseType: auht0Config.responseType,
+      state: transaction.state,
+      nonce: transaction.nonce,
+      scope: transaction.scope,
+    });
+  }
+}
+
+
+
+/// Domain
+interface UsernamePasswordLoginCredentials {
   username: string,
   password: string,
 }
-interface RegisterCredentials extends LoginCredentials {
+interface RegisterCredentials extends UsernamePasswordLoginCredentials {
   fullname: string,
 }
-export interface AuthenUseCase {
-  login: (credentials : LoginCredentials) => void;
+interface AuthenUseCase {
+  usernamePasswordLogin: (credentials: UsernamePasswordLoginCredentials) => void;
+  googleLogin: () => void;
   register: (credentials: RegisterCredentials) => void;
 }
 
-const login = (credentials: LoginCredentials) => {
-  const { username, password } = credentials;
+// infrastructure
+class Auth0UseCase implements AuthenUseCase {
+  constructor() { }
 
-  const transaction = generateTransaction();
-  setAuth0Transaction(transaction);
-  auth.login({
-    realm: AUTH0_REALM,
-    username: username,
-    password: password,
-    redirectUri: transaction.redirect_uri,
-    responseType: AUTH0_LOGIN_RESPONSE_TYPE,
-    state: transaction.state,
-    nonce: transaction.nonce,
-    scope: transaction.scope,
+  usernamePasswordLogin(credentials: UsernamePasswordLoginCredentials) {
+    new UsernamePasswordLoginUseCase(credentials).login();
+  }
 
-  }, (err, authResult) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    console.log("authResult:", authResult);
-  });
-};
+  googleLogin() {
+    new GoogleLoginUseCase().login();
+  }
 
-const register = (credentials: RegisterCredentials) => {
-  throw new Error('Not implemented');
+  register(credentials: RegisterCredentials) {
+    throw new Error('Not implemented');
+  }
 }
-
 export const useAuthen = (): AuthenUseCase => {
-  return {
-    login,
-    register,
-  };
+  return new Auth0UseCase();
 };
