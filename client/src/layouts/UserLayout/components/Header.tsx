@@ -1,28 +1,17 @@
-import { Profiler, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../../../App.css';
 import React from 'react';
 // import { Button } from '@mui/material';
 // import { useAuth0 } from "@auth0/auth0-react";
 import * as UserModule from '../../../modules/user-module';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { auth } from '../../../shared/services/auth0.service';
-import {
-  Auth0DecodedHash,
-  Auth0Error,
-  Auth0ParseHashError,
-  Auth0UserProfile,
-} from 'auth0-js';
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
   const navigation = useNavigate();
-  const location = useLocation();
 
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
-  // const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-
-  const [userProfile, setUserProfile] = React.useState<Auth0UserProfile>();
 
   const userId =
     localStorage.getItem('user') == null
@@ -30,44 +19,6 @@ function Header() {
       : JSON.parse(localStorage.getItem('user') as string).id;
 
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-
-  const processHash = (hash: string) => {
-    auth.parseHash(
-      {
-        hash,
-      },
-      function (
-        error: Auth0ParseHashError | null,
-        result: Auth0DecodedHash | null
-      ) {
-        if (error) {
-          console.log('something wrong');
-          console.log(error);
-          return;
-        }
-        if (result) {
-          const { accessToken } = result;
-          console.log(accessToken);
-          if (accessToken) {
-            auth.client.userInfo(
-              accessToken,
-              function (error: Auth0Error | null, result: Auth0UserProfile) {
-                if (error) {
-                  console.log('something wrong in fetching profile');
-                  console.log(error);
-                  return;
-                }
-                console.log('login success');
-                console.log(result.email);
-                setUserProfile(result);
-                setIsAuthenticated(true);
-              }
-            );
-          }
-        }
-      }
-    );
-  };
 
   const fetchNotification = ({
     id,
@@ -83,19 +34,6 @@ function Header() {
       setTotal(res.pagination.total);
     });
   };
-  // React.useEffect(() => {
-  //   if (userId != '') fetchNotification({ id: userId });
-  // }, []);
-
-  React.useEffect(() => {
-    if (location.hash) {
-      processHash(location.hash);
-    }
-  }, [location]);
-
-  // React.useEffect(() => {
-  //   console.log(user);
-  // }, [user]);
 
   const [isJobsHovered, setIsJobsHovered] = useState(false);
   const [isCVsHovered, setIsCVsHovered] = useState(false);
@@ -103,13 +41,6 @@ function Header() {
   const [isToolsHovered, setIsToolsHovered] = useState(false);
   const [isSupportsHovered, setIsSupportsHovered] = useState(false);
   const [isAccountHovered, setIsAccountHovered] = useState(false);
-
-  // const logoutWithRedirect = () =>
-  //   logout({
-  //     logoutParams: {
-  //       returnTo: window.location.origin,
-  //     },
-  //   });
 
   return (
     <header className="menu-top bg-white text-black border border-1 border-slate-300 fixed z-50 top-0 left-0 right-0">

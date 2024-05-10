@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FormControlLabel, Checkbox } from '@mui/material';
 import { Mail, ShieldCheck, Eye, EyeOff } from 'lucide-react';
@@ -6,18 +6,11 @@ import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import img from '../../shared/assets/images/Sign-up user.png';
-import { MyContext } from '../../App';
-import { auth } from '../../shared/services/auth0.service';
-import {
-  AUTH0_LOGIN_REDIRECT_URL,
-  AUTH0_LOGIN_RESPONSE_TYPE,
-  AUTH0_REALM,
-} from '../../shared/services/config';
-import { Auth0Error } from 'auth0-js';
+import { useAuthen } from '../../shared/services/auth0.service';
 
 function UserLogIn() {
-  const { accountList } = useContext(MyContext);
   const navigation = useNavigate();
+  const {login} = useAuthen();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -85,26 +78,13 @@ function UserLogIn() {
       errorCount++;
     }
 
-    if (errorCount === 0) {
-      auth.login(
-        {
-          username: formData.email,
-          password: formData.password,
-          realm: AUTH0_REALM,
-          redirectUri: AUTH0_LOGIN_REDIRECT_URL,
-          responseType: AUTH0_LOGIN_RESPONSE_TYPE,
-        },
-        function (error: Auth0Error | null, result: any) {
-          if (error) {
-            console.log('login fail');
-            console.log(error);
-            return;
-          }
-          console.log('login success');
-          console.log(result);
-        }
-      );
+    if (errorCount > 0) {
+      return;
     }
+    login({
+      username: formData.email,
+      password: formData.password,
+    });
   };
 
   return (
