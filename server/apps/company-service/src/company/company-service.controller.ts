@@ -118,6 +118,10 @@ export class CompanyServiceController {
     };
 
     return result;
-    // return this.campaignService.findCampaignByEmployerId(employerId);
+  }
+
+  @MessagePattern({ cmd: 'find_all_campaign_by_employerid' })
+  findAllCampaignByEmployerId(employerId: number) {
+    return this.campaignService.findAllCampaignByEmployerId(employerId);
   }
 }
