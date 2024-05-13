@@ -1,11 +1,15 @@
 import { Module } from '@nestjs/common';
-import { UserService } from './user.service';
-import { UserController } from './user.controller';
+import { UserService } from './domain/services/user.service';
+import { UserController } from './application/controllers/user.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
+import { User } from './domain/entities/user.entity';
 import * as path from 'path';
-import { DatabaseConfiger, DatabaseOptions } from './database/init';
+import {
+  DatabaseConfiger,
+  DatabaseOptions,
+} from './infrastructure/database/init';
+import { UserRepository } from './infrastructure/repositories/user.repository';
 
 @Module({
   imports: [
@@ -34,6 +38,6 @@ import { DatabaseConfiger, DatabaseOptions } from './database/init';
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [UserService, UserRepository],
 })
 export class UserModule {}

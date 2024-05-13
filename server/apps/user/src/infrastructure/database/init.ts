@@ -1,6 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { User } from '../entities/user.entity';
+import { User } from '../../domain/entities/user.entity';
 import { users } from './data-user';
 
 const DB_NOT_EXIST_ERROR_CODE = '3D000';
@@ -16,7 +16,7 @@ const doCallbackWithAutoCloseConnection = async (
 };
 
 export class DatabaseConfiger {
-  constructor(private defaultConfig: DatabaseOptions) { }
+  constructor(private defaultConfig: DatabaseOptions) {}
 
   private async isDatabaseExist(name: string) {
     try {
@@ -25,7 +25,7 @@ export class DatabaseConfiger {
         database: name,
       } as DataSourceOptions;
 
-      await doCallbackWithAutoCloseConnection(dataSourceOption, async () => { });
+      await doCallbackWithAutoCloseConnection(dataSourceOption, async () => {});
     } catch (error) {
       if (error.code === DB_NOT_EXIST_ERROR_CODE) {
         return false;

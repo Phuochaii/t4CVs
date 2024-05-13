@@ -1,18 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { User } from './entities/user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { RpcException } from '@nestjs/microservices';
-import { CreateUserDTO } from './dto/Req/createUser.dto';
+import { CreateUserDTO } from '../../application/dto/Req/createUser.dto';
+import { UserRepository } from '../../infrastructure/repositories/user.repository';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-  ) {}
+  constructor(private readonly userRepository: UserRepository) {}
   async findById(id: number) {
-    const user = await this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findById(id);
     if (!user) {
       throw new RpcException('User not found');
     }
@@ -20,12 +15,12 @@ export class UserService {
   }
 
   async findAll() {
-    return await this.userRepository.find();
+    return await this.userRepository.findAll();
   }
 
   async createUser(user: CreateUserDTO) {
     try {
-      await this.userRepository.save(user);
+      await this.userRepository.createUser(user);
       return 'User created successfully!';
     } catch (error) {
       throw new RpcException('User not created');
