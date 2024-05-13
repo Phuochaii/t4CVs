@@ -15,13 +15,15 @@ import { Observable } from 'rxjs';
 import { PaginationRequest, PaginationResponse } from '@app/common';
 import { NotificationStatus } from './entities';
 import { DateTimestampConverter } from '@app/common/conveters';
+import { NotificationApplication } from './domain/notification.application';
 
 @Controller()
 @NotificationServiceControllerMethods()
 export class NotificationController implements NotificationServiceController {
   constructor(
     private readonly notificationServiceService: NotificationServiceService,
-  ) {}
+    private readonly notificationApplication: NotificationApplication,
+  ) { }
 
   async updateNotificationStatus({
     user: { id: userId },
@@ -45,33 +47,21 @@ export class NotificationController implements NotificationServiceController {
     paginationRequest,
   }: GetUserNotificationsRequest): Promise<GetUserNotificationsResponse> {
     const paginationReq = new PaginationRequest(paginationRequest);
+    const notifications = await this.notificationApplication.getNotifications({
+      user,
+      paginationRequest: paginationReq,
+    });
 
-    const userNotifications =
-      await this.notificationServiceService.getNotifications(
-        user.id,
-        paginationReq,
-      );
-    const total = await this.notificationServiceService.getTotalNotifications(
-      user.id,
-    );
     return {
-      pagination: new PaginationResponse(
-        total,
-        userNotifications,
-        paginationReq,
-      ),
-      data: userNotifications.map((userNotification) => {
-        const notification = userNotification.notification;
+      pagination: notifications.pagination,
+      data: notifications.data.map((notification) => {
         return {
-          id: notification.id,
-          title: notification.title,
-          content: notification.content,
-          link: notification.link,
-          status: userNotification.status as unknown as status,
+          ...notification,
+          status: notification.status as unknown as status,
           createdAt: DateTimestampConverter.toTimestamp(notification.createdAt),
         };
       }),
-    };
+    }
   }
 
   async sendNotification(

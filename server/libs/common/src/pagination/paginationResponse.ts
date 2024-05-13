@@ -1,13 +1,24 @@
 import { PaginationRequest } from "./paginationRequest";
 
-export class PaginationResponse {
+type Pagination = {
     page: number;
     total: number;
     limit: number;
+}
+export class PaginationResponse<T> {
+    pagination: Pagination;
+    data: T[];
 
-    constructor(total: number, data: unknown[], pageRequest: PaginationRequest) {
-        this.total = Number(total);
-        this.page = pageRequest.page;
-        this.limit = data.length;
+    constructor({ total, data, pageRequest }: {
+        total: number,
+        data: T[],
+        pageRequest: PaginationRequest
+    }) {
+        this.pagination = {
+            page: pageRequest.page,
+            total: Number(total),
+            limit: data.length
+        };
+        this.data = data;
     }
 }
