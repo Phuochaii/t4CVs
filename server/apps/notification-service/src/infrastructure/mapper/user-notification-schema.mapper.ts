@@ -1,9 +1,9 @@
 import { UserNotificationAggregate } from "../../domain/aggregate";
-import { UserNotification } from "../schema";
+import { UserNotificationSchema } from "../schema";
 import { Mapper } from "./base.mapper";
 
-export class UserNotificationSchemaMapper implements Mapper<UserNotificationAggregate, UserNotification> {
-    toDomain(schema: UserNotification): UserNotificationAggregate {
+export class UserNotificationSchemaMapper implements Mapper<UserNotificationAggregate, UserNotificationSchema> {
+    toDomain(schema: UserNotificationSchema): UserNotificationAggregate {
         return {
             user: {
                 id: schema.userId,
@@ -19,7 +19,7 @@ export class UserNotificationSchemaMapper implements Mapper<UserNotificationAggr
         };
     }
 
-    toSchema(domain: UserNotificationAggregate): UserNotification {
+    toSchema(domain: UserNotificationAggregate): UserNotificationSchema {
         return {
             userId: domain.user.id,
             notificationId: domain.notification.id,

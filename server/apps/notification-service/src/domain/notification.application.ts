@@ -1,12 +1,14 @@
 import { PaginationRequest, PaginationResponse } from "@app/common/dto/pagination";
-import { GetUserNotificationsDto, UserNotificationsDTO } from "./dto";
-import { GetUserNotificationsService, GetUserTotalNotificationsService } from "./service";
+import { CreateNotificationDto, GetUserNotificationsDto, UserNotificationsDTO } from "./dto";
+import { CreateNotificationService, GetUserNotificationsService, GetUserTotalNotificationsService } from "./service";
 import { UserNotificationAggregate } from "./aggregate";
+import { Notification } from "./entity";
 
 export class NotificationApplication {
     constructor(
         private readonly getUserNotification: GetUserNotificationsService,
-        private readonly getUserTotalNotification: GetUserTotalNotificationsService
+        private readonly getUserTotalNotification: GetUserTotalNotificationsService,
+        private readonly createNotificationService: CreateNotificationService,
     ) { }
     async getNotifications(
         {
@@ -32,5 +34,11 @@ export class NotificationApplication {
             total,
             pageRequest: paginationRequest
         });
+    }
+
+    async createNotification(
+        request: CreateNotificationDto
+    ): Promise<Notification> {
+        return await this.createNotificationService.execute(request);
     }
 }

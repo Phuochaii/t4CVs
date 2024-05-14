@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { NotificationApplication } from './domain/notification.application';
-import { GetUserNotificationsService, GetUserTotalNotificationsService } from './domain/service';
+import { CreateNotificationService, GetUserNotificationsService, GetUserTotalNotificationsService } from './domain/service';
 import { NotificationPersistenceModule } from './infrastructure/notification-persistence.module';
-import { UserNotificationRepository } from './domain/repository';
+import { NotificationRepository, UserNotificationRepository } from './domain/repository';
 import { createProvider } from '../../../libs/common/src/DI';
 
 @Module({
@@ -19,7 +19,18 @@ import { createProvider } from '../../../libs/common/src/DI';
             domainClass: GetUserTotalNotificationsService,
         }),
         createProvider({
-            dependencies: [GetUserNotificationsService, GetUserTotalNotificationsService],
+            dependencies: [
+                NotificationRepository,
+                UserNotificationRepository,
+            ],
+            domainClass: CreateNotificationService,
+        }),
+        createProvider({
+            dependencies: [
+                GetUserNotificationsService,
+                GetUserTotalNotificationsService,
+                CreateNotificationService
+            ],
             domainClass: NotificationApplication,
         }),
     ],

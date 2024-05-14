@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserNotificationRepository } from "../domain/repository"
+import { NotificationRepository, UserNotificationRepository } from "../domain/repository"
 import { TypeOrmUserNotificationRepository } from './repository';
-import { Notification, UserNotification } from './schema';
+import { NotificationSchema, UserNotificationSchema } from './schema';
+import { TypeOrmNotificationRepository } from './repository/notification.repository';
 
 @Module({
     imports: [
@@ -23,14 +24,18 @@ import { Notification, UserNotification } from './schema';
                 };
             },
         }),
-        TypeOrmModule.forFeature([Notification, UserNotification]),
+        TypeOrmModule.forFeature([NotificationSchema, UserNotificationSchema]),
     ],
     providers: [
         {
             provide: UserNotificationRepository,
             useClass: TypeOrmUserNotificationRepository,
         },
+        {
+            provide: NotificationRepository,
+            useClass: TypeOrmNotificationRepository,
+        }
     ],
-    exports: [UserNotificationRepository],
+    exports: [UserNotificationRepository, NotificationRepository],
 })
 export class NotificationPersistenceModule { }
