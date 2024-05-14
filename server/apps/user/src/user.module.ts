@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
-import { UserService } from './domain/services/user.service';
-import { UserController } from './application/controllers/user.controller';
+import { UserService } from './domain/user.service';
+import { UserController } from './user.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './domain/entities/user.entity';
+import { User } from './infrastructure/schemas/user.schema';
 import * as path from 'path';
-import {
-  DatabaseConfiger,
-  DatabaseOptions,
-} from './infrastructure/database/init';
-import { UserRepository } from './infrastructure/repositories/user.repository';
+import { DatabaseConfiger, DatabaseOptions } from './database/init';
+import { TypeOrmUserRepository } from './infrastructure/repository/user.repository';
+import { UserRepository } from './domain/repository';
 
 @Module({
   imports: [
@@ -38,6 +36,12 @@ import { UserRepository } from './infrastructure/repositories/user.repository';
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [UserController],
-  providers: [UserService, UserRepository],
+  providers: [
+    UserService,
+    {
+      provide: UserRepository,
+      useClass: TypeOrmUserRepository,
+    },
+  ],
 })
 export class UserModule {}

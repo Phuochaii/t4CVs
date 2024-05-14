@@ -1,6 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { User } from '../../domain/entities/user.entity';
+import { User } from '../infrastructure/schemas/user.schema';
 import { users } from './data-user';
 
 const DB_NOT_EXIST_ERROR_CODE = '3D000';
