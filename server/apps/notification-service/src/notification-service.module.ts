@@ -5,7 +5,7 @@ import { NotificationServiceService } from './services';
 import { Notification, User_Notification } from './entities';
 import { DatabaseConfiger, DatabaseOptions } from './database/init';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import path from 'path';
+import { NotificationApplicationModule } from './notification-application.module';
 
 @Module({
   imports: [
@@ -33,6 +33,7 @@ import path from 'path';
       },
     }),
     TypeOrmModule.forFeature([Notification, User_Notification]),
+    NotificationApplicationModule,
   ],
   controllers: [NotificationController],
   providers: [NotificationServiceService],

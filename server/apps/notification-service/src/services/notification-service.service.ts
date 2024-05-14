@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Notification, User_Notification } from '../entities';
 import { SendNotificationRequest } from '@app/common/proto/notification';
-import { PaginationRequest } from '@app/common';
+import { PaginationRequest } from '@app/common/dto/pagination';
 @Injectable()
 export class NotificationServiceService {
   constructor(
