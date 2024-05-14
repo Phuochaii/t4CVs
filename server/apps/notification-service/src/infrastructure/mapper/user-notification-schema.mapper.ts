@@ -30,7 +30,7 @@ export class UserNotificationSchemaMapper implements Mapper<UserNotificationAggr
                 createdAt: domain.notification.createdAt,
                 link: domain.notification.link,
             },
-            status: domain.status,    
+            status: domain.status,
         };
     }
 }

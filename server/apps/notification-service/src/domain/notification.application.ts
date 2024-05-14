@@ -2,9 +2,7 @@ import { PaginationRequest, PaginationResponse } from "@app/common/dto/paginatio
 import { GetUserNotificationsDto, UserNotificationsDTO } from "./dto";
 import { GetUserNotificationsService, GetUserTotalNotificationsService } from "./service";
 import { UserNotificationAggregate } from "./aggregate";
-import { Injectable } from "@nestjs/common";
 
-@Injectable()
 export class NotificationApplication {
     constructor(
         private readonly getUserNotification: GetUserNotificationsService,
