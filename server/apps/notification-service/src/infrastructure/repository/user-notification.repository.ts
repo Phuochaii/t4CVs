@@ -1,5 +1,5 @@
 import { PaginationRequest } from "@app/common/dto/pagination";
-import { UserNotificationAggregate } from "../../domain/aggregate";
+import { NotificationStatus, UserNotificationAggregate } from "../../domain/aggregate";
 import { Notification, User } from "../../domain/entity";
 import { UserNotificationRepository } from "../../domain/repository";
 import { Repository } from "typeorm";
@@ -8,12 +8,28 @@ import { UserNotificationSchema } from "../schema";
 import { UserNotificationSchemaMapper } from "../mapper";
 
 export class TypeOrmUserNotificationRepository extends UserNotificationRepository {
+
     constructor(
         @InjectRepository(UserNotificationSchema)
         private readonly userNotificationRepository: Repository<UserNotificationSchema>
     ) {
         super();
     }
+
+    async getUserNotification(
+        user: User,
+        notificationId: Notification['id']
+    ): Promise<UserNotificationAggregate> {
+        const query = await this.userNotificationRepository.findOne({
+            where: {
+                userId: user.id,
+                notificationId,
+            },
+            relations: ['notification'],
+        });
+        return new UserNotificationSchemaMapper().toDomain(query);
+    }
+
     async getUserNotificationsWithPagination(
         user: User,
         pagination: PaginationRequest
@@ -35,6 +51,7 @@ export class TypeOrmUserNotificationRepository extends UserNotificationRepositor
             return new UserNotificationSchemaMapper().toDomain(notification);
         })
     }
+
     async getTotalNotifications(user: User): Promise<number> {
         return await this.userNotificationRepository.count({
             where: {
@@ -63,5 +80,23 @@ export class TypeOrmUserNotificationRepository extends UserNotificationRepositor
         return savedUserNotifications.map((userNotification) => {
             return new UserNotificationSchemaMapper().toDomain(userNotification);
         });
+    }
+
+    async updateNotificationStatus(
+        user: User,
+        notificationId: Notification['id'],
+        status: NotificationStatus
+    ): Promise<UserNotificationAggregate> {
+        const toBeUpdated = this.userNotificationRepository
+            .create({
+                userId: user.id,
+                notificationId,
+                status,
+            });
+        const updatedUserNotification =
+            await this.userNotificationRepository
+                .save(toBeUpdated);
+        const savedUserNotification = await this.getUserNotification(user, notificationId);
+        return savedUserNotification;
     }
 }

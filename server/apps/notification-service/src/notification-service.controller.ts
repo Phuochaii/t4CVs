@@ -1,5 +1,4 @@
 import { Controller } from '@nestjs/common';
-import { NotificationServiceService } from './services';
 import {
   GetUserNotificationsRequest,
   GetUserNotificationsResponse,
@@ -12,16 +11,15 @@ import {
   status,
 } from '@app/common/proto/notification';
 import { Observable } from 'rxjs';
-import { PaginationRequest, PaginationResponse } from '@app/common/dto/pagination';
-import { NotificationStatus } from './entities';
+import { PaginationRequest } from '@app/common/dto/pagination';
 import { DateTimestampConverter } from '@app/common/conveters';
 import { NotificationApplication } from './domain/notification.application';
+import { UserNotificationAggregate } from './domain/aggregate';
 
 @Controller()
 @NotificationServiceControllerMethods()
 export class NotificationController implements NotificationServiceController {
   constructor(
-    private readonly notificationServiceService: NotificationServiceService,
     private readonly notificationApplication: NotificationApplication,
   ) { }
 
@@ -30,15 +28,14 @@ export class NotificationController implements NotificationServiceController {
     notificationId,
     status,
   }: UpdateNotificationStatusRequest): Promise<UpdateNotificationStatusResponse> {
-    const userNotification =
-      await this.notificationServiceService.updateNotificationStatus(
-        userId,
-        notificationId,
-        status as unknown as NotificationStatus,
-      );
-
+    const updatedStatus = await this.notificationApplication.updateNotificationStatus({
+      user: { id: userId },
+      notificationId,
+      status: status as unknown as UserNotificationAggregate['status'],
+    });
+  
     return {
-      status: userNotification.status as unknown as status,
+      status: updatedStatus.status as unknown as status,
     };
   }
 

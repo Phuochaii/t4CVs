@@ -13,4 +13,9 @@ export abstract class UserNotificationRepository {
         users: User[],
         notification: Notification
     ): Promise<UserNotificationAggregate[]>;
+    abstract updateNotificationStatus(
+        user: User,
+        notificationId: Notification['id'],
+        status: UserNotificationAggregate['status']
+    ): Promise<UserNotificationAggregate>;
 }

@@ -1,7 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { notifications, userNotifications } from './data';
-import { Notification, User_Notification } from '../entities';
+import { NotificationSchema, UserNotificationSchema } from '../schema';
 
 const DB_NOT_EXIST_ERROR_CODE = '3D000';
 export type DatabaseOptions = TypeOrmModuleOptions & { database: string };
@@ -16,7 +16,7 @@ const doCallbackWithAutoCloseConnection = async (
 };
 
 export class DatabaseConfiger {
-  constructor(private defaultConfig: DatabaseOptions) {}
+  constructor(private defaultConfig: DatabaseOptions) { }
 
   private async isDatabaseExist(name: string) {
     try {
@@ -25,7 +25,7 @@ export class DatabaseConfiger {
         database: name,
       } as DataSourceOptions;
 
-      await doCallbackWithAutoCloseConnection(dataSourceOption, async () => {});
+      await doCallbackWithAutoCloseConnection(dataSourceOption, async () => { });
     } catch (error) {
       if (error.code === DB_NOT_EXIST_ERROR_CODE) {
         return false;
@@ -53,12 +53,12 @@ export class DatabaseConfiger {
   private async insertData() {
     const option = {
       ...this.defaultConfig,
-      entities: [Notification, User_Notification],
+      entities: [NotificationSchema, UserNotificationSchema],
     } as DataSourceOptions;
     await doCallbackWithAutoCloseConnection(option, async (dataSource) => {
-      await dataSource.getRepository(Notification).insert(notifications);
+      await dataSource.getRepository(NotificationSchema).insert(notifications);
       await dataSource
-        .getRepository(User_Notification)
+        .getRepository(UserNotificationSchema)
         .insert(userNotifications);
     });
   }

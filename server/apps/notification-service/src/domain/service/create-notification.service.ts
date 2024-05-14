@@ -1,7 +1,7 @@
 import { BaseService } from './base.service';
 import { NotificationRepository, UserNotificationRepository } from '../repository';
-import { CreateNotificationDto } from '../dto/create-notification.dto';
 import { Notification } from '../entity';
+import { CreateNotificationDto } from '../dto';
 
 export class CreateNotificationService implements BaseService<Notification> {
     constructor(

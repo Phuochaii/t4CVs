@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { NotificationApplication } from './domain/notification.application';
-import { CreateNotificationService, GetUserNotificationsService, GetUserTotalNotificationsService } from './domain/service';
+import { CreateNotificationService, GetUserNotificationsService, GetUserTotalNotificationsService, UpdateNotificationStatusService } from './domain/service';
 import { NotificationPersistenceModule } from './infrastructure/notification-persistence.module';
 import { NotificationRepository, UserNotificationRepository } from './domain/repository';
 
@@ -39,25 +39,36 @@ import { NotificationRepository, UserNotificationRepository } from './domain/rep
                 );
             },
             inject: [NotificationRepository, UserNotificationRepository],
-
+        },
+        {
+            provide: UpdateNotificationStatusService,
+            useFactory: (
+                userNotificationRepository: UserNotificationRepository
+            ) => {
+                return new UpdateNotificationStatusService(userNotificationRepository);
+            },
+            inject: [UserNotificationRepository],
         },
         {
             provide: NotificationApplication,
             useFactory: (
                 getUserNotificationsService: GetUserNotificationsService,
                 getUserTotalNotificationsService: GetUserTotalNotificationsService,
-                createNotificationService: CreateNotificationService
+                createNotificationService: CreateNotificationService,
+                updateNotificationStatusService: UpdateNotificationStatusService
             ) => {
                 return new NotificationApplication(
                     getUserNotificationsService,
                     getUserTotalNotificationsService,
-                    createNotificationService
+                    createNotificationService,
+                    updateNotificationStatusService
                 );
             },
             inject: [
                 GetUserNotificationsService,
                 GetUserTotalNotificationsService,
                 CreateNotificationService,
+                UpdateNotificationStatusService
             ],
         },
     ],
