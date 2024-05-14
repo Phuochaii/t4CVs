@@ -1,6 +1,6 @@
-import { PaginationRequest } from "@app/common";
-import { UserNotificationAggregate } from "../../aggregate";
-import { User } from "../../entity";
+import { PaginationRequest } from "@app/common/dto/pagination";
+import { UserNotificationAggregate } from "../aggregate";
+import { User } from "../entity";
 
 export abstract class UserNotificationRepository {
     abstract getUserNotificationsWithPagination(

@@ -1,8 +1,8 @@
-import { PaginationRequest } from "@app/common";
+import { PaginationRequest } from "@app/common/dto/pagination";
 import { UserNotificationAggregate } from "../aggregate";
 import { GetUserNotificationsDto } from "../dto";
 import { BaseService } from "./base.service";
-import { UserNotificationRepository } from "../repository/interface/user-notification.repository";
+import { UserNotificationRepository } from "../repository";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()

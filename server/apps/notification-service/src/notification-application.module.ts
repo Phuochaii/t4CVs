@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { NotificationApplication } from './domain/notification.application';
 import { GetUserNotificationsService, GetUserTotalNotificationsService } from './domain/service';
-import { NotificationPersistenceModule } from './notification-persistence.module';
+import { NotificationPersistenceModule } from './infrastructure/notification-persistence.module';
 
 @Module({
     imports: [

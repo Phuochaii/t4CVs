@@ -1,16 +1,16 @@
-import { PaginationRequest } from "@app/common";
-import { UserNotificationAggregate } from "../../../aggregate";
-import { User } from "../../../entity";
-import { UserNotificationRepository } from "../../interface";
+import { PaginationRequest } from "@app/common/dto/pagination";
+import { UserNotificationAggregate } from "../../domain/aggregate";
+import { User } from "../../domain/entity";
+import { UserNotificationRepository } from "../../domain/repository";
 import { Repository } from "typeorm";
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserNotificationEntity } from "../schema";
+import { UserNotification } from "../schema";
 import { UserNotificationSchemaMapper } from "../mapper";
 
-export class UserNotificationRepositoryImp extends UserNotificationRepository {
+export class TypeOrmUserNotificationRepository extends UserNotificationRepository {
     constructor(
-        @InjectRepository(UserNotificationEntity)
-        private readonly userNotificationRepository: Repository<UserNotificationEntity>
+        @InjectRepository(UserNotification)
+        private readonly userNotificationRepository: Repository<UserNotification>
     ) {
         super();
     }

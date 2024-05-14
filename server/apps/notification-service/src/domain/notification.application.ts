@@ -1,4 +1,4 @@
-import { PaginationRequest, PaginationResponse } from "@app/common";
+import { PaginationRequest, PaginationResponse } from "@app/common/dto/pagination";
 import { GetUserNotificationsDto, UserNotificationsDTO } from "./dto";
 import { GetUserNotificationsService, GetUserTotalNotificationsService } from "./service";
 import { UserNotificationAggregate } from "./aggregate";

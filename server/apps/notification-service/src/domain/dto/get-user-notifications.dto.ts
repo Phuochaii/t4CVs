@@ -1,4 +1,4 @@
-import { PaginationRequest } from "@app/common";
+import { PaginationRequest } from "@app/common/dto/pagination";
 import { User } from "../entity/user.entity";
 
 export class GetUserNotificationsDto {

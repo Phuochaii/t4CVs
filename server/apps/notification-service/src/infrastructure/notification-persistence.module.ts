@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserNotificationRepository } from "./domain/repository/interface"
-import { UserNotificationRepositoryImp } from './domain/repository/implementation/repository';
-import { UserNotificationEntity, NotificationEntity } from './domain/repository/implementation/schema';
+import { UserNotificationRepository } from "../domain/repository"
+import { TypeOrmUserNotificationRepository } from './repository';
+import { Notification, UserNotification } from './schema';
 
 @Module({
     imports: [
@@ -23,12 +23,12 @@ import { UserNotificationEntity, NotificationEntity } from './domain/repository/
                 };
             },
         }),
-        TypeOrmModule.forFeature([UserNotificationEntity, NotificationEntity]),
+        TypeOrmModule.forFeature([Notification, UserNotification]),
     ],
     providers: [
         {
             provide: UserNotificationRepository,
-            useClass: UserNotificationRepositoryImp,
+            useClass: TypeOrmUserNotificationRepository,
         },
     ],
     exports: [UserNotificationRepository],

@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { NotificationStatus, UserNotificationAggregate } from "../../../aggregate";
-import { NotificationEntity } from "./notification.schema";
+import { NotificationStatus, UserNotificationAggregate } from "../../domain/aggregate";
+import { Notification } from "./notification.schema";
 
 interface _ extends Omit<UserNotificationAggregate, "notication" | 'user'> {
     notificationId: number;
@@ -8,16 +8,16 @@ interface _ extends Omit<UserNotificationAggregate, "notication" | 'user'> {
 }
 
 @Entity('user_notification')
-export class UserNotificationEntity implements _ {
+export class UserNotification implements _ {
     @PrimaryColumn()
     userId: string;
 
     @PrimaryColumn()
     notificationId: number;
 
-    @ManyToOne(() => NotificationEntity, { eager: true })
+    @ManyToOne(() => Notification, { eager: true })
     @JoinColumn({ name: 'notificationId' })
-    notification: NotificationEntity;
+    notification: Notification;
 
     @Column('enum', {
         enum: NotificationStatus,

@@ -1,10 +1,10 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { Notification } from "../../../entity";
+import { Notification as NotificationEntity } from "../../domain/entity";
 
-interface _ extends Notification { }
+interface _ extends NotificationEntity { }
 
 @Entity('notification')
-export class NotificationEntity implements _ {
+export class Notification implements _ {
     @PrimaryGeneratedColumn()
     id: number;
 

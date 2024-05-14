@@ -12,7 +12,7 @@ import {
   status,
 } from '@app/common/proto/notification';
 import { Observable } from 'rxjs';
-import { PaginationRequest, PaginationResponse } from '@app/common';
+import { PaginationRequest, PaginationResponse } from '@app/common/dto/pagination';
 import { NotificationStatus } from './entities';
 import { DateTimestampConverter } from '@app/common/conveters';
 import { NotificationApplication } from './domain/notification.application';
