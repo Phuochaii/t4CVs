@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './infrastructure/schemas/user.schema';
 import * as path from 'path';
 import { DatabaseConfiger, DatabaseOptions } from './database/init';
-import { TypeOrmUserRepository } from './infrastructure/repository/user.repository';
+import { TypeOrmUserRepository } from './infrastructure/repository';
 import { UserRepository } from './domain/repository';
 
 @Module({

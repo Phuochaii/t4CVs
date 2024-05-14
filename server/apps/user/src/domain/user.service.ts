@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
-import { CreateUserDTO } from './dto/Req/create-user.dto';
+import { CreateUserDTO } from './dto/Req';
 import { UserRepository } from './repository';
 
 @Injectable()
