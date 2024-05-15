@@ -1,13 +1,23 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { CompanyRepository } from '../../domain/repository';
+import { CampaignRepository } from '../../domain/repository';
 import { Repository } from 'typeorm';
-import { Campaign } from '../schema';
+import { CampaignSchema } from '../schema';
+import { PaginationRequest } from '@app/common/dto/pagination';
+import { CreateCampaignDTO, GetCampaignDTO } from '../../domain/dto';
+import { Campaign } from '../../domain/entity';
 
-export class TypeOrmCompanyRepository extends CompanyRepository {
+export class TypeOrmCampaignRepository extends CampaignRepository {
   constructor(
-    @InjectRepository(Campaign)
-    private readonly campaignRepository: Repository<Campaign>,
+    @InjectRepository(CampaignSchema)
+    private readonly campaignRepository: Repository<CampaignSchema>,
   ) {
     super();
+  }
+
+  createCampaign(campaign: CreateCampaignDTO): Promise<Campaign> {
+    throw new Error('Method not implemented.');
+  }
+  getAllCampaign(pagination: PaginationRequest): Promise<GetCampaignDTO[]> {
+    throw new Error('Method not implemented.');
   }
 }
