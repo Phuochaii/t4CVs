@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { JobService } from './job.service';
+import { JobService } from './domain/job.service';
 import { CreateJobDto } from './dto/Req/create-job.dto';
 import { MessagePattern } from '@nestjs/microservices';
 import { UpdateJobDto } from './dto/Req/update-job.dto';

@@ -1,4 +1,4 @@
-import { Job } from '../../entities/job.entity';
+import { Job } from '../../infrastructure/schemas/job.schema';
 
 export class FindJobRespDTO {
   page: number;
