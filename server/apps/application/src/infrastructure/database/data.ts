@@ -1,6 +1,8 @@
-import { Application } from '../entities/application.entity';
+// import { Application } from '../entities/application.entity';
+// import { NotificationStatus } from '../../domain/aggregate';
+import { ApplicationSchema } from '../schema';
 
-export const applications: Application[] = [
+export const applications: ApplicationSchema[] = [
   {
     id: 1,
     status: true,
