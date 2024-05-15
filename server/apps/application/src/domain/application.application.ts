@@ -4,6 +4,7 @@
 // } from '@app/common/dto/pagination';
 import {
   CreateApplicationDto,
+  GetApplicationDto,
   //   GetUserNotificationsDto,
   //   UpdateNotificationStatusDto,
   //   UpdateNotificationStatusResponseDto,
@@ -11,6 +12,7 @@ import {
 } from './dto';
 import {
   CreateApplicationService,
+  GetApplicationService,
   // ApplicationService,
   //   GetUserNotificationsService,
   //   GetUserTotalNotificationsService,
@@ -24,6 +26,7 @@ export class ApplicationApplication {
     // private readonly getUserNotification: GetUserNotificationsService,
     // private readonly getUserTotalNotification: GetUserTotalNotificationsService,
     private readonly createApplicationService: CreateApplicationService,
+    private readonly getApplicationService: GetApplicationService,
     // private readonly updateNotificationStatusService: UpdateNotificationStatusService,
   ) {}
 
@@ -59,10 +62,11 @@ export class ApplicationApplication {
   //   }
 
   async createApplication(request: CreateApplicationDto): Promise<Application> {
-    // request.id = 1000;
-    // console.log(111);
-    // console.log(request);
     return await this.createApplicationService.execute(request);
+  }
+
+  async getApplication(request: GetApplicationDto): Promise<Application> {
+    return await this.getApplicationService.execute(request);
   }
 
   //   async updateNotificationStatus(

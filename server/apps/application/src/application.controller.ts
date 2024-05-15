@@ -33,7 +33,7 @@ export class ApplicationController implements ApplicationServiceController {
 
   createApplication(request: CreateApplicationRequest) {
     const cre = this.applicationApplication.createApplication(request);
-    console.log(cre);
+    // console.log(cre);
     return cre;
   }
 

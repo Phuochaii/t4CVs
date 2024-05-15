@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ApplicationApplication } from './domain/application.application';
 import {
   CreateApplicationService,
+  GetApplicationService,
   //   GetUserNotificationsService,
   //   GetUserTotalNotificationsService,
   //   UpdateNotificationStatusService,
@@ -29,11 +30,24 @@ import { ApplicationRepository } from './domain/repository';
     {
       provide: CreateApplicationService,
       useFactory: (
-        notificationRepository: ApplicationRepository,
+        applicationRepository: ApplicationRepository,
         // userNotificationRepository: UserNotificationRepository,
       ) => {
         return new CreateApplicationService(
-          notificationRepository,
+          applicationRepository,
+          //   userNotificationRepository,
+        );
+      },
+      inject: [ApplicationRepository],
+    },
+    {
+      provide: GetApplicationService,
+      useFactory: (
+        applicationRepository: ApplicationRepository,
+        // userNotificationRepository: UserNotificationRepository,
+      ) => {
+        return new GetApplicationService(
+          applicationRepository,
           //   userNotificationRepository,
         );
       },
@@ -49,24 +63,15 @@ import { ApplicationRepository } from './domain/repository';
     {
       provide: ApplicationApplication,
       useFactory: (
-        // getUserNotificationsService: GetUserNotificationsService,
-        // getUserTotalNotificationsService: GetUserTotalNotificationsService,
         createApplicationService: CreateApplicationService,
-        // updateNotificationStatusService: UpdateNotificationStatusService,
+        getApplicationService: GetApplicationService,
       ) => {
         return new ApplicationApplication(
-          // getUserNotificationsService,
-          // getUserTotalNotificationsService,
           createApplicationService,
-          // updateNotificationStatusService,
+          getApplicationService,
         );
       },
-      inject: [
-        // GetUserNotificationsService,
-        // GetUserTotalNotificationsService,
-        CreateApplicationService,
-        // UpdateNotificationStatusService,
-      ],
+      inject: [CreateApplicationService, GetApplicationService],
     },
   ],
   exports: [ApplicationApplication],
