@@ -3,7 +3,6 @@ import { Type } from '../../infrastructure/schemas/type.schema';
 import { CreateBaseDto } from '../../domain/dto/Req/createBase.dto';
 import { TypeRepository } from '../repository';
 
-@Injectable()
 export class TypeService {
   constructor(private readonly typeRepository: TypeRepository) {}
   findAll() {

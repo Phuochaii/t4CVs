@@ -9,7 +9,13 @@ import { TypeRepository } from '../domain/repository';
   imports: [TypeOrmModule.forFeature([Type])],
   controllers: [],
   providers: [
-    TypeService,
+    {
+      provide: TypeService,
+      useFactory: (typeRepository: TypeRepository) => {
+        return new TypeService(typeRepository);
+      },
+      inject: [TypeRepository],
+    },
     {
       provide: TypeRepository,
       useClass: TypeOrmTypeRepository,

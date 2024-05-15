@@ -1,9 +1,7 @@
-import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { CreateUserDTO } from './dto/Req';
 import { UserRepository } from './repository';
 
-@Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
   async findById(id: number) {

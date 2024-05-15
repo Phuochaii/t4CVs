@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CreateJobDto } from '../../domain/dto/Req/create-job.dto';
 import { JobDetailRepository } from '../repository';
 
-@Injectable()
 export class JobDetailService {
   constructor(private JobDetailRepository: JobDetailRepository) {}
   async createJobDetail(createJobDto: CreateJobDto) {

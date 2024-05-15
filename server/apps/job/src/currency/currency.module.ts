@@ -9,7 +9,13 @@ import { TypeOrmCurrencyRepository } from '../infrastructure/repository/currency
   imports: [TypeOrmModule.forFeature([Currency])],
   controllers: [],
   providers: [
-    CurrencyService,
+    {
+      provide: CurrencyService,
+      useFactory: (currencyRepository: CurrencyRepository) => {
+        return new CurrencyService(currencyRepository);
+      },
+      inject: [CurrencyRepository],
+    },
     {
       provide: CurrencyRepository,
       useClass: TypeOrmCurrencyRepository,

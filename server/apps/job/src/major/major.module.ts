@@ -9,7 +9,13 @@ import { TypeOrmMajorRepository } from '../infrastructure/repository';
   imports: [TypeOrmModule.forFeature([Major])],
   controllers: [],
   providers: [
-    MajorService,
+    {
+      provide: MajorService,
+      useFactory: (majorRepository: MajorRepository) => {
+        return new MajorService(majorRepository);
+      },
+      inject: [MajorRepository],
+    },
     {
       provide: MajorRepository,
       useClass: TypeOrmMajorRepository,

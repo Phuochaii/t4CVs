@@ -9,7 +9,13 @@ import { TypeOrmJobDetailRepository } from '../infrastructure/repository';
   imports: [TypeOrmModule.forFeature([JobDetail])],
   controllers: [],
   providers: [
-    JobDetailService,
+    {
+      provide: JobDetailService,
+      useFactory: (jobDetailRepository: JobDetailRepository) => {
+        return new JobDetailService(jobDetailRepository);
+      },
+      inject: [JobDetailRepository],
+    },
     {
       provide: JobDetailRepository,
       useClass: TypeOrmJobDetailRepository,

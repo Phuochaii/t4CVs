@@ -3,7 +3,6 @@ import { Currency } from '../../infrastructure/schemas/currency.schema';
 import { CreateBaseDto } from '../../domain/dto/Req/createBase.dto';
 import { CurrencyRepository } from '../repository';
 
-@Injectable()
 export class CurrencyService {
   constructor(private readonly currencyRepository: CurrencyRepository) {}
 

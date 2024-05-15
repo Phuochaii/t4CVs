@@ -8,7 +8,13 @@ import { TypeOrmLocationRepository } from '../infrastructure/repository';
   imports: [TypeOrmModule.forFeature([Location])],
   controllers: [],
   providers: [
-    LocationService,
+    {
+      provide: LocationService,
+      useFactory: (locationRepository: LocationRepository) => {
+        return new LocationService(locationRepository);
+      },
+      inject: [LocationRepository],
+    },
     {
       provide: LocationRepository,
       useClass: TypeOrmLocationRepository,

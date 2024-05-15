@@ -3,7 +3,6 @@ import { Major } from '../../infrastructure/schemas/major.schema';
 import { CreateBaseDto } from '../../domain/dto/Req/createBase.dto';
 import { MajorRepository } from '../repository';
 
-@Injectable()
 export class MajorService {
   constructor(private majorRepository: MajorRepository) {}
 

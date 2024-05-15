@@ -9,7 +9,13 @@ import { TypeOrmExperienceRepository } from '../infrastructure/repository';
   imports: [TypeOrmModule.forFeature([Experience])],
   controllers: [],
   providers: [
-    ExperienceService,
+    {
+      provide: ExperienceService,
+      useFactory: (experienceRepository: ExperienceRepository) => {
+        return new ExperienceService(experienceRepository);
+      },
+      inject: [ExperienceRepository],
+    },
     {
       provide: ExperienceRepository,
       useClass: TypeOrmExperienceRepository,

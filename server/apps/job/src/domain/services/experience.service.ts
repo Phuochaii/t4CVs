@@ -3,7 +3,6 @@ import { Experience } from '../../infrastructure/schemas/experience.schema';
 import { CreateBaseDto } from '../../domain/dto/Req/createBase.dto';
 import { ExperienceRepository } from '../repository';
 
-@Injectable()
 export class ExperienceService {
   constructor(private readonly experienceRepository: ExperienceRepository) {}
   findAll() {

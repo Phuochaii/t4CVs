@@ -37,7 +37,13 @@ import { UserRepository } from './domain/repository';
   ],
   controllers: [UserController],
   providers: [
-    UserService,
+    {
+      provide: UserService,
+      useFactory: (userRepository: UserRepository) => {
+        return new UserService(userRepository);
+      },
+      inject: [UserRepository],
+    },
     {
       provide: UserRepository,
       useClass: TypeOrmUserRepository,

@@ -9,7 +9,13 @@ import { TypeOrmFieldRepository } from '../infrastructure/repository';
   imports: [TypeOrmModule.forFeature([Field])],
   controllers: [],
   providers: [
-    FieldService,
+    {
+      provide: FieldService,
+      useFactory: (fieldRepository: FieldRepository) => {
+        return new FieldService(fieldRepository);
+      },
+      inject: [FieldRepository],
+    },
     {
       provide: FieldRepository,
       useClass: TypeOrmFieldRepository,

@@ -3,7 +3,6 @@ import { Field } from '../../infrastructure/schemas/field.schema';
 import { CreateBaseDto } from '../../domain/dto/Req/createBase.dto';
 import { FieldRepository } from '../repository';
 
-@Injectable()
 export class FieldService {
   constructor(private readonly fieldRepository: FieldRepository) {}
   create(fields: CreateBaseDto): string {

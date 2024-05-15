@@ -9,7 +9,13 @@ import { TypeOrmLevelyRepository } from '../infrastructure/repository';
   imports: [TypeOrmModule.forFeature([Level])],
   controllers: [],
   providers: [
-    LevelService,
+    {
+      provide: LevelService,
+      useFactory: (levelRepository: LevelRepository) => {
+        return new LevelService(levelRepository);
+      },
+      inject: [LevelRepository],
+    },
     {
       provide: LevelRepository,
       useClass: TypeOrmLevelyRepository,

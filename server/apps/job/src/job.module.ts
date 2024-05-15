@@ -16,6 +16,16 @@ import { DatabaseConfiger, DatabaseOptions } from './database/init';
 import * as path from 'path';
 import { JobRepository } from './domain/repository';
 import { TypeOrmJobRepository } from './infrastructure/repository/job.repository';
+import {
+  CurrencyService,
+  ExperienceService,
+  FieldService,
+  JobDetailService,
+  LevelService,
+  LocationService,
+  MajorService,
+  TypeService,
+} from './domain/services';
 
 @Module({
   imports: [
@@ -63,7 +73,43 @@ import { TypeOrmJobRepository } from './infrastructure/repository/job.repository
   ],
   controllers: [JobController],
   providers: [
-    JobService,
+    {
+      provide: JobService,
+      useFactory: (
+        jobRepository: JobRepository,
+        jobDetailService: JobDetailService,
+        majorService: MajorService,
+        levelService: LevelService,
+        currencyService: CurrencyService,
+        fieldService: FieldService,
+        locationService: LocationService,
+        experienceService: ExperienceService,
+        typeService: TypeService,
+      ) => {
+        return new JobService(
+          jobRepository,
+          jobDetailService,
+          majorService,
+          levelService,
+          currencyService,
+          fieldService,
+          locationService,
+          experienceService,
+          typeService,
+        );
+      },
+      inject: [
+        JobRepository,
+        JobDetailService,
+        MajorService,
+        LevelService,
+        CurrencyService,
+        FieldService,
+        LocationService,
+        ExperienceService,
+        TypeService,
+      ],
+    },
     {
       provide: JobRepository,
       useClass: TypeOrmJobRepository,
