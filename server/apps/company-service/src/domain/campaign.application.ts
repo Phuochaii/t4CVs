@@ -1,4 +1,4 @@
-import { CreateCampaignDTO, GetCampaignDTO, UpdateCampaignDTO } from './dto';
+import { CreateCampaignDTO, UpdateCampaignDTO } from './dto';
 import { Campaign } from './entity';
 import {
   CreateCampaignService,
@@ -30,7 +30,7 @@ export class CampaignApplication {
   async getAllCampaignPagination(
     page: number,
     limit: number,
-  ): Promise<GetCampaignDTO[]> {
+  ): Promise<Campaign[]> {
     return await this.getAllCampaignPaginationService.execute(page, limit);
   }
 
@@ -46,9 +46,7 @@ export class CampaignApplication {
     return await this.updateCampaignService.execute(campaign);
   }
 
-  async getAllCampaignByEmployerId(
-    employerId: number,
-  ): Promise<GetCampaignDTO[]> {
+  async getAllCampaignByEmployerId(employerId: number): Promise<Campaign[]> {
     return await this.getAllCampaignByEmployerIdService.execute(employerId);
   }
 
@@ -56,7 +54,7 @@ export class CampaignApplication {
     employerId: number,
     page: number,
     limit: number,
-  ): Promise<GetCampaignDTO[]> {
+  ): Promise<Campaign[]> {
     return await this.getAllCampaignByEmplyerIdPaginationService.execute(
       employerId,
       page,

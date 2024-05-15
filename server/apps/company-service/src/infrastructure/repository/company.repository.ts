@@ -3,12 +3,7 @@ import { CompanyRepository } from '../../domain/repository';
 import { Repository } from 'typeorm';
 import { CompanySchema } from '../schema';
 import { Company } from '../../domain/entity';
-import { CompanySchemaMapper } from '../mapper/company.mapper';
-import {
-  CreateCompanyDTO,
-  GetCompanyDTO,
-  UpdateCompanyDTO,
-} from '../../domain/dto';
+import { CreateCompanyDTO, UpdateCompanyDTO } from '../../domain/dto';
 
 export class TypeOrmCompanyRepository extends CompanyRepository {
   constructor(
@@ -25,7 +20,7 @@ export class TypeOrmCompanyRepository extends CompanyRepository {
   async getAllCompanyPagination(
     page: number,
     limit: number,
-  ): Promise<GetCompanyDTO[]> {
+  ): Promise<Company[]> {
     const skip = (page - 1) * limit;
 
     const companies = await this.companyRepository.find({
@@ -33,9 +28,7 @@ export class TypeOrmCompanyRepository extends CompanyRepository {
       take: limit,
     });
 
-    return companies.map((company) => {
-      return new CompanySchemaMapper().toDomain(company);
-    });
+    return companies;
   }
 
   async getTotalCompanies(): Promise<number> {

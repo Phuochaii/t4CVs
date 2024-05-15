@@ -3,12 +3,7 @@ import { CampaignRepository } from '../../domain/repository';
 import { Repository } from 'typeorm';
 import { CampaignSchema } from '../schema';
 import { Campaign } from '../../domain/entity';
-import { CampaignSchemaMapper } from '../mapper/campaign.mapper';
-import {
-  CreateCampaignDTO,
-  GetCampaignDTO,
-  UpdateCampaignDTO,
-} from '../../domain/dto';
+import { CreateCampaignDTO, UpdateCampaignDTO } from '../../domain/dto';
 
 export class TypeOrmCampaignRepository extends CampaignRepository {
   constructor(
@@ -25,7 +20,7 @@ export class TypeOrmCampaignRepository extends CampaignRepository {
   async getAllCampaignPagination(
     page: number,
     limit: number,
-  ): Promise<GetCampaignDTO[]> {
+  ): Promise<Campaign[]> {
     const skip = (page - 1) * limit;
 
     const campaigns = await this.campaignRepository.find({
@@ -36,9 +31,7 @@ export class TypeOrmCampaignRepository extends CampaignRepository {
       },
     });
 
-    return campaigns.map((campaign) => {
-      return new CampaignSchemaMapper().toDomain(campaign);
-    });
+    return campaigns;
   }
 
   async getTotalCampaigns(): Promise<number> {
@@ -67,7 +60,7 @@ export class TypeOrmCampaignRepository extends CampaignRepository {
     return await this.findCampaignById(campaign.id);
   }
 
-  async getCampaignByEmployerId(employerId: number): Promise<GetCampaignDTO[]> {
+  async getCampaignByEmployerId(employerId: number): Promise<Campaign[]> {
     const campaigns = await this.campaignRepository.find({
       where: { employerId: employerId },
       order: {
@@ -75,16 +68,14 @@ export class TypeOrmCampaignRepository extends CampaignRepository {
       },
     });
 
-    return campaigns.map((campaign) => {
-      return new CampaignSchemaMapper().toDomain(campaign);
-    });
+    return campaigns;
   }
 
   async getCampaignByEmployerIdPagination(
     employerId: number,
     page: number,
     limit: number,
-  ): Promise<GetCampaignDTO[]> {
+  ): Promise<Campaign[]> {
     const skip = (page - 1) * limit;
     const campaigns = await this.campaignRepository.find({
       where: { employerId: employerId },
@@ -95,9 +86,7 @@ export class TypeOrmCampaignRepository extends CampaignRepository {
       },
     });
 
-    return campaigns.map((campaign) => {
-      return new CampaignSchemaMapper().toDomain(campaign);
-    });
+    return campaigns;
   }
 
   async getTotalCampaignByEmployerId(employerId: number): Promise<number> {

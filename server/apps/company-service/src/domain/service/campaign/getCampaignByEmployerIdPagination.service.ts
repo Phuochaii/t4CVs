@@ -1,9 +1,9 @@
-import { GetCampaignDTO } from '../../dto';
+import { Campaign } from '../../entity';
 import { CampaignRepository } from '../../repository';
 import { BaseService } from '../base.service';
 
 export class GetAllCampaignByEmployerIdPaginationService
-  implements BaseService<GetCampaignDTO[]>
+  implements BaseService<Campaign[]>
 {
   constructor(private readonly campaignRepository: CampaignRepository) {}
 
@@ -11,7 +11,7 @@ export class GetAllCampaignByEmployerIdPaginationService
     employerId: number,
     page: number,
     limit: number,
-  ): Promise<GetCampaignDTO[]> {
+  ): Promise<Campaign[]> {
     const campaigns =
       await this.campaignRepository.getCampaignByEmployerIdPagination(
         employerId,

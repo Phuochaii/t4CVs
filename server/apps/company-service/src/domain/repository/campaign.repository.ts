@@ -1,4 +1,4 @@
-import { CreateCampaignDTO, GetCampaignDTO, UpdateCampaignDTO } from '../dto';
+import { CreateCampaignDTO, UpdateCampaignDTO } from '../dto';
 import { Campaign } from '../entity';
 
 export abstract class CampaignRepository {
@@ -7,7 +7,7 @@ export abstract class CampaignRepository {
   abstract getAllCampaignPagination(
     page: number,
     limit: number,
-  ): Promise<GetCampaignDTO[]>;
+  ): Promise<Campaign[]>;
 
   abstract getTotalCampaigns(): Promise<number>;
 
@@ -15,15 +15,13 @@ export abstract class CampaignRepository {
 
   abstract updateCampaign(campaign: UpdateCampaignDTO): Promise<Campaign>;
 
-  abstract getCampaignByEmployerId(
-    employerId: number,
-  ): Promise<GetCampaignDTO[]>;
+  abstract getCampaignByEmployerId(employerId: number): Promise<Campaign[]>;
 
   abstract getCampaignByEmployerIdPagination(
     employerId: number,
     page: number,
     limit: number,
-  ): Promise<GetCampaignDTO[]>;
+  ): Promise<Campaign[]>;
 
   abstract getTotalCampaignByEmployerId(employerId: number): Promise<number>;
 }

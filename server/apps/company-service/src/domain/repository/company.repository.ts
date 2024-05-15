@@ -1,4 +1,4 @@
-import { CreateCompanyDTO, GetCompanyDTO, UpdateCompanyDTO } from '../dto';
+import { CreateCompanyDTO, UpdateCompanyDTO } from '../dto';
 import { Company } from '../entity';
 
 export abstract class CompanyRepository {
@@ -7,7 +7,7 @@ export abstract class CompanyRepository {
   abstract getAllCompanyPagination(
     page: number,
     limit: number,
-  ): Promise<GetCompanyDTO[]>;
+  ): Promise<Company[]>;
 
   abstract getTotalCompanies(): Promise<number>;
 

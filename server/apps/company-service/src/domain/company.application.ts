@@ -1,4 +1,4 @@
-import { CreateCompanyDTO, GetCompanyDTO, UpdateCompanyDTO } from './dto';
+import { CreateCompanyDTO, UpdateCompanyDTO } from './dto';
 import { Company } from './entity';
 import {
   CreateCompanyService,
@@ -26,7 +26,7 @@ export class CompanyApplication {
   async getAllCompanyPagination(
     page: number,
     limit: number,
-  ): Promise<GetCompanyDTO[]> {
+  ): Promise<Company[]> {
     return await this.getAllCompanyPaginationService.execute(page, limit);
   }
 
