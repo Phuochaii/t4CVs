@@ -8,7 +8,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @MessagePattern({ cmd: 'find_user_by_id' })
-  findById(id: number) {
+  findById(id: string) {
     return this.userService.findById(id);
   }
 

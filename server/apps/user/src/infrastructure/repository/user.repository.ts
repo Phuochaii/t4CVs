@@ -11,7 +11,7 @@ export class TypeOrmUserRepository {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async findById(id: number) {
+  async findById(id: string) {
     return await this.userRepository.findOne({ where: { id } });
   }
 

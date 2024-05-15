@@ -4,7 +4,7 @@ import { UserRepository } from './repository';
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
-  async findById(id: number) {
+  async findById(id: string) {
     const user = await this.userRepository.findById(id);
     if (!user) {
       throw new RpcException('User not found');
@@ -16,13 +16,14 @@ export class UserService {
     return await this.userRepository.findAll();
   }
 
-  async createUser(user: CreateUserDTO) {
-    try {
-      await this.userRepository.createUser(user);
-      return 'User created successfully!';
-    } catch (error) {
-      throw new RpcException('User not created');
+  async createUser(createUserDTO: CreateUserDTO) {
+    const user = await this.userRepository.findById(createUserDTO.id);
+    if (user) {
+      throw new RpcException('User exists!');
     }
+    await this.userRepository.createUser(user);
+    return 'User created successfully!';
+
     // const userEntity = await this.userRepository.save({
     //   ...user,
     //   image: `${filename}`,
