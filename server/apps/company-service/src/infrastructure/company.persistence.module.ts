@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DatabaseConfiger, DatabaseOptions } from '../database/init';
+import { DatabaseConfiger, DatabaseOptions } from './database/init';
 import { CampaignSchema, CompanySchema } from './schema';
 import { CampaignRepository, CompanyRepository } from '../domain/repository';
 import {

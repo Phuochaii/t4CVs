@@ -13,7 +13,6 @@ import { CreateCompanyDto } from './dto/Req/createCompany.dto';
 import { UpdateCompanyDto } from './dto/Req/updateCompany.dto';
 import { CreateCampaignDto } from './dto/Req/createCampaign.dto';
 import { UpdateCampaignDto } from './dto/Req/updateCampaign.dto';
-import { PaginationRequest } from '@app/common/dto/pagination';
 
 @Controller('company')
 export class CompanyController {
@@ -26,9 +25,10 @@ export class CompanyController {
 
   @Get('all')
   getAllCompanies(
-    @Query() paginationRequest: PaginationRequest = new PaginationRequest(),
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
   ): Observable<string> {
-    return this.companyService.getAllCompanies(paginationRequest);
+    return this.companyService.getAllCompanies(page, limit);
   }
 
   @Get(':id')

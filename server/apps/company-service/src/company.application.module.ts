@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
 import { CompanyPersistenceModule } from './infrastructure/company.persistence.module';
-import {
-  CreateCompanyService,
-  GetAllCompanyPaginationService,
-  GetTotalCompaniesService,
-} from './domain/service';
 import { CompanyRepository } from './domain/repository';
 import { CompanyApplication } from './domain';
+import {
+  CreateCompanyService,
+  FindCompanyByIdService,
+  GetAllCompanyPaginationService,
+  GetTotalCompaniesService,
+  RemoveCompanyService,
+  UpdateCompanyService,
+} from './domain/service';
 
 @Module({
   imports: [CompanyPersistenceModule],
@@ -33,22 +36,52 @@ import { CompanyApplication } from './domain';
       inject: [CompanyRepository],
     },
     {
+      provide: FindCompanyByIdService,
+      useFactory: (companyRepository: CompanyRepository) => {
+        return new FindCompanyByIdService(companyRepository);
+      },
+      inject: [CompanyRepository],
+    },
+    {
+      provide: UpdateCompanyService,
+      useFactory: (companyRepository: CompanyRepository) => {
+        return new UpdateCompanyService(companyRepository);
+      },
+      inject: [CompanyRepository],
+    },
+    {
+      provide: RemoveCompanyService,
+      useFactory: (companyRepository: CompanyRepository) => {
+        return new RemoveCompanyService(companyRepository);
+      },
+      inject: [CompanyRepository],
+    },
+    {
       provide: CompanyApplication,
       useFactory: (
         createCompanyService: CreateCompanyService,
         getAllCompanyPaginationService: GetAllCompanyPaginationService,
         getTotalCompanies: GetTotalCompaniesService,
+        findCompanyById: FindCompanyByIdService,
+        updateCompany: UpdateCompanyService,
+        removeCompany: RemoveCompanyService,
       ) => {
         return new CompanyApplication(
           createCompanyService,
           getAllCompanyPaginationService,
           getTotalCompanies,
+          findCompanyById,
+          updateCompany,
+          removeCompany,
         );
       },
       inject: [
         CreateCompanyService,
         GetAllCompanyPaginationService,
         GetTotalCompaniesService,
+        FindCompanyByIdService,
+        UpdateCompanyService,
+        RemoveCompanyService,
       ],
     },
   ],

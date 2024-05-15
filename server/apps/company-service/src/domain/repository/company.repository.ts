@@ -1,15 +1,19 @@
-import { PaginationRequest } from '@app/common/dto/pagination';
-import { CreateCompanyDTO, GetCompanyDTO } from '../dto';
+import { CreateCompanyDTO, GetCompanyDTO, UpdateCompanyDTO } from '../dto';
 import { Company } from '../entity';
 
 export abstract class CompanyRepository {
   abstract createCompany(company: CreateCompanyDTO): Promise<Company>;
 
   abstract getAllCompanyPagination(
-    pagination: PaginationRequest,
+    page: number,
+    limit: number,
   ): Promise<GetCompanyDTO[]>;
 
   abstract getTotalCompanies(): Promise<number>;
 
-  abstract findCompanyById(id: number): Promise<GetCompanyDTO>;
+  abstract findCompanyById(id: number): Promise<Company>;
+
+  abstract updateCompany(company: UpdateCompanyDTO): Promise<Company>;
+
+  abstract removeCompany(id: number): Promise<string>;
 }

@@ -1,9 +1,14 @@
+import { CreateCampaignDTO } from '../../dto';
 import { Campaign } from '../../entity';
+import { CampaignRepository } from '../../repository';
 import { BaseService } from '../base.service';
 
 export class CreateCampaignService implements BaseService<Campaign> {
-  execute(...args: any[]): Promise<Campaign> {
-    console.log(args);
-    throw new Error('Method not implemented.');
+  constructor(private readonly campaignRepository: CampaignRepository) {}
+
+  execute(campaign: CreateCampaignDTO): Promise<Campaign> {
+    const createdCampaign = this.campaignRepository.createCampaign(campaign);
+
+    return createdCampaign;
   }
 }

@@ -1,7 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { Company } from '../entities/company.entity';
-import { Campaign } from '../entities/campaign.entity';
+import { Company, Campaign } from '../../domain/entity';
 import { campaigns } from './data-campaign';
 import { companies } from './data-company';
 
