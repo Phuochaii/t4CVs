@@ -7,6 +7,7 @@ import { CreateCampaignDto } from './dto/Req/createCampaign.dto';
 import { UpdateCampaignDto } from './dto/Req/updateCampaign.dto';
 import { FindCampaignDTOResponse } from './dto/Res/find-campaign.dto';
 import { FindCompanyDTOResponse } from './dto/Res/find-company.dto';
+import { PaginationRequest } from '@app/common/dto/pagination';
 
 @Injectable()
 export class CompanyService {
@@ -16,10 +17,10 @@ export class CompanyService {
     return this.companyClient.send({ cmd: 'create_company' }, createCompanyDTO);
   }
 
-  getAllCompanies(page: number, limit: number): Observable<string> {
+  getAllCompanies(paginationRequest: PaginationRequest): Observable<string> {
     return this.companyClient.send(
       { cmd: 'get_all_companies' },
-      { page, limit },
+      paginationRequest,
     );
   }
 

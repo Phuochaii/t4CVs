@@ -2,6 +2,7 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { CompanyApplication } from './domain';
 import { CreateCompanyDTO } from './domain/dto';
+import { PaginationRequest } from '@app/common/dto/pagination';
 
 @Controller()
 export class CompanyServiceController {
@@ -12,26 +13,23 @@ export class CompanyServiceController {
     return this.companyApplication.createCompany(company);
   }
 
-  //   @MessagePattern({ cmd: 'get_all_companies' })
-  //   async findAllCompanies(@Payload() data: any) {
-  //     const page = Number(data.page);
-  //     const limit = Number(data.limit);
+  @MessagePattern({ cmd: 'get_all_companies' })
+  async findAllCompanies(pagination: PaginationRequest) {
+    const total = await this.companyApplication.getTotalCompanies();
+    const total_page = Math.ceil(total / pagination.limit);
+    // eslint-disable-next-line prettier/prettier
+    const data_find = await this.companyApplication.getAllCompanyPagination(pagination);
 
-  //     const total = Number(await this.campaignService.getTotalCampaign());
-  //     const total_page = Math.ceil(total / limit);
-  //     // eslint-disable-next-line prettier/prettier
-  //     const data_find = await this.companyServiceService.findAllCompanies(page, limit);
+    const result = {
+      page: pagination.page,
+      limit: pagination.limit,
+      total: total,
+      total_page: total_page,
+      data: data_find,
+    };
 
-  //     const result = {
-  //       page: page,
-  //       limit: limit,
-  //       total: total,
-  //       total_page: total_page,
-  //       data: data_find,
-  //     };
-
-  //     return result;
-  //   }
+    return result;
+  }
 
   //   @MessagePattern({ cmd: 'find_company_by_id' })
   //   findCompanyById(id: number) {

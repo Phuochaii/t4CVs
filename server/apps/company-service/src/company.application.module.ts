@@ -1,6 +1,10 @@
 import { Module } from '@nestjs/common';
 import { CompanyPersistenceModule } from './infrastructure/company.persistence.module';
-import { CreateCompanyService } from './domain/service';
+import {
+  CreateCompanyService,
+  GetAllCompanyPaginationService,
+  GetTotalCompaniesService,
+} from './domain/service';
 import { CompanyRepository } from './domain/repository';
 import { CompanyApplication } from './domain';
 
@@ -15,11 +19,37 @@ import { CompanyApplication } from './domain';
       inject: [CompanyRepository],
     },
     {
-      provide: CompanyApplication,
-      useFactory: (createCompanyService: CreateCompanyService) => {
-        return new CompanyApplication(createCompanyService);
+      provide: GetAllCompanyPaginationService,
+      useFactory: (companyRepository: CompanyRepository) => {
+        return new GetAllCompanyPaginationService(companyRepository);
       },
-      inject: [CreateCompanyService],
+      inject: [CompanyRepository],
+    },
+    {
+      provide: GetTotalCompaniesService,
+      useFactory: (companyRepository: CompanyRepository) => {
+        return new GetTotalCompaniesService(companyRepository);
+      },
+      inject: [CompanyRepository],
+    },
+    {
+      provide: CompanyApplication,
+      useFactory: (
+        createCompanyService: CreateCompanyService,
+        getAllCompanyPaginationService: GetAllCompanyPaginationService,
+        getTotalCompanies: GetTotalCompaniesService,
+      ) => {
+        return new CompanyApplication(
+          createCompanyService,
+          getAllCompanyPaginationService,
+          getTotalCompanies,
+        );
+      },
+      inject: [
+        CreateCompanyService,
+        GetAllCompanyPaginationService,
+        GetTotalCompaniesService,
+      ],
     },
   ],
   exports: [CompanyApplication],

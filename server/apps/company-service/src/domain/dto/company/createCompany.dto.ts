@@ -1,4 +1,4 @@
-import { Company } from '../entity';
+import { Company } from '../../entity';
 
 export class CreateCompanyDTO implements Omit<Company, 'id' | 'status'> {
   field: number;
