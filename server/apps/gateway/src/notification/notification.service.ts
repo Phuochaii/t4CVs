@@ -7,7 +7,7 @@ import {
 } from '@app/common/proto/notification';
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
-import { PaginationRequest } from '@app/common';
+import { PaginationRequest } from '@app/common/dto/pagination';
 import { first, firstValueFrom, lastValueFrom, map } from 'rxjs';
 import { DateTimestampConverter } from '@app/common/conveters';
 

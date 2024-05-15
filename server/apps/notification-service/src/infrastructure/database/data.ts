@@ -1,6 +1,7 @@
-import { Notification, NotificationStatus, User_Notification } from '../entities';
+import { NotificationStatus } from '../../domain/aggregate';
+import { NotificationSchema, UserNotificationSchema } from '../schema';
 
-export const notifications: Notification[] = [
+export const notifications: NotificationSchema[] = [
   {
     id: 1,
     title: 'Noti 1',
@@ -144,7 +145,7 @@ export const notifications: Notification[] = [
 ];
 
 
-export const userNotifications: Omit<User_Notification, "notification">[] = [
+export const userNotifications: Omit<UserNotificationSchema, "notification">[] = [
   { userId: 'user-2', notificationId: 20, status: NotificationStatus.READ },
   { userId: 'user-17', notificationId: 19, status: NotificationStatus.READ },
   { userId: 'user-7', notificationId: 5, status: NotificationStatus.READ },
