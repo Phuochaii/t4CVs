@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { Location } from '../../infrastructure/schemas/location.schema';
-import { CreateBaseDto } from '../../dto/Req/createBase.dto';
+import { CreateBaseDto } from '../../domain/dto/Req/createBase.dto';
 import { LocationRepository } from '../repository';
 
 @Injectable()

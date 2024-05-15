@@ -1,4 +1,4 @@
-import { User } from '../../domain/entities/user.entity';
+import { User } from '../infrastructure/schemas';
 
 export const users: User[] = [
   {

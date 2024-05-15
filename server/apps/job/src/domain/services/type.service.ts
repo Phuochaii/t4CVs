@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Type } from '../../infrastructure/schemas/type.schema';
-import { CreateBaseDto } from '../../dto/Req/createBase.dto';
+import { CreateBaseDto } from '../../domain/dto/Req/createBase.dto';
 import { TypeRepository } from '../repository';
 
 @Injectable()

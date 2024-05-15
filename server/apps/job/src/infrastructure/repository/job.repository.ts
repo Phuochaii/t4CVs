@@ -4,9 +4,10 @@ import { JobAggregate } from '../../domain/aggregate';
 import { Job } from '../schemas';
 import { Repository } from 'typeorm';
 import { JobMapper } from '../mapper';
-import { CreateJobDto } from '../../dto/Req/create-job.dto';
+import { CreateJobDto } from '../../domain/dto/Req/create-job.dto';
 import { QueryDTO } from '../../domain/dto/Req/query.dto';
 import { UpdateJobDto } from '../../domain/dto/Req/update-job.dto';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class TypeOrmJobRepository {
@@ -30,6 +31,7 @@ export class TypeOrmJobRepository {
         'locations',
       ],
     });
+    if (!result) throw new BadRequestException('Not found');
     return new JobMapper().toDomain(result);
   }
   async findJobById(id: number): Promise<JobAggregate> {
@@ -82,7 +84,7 @@ export class TypeOrmJobRepository {
       status: data.status,
     });
     if (result.affected === 0) {
-      throw new BadRequestException('Not found');
+      throw new RpcException('Not found');
     }
     return 'Update success';
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Experience } from '../../infrastructure/schemas/experience.schema';
-import { CreateBaseDto } from '../../dto/Req/createBase.dto';
+import { CreateBaseDto } from '../../domain/dto/Req/createBase.dto';
 import { ExperienceRepository } from '../repository';
 
 @Injectable()

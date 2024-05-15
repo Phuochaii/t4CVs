@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { JobDetail } from '../../infrastructure/schemas/job-detail.schema';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { CreateJobDto } from '../../dto/Req/create-job.dto';
+import { CreateJobDto } from '../../domain/dto/Req/create-job.dto';
 import { JobDetailRepository } from '../repository';
 
 @Injectable()

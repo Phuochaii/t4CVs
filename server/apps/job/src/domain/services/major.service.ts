@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Major } from '../../infrastructure/schemas/major.schema';
-import { CreateBaseDto } from '../../dto/Req/createBase.dto';
+import { CreateBaseDto } from '../../domain/dto/Req/createBase.dto';
 import { MajorRepository } from '../repository';
 
 @Injectable()
