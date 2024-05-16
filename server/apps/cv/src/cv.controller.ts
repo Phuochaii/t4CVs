@@ -18,7 +18,7 @@ export class CVController {
   }
 
   @MessagePattern({ cmd: 'uploadCV' })
-  uploadCV(data: { file: any; userId: number }) {
+  uploadCV(data: any) {
     console.log(JSON.stringify(data));
     return this.cvService.uploadCV(data);
   }

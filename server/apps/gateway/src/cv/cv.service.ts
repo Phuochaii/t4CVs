@@ -1,11 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { from, Observable, switchMap } from 'rxjs';
 import { CVDto } from './dto/cv.dto';
 import { ClientProxy } from '@nestjs/microservices';
+import { UploadService } from '../upload/upload.service';
 
 @Injectable()
 export class CVService {
-  constructor(@Inject('CV') private readonly cvClient: ClientProxy) {}
+  constructor(
+    @Inject('CV') private readonly cvClient: ClientProxy,
+    private readonly uploadService: UploadService,
+  ) {}
 
   getHello(): Observable<any> {
     return this.cvClient.send({ cmd: 'hello' }, {});
@@ -24,9 +28,14 @@ export class CVService {
   }
 
   uploadCV(file: any, userId: number): Observable<any> {
-    console.log(JSON.stringify(file));
-    return this.cvClient.send({ cmd: 'uploadCV' }, { file, userId });
+    const uploadLink$ = from(this.uploadService.uploadCV(file));
+    return uploadLink$.pipe(
+      switchMap((link: string) =>
+        this.cvClient.send({ cmd: 'uploadCV' }, { file, userId, link }),
+      ),
+    );
   }
+
   updateCV(id: number, cvDto: CVDto): Observable<any> {
     return this.cvClient.send({ cmd: 'updateCV' }, { id, cvDto });
   }
