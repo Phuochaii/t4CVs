@@ -4,10 +4,7 @@ import { Application } from '../entity';
 // import { ApplicationDto } from '../dto';
 
 export class CreateApplicationService implements BaseService<Application> {
-  constructor(
-    private readonly applicationRepository: ApplicationRepository,
-    // private readonly userNotificationRepository: UserNotificationRepository,
-  ) {}
+  constructor(private readonly applicationRepository: ApplicationRepository) {}
 
   async execute(ApplicationDto): Promise<Application> {
     ApplicationDto.status = false;

@@ -2,7 +2,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ApplicationRepository } from '../../domain/repository';
 import { ApplicationSchema } from '../schema';
 import { Repository } from 'typeorm';
-import { ApplicationDto, GetApplicationDto } from '../../domain/dto';
+import {
+  ApplicationDto,
+  GetApplicationDto,
+  GetAllApplicationsDto,
+} from '../../domain/dto';
 import { Application } from '../../domain/entity';
 
 export class TypeOrmApplicationRepository extends ApplicationRepository {
@@ -18,6 +22,24 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
   }
 
   async getApplication(application: GetApplicationDto): Promise<Application> {
+    console.log(application);
     return await this.applicationRepository.findOneBy(application);
+  }
+
+  async getAllApplication(
+    application: GetAllApplicationsDto,
+  ): Promise<Application[]> {
+    const skip =
+      (application.paginationRequest.page - 1) *
+      application.paginationRequest.limit;
+    const data = await this.applicationRepository.find({
+      skip: skip,
+      take: application.paginationRequest.limit,
+      order: {
+        createdAt: 'DESC',
+        id: 'DESC',
+      },
+    });
+    return data;
   }
 }

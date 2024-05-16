@@ -3,6 +3,7 @@ import { ApplicationApplication } from './domain/application.application';
 import {
   CreateApplicationService,
   GetApplicationService,
+  GetAllApplicationService,
   //   GetUserNotificationsService,
   //   GetUserTotalNotificationsService,
   //   UpdateNotificationStatusService,
@@ -13,65 +14,45 @@ import { ApplicationRepository } from './domain/repository';
 @Module({
   imports: [NotificationPersistenceModule],
   providers: [
-    // {
-    //   provide: GetUserNotificationsService,
-    //   useFactory: (userNotificationRepository: UserNotificationRepository) => {
-    //     return new GetUserNotificationsService(userNotificationRepository);
-    //   },
-    //   inject: [UserNotificationRepository],
-    // },
-    // {
-    //   provide: GetUserTotalNotificationsService,
-    //   useFactory: (userNotificationRepository: UserNotificationRepository) => {
-    //     return new GetUserTotalNotificationsService(userNotificationRepository);
-    //   },
-    //   inject: [UserNotificationRepository],
-    // },
     {
       provide: CreateApplicationService,
-      useFactory: (
-        applicationRepository: ApplicationRepository,
-        // userNotificationRepository: UserNotificationRepository,
-      ) => {
-        return new CreateApplicationService(
-          applicationRepository,
-          //   userNotificationRepository,
-        );
+      useFactory: (applicationRepository: ApplicationRepository) => {
+        return new CreateApplicationService(applicationRepository);
       },
       inject: [ApplicationRepository],
     },
     {
       provide: GetApplicationService,
-      useFactory: (
-        applicationRepository: ApplicationRepository,
-        // userNotificationRepository: UserNotificationRepository,
-      ) => {
-        return new GetApplicationService(
-          applicationRepository,
-          //   userNotificationRepository,
-        );
+      useFactory: (applicationRepository: ApplicationRepository) => {
+        return new GetApplicationService(applicationRepository);
       },
       inject: [ApplicationRepository],
     },
-    // {
-    //   provide: UpdateNotificationStatusService,
-    //   useFactory: (userNotificationRepository: UserNotificationRepository) => {
-    //     return new UpdateNotificationStatusService(userNotificationRepository);
-    //   },
-    //   inject: [UserNotificationRepository],
-    // },
+    {
+      provide: GetAllApplicationService,
+      useFactory: (applicationRepository: ApplicationRepository) => {
+        return new GetApplicationService(applicationRepository);
+      },
+      inject: [ApplicationRepository],
+    },
     {
       provide: ApplicationApplication,
       useFactory: (
         createApplicationService: CreateApplicationService,
         getApplicationService: GetApplicationService,
+        getAllApplicationService: GetAllApplicationService,
       ) => {
         return new ApplicationApplication(
           createApplicationService,
           getApplicationService,
+          getAllApplicationService,
         );
       },
-      inject: [CreateApplicationService, GetApplicationService],
+      inject: [
+        CreateApplicationService,
+        GetApplicationService,
+        GetAllApplicationService,
+      ],
     },
   ],
   exports: [ApplicationApplication],

@@ -1,65 +1,21 @@
-// import {
-//   PaginationRequest,
-//   PaginationResponse,
-// } from '@app/common/dto/pagination';
 import {
   CreateApplicationDto,
   GetApplicationDto,
-  //   GetUserNotificationsDto,
-  //   UpdateNotificationStatusDto,
-  //   UpdateNotificationStatusResponseDto,
-  //   UserNotificationsDTO,
+  GetAllApplicationsDto,
 } from './dto';
 import {
   CreateApplicationService,
   GetApplicationService,
-  // ApplicationService,
-  //   GetUserNotificationsService,
-  //   GetUserTotalNotificationsService,
-  //   UpdateNotificationStatusService,
+  GetAllApplicationService,
 } from './service';
-// import { ApplicationAggregate } from './aggregate';
 import { Application } from './entity';
 
 export class ApplicationApplication {
   constructor(
-    // private readonly getUserNotification: GetUserNotificationsService,
-    // private readonly getUserTotalNotification: GetUserTotalNotificationsService,
     private readonly createApplicationService: CreateApplicationService,
     private readonly getApplicationService: GetApplicationService,
-    // private readonly updateNotificationStatusService: UpdateNotificationStatusService,
+    private readonly getAllApplicationService: GetAllApplicationService,
   ) {}
-
-  //   async getNotifications({
-  //     user,
-  //     paginationRequest = new PaginationRequest({ page: 1, limit: 10 }),
-  //   }: GetUserNotificationsDto): Promise<
-  //     PaginationResponse<UserNotificationsDTO>
-  //   > {
-  //     const total = await this.getUserTotalNotification.execute(user);
-  //     const userNotifications = await this.getUserNotification.execute({
-  //       user,
-  //       paginationRequest,
-  //     });
-
-  //     return new PaginationResponse<UserNotificationsDTO>({
-  //       data: userNotifications.map(
-  //         (userNotification: UserNotificationAggregate) => {
-  //           const notification = userNotification.notification;
-  //           return {
-  //             id: notification.id,
-  //             title: notification.title,
-  //             content: notification.content,
-  //             createdAt: notification.createdAt,
-  //             link: notification.link,
-  //             status: userNotification.status,
-  //           };
-  //         },
-  //       ),
-  //       total,
-  //       pageRequest: paginationRequest,
-  //     });
-  //   }
 
   async createApplication(request: CreateApplicationDto): Promise<Application> {
     return await this.createApplicationService.execute(request);
@@ -69,13 +25,9 @@ export class ApplicationApplication {
     return await this.getApplicationService.execute(request);
   }
 
-  //   async updateNotificationStatus(
-  //     request: UpdateNotificationStatusDto,
-  //   ): Promise<UpdateNotificationStatusResponseDto> {
-  //     return await this.updateNotificationStatusService.execute({
-  //       notificationId: request.notificationId,
-  //       status: request.status,
-  //       user: request.user,
-  //     });
-  //   }
+  async getAllApplication(
+    request: GetAllApplicationsDto,
+  ): Promise<Application[]> {
+    return await this.getAllApplicationService.execute(request);
+  }
 }

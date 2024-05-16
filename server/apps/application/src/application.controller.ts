@@ -32,13 +32,15 @@ export class ApplicationController implements ApplicationServiceController {
   // }
 
   createApplication(request: CreateApplicationRequest) {
-    const cre = this.applicationApplication.createApplication(request);
+    const res = this.applicationApplication.createApplication(request);
     // console.log(cre);
-    return cre;
+    return res;
   }
 
   readApplication(request: ReadApplicationRequest) {
-    return null;
+    const res = this.applicationApplication.getApplication(request);
+    // console.log(cre);
+    return res;
   }
 
   async readAllApplicationByCampaignId(

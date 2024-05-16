@@ -2,12 +2,12 @@ import { BaseService } from './base.service';
 import { ApplicationRepository } from '../repository';
 import { Application } from '../entity';
 
-export class GetApplicationService implements BaseService<Application> {
+export class GetAllApplicationService implements BaseService<Application> {
   constructor(private readonly applicationRepository: ApplicationRepository) {}
 
-  async execute(ApplicationDto): Promise<Application> {
+  async execute(ApplicationDto): Promise<Application[]> {
     const getApplication =
-      await this.applicationRepository.getApplication(ApplicationDto);
+      await this.applicationRepository.getAllApplication(ApplicationDto);
     return getApplication;
   }
 }
