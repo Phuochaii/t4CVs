@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
-import { CreateEmployerDto } from 'apps/employer/src/dto/Req/create-employer.dto';
-import { FindEmployerDTOResponse } from 'apps/employer/src/dto/Res/find_employer.dto';
+import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
+import { FindEmployerDTOResponse } from './dto/Res/find_employer.dto';
 
 @Injectable()
 export class EmployerService {
@@ -24,7 +24,7 @@ export class EmployerService {
     );
   }
 
-  findEmployerById(id: number): Observable<FindEmployerDTOResponse> {
+  findEmployerById(id: string): Observable<FindEmployerDTOResponse> {
     return this.employerClient.send<FindEmployerDTOResponse>(
       { cmd: 'find_employer_by_id' },
       id,

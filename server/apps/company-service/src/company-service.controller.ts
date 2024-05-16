@@ -96,7 +96,7 @@ export class CompanyServiceController {
 
   @MessagePattern({ cmd: 'find_campaign_by_employerId' })
   async findCampaignByEmployerId(@Payload() data: any) {
-    const employerId = Number(data.employerId);
+    const employerId = String(data.employerId);
     const page = Number(data.page);
     const limit = Number(data.limit);
 
@@ -124,7 +124,7 @@ export class CompanyServiceController {
   }
 
   @MessagePattern({ cmd: 'find_all_campaign_by_employerid' })
-  findAllCampaignByEmployerId(employerId: number) {
+  findAllCampaignByEmployerId(employerId: string) {
     return this.campaignApplication.getAllCampaignByEmployerId(employerId);
   }
 }

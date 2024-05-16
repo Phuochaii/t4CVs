@@ -1,6 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { Company, Campaign } from '../../domain/entity';
+import { CompanySchema, CampaignSchema } from '../schema';
 import { campaigns } from './data-campaign';
 import { companies } from './data-company';
 
@@ -54,11 +54,11 @@ export class DatabaseConfiger {
   private async insertData() {
     const option = {
       ...this.defaultConfig,
-      entities: [Company, Campaign],
+      entities: [CompanySchema, CampaignSchema],
     } as DataSourceOptions;
     await doCallbackWithAutoCloseConnection(option, async (dataSource) => {
-      await dataSource.getRepository(Campaign).insert(campaigns);
-      await dataSource.getRepository(Company).insert(companies);
+      await dataSource.getRepository(CampaignSchema).insert(campaigns);
+      await dataSource.getRepository(CompanySchema).insert(companies);
     });
   }
 

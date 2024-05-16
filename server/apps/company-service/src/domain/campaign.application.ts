@@ -46,12 +46,12 @@ export class CampaignApplication {
     return await this.updateCampaignService.execute(campaign);
   }
 
-  async getAllCampaignByEmployerId(employerId: number): Promise<Campaign[]> {
+  async getAllCampaignByEmployerId(employerId: string): Promise<Campaign[]> {
     return await this.getAllCampaignByEmployerIdService.execute(employerId);
   }
 
   async getAllCampaignByEmployerIdPagination(
-    employerId: number,
+    employerId: string,
     page: number,
     limit: number,
   ): Promise<Campaign[]> {
@@ -62,7 +62,7 @@ export class CampaignApplication {
     );
   }
 
-  async getTotalCampaignByEmployerId(employerId: number): Promise<number> {
+  async getTotalCampaignByEmployerId(employerId: string): Promise<number> {
     return await this.getTotalCampaignByEmployerIdService.execute(employerId);
   }
 }

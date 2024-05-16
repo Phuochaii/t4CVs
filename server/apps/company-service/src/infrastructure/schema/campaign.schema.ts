@@ -18,5 +18,5 @@ export class CampaignSchema implements _ {
   @CreateDateColumn()
   createdAt: Date;
   @Column()
-  employerId: number;
+  employerId: string;
 }

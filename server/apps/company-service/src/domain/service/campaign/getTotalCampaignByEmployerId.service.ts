@@ -6,7 +6,7 @@ export class GetTotalCampaignByEmployerIdService
 {
   constructor(private readonly campaignRepository: CampaignRepository) {}
 
-  async execute(employerId: number): Promise<number> {
+  async execute(employerId: string): Promise<number> {
     const total =
       await this.campaignRepository.getTotalCampaignByEmployerId(employerId);
 

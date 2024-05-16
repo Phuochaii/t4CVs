@@ -1,6 +1,6 @@
-import { Company } from '../../domain/entity';
+import { CompanySchema } from '../schema';
 
-export const companies: Company[] = [
+export const companies: CompanySchema[] = [
   {
     id: 1,
     field: 3,

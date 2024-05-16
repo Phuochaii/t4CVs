@@ -7,7 +7,7 @@ export class GetAllCampaignByEmployerIdService
 {
   constructor(private readonly campaignRepository: CampaignRepository) {}
 
-  async execute(employerId: number): Promise<Campaign[]> {
+  async execute(employerId: string): Promise<Campaign[]> {
     const campaigns =
       await this.campaignRepository.getCampaignByEmployerId(employerId);
 

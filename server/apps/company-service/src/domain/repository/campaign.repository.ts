@@ -15,13 +15,13 @@ export abstract class CampaignRepository {
 
   abstract updateCampaign(campaign: UpdateCampaignDTO): Promise<Campaign>;
 
-  abstract getCampaignByEmployerId(employerId: number): Promise<Campaign[]>;
+  abstract getCampaignByEmployerId(employerId: string): Promise<Campaign[]>;
 
   abstract getCampaignByEmployerIdPagination(
-    employerId: number,
+    employerId: string,
     page: number,
     limit: number,
   ): Promise<Campaign[]>;
 
-  abstract getTotalCampaignByEmployerId(employerId: number): Promise<number>;
+  abstract getTotalCampaignByEmployerId(employerId: string): Promise<number>;
 }

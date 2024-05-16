@@ -8,7 +8,7 @@ export class GetAllCampaignByEmployerIdPaginationService
   constructor(private readonly campaignRepository: CampaignRepository) {}
 
   async execute(
-    employerId: number,
+    employerId: string,
     page: number,
     limit: number,
   ): Promise<Campaign[]> {
