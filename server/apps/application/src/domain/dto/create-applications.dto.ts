@@ -1,5 +1,7 @@
+// import { ApplicationDto } from './application.dto';
+// import { Application } from '../entity';
+
 export class CreateApplicationDto {
-  id: number;
   fullname: string;
   phone: string;
   email: string;
