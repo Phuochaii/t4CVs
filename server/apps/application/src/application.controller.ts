@@ -14,11 +14,7 @@ import {
   ReadAllApplicationByCampaignIdRequest,
   ReadAllApplicationByUserIdRequest,
 } from '@app/common/proto/application';
-// import { Observable } from 'rxjs';
-// import { PaginationRequest } from '@app/common/dto/pagination';
-// import { DateTimestampConverter } from '@app/common/conveters';
 import { ApplicationApplication } from './domain/application.application';
-// import { UserNotificationAggregate } from './domain/aggregate';
 
 @Controller()
 @ApplicationServiceControllerMethods()
@@ -27,13 +23,8 @@ export class ApplicationController implements ApplicationServiceController {
     private readonly applicationApplication: ApplicationApplication,
   ) {}
 
-  // createApplication(request: CreateApplicationRequest) {
-  //   return this.applicationService.store(request);
-  // }
-
   createApplication(request: CreateApplicationRequest) {
     const res = this.applicationApplication.createApplication(request);
-    // console.log(cre);
     return res;
   }
 
@@ -60,7 +51,7 @@ export class ApplicationController implements ApplicationServiceController {
   }
 
   updateApplication(request: UpdateApplicationRequest) {
-    return null;
+    return this.applicationApplication.updateApplication(request);
   }
 
   deleteApplication(request: DeleteApplicationRequest) {

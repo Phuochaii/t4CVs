@@ -2,6 +2,7 @@ import {
   ApplicationDto,
   GetApplicationDto,
   GetAllApplicationsDto,
+  UpdateApplicationDto,
 } from '../dto';
 import { Application } from '../entity';
 
@@ -13,4 +14,8 @@ export abstract class ApplicationRepository {
   abstract getAllApplication(
     application: GetAllApplicationsDto,
   ): Promise<Application[]>;
+
+  abstract updateApplication(
+    application: UpdateApplicationDto,
+  ): Promise<Application>;
 }

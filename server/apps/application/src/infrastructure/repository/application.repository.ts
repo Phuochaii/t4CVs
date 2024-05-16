@@ -6,6 +6,7 @@ import {
   ApplicationDto,
   GetApplicationDto,
   GetAllApplicationsDto,
+  UpdateApplicationDto,
 } from '../../domain/dto';
 import { Application } from '../../domain/entity';
 
@@ -22,7 +23,6 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
   }
 
   async getApplication(application: GetApplicationDto): Promise<Application> {
-    console.log(application);
     return await this.applicationRepository.findOneBy(application);
   }
 
@@ -41,5 +41,15 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
       },
     });
     return data;
+  }
+
+  async updateApplication(
+    application: UpdateApplicationDto,
+  ): Promise<Application> {
+    await this.applicationRepository.update(application.id, {
+      status: true,
+    });
+
+    return await this.applicationRepository.findOneBy(application);
   }
 }

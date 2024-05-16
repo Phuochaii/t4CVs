@@ -4,9 +4,7 @@ import {
   CreateApplicationService,
   GetApplicationService,
   GetAllApplicationService,
-  //   GetUserNotificationsService,
-  //   GetUserTotalNotificationsService,
-  //   UpdateNotificationStatusService,
+  UpdateApplicationService,
 } from './domain/service';
 import { NotificationPersistenceModule } from './infrastructure/application-persistence.module';
 import { ApplicationRepository } from './domain/repository';
@@ -36,22 +34,32 @@ import { ApplicationRepository } from './domain/repository';
       inject: [ApplicationRepository],
     },
     {
+      provide: UpdateApplicationService,
+      useFactory: (applicationRepository: ApplicationRepository) => {
+        return new UpdateApplicationService(applicationRepository);
+      },
+      inject: [ApplicationRepository],
+    },
+    {
       provide: ApplicationApplication,
       useFactory: (
         createApplicationService: CreateApplicationService,
         getApplicationService: GetApplicationService,
         getAllApplicationService: GetAllApplicationService,
+        updateApplicationService: UpdateApplicationService,
       ) => {
         return new ApplicationApplication(
           createApplicationService,
           getApplicationService,
           getAllApplicationService,
+          updateApplicationService,
         );
       },
       inject: [
         CreateApplicationService,
         GetApplicationService,
         GetAllApplicationService,
+        UpdateApplicationService,
       ],
     },
   ],
