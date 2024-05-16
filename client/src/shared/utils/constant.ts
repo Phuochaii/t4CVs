@@ -38,3 +38,60 @@ export const cvLabel: NameValue[] = [
   { name: "Ưu tiên", value: "2" },
   { name: "Ít tiềm năng", value: "3" },
 ];
+
+export const  salary_range:any[] = [
+  {
+    value: "0",
+    label: "Tất cả mức lương",
+    minSalary: 0,
+    maxSalary: 0,
+  },
+  {
+    value: "1",
+    label: "Dưới 10 triệu",
+    minSalary: 0,
+    maxSalary: 10,
+  },
+  {
+    value: "2",
+    label: "10 - 15 triệu",
+    minSalary: 10,
+    maxSalary: 15,
+  },
+  {
+    value: "3",
+    label: "15 - 20 triệu",
+    minSalary: 15,
+    maxSalary: 20,
+  },
+  {
+    value: "4",
+    label: "20 - 25 triệu",
+    minSalary: 20,
+    maxSalary: 25,
+  },
+  {
+    value: "5",
+    label: "25 - 30 triệu",
+    minSalary: 25,
+    maxSalary: 30,
+  },
+  {
+    value: "6",
+    label: "30 - 50 triệu",
+    minSalary: 30,
+    maxSalary: 50,
+  },
+  {
+    value: "7",
+    label: "Trên 50 triệu",
+    minSalary: 50,
+    maxSalary: 0,
+  },
+  {
+    value: "8",
+    label: "Thỏa thuận",
+    minSalary: 0,
+    maxSalary: 0,
+  },
+];

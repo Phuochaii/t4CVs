@@ -286,24 +286,14 @@ function SearchJob() {
   const handleSearch = () => {
     const queryParams = {
       titleRecruitment:
-        searchParam.titleRecruitment !== ""
-          ? `titleRecruitment=${searchParam.titleRecruitment}`
+        filter.titleRecruitment !== ""
+          ? `titleRecruitment=${filter.titleRecruitment}`
           : "",
-      salaryMin:
-        searchParam.salaryMin !== 0 ? `salaryMin=${searchParam.salaryMin}` : "",
-      salaryMax:
-        searchParam.salaryMax !== 0 ? `salaryMax=${searchParam.salaryMax}` : "",
+      salaryMin: filter.salaryMin !== 0 ? `salaryMin=${filter.salaryMin}` : "",
+      salaryMax: filter.salaryMax !== 0 ? `salaryMax=${filter.salaryMax}` : "",
       locationId:
-        searchParam.locationId !== 0
-          ? `locationId=${searchParam.locationId}`
-          : "",
-      expId: searchParam.expId !== 0 ? `expId=${searchParam.expId}` : "",
-      majorId:
-        searchParam.majorId !== 0 ? `majorId=${searchParam.majorId}` : "",
-      levelId:
-        searchParam.levelId !== 0 ? `levelId=${searchParam.levelId}` : "",
-      typeId: searchParam.typeId !== 0 ? `typeId=${searchParam.typeId}` : "",
-      fieldId: searchParam.fieldId !== 0 ? `fielId=${searchParam.fieldId}` : "",
+        filter.locationId !== 0 ? `locationId=${filter.locationId}` : "",
+      expId: filter.expId !== 0 ? `expId=${filter.expId}` : "",
     };
 
     const queryString = Object.values(queryParams)
