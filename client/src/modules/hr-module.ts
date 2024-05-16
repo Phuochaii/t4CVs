@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const serverURL = process.env.SERVERURL;
+const serverURL = 'http://localhost:3000';
 
 // GET APPLICATION BY HR ID
 const getApplicationByCampaignIdHRId = async ({campaignId, hrId, status, page=1 }: {campaignId : string,
