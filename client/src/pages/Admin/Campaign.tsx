@@ -29,7 +29,9 @@ const CompanyCampaignTableHeader = () => {
   return (
     <thead>
       <tr>
-        <td className="px-2 py-1 font-bold border">Chiến dịch tuyển dụng</td>
+        <td className="px-2 py-1 font-bold border">
+          Chiến dịch tuyển dụng
+        </td>
         <td className="px-2 py-1 font-bold border">Người tạo</td>
         <td className="px-2 py-1 font-bold border">Ngày tạo</td>
         <td className="px-2 py-1 font-bold border">Công ty</td>
@@ -46,9 +48,13 @@ interface CompanyCampaignTableRowProps {
   data: CampaignType;
 }
 
-const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
+const CompanyCampaignTableRow = ({
+  data,
+}: CompanyCampaignTableRowProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [applicants, setApplicants] = useState<(UserFromServer | null)[]>([]);
+  const [applicants, setApplicants] = useState<
+    (UserFromServer | null)[]
+  >([]);
   const campaign = data;
   console.log(data);
   useEffect(() => {
@@ -89,7 +95,7 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
                 "Chưa có CV nào"
               ) : (
                 <div className="flex items-center gap-1">
-                  {applicants.slice(0, 5).map((candidate, item) => {
+                  {applicants.slice(0, 5).map((_, item) => {
                     return (
                       <img
                         key={item}
@@ -207,7 +213,9 @@ function Campaign() {
 
   useEffect(() => {
     async function getData() {
-      const { allCampaigns, totalPages } = await getAllCampaigns(page);
+      const { allCampaigns, totalPages } = await getAllCampaigns(
+        page
+      );
       const rawCampaigns = await allCampaigns.map(async (item) => {
         const employer = await getEmployerById(item.employerId);
         const company = employer.companyId
@@ -260,7 +268,10 @@ function Campaign() {
             </div>
           </div>
         </div>
-        <CompanyCampaignTable data={campaigns} setData={setCampaigns} />
+        <CompanyCampaignTable
+          data={campaigns}
+          setData={setCampaigns}
+        />
         <div className="flex items-center self-center justify-center gap-2">
           <ChevronLeftCircle
             className="cursor-pointer"
@@ -276,7 +287,9 @@ function Campaign() {
             stroke="green"
             className="cursor-pointer"
             strokeWidth={1}
-            onClick={() => setPage(page + 1 <= totalPages ? page + 1 : page)}
+            onClick={() =>
+              setPage(page + 1 <= totalPages ? page + 1 : page)
+            }
           />
         </div>
       </div>

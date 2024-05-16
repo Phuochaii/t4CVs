@@ -25,17 +25,17 @@ interface RouteItem {
 const routes: RouteItem[] = [
   // 
   // HR INIT PAGES 
-  {path: 'hr', component:Authentication.HRInit, layout: EmptyLayout},
+  { path: 'hr', component:Authentication.HRInit, layout: EmptyLayout},
 
 // HR INIT PAGES 
-  {path: 'admin', component:Authentication.AdminInit, layout: EmptyLayout},
+  { path: 'admin', component:Authentication.AdminInit, layout: EmptyLayout},
 
   // AUTHENTICATION PAGES - Tiến
-  {path: 'admin-login', component:Authentication.AdminLogIn, layout: EmptyLayout},
-  {path: 'hr-login', component:Authentication.HRLogIn, layout: EmptyLayout},
-  {path: 'hr-signup', component:Authentication.HRSignUp, layout: EmptyLayout},
-  {path: 'user-login', component:Authentication.UserLogIn, layout: EmptyLayout},
-  {path: 'user-signup', component:Authentication.UserSignUp, layout: EmptyLayout},
+  { path: 'admin-login', component:Authentication.AdminLogIn, layout: EmptyLayout},
+  { path: 'hr-login', component:Authentication.HRLogIn, layout: EmptyLayout},
+  { path: 'hr-signup', component:Authentication.HRSignUp, layout: EmptyLayout},
+  { path: 'user-login', component:Authentication.UserLogIn, layout: EmptyLayout},
+  { path: 'user-signup', component:Authentication.UserSignUp, layout: EmptyLayout},
 
   // USER PAGES - Nguyên , Khoa, Hùng
   { path: "/", component: User.Home, layout: UserLayout }, //khoa - > tiến
@@ -49,7 +49,7 @@ const routes: RouteItem[] = [
   { path: "/create-cv", component: User.CreateCV, layout: UserLayout },//
   { path: "/edit-cv", component: User.EditCV, layout: UserLayout },//
   { path: "/template-cv", component: User.TemplateCV, layout: UserLayout }, //nguyên
-  {path: "/list-cv", component: User.ListCV, layout: UserLayout}, // nguyên
+  { path: "/list-cv", component: User.ListCV, layout: UserLayout}, // nguyên
 
   // ADMIN PAGES - Thức
   { path: "/admin/overview", component: Admin.Overview, layout: AdminLayout },
@@ -57,8 +57,8 @@ const routes: RouteItem[] = [
 
   // HR PAGES - Yến, Thịnh, Thức
   { path: "/hr/approve", component: HR.ReceiveCV, layout: HRLayout }, // yến
-  { path:"/hr/compaign-edit/:id", component: HR.CompaignEdit, layout: HRLayout},
-  { path:"/hr/recruitment", component: HR.Recruitment, layout: HRLayout},
+  { path: "/hr/compaign-edit/:id", component: HR.CompaignEdit, layout: HRLayout},
+  { path: "/hr/recruitment", component: HR.Recruitment, layout: HRLayout},
 
   // ERROR PAGES
   { path: "error-path", component: Error.ErrorPath, layout: EmptyLayout },
@@ -72,8 +72,8 @@ const routes: RouteItem[] = [
   
   // ADMIN
   { path: "/admin/company", component: Admin.Company, layout: AdminLayout }, // thuc
-  {path: "/admin/campaign",component: Admin.Campaign,layout: AdminLayout,}, // thuc
-  {path: "/admin/recruitment",component: Admin.Recruitment,layout: AdminLayout,}, // thuc
+  { path: "/admin/campaign",component: Admin.Campaign,layout: AdminLayout,}, // thuc
+  { path: "/admin/recruitment",component: Admin.Recruitment,layout: AdminLayout,}, // thuc
 
 
   // HR
@@ -97,10 +97,10 @@ const routes: RouteItem[] = [
 
   { path: "/hr/help", component: HR.Support, layout: EmptyLayout }, // thinh
 
-  {path: "/saved-jobs", component: User.SavedJobs, layout: UserLayout}, //khoa
-  {path: "/user-information", component: User.UserInformation, layout: UserLayout}, //thuc
+  { path: "/saved-jobs", component: User.SavedJobs, layout: UserLayout}, //khoa
+  { path: "/user-information", component: User.UserInformation, layout: UserLayout}, //thuc
 
-  {path: "/hr/settings", component: HR.Settings, layout: HRLayout}, //tien + hung
+  { path: "/hr/settings", component: HR.Settings, layout: HRLayout}, //tien + hung
 
 
 ];
