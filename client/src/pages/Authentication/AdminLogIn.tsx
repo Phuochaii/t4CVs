@@ -2,10 +2,9 @@ import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
 import img from "../../shared/assets/images/Sign-up user.png";
-import { MyContext } from "../../App";
+import { accountList } from "../../shared/utils/constant";
 
 function AdminLogIn() {
-  const { accountList } = useContext(MyContext);
   const navigation = useNavigate();
   React.useEffect(() => {
     if (localStorage.getItem("admin") !== null) {

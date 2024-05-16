@@ -26,6 +26,7 @@ interface RecruitmentTableProps {
   setRefresh: React.Dispatch<SetStateAction<boolean>>;
 }
 
+const serverURL = "http://localhost:3000";
 function RecruitmentTable({
   data,
   setData,
@@ -62,13 +63,10 @@ function RecruitmentTable({
                         };
                         data[key] = newJobPost;
                         setData([...data]);
-                        await axios.post(
-                          "http://localhost:3000/job/update-status",
-                          {
-                            id: newJobPost.id,
-                            status: !jobPost.status,
-                          }
-                        );
+                        await axios.post(`${serverURL}/job/update-status`, {
+                          id: newJobPost.id,
+                          status: !jobPost.status,
+                        });
                         setRefresh(!refresh);
                       }}
                     />

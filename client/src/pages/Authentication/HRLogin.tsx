@@ -6,6 +6,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { MyContext } from "../../App";
+import { accountList } from "../../shared/utils/constant";
 
 const images = [
   {
@@ -23,7 +24,6 @@ const images = [
 ];
 
 function HRLogIn() {
-  const { accountList } = useContext(MyContext);
   const navigation = useNavigate();
   React.useEffect(() => {
     if (localStorage.getItem("hr") !== null) {

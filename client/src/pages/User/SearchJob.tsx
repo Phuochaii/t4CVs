@@ -2,24 +2,14 @@
 import { useState } from "react";
 import React from "react";
 import JobService from "../../modules/job-module";
+import { TextField, InputAdornment, MenuItem } from "@mui/material";
 import {
-  TextField,
-  FormControl,
-  OutlinedInput,
-  InputAdornment,
-  MenuItem,
-  Button,
-} from "@mui/material";
-import {
-  MagnifyingGlassIcon,
   ChevronDownIcon,
   ChevronUpIcon,
   CurrencyDollarIcon,
 } from "@heroicons/react/20/solid";
 import {
   HeartIcon,
-  MapPinIcon,
-  StarIcon,
   BriefcaseIcon,
   CubeIcon,
   ClockIcon,
@@ -32,63 +22,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { DefaultPagination } from "../../shared/components/default-pagination";
 import SearchBoxComponent from "../../layouts/UserLayout/components/SearchBoxComponent";
 import InterestedJobComponent from "../../layouts/UserLayout/components/InterestedJobComponent";
-
-const salary_range = [
-  {
-    value: "0",
-    label: "Tất cả mức lương",
-    minSalary: 0,
-    maxSalary: 0,
-  },
-  {
-    value: "1",
-    label: "Dưới 10 triệu",
-    minSalary: 0,
-    maxSalary: 10,
-  },
-  {
-    value: "2",
-    label: "10 - 15 triệu",
-    minSalary: 10,
-    maxSalary: 15,
-  },
-  {
-    value: "3",
-    label: "15 - 20 triệu",
-    minSalary: 15,
-    maxSalary: 20,
-  },
-  {
-    value: "4",
-    label: "20 - 25 triệu",
-    minSalary: 20,
-    maxSalary: 25,
-  },
-  {
-    value: "5",
-    label: "25 - 30 triệu",
-    minSalary: 25,
-    maxSalary: 30,
-  },
-  {
-    value: "6",
-    label: "30 - 50 triệu",
-    minSalary: 30,
-    maxSalary: 50,
-  },
-  {
-    value: "7",
-    label: "Trên 50 triệu",
-    minSalary: 50,
-    maxSalary: 0,
-  },
-  {
-    value: "8",
-    label: "Thỏa thuận",
-    minSalary: 0,
-    maxSalary: 0,
-  },
-];
 
 const news_type = [
   {
@@ -128,28 +61,6 @@ function SearchJob() {
   const navigation = useNavigate();
   const url = useLocation();
 
-  const searchParams = new URLSearchParams(url.search);
-  const newLocationId = Number(searchParams.get("locationId")) ?? 0;
-  const newExpId = Number(searchParams.get("expId")) ?? 0;
-  const newTitleRecruitment = searchParams.get("titleRecruitment") ?? "";
-  const newSalaryMin = Number(searchParams.get("salaryMin")) ?? 0;
-  const newSalaryMax = Number(searchParams.get("salaryMax")) ?? 0;
-
-  function findSalaryRangeValue(
-    minSalary: number,
-    maxSalary: number,
-    salaryRanges: any[]
-  ) {
-    if (minSalary === 0 && maxSalary === 0) {
-      return "0";
-    }
-
-    const selectedRange = salaryRanges.find(
-      (range) => range.minSalary === minSalary && range.maxSalary === maxSalary
-    );
-    return selectedRange ? selectedRange.value : "0";
-  }
-
   const [cities, setCities] = useState<any[]>([]);
   const [exp_year, setExpYear] = useState<any[]>([]);
   const [majors, setMajor] = useState<any[]>([]);
@@ -166,16 +77,44 @@ function SearchJob() {
   });
 
   const [searchParam, setSearchParam] = useState<SearchParams>({
-    titleRecruitment: newTitleRecruitment,
-    salaryMin: newSalaryMin,
-    salaryMax: newSalaryMax,
-    locationId: newLocationId,
-    expId: newExpId,
+    titleRecruitment: "",
+    salaryMin: 0,
+    salaryMax: 0,
+    locationId: 0,
+    expId: 0,
     majorId: 0,
     fieldId: 0,
     typeId: 0,
     levelId: 0,
   });
+
+  const getParams = () => {
+    console.log(window.location.search);
+
+    const params = new URLSearchParams(window.location.search);
+
+    const newLocationId = Number(params.get("locationId")) ?? 0;
+    const newExpId = Number(params.get("expId")) ?? 0;
+    const newTitleRecruitment = params.get("titleRecruitment") ?? "";
+    const newSalaryMin = Number(params.get("salaryMin")) ?? 0;
+    const newSalaryMax = Number(params.get("salaryMax")) ?? 0;
+
+    setSearchParam({
+      titleRecruitment: newTitleRecruitment,
+      salaryMin: newSalaryMin,
+      salaryMax: newSalaryMax,
+      locationId: newLocationId,
+      expId: newExpId,
+      majorId: 0,
+      fieldId: 0,
+      typeId: 0,
+      levelId: 0,
+    });
+  };
+
+  React.useEffect(() => {
+    getParams();
+  }, []);
 
   // const [locationId, setLocationId] = useState(newLocationId);
   // const [expId, setExpId] = useState(newExpId);
@@ -221,7 +160,7 @@ function SearchJob() {
 
   React.useEffect(() => {
     searchJob();
-  }, [page]);
+  }, [page, searchParam]);
 
   const searchJob = () => {
     JobService.searchJob({
@@ -236,7 +175,7 @@ function SearchJob() {
       levelId: searchParam.levelId,
       typeId: searchParam.typeId,
     }).then((response) => {
-      // console.log(response);
+      console.log(response);
 
       setJobResult(response.data);
       setTotalPage(response.total_pages);
@@ -254,27 +193,6 @@ function SearchJob() {
 
   const setTitleRecruitment = (value: string) => {
     setFilter((prevState) => ({ ...prevState, titleRecruitment: value }));
-  };
-
-  const SelectSalary = (value: number) => {
-    if (value !== 0) {
-      const foundRange = salary_range.find(
-        (range) => Number(range.value) === value
-      );
-      if (foundRange) {
-        setSearchParam((prevFilter) => ({
-          ...prevFilter,
-          salaryMin: foundRange.minSalary,
-          salaryMax: foundRange.maxSalary,
-        }));
-      }
-    } else {
-      setSearchParam((prevFilter) => ({
-        ...prevFilter,
-        salaryMin: 0,
-        salaryMax: 0,
-      }));
-    }
   };
 
   const handleClick = () => {
@@ -302,7 +220,9 @@ function SearchJob() {
 
     navigation(`/results?${queryString}`);
 
-    searchJob();
+    getParams();
+
+    // searchJob();
   };
 
   return (
@@ -335,7 +255,7 @@ function SearchJob() {
                 </div>
                 <div
                   className={`search-result-tool ml-28 flex flex-row items-center py-2 px-4 border border-transparent font-bold text-white rounded-md ${isActive ? "active" : ""}`}
-                  // onClick={handleClick}
+                  onClick={handleClick}
                 >
                   <Bars3Icon className="w-8 mr-2" />
                   <span>Lọc nâng cao</span>
@@ -372,7 +292,7 @@ function SearchJob() {
                         },
                       }}
                       onChange={(e) => {
-                        setSearchParam((prevState) => ({
+                        setFilter((prevState) => ({
                           ...prevState,
                           majorId: Number(e.target.value),
                         }));
@@ -413,7 +333,7 @@ function SearchJob() {
                         },
                       }}
                       onChange={(e) => {
-                        setSearchParam((prevState) => ({
+                        setFilter((prevState) => ({
                           ...prevState,
                           fieldId: Number(e.target.value),
                         }));
@@ -445,7 +365,7 @@ function SearchJob() {
                         ),
                       }}
                       onChange={(e) => {
-                        setSearchParam((prevState) => ({
+                        setFilter((prevState) => ({
                           ...prevState,
                           typeId: Number(e.target.value),
                         }));
@@ -486,7 +406,7 @@ function SearchJob() {
                         },
                       }}
                       onChange={(e) => {
-                        setSearchParam((prevState) => ({
+                        setFilter((prevState) => ({
                           ...prevState,
                           levelId: Number(e.target.value),
                         }));

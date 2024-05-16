@@ -31,21 +31,21 @@ interface filterSearch {
 }
 
 function ApplyCV() {
-  // const { id: jobId } = useParams();
+  const { id: jobId } = useParams();
   // const jobId = state.id;
-  // const userId =
-  //   localStorage.getItem("user") == null
-  //     ? ""
-  //     : JSON.parse(localStorage.getItem("user") as string).id;
-  const jobId = "3";
-  const userId = "2";
+  const userId =
+    localStorage.getItem("user") == null
+      ? ""
+      : JSON.parse(localStorage.getItem("user") as string).id;
+  // const jobId = "3";
+  // const userId = "2";
 
   const [showModal, setShowModal] = useState(false);
   const handleBeforeApply = () => {
-    // if (localStorage.getItem("user") === null) {
-    //   navigation("/user-login");
-    //   return;
-    // }
+    if (localStorage.getItem("user") === null) {
+      navigation("/user-login");
+      return;
+    }
   };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -100,10 +100,6 @@ function ApplyCV() {
       }));
     }
   };
-
-  // const [locationId, setLocationId] = useState(0);
-  // const [expId, setExpId] = useState(0);
-  // const [titleRecruitment, setTitleRecruitment] = useState("");
 
   const fetchDataFilter = async () => {
     try {
