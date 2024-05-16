@@ -5,6 +5,8 @@ import {
   GetApplicationService,
   GetAllApplicationService,
   UpdateApplicationService,
+  GetByCampaignIdApplicationService,
+  GetAllByCampaignIdApplicationService,
 } from './domain/service';
 import { NotificationPersistenceModule } from './infrastructure/application-persistence.module';
 import { ApplicationRepository } from './domain/repository';
@@ -29,7 +31,7 @@ import { ApplicationRepository } from './domain/repository';
     {
       provide: GetAllApplicationService,
       useFactory: (applicationRepository: ApplicationRepository) => {
-        return new GetApplicationService(applicationRepository);
+        return new GetAllApplicationService(applicationRepository);
       },
       inject: [ApplicationRepository],
     },
@@ -41,25 +43,45 @@ import { ApplicationRepository } from './domain/repository';
       inject: [ApplicationRepository],
     },
     {
+      provide: GetByCampaignIdApplicationService,
+      useFactory: (applicationRepository: ApplicationRepository) => {
+        return new GetByCampaignIdApplicationService(applicationRepository);
+      },
+      inject: [ApplicationRepository],
+    },
+    {
+      provide: GetAllByCampaignIdApplicationService,
+      useFactory: (applicationRepository: ApplicationRepository) => {
+        return new GetAllByCampaignIdApplicationService(applicationRepository);
+      },
+      inject: [ApplicationRepository],
+    },
+    {
       provide: ApplicationApplication,
       useFactory: (
         createApplicationService: CreateApplicationService,
         getApplicationService: GetApplicationService,
         getAllApplicationService: GetAllApplicationService,
+        getByCampaignIdApplication: GetByCampaignIdApplicationService,
         updateApplicationService: UpdateApplicationService,
+        getAllByCampaignIdApplication: GetAllByCampaignIdApplicationService,
       ) => {
         return new ApplicationApplication(
           createApplicationService,
           getApplicationService,
           getAllApplicationService,
+          getByCampaignIdApplication,
           updateApplicationService,
+          getAllByCampaignIdApplication,
         );
       },
       inject: [
         CreateApplicationService,
         GetApplicationService,
         GetAllApplicationService,
+        GetByCampaignIdApplicationService,
         UpdateApplicationService,
+        GetAllByCampaignIdApplicationService,
       ],
     },
   ],

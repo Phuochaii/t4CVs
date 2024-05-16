@@ -1,12 +1,14 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { ApplicationRepository } from '../../domain/repository';
 import { ApplicationSchema } from '../schema';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import {
   ApplicationDto,
   GetApplicationDto,
   GetAllApplicationsDto,
   UpdateApplicationDto,
+  GetByCampaignIdApplicationDto,
+  GetAllByCampaignIdApplicationDto,
 } from '../../domain/dto';
 import { Application } from '../../domain/entity';
 
@@ -51,5 +53,35 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
     });
 
     return await this.applicationRepository.findOneBy(application);
+  }
+
+  async getByCampaignIdApplication(
+    application: GetByCampaignIdApplicationDto,
+  ): Promise<Application[]> {
+    const skip = (application.page - 1) * application.limit;
+    const data = await this.applicationRepository.find({
+      where: {
+        campaignId: In(application.campaignIds),
+        status: application.status,
+      },
+      skip: skip,
+      take: application.limit,
+      order: {
+        createdAt: 'DESC',
+        id: 'DESC',
+      },
+    });
+    return data;
+  }
+
+  async getAllByCampaignIdApplication(
+    application: GetAllByCampaignIdApplicationDto,
+  ): Promise<Application[]> {
+    const data = await this.applicationRepository.find({
+      where: {
+        campaignId: In(application.campaignIds),
+      },
+    });
+    return data;
   }
 }

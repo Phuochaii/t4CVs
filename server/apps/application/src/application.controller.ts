@@ -1,7 +1,4 @@
 import { Controller } from '@nestjs/common';
-// import { ApplicationService } from './old/application.service';
-// import { GrpcMethod } from '@nestjs/microservices';
-// import { CreateApplicationDto } from './dto/create-application.dto';
 import {
   ApplicationServiceController,
   ApplicationServiceControllerMethods,
@@ -37,7 +34,25 @@ export class ApplicationController implements ApplicationServiceController {
   async readAllApplicationByCampaignId(
     request: ReadAllApplicationByCampaignIdRequest,
   ): Promise<Applications> {
-    return null;
+    const campaignIds = request.campaignIds;
+    const total_data =
+      this.applicationApplication.getAllByCampaignIdApplication({
+        campaignIds,
+      });
+    console.log(total_data);
+    const total = (await total_data).length;
+    const data =
+      await this.applicationApplication.getByCampaignIdApplication(request);
+    // console.log(total);
+
+    const total_pages = Math.ceil(total / request.limit);
+    return {
+      page: request.page,
+      limit: request.limit,
+      total: total,
+      totalPage: total_pages,
+      applications: data,
+    };
   }
 
   async readAllApplicationByUserId(
