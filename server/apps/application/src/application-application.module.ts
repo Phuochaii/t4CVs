@@ -7,6 +7,8 @@ import {
   UpdateApplicationService,
   GetByCampaignIdApplicationService,
   GetAllByCampaignIdApplicationService,
+  GetByUserIdApplicationService,
+  GetByUserIdPaginationApplicationService,
 } from './domain/service';
 import { NotificationPersistenceModule } from './infrastructure/application-persistence.module';
 import { ApplicationRepository } from './domain/repository';
@@ -57,6 +59,22 @@ import { ApplicationRepository } from './domain/repository';
       inject: [ApplicationRepository],
     },
     {
+      provide: GetByUserIdApplicationService,
+      useFactory: (applicationRepository: ApplicationRepository) => {
+        return new GetByUserIdApplicationService(applicationRepository);
+      },
+      inject: [ApplicationRepository],
+    },
+    {
+      provide: GetByUserIdPaginationApplicationService,
+      useFactory: (applicationRepository: ApplicationRepository) => {
+        return new GetByUserIdPaginationApplicationService(
+          applicationRepository,
+        );
+      },
+      inject: [ApplicationRepository],
+    },
+    {
       provide: ApplicationApplication,
       useFactory: (
         createApplicationService: CreateApplicationService,
@@ -65,6 +83,8 @@ import { ApplicationRepository } from './domain/repository';
         getByCampaignIdApplication: GetByCampaignIdApplicationService,
         updateApplicationService: UpdateApplicationService,
         getAllByCampaignIdApplication: GetAllByCampaignIdApplicationService,
+        getByUserIdApplication: GetByUserIdApplicationService,
+        getByUserIdPaginationApplication: GetByUserIdPaginationApplicationService,
       ) => {
         return new ApplicationApplication(
           createApplicationService,
@@ -73,6 +93,8 @@ import { ApplicationRepository } from './domain/repository';
           getByCampaignIdApplication,
           updateApplicationService,
           getAllByCampaignIdApplication,
+          getByUserIdApplication,
+          getByUserIdPaginationApplication,
         );
       },
       inject: [
@@ -82,6 +104,8 @@ import { ApplicationRepository } from './domain/repository';
         GetByCampaignIdApplicationService,
         UpdateApplicationService,
         GetAllByCampaignIdApplicationService,
+        GetByUserIdApplicationService,
+        GetByUserIdPaginationApplicationService,
       ],
     },
   ],

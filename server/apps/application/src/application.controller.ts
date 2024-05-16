@@ -39,7 +39,7 @@ export class ApplicationController implements ApplicationServiceController {
       this.applicationApplication.getAllByCampaignIdApplication({
         campaignIds,
       });
-    console.log(total_data);
+    // console.log(total_data);
     const total = (await total_data).length;
     const data =
       await this.applicationApplication.getByCampaignIdApplication(request);
@@ -58,7 +58,24 @@ export class ApplicationController implements ApplicationServiceController {
   async readAllApplicationByUserId(
     request: ReadAllApplicationByUserIdRequest,
   ): Promise<Applications> {
-    return null;
+    const userId = request.userId;
+    const total_data = this.applicationApplication.getByUserIdApplication({
+      userId,
+    });
+    const total = (await total_data).length;
+    const data =
+      await this.applicationApplication.getByUserIdPaginationApplication(
+        request,
+      );
+
+    const total_pages = Math.ceil(total / request.limit);
+    return {
+      page: request.page,
+      limit: request.limit,
+      total: total,
+      totalPage: total_pages,
+      applications: data,
+    };
   }
 
   async readAllApplication(request: Pagination): Promise<Applications> {

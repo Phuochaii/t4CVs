@@ -5,3 +5,5 @@ export * from './getall-application.dto';
 export * from './update-application.dto';
 export * from './getbycampaignId-application.dto';
 export * from './getallbycampaignId-application.dto';
+export * from './getbyuserId-application.dto';
+export * from './getbyuserIdpagination-application.dto';

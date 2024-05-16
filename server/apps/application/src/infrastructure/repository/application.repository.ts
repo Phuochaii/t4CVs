@@ -9,6 +9,8 @@ import {
   UpdateApplicationDto,
   GetByCampaignIdApplicationDto,
   GetAllByCampaignIdApplicationDto,
+  GetByUserIdApplicationDto,
+  GetByUserIdPaginationApplicationDto,
 } from '../../domain/dto';
 import { Application } from '../../domain/entity';
 
@@ -80,6 +82,35 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
     const data = await this.applicationRepository.find({
       where: {
         campaignId: In(application.campaignIds),
+      },
+    });
+    return data;
+  }
+
+  async getByUserIdApplication(
+    application: GetByUserIdApplicationDto,
+  ): Promise<Application[]> {
+    const data = await this.applicationRepository.find({
+      where: {
+        userId: application.userId,
+      },
+    });
+    return data;
+  }
+
+  async getByUserIdPaginationApplication(
+    application: GetByUserIdPaginationApplicationDto,
+  ): Promise<Application[]> {
+    const skip = (application.page - 1) * application.limit;
+    const data = await this.applicationRepository.find({
+      where: {
+        userId: application.userId,
+      },
+      skip: skip,
+      take: application.limit,
+      order: {
+        createdAt: 'DESC',
+        id: 'DESC',
       },
     });
     return data;

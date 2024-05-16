@@ -5,6 +5,8 @@ import {
   UpdateApplicationDto,
   GetByCampaignIdApplicationDto,
   GetAllByCampaignIdApplicationDto,
+  GetByUserIdApplicationDto,
+  GetByUserIdPaginationApplicationDto,
 } from './dto';
 import {
   CreateApplicationService,
@@ -13,6 +15,8 @@ import {
   UpdateApplicationService,
   GetByCampaignIdApplicationService,
   GetAllByCampaignIdApplicationService,
+  GetByUserIdApplicationService,
+  GetByUserIdPaginationApplicationService,
 } from './service';
 import { Application } from './entity';
 
@@ -24,6 +28,9 @@ export class ApplicationApplication {
     private readonly getByCampaignIdApplicationService: GetByCampaignIdApplicationService,
     private readonly updateApplicationService: UpdateApplicationService,
     private readonly getAllByCampaignIdApplicationService: GetAllByCampaignIdApplicationService,
+    private readonly getByUserIdApplicationService: GetByUserIdApplicationService,
+    private readonly getByUserIdPagiantionApplicationService: GetByUserIdPaginationApplicationService,
+    // private readonly getByUserIdPaginationApplicationService: GetByUserIdPaginationApplicationService,
   ) {}
 
   async createApplication(request: CreateApplicationDto): Promise<Application> {
@@ -46,13 +53,26 @@ export class ApplicationApplication {
     return await this.getByCampaignIdApplicationService.execute(request);
   }
 
-  async updateApplication(request: UpdateApplicationDto): Promise<Application> {
-    return await this.updateApplicationService.execute(request);
-  }
-
   async getAllByCampaignIdApplication(
     request: GetAllByCampaignIdApplicationDto,
   ): Promise<Application[]> {
     return await this.getAllByCampaignIdApplicationService.execute(request);
+  }
+
+  async updateApplication(request: UpdateApplicationDto): Promise<Application> {
+    return await this.updateApplicationService.execute(request);
+  }
+
+  async getByUserIdApplication(
+    request: GetByUserIdApplicationDto,
+  ): Promise<Application[]> {
+    console.log(this.getByUserIdApplicationService.execute(request.userId));
+    return await this.getByUserIdApplicationService.execute(request.userId);
+  }
+
+  async getByUserIdPaginationApplication(
+    request: GetByUserIdPaginationApplicationDto,
+  ): Promise<Application[]> {
+    return await this.getByUserIdPagiantionApplicationService.execute(request);
   }
 }

@@ -5,6 +5,8 @@ import {
   UpdateApplicationDto,
   GetByCampaignIdApplicationDto,
   GetAllByCampaignIdApplicationDto,
+  GetByUserIdApplicationDto,
+  GetByUserIdPaginationApplicationDto,
 } from '../dto';
 import { Application } from '../entity';
 
@@ -27,5 +29,13 @@ export abstract class ApplicationRepository {
 
   abstract getAllByCampaignIdApplication(
     application: GetAllByCampaignIdApplicationDto,
+  ): Promise<Application[]>;
+
+  abstract getByUserIdApplication(
+    application: GetByUserIdApplicationDto,
+  ): Promise<Application[]>;
+
+  abstract getByUserIdPaginationApplication(
+    application: GetByUserIdPaginationApplicationDto,
   ): Promise<Application[]>;
 }
