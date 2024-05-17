@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { JobService } from './job.service';
+import { JobService } from './domain/job.service';
 import { JobController } from './job.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Job } from './entities/job.entity';
+import { Job } from './infrastructure/schemas/job.schema';
 import { JobDetailModule } from './job-detail/job-detail.module';
 import { MajorModule } from './major/major.module';
 import { LevelModule } from './level/level.module';
@@ -14,6 +14,18 @@ import { ExperienceModule } from './experience/experience.module';
 import { TypeModule } from './type/type.module';
 import { DatabaseConfiger, DatabaseOptions } from './database/init';
 import * as path from 'path';
+import { JobRepository } from './domain/repository';
+import { TypeOrmJobRepository } from './infrastructure/repository/job.repository';
+import {
+  CurrencyService,
+  ExperienceService,
+  FieldService,
+  JobDetailService,
+  LevelService,
+  LocationService,
+  MajorService,
+  TypeService,
+} from './domain/services';
 
 @Module({
   imports: [
@@ -60,6 +72,48 @@ import * as path from 'path';
     TypeModule, // JobRepository]),
   ],
   controllers: [JobController],
-  providers: [JobService], //, JobRepository],
+  providers: [
+    {
+      provide: JobService,
+      useFactory: (
+        jobRepository: JobRepository,
+        jobDetailService: JobDetailService,
+        majorService: MajorService,
+        levelService: LevelService,
+        currencyService: CurrencyService,
+        fieldService: FieldService,
+        locationService: LocationService,
+        experienceService: ExperienceService,
+        typeService: TypeService,
+      ) => {
+        return new JobService(
+          jobRepository,
+          jobDetailService,
+          majorService,
+          levelService,
+          currencyService,
+          fieldService,
+          locationService,
+          experienceService,
+          typeService,
+        );
+      },
+      inject: [
+        JobRepository,
+        JobDetailService,
+        MajorService,
+        LevelService,
+        CurrencyService,
+        FieldService,
+        LocationService,
+        ExperienceService,
+        TypeService,
+      ],
+    },
+    {
+      provide: JobRepository,
+      useClass: TypeOrmJobRepository,
+    },
+  ], //, JobRepository],
 })
 export class JobModule {}
