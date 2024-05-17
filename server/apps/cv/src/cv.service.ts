@@ -60,7 +60,8 @@ export class CVService {
     });
   }
 
-  async create(cvData: Partial<CV>): Promise<CV> {
+  async create(cvData: any): Promise<CV> {
+    console.log(cvData);
     return new Promise((resolve, reject) => {
       const stmt = this.db.prepare(
         'INSERT INTO CV (userId, templateId, link, isPublic) VALUES (?, ?, ?, ?)',
@@ -82,9 +83,9 @@ export class CVService {
                 userId: cvData.userId,
                 templateId: cvData.templateId,
                 link: cvData.link,
-                isPublic: cvData.isPublic,
+                isPublic: true,
                 creationAt: new Date(),
-                lastModified: null,
+                lastModified: new Date(),
               }),
             );
           }
@@ -126,51 +127,6 @@ export class CVService {
       );
       stmt.finalize();
     });
-  }
-
-  async uploadCV(data: any): Promise<any> {
-    const { file, userId } = data;
-    const fileExtension = path.extname(file.originalname);
-    const newFilename = `${uuidv4()}${fileExtension}`;
-    const uploadPath = './uploads';
-
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true });
-    }
-
-    console.log(JSON.stringify(file));
-
-    const fileBuffer = await fs.promises.readFile(file.path);
-
-    try {
-      await fs.promises.rename(file.path, `${uploadPath}/${newFilename}`);
-      const cvDto = new CVDto();
-      cvDto.userId = Number(userId.userId);
-      cvDto.templateId = 1;
-      cvDto.link = `http://${BUCKET_NAME}.s3-website-${AWS_S3_REGION}.amazonaws.com/${newFilename}`;
-      cvDto.creationAt = new Date();
-      cvDto.isPublic = true;
-      cvDto.lastModified = new Date();
-
-      console.log(JSON.stringify(file));
-
-      const putObjectCommand = new PutObjectCommand({
-        Bucket: BUCKET_NAME,
-        Key: newFilename,
-        Body: fileBuffer,
-        ContentDisposition: 'inline',
-        ContentType: file.mimetype,
-      });
-
-      await this.s3Client.send(putObjectCommand);
-
-      const result = await this.create(cvDto);
-
-      return result;
-    } catch (error: any) {
-      console.error('Error uploading file:', error);
-      throw new Error(error);
-    }
   }
 
   async findAll(): Promise<CV[]> {
@@ -217,38 +173,5 @@ export class CVService {
         }
       });
     });
-  }
-
-  async downloadCV(id: number): Promise<any> {
-    try {
-      const cv = await this.findOne(id);
-
-      const linkParts = cv.link.split('/');
-      const bucketName = linkParts[2];
-      const filename = linkParts[linkParts.length - 1];
-
-      const getObjectCommand = new GetObjectCommand({
-        Bucket: 'nestjsdacnpm',
-        Key: filename,
-      });
-      const { Body } = await this.s3Client.send(getObjectCommand);
-
-      const readableStream = Readable.from(Body as any);
-
-      const filePath = `D:\\${filename}`;
-      const fileStream = fs.createWriteStream(filePath);
-
-      readableStream.pipe(fileStream);
-
-      await new Promise((resolve, reject) => {
-        fileStream.on('finish', resolve);
-        fileStream.on('error', reject);
-      });
-
-      return filePath;
-    } catch (error: any) {
-      console.error(error);
-      throw new HttpException('CV not found', HttpStatus.NOT_FOUND);
-    }
   }
 }
