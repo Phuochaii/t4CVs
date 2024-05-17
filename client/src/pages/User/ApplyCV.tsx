@@ -335,14 +335,14 @@ function ApplyCV() {
             <div className="list-job">
               <div className="job-body grid grid-cols-3 gap-x-4">
                 <div className="job-detail__body-left col-span-2 flex flex-col gap-4">
-                  <div className="job-detail__info mt-4 bg-white text-black rounded-lg py-2 px-4 grid grid-rows-4 items-center">
+                  <div className="job-detail__info mt-4 bg-white text-black rounded-lg p-4 flex flex-col gap-4">
                     <h1 className="job-detail__info--title text-2xl font-bold">
                       {jobData?.titleRecruitment
                         ? jobData?.titleRecruitment
                         : ""}
                     </h1>
                     <div className="job-detail__info--sections grid grid-cols-3 gap-x-4 justify-center">
-                      <div className="job-detail__info--section flex flex-row items-center gap-x-4">
+                      <div className="job-detail__info--section flex flex-row gap-x-4">
                         <div className="job-detail__info--section-icon w-10 h-10 p-2 rounded-full">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -370,7 +370,7 @@ function ApplyCV() {
                           </strong>
                         </div>
                       </div>
-                      <div className="job-detail__info--section flex flex-row items-center gap-x-4">
+                      <div className="job-detail__info--section flex flex-row gap-x-4">
                         <div className="job-detail__info--section-icon w-10 h-10 p-2 rounded-full">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -387,16 +387,16 @@ function ApplyCV() {
                           <span className="job-detail__info--section-content-title">
                             Địa điểm
                           </span>
-                          <strong className="job-detail__info--section-content-value">
-                            {jobData?.locations
-                              ? jobData?.locations[0]?.name
-                                ? jobData?.locations[0]?.name
-                                : ""
-                              : ""}
-                          </strong>
+                          {jobData?.locations
+                            ? jobData?.locations.map((location: any) => (
+                              <strong className="job-detail__info--section-content-value" key={location.id}>
+                                {location.name}
+                              </strong>
+                              ))
+                            : ""}
                         </div>
                       </div>
-                      <div className="job-detail__info--section flex flex-row items-center gap-x-4">
+                      <div className="job-detail__info--section flex flex-row gap-x-4">
                         <div className="job-detail__info--section-icon w-10 h-10 p-2 rounded-full">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"

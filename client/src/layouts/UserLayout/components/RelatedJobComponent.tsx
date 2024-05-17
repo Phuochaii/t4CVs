@@ -34,8 +34,8 @@ function RelatedJobComponent() {
             </h2>
             <div className="related-job-item__job-list flex flex-col gap-5">
                 {jobResults
-                    ? jobResults.map((job: any) => (
-                        <div className="job-item-search-result max-h-40 bg-slate-100 p-3 border border-transparent rounded-lg shadow-md flex items-center gap-3 hover:border-green-400 cursor-pointer">
+                    ? jobResults.map((job: any, index: number) => (
+                        <div className="job-item-search-result max-h-40 bg-slate-100 p-3 border border-transparent rounded-lg shadow-md flex items-center gap-3 hover:border-green-400 cursor-pointer" key={index}>
                             <div className="job-logo-company w-32 h-32 min-w-32 bg-white flex items-center border rounded-lg">
                                 <img src={job?.company
                                         ? (job?.company?.image
