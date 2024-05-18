@@ -13,14 +13,8 @@ export class CVController {
   }
 
   @MessagePattern({ cmd: 'createCV' })
-  async create(cvData: Partial<CV>): Promise<CV> {
-    return this.cvService.create(cvData);
-  }
-
-  @MessagePattern({ cmd: 'uploadCV' })
-  uploadCV(data: { file: any; userId: number }) {
-    console.log(JSON.stringify(data));
-    return this.cvService.uploadCV(data);
+  async create(data: any): Promise<CV> {
+    return this.cvService.create(data);
   }
 
   @MessagePattern({ cmd: 'getAllCVs' })
@@ -33,18 +27,8 @@ export class CVController {
     return this.cvService.findOne(id);
   }
 
-  @MessagePattern({ cmd: 'updateCV' })
-  async update(data: { id: number; cvData: Partial<CV> }): Promise<CV> {
-    return this.cvService.update(data);
-  }
-
   @MessagePattern({ cmd: 'deleteCV' })
   async remove(id: number): Promise<void> {
     return this.cvService.remove(id);
-  }
-
-  @MessagePattern({ cmd: 'downloadCV' })
-  async downloadCV(id: number): Promise<any> {
-    return this.cvService.downloadCV(id);
   }
 }

@@ -30,7 +30,7 @@ export class UploadController {
       }),
     }),
   )
-  uploadCV(@UploadedFile() file: any, @Body() userId: number): Observable<any> {
-    return this.uploadService.uploadCV(file, userId);
+  uploadCV(@UploadedFile() file: any): any {
+    return this.uploadService.uploadCV(file);
   }
 }
