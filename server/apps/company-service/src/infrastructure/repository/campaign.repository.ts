@@ -60,7 +60,7 @@ export class TypeOrmCampaignRepository extends CampaignRepository {
     return await this.findCampaignById(campaign.id);
   }
 
-  async getCampaignByEmployerId(employerId: number): Promise<Campaign[]> {
+  async getCampaignByEmployerId(employerId: string): Promise<Campaign[]> {
     const campaigns = await this.campaignRepository.find({
       where: { employerId: employerId },
       order: {
@@ -72,7 +72,7 @@ export class TypeOrmCampaignRepository extends CampaignRepository {
   }
 
   async getCampaignByEmployerIdPagination(
-    employerId: number,
+    employerId: string,
     page: number,
     limit: number,
   ): Promise<Campaign[]> {
@@ -89,7 +89,7 @@ export class TypeOrmCampaignRepository extends CampaignRepository {
     return campaigns;
   }
 
-  async getTotalCampaignByEmployerId(employerId: number): Promise<number> {
+  async getTotalCampaignByEmployerId(employerId: string): Promise<number> {
     const total = await this.campaignRepository.count({
       where: { employerId: employerId },
     });
