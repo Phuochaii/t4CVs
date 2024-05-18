@@ -1,6 +1,12 @@
 import { Module } from '@nestjs/common';
 import { CvApplication } from './domain/cv.application';
-import { CreateCvService } from './domain/service';
+import {
+  CreateCvService,
+  UpdateCvService,
+  GetCvService,
+  GetAllCvService,
+  DeleteCvService,
+} from './domain/service';
 import { CvPersistenceModule } from './infrastructure/cv-persistence.module';
 import { CvRepository } from './domain/repository';
 
@@ -14,13 +20,61 @@ import { CvRepository } from './domain/repository';
       },
       inject: [CvRepository],
     },
+    {
+      provide: UpdateCvService,
+      useFactory: (cvRepository: CvRepository) => {
+        return new UpdateCvService(cvRepository);
+      },
+      inject: [CvRepository],
+    },
+    {
+      provide: GetCvService,
+      useFactory: (cvRepository: CvRepository) => {
+        return new GetCvService(cvRepository);
+      },
+      inject: [CvRepository],
+    },
+
+    {
+      provide: GetAllCvService,
+      useFactory: (cvRepository: CvRepository) => {
+        return new GetAllCvService(cvRepository);
+      },
+      inject: [CvRepository],
+    },
+
+    {
+      provide: DeleteCvService,
+      useFactory: (cvRepository: CvRepository) => {
+        return new DeleteCvService(cvRepository);
+      },
+      inject: [CvRepository],
+    },
 
     {
       provide: CvApplication,
-      useFactory: (createCvService: CreateCvService) => {
-        return new CvApplication(createCvService);
+      useFactory: (
+        createCvService: CreateCvService,
+        updateCvService: UpdateCvService,
+        getCvService: GetCvService,
+        getAllCvService: GetAllCvService,
+        deleteCvService: DeleteCvService,
+      ) => {
+        return new CvApplication(
+          createCvService,
+          updateCvService,
+          getCvService,
+          getAllCvService,
+          deleteCvService,
+        );
       },
-      inject: [CreateCvService],
+      inject: [
+        CreateCvService,
+        UpdateCvService,
+        GetCvService,
+        GetAllCvService,
+        DeleteCvService,
+      ],
     },
   ],
   exports: [CvApplication],

@@ -11,7 +11,7 @@ export class CreateCvService implements BaseService<Cv> {
     CvDto.createdAt = now.toISOString();
     CvDto.lastModified = now.toISOString();
     CvDto.isPublic = false;
-    const createdApplication = await this.cvRepository.createApplication(CvDto);
+    const createdApplication = await this.cvRepository.createCv(CvDto);
     return createdApplication;
   }
 }

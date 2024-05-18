@@ -53,10 +53,10 @@ export class DatabaseConfiger {
   private async insertData() {
     const option = {
       ...this.defaultConfig,
-      entities: [ApplicationSchema],
+      entities: [CvSchema],
     } as DataSourceOptions;
     await doCallbackWithAutoCloseConnection(option, async (dataSource) => {
-      await dataSource.getRepository(ApplicationSchema).insert(applications);
+      await dataSource.getRepository(CvSchema).insert(cvs);
     });
   }
 

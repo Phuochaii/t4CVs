@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { from, Observable, switchMap } from 'rxjs';
+import { from, Observable, switchMap, tap } from 'rxjs';
 import { CVDto } from './dto/cv.dto';
 import { ClientProxy } from '@nestjs/microservices';
 import { UploadService } from '../upload/upload.service';
+import { Response } from 'express';
 
 @Injectable()
 export class CVService {
@@ -23,16 +24,18 @@ export class CVService {
     return this.cvClient.send({ cmd: 'getCVById' }, id);
   }
 
-  createCV(cvDto: CVDto): Observable<any> {
-    return this.cvClient.send({ cmd: 'createCV' }, cvDto);
-  }
+  createCV(file: any, userId: number, templateId: number): Observable<any> {
+    // const uploadLink$ = from(this.uploadService.upload(file));
+    // return uploadLink$.pipe(
+    //   switchMap((link: string) =>
+    //     this.cvClient.send({ cmd: 'createCV' }, { userId, link, templateId }),
+    //   ),
+    // );
+    const link = '123';
 
-  uploadCV(file: any, userId: number): Observable<any> {
-    const uploadLink$ = from(this.uploadService.uploadCV(file));
-    return uploadLink$.pipe(
-      switchMap((link: string) =>
-        this.cvClient.send({ cmd: 'uploadCV' }, { file, userId, link }),
-      ),
+    return this.cvClient.send(
+      { cmd: 'createCV' },
+      { userId, link, templateId },
     );
   }
 
@@ -44,7 +47,14 @@ export class CVService {
     return this.cvClient.send({ cmd: 'deleteCV' }, id);
   }
 
-  downloadCV(id: number): Observable<any> {
-    return this.cvClient.send({ cmd: 'downloadCV' }, id);
+  downloadCV(id: number, res: Response): Observable<any> {
+    return this.cvClient.send({ cmd: 'getCVById' }, id).pipe(
+      switchMap((cv: any) => {
+        if (!cv || !cv.link) {
+          throw new Error('CV not found or link not available');
+        }
+        return this.uploadService.download(cv.link, res);
+      }),
+    );
   }
 }

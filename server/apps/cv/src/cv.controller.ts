@@ -46,7 +46,7 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { CvApplication } from './domain/cv.application';
-import { CreateCvDto } from './domain/dto';
+import { CreateCvDto, UpdateCvDto } from './domain/dto';
 
 @Controller()
 export class CvController {
@@ -55,5 +55,25 @@ export class CvController {
   @MessagePattern({ cmd: 'createCV' })
   createCompany(cv: CreateCvDto) {
     return this.cvApplication.createCv(cv);
+  }
+
+  @MessagePattern({ cmd: 'updateCV' })
+  async update(cv: UpdateCvDto): Promise<any> {
+    return this.cvApplication.updateCv(cv);
+  }
+
+  @MessagePattern({ cmd: 'getCVById' })
+  async findOne(id: number) {
+    return await this.cvApplication.getCv({ id });
+  }
+
+  @MessagePattern({ cmd: 'getAllCVs' })
+  async findAll() {
+    return this.cvApplication.getAllCv();
+  }
+
+  @MessagePattern({ cmd: 'deleteCV' })
+  async remove(id: number) {
+    return this.cvApplication.deleteCv({ id });
   }
 }
