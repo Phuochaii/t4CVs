@@ -73,7 +73,7 @@ function Company() {
                         <img
                             src={companyInfo?.image ? companyInfo?.image : " "}
                             alt="logo"
-                            className="h-[80%] w-[80%] object-contain"
+                            className="w-full h-full object-cover"
                         />
                     </div>
                 </div>
