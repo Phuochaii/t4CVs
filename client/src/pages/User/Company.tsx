@@ -11,12 +11,12 @@ const relatedCompanies = [
         avatar: "https://static.topcv.vn/company_logos/ngan-hang-tmcp-hang-hai-5ca1e09fb0cf2.jpg",
     },
     {
-        name: "NGÂN HÀNG TMCP HÀNG HẢI VIỆT NAM (MSB)",
+        name: "NGÂN HÀNG BẢO VIỆT",
         num: 18,
         avatar: "https://static.topcv.vn/company_logos/ngan-hang-bao-viet-5937b34d972ad_rs.jpg",
     },
     {
-        name: "NGÂN HÀNG TMCP HÀNG HẢI VIỆT NAM (MSB)",
+        name: "NGÂN HÀNG TMCP QUÂN ĐỘI",
         num: 3,
         avatar: "https://static.topcv.vn/company_logos/ngan-hang-tmcp-quan-doi-5f16a4ddc5124.jpg",
     },
