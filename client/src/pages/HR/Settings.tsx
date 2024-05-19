@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import Icon from "../../shared/components/regular-icon";
 import {
   LucideProps,
-  LayoutGrid,
-  Gem,
-  Gift,
-  Bot,
+  Lock,
+  UserRound,
+  File,
+  Building,
+  Share2,
 } from "lucide-react";
 import Profile from "../../shared/components/profile";
 import Certificate from "../../shared/components/certificate";
@@ -53,11 +54,11 @@ const Item = ({
 
 const Settings = () => {
   const sidebarItems = [
-    { icon: LayoutGrid, title: "Đổi mật khẩu", key: "ChangePassword", component: <div>Change Password</div> },
-    { icon: Gem, title: "Thông tin cá nhân", key: "Profile", component: <Profile /> },
-    { icon: Gift, title: "Giấy phép kinh doanh", key: "Certificate", component: <Certificate/> },
-    { icon: Bot, title: "Thông tin công ty", key: "CompanyInfo", component: <CompanyInfo/> },
-    { icon: Bot, title: "Kết nối API", key: "APIConnection", component: <div>API Connection</div> },
+    { icon: Lock, title: "Đổi mật khẩu", key: "ChangePassword", component: <div>Change Password</div> },
+    { icon: UserRound, title: "Thông tin cá nhân", key: "Profile", component: <Profile /> },
+    { icon: File, title: "Giấy phép kinh doanh", key: "Certificate", component: <Certificate/> },
+    { icon: Building, title: "Thông tin công ty", key: "CompanyInfo", component: <CompanyInfo/> },
+    { icon: Share2, title: "Kết nối API", key: "APIConnection", component: <div>API Connection</div> },
   ];
   const [selectedKey, setSelectedKey] = useState('ChangePassword');
   const selectedComponent = sidebarItems.find(item => item.key === selectedKey)?.component;
