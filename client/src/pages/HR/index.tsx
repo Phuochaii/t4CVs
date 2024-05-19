@@ -10,6 +10,7 @@ import Settings from "./Settings";
 import ManageCV from "./manage-cv/index";
 import * as VerifyAccount from "./verify-account";
 import PostCompaign from "./post-compaign";
+import RecruitmentReports from "./RecruitmentReports";
 
 export {
   PostJob,
@@ -23,4 +24,5 @@ export {
   VerifyAccount,
   PostCompaign,
   Settings,
+  RecruitmentReports
 };
