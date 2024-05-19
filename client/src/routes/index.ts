@@ -98,6 +98,7 @@ const routes: RouteItem[] = [
   { path: "/hr/help", component: HR.Support, layout: EmptyLayout }, // thinh
 
   { path: "/saved-jobs", component: User.SavedJobs, layout: UserLayout}, //khoa
+  { path: "/recruitment-reports", component: HR.RecruitmentReports, layout: HRLayout}, //khoa
   { path: "/user-information", component: User.UserInformation, layout: UserLayout}, //thuc
 
   { path: "/hr/settings", component: HR.Settings, layout: HRLayout}, //tien + hung
