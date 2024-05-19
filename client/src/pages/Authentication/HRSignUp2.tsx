@@ -89,8 +89,7 @@ interface ValidateMessages {
   position: string;
 }
 
-
-function HRSignUp() {
+function HRSignUp2() {
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
@@ -105,9 +104,9 @@ function HRSignUp() {
     address_work: "",
     address: "",
     district: "",
-    skype_account: ""
+    skype_account: "",
   });
-  
+
   const [validateMessages, setValidateMessages] = useState<ValidateMessages>({
     phone: "",
     email: "",
@@ -117,13 +116,13 @@ function HRSignUp() {
     sex: "",
     name: "",
     address: "",
-    position: ""
+    position: "",
   });
 
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [expanded, setExpanded] = useState(true);
 
-  const [openDialog, setOpenDialog] = useState(true);
+  const [openDialog, setOpenDialog] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const settings = {
@@ -140,21 +139,21 @@ function HRSignUp() {
 
   const isEmailValid = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setValidateMessages(prevState => ({
+    setValidateMessages((prevState) => ({
       ...prevState,
-      email: ""
+      email: "",
     }));
 
     if (!email) {
-      setValidateMessages(prevState => ({
+      setValidateMessages((prevState) => ({
         ...prevState,
-        email: "Email đăng nhập không được để trống"
+        email: "Email đăng nhập không được để trống",
       }));
       return false;
     } else if (!emailRegex.test(email)) {
-      setValidateMessages(prevState => ({
+      setValidateMessages((prevState) => ({
         ...prevState,
-        email: "Định dạng email không phù hợp"
+        email: "Định dạng email không phù hợp",
       }));
       return false;
     } else {
@@ -163,67 +162,65 @@ function HRSignUp() {
   };
 
   const isPasswordValid = (password: string) => {
-    setValidateMessages(prevState => ({
+    setValidateMessages((prevState) => ({
       ...prevState,
-      password: ""
+      password: "",
     }));
 
     const passwordRegexOnlyNumber = /^(?=.*\d)[0-9]{6,25}$/;
     const passwordRegexOnlyLowcase = /^[a-z]{6,25}$/;
     const passwordRegexOnlyUppcase = /^[A-Z]{6,25}$/;
-    const passwordRegexNumberandLowcase =
-      /^(?=.*[a-z])(?=.*\d)[a-z\d]{6,25}$/;
-    const passwordRegexNumberandUpcase =
-      /^(?=.*\d)(?=.*[A-Z])[A-Z\d]{6,25}$/;
+    const passwordRegexNumberandLowcase = /^(?=.*[a-z])(?=.*\d)[a-z\d]{6,25}$/;
+    const passwordRegexNumberandUpcase = /^(?=.*\d)(?=.*[A-Z])[A-Z\d]{6,25}$/;
     const passwordRegexNoNumber = /^[a-zA-Z]{6,25}$/;
 
     const passwordLength = password.length;
     if (!password) {
-      setValidateMessages(prevState => ({
+      setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu không được để trống"
+        password: "Mật khẩu không được để trống",
       }));
       return false;
     } else if (passwordLength < 6 || passwordLength > 25) {
-      setValidateMessages(prevState => ({
+      setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu từ 6 đến 25 ký tự"
+        password: "Mật khẩu từ 6 đến 25 ký tự",
       }));
       return false;
     } else if (passwordRegexOnlyNumber.test(password)) {
-      setValidateMessages(prevState => ({
+      setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ hoa và một chữ thường"
+        password: "Mật khẩu phải chứa ít nhất một chữ hoa và một chữ thường",
       }));
       return false;
     } else if (passwordRegexOnlyLowcase.test(password)) {
-      setValidateMessages(prevState => ({
+      setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ số và một chữ hoa"
+        password: "Mật khẩu phải chứa ít nhất một chữ số và một chữ hoa",
       }));
       return false;
     } else if (passwordRegexOnlyUppcase.test(password)) {
-      setValidateMessages(prevState => ({
+      setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ số và một chữ thường"
+        password: "Mật khẩu phải chứa ít nhất một chữ số và một chữ thường",
       }));
       return false;
     } else if (passwordRegexNumberandLowcase.test(password)) {
-      setValidateMessages(prevState => ({
+      setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ hoa"
+        password: "Mật khẩu phải chứa ít nhất một chữ hoa",
       }));
       return false;
     } else if (passwordRegexNumberandUpcase.test(password)) {
-      setValidateMessages(prevState => ({
+      setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ thường"
+        password: "Mật khẩu phải chứa ít nhất một chữ thường",
       }));
       return false;
     } else if (passwordRegexNoNumber.test(password)) {
-      setValidateMessages(prevState => ({
+      setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ số"
+        password: "Mật khẩu phải chứa ít nhất một chữ số",
       }));
       return false;
     } else {
@@ -235,21 +232,21 @@ function HRSignUp() {
     confirmpassword: string,
     password: string
   ) => {
-    setValidateMessages(prevState => ({
+    setValidateMessages((prevState) => ({
       ...prevState,
-      confirmPassword: ""
+      confirmPassword: "",
     }));
 
     if (!confirmpassword) {
-      setValidateMessages(prevState => ({
+      setValidateMessages((prevState) => ({
         ...prevState,
-        confirmPassword: "Nhập lại mật khẩu không được để trống"
+        confirmPassword: "Nhập lại mật khẩu không được để trống",
       }));
       return false;
     } else if (confirmpassword !== password) {
-      setValidateMessages(prevState => ({
+      setValidateMessages((prevState) => ({
         ...prevState,
-        confirmPassword: "Nhập lại mật khẩu không đúng"
+        confirmPassword: "Nhập lại mật khẩu không đúng",
       }));
       return false;
     } else {
@@ -258,21 +255,21 @@ function HRSignUp() {
   };
 
   const isPhoneValid = (phone: string) => {
-    setValidateMessages(prevState => ({
+    setValidateMessages((prevState) => ({
       ...prevState,
-      phone: ""
+      phone: "",
     }));
 
     if (!phone) {
-      setValidateMessages(prevState => ({
+      setValidateMessages((prevState) => ({
         ...prevState,
-        phone: "Số điện thoại cá nhân không được để trống"
+        phone: "Số điện thoại cá nhân không được để trống",
       }));
       return false;
     } else if (phone.length !== 10) {
-      setValidateMessages(prevState => ({
+      setValidateMessages((prevState) => ({
         ...prevState,
-        phone: "Số điện thoại phải có 10 ký tự"
+        phone: "Số điện thoại phải có 10 ký tự",
       }));
       return false;
     } else {
@@ -298,9 +295,9 @@ function HRSignUp() {
       {
         check: !formData.address_work,
         action: () => {
-          setValidateMessages(prevState => ({
+          setValidateMessages((prevState) => ({
             ...prevState,
-            address: "Địa chỉ làm việc không được để trống"
+            address: "Địa chỉ làm việc không được để trống",
           }));
           setErrorMessage(validateMessages.address);
         },
@@ -308,9 +305,9 @@ function HRSignUp() {
       {
         check: !formData.position,
         action: () => {
-          setValidateMessages(prevState => ({
+          setValidateMessages((prevState) => ({
             ...prevState,
-            position: "Vị trí công tác không được để trống"
+            position: "Vị trí công tác không được để trống",
           }));
           setErrorMessage(validateMessages.position);
         },
@@ -318,9 +315,9 @@ function HRSignUp() {
       {
         check: !formData.company,
         action: () => {
-          setValidateMessages(prevState => ({
+          setValidateMessages((prevState) => ({
             ...prevState,
-            company: "Tên công ty không được để trống"
+            company: "Tên công ty không được để trống",
           }));
           setErrorMessage(validateMessages.company);
         },
@@ -332,9 +329,9 @@ function HRSignUp() {
       {
         check: !formData.sex,
         action: () => {
-          setValidateMessages(prevState => ({
+          setValidateMessages((prevState) => ({
             ...prevState,
-            sex: "Giới tính không được để trống"
+            sex: "Giới tính không được để trống",
           }));
           setErrorMessage(validateMessages.sex);
         },
@@ -342,30 +339,14 @@ function HRSignUp() {
       {
         check: !formData.name,
         action: () => {
-          setValidateMessages(prevState => ({
+          setValidateMessages((prevState) => ({
             ...prevState,
-            name: "Họ tên không được để trống"
+            name: "Họ tên không được để trống",
           }));
           setErrorMessage(validateMessages.name);
         },
       },
-      {
-        check: !isConfirmPasswordValid(
-          formData.confirmPassword,
-          formData.password
-        ),
-        action: () => setErrorMessage(validateMessages.confirmPassword),
-      },
-      {
-        check: !isPasswordValid(formData.password),
-        action: () => {
-          setErrorMessage(validateMessages.password);
-        },
-      },
-      {
-        check: !isEmailValid(formData.email),
-        action: () => setErrorMessage(validateMessages.email),
-      },
+
       {
         check: !formData.agreeToTerms,
         action: () =>
@@ -455,59 +436,6 @@ function HRSignUp() {
           <form onSubmit={handleSignUp} className="space-y-4 mb-4">
             <div className="border-l-4 border-green-500">
               <span className="text-2xl font-bold ml-2 text-black">
-                Tài khoản
-              </span>
-            </div>
-            <h4 className="text-gray-700 font-bold">
-              Email đăng nhập <span className="text-red-500">*</span>
-            </h4>
-            <Input
-              id="email"
-              name="email"
-              type="text"
-              placeholder="Email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData(prevFormData => ({ ...prevFormData, email: e.target.value }))
-              }
-              errorMessage={validateMessages.email}
-              icon={Mail}
-            />
-
-            <h4 className="text-gray-700 font-bold">
-              Mật khẩu <span className="text-red-500">*</span>
-            </h4>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Nhập mật khẩu"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData(prevFormData => ({ ...prevFormData, password: e.target.value }))
-              }
-              errorMessage={validateMessages.password}
-              icon={Lock}
-            />
-
-            <h4 className="text-gray-700 font-bold">
-              Nhập lại mật khẩu <span className="text-red-500">*</span>
-            </h4>
-            <Input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              placeholder="Nhập lại mật khẩu"
-              value={formData.confirmPassword}
-              onChange={(e) =>
-                setFormData(prevFormData => ({ ...prevFormData, confirmPassword: e.target.value }))
-              }
-              errorMessage={validateMessages.confirmPassword}
-              icon={Lock}
-            />
-
-            <div className="border-l-4 border-green-500">
-              <span className="text-2xl font-bold ml-2 text-black">
                 Thông tin nhà tuyển dụng
               </span>
             </div>
@@ -524,7 +452,11 @@ function HRSignUp() {
                   placeholder="Họ và tên"
                   value={formData.name}
                   onChange={(e) =>
-                    setFormData(prevFormData => ({ ...prevFormData, name: e.target.value }))}
+                    setFormData((prevFormData) => ({
+                      ...prevFormData,
+                      name: e.target.value,
+                    }))
+                  }
                   errorMessage={validateMessages.name}
                   icon={User}
                 />
@@ -540,10 +472,13 @@ function HRSignUp() {
                     name="sex"
                     id="sex"
                     onChange={(e) => {
-                      setFormData(prevFormData => ({ ...prevFormData, sex: e.target.value }));
-                      setValidateMessages(prevState => ({
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        sex: e.target.value,
+                      }));
+                      setValidateMessages((prevState) => ({
                         ...prevState,
-                        sex: ""
+                        sex: "",
                       }));
                     }}
                   >
@@ -579,7 +514,10 @@ function HRSignUp() {
               placeholder="Số điện thoại cá nhân"
               value={formData.phone}
               onChange={(e) =>
-                setFormData(prevFormData => ({ ...prevFormData, phone: e.target.value }))
+                setFormData((prevFormData) => ({
+                  ...prevFormData,
+                  phone: e.target.value,
+                }))
               }
               errorMessage={validateMessages.phone}
               icon={Phone}
@@ -597,7 +535,11 @@ function HRSignUp() {
                   placeholder="Tên công ty"
                   value={formData.company}
                   onChange={(e) =>
-                    setFormData(prevFormData => ({ ...prevFormData, company: e.target.value }))}
+                    setFormData((prevFormData) => ({
+                      ...prevFormData,
+                      company: e.target.value,
+                    }))
+                  }
                   errorMessage={validateMessages.company}
                   icon={Building}
                 />
@@ -613,10 +555,13 @@ function HRSignUp() {
                     value={formData.position}
                     displayEmpty
                     onChange={(e) => {
-                      setFormData(prevFormData => ({ ...prevFormData, position: e.target.value }));
-                      setValidateMessages(prevState => ({
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        position: e.target.value,
+                      }));
+                      setValidateMessages((prevState) => ({
                         ...prevState,
-                        position: ""
+                        position: "",
                       }));
                     }}
                     placeholder="Chọn vị trí công tác"
@@ -653,22 +598,24 @@ function HRSignUp() {
                     value={formData.address_work}
                     displayEmpty
                     onChange={(e) => {
-                      setFormData(prevFormData => ({ ...prevFormData, address_work: e.target.value }));
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        address_work: e.target.value,
+                      }));
 
                       const foundProvince = data_provinces.data.find(
                         (province) => province.code === e.target.value
                       );
-                
+
                       setFormData((prevFormData) => ({
                         ...prevFormData,
                         address: foundProvince?.name_with_type || "",
                       }));
 
-                      setValidateMessages(prevState => ({
+                      setValidateMessages((prevState) => ({
                         ...prevState,
-                        address: ""
+                        address: "",
                       }));
-
                     }}
                     placeholder="Chọn tỉnh/ thành phố"
                     className="mt-2 h-9"
@@ -699,7 +646,10 @@ function HRSignUp() {
                     value={formData.district}
                     displayEmpty
                     onChange={(e) =>
-                      setFormData(prevFormData => ({ ...prevFormData, district: e.target.value }))
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        district: e.target.value,
+                      }))
                     }
                     placeholder="Chọn quận/ huyện"
                     className="mt-2 h-9"
@@ -730,7 +680,10 @@ function HRSignUp() {
               placeholder="Tài khoản skype"
               value={formData.skype_account}
               onChange={(e) =>
-                setFormData(prevFormData => ({ ...prevFormData, skype_account: e.target.value }))
+                setFormData((prevFormData) => ({
+                  ...prevFormData,
+                  skype_account: e.target.value,
+                }))
               }
               className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
                   focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 
@@ -893,4 +846,4 @@ function HRSignUp() {
   );
 }
 
-export default HRSignUp;
+export default HRSignUp2;
