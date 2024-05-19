@@ -10,7 +10,6 @@ function EmptyLayout({ children }: LayoutProp) {
       {React.cloneElement(children as React.ReactElement<any>)}
     </div>
   );
-
 }
 
 export default EmptyLayout;
