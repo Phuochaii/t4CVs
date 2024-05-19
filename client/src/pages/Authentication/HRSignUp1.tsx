@@ -64,29 +64,13 @@ interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
-  agreeToTerms: boolean;
   role: string;
-  name: string;
-  sex: string;
-  phone: string;
-  company: string;
-  position: string;
-  address_work: string; // này là hiện code
-  address: string; // này là hiện tên
-  district: string;
-  skype_account: string;
 }
 
 interface ValidateMessages {
-  phone: string;
   email: string;
   password: string;
   confirmPassword: string;
-  company: string;
-  sex: string;
-  name: string;
-  address: string;
-  position: string;
 }
 
 function HRSignUp() {
@@ -96,29 +80,13 @@ function HRSignUp() {
     email: "",
     password: "",
     confirmPassword: "",
-    agreeToTerms: false,
     role: "",
-    name: "",
-    sex: "",
-    phone: "",
-    company: "",
-    position: "",
-    address_work: "",
-    address: "",
-    district: "",
-    skype_account: "",
   });
 
   const [validateMessages, setValidateMessages] = useState<ValidateMessages>({
-    phone: "",
     email: "",
     password: "",
     confirmPassword: "",
-    company: "",
-    sex: "",
-    name: "",
-    address: "",
-    position: "",
   });
 
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -134,10 +102,6 @@ function HRSignUp() {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-
-  const filteredDistricts = data_districts.data.filter(
-    (district) => district.parent_code === formData.address_work
-  );
 
   const isEmailValid = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -249,29 +213,6 @@ function HRSignUp() {
       setValidateMessages((prevState) => ({
         ...prevState,
         confirmPassword: "Nhập lại mật khẩu không đúng",
-      }));
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-  const isPhoneValid = (phone: string) => {
-    setValidateMessages((prevState) => ({
-      ...prevState,
-      phone: "",
-    }));
-
-    if (!phone) {
-      setValidateMessages((prevState) => ({
-        ...prevState,
-        phone: "Số điện thoại cá nhân không được để trống",
-      }));
-      return false;
-    } else if (phone.length !== 10) {
-      setValidateMessages((prevState) => ({
-        ...prevState,
-        phone: "Số điện thoại phải có 10 ký tự",
       }));
       return false;
     } else {

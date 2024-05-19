@@ -61,9 +61,6 @@ const images = [
 ];
 
 interface FormData {
-  email: string;
-  password: string;
-  confirmPassword: string;
   agreeToTerms: boolean;
   role: string;
   name: string;
@@ -79,9 +76,7 @@ interface FormData {
 
 interface ValidateMessages {
   phone: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
+
   company: string;
   sex: string;
   name: string;
@@ -91,9 +86,6 @@ interface ValidateMessages {
 
 function HRSignUp2() {
   const [formData, setFormData] = useState<FormData>({
-    email: "",
-    password: "",
-    confirmPassword: "",
     agreeToTerms: false,
     role: "",
     name: "",
@@ -109,9 +101,7 @@ function HRSignUp2() {
 
   const [validateMessages, setValidateMessages] = useState<ValidateMessages>({
     phone: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+
     company: "",
     sex: "",
     name: "",
@@ -122,7 +112,6 @@ function HRSignUp2() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [expanded, setExpanded] = useState(true);
 
-  const [openDialog, setOpenDialog] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const settings = {
@@ -136,123 +125,6 @@ function HRSignUp2() {
   const filteredDistricts = data_districts.data.filter(
     (district) => district.parent_code === formData.address_work
   );
-
-  const isEmailValid = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setValidateMessages((prevState) => ({
-      ...prevState,
-      email: "",
-    }));
-
-    if (!email) {
-      setValidateMessages((prevState) => ({
-        ...prevState,
-        email: "Email đăng nhập không được để trống",
-      }));
-      return false;
-    } else if (!emailRegex.test(email)) {
-      setValidateMessages((prevState) => ({
-        ...prevState,
-        email: "Định dạng email không phù hợp",
-      }));
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-  const isPasswordValid = (password: string) => {
-    setValidateMessages((prevState) => ({
-      ...prevState,
-      password: "",
-    }));
-
-    const passwordRegexOnlyNumber = /^(?=.*\d)[0-9]{6,25}$/;
-    const passwordRegexOnlyLowcase = /^[a-z]{6,25}$/;
-    const passwordRegexOnlyUppcase = /^[A-Z]{6,25}$/;
-    const passwordRegexNumberandLowcase = /^(?=.*[a-z])(?=.*\d)[a-z\d]{6,25}$/;
-    const passwordRegexNumberandUpcase = /^(?=.*\d)(?=.*[A-Z])[A-Z\d]{6,25}$/;
-    const passwordRegexNoNumber = /^[a-zA-Z]{6,25}$/;
-
-    const passwordLength = password.length;
-    if (!password) {
-      setValidateMessages((prevState) => ({
-        ...prevState,
-        password: "Mật khẩu không được để trống",
-      }));
-      return false;
-    } else if (passwordLength < 6 || passwordLength > 25) {
-      setValidateMessages((prevState) => ({
-        ...prevState,
-        password: "Mật khẩu từ 6 đến 25 ký tự",
-      }));
-      return false;
-    } else if (passwordRegexOnlyNumber.test(password)) {
-      setValidateMessages((prevState) => ({
-        ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ hoa và một chữ thường",
-      }));
-      return false;
-    } else if (passwordRegexOnlyLowcase.test(password)) {
-      setValidateMessages((prevState) => ({
-        ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ số và một chữ hoa",
-      }));
-      return false;
-    } else if (passwordRegexOnlyUppcase.test(password)) {
-      setValidateMessages((prevState) => ({
-        ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ số và một chữ thường",
-      }));
-      return false;
-    } else if (passwordRegexNumberandLowcase.test(password)) {
-      setValidateMessages((prevState) => ({
-        ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ hoa",
-      }));
-      return false;
-    } else if (passwordRegexNumberandUpcase.test(password)) {
-      setValidateMessages((prevState) => ({
-        ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ thường",
-      }));
-      return false;
-    } else if (passwordRegexNoNumber.test(password)) {
-      setValidateMessages((prevState) => ({
-        ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ số",
-      }));
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-  const isConfirmPasswordValid = (
-    confirmpassword: string,
-    password: string
-  ) => {
-    setValidateMessages((prevState) => ({
-      ...prevState,
-      confirmPassword: "",
-    }));
-
-    if (!confirmpassword) {
-      setValidateMessages((prevState) => ({
-        ...prevState,
-        confirmPassword: "Nhập lại mật khẩu không được để trống",
-      }));
-      return false;
-    } else if (confirmpassword !== password) {
-      setValidateMessages((prevState) => ({
-        ...prevState,
-        confirmPassword: "Nhập lại mật khẩu không đúng",
-      }));
-      return false;
-    } else {
-      return true;
-    }
-  };
 
   const isPhoneValid = (phone: string) => {
     setValidateMessages((prevState) => ({
@@ -279,11 +151,6 @@ function HRSignUp2() {
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
-  };
-
-  const handleCloseDialog = (roleclick: any) => {
-    setFormData({ ...formData, role: roleclick });
-    setOpenDialog(false);
   };
 
   const handleSignUp = (e: { preventDefault: () => void }) => {
@@ -386,52 +253,6 @@ function HRSignUp2() {
             Cùng tạo dựng lợi thế cho doanh nghiệp bằng trải nghiệm công nghệ
             tuyển dụng ứng dụng sâu AI & Hiring Funnel.
           </div>
-
-          <Card className="mb-4 border border-green-500">
-            <CardActions disableSpacing>
-              <b className="text-green-600 text-2xl font-bold">Quy định</b>
-              <ExpandMore
-                expand={expanded}
-                onClick={handleExpandClick}
-                aria-expanded={expanded}
-                aria-label="show more"
-              >
-                <ExpandMoreIcon />
-              </ExpandMore>
-            </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-              <CardContent>
-                <Typography paragraph>
-                  Để đảm bảo chất lượng dịch vụ, TopCV{" "}
-                  <span className="text-red-600">
-                    không cho phép một người dùng tạo nhiều tài khoản khác nhau
-                  </span>
-                  .
-                </Typography>
-                <Typography paragraph>
-                  Nếu phát hiện vi phạm, TopCV sẽ ngừng cung cấp dịch vụ tới tất
-                  cả các tài khoản trùng lặp hoặc chặn toàn bộ truy cập tới hệ
-                  thống website của TopCV. Đối với trường hợp khách hàng đã sử
-                  dụng hết 3 tin tuyển dụng miễn phí, TopCV hỗ trợ kích hoạt
-                  đăng tin tuyển dụng không giới hạn sau khi quý doanh nghiệp
-                  cung cấp thông tin giấy phép kinh doanh.
-                </Typography>
-                <Typography paragraph>
-                  Mọi thắc mắc vui lòng liên hệ Hotline CSKH:
-                </Typography>
-                <Typography className="flex">
-                  <Phone color="#00b14f"></Phone>
-                  <span className="text-green-500 ml-1 pr-10 font-bold">
-                    (024) 71079799
-                  </span>
-                  <Phone color="#00b14f"></Phone>
-                  <span className="text-green-500 ml-1 font-bold">
-                    0862 691929
-                  </span>
-                </Typography>
-              </CardContent>
-            </Collapse>
-          </Card>
 
           <form onSubmit={handleSignUp} className="space-y-4 mb-4">
             <div className="border-l-4 border-green-500">
@@ -686,7 +507,7 @@ function HRSignUp2() {
                 }))
               }
               className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
-                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 
+                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 
                   `}
             />
 
@@ -724,16 +545,6 @@ function HRSignUp2() {
               </div>
             )}
           </form>
-
-          <p className="text-center text-gray-600">
-            Bạn đã có tài khoản?{" "}
-            <Link
-              to="/hr-login"
-              className="text-green-500 hover:underline hover:text-green-500"
-            >
-              Đăng nhập ngay
-            </Link>
-          </p>
         </div>
 
         <div className="col-span-1 fixed top-0 right-0 left-2/3 bottom-0">
@@ -769,69 +580,6 @@ function HRSignUp2() {
           </div>
         </div>
       </div>
-
-      <Dialog
-        open={openDialog}
-        onClose={handleCloseDialog}
-        maxWidth="md"
-        fullWidth
-        PaperProps={{
-          style: {
-            borderRadius: "20px",
-          },
-        }}
-      >
-        <div className="grid grid-cols-2 gap-4">
-          <div className="col-span-2 justify-self-center text-center pt-16">
-            <div className="text-2xl font-bold pb-3">Chào bạn,</div>
-            <div className="flex text-gray-600 pb-3">
-              Bạn hãy dành ra vài giây để xác nhận thông tin dưới đây nhé!
-              <img
-                src="https://tuyendung.topcv.vn/app/_nuxt/img/ring.8fa28ce.png"
-                alt="bell"
-                style={{ width: "40px" }}
-              />
-            </div>
-          </div>
-          <div className="col-span-2 border border-gray-100 pb-3"></div>
-          <div className="col-span-2 text-center font-medium text-lg">
-            <div>Để tối ưu tốt nhất cho trải nghiệm của bạn với TopCV,</div>
-            <div>vui lòng lựa chọn nhóm phù hợp nhất với bạn.</div>
-          </div>
-        </div>
-        <div className="col-span-2 flex flex-row">
-          <img
-            className="basis-1/2 justify-self-center"
-            src="https://tuyendung.topcv.vn/app/_nuxt/img/bussiness.efbec2d.png"
-            alt="HR"
-            style={{ width: "384px" }}
-          />
-          <img
-            className="basis-1/2 justify-self-center"
-            src="https://tuyendung.topcv.vn/app/_nuxt/img/student.c1c39ee.png"
-            alt="employ"
-            style={{ width: "384px" }}
-          />
-        </div>
-        <div className="col-span-2 flex flex-row pb-16">
-          <div className="basis-1/2 justify-self-center  text-center">
-            <button
-              className="rounded-full px-4 py-4 bg-green-600 text-white hover:bg-green-700"
-              onClick={(_e) => handleCloseDialog("HR")}
-            >
-              Tôi là nhà tuyển dụng
-            </button>
-          </div>
-          <div className="basis-1/2 justify-self-center text-center">
-            <a
-              className="rounded-full px-4 py-4 bg-green-600 text-white hover:bg-green-700"
-              href="/user-signup"
-            >
-              Tôi là ứng viên tìm việc
-            </a>
-          </div>
-        </div>
-      </Dialog>
 
       <Snackbar
         open={!!errorMessage}
