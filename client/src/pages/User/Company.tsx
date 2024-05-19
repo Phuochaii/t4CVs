@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 import RelatedCompany from "../../shared/components/RelatedCompany";
+import RecruitmentItem from "../../shared/components/RecruitmentItem";
+
+import { Search, MapPin, ChevronDown } from "lucide-react";
 
 const relatedCompanies = [
     {
@@ -185,6 +188,74 @@ function Company() {
                                         <path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z" />
                                     </svg>
                                 </div> */}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="w-full rounded-[8px] overflow-hidden">
+                        <div className="intro mb-[32px] bg-white">
+                            <h2 className="p-5 bg-gradient-to-r from-[#212f3f] to-[#00b14f] text-white font-semibold text-lg">
+                                Tuyển dụng
+                            </h2>
+                            <div className="px-5 py-7">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-[46%]">
+                                        <div className="border flex items-center py-4 px-3 rounded-md overflow-hidden">
+                                            <Search
+                                                style={{
+                                                    width: "24px",
+                                                    height: "24px",
+                                                    marginRight: "12px",
+                                                }}
+                                            />
+                                            <input
+                                                type="text"
+                                                placeholder="Tên công viêc, vị trí ứng tuyển..."
+                                                className="w-full bg-white focus:outline-none  "
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="w-[34%]">
+                                        <div className="border flex items-center py-4 px-3 rounded-md overflow-hidden">
+                                            <MapPin
+                                                style={{
+                                                    width: "24px",
+                                                    height: "24px",
+                                                    marginRight: "12px",
+                                                }}
+                                            />
+                                            <div className="cursor-pointer flex items-center">
+                                                <span>
+                                                    Tất cả tỉnh, thành phố
+                                                </span>
+                                                <ChevronDown
+                                                    style={{
+                                                        width: "24px",
+                                                        height: "24px",
+                                                        color: "00B14F",
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="w-[20%] cursor-pointer">
+                                        <div className="border flex items-center p-4 rounded-md overflow-hidden bg-[#00B14F]">
+                                            <Search
+                                                style={{
+                                                    width: "24px",
+                                                    height: "24px",
+                                                    marginRight: "12px",
+                                                    color: "white",
+                                                }}
+                                            />
+                                            <span className="text-white">
+                                                Tìm kiếm
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <RecruitmentItem />
+                                <RecruitmentItem />
+                                <RecruitmentItem />
                             </div>
                         </div>
                     </div>
