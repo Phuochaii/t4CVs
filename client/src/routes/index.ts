@@ -89,6 +89,7 @@ const routes: RouteItem[] = [
 
   { path: "/hr/campaign", component: HR.Campaign, layout: HRLayout }, // thuc
 
+  
   { path: "/hr/campain-edit/:id", component: HR.CompaignEdit, layout: HRLayout }, // thuc
 
   { path: "/hr/recruitment", component: HR.Recruitment, layout: HRLayout },
@@ -104,6 +105,7 @@ const routes: RouteItem[] = [
 
   { path: "/hr/settings", component: HR.Settings, layout: HRLayout}, //tien + hung
 
+  { path: "/hr/account/activities",component: HR.Activities, layout:HRLayout},
 
 ];
 
