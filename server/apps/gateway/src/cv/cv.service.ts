@@ -25,17 +25,11 @@ export class CVService {
   }
 
   createCV(file: any, userId: number, templateId: number): Observable<any> {
-    // const uploadLink$ = from(this.uploadService.upload(file));
-    // return uploadLink$.pipe(
-    //   switchMap((link: string) =>
-    //     this.cvClient.send({ cmd: 'createCV' }, { userId, link, templateId }),
-    //   ),
-    // );
-    const link = '123';
-
-    return this.cvClient.send(
-      { cmd: 'createCV' },
-      { userId, link, templateId },
+    const uploadLink$ = from(this.uploadService.upload(file));
+    return uploadLink$.pipe(
+      switchMap((link: string) =>
+        this.cvClient.send({ cmd: 'createCV' }, { userId, link, templateId }),
+      ),
     );
   }
 
