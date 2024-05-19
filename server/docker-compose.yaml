@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  gateway:
+    container_name: gateway
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=gateway
+    environment:
+      - NOTIFICATION_SERVICE_URL=notification:50052
+    ports:
+      - 3000:3000
+    networks:
+      - backend
+  notification:
+    container_name: notification
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=notification-service
+    environment:
+      - DB_HOST=notification-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=123456
+      - DB_NOTIFICATION_DATABASE=notification
+    depends_on:
+      - notification-db
+    networks:
+      - backend
+      - notification
+  notification-db:
+    container_name: notification-db
+    image: postgres:latest
+    networks:
+      - notification
+    environment:
+      - POSTGRES_PASSWORD=123456
+    volumes:
+      - notification-db:/var/lib/postgresql/data
+networks:
+  backend:
+  notification:
+volumes:
+  notification-db:
