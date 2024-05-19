@@ -16,20 +16,22 @@ const Item = ({
   iconSize = 16,
   title,
   isChosen = false,
+  available = false,
   onClick = () => {},
 }: {
   icon?: React.FC<LucideProps>;
   iconSize?: number;
   title: string;
   isChosen?: boolean;
+  available?: boolean;
   onClick?: () => void;
 }) => {
   return (
     <li
       onClick={onClick}
-      className={`flex items-center space-x-2 cursor-pointer hover:text-green-500 active:text-green-500 ${
+      className={`flex items-center space-x-2 cursor-pointer text-sm font-semibold hover:text-green-500 active:text-green-500 ${
         isChosen ? "bg-white text-green-500" : ""
-      }`}
+      } ${!available?"text-gray-400":""}`}
       style={{
         padding: "12px 14px",
         margin: 0,
@@ -54,18 +56,45 @@ const Item = ({
 
 const Settings = () => {
   const sidebarItems = [
-    { icon: Lock, title: "Đổi mật khẩu", key: "ChangePassword", component: <div>Change Password</div> },
-    { icon: UserRound, title: "Thông tin cá nhân", key: "Profile", component: <Profile /> },
-    { icon: File, title: "Giấy phép kinh doanh", key: "Certificate", component: <Certificate/> },
-    { icon: Building, title: "Thông tin công ty", key: "CompanyInfo", component: <CompanyInfo/> },
-    { icon: Share2, title: "Kết nối API", key: "APIConnection", component: <div>API Connection</div> },
+    {
+      icon: Lock,
+      title: "Đổi mật khẩu",
+      key: "ChangePassword",
+      component: <div>Change Password</div>,
+    },
+    {
+      icon: UserRound,
+      title: "Thông tin cá nhân",
+      key: "Profile",
+      component: <Profile />,
+      available: true,
+    },
+    {
+      icon: File,
+      title: "Giấy phép kinh doanh",
+      key: "Certificate",
+      component: <Certificate />,
+      available: true,
+    },
+    {
+      icon: Building,
+      title: "Thông tin công ty",
+      key: "CompanyInfo",
+      component: <CompanyInfo />,
+      available: true,
+    },
+    {
+      icon: Share2,
+      title: "Kết nối API",
+      key: "APIConnection",
+      component: <div>API Connection</div>,
+    },
   ];
   const [selectedKey, setSelectedKey] = useState('ChangePassword');
   const selectedComponent = sidebarItems.find(item => item.key === selectedKey)?.component;
   return (
-    <div className="w-[105%] flex flex-row h-fit m-5">
-      <div className="w-1/5 bg-gray-100">
-       
+    <div className="flex flex-row h-fit m-5">
+      <div className="w-[230px] bg-gray-100">
           <ul className="space-y-2">
           {sidebarItems.map((item) => (
             <Item
@@ -73,13 +102,14 @@ const Settings = () => {
               icon={item.icon}
               title={item.title}
               isChosen={selectedKey === item.key}
+              available={item.available}
               onClick={() => setSelectedKey(item.key)}
             />
           ))}
         </ul>
    
       </div>
-      <div className="w-4/5 bg-white">
+      <div className="flex-grow bg-white">
          {selectedComponent}
       </div>
     </div>

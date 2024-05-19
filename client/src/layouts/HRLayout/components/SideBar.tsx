@@ -114,8 +114,9 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
       },
       {
         _icon: LineChart,
-        to: "",
+        to: "/hr/recruitment-reports",
         title: "Báo cáo tuyển dụng",
+        available: true,
       },
     ],
 
@@ -152,8 +153,9 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
       {
         _icon: Settings,
         icon: "fa-solid fa-gear",
-        to: "",
+        to: "/hr/settings",
         title: "Cài đặt tài khoản",
+        available: true,
       },
     ],
     [

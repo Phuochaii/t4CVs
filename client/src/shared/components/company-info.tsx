@@ -10,7 +10,7 @@ function CompanyInfo() {
         { id: 4, name: 'FPT information system', number: '0401530735', logo: FPT, time: '14-09-2023 15:55 PM', address: '170/2 Đường Nguyễn Xí, Quận 26', field:'Khác' },
     ];
     return (
-        <div className="w-full m-5 flex flex-col">
+        <div className="m-5 flex flex-col">
             <div
                 className={`btn text-sm p-3 flex items-center justify-between w-11/12`}
                 style={{

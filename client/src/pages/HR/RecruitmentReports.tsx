@@ -1,10 +1,10 @@
 function RecruitmentReports() {
     return <>
         <div className="recruitment-reports text-black">
-            <div className="recruitment-reports--header font-medium text-black text-lg p-5 bg-white">
+            <div className=" font-medium text-black text-lg px-5 py-3 bg-white">
                 Báo cáo hoạt động tuyển dụng
             </div>
-            <div className="recruitment-reports--body px-5 grid grid-cols-2 gap-3 mt-20">
+            <div className="recruitment-reports--body px-5 grid grid-cols-2 gap-3 mt-10 mb-5">
                 <div className="left-body flex flex-col gap-5">
                     <div className="left-body--banner text-[40px] font-medium">
                         Báo cáo hiệu quả tuyển dụng
