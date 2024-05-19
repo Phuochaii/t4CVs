@@ -7,6 +7,10 @@ import {
   GetEmployerByIdService,
   GetEmployerService,
   GetTotalEmployerService,
+  UpdateEmployerCompanyIdService,
+  UpdateEmployerLicenseService,
+  UpdateEmployerLicenseStatusService,
+  UpdateEmployerPhoneStatusService,
 } from './domain/service';
 
 @Module({
@@ -47,18 +51,54 @@ import {
       inject: [EmployerRepository],
     },
     {
+      provide: UpdateEmployerCompanyIdService,
+      useFactory: (employerRepository: EmployerRepository) => {
+        return new UpdateEmployerCompanyIdService(employerRepository);
+      },
+      inject: [EmployerRepository],
+    },
+    {
+      provide: UpdateEmployerLicenseService,
+      useFactory: (employerRepository: EmployerRepository) => {
+        return new UpdateEmployerLicenseService(employerRepository);
+      },
+      inject: [EmployerRepository],
+    },
+    {
+      provide: UpdateEmployerLicenseStatusService,
+      useFactory: (employerRepository: EmployerRepository) => {
+        return new UpdateEmployerLicenseStatusService(employerRepository);
+      },
+      inject: [EmployerRepository],
+    },
+    {
+      provide: UpdateEmployerPhoneStatusService,
+      useFactory: (employerRepository: EmployerRepository) => {
+        return new UpdateEmployerPhoneStatusService(employerRepository);
+      },
+      inject: [EmployerRepository],
+    },
+    {
       provide: EmployerApplication,
       useFactory: (
         createEmployerService: CreateEmployerService,
         getAllEmployerService: GetEmployerService,
         getTotalEmployerService: GetTotalEmployerService,
         getEmployerByIdService: GetEmployerByIdService,
+        updateEmployerCompanyIdService: UpdateEmployerCompanyIdService,
+        updateEmployerLicenseService: UpdateEmployerLicenseService,
+        updateEmployerLicenseStatusService: UpdateEmployerLicenseStatusService,
+        updateEmployerPhoneStatusService: UpdateEmployerPhoneStatusService,
       ) => {
         return new EmployerApplication(
           createEmployerService,
           getAllEmployerService,
           getTotalEmployerService,
           getEmployerByIdService,
+          updateEmployerCompanyIdService,
+          updateEmployerLicenseService,
+          updateEmployerLicenseStatusService,
+          updateEmployerPhoneStatusService,
         );
       },
       inject: [
@@ -66,6 +106,10 @@ import {
         GetEmployerService,
         GetTotalEmployerService,
         GetEmployerByIdService,
+        UpdateEmployerCompanyIdService,
+        UpdateEmployerLicenseService,
+        UpdateEmployerLicenseStatusService,
+        UpdateEmployerPhoneStatusService,
       ],
     },
   ],

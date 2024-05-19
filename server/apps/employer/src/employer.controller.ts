@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { EmployerApplication, PositionApplication } from './domain';
-import { CreateEmployerDTO } from './domain/dto';
+import { CreateEmployerDTO, UpdateEmployerCompanyDTO } from './domain/dto';
 
 @Controller()
 export class EmployerController {
@@ -51,6 +51,58 @@ export class EmployerController {
 
     if (employer) {
       return employer;
+    } else {
+      return 'Your employerId not exsist';
+    }
+  }
+
+  @MessagePattern({ cmd: 'update_employer_companyid' })
+  updateEmployerCompanyId(employer: UpdateEmployerCompanyDTO) {
+    const result = this.employerApplication.updateEmployerCompanyId(employer);
+
+    if (result) {
+      return result;
+    } else {
+      return 'Your employerId not exsist';
+    }
+  }
+
+  @MessagePattern({ cmd: 'update_employer_license' })
+  updateEmployerLicense(@Payload() data: any) {
+    const employerId = String(data.employerId);
+    const license = String(data.license);
+
+    const result = this.employerApplication.updateEmployerLicense(
+      employerId,
+      license,
+    );
+
+    if (result) {
+      return result;
+    } else {
+      return 'Your employerId not exsist';
+    }
+  }
+
+  @MessagePattern({ cmd: 'update_employer_license_status' })
+  updateEmployerLicenseStatus(employerId: string) {
+    const result =
+      this.employerApplication.updateEmployerLicenseStatus(employerId);
+
+    if (result) {
+      return result;
+    } else {
+      return 'Your employerId not exsist';
+    }
+  }
+
+  @MessagePattern({ cmd: 'update_employer_phone_status' })
+  updateEmployerPhoneStatus(employerId: string) {
+    const result =
+      this.employerApplication.updateEmployerPhoneStatus(employerId);
+
+    if (result) {
+      return result;
     } else {
       return 'Your employerId not exsist';
     }
