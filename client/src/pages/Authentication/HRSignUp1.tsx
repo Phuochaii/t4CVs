@@ -267,8 +267,8 @@ function HRSignUp() {
 
     if (!error) {
       setShowSuccessMessage(true);
+      navigation("/hr-signup/2");
     }
-    navigation("/hr-signup/2");
   };
 
   return (
