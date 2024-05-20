@@ -11,7 +11,7 @@ function CustomSelectOption({
 }: {
   label: string;
   labelColor?: string;
-  list?: { name: string; value: string | boolean | undefined }[];
+  list?: NameValue[];
   value?: any;
   width?: string;
   onChange?: (e: any) => void;

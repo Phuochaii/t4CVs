@@ -2,7 +2,7 @@ import axios from "axios"
 import { CampaignFromServer } from "../types/Campaign.type"
 import { CompanyFromServer } from "../types/Company.type"
 import { EmployerFromServer } from "../types/Employer.type"
-import { RecruitmentFromServer } from "../types/Recruitment.type"
+import { Field, RecruitmentFromServer } from "../types/Recruitment.type"
 import { ApplicationFromServer } from "../types/Application.type"
 import { UserFromServer } from "../types/User.type"
 
@@ -29,10 +29,12 @@ export async function getCampaignByHRId(id: number, page:number = 1) {
 }
 
 
-export async function getAllCompanies() {
-    const response = await axios.get(`${serverURL}/company/all`)
+export async function getAllCompanies(page: number = 1) {
+    const response = await axios.get(`${serverURL}/company/all?page=${page}`)
     const rawCompanies: CompanyFromServer[] = response.data.data;
-    return rawCompanies;
+    const totalPages = response.data.total_page;
+    const total = response.data.total;
+    return {allCompanies: rawCompanies, totalPages: totalPages, total: total};
 }
 
 export async function getCompanyById(id:number) {
@@ -108,4 +110,10 @@ export async function getUserById(userId: number) {
     catch (e) {
         return null;
     }
+}
+
+export async function getAllFields() {
+    const response = await axios.get(`${serverURL}/job/field/all`);
+    const fields: Field[] = response.data;
+    return fields;
 }

@@ -12,14 +12,12 @@ function Header() {
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
-
+  // const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const userId =
-    localStorage.getItem('user') == null
-      ? ''
-      : JSON.parse(localStorage.getItem('user') as string).id;
-
-  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-
+    localStorage.getItem("user") == null
+      ? ""
+      : JSON.parse(localStorage.getItem("user") as string).id;
+  const [isAuthenticated, setIsAuthenticated] = React.useState(userId != "");
   const fetchNotification = ({
     id,
     limit = 3,
@@ -34,6 +32,13 @@ function Header() {
       setTotal(res.pagination.total);
     });
   };
+  React.useEffect(() => {
+    if (userId != "") fetchNotification({ id: userId });
+  }, []);
+
+  // React.useEffect(() => {
+  //   console.log(user);
+  // }, [user]);
 
   const [isJobsHovered, setIsJobsHovered] = useState(false);
   const [isCVsHovered, setIsCVsHovered] = useState(false);
@@ -43,10 +48,10 @@ function Header() {
   const [isAccountHovered, setIsAccountHovered] = useState(false);
 
   return (
-    <header className="menu-top bg-white text-black border border-1 border-slate-300 fixed z-50 top-0 left-0 right-0">
-      <div className=" px-8 flex flex-row justify-between items-center">
-        <div className="main flex flex-row items-center gap-5">
-          <div className="logo w-52" onClick={() => navigation('/')}>
+    <header className="fixed top-0 left-0 right-0 z-50 text-black bg-white border menu-top border-1 border-slate-300">
+      <div className="flex flex-row items-center justify-between px-8 ">
+        <div className="flex flex-row items-center gap-5 main">
+          <div className="logo w-52" onClick={() => navigation("/")}>
             <img src="../../../images/topcv-logo.png" alt="" />
           </div>
           <nav className="nav-menu">
@@ -58,13 +63,13 @@ function Header() {
               >
                 <a
                   href="#"
-                  className="font-semibold text-base px-6 py-8 hover:text-green-500"
+                  className="px-6 py-8 text-base font-semibold hover:text-green-500"
                 >
                   Việc làm
                 </a>
                 {isJobsHovered ? (
-                  <ul className="sub-menu absolute z-50 top-full left-0 font-semibold text-base bg-white border border-slate-100 rounded-lg p-3 flex flex-col gap-3 shadow-lg">
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                  <ul className="absolute left-0 z-50 flex flex-col gap-3 p-3 text-base font-semibold bg-white border rounded-lg shadow-lg sub-menu top-full border-slate-100">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         viewBox="0 0 15 15"
@@ -81,7 +86,7 @@ function Header() {
                     <li>
                       <hr />
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -95,7 +100,12 @@ function Header() {
                       </svg>
                       Việc làm đang ứng tuyển
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li
+                      onClick={() => {
+                        navigation("/saved-jobs");
+                      }}
+                      className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
+                    >
                       <svg
                         className="w-7 h-7"
                         fill="rgb(34 197 94)"
@@ -109,7 +119,7 @@ function Header() {
                     <li>
                       <hr />
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-5 h-5"
                         fill="rgb(34 197 94)"
@@ -126,7 +136,7 @@ function Header() {
                       </svg>
                       Việc làm phù hợp
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -137,7 +147,7 @@ function Header() {
                       </svg>
                       Việc làm IT
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -187,14 +197,14 @@ function Header() {
               >
                 <a
                   href="#"
-                  className="font-semibold text-base px-6 py-8 hover:text-green-500"
+                  className="px-6 py-8 text-base font-semibold hover:text-green-500"
                 >
                   Hồ sơ & CV
                 </a>
                 {isCVsHovered ? (
-                  <ul className="sub-menu absolute z-50 top-full left-0 font-semibold text-base bg-white border border-slate-100 rounded-lg p-3 flex flex-col gap-3 shadow-lg">
+                  <ul className="absolute left-0 z-50 flex flex-col gap-3 p-3 text-base font-semibold bg-white border rounded-lg shadow-lg sub-menu top-full border-slate-100">
                     {/* <li><hr /></li> */}
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-7 h-7"
                         viewBox="0 0 24 24"
@@ -210,7 +220,7 @@ function Header() {
                           fill="rgb(34 197 94)"
                         />
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           clipRule="evenodd"
                           d="M7 2.25C5.48122 2.25 4.25 3.48122 4.25 5V19C4.25 20.5188 5.48122 21.75 7 21.75H17C18.5188 21.75 19.75 20.5188 19.75 19V8.1979C19.75 7.83178 19.6352 7.47488 19.4217 7.17745L16.4085 2.97955C16.0798 2.52157 15.5506 2.25 14.9868 2.25H7ZM5.75 5C5.75 4.30964 6.30964 3.75 7 3.75H14.25V8.14705C14.25 8.56126 14.5858 8.89705 15 8.89705H18.25V19C18.25 19.6904 17.6904 20.25 17 20.25H7C6.30964 20.25 5.75 19.6904 5.75 19V5Z"
                           fill="rgb(34 197 94)"
@@ -218,7 +228,7 @@ function Header() {
                       </svg>
                       Quản lý CV
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -229,7 +239,7 @@ function Header() {
                       </svg>
                       Tải CV lên
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -243,7 +253,7 @@ function Header() {
                     <li>
                       <hr />
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-7 h-7"
                         viewBox="0 0 24 24"
@@ -259,7 +269,7 @@ function Header() {
                           fill="rgb(34 197 94)"
                         />
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           clipRule="evenodd"
                           d="M7 2.25C5.48122 2.25 4.25 3.48122 4.25 5V19C4.25 20.5188 5.48122 21.75 7 21.75H17C18.5188 21.75 19.75 20.5188 19.75 19V8.1979C19.75 7.83178 19.6352 7.47488 19.4217 7.17745L16.4085 2.97955C16.0798 2.52157 15.5506 2.25 14.9868 2.25H7ZM5.75 5C5.75 4.30964 6.30964 3.75 7 3.75H14.25V8.14705C14.25 8.56126 14.5858 8.89705 15 8.89705H18.25V19C18.25 19.6904 17.6904 20.25 17 20.25H7C6.30964 20.25 5.75 19.6904 5.75 19V5Z"
                           fill="rgb(34 197 94)"
@@ -267,7 +277,7 @@ function Header() {
                       </svg>
                       Mẫu CV
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -281,7 +291,7 @@ function Header() {
                     <li>
                       <hr />
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-7 h-7"
                         viewBox="0 0 24 24"
@@ -297,7 +307,7 @@ function Header() {
                           fill="rgb(34 197 94)"
                         />
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           clipRule="evenodd"
                           d="M7 2.25C5.48122 2.25 4.25 3.48122 4.25 5V19C4.25 20.5188 5.48122 21.75 7 21.75H17C18.5188 21.75 19.75 20.5188 19.75 19V8.1979C19.75 7.83178 19.6352 7.47488 19.4217 7.17745L16.4085 2.97955C16.0798 2.52157 15.5506 2.25 14.9868 2.25H7ZM5.75 5C5.75 4.30964 6.30964 3.75 7 3.75H14.25V8.14705C14.25 8.56126 14.5858 8.89705 15 8.89705H18.25V19C18.25 19.6904 17.6904 20.25 17 20.25H7C6.30964 20.25 5.75 19.6904 5.75 19V5Z"
                           fill="rgb(34 197 94)"
@@ -305,7 +315,7 @@ function Header() {
                       </svg>
                       Dịch vụ tư vấn CV
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6 pl-1"
                         fill="rgb(34 197 94)"
@@ -320,7 +330,7 @@ function Header() {
                       </svg>
                       Hướng dẫn viết CV theo ngành nghề
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -328,7 +338,7 @@ function Header() {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M15,3.41421356 L15,7 L18.5857864,7 L15,3.41421356 Z M19,9 L15,9 C13.8954305,9 13,8.1045695 13,7 L13,3 L5,3 L5,21 L19,21 L19,9 Z M5,1 L15.4142136,1 L21,6.58578644 L21,21 C21,22.1045695 20.1045695,23 19,23 L5,23 C3.8954305,23 3,22.1045695 3,21 L3,3 C3,1.8954305 3.8954305,1 5,1 Z M11,15.5857864 L15.2928932,11.2928932 L16.7071068,12.7071068 L11,18.4142136 L7.29289322,14.7071068 L8.70710678,13.2928932 L11,15.5857864 Z"
                         />
                       </svg>
@@ -337,7 +347,7 @@ function Header() {
                     <li>
                       <hr />
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -387,15 +397,15 @@ function Header() {
               >
                 <a
                   href="#"
-                  className="font-semibold text-base px-6 py-8 hover:text-green-500"
+                  className="px-6 py-8 text-base font-semibold hover:text-green-500"
                 >
                   Công ty
                 </a>
                 {isCompaniesHovered ? (
-                  <ul className="sub-menu absolute z-50 top-full left-0 font-semibold text-base bg-white border border-slate-100 rounded-lg p-3 flex flex-col gap-3 shadow-lg">
+                  <ul className="absolute left-0 z-50 flex flex-col gap-3 p-3 text-base font-semibold bg-white border rounded-lg shadow-lg sub-menu top-full border-slate-100">
                     <li
-                      onClick={() => navigation('/companies')}
-                      className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer"
+                      onClick={() => navigation("/companies")}
+                      className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
                       <svg
                         className="w-6 h-6"
@@ -407,7 +417,7 @@ function Header() {
                       </svg>
                       Danh sách công ty
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         viewBox="0 0 512 512"
@@ -444,14 +454,14 @@ function Header() {
               >
                 <a
                   href="#"
-                  className="font-semibold text-base px-6 py-8 hover:text-green-500"
+                  className="px-6 py-8 text-base font-semibold hover:text-green-500"
                 >
                   Công cụ
                 </a>
                 {isToolsHovered ? (
                   <div className="grid grid-cols-2 absolute z-50 top-full left-0 w-[720px] font-semibold text-base bg-white border border-slate-100 rounded-lg shadow-lg">
-                    <ul className="sub-menu p-3 flex flex-col gap-3">
-                      <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <ul className="flex flex-col gap-3 p-3 sub-menu">
+                      <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                         <svg
                           className="w-6 h-6"
                           fill="none"
@@ -466,7 +476,7 @@ function Header() {
                         </svg>
                         Trắc nghiệm tính cách MBTI
                       </li>
-                      <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                      <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                         <svg
                           className="w-6 h-6"
                           fill="none"
@@ -484,7 +494,7 @@ function Header() {
                       <li>
                         <hr />
                       </li>
-                      <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                      <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                         <svg
                           className="w-6 h-6"
                           fill="rgb(34 197 94)"
@@ -498,7 +508,7 @@ function Header() {
                       <li>
                         <hr />
                       </li>
-                      <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                      <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                         <svg
                           className="w-6 h-6"
                           viewBox="0 0 48 48"
@@ -508,23 +518,23 @@ function Header() {
                           <path
                             d="M4 13L24 8L44 13L24 18L4 13Z"
                             stroke="rgb(34 197 94)"
-                            stroke-width="4"
+                            strokeWidth="4"
                             strokeLinecap="round"
-                            stroke-linejoin="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M13 16V25.9706C13 25.9706 18 29 24 29C30 29 35 25.9706 35 25.9706V16"
                             stroke="rgb(34 197 94)"
-                            stroke-width="4"
+                            strokeWidth="4"
                             strokeLinecap="round"
-                            stroke-linejoin="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M7 14V36"
                             stroke="rgb(34 197 94)"
-                            stroke-width="4"
+                            strokeWidth="4"
                             strokeLinecap="round"
-                            stroke-linejoin="round"
+                            strokeLinejoin="round"
                           />
                           <rect
                             x="4"
@@ -533,9 +543,9 @@ function Header() {
                             height="6"
                             fill="none"
                             stroke="rgb(34 197 94)"
-                            stroke-width="4"
+                            strokeWidth="4"
                             strokeLinecap="round"
-                            stroke-linejoin="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                         Khóa học
@@ -543,7 +553,7 @@ function Header() {
                       <li>
                         <hr />
                       </li>
-                      <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                      <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                         <svg
                           className="w-6 h-6"
                           fill="rgb(34 197 94)"
@@ -556,8 +566,8 @@ function Header() {
                       </li>
                     </ul>
 
-                    <ul className="sub-menu p-3 flex flex-col gap-3">
-                      <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <ul className="flex flex-col gap-3 p-3 sub-menu">
+                      <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                         <svg
                           className="w-6 h-6"
                           fill="rgb(34 197 94)"
@@ -579,7 +589,7 @@ function Header() {
                         </svg>
                         Tính lương GROSS - NET
                       </li>
-                      <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                      <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                         <svg
                           className="w-6 h-6"
                           viewBox="0 0 16 16"
@@ -611,7 +621,7 @@ function Header() {
                       <li>
                         <hr />
                       </li>
-                      <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                      <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                         <svg
                           className="w-6 h-6"
                           fill="rgb(34 197 94)"
@@ -640,7 +650,7 @@ function Header() {
                         </svg>
                         Tính Bảo hiểm thất nghiệp
                       </li>
-                      <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                      <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                         <svg
                           className="w-6 h-6"
                           fill="rgb(34 197 94)"
@@ -669,7 +679,7 @@ function Header() {
                       <li>
                         <hr />
                       </li>
-                      <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                      <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                         <svg
                           className="w-6 h-6"
                           viewBox="0 0 24 24"
@@ -679,14 +689,14 @@ function Header() {
                           <path
                             d="M13 5C13 6.10457 10.5376 7 7.5 7C4.46243 7 2 6.10457 2 5M13 5C13 3.89543 10.5376 3 7.5 3C4.46243 3 2 3.89543 2 5M13 5V6.5M2 5V17C2 18.1046 4.46243 19 7.5 19M7.5 11C7.33145 11 7.16468 10.9972 7 10.9918C4.19675 10.9 2 10.0433 2 9M7.5 15C4.46243 15 2 14.1046 2 13M22 11.5C22 12.6046 19.5376 13.5 16.5 13.5C13.4624 13.5 11 12.6046 11 11.5M22 11.5C22 10.3954 19.5376 9.5 16.5 9.5C13.4624 9.5 11 10.3954 11 11.5M22 11.5V19C22 20.1046 19.5376 21 16.5 21C13.4624 21 11 20.1046 11 19V11.5M22 15.25C22 16.3546 19.5376 17.25 16.5 17.25C13.4624 17.25 11 16.3546 11 15.25"
                             stroke="rgb(34 197 94)"
-                            stroke-width="2"
+                            strokeWidth="2"
                             strokeLinecap="round"
-                            stroke-linejoin="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                         Tính lãi xuất kép
                       </li>
-                      <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                      <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                         <svg
                           className="w-6 h-6"
                           fill="rgb(34 197 94)"
@@ -725,13 +735,13 @@ function Header() {
               >
                 <a
                   href="#"
-                  className="font-semibold text-base px-6 py-8 hover:text-green-500"
+                  className="px-6 py-8 text-base font-semibold hover:text-green-500"
                 >
                   Cẩm nang nghề nghiệp
                 </a>
                 {isSupportsHovered ? (
-                  <ul className="sub-menu absolute z-50 top-full left-0 font-semibold text-base bg-white border border-slate-100 rounded-lg p-3 flex flex-col gap-3 shadow-lg">
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                  <ul className="absolute left-0 z-50 flex flex-col gap-3 p-3 text-base font-semibold bg-white border rounded-lg shadow-lg sub-menu top-full border-slate-100">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -746,7 +756,7 @@ function Header() {
                       </svg>
                       Định hướng nghề nghiệp
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         viewBox="0 0 24 24"
@@ -756,14 +766,14 @@ function Header() {
                         <path
                           d="M13 7L11.8845 4.76892C11.5634 4.1268 11.4029 3.80573 11.1634 3.57116C10.9516 3.36373 10.6963 3.20597 10.4161 3.10931C10.0992 3 9.74021 3 9.02229 3H5.2C4.0799 3 3.51984 3 3.09202 3.21799C2.71569 3.40973 2.40973 3.71569 2.21799 4.09202C2 4.51984 2 5.0799 2 6.2V7M2 7H17.2C18.8802 7 19.7202 7 20.362 7.32698C20.9265 7.6146 21.3854 8.07354 21.673 8.63803C22 9.27976 22 10.1198 22 11.8V16.2C22 17.8802 22 18.7202 21.673 19.362C21.3854 19.9265 20.9265 20.3854 20.362 20.673C19.7202 21 18.8802 21 17.2 21H6.8C5.11984 21 4.27976 21 3.63803 20.673C3.07354 20.3854 2.6146 19.9265 2.32698 19.362C2 18.7202 2 17.8802 2 16.2V7ZM15.5 17.5L14 16M15 13.5C15 15.433 13.433 17 11.5 17C9.567 17 8 15.433 8 13.5C8 11.567 9.567 10 11.5 10C13.433 10 15 11.567 15 13.5Z"
                           stroke="rgb(34 197 94)"
-                          stroke-width="2"
+                          strokeWidth="2"
                           strokeLinecap="round"
-                          stroke-linejoin="round"
+                          strokeLinejoin="round"
                         />
                       </svg>
                       Bí kíp tìm việc
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -787,7 +797,7 @@ function Header() {
                       </svg>
                       Chế độ lương thưởng
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -805,7 +815,7 @@ function Header() {
                       </svg>
                       Kiến thức chuyên ngành
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -819,7 +829,7 @@ function Header() {
                       </svg>
                       Hành trang nghề nghiệp
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -837,18 +847,18 @@ function Header() {
             </ul>
           </nav>
         </div>
-        <div className="user-actions justify-end flex flex-row gap-3">
+        <div className="flex flex-row justify-end gap-3 user-actions">
           {/* NOTIFY BUTTON */}
 
           {isAuthenticated ? (
             <>
               <li
-                className="relative list-none flex flex-col justify-center"
+                className="relative flex flex-col justify-center list-none"
                 onMouseEnter={() => setDisplayNoti(true)}
                 onMouseLeave={() => setDisplayNoti(false)}
               >
-                <a className="text-center inline-flex items-center bg-transparent">
-                  <span className="btn-notice bg-green-100 p-3 rounded-full">
+                <a className="inline-flex items-center text-center bg-transparent">
+                  <span className="p-3 bg-green-100 rounded-full btn-notice">
                     <svg
                       fill="rgb(22 163 74)"
                       className="w-6 h-6"
@@ -878,7 +888,7 @@ function Header() {
                       className="py-2 border-b-2 border-l-stone-900"
                       onClick={() => setDisplayNoti(true)}
                     >
-                      <span className="block px-4 text-lg text-gray-700 font-bold">
+                      <span className="block px-4 text-lg font-bold text-gray-700">
                         Thông báo
                       </span>
                     </div>
@@ -895,16 +905,16 @@ function Header() {
                                 notificationId: item.id,
                               });
                               fetchNotification({ id: userId });
-                              window.open(item.link, '_blank', 'noopener');
+                              window.open(item.link, "_blank", "noopener");
                             }}
                             key={index}
-                            className="px-4 py-2 border-b-gray-200 border  hover:text-green-500"
+                            className="px-4 py-2 border border-b-gray-200 hover:text-green-500"
                           >
-                            <span className="font-semibold cursor-pointer  hover:text-green-500">
+                            <span className="font-semibold cursor-pointer hover:text-green-500">
                               {item.content}
                             </span>
-                            <p className="text-sm text-slate-500 text-right mt-2">
-                              {item.createdAt.split('T')[0] + '  '}
+                            <p className="mt-2 text-sm text-right text-slate-500">
+                              {item.createdAt.split("T")[0] + "  "}
                               {item.status && (
                                 <span className="text-green-500">✓</span>
                               )}
@@ -915,16 +925,19 @@ function Header() {
                     )}
                     {total > notifications.length ? (
                       <button
-                        className="text-green-500 hover:underline font-semibold w-full mt-2"
+                        className="w-full mt-2 font-semibold text-green-500 hover:underline"
                         onClick={() =>
-                          fetchNotification({ id: userId, limit: total })
+                          fetchNotification({
+                            id: userId,
+                            limit: total,
+                          })
                         }
                       >
                         Xem tất cả thông báo
                       </button>
                     ) : notifications.length > 3 ? (
                       <button
-                        className="text-green-500 hover:underline font-semibold w-full mt-2"
+                        className="w-full mt-2 font-semibold text-green-500 hover:underline"
                         onClick={() => fetchNotification({ id: userId })}
                       >
                         Ẩn bớt
@@ -938,7 +951,7 @@ function Header() {
                 )}
               </li>
 
-              <span className="btn-message bg-green-100 p-2 rounded-full my-6">
+              <span className="p-2 my-6 bg-green-100 rounded-full btn-message">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -957,18 +970,18 @@ function Header() {
               >
                 <a
                   href="#"
-                  className="font-semibold text-base px-6 py-8 hover:text-green-500"
+                  className="px-6 py-8 text-base font-semibold hover:text-green-500"
                 >
-                  <span className="btn-user-info p-2 bg-slate-100 rounded-full cursor-pointer items-center flex flex-row gap-2 group/user">
+                  <span className="flex flex-row items-center gap-2 p-2 rounded-full cursor-pointer btn-user-info bg-slate-100 group/user">
                     <img
                       src="../../../images/user-logo.png"
                       className="w-8 h-8"
                       alt=""
                     />
-                    <span className="user-name font-bold">
+                    <span className="font-bold user-name">
                       Phạm Trường Khoa
                     </span>
-                    <span className="user-action transition ease-in-out group-hover/user:rotate-180">
+                    <span className="transition ease-in-out user-action group-hover/user:rotate-180">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -985,11 +998,16 @@ function Header() {
                   </span>
                 </a>
                 {isAccountHovered ? (
-                  <ul className="sub-menu absolute h-80 overflow-y-scroll z-50 top-full right-0 font-semibold text-base bg-white border border-slate-100 rounded-lg p-3 flex flex-col gap-3 shadow-lg">
+                  <ul className="absolute right-0 z-50 flex flex-col gap-3 p-3 overflow-y-scroll text-base font-semibold bg-white border rounded-lg shadow-lg sub-menu h-80 top-full border-slate-100">
                     <li>
                       <hr />
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li
+                      onClick={() => {
+                        navigation("/user-information");
+                      }}
+                      className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
+                    >
                       <svg
                         className="w-6 h-6"
                         viewBox="0 0 15 15"
@@ -1004,7 +1022,7 @@ function Header() {
                       Cài đặt thông tin cá nhân
                     </li>
 
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -1018,7 +1036,7 @@ function Header() {
                       </svg>
                       Nâng cấp tài khoản VIP
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-7 h-7"
                         fill="rgb(34 197 94)"
@@ -1030,7 +1048,7 @@ function Header() {
                       Kích hoạt quà tặng
                     </li>
 
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-5 h-5"
                         fill="rgb(34 197 94)"
@@ -1047,7 +1065,7 @@ function Header() {
                       </svg>
                       Nhà tuyển dụng xem hồ sơ
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -1058,7 +1076,7 @@ function Header() {
                       </svg>
                       Cài đặt gợi ý việc làm
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -1096,7 +1114,7 @@ function Header() {
                       </svg>
                       Cài đặt nhận email
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -1107,7 +1125,7 @@ function Header() {
                       </svg>
                       Cài đặt bảo mật
                     </li>
-                    <li className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -1122,9 +1140,9 @@ function Header() {
                       onClick={() => {
                         // logoutWithRedirect();
                         setIsAuthenticated(false);
-                        localStorage.removeItem('user');
+                        localStorage.removeItem("user");
                       }}
-                      className="p-4 text-slate-800 rounded bg-slate-100 flex flex-row gap-3 w-96 hover:text-green-600 hover:bg-slate-200 cursor-pointer"
+                      className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
                       <svg
                         className="w-6 h-6"
@@ -1143,12 +1161,12 @@ function Header() {
               </li>
             </>
           ) : (
-            <div className="list-none flex items-center">
+            <div className="flex items-center list-none">
               <li>
                 <button
                   onClick={() => {
                     // loginWithRedirect();
-                    navigation('/user-login');
+                    navigation("/user-login");
                   }}
                   className="py-2 px-4 rounded-md mx-2 border border-[#00A74B] hover:border-green-800 bg-white"
                 >
@@ -1158,7 +1176,7 @@ function Header() {
               <li>
                 <button
                   onClick={() => {
-                    navigation('/user-signup');
+                    navigation("/user-signup");
                   }}
                   className="py-2 px-4 rounded-md mx-2 bg-[#00A74B] hover:bg-green-800 text-white"
                 >
@@ -1168,9 +1186,9 @@ function Header() {
               <li>
                 <button
                   onClick={() => {
-                    navigation('/hr-login');
+                    navigation("/hr-login");
                   }}
-                  className="py-2 px-4 rounded-md mx-2 bg-black hover:bg-gray-800 text-white"
+                  className="px-4 py-2 mx-2 text-white bg-black rounded-md hover:bg-gray-800"
                 >
                   Đăng tuyển & tìm hồ sơ
                 </button>

@@ -1,39 +1,50 @@
 import React from "react";
 import CustomSelectOption from "../../layouts/HRLayout/components/CustomSelectOption";
-import { ChevronRight, Mail, Phone, Clock, Search } from "lucide-react";
+import { ChevronRight, Search } from "lucide-react";
 import * as HRModule from "../../modules/hr-module";
 import { DefaultPagination } from "../../shared/components/default-pagination";
+import { ApplicationFromServer } from "../../shared/types/Application.type";
+import { cvState, cvLabel } from "../../shared/utils/constant";
+import ReceivedCVTable from "../../shared/components/ReceivedCVTable";
 
 function ReceiveCV() {
   const hrId = JSON.parse(localStorage.getItem("hr") as string).id;
 
   const [campaign, setCampaign] = React.useState<any>();
-  const [receivedCvState, setReceivedCvState] = React.useState<any>(undefined);
-  // const [cvSourceState, setCvSourceState] = React.useState();
+  const [receivedCvState, setReceivedCvState] = React.useState<
+    NameValue | undefined
+  >(undefined);
   const [cvLabelState, setCvLabelState] = React.useState();
 
-  const [listCV, setListCV] = React.useState<any>([]);
+  const [listCV, setListCV] = React.useState<ApplicationFromServer[]>([]);
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
-  const [compaignList, setCompaignList] = React.useState<any>([]);
+  const [compaignList, setCompaignList] = React.useState<NameValue[]>([]);
 
   const fetchApplication = (hrId: string, compaignId: string) => {
     HRModule.getApplicationByCampaignIdHRId({
       campaignId: compaignId,
       hrId: hrId,
-      status: receivedCvState ? receivedCvState.value : undefined,
+      status:
+        receivedCvState != undefined
+          ? (receivedCvState.value as boolean)
+          : undefined,
       page: page,
     }).then((res) => {
+      console.log(res);
       setListCV(res.applications);
       setTotalPage(res.totalPage);
     });
   };
   const fetchAllCompaign = async () => {
     HRModule.getAllCompaignByHrId({ hrId: hrId }).then((res) => {
-      // console.log(res.data);
       setCompaignList([
-        { id: "", name: "Tất cả" },
-        ...res.data.filter((item: any) => item.name != ""),
+        { value: "", name: "Tất cả" },
+        ...res.data
+          .filter((item: any) => item.name != "")
+          .map((item: any) => {
+            return { value: item.id, name: item.name } as NameValue;
+          }),
       ]);
     });
   };
@@ -44,39 +55,9 @@ function ReceiveCV() {
   }, []);
 
   React.useEffect(() => {
-    fetchApplication(hrId, !campaign ? "" : campaign.id);
+    fetchApplication(hrId, !campaign ? "" : campaign.value);
   }, [campaign, receivedCvState, page]);
 
-  const cvState = [
-    { name: "Tất cả", value: undefined },
-    { name: "Đã xem", value: true },
-    { name: "Chưa xem", value: false },
-  ];
-
-  const cvLabel = [
-    { name: "Chưa gắn nhãn", value: "1" },
-    { name: "Ưu tiên", value: "2" },
-    { name: "Ít tiềm năng", value: "3" },
-  ];
-  const cvSeeMode = [
-    {
-      name: "Hiển thị tất cả CV",
-      value: "1",
-    },
-    { name: "Chỉ hiện thị CV chưa xem", value: "2" },
-  ];
-
-  function getCompaignName(id: string) {
-    // console.log(id);
-    // console.log(compaignList);
-    return 123;
-
-    if (compaignList != undefined && id != "") {
-      return compaignList.filter((item: any) => {
-        return item.id == id;
-      })[0].name;
-    }
-  }
   return (
     <div className="flex flex-col items-center overflow-x-hidden">
       <div
@@ -125,14 +106,7 @@ function ReceiveCV() {
             }}
             list={cvState}
           />
-          {/* <CustomSelectOption
-            label="Nhập nguồn CV"
-            value={cvSourceState}
-            onChange={(e) => {
-              setCvSourceState(e);
-            }}
-            list={cvSource}
-          /> */}
+
           <CustomSelectOption
             label="Tất cả nhãn"
             value={cvLabelState}
@@ -143,9 +117,7 @@ function ReceiveCV() {
           />
         </div>
       </div>
-      <div
-      // style={{ maxWidth: "1206px" }}
-      >
+      <div>
         <div
           className="mt-6 mx-6 flex items-center rounded-lg"
           style={{
@@ -188,7 +160,7 @@ function ReceiveCV() {
                 onChange={(e) => {
                   console.log(e.target.checked);
                   if (e.target.checked) {
-                    setReceivedCvState(cvState[2]);
+                    setReceivedCvState(cvState[2] as NameValue);
                   } else {
                     setReceivedCvState(undefined);
                   }
@@ -211,99 +183,7 @@ function ReceiveCV() {
             </div>
           ) : (
             <div className="p-5">
-              <table
-                className="p-5 border-spacing-y-3 border-separate"
-                style={{ width: "100%" }}
-              >
-                <thead>
-                  <tr>
-                    <th className="text-left">Ứng viên</th>
-                    <th className="text-left">Chiến dịch</th>
-                    <th className="text-left">Thông tin liên hệ</th>
-                    <th className="text-left">Insighs</th>
-                    <th className="text-left">Trạng thái</th>
-                    <th className="text-left"></th>
-                  </tr>
-                </thead>
-                <tbody className="bg-[#F8F8F8C9]">
-                  {listCV != undefined &&
-                    listCV.map((item: any, index: number) => (
-                      <tr
-                        key={index}
-                        className="font-medium py-5 mx-3"
-                        style={{ fontSize: "13px" }}
-                      >
-                        <td>
-                          <p className="font-semibold">{item.fullname}</p>
-                        </td>
-                        <td>
-                          <p>{getCompaignName(item.campaignId)}</p>
-                          <span>#{item.campaignId}</span>
-                        </td>
-                        <td>
-                          <p className="flex">
-                            <Mail
-                              size={15}
-                              color="#38A34D"
-                              style={{ marginRight: "5px" }}
-                            />
-                            {item.email}
-                          </p>
-                          <p className="flex">
-                            <Phone
-                              color="#38A34D"
-                              size={18}
-                              style={{ marginRight: "5px" }}
-                            />
-                            {item.phone}
-                          </p>
-                        </td>
-                        <td>
-                          <p className="flex">
-                            <Mail
-                              size={15}
-                              color="#38A34D"
-                              style={{ marginRight: "5px" }}
-                            />
-                            Tìm việc
-                          </p>
-                          <p className="flex">
-                            <Clock
-                              size={15}
-                              color="#38A34D"
-                              style={{ marginRight: "5px" }}
-                            />
-                            {item.updateAt}
-                          </p>
-                        </td>
-                        <td>
-                          <div
-                            className={`rounded-full ${item.status ? "bg-orange-100 text-orange-400" : "bg-blue-200 text-blue-500"} px-3`}
-                          >
-                            {item.status ? "Đã xem" : "Chưa xem"}
-                          </div>
-                        </td>
-                        <td>
-                          <button
-                            onClick={async () => {
-                              // fetchApplication(hrId);
-                              HRModule.getCVByApplicationID({
-                                applicationId: item.id,
-                              }).then((res) => {
-                                console.log(res);
-                                window.open(res.link, "_blank", "noopener");
-                              });
-                            }}
-                            className="btn px-3 py-1 text-white rounded-md ml-5 bg-[#5EE199] hover:bg-green-500 transition ease-out duration-100"
-                          >
-                            {/* <Ellipsis size={18} /> */}
-                            Xem CV
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
+              <ReceivedCVTable data={listCV} compaigns={compaignList} />
               <div className="flex justify-center mt-5">
                 <DefaultPagination
                   totalPage={totalPage}

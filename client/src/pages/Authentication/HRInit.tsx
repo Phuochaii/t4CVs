@@ -82,7 +82,7 @@ function HRInit() {
             <li>
               <button
                 onClick={() => {
-                  navigation("/hr-signup");
+                  navigation("/hr-signup/1");
                 }}
                 className="py-3.5 px-5 rounded-md mx-2 bg-[#00A74B] hover:bg-green-800 text-white"
               >

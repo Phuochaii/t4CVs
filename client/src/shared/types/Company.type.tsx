@@ -5,7 +5,7 @@ export interface CompanyFromServer {
   name: string;
   website: string;
   image: string;
-  address: "88 Kingsford Junction";
+  address: string;
   phone: string;
   companySize: number;
   description: string;

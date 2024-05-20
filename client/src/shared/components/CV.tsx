@@ -1,5 +1,3 @@
-import React from "react";
-
 function CV() {
   // Dữ liệu giả
   const fakeData = {
