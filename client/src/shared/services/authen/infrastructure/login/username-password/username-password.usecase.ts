@@ -1,10 +1,12 @@
 import { AUTH0_REALM } from "../../config";
 import { UsernamePasswordLoginCredentials } from "../../../domain";
 import { Auth0OperationUseCase, Auth0CallCredentials } from "../../base.usecase";
+import { Role } from "../../../domain/context";
 
 export class UsernamePasswordLoginUseCase extends Auth0OperationUseCase {
     constructor(
-        private credentials: UsernamePasswordLoginCredentials
+        private credentials: UsernamePasswordLoginCredentials,
+        private role: Role,
     ) {
         super(AUTH0_REALM.UsernamePassword);
     }
@@ -16,7 +18,7 @@ export class UsernamePasswordLoginUseCase extends Auth0OperationUseCase {
             realm: realm,
             username: username,
             password: password,
-            redirectUri: transaction.redirect_uri,
+            redirectUri: `http://localhost:5173${this.role.redirectUrl}`,
             responseType: auht0Config.responseType,
             state: transaction.state,
             nonce: transaction.nonce,

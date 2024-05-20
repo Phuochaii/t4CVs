@@ -1,3 +1,5 @@
+import { Role } from "./context";
+
 /// Domain
 export interface UsernamePasswordLoginCredentials {
   username: string,
@@ -8,9 +10,9 @@ export interface RegisterCredentials extends UsernamePasswordLoginCredentials {
 }
 export type SocialLogin = () => void;
 export interface AuthenUseCase {
-  usernamePasswordLogin: (credentials: UsernamePasswordLoginCredentials) => void;
+  usernamePasswordLogin: (credentials: UsernamePasswordLoginCredentials, role: Role) => void;
   googleLogin: SocialLogin;
   linkedInLogin: SocialLogin;
   facebookLogin: SocialLogin;
-  register: (credentials: RegisterCredentials) => void;
+  register: (credentials: RegisterCredentials, role: Role) => void;
 }

@@ -6,6 +6,10 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { accountList } from "../../shared/utils/constant";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useAuthen } from "../../shared/services/authen";
+import { Roles } from "../../shared/services/authen/domain/context";
+import Spinner from "../Spinner";
 
 const images = [
   {
@@ -23,13 +27,16 @@ const images = [
 ];
 
 function HRLogIn() {
-  const navigation = useNavigate();
+  const navigate = useNavigate();
+  const {user, isLoading} = useAuth0();
   React.useEffect(() => {
-    if (localStorage.getItem("hr") !== null) {
-      navigation("/hr/news");
+    if(isLoading) return;
+    if (user) {
+      navigate(Roles.HR.redirectUrl);
       return;
     }
-  }, []);
+  }, [user, isLoading]);
+  if(isLoading || user) return <Spinner/>;
 
   const [formData, setFormData] = useState({
     email: "",
@@ -44,6 +51,7 @@ function HRLogIn() {
 
   const [emailEmpty, setEmailEmpty] = useState(false);
   const [passwordEmpty, setPasswordEmpty] = useState(false);
+  const {usernamePasswordLogin} = useAuthen();
 
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
@@ -64,7 +72,7 @@ function HRLogIn() {
         console.log("Đăng nhập thành công với email:", formData.email);
         // store in local storage
         localStorage.setItem("hr", JSON.stringify(account));
-        navigation("/hr/news");
+        navigate("/hr/news");
       }
     });
 
@@ -79,6 +87,11 @@ function HRLogIn() {
       setError("Email hoặc mật khẩu không chính xác.");
       setShowError(true);
     }
+    
+    usernamePasswordLogin({
+      username: formData.email,
+      password: formData.password,
+    }, Roles.HR);
   };
 
   const settings = {
@@ -200,7 +213,7 @@ function HRLogIn() {
         <p className="text-center text-gray-600">
           Chưa có tài khoản?{" "}
           <Link
-            to="/hr-signup/1"
+            to="/hr-signup"
             className="text-green-500 hover:underline hover:text-green-500"
           >
             Đăng ký ngay

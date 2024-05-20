@@ -7,10 +7,11 @@ import { useAuth0 } from '@auth0/auth0-react';
 export const withRoleCheck = (role: Role) => (WrappedComponent: FC) => {
   const AuthHOC: FC = (props) => {
     const navigate = useNavigate();
-    const {user} = useAuth0();
+    const {user, isLoading} = useAuth0();
     const {role: currentRole, setRole} = useRoleContext();
     
     useEffect(() => {
+      if(isLoading) return;
       console.log('withRoleCheck: user:', user)
       if(!user){
         console.log('withRoleCheck: user is null')
@@ -29,7 +30,7 @@ export const withRoleCheck = (role: Role) => (WrappedComponent: FC) => {
         .catch(() => {
           setRole(null);
         });
-    }, [user, currentRole, setRole, role, navigate]);
+    }, [user, currentRole, setRole, role, navigate, isLoading]);
     if(currentRole === undefined) {
       return <Spinner />;
     }

@@ -12,7 +12,7 @@ export interface Role {
     loginUrl: string,
 }
   
-export const Roles: { [key: string]: Role } = {
+export const Roles: { [key in "HR" | "USER"]: Role } = {
     HR: {
         check: async (userId) => {
             try {
@@ -23,12 +23,14 @@ export const Roles: { [key: string]: Role } = {
                 return false
             }
         },
-        redirectUrl: '/admin',
         RegisterProfile: () => {
-            return <Modal open={true}>
-                <Spinner/>
-            </Modal>
+            const navigate = useNavigate();
+            useEffect(() => {
+                navigate('/hr-profile-register');
+            }, [navigate]);
+            return <Spinner/>
         },
+        redirectUrl: '/hr/news',
         loginUrl: '/hr-login',
     },
     USER: {
@@ -41,7 +43,7 @@ export const Roles: { [key: string]: Role } = {
                 return false;
             }
         },
-        redirectUrl: '/user',
+        redirectUrl: '/',
         RegisterProfile: () => {
             const { user } = useAuth0();
             const navigate = useNavigate();

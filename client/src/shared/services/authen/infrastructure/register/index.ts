@@ -2,11 +2,13 @@ import { RegisterCredentials } from './../../domain/index';
 import { AUTH0_REALM } from '../config';
 import { Auth0OperationUseCase, Auth0CallCredentials } from '../base.usecase';
 import { UsernamePasswordLoginUseCase } from '../login';
+import { Role } from '../../domain/context';
 export class RegisterUseCase extends Auth0OperationUseCase {
     constructor(
         private credentials: RegisterCredentials,
+        role: Role,
         private usernamePasswordLogin: UsernamePasswordLoginUseCase
-            = new UsernamePasswordLoginUseCase(credentials),
+            = new UsernamePasswordLoginUseCase(credentials, role),
     ) {
         super(AUTH0_REALM.UsernamePassword);
     }

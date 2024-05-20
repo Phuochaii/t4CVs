@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FormControlLabel, Checkbox } from '@mui/material';
 import { User, Mail, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import GoogleIcon from '@mui/icons-material/Google';
@@ -7,8 +7,12 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import img from '../../shared/assets/images/Sign-up user.png';
 import { useAuthen } from '../../shared/services/authen';
+import { Roles } from '../../shared/services/authen/domain/context';
+import { useAuth0 } from '@auth0/auth0-react';
+import Spinner from '../Spinner';
 
 function UserSignUp() {
+  const {user, isLoading} = useAuth0();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -110,9 +114,18 @@ function UserSignUp() {
         username: formData.email,
         password: formData.password,
         fullname: formData.name,
-      });
+      }, Roles.USER);
     }
   };
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isLoading) return;
+    if (user) {
+      navigate(Roles.USER.redirectUrl);
+    }
+  }, [user, isLoading]);
+  if(isLoading || user) return <Spinner/>;
 
   return (
     <div className="grid grid-cols-3 gap-4 ">

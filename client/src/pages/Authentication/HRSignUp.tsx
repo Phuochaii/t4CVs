@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   FormControlLabel,
@@ -29,6 +29,9 @@ import "../../shared/assets/styles/hr-signup.css";
 import { data_provinces } from "../auth-page/signup-page/provinces-data";
 import { data_districts } from "../auth-page/signup-page/districts-data";
 import Input from "../auth-page/signup-page/Input";
+import { useAuth0 } from "@auth0/auth0-react";
+import { Roles } from "../../shared/services/authen/domain/context";
+import Spinner from "../Spinner";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -74,7 +77,16 @@ interface ValidateMessages {
 }
 
 function HRSignUp() {
-  const navigation = useNavigate();
+  const navigate = useNavigate();
+  const {user, isLoading} = useAuth0();
+  useEffect(() => {
+    if(isLoading) return;
+    if (user) {
+      navigate(Roles.HR.redirectUrl);
+      return;
+    }
+  }, [user, isLoading]);
+  if(isLoading || user) return <Spinner/>;
 
   const [formData, setFormData] = useState<FormData>({
     email: "",
@@ -267,7 +279,7 @@ function HRSignUp() {
 
     if (!error) {
       setShowSuccessMessage(true);
-      navigation("/hr-signup/2");
+      navigate("/hr-profile-register");
     }
   };
 

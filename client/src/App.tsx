@@ -12,6 +12,7 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import { AUTH0_CLIENT_ID, AUTH0_DOMAIN } from "./shared/services/authen/infrastructure/config";
 import { accountList } from "./shared/utils/constant";
 import { RoleProvider } from "./shared/services/authen/domain/context";
+import { withRoleCheck } from "./shared/services/authen/domain/withRoleCheck";
 
 export const MyContext = createContext({});
 
@@ -30,14 +31,21 @@ function App() {
               {routes.map((route, index) => {
                 const Layout = route.layout || EmptyLayout;
                 const Page = route.component;
+                const role = route.role;
+                const Element = () => (
+                  <Layout>
+                    <Page />
+                  </Layout>
+                );
+                const ElementWithRoleCheck = role
+                ? withRoleCheck(role)(() => <Element />)
+                : Element;
                 return (
                   <Route
                     key={index}
                     path={route.path}
                     element={
-                      <Layout>
-                        <Page />
-                      </Layout>
+                      <ElementWithRoleCheck />
                     }
                   />
                 );

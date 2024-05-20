@@ -81,6 +81,25 @@ const createCompaign = async ({employerId, name}:{employerId:string,  name: stri
   return response.data;
 }
 
+interface CreateEmployerInterface {
+  id: string;
+  fullname: string,
+  gender: string,
+  positionId: number,
+  skype: string,
+  phoneNumber: string,
+  image: string,
+}
+export const createEmpolyer = async ({
+  id, fullname, gender, positionId, skype, phoneNumber, image
+}:CreateEmployerInterface) => {
+  const response = await axios.post(`${serverURL}/employer/create`, {
+    id, fullname, gender, positionId, skype, phoneNumber, image
+  })
+    .then((res) => res.data);
+  return response;
+}
+
 
 
 

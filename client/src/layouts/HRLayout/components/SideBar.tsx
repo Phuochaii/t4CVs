@@ -22,6 +22,7 @@ import {
     Bell,
     Mail,
 } from "lucide-react";
+import { useAuth0 } from "@auth0/auth0-react";
 const Item = ({
     _icon,
     iconSize = 16,
@@ -71,6 +72,7 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
     const location = useLocation();
     const pathname = location.pathname;
     const navigation = useNavigate();
+    const {user} = useAuth0();
 
     React.useEffect(() => {}, [isCollapsed]);
     //
@@ -194,14 +196,16 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
             <div className="flex" style={{ padding: " 10px 14px", margin: 0 }}>
                 <div className="flex items-center space-x-2">
                     <img
-                        src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg"
+                        src={ user?.picture ||
+                            "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg"
+                        }
                         className="rounded-full"
                         style={{ width: "32px", marginRight: "10px" }}
                         alt="Avatar"
                     />
                     {!isCollapsed && (
                         <div>
-                            <p>Moira Vien</p>
+                            <p>{user?.name}</p>
                             <p style={{ fontSize: "12px" }}>Employer</p>
                             <p style={{ fontSize: "12px" }} className="flex">
                                 Tài khoản xác thực:{" "}

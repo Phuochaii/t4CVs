@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FormControlLabel,
   Card,
@@ -29,6 +29,10 @@ import "../../shared/assets/styles/hr-signup.css";
 import { data_provinces } from "../auth-page/signup-page/provinces-data";
 import { data_districts } from "../auth-page/signup-page/districts-data";
 import Input from "../auth-page/signup-page/Input";
+import { createEmpolyer } from "../../modules/hr-module";
+import { useAuth0 } from "@auth0/auth0-react";
+import { Roles, useRoleContext } from "../../shared/services/authen/domain/context";
+import Spinner from "../Spinner";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -84,7 +88,10 @@ interface ValidateMessages {
   position: string;
 }
 
-function HRSignUp2() {
+function HRProfileRegister() {
+  const {user, isLoading} = useAuth0();
+  const {role, setRole} = useRoleContext();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
     agreeToTerms: false,
     role: "",
@@ -232,10 +239,49 @@ function HRSignUp2() {
       setErrorMessage("");
     }, 3000);
 
-    if (!error) {
-      setShowSuccessMessage(true);
-    }
+    if(error) return;
+
+    createEmpolyer({
+      id: user?.sub as string,
+      fullname: user?.name as string,
+      gender: formData.sex,
+      positionId: 1,
+      skype: formData.skype_account,
+      phoneNumber: formData.phone,
+      image: user?.picture as string,
+    })
+      .then(() =>  console.log("Success register profile"))
+      .then(() => setErrorMessage(""))
+      .then(() => setShowSuccessMessage(true))
+      .then(() => setRole(Roles.HR))
+      .catch(() => setErrorMessage("Failed to set up employer profile !"));
   };
+
+  useEffect(() => {
+    if(isLoading) return;
+    if(!user) {
+      navigate(Roles.HR.loginUrl);
+      return;
+    }
+    if(role === undefined) {
+      Roles.HR.check(user.sub as string)
+        .then((isAuthenticated) => {
+          if(isAuthenticated) {
+            setRole(Roles.HR);
+            return;
+          }
+          setRole(null);
+        })
+        .catch(() => {
+          setRole(null);
+        });
+    }
+    if(role === Roles.HR){
+      navigate(Roles.HR.redirectUrl);
+      return;
+    }
+  }, [user, role, isLoading])
+  if(isLoading || !user || role === undefined ||role === Roles.HR) return <Spinner/>;
 
   return (
     <>
@@ -594,4 +640,4 @@ function HRSignUp2() {
   );
 }
 
-export default HRSignUp2;
+export default HRProfileRegister;

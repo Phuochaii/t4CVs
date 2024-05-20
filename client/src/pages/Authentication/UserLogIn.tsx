@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { FormControlLabel, Checkbox } from '@mui/material';
 import { Mail, ShieldCheck, Eye, EyeOff } from 'lucide-react';
@@ -8,8 +8,13 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import img from '../../shared/assets/images/Sign-up user.png';
 import { useAuthen } from '../../shared/services/authen';
 import { accountList } from "../../shared/utils/constant";
+import { Roles } from "../../shared/services/authen/domain/context";
+import { useAuth0 } from "@auth0/auth0-react";
+import Spinner from "../Spinner";
 
 function UserLogIn() {
+  const {user, isLoading} = useAuth0();
+  
   const navigation = useNavigate();
   const {usernamePasswordLogin, googleLogin, linkedInLogin, facebookLogin} = useAuthen();
 
@@ -31,12 +36,14 @@ function UserLogIn() {
     setShowPassword(!showPassword);
   };
 
-  React.useEffect(() => {
-    if (localStorage.getItem("user") !== null) {
-      navigation("/");
+  useEffect(() => {
+    if(isLoading) return
+    if (user) {
+      navigation(Roles.USER.redirectUrl);
       return;
     }
-  }, []);
+  },[user, isLoading]);
+  if(isLoading || user) return <Spinner/>;
 
   const isEmailValid = (email: string) => {
     // Biểu thức chính quy để kiểm tra định dạng email
@@ -83,7 +90,7 @@ function UserLogIn() {
     usernamePasswordLogin({
       username: formData.email,
       password: formData.password,
-    });
+    }, Roles.USER);
   };
 
   const handleGoogleLogin = () => {
