@@ -22,7 +22,7 @@ export class UploadController {
     return this.uploadService.getHello();
   }
 
-  @Post('cv')
+  @Post('')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -30,7 +30,7 @@ export class UploadController {
       }),
     }),
   )
-  uploadCV(@UploadedFile() file: any): any {
-    return this.uploadService.uploadCV(file);
+  upload(@UploadedFile() file: any): any {
+    return this.uploadService.upload(file);
   }
 }
