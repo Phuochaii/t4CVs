@@ -31,7 +31,7 @@ export class UserController {
   createUser(
     // @UploadedFile() image: Express.Multer.File,
     @Body() user: CreateUserDTO,
-  ): Observable<string> {
+  ): Promise<Observable<string>> {
     return this.userService.createUser(user);
   }
 

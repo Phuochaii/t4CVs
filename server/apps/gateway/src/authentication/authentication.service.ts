@@ -7,15 +7,16 @@ import { Role } from './dto/role.dto';
 
 @Injectable()
 export class AuthenticationService {
-
+  auth0: ManagementClient;
   constructor(
     configService: ConfigService,
-    private auth0 = new ManagementClient({
+  ) { 
+    this.auth0 = new ManagementClient({
       domain: configService.get<string>('AUTH0_MANAGEMENT_DOMAIN'),
       clientId: configService.get<string>('AUTH0_MANAGEMENT_CLIENTID'),
       clientSecret: configService.get<string>('AUTH0_MANAGEMENT_CLIENTSECRET'),
     })
-  ) { }
+  }
 
   private toRoleId(role: Role): string {
     switch (role) {
