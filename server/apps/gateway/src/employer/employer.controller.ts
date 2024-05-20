@@ -8,7 +8,7 @@ export class EmployerController {
   constructor(private readonly employerService: EmployerService) {}
 
   @Post('create')
-  createEmployer(@Body() data: CreateEmployerDto): Observable<string> {
+  async createEmployer(@Body() data: CreateEmployerDto): Promise<Observable<string>> {
     return this.employerService.createEmployer(data);
   }
 

@@ -3,14 +3,21 @@ import { Observable } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
 import { FindEmployerDTOResponse } from './dto/Res/find_employer.dto';
+import { AuthenticationService } from '../authentication/authentication.service';
+import { Role } from '../authentication/dto/role.dto';
 
 @Injectable()
 export class EmployerService {
   constructor(
     @Inject('EMPLOYER') private readonly employerClient: ClientProxy,
+    private readonly authenticationService: AuthenticationService,
   ) {}
 
-  createEmployer(createEmployerDTO: CreateEmployerDto): Observable<string> {
+  async createEmployer(createEmployerDTO: CreateEmployerDto): Promise<Observable<string>> {
+    await this.authenticationService.setRoleForUser({
+      userId: createEmployerDTO.id,
+      role: Role.HR,
+    }); 
     return this.employerClient.send(
       { cmd: 'create_employer' },
       createEmployerDTO,
