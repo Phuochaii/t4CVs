@@ -30,4 +30,8 @@ export class EmployerApplication {
   async getEmployerById(id: string): Promise<Employer> {
     return await this.getEmployerByIdService.execute(id);
   }
+
+  async checkEmployer(id: string): Promise<boolean> {
+    return await this.getEmployerByIdService.execute(id) ? true : false;
+  }
 }

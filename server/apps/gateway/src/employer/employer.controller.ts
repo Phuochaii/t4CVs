@@ -34,4 +34,9 @@ export class EmployerController {
   findPositionById(@Param('id') id: number): Observable<string> {
     return this.employerService.findPositionById(id);
   }
+
+  @Get('check/:id')
+  checkEmployer(@Param('id') id: string): Observable<boolean> {
+    return this.employerService.checkEmployer(id);
+  }
 }

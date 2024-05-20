@@ -65,4 +65,9 @@ export class EmployerController {
   findPositionById(id: number) {
     return this.positionApplication.getPositionById(id);
   }
+
+  @MessagePattern({ cmd: 'check_employer' })
+  checkEmployer(id: string) {
+    return this.employerApplication.checkEmployer(id);
+  }
 }

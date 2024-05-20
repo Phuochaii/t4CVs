@@ -38,4 +38,8 @@ export class EmployerService {
   findPositionById(id: number): Observable<string> {
     return this.employerClient.send({ cmd: 'find_position_by_id' }, id);
   }
+
+  checkEmployer(id: string): Observable<boolean> {
+    return this.employerClient.send({ cmd: 'check_employer' }, id);
+  }
 }
