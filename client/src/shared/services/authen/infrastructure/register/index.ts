@@ -18,9 +18,6 @@ export class RegisterUseCase extends Auth0OperationUseCase {
             email: username,
             password: password,
             scope: transaction.scope,
-            userMetadata: {
-                fullname,
-            },
         }, (err, authResult) => {
             if (err) {
                 throw err;
