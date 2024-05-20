@@ -42,7 +42,6 @@ export class ApplicationController {
     );
     const employerId = campaign.employerId;
 
-    console.log(employerId);
     const notification = await firstValueFrom(
       this.notificationService.create(
         [new NotificationUserId(employerId, NotificationUserRole.HR)],
@@ -58,7 +57,7 @@ export class ApplicationController {
 
   @Get('/hr/:hrId')
   async findAll(
-    @Param('hrId') hrId: number,
+    @Param('hrId') hrId: string,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
     @Query('campaignId') campaignId: number | null,
