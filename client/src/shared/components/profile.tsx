@@ -24,7 +24,7 @@ function Profile() {
         label: string;
     }> | null>(null);
     return (
-        <div className="flex flex-col w-[100%] my-10 space-y-10 items-center">
+        <div className="flex flex-col w-full my-10 space-y-10 items-center">
             <div className="w-[95%] border-slate-200 border-2 px-8 py-4">
                 <h1 className="text-black text-sl font-bold mb-5">
                     Tài khoản xác thực: <span className="text-green-600">Cấp 1/5</span>

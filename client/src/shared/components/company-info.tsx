@@ -8,9 +8,11 @@ function CompanyInfo() {
         { id: 2, name: 'FPT information system', number: '0401530735', logo: FPT, time: '14-09-2023 15:55 PM', address: '170/2 Đường Nguyễn Xí, Quận 26', field:'Khác' },
         { id: 3, name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', number: '0401530734', logo: VNRS, time: '06-09-2023 21:36 PM', address: '316 Chánh Hưng, Phường 5, Quận 8', field:'Lập trình phần mềm' },
         { id: 4, name: 'FPT information system', number: '0401530735', logo: FPT, time: '14-09-2023 15:55 PM', address: '170/2 Đường Nguyễn Xí, Quận 26', field:'Khác' },
+        { id: 5, name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', number: '0401530734', logo: VNRS, time: '06-09-2023 21:36 PM', address: '316 Chánh Hưng, Phường 5, Quận 8', field:'Lập trình phần mềm' },
+        { id: 6, name: 'FPT information system', number: '0401530735', logo: FPT, time: '14-09-2023 15:55 PM', address: '170/2 Đường Nguyễn Xí, Quận 26', field:'Khác' },
     ];
     return (
-        <div className="m-5 flex flex-col">
+        <div className="w-full m-10 flex flex-col">
             <div
                 className={`btn text-sm p-3 flex items-center justify-between w-11/12`}
                 style={{
@@ -83,7 +85,7 @@ function CompanyInfo() {
                     </button>
                 </div>
                 <h1 className="text-black my-3">Công ty mới tạo</h1>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4" style={{height: '250px', overflowY: 'scroll'}}>
                     {companies.length > 0 ? (
                         companies.map((item, index) => (
                             <div
