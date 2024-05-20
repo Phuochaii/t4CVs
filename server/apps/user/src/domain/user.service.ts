@@ -41,4 +41,9 @@ export class UserService {
 
     // return userEntity;
   }
+
+  async check(id: string) {
+    const user = await this.userRepository.findById(id);
+    return !!user;
+  }
 }

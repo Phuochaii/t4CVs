@@ -34,4 +34,9 @@ export class UserController {
   ): Observable<string> {
     return this.userService.createUser(user);
   }
+
+  @Get('check/:id')
+  checkUser(@Param('id') id: number): Observable<boolean> {
+    return this.userService.checkUser(id);
+  }
 }

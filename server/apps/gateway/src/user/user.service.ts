@@ -24,4 +24,8 @@ export class UserService {
   findUserById(id: number): Observable<string> {
     return this.userClient.send({ cmd: 'find_user_by_id' }, id);
   }
+
+  checkUser(id: number): Observable<boolean> {
+    return this.userClient.send({ cmd: 'check_user' }, id);
+  }
 }
