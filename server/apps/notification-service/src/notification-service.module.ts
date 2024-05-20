@@ -5,7 +5,9 @@ import { NotificationApplicationModule } from './notification-application.module
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: './configs/.env',
+    }),
     NotificationApplicationModule,
   ],
   controllers: [NotificationController],

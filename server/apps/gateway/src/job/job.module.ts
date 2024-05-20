@@ -11,7 +11,7 @@ import { CompanyModule } from '../company/company.module';
         name: 'JOB',
         transport: Transport.TCP,
         options: {
-          host: 'job',
+          host: 'localhost',
           port: 3001,
         },
       },

@@ -20,7 +20,7 @@ import { EmployerModule } from './employer/employer.module';
     CompanyModule,
     UserModule,
     CVModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ envFilePath: '.env.example' }),
     EmployerModule,
   ],
   controllers: [GatewayController],

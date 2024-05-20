@@ -17,7 +17,7 @@ export enum NotificationUserRole {
 }
 export class NotificationUserId {
   constructor(
-    private id: string,
+    private id: number,
     private role: NotificationUserRole,
   ) { }
   get userId() {

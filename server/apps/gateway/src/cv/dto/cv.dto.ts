@@ -5,5 +5,5 @@ export class CVDto {
   creationAt: any;
   isPublic: boolean;
   lastModified: any;
-  userId: string;
+  userId: number;
 }

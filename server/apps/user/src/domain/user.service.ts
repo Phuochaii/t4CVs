@@ -21,7 +21,7 @@ export class UserService {
     if (user) {
       throw new RpcException('User exists!');
     }
-    await this.userRepository.createUser(createUserDTO);
+    await this.userRepository.createUser(user);
     return 'User created successfully!';
 
     // const userEntity = await this.userRepository.save({

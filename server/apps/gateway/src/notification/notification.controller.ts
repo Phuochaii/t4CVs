@@ -22,7 +22,7 @@ export class NotificationController {
 
   @Get('/:role/:userId')
   getAllOfUser(
-    @Param('userId') userId: string,
+    @Param('userId') userId: number,
     @Param('role') role: NotificationUserRole,
     @Query() paginationRequest: PaginationRequest = new PaginationRequest(),
   ) {
@@ -38,7 +38,7 @@ export class NotificationController {
 
   @Put('/:role/:userId/:notificationId')
   updateStatusOfUser(
-    @Param('userId') userId: string,
+    @Param('userId') userId: number,
     @Param('role') role: NotificationUserRole,
     @Param('notificationId') notificationId: number,
     @Body('status') status: status,
