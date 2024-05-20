@@ -29,9 +29,9 @@ import {
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: path.resolve(__dirname, '../../../configs/.env'),
-    }),
+    // ConfigModule.forRoot({
+    //   envFilePath: path.resolve(__dirname, '../../../configs/.env'),
+    // }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
