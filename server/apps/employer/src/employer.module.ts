@@ -6,9 +6,10 @@ import { PositionApplicationModule } from './position.application.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: './configs/.env',
-    }),
+    // ConfigModule.forRoot({
+    //   envFilePath: './configs/.env',
+    // }),
+    ConfigModule.forRoot(),
     EmployerApplicationModule,
     PositionApplicationModule,
   ],

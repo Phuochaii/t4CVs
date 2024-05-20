@@ -94,12 +94,70 @@ services:
       - POSTGRES_PASSWORD=phuochai1901
     volumes:
       - job-db:/var/lib/postgresql/data
+  company:
+    container_name: company
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=company-service
+    environment:
+      - DB_HOST=company-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=713112411
+      - DB_COMPANY_DATABASE=company
+    depends_on:
+      - company-db
+    networks:
+      - backend
+      - company
+  company-db:
+    container_name: company-db
+    image: postgres:latest
+    networks:
+      - company
+    environment:
+      - POSTGRES_PASSWORD=713112411
+    volumes:
+      - company-db:/var/lib/postgresql/data
+  employer:
+    container_name: employer
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=employer
+    environment:
+      - DB_HOST=employer-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=713112411
+      - DB_EMPLOYER_DATABASE=employer
+    depends_on:
+      - employer-db
+    networks:
+      - backend
+      - employer
+  employer-db:
+    container_name: employer-db
+    image: postgres:latest
+    networks:
+      - employer
+    environment:
+      - POSTGRES_PASSWORD=713112411
+    volumes:
+      - employer-db:/var/lib/postgresql/data
 networks:
   backend:
   notification:
   user:
   job:
+  company:
+  employer:
 volumes:
   notification-db:
   user-db:
   job-db:
+  company-db:
+  employer-db:

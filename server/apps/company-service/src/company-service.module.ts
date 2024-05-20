@@ -6,9 +6,10 @@ import { CampaignApplicationModule } from './campaign.application.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: './configs/.env',
-    }),
+    // ConfigModule.forRoot({
+    //   envFilePath: './configs/.env',
+    // }),
+    ConfigModule.forRoot(),
     CompanyApplicationModule,
     CampaignApplicationModule,
   ],
