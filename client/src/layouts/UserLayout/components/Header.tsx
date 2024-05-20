@@ -1,23 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import '../../../App.css';
 import React from 'react';
 // import { Button } from '@mui/material';
 // import { useAuth0 } from "@auth0/auth0-react";
 import * as UserModule from '../../../modules/user-module';
 import { useNavigate } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 
 function Header() {
   const navigation = useNavigate();
-
+  const {isAuthenticated, user, logout} = useAuth0();
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
-  // const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-  const userId =
-    localStorage.getItem("user") == null
-      ? ""
-      : JSON.parse(localStorage.getItem("user") as string).id;
-  const [isAuthenticated, setIsAuthenticated] = React.useState(userId != "");
+  const userId = user?.sub || "";
   const fetchNotification = ({
     id,
     limit = 3,
@@ -973,13 +969,13 @@ function Header() {
                   className="px-6 py-8 text-base font-semibold hover:text-green-500"
                 >
                   <span className="flex flex-row items-center gap-2 p-2 rounded-full cursor-pointer btn-user-info bg-slate-100 group/user">
-                    <img
-                      src="../../../images/user-logo.png"
-                      className="w-8 h-8"
-                      alt=""
-                    />
+                  <img 
+                    className="w-8 h-8 rounded-full" 
+                    src={user?.picture && '../../../images/user-logo.png'}
+                    alt="avatar" 
+                  />
                     <span className="font-bold user-name">
-                      Phạm Trường Khoa
+                      {user?.name}
                     </span>
                     <span className="transition ease-in-out user-action group-hover/user:rotate-180">
                       <svg
@@ -1138,9 +1134,7 @@ function Header() {
                     </li>
                     <li
                       onClick={() => {
-                        // logoutWithRedirect();
-                        setIsAuthenticated(false);
-                        localStorage.removeItem("user");
+                        logout();
                       }}
                       className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
