@@ -29,14 +29,7 @@ const images = [
 function HRLogIn() {
   const navigate = useNavigate();
   const {user, isLoading} = useAuth0();
-  React.useEffect(() => {
-    if(isLoading) return;
-    if (user) {
-      navigate(Roles.HR.redirectUrl);
-      return;
-    }
-  }, [user, isLoading]);
-  if(isLoading || user) return <Spinner/>;
+  
 
   const [formData, setFormData] = useState({
     email: "",
@@ -101,6 +94,15 @@ function HRLogIn() {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
+
+  React.useEffect(() => {
+    if(isLoading) return;
+    if (user) {
+      navigate(Roles.HR.redirectUrl);
+      return;
+    }
+  }, [user, isLoading]);
+  if(isLoading || user) return <Spinner/>;
 
   return (
     <div className="grid grid-cols-3 gap-4">

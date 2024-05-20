@@ -79,14 +79,6 @@ interface ValidateMessages {
 function HRSignUp() {
   const navigate = useNavigate();
   const {user, isLoading} = useAuth0();
-  useEffect(() => {
-    if(isLoading) return;
-    if (user) {
-      navigate(Roles.HR.redirectUrl);
-      return;
-    }
-  }, [user, isLoading]);
-  if(isLoading || user) return <Spinner/>;
 
   const [formData, setFormData] = useState<FormData>({
     email: "",
@@ -282,6 +274,15 @@ function HRSignUp() {
       navigate("/hr-profile-register");
     }
   };
+
+  useEffect(() => {
+    if(isLoading) return;
+    if (user) {
+      navigate(Roles.HR.redirectUrl);
+      return;
+    }
+  }, [user, isLoading]);
+  if(isLoading || user) return <Spinner/>;
 
   return (
     <>

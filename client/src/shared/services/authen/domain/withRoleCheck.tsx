@@ -14,7 +14,6 @@ export const withRoleCheck = (role: Role) => (WrappedComponent: FC) => {
       if(isLoading) return;
       console.log('withRoleCheck: user:', user)
       if(!user){
-        console.log('withRoleCheck: user is null')
         navigate(role.loginUrl);
         return;
       }
