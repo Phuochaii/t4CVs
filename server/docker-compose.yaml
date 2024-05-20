@@ -1,0 +1,105 @@
+version: '3.8'
+services:
+  gateway:
+    container_name: gateway
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=gateway
+    environment:
+      - NOTIFICATION_SERVICE_URL=notification:50052
+    ports:
+      - 3000:3000
+    networks:
+      - backend
+  notification:
+    container_name: notification
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=notification-service
+    environment:
+      - DB_HOST=notification-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=123456
+      - DB_NOTIFICATION_DATABASE=notification
+    depends_on:
+      - notification-db
+    networks:
+      - backend
+      - notification
+  notification-db:
+    container_name: notification-db
+    image: postgres:latest
+    networks:
+      - notification
+    environment:
+      - POSTGRES_PASSWORD=123456
+    volumes:
+      - notification-db:/var/lib/postgresql/data
+  user:
+    container_name: user
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=user
+    environment:
+      - DB_HOST=user-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=phuochai1901
+      - DB_USER_DATABASE=applicant
+    depends_on:
+      - user-db
+    networks:
+      - backend
+      - user
+  user-db:
+    container_name: user-db
+    image: postgres:latest
+    networks:
+      - user
+    environment:
+      - POSTGRES_PASSWORD=phuochai1901
+    volumes:
+      - user-db:/var/lib/postgresql/data
+  job:
+    container_name: job
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=job
+    environment:
+      - DB_HOST=job-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=phuochai1901
+      - DB_JOB_DATABASE=job
+    depends_on:
+      - job-db
+    networks:
+      - backend
+      - job
+  job-db:
+    container_name: job-db
+    image: postgres:latest
+    networks:
+      - job
+    environment:
+      - POSTGRES_PASSWORD=phuochai1901
+    volumes:
+      - job-db:/var/lib/postgresql/data
+networks:
+  backend:
+  notification:
+  user:
+  job:
+volumes:
+  notification-db:
+  user-db:
+  job-db:
