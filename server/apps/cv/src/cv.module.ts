@@ -1,21 +1,15 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { CVController } from './cv.controller';
-import { CVService } from './cv.service';
-import { join } from 'path';
+import { CvController } from './cv.controller';
 import { ConfigModule } from '@nestjs/config';
+import { CvApplicationModule } from './cv-application.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: join(__dirname, 'src', 'table.sql'),
-      synchronize: true,
-      entities: [join(__dirname, 'src', 'entities', '**', '*.entity.ts')],
+    ConfigModule.forRoot({
+      envFilePath: './configs/.env',
     }),
-    ConfigModule.forRoot({ envFilePath: '.env.example' }),
+    CvApplicationModule,
   ],
-  controllers: [CVController],
-  providers: [CVService],
+  controllers: [CvController],
 })
-export class CVModule {}
+export class CvModule {}

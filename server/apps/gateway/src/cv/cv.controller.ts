@@ -52,7 +52,6 @@ export class CVController {
   ): Observable<any> {
     const numericUserId = parseInt(userId, 10);
     const numericTemplateId = parseInt(templateId, 10);
-    console.log(numericUserId);
     return this.cvService.createCV(file, numericUserId, numericTemplateId);
   }
 

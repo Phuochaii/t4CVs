@@ -42,7 +42,7 @@ export class UploadService {
     return 'Hello';
   }
 
-  async uploadCV(file: any): Promise<string> {
+  async upload(file: any): Promise<string> {
     try {
       const bucketName = this.configService.get<string>('BUCKET_NAME');
       console.log(bucketName);
