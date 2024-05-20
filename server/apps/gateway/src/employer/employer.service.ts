@@ -44,7 +44,7 @@ export class EmployerService {
   }
 
   updateEmployerLicense(file: any, employerId: string): Observable<any> {
-    const uploadLink$ = from(this.uploadService.uploadCV(file));
+    const uploadLink$ = from(this.uploadService.upload(file));
 
     return uploadLink$.pipe(
       switchMap((license: string) =>
