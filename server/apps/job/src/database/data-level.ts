@@ -1,4 +1,4 @@
-import { Level } from '../entities/level.entity';
+import { Level } from '../infrastructure/schemas/level.schema';
 
 export const levels: Level[] = [
   {

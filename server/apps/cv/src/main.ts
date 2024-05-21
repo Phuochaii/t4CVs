@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { CVModule } from './cv.module';
+import { CvModule } from './cv.module';
 import { Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice(CVModule, {
+  const app = await NestFactory.createMicroservice(CvModule, {
     transport: Transport.TCP,
     options: {
       host: 'localhost',

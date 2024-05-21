@@ -41,6 +41,7 @@ export class ApplicationService implements OnModuleInit {
   }
 
   create(createApplicationRequest: CreateApplicationRequest) {
+    // console.log(createApplicationRequest);
     return this.applicationServiceClient.createApplication(
       createApplicationRequest,
     );
@@ -66,7 +67,7 @@ export class ApplicationService implements OnModuleInit {
     return applications$;
   }
 
-  findAllByUserId(page: number, limit: number, userId: number) {
+  findAllByUserId(page: number, limit: number, userId: string) {
     const applications$ =
       this.applicationServiceClient.readAllApplicationByUserId({
         page,
