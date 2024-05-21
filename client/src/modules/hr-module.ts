@@ -100,7 +100,10 @@ export const createEmpolyer = async ({
   return response;
 }
 
+// GET ALL POSITION 
+const getPosition = async () => {
+  const response = await axios.get(`${serverURL}/employer/position/all`);
+  return response.data;
+}
 
-
-
-export { getApplicationByCampaignIdHRId, getCampaignById, getAllCompaignByHrId, updateApplicationStatus ,getCVByApplicationID, getNotification,updateStatusNotification,createCompaign} ;
+export { getApplicationByCampaignIdHRId, getCampaignById, getAllCompaignByHrId, updateApplicationStatus ,getCVByApplicationID, getNotification,updateStatusNotification,createCompaign, getPosition} ;

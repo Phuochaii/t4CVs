@@ -35,7 +35,7 @@ const routes: RouteItem[] = [
   // AUTHENTICATION PAGES - Tiến
   { path: 'admin-login', component:Authentication.AdminLogIn, layout: EmptyLayout},
   { path: 'hr-login', component:Authentication.HRLogIn, layout: EmptyLayout},
-  { path: 'hr-signup', component:Authentication.HRSignUp1, layout: EmptyLayout},
+  { path: 'hr-signup', component:Authentication.HRSignUp, layout: EmptyLayout},
   { path: 'hr-profile-register', component:Authentication.HRProfileRegister, layout: EmptyLayout},
   { path: 'user-login', component:Authentication.UserLogIn, layout: EmptyLayout},
   { path: 'user-signup', component:Authentication.UserSignUp, layout: EmptyLayout},

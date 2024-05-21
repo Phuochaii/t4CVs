@@ -2,7 +2,7 @@
 
 import AdminLogIn from "./AdminLogIn";
 import HRLogIn from "./HRLogin";
-import HRSignUp1 from "./HRSignUp";
+import HRSignUp from "./HRSignUp";
 import HRProfileRegister from "./HRProfileRegister";
 import UserLogIn from "./UserLogIn";
 import UserSignUp from "./UserSignUp";
@@ -14,7 +14,7 @@ import AdminInit from "./AdminInit";
 export {
   AdminLogIn,
   HRLogIn,
-  HRSignUp1,
+  HRSignUp,
   HRProfileRegister,
   UserLogIn,
   UserSignUp,
