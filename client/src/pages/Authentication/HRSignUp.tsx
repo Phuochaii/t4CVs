@@ -32,6 +32,7 @@ import Input from "../auth-page/signup-page/Input";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Roles } from "../../shared/services/authen/domain/context";
 import Spinner from "../Spinner";
+import { useAuthen } from "../../shared/services/authen";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -79,6 +80,7 @@ interface ValidateMessages {
 function HRSignUp() {
   const navigate = useNavigate();
   const {user, isLoading} = useAuth0();
+  const {register} = useAuthen();
 
   const [formData, setFormData] = useState<FormData>({
     email: "",
@@ -271,7 +273,11 @@ function HRSignUp() {
 
     if (!error) {
       setShowSuccessMessage(true);
-      navigate("/hr-profile-register");
+      register({
+        username: formData.email,
+        password: formData.password,
+        fullname: "",
+      },Roles.HR);
     }
   };
 
@@ -362,12 +368,16 @@ function HRSignUp() {
               type="text"
               placeholder="Email"
               value={formData.email}
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData((prevFormData) => ({
                   ...prevFormData,
                   email: e.target.value,
                 }))
-              }
+                setValidateMessages((prevState) => ({
+                  ...prevState,
+                  email: "",
+                }));
+              }}
               errorMessage={validateMessages.email}
               icon={Mail}
             />
@@ -381,12 +391,16 @@ function HRSignUp() {
               type="password"
               placeholder="Nhập mật khẩu"
               value={formData.password}
-              onChange={(e) =>
-                setFormData((prevFormData) => ({
-                  ...prevFormData,
-                  password: e.target.value,
-                }))
-              }
+              onChange={(e) =>{
+                  setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    password: e.target.value,
+                  }))
+                  setValidateMessages((prevState) => ({
+                    ...prevState,
+                    password: ""
+                  }));
+              }}
               errorMessage={validateMessages.password}
               icon={Lock}
             />
@@ -400,12 +414,16 @@ function HRSignUp() {
               type="password"
               placeholder="Nhập lại mật khẩu"
               value={formData.confirmPassword}
-              onChange={(e) =>
+              onChange={(e) =>{
                 setFormData((prevFormData) => ({
                   ...prevFormData,
                   confirmPassword: e.target.value,
                 }))
-              }
+                setValidateMessages((prevState) => ({
+                  ...prevState,
+                  confirmPassword: "",
+                }));
+              }}
               errorMessage={validateMessages.confirmPassword}
               icon={Lock}
             />

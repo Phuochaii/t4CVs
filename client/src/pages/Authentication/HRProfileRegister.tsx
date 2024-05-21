@@ -29,10 +29,11 @@ import "../../shared/assets/styles/hr-signup.css";
 import { data_provinces } from "../auth-page/signup-page/provinces-data";
 import { data_districts } from "../auth-page/signup-page/districts-data";
 import Input from "../auth-page/signup-page/Input";
-import { createEmpolyer } from "../../modules/hr-module";
+import { createEmpolyer, getPosition } from "../../modules/hr-module";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Roles, useRoleContext } from "../../shared/services/authen/domain/context";
 import Spinner from "../Spinner";
+import { AUTH0_CLIENT_ID } from "../../shared/services/authen/infrastructure/config";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -71,7 +72,7 @@ interface FormData {
   sex: string;
   phone: string;
   company: string;
-  position: string;
+  position: number | null;
   address_work: string; // này là hiện code
   address: string; // này là hiện tên
   district: string;
@@ -89,7 +90,7 @@ interface ValidateMessages {
 }
 
 function HRProfileRegister() {
-  const {user, isLoading} = useAuth0();
+  const {user, isLoading, logout} = useAuth0();
   const {role, setRole} = useRoleContext();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
@@ -99,7 +100,7 @@ function HRProfileRegister() {
     sex: "",
     phone: "",
     company: "",
-    position: "",
+    position: null,
     address_work: "",
     address: "",
     district: "",
@@ -120,6 +121,7 @@ function HRProfileRegister() {
   const [expanded, setExpanded] = useState(true);
 
   const [errorMessage, setErrorMessage] = useState("");
+  const [positions, setPositions] = useState<any[]>([]);
 
   const settings = {
     dots: true,
@@ -132,6 +134,18 @@ function HRProfileRegister() {
   const filteredDistricts = data_districts.data.filter(
     (district) => district.parent_code === formData.address_work
   );
+  const fetchDataPosition = async () => {
+    try {
+      const positionResponse = await getPosition();
+      setPositions(positionResponse);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDataPosition();
+  }, []);
 
   const isPhoneValid = (phone: string) => {
     setValidateMessages((prevState) => ({
@@ -245,7 +259,7 @@ function HRProfileRegister() {
       id: user?.sub as string,
       fullname: user?.name as string,
       gender: formData.sex,
-      positionId: 1,
+      positionId: formData.position as number,
       skype: formData.skype_account,
       phoneNumber: formData.phone,
       image: user?.picture as string,
@@ -318,12 +332,16 @@ function HRProfileRegister() {
                   type="text"
                   placeholder="Họ và tên"
                   value={formData.name}
-                  onChange={(e) =>
+                  onChange={(e) =>{
                     setFormData((prevFormData) => ({
                       ...prevFormData,
                       name: e.target.value,
                     }))
-                  }
+                    setValidateMessages((prevState) => ({
+                      ...prevState,
+                      name: "",
+                    }));
+                  }}
                   errorMessage={validateMessages.name}
                   icon={User}
                 />
@@ -380,12 +398,16 @@ function HRProfileRegister() {
               type="text"
               placeholder="Số điện thoại cá nhân"
               value={formData.phone}
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData((prevFormData) => ({
                   ...prevFormData,
                   phone: e.target.value,
                 }))
-              }
+                setValidateMessages((prevState) => ({
+                  ...prevState,
+                  phone: "",
+                }));
+              }}
               errorMessage={validateMessages.phone}
               icon={Phone}
             />
@@ -401,12 +423,16 @@ function HRProfileRegister() {
                   type="text"
                   placeholder="Tên công ty"
                   value={formData.company}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setFormData((prevFormData) => ({
                       ...prevFormData,
                       company: e.target.value,
                     }))
-                  }
+                    setValidateMessages((prevState) => ({
+                      ...prevState,
+                      company: "",
+                    }));
+                  }}
                   errorMessage={validateMessages.company}
                   icon={Building}
                 />
@@ -424,7 +450,7 @@ function HRProfileRegister() {
                     onChange={(e) => {
                       setFormData((prevFormData) => ({
                         ...prevFormData,
-                        position: e.target.value,
+                        position: parseInt(e.target.value as string) || null,
                       }));
                       setValidateMessages((prevState) => ({
                         ...prevState,
@@ -433,17 +459,25 @@ function HRProfileRegister() {
                     }}
                     placeholder="Chọn vị trí công tác"
                     className="mt-2 h-9"
+                    MenuProps={{
+                      PaperProps: {
+                        style: {
+                          maxHeight: "200px",
+                        },
+                      },
+                    }}
                   >
                     <MenuItem value="" disabled>
                       Chọn vị trí công tác
                     </MenuItem>
-                    <MenuItem value={"Nhân viên"}>Nhân viên</MenuItem>
-                    <MenuItem value={"Trưởng nhóm"}>Trưởng nhóm</MenuItem>
-                    <MenuItem value={"Phó phòng"}>Phó phòng</MenuItem>
-                    <MenuItem value={"Trưởng phòng"}>Trưởng phòng</MenuItem>
-                    <MenuItem value={"Phó giám đốc"}>Phó giám đốc</MenuItem>
-                    <MenuItem value={"Giám đốc"}>Giám đốc</MenuItem>
-                    <MenuItem value={"Tổng giám đốc"}>Tổng giám đốc</MenuItem>
+                    {positions
+                      ? positions.map((position) => (
+                        <MenuItem key={position.id} value={position.id}>
+                          {position.name}
+                        </MenuItem>
+                      ))
+                      : "Error to fetch positions"
+                    }
                   </Select>
                 </FormControl>
                 {validateMessages.position && (
@@ -584,6 +618,20 @@ function HRProfileRegister() {
               disabled={formData.role === "employee" ? true : false}
             >
               Hoàn tất
+            </button>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                logout({
+                  clientId: AUTH0_CLIENT_ID,
+                  logoutParams: {
+                    returnTo: `${window.location.origin}${Roles.HR.loginUrl}` ,
+                  }
+                })
+              }}
+              className={`py-2 px-4 w-full focus:outline-none text-white rounded-md ${formData.role === "employee" ? "bg-gray-500" : "bg-red-600 hover:bg-red-700 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"}`}
+            >
+              Đăng xuất
             </button>
             {showSuccessMessage && (
               <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mt-4">
