@@ -1,4 +1,4 @@
-import { Currency } from '../entities/currency.entity';
+import { Currency } from '../infrastructure/schemas/currency.schema';
 
 export const currencies: Currency[] = [
   {
