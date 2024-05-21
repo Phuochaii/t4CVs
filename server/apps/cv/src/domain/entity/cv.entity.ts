@@ -1,9 +1,9 @@
-export class CVDto {
+export class Cv {
   id: number;
-  userId: number;
+  userId: string;
   templateId: number;
   link: string;
-  creationAt: any;
+  createdAt: any;
   isPublic: boolean;
   lastModified: any;
 }

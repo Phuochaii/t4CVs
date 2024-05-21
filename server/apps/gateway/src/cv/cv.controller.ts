@@ -8,12 +8,14 @@ import {
   Param,
   UploadedFile,
   UseInterceptors,
+  Res,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CVService } from './cv.service';
 import { CVDto } from './dto/cv.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { Response } from 'express';
 
 @Controller('cv')
 export class CVController {
@@ -36,11 +38,6 @@ export class CVController {
   }
 
   @Post()
-  createCV(@Body() cvDto: CVDto): Observable<any> {
-    return this.cvService.createCV(cvDto);
-  }
-
-  @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -48,13 +45,22 @@ export class CVController {
       }),
     }),
   )
-  uploadCV(@UploadedFile() file: any, @Body() userId: number): Observable<any> {
-    return this.cvService.uploadCV(file, userId);
+  createCV(
+    @UploadedFile() file: any,
+    @Body('userId') userId: string,
+    @Body('templateId') templateId: string,
+  ): Observable<any> {
+    const numericUserId = parseInt(userId, 10);
+    const numericTemplateId = parseInt(templateId, 10);
+    return this.cvService.createCV(file, numericUserId, numericTemplateId);
   }
 
   @Put(':id')
-  updateCV(@Param('id') id: number, @Body() cvDto: CVDto): Observable<any> {
-    return this.cvService.updateCV(id, cvDto);
+  updateCV(
+    @Param('id') id: number,
+    @Body('isPublic') isPublic: boolean,
+  ): Observable<any> {
+    return this.cvService.updateCV(id, isPublic);
   }
 
   @Delete(':id')
@@ -63,7 +69,7 @@ export class CVController {
   }
 
   @Get('download/:id')
-  downloadCV(@Param('id') id: number): Observable<any> {
-    return this.cvService.downloadCV(id);
+  downloadCV(@Param('id') id: number, @Res() res: Response): Observable<any> {
+    return this.cvService.downloadCV(id, res);
   }
 }

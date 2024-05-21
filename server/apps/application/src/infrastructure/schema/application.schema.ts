@@ -32,8 +32,8 @@ export class ApplicationSchema implements _ {
   @Column('int', { nullable: true })
   campaignId: number | null;
 
-  @Column('int', { nullable: true })
-  userId: number | null;
+  @Column('varchar', { nullable: true })
+  userId: string | null;
 
   @Column('int', { nullable: true })
   cvId: number | null;

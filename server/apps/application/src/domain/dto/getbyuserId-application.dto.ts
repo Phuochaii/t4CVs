@@ -1,3 +1,3 @@
 export class GetByUserIdApplicationDto {
-  userId: number;
+  userId: string;
 }
