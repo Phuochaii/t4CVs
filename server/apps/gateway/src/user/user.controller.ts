@@ -11,6 +11,7 @@ import { UserService } from './user.service';
 import { Observable } from 'rxjs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateUserDTO } from './dto/Req/createUser.dto';
+import { CreateUserDto as CreateUserAccountDto} from '../authentication/dto/create-user.dto'
 
 @Controller('user')
 export class UserController {
@@ -38,5 +39,10 @@ export class UserController {
   @Get('check/:id')
   checkUser(@Param('id') id: number): Observable<boolean> {
     return this.userService.checkUser(id);
+  }
+
+  @Post('/register')
+  registerAccount(@Body() user: CreateUserAccountDto): Promise<Observable<string>> {
+    return this.userService.registerAccount(user);
   }
 }

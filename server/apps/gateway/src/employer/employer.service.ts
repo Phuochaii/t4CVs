@@ -14,7 +14,7 @@ export class EmployerService {
   ) {}
 
   async createEmployer(createEmployerDTO: CreateEmployerDto): Promise<Observable<string>> {
-    await this.authenticationService.setRoleForUser({
+    await this.authenticationService.asignRole({
       userId: createEmployerDTO.id,
       role: Role.HR,
     }); 

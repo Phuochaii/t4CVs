@@ -2,6 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ManagementClient } from 'auth0';
 import { Role } from './dto/role.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 
 
 
@@ -10,7 +11,7 @@ export class AuthenticationService {
   auth0: ManagementClient;
   constructor(
     configService: ConfigService,
-  ) { 
+  ) {
     this.auth0 = new ManagementClient({
       domain: configService.get<string>('AUTH0_MANAGEMENT_DOMAIN'),
       clientId: configService.get<string>('AUTH0_MANAGEMENT_CLIENTID'),
@@ -30,7 +31,7 @@ export class AuthenticationService {
   }
 
 
-  private async asignRole({
+  async asignRole({
     userId,
     role,
   }: {
@@ -48,18 +49,21 @@ export class AuthenticationService {
     return response;
   }
 
-
-  async setRoleForUser({
-    userId,
-    role,
-  }: {
-    userId: string,
-    role: Role,
-  }) {
-    await this.asignRole({
-      userId,
-      role,
+  async createUserAccount({
+    email, password, fullname,
+  }: CreateUserDto) {
+    const response = await this.auth0.users.create({
+      email,
+      password,
+      connection: 'Username-Password-Authentication',
+      email_verified: false,
+      name: fullname,
     });
+    await this.asignRole({
+      userId: response.data.user_id,
+      role: Role.USER,
+    });
+    return response;
   }
 
 }
