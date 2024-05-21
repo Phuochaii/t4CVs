@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { EmployerRepository } from '../../domain/repository';
 import { EmployerSchema } from '../schema';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateEmployerDTO } from '../../domain/dto';
+import { CreateEmployerDTO, UpdateEmployerCompanyDTO } from '../../domain/dto';
 import { Employer } from '../../domain/entity';
 
 export class TypeOrmEmployerRepository extends EmployerRepository {
@@ -41,5 +41,50 @@ export class TypeOrmEmployerRepository extends EmployerRepository {
     const total = await this.employerRepository.count();
 
     return total;
+  }
+
+  async updateEmployerLincense(
+    employerId: string,
+    license: string,
+  ): Promise<Employer> {
+    await this.employerRepository.update(employerId, {
+      license: license,
+    });
+
+    const result = await this.getEmployerById(employerId);
+
+    return result;
+  }
+
+  async updateEmployerCompany(
+    employerCompany: UpdateEmployerCompanyDTO,
+  ): Promise<Employer> {
+    await this.employerRepository.update(employerCompany.id, {
+      companyId: employerCompany.companyId,
+    });
+
+    const result = await this.getEmployerById(employerCompany.id);
+
+    return result;
+  }
+
+  async updateEmployerPhoneStatus(id: string): Promise<Employer> {
+    const employer = await this.getEmployerById(id);
+
+    await this.employerRepository.update(employer.id, {
+      phoneNumberStatus: !employer.phoneNumberStatus,
+    });
+
+    return await this.getEmployerById(id);
+  }
+
+  async updateEmployerLicenseStatus(id: string): Promise<Employer> {
+    const employer = await this.getEmployerById(id);
+
+    await this.employerRepository.update(employer.id, {
+      licenseStatus: !employer.licenseStatus,
+    });
+
+    return await this.getEmployerById(id);
   }
 }
