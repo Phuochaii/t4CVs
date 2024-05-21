@@ -7,6 +7,6 @@ export class CreateApplicationDto {
   email: string;
   coverLetter: string;
   campaignId: number;
-  userId: number;
+  userId: string;
   cvId: number;
 }

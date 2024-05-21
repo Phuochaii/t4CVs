@@ -1,6 +1,6 @@
 export class CVDto {
   id: number;
-  userId: number;
+  userId: string;
   templateId: number;
   link: string;
   creationAt: any;

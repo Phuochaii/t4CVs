@@ -17,7 +17,7 @@ export class CV {
 
   @Column({ nullable: true })
   @Field(() => Int, { description: 'Unique identifier for the user' })
-  userId: number;
+  userId: string;
 
   @Column({ nullable: true })
   @Field(() => Int, { description: 'Unique identifier for template' })

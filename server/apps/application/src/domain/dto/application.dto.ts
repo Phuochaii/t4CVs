@@ -10,6 +10,6 @@ export class ApplicationDto {
   createdAt: string;
   updateAt: string;
   campaignId: number;
-  userId: number;
+  userId: string;
   cvId: number;
 }

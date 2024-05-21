@@ -33,7 +33,7 @@ export class ApplicationSchema implements _ {
   campaignId: number | null;
 
   @Column('int', { nullable: true })
-  userId: number | null;
+  userId: string | null;
 
   @Column('int', { nullable: true })
   cvId: number | null;

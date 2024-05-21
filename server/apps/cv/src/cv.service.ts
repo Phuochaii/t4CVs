@@ -145,7 +145,7 @@ export class CVService {
     try {
       await fs.promises.rename(file.path, `${uploadPath}/${newFilename}`);
       const cvDto = new CVDto();
-      cvDto.userId = Number(userId.userId);
+      cvDto.userId = String(userId.userId);
       cvDto.templateId = 1;
       cvDto.link = `http://${BUCKET_NAME}.s3-website-${AWS_S3_REGION}.amazonaws.com/${newFilename}`;
       cvDto.creationAt = new Date();
