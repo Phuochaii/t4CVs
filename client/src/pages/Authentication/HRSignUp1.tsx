@@ -349,12 +349,17 @@ function HRSignUp() {
               type="text"
               placeholder="Email"
               value={formData.email}
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData((prevFormData) => ({
                   ...prevFormData,
                   email: e.target.value,
                 }))
-              }
+
+                setValidateMessages((prevState) => ({
+                  ...prevState,
+                  email: "",
+                }));
+              }}
               errorMessage={validateMessages.email}
               icon={Mail}
             />
@@ -368,12 +373,17 @@ function HRSignUp() {
               type="password"
               placeholder="Nhập mật khẩu"
               value={formData.password}
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData((prevFormData) => ({
                   ...prevFormData,
                   password: e.target.value,
-                }))
-              }
+                }));
+
+                setValidateMessages((prevState) => ({
+                  ...prevState,
+                  password: ""
+                }));
+              }}
               errorMessage={validateMessages.password}
               icon={Lock}
             />
@@ -387,12 +397,17 @@ function HRSignUp() {
               type="password"
               placeholder="Nhập lại mật khẩu"
               value={formData.confirmPassword}
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData((prevFormData) => ({
                   ...prevFormData,
                   confirmPassword: e.target.value,
-                }))
-              }
+                }));
+
+                setValidateMessages((prevState) => ({
+                  ...prevState,
+                  confirmPassword: "",
+                }));
+              }}
               errorMessage={validateMessages.confirmPassword}
               icon={Lock}
             />
