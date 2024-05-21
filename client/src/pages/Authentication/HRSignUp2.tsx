@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   FormControlLabel,
@@ -29,6 +29,7 @@ import "../../shared/assets/styles/hr-signup.css";
 import { data_provinces } from "../auth-page/signup-page/provinces-data";
 import { data_districts } from "../auth-page/signup-page/districts-data";
 import Input from "../auth-page/signup-page/Input";
+import { getPosition } from "../../modules/hr-module";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -93,8 +94,8 @@ function HRSignUp2() {
     phone: "",
     company: "",
     position: "",
-    address_work: "",
-    address: "",
+    address_work: "", // lấy id
+    address: "", // lấy string (Tên thành phố)
     district: "",
     skype_account: "",
   });
@@ -114,6 +115,8 @@ function HRSignUp2() {
 
   const [errorMessage, setErrorMessage] = useState("");
 
+  const [positions, setPositions] = useState<any[]>([]);
+
   const settings = {
     dots: true,
     infinite: true,
@@ -125,6 +128,19 @@ function HRSignUp2() {
   const filteredDistricts = data_districts.data.filter(
     (district) => district.parent_code === formData.address_work
   );
+
+  const fetchDataPosition = async () => {
+    try {
+      const positionResponse = await getPosition();
+      setPositions(positionResponse);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDataPosition();
+  }, []);
 
   const isPhoneValid = (phone: string) => {
     setValidateMessages((prevState) => ({
@@ -272,12 +288,17 @@ function HRSignUp2() {
                   type="text"
                   placeholder="Họ và tên"
                   value={formData.name}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setFormData((prevFormData) => ({
                       ...prevFormData,
                       name: e.target.value,
-                    }))
-                  }
+                    }));
+
+                    setValidateMessages((prevState) => ({
+                      ...prevState,
+                      name: "",
+                    }));
+                  }}
                   errorMessage={validateMessages.name}
                   icon={User}
                 />
@@ -334,12 +355,17 @@ function HRSignUp2() {
               type="text"
               placeholder="Số điện thoại cá nhân"
               value={formData.phone}
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData((prevFormData) => ({
                   ...prevFormData,
                   phone: e.target.value,
-                }))
-              }
+                }));
+
+                setValidateMessages((prevState) => ({
+                  ...prevState,
+                  phone: "",
+                }));
+              }}
               errorMessage={validateMessages.phone}
               icon={Phone}
             />
@@ -355,12 +381,17 @@ function HRSignUp2() {
                   type="text"
                   placeholder="Tên công ty"
                   value={formData.company}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setFormData((prevFormData) => ({
                       ...prevFormData,
                       company: e.target.value,
-                    }))
-                  }
+                    }));
+
+                    setValidateMessages((prevState) => ({
+                      ...prevState,
+                      company: "",
+                    }));
+                  }}
                   errorMessage={validateMessages.company}
                   icon={Building}
                 />
@@ -380,6 +411,7 @@ function HRSignUp2() {
                         ...prevFormData,
                         position: e.target.value,
                       }));
+
                       setValidateMessages((prevState) => ({
                         ...prevState,
                         position: "",
@@ -387,17 +419,24 @@ function HRSignUp2() {
                     }}
                     placeholder="Chọn vị trí công tác"
                     className="mt-2 h-9"
+                    MenuProps={{
+                      PaperProps: {
+                        style: {
+                          maxHeight: "200px",
+                        },
+                      },
+                    }}
                   >
                     <MenuItem value="" disabled>
                       Chọn vị trí công tác
                     </MenuItem>
-                    <MenuItem value={"Nhân viên"}>Nhân viên</MenuItem>
-                    <MenuItem value={"Trưởng nhóm"}>Trưởng nhóm</MenuItem>
-                    <MenuItem value={"Phó phòng"}>Phó phòng</MenuItem>
-                    <MenuItem value={"Trưởng phòng"}>Trưởng phòng</MenuItem>
-                    <MenuItem value={"Phó giám đốc"}>Phó giám đốc</MenuItem>
-                    <MenuItem value={"Giám đốc"}>Giám đốc</MenuItem>
-                    <MenuItem value={"Tổng giám đốc"}>Tổng giám đốc</MenuItem>
+                    {positions
+                      ? positions.map((position) => (
+                        <MenuItem key={position.id} value={position.id}>
+                          {position.name}
+                        </MenuItem>
+                      ))
+                      : "Error to fetch positions"}
                   </Select>
                 </FormControl>
                 {validateMessages.position && (
