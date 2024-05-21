@@ -1,14 +1,14 @@
 import { Controller } from '@nestjs/common';
-import { UserService } from './domain/user.service';
+import { UserService } from './user.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { CreateUserDTO } from './domain/dto/Req';
+import { CreateUserDTO } from './dto/Req/createUser.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @MessagePattern({ cmd: 'find_user_by_id' })
-  findById(id: string) {
+  findById(id: number) {
     return this.userService.findById(id);
   }
 

@@ -8,5 +8,5 @@ export class FindCampaignDTOResponse {
   id: number;
   name: string;
   createdAt: Date;
-  employerId: string;
+  employerId: number;
 }

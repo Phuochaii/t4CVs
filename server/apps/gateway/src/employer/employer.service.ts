@@ -27,7 +27,7 @@ export class EmployerService {
     );
   }
 
-  findEmployerById(id: string): Observable<FindEmployerDTOResponse> {
+  findEmployerById(id: number): Observable<FindEmployerDTOResponse> {
     return this.employerClient.send<FindEmployerDTOResponse>(
       { cmd: 'find_employer_by_id' },
       id,

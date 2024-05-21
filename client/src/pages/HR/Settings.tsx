@@ -94,7 +94,7 @@ const Settings = () => {
   const selectedComponent = sidebarItems.find(item => item.key === selectedKey)?.component;
   return (
     <div className="flex flex-row h-fit m-5">
-      <div className="w-[230px] bg-gray-100">
+      <div className="w-[22%] bg-gray-100">
           <ul className="space-y-2">
           {sidebarItems.map((item) => (
             <Item
@@ -109,7 +109,7 @@ const Settings = () => {
         </ul>
    
       </div>
-      <div className="flex-grow bg-white">
+      <div className="w-[78%] flex-grow bg-white">
          {selectedComponent}
       </div>
     </div>

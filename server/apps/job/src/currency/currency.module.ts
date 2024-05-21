@@ -1,26 +1,12 @@
 import { Module } from '@nestjs/common';
-import { CurrencyService } from '../domain/services/currency.service';
+import { CurrencyService } from './currency.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Currency } from '../infrastructure/schemas/currency.schema';
-import { CurrencyRepository } from '../domain/repository';
-import { TypeOrmCurrencyRepository } from '../infrastructure/repository/currency.repository';
+import { Currency } from '../entities/currency.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Currency])],
   controllers: [],
-  providers: [
-    {
-      provide: CurrencyService,
-      useFactory: (currencyRepository: CurrencyRepository) => {
-        return new CurrencyService(currencyRepository);
-      },
-      inject: [CurrencyRepository],
-    },
-    {
-      provide: CurrencyRepository,
-      useClass: TypeOrmCurrencyRepository,
-    },
-  ],
+  providers: [CurrencyService],
   exports: [CurrencyService],
 })
 export class CurrencyModule {}

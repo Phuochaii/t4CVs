@@ -33,7 +33,7 @@ export class EmployerController {
   }
 
   @Get(':id')
-  findEmployerById(@Param('id') id: string) {
+  findEmployerById(@Param('id') id: number) {
     return this.employerService.findEmployerById(id);
   }
 

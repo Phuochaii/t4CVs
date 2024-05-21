@@ -41,7 +41,6 @@ export class ApplicationService implements OnModuleInit {
   }
 
   create(createApplicationRequest: CreateApplicationRequest) {
-    // console.log(createApplicationRequest);
     return this.applicationServiceClient.createApplication(
       createApplicationRequest,
     );

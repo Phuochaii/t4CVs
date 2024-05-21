@@ -1,4 +1,4 @@
-import { Location } from '../infrastructure/schemas/location.schema';
+import { Location } from '../entities/location.entity';
 
 export const locations: Location[] = [
   {

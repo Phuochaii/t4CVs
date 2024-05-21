@@ -71,7 +71,7 @@ export class CompanyController {
 
   @Get('campaign/employer/:employerId')
   findCampaignByEmployerId(
-    @Param('employerId') employerId: string,
+    @Param('employerId') employerId: number,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
   ) {
@@ -83,7 +83,7 @@ export class CompanyController {
   }
 
   @Get('campaign/employer/all/:employerId')
-  findAllCampaignByEmployerId(@Param('employerId') employerId: string) {
+  findAllCampaignByEmployerId(@Param('employerId') employerId: number) {
     return this.companyService.findAllCampaignByEmployerId(employerId);
   }
 

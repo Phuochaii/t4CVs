@@ -42,7 +42,7 @@ export class ApplicationController {
     );
     const employerId = campaign.employerId;
 
-    console.log(employerId);
+    // console.log(employerId);
     const notification = await firstValueFrom(
       this.notificationService.create(
         [new NotificationUserId(employerId, NotificationUserRole.HR)],

@@ -5,11 +5,11 @@ function Certificate() {
     const [firstImage, setFirstImage] = useState(null);
     const [secondImage, setSecondImage] = useState(null);
     return (
-        <div className="w-full m-5 flex flex-col">
+        <div className="w-full m-10 flex flex-col">
             <h1 className="text-black text-sl mb-5">
                 Thông tin giấy phép kinh doanh
             </h1>
-            <div className="w-[96%] border-slate-200 border-2 px-8 py-4 space-y-4">
+            <div className="w-[90%] border-slate-200 border-2 px-8 py-4 space-y-4">
                 <h1 className="text-black text-[13px] mb-5">
                     Trạng thái: <span className="text-slate-400">chưa cập nhật</span>
                 </h1>
