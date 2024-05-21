@@ -17,9 +17,9 @@ export enum NotificationUserRole {
 }
 export class NotificationUserId {
   constructor(
-    private id: number,
+    private id: string,
     private role: NotificationUserRole,
-  ) { }
+  ) {}
   get userId() {
     return `${this.role}-${this.id}`;
   }
@@ -29,7 +29,7 @@ export class NotificationService implements OnModuleInit {
   private notificationServiceClient: NotificationServiceClient;
   constructor(
     @Inject(NOTIFICATION_PACKAGE_NAME) private readonly client: ClientGrpc,
-  ) { }
+  ) {}
   onModuleInit() {
     this.notificationServiceClient =
       this.client.getService<NotificationServiceClient>(
@@ -53,20 +53,19 @@ export class NotificationService implements OnModuleInit {
     notificationUserId: NotificationUserId,
     paginationRequest: PaginationRequest,
   ) {
-    const { pagination, data = [] } = await lastValueFrom(this.notificationServiceClient
-      .getNotifications({
+    const { pagination, data = [] } = await lastValueFrom(
+      this.notificationServiceClient.getNotifications({
         user: { id: notificationUserId.userId },
         paginationRequest,
-      }));
+      }),
+    );
     return {
       pagination,
       data: data.map((notification) => ({
         ...notification,
-        createdAt: DateTimestampConverter.fromTimestamp(
-          notification.createdAt,
-        ),
+        createdAt: DateTimestampConverter.fromTimestamp(notification.createdAt),
       })),
-    }
+    };
   }
 
   updateStatus(

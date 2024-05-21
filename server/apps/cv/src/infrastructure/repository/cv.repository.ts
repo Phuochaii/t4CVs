@@ -21,7 +21,6 @@ export class TypeOrmCvRepository extends CvRepository {
     const now = new Date();
     const lastModified = now.toISOString();
     await this.cvRepository.update(cv.id, {
-      link: cv.link,
       isPublic: cv.isPublic,
       lastModified: lastModified,
     });

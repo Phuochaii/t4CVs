@@ -8,8 +8,8 @@ export class CvSchema implements _ {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('int', { nullable: true })
-  userId: number | null;
+  @Column('varchar', { nullable: true })
+  userId: string | null;
 
   @Column('int', { nullable: true })
   templateId: number | null;
