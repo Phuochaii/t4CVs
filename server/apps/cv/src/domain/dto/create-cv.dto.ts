@@ -1,5 +1,5 @@
 export class CreateCvDto {
-  userId: number;
+  userId: string;
   templateId: number;
   link: string;
 }

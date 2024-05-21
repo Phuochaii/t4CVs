@@ -56,8 +56,11 @@ export class CVController {
   }
 
   @Put(':id')
-  updateCV(@Param('id') id: number, @Body() cvDto: CVDto): Observable<any> {
-    return this.cvService.updateCV(id, cvDto);
+  updateCV(
+    @Param('id') id: number,
+    @Body('isPublic') isPublic: boolean,
+  ): Observable<any> {
+    return this.cvService.updateCV(id, isPublic);
   }
 
   @Delete(':id')

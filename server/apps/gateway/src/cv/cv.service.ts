@@ -33,8 +33,8 @@ export class CVService {
     );
   }
 
-  updateCV(id: number, cvDto: CVDto): Observable<any> {
-    return this.cvClient.send({ cmd: 'updateCV' }, { id, cvDto });
+  updateCV(id: number, isPublic: boolean): Observable<any> {
+    return this.cvClient.send({ cmd: 'updateCV' }, { id, isPublic });
   }
 
   deleteCV(id: number): Observable<any> {

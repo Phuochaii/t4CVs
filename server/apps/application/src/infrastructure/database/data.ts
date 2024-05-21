@@ -14,7 +14,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-05-24',
     updateAt: '2023-06-27',
     campaignId: 2,
-    userId: 15,
+    userId: '15',
     cvId: 1,
   },
   {
@@ -28,7 +28,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-05-25',
     updateAt: '2023-06-28',
     campaignId: 4,
-    userId: 16,
+    userId: '16',
     cvId: 2,
   },
   {
@@ -42,7 +42,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-05-26',
     updateAt: '2023-06-29',
     campaignId: 7,
-    userId: 17,
+    userId: '17',
     cvId: 3,
   },
   {
@@ -56,7 +56,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-05-27',
     updateAt: '2023-06-30',
     campaignId: 10,
-    userId: 18,
+    userId: '18',
     cvId: 4,
   },
   {
@@ -70,7 +70,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-05-28',
     updateAt: '2023-07-01',
     campaignId: 7,
-    userId: 19,
+    userId: '19',
     cvId: 5,
   },
   {
@@ -84,7 +84,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-05-29',
     updateAt: '2023-07-02',
     campaignId: 4,
-    userId: 20,
+    userId: '20',
     cvId: 6,
   },
   {
@@ -98,7 +98,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-05-30',
     updateAt: '2023-07-03',
     campaignId: 3,
-    userId: 21,
+    userId: '21',
     cvId: 7,
   },
   {
@@ -112,7 +112,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-05-31',
     updateAt: '2023-07-04',
     campaignId: 1,
-    userId: 22,
+    userId: '22',
     cvId: 8,
   },
   {
@@ -126,7 +126,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-06-01',
     updateAt: '2023-07-05',
     campaignId: 1,
-    userId: 23,
+    userId: '23',
     cvId: 9,
   },
   {
@@ -140,7 +140,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-06-02',
     updateAt: '2023-07-06',
     campaignId: 1,
-    userId: 24,
+    userId: '24',
     cvId: 10,
   },
   {
@@ -154,7 +154,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-06-03',
     updateAt: '2023-07-07',
     campaignId: 9,
-    userId: 25,
+    userId: '25',
     cvId: 11,
   },
   {
@@ -168,7 +168,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-06-04',
     updateAt: '2023-07-08',
     campaignId: 1,
-    userId: 26,
+    userId: '26',
     cvId: 12,
   },
   {
@@ -182,7 +182,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-06-05',
     updateAt: '2023-07-09',
     campaignId: 4,
-    userId: 27,
+    userId: '27',
     cvId: 13,
   },
   {
@@ -196,7 +196,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-06-06',
     updateAt: '2023-07-10',
     campaignId: 8,
-    userId: 28,
+    userId: '28',
     cvId: 14,
   },
   {
@@ -210,7 +210,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-06-07',
     updateAt: '2023-07-11',
     campaignId: 2,
-    userId: 29,
+    userId: '29',
     cvId: 15,
   },
   {
@@ -224,7 +224,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-06-08',
     updateAt: '2023-07-12',
     campaignId: 3,
-    userId: 30,
+    userId: '30',
     cvId: 16,
   },
   {
@@ -238,7 +238,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-06-09',
     updateAt: '2023-07-13',
     campaignId: 5,
-    userId: 31,
+    userId: '31',
     cvId: 17,
   },
   {
@@ -252,7 +252,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-06-10',
     updateAt: '2023-07-14',
     campaignId: 1,
-    userId: 32,
+    userId: '32',
     cvId: 18,
   },
   {
@@ -266,7 +266,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-06-11',
     updateAt: '2023-07-15',
     campaignId: 3,
-    userId: 33,
+    userId: '33',
     cvId: 19,
   },
   {
@@ -280,7 +280,7 @@ export const applications: ApplicationSchema[] = [
     createdAt: '2024-06-12',
     updateAt: '2023-07-16',
     campaignId: 1,
-    userId: 34,
+    userId: '34',
     cvId: 20,
   },
 ];
