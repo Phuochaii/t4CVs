@@ -24,7 +24,7 @@ message ReadApplicationRequest {
 message ReadAllApplicationByUserIdRequest {
   int32 page = 1;
   int32 limit = 2;
-  int32 userId = 3;
+  string userId = 3;
 }
 
 message ReadAllApplicationByCampaignIdRequest {
