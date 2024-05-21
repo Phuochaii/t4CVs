@@ -1,11 +1,10 @@
-import React, { useContext, useState } from "react";
-import { Link, useNavigate, useNavigation } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import "../../shared/assets/styles/hr-signup.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { MyContext } from "../../App";
 import { accountList } from "../../shared/utils/constant";
 
 const images = [
@@ -201,7 +200,7 @@ function HRLogIn() {
         <p className="text-center text-gray-600">
           Chưa có tài khoản?{" "}
           <Link
-            to="/hr-signup"
+            to="/hr-signup/1"
             className="text-green-500 hover:underline hover:text-green-500"
           >
             Đăng ký ngay

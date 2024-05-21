@@ -155,8 +155,8 @@
 
 .search-job .header .search-result .search-result-tool{
   background-color: #00b752;
-  pointer-events: none;
-  opacity: 0.5;
+  /* pointer-events: none;
+  opacity: 0.5; */
 }
 
 /* .search-job .header .search-result .search-result-tool:hover{

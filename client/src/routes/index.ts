@@ -33,7 +33,8 @@ const routes: RouteItem[] = [
   // AUTHENTICATION PAGES - Tiến
   { path: 'admin-login', component:Authentication.AdminLogIn, layout: EmptyLayout},
   { path: 'hr-login', component:Authentication.HRLogIn, layout: EmptyLayout},
-  { path: 'hr-signup', component:Authentication.HRSignUp, layout: EmptyLayout},
+  { path: 'hr-signup/1', component:Authentication.HRSignUp1, layout: EmptyLayout},
+  { path: 'hr-signup/2', component:Authentication.HRSignUp2, layout: EmptyLayout},
   { path: 'user-login', component:Authentication.UserLogIn, layout: EmptyLayout},
   { path: 'user-signup', component:Authentication.UserSignUp, layout: EmptyLayout},
 
@@ -88,6 +89,7 @@ const routes: RouteItem[] = [
 
   { path: "/hr/campaign", component: HR.Campaign, layout: HRLayout }, // thuc
 
+  
   { path: "/hr/campain-edit/:id", component: HR.CompaignEdit, layout: HRLayout }, // thuc
 
   { path: "/hr/recruitment", component: HR.Recruitment, layout: HRLayout },
@@ -98,10 +100,12 @@ const routes: RouteItem[] = [
   { path: "/hr/help", component: HR.Support, layout: EmptyLayout }, // thinh
 
   { path: "/saved-jobs", component: User.SavedJobs, layout: UserLayout}, //khoa
+  { path: "/hr/recruitment-reports", component: HR.RecruitmentReports, layout: HRLayout}, //khoa
   { path: "/user-information", component: User.UserInformation, layout: UserLayout}, //thuc
 
   { path: "/hr/settings", component: HR.Settings, layout: HRLayout}, //tien + hung
 
+  { path: "/hr/account/activities",component: HR.Activities, layout:HRLayout},
 
 ];
 
