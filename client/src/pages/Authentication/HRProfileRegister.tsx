@@ -90,7 +90,7 @@ interface ValidateMessages {
 }
 
 function HRProfileRegister() {
-  const {user, isLoading, logout} = useAuth0();
+  const {user, isLoading, logout, getAccessTokenSilently} = useAuth0();
   const {role, setRole} = useRoleContext();
   const navigate = useNavigate();
   const [canUpdateProfile, setCanUpdateProfile] = useState<boolean | undefined>(undefined);
@@ -284,6 +284,9 @@ function HRProfileRegister() {
       .then(() =>  console.log("Success register profile"))
       .then(() => setErrorMessage(""))
       .then(() => setShowSuccessMessage(true))
+      .then(() => getAccessTokenSilently({
+        cacheMode: 'off'
+      }))
       .then(() => setRole(Roles.HR))
       .catch(() => setErrorMessage("Failed to set up employer profile !"));
   };
