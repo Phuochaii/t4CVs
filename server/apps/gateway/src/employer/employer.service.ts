@@ -11,13 +11,17 @@ export class EmployerService {
   constructor(
     @Inject('EMPLOYER') private readonly employerClient: ClientProxy,
     private readonly authenticationService: AuthenticationService,
-  ) {}
+  ) { }
 
   async createEmployer(createEmployerDTO: CreateEmployerDto): Promise<Observable<string>> {
     await this.authenticationService.asignRole({
       userId: createEmployerDTO.id,
       role: Role.HR,
-    }); 
+    });
+    await this.authenticationService.setUpProfile({
+      id: createEmployerDTO.id,
+      name: createEmployerDTO.fullname,
+    });
     return this.employerClient.send(
       { cmd: 'create_employer' },
       createEmployerDTO,
@@ -48,5 +52,9 @@ export class EmployerService {
 
   checkEmployer(id: string): Observable<boolean> {
     return this.employerClient.send({ cmd: 'check_employer' }, id);
+  }
+
+  canUpdateProfile(id: string): Promise<boolean> {
+    return this.authenticationService.canUpdateProfile(id);
   }
 }

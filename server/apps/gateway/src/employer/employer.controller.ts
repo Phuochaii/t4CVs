@@ -39,4 +39,9 @@ export class EmployerController {
   checkEmployer(@Param('id') id: string): Observable<boolean> {
     return this.employerService.checkEmployer(id);
   }
+
+  @Get(':id/can-update-profile')
+  canUpdateProfile(@Param('id') id: string): Promise<boolean> {
+    return this.employerService.canUpdateProfile(id);
+  }
 }

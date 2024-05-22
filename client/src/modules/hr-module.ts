@@ -100,6 +100,11 @@ export const createEmpolyer = async ({
   return response;
 }
 
+export const getCanUpdateProfile = async (id: string) => {
+  const response = await axios.get(`${serverURL}/employer/${id}/can-update-profile`);
+  return response.data;
+}
+
 // GET ALL POSITION 
 const getPosition = async () => {
   const response = await axios.get(`${serverURL}/employer/position/all`);

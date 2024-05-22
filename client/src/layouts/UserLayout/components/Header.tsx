@@ -6,10 +6,11 @@ import React from 'react';
 import * as UserModule from '../../../modules/user-module';
 import { useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
+import Spinner from '../../../pages/Spinner';
 
 function Header() {
   const navigation = useNavigate();
-  const {isAuthenticated, user, logout} = useAuth0();
+  const {isAuthenticated, user, logout, isLoading} = useAuth0();
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
@@ -32,9 +33,6 @@ function Header() {
     if (userId != "") fetchNotification({ id: userId });
   }, []);
 
-  // React.useEffect(() => {
-  //   console.log(user);
-  // }, [user]);
 
   const [isJobsHovered, setIsJobsHovered] = useState(false);
   const [isCVsHovered, setIsCVsHovered] = useState(false);
@@ -971,7 +969,7 @@ function Header() {
                   <span className="flex flex-row items-center gap-2 p-2 rounded-full cursor-pointer btn-user-info bg-slate-100 group/user">
                   <img 
                     className="w-8 h-8 rounded-full" 
-                    src={user?.picture && '../../../images/user-logo.png'}
+                    src={user?.picture || '../../../images/user-logo.png'}
                     alt="avatar" 
                   />
                     <span className="font-bold user-name">

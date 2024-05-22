@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { ManagementClient } from 'auth0';
 import { Role } from './dto/role.dto';
 import { CreateUserDto } from './dto/create-user.dto';
+import { SetUpProfileDto } from './dto/setup-profile.dto';
 
 
 
@@ -64,6 +65,31 @@ export class AuthenticationService {
       role: Role.USER,
     });
     return response;
+  }
+
+  async setUpProfile({
+    id, name
+  }: SetUpProfileDto) {
+    const response = await this.auth0.users.update(
+      { id: id },
+      {
+        name,
+      }
+    );
+    return response;
+  }
+
+  async canUpdateProfile(id: string) {
+    const response = await this.auth0.users.get({ id });
+    try {
+      await this.setUpProfile({
+        id,
+        name: response.data.name,
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
 }

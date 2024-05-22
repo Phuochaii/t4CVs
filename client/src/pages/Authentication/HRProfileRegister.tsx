@@ -29,7 +29,7 @@ import "../../shared/assets/styles/hr-signup.css";
 import { data_provinces } from "../auth-page/signup-page/provinces-data";
 import { data_districts } from "../auth-page/signup-page/districts-data";
 import Input from "../auth-page/signup-page/Input";
-import { createEmpolyer, getPosition } from "../../modules/hr-module";
+import { createEmpolyer, getCanUpdateProfile, getPosition } from "../../modules/hr-module";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Roles, useRoleContext } from "../../shared/services/authen/domain/context";
 import Spinner from "../Spinner";
@@ -93,6 +93,7 @@ function HRProfileRegister() {
   const {user, isLoading, logout} = useAuth0();
   const {role, setRole} = useRoleContext();
   const navigate = useNavigate();
+  const [canUpdateProfile, setCanUpdateProfile] = useState<boolean | undefined>(undefined);
   const [formData, setFormData] = useState<FormData>({
     agreeToTerms: false,
     role: "",
@@ -142,10 +143,26 @@ function HRProfileRegister() {
       console.error("Error fetching data:", error);
     }
   };
-
+  const fetchCanUpdateProfile = async (id: string) => {
+    try {
+      const response = await getCanUpdateProfile(id);
+      if(!response)  setFormData((prevFormData) => ({
+        ...prevFormData,
+        name: user?.name || "",
+      }));
+      setCanUpdateProfile(response);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
   useEffect(() => {
     fetchDataPosition();
   }, []);
+
+  useEffect(() => {
+    if(!user) return;
+    fetchCanUpdateProfile(user.sub as string);
+  }, [user]);
 
   const isPhoneValid = (phone: string) => {
     setValidateMessages((prevState) => ({
@@ -257,7 +274,7 @@ function HRProfileRegister() {
 
     createEmpolyer({
       id: user?.sub as string,
-      fullname: user?.name as string,
+      fullname: formData.name,
       gender: formData.sex,
       positionId: formData.position as number,
       skype: formData.skype_account,
@@ -331,6 +348,7 @@ function HRProfileRegister() {
                   name="name"
                   type="text"
                   placeholder="Họ và tên"
+                  disabled={canUpdateProfile === false}
                   value={formData.name}
                   onChange={(e) =>{
                     setFormData((prevFormData) => ({
