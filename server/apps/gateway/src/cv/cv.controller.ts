@@ -72,8 +72,8 @@ export class CVController {
     return this.cvService.downloadCV(id, res);
   }
 
-  @Get('/test')
-  getCVsById(): Observable<any[]> {
-    return this.cvService.getCVsById();
-  }
+  // @Get('/test')
+  // getCVsById(): Observable<any[]> {
+  //   return this.cvService.getCVsById();
+  // }
 }

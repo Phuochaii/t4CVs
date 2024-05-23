@@ -9,22 +9,13 @@ import {
   ParseBoolPipe,
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
-import { CompanyService } from '../company/company.service';
-import { UserService } from '../user/user.service';
-import { NotificationService } from '../notification/notification.service';
 import { CreateApplicationRequest } from '@app/common/proto/application';
-import { firstValueFrom } from 'rxjs';
 
 // import { firstValueFrom } from 'rxjs';
 
 @Controller('application')
 export class ApplicationController {
-  constructor(
-    private readonly applicationService: ApplicationService,
-    private readonly companyService: CompanyService,
-    private readonly notificationService: NotificationService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly applicationService: ApplicationService) {}
 
   @Post()
   async create(@Body() createApplicationRequest: CreateApplicationRequest) {
@@ -46,22 +37,13 @@ export class ApplicationController {
     )
     status: boolean | null, //truyen vao false or null //filter
   ) {
-    const campaignRes = await firstValueFrom(
-      this.companyService.findCampaignByEmployerId(hrId, 1, 100),
+    return this.applicationService.findAll(
+      page,
+      limit,
+      campaignId,
+      status,
+      hrId,
     );
-
-    let campaignIds = campaignRes.data.map((campaign) => campaign.id);
-    if (campaignId) {
-      campaignIds = [campaignId];
-    }
-    const { applications = [], ...data } = await firstValueFrom(
-      this.applicationService.findAll(page, limit, campaignIds, status),
-    );
-
-    return {
-      ...data,
-      applications,
-    };
   }
 
   @Get('/user/:userId')
@@ -77,14 +59,7 @@ export class ApplicationController {
     )
     status: boolean | null,
   ) {
-    const { applications = [], ...data } = await firstValueFrom(
-      this.applicationService.findAllByUserId(page, limit, userId, status),
-    );
-
-    return {
-      ...data,
-      applications,
-    };
+    return this.applicationService.findAllByUserId(page, limit, userId, status);
   }
 
   @Get(':id/cv')
@@ -94,13 +69,7 @@ export class ApplicationController {
 
   @Get(':id')
   async findOne(@Param('id') id: number) {
-    let campaignId;
-    const result = await this.applicationService.findOne(id);
-    this.applicationService.findOne(id).subscribe((value) => {
-      campaignId = value.fullname;
-    });
-
-    return result;
+    return this.applicationService.findOne(id);
   }
 
   @Patch(':id')

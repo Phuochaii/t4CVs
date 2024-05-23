@@ -23,9 +23,8 @@ export class CVService {
   getCVById(id: number): Observable<any> {
     return this.cvClient.send({ cmd: 'getCVById' }, id);
   }
-
-  getCVsById(): Observable<any[]> {
-    const Ids: number[] = [1, 2];
+  getCVsById(Ids: number[]): Observable<any[]> {
+    // const Ids: number[] = [1, 2];
     return this.cvClient.send({ cmd: 'getCVsById' }, Ids);
   }
 

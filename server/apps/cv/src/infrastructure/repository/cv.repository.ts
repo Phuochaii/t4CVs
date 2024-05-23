@@ -37,7 +37,9 @@ export class TypeOrmCvRepository extends CvRepository {
         id: In(cv.id),
       },
     });
-    return data;
+
+    const orderedData = cv.id.map((id) => data.find((item) => item.id === id));
+    return orderedData;
   }
 
   async getAllCv(): Promise<Cv[]> {
