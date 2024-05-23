@@ -65,7 +65,9 @@ export class JobService {
     );
     const lastJob = await lastValueFrom(job);
     if (lastJob === null) {
-      throw new BadRequestException(`Job doesn't exit!`);
+      throw new BadRequestException(
+        `Doesn't exit job with campaign ID = ${campaignId}!`,
+      );
     }
     const company = this.companyService.findCompanyById(lastJob.companyId);
     const lastCompany = await lastValueFrom(company);
@@ -74,8 +76,13 @@ export class JobService {
     return result;
   }
 
-  updateJobStatus(data: UpdateJobDto): Observable<string> {
-    return this.jobClient.send({ cmd: 'update_job_status' }, data);
+  updateJobStatus(data: UpdateJobDto) {
+    const status = this.jobClient.send({ cmd: 'update_job_status' }, data);
+    const lastStatus = lastValueFrom(status);
+    if (lastStatus) {
+      return 'Updated successfully!';
+    }
+    return new BadRequestException(`Update failed!`);
   }
 
   createJobInfo(): Observable<string> {

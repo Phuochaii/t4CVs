@@ -47,7 +47,7 @@ export class JobController {
   }
 
   @Post('update-status')
-  updateJobStatus(@Body() data: UpdateJobDto): Observable<string> {
+  updateJobStatus(@Body() data: UpdateJobDto) {
     return this.jobService.updateJobStatus(data);
   }
 

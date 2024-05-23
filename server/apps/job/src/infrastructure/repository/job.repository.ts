@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JobAggregate } from '../../domain/aggregate';
 import { Job } from '../schemas';
@@ -8,6 +8,7 @@ import { CreateJobDto } from '../../domain/dto/Req/create-job.dto';
 import { QueryDTO } from '../../domain/dto/Req/query.dto';
 import { UpdateJobDto } from '../../domain/dto/Req/update-job.dto';
 import { RpcException } from '@nestjs/microservices';
+import { FindJobByCampaignIdDto } from '../../domain/dto/Resp/find-job-by-campaignId.dto';
 
 @Injectable()
 export class TypeOrmJobRepository {
@@ -15,24 +16,30 @@ export class TypeOrmJobRepository {
     @InjectRepository(Job)
     private readonly jobRepository: Repository<Job>,
   ) {}
-  async findJobByCampaignId(campaignId: number): Promise<JobAggregate> {
-    const result = await this.jobRepository.findOne({
+  async findJobByCampaignId(
+    campaignId: number,
+  ): Promise<FindJobByCampaignIdDto> {
+    const job = await this.jobRepository.findOne({
       where: {
         campaignId,
       },
-      relations: [
-        'jobDetail',
-        'major',
-        'level',
-        'currency',
-        'fields',
-        'exp',
-        'type',
-        'locations',
-      ],
+      select: {
+        titleRecruitment: true,
+        companyId: true,
+        salaryMax: true,
+        salaryMin: true,
+        campaignId: true,
+      },
     });
-    if (!result) throw new BadRequestException('Not found');
-    return new JobMapper().toDomain(result);
+    if (!job) return null;
+    const result: FindJobByCampaignIdDto = {
+      titleRecruitment: job.titleRecruitment,
+      companyId: job.companyId,
+      salaryMax: job.salaryMax,
+      salaryMin: job.salaryMin,
+      campaignId: job.campaignId,
+    };
+    return result;
   }
   async findJobById(id: number): Promise<JobAggregate> {
     const result = await this.jobRepository.findOne({
@@ -50,6 +57,7 @@ export class TypeOrmJobRepository {
         'locations',
       ],
     });
+    if (!result) return null;
     return new JobMapper().toDomain(result);
   }
   async createJob(job: CreateJobDto): Promise<JobAggregate> {
@@ -79,13 +87,13 @@ export class TypeOrmJobRepository {
       ],
     });
   }
-  async updateJobStatus(data: UpdateJobDto): Promise<string> {
+  async updateJobStatus(data: UpdateJobDto): Promise<boolean> {
     const result = await this.jobRepository.update(data.id, {
       status: data.status,
     });
     if (result.affected === 0) {
-      throw new RpcException('Not found');
+      return false;
     }
-    return 'Update success';
+    return true;
   }
 }
