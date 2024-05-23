@@ -7,6 +7,7 @@ import JobService from "../../modules/job-module";
 import SearchBoxComponent from "../../layouts/UserLayout/components/SearchBoxComponent";
 import TopCompanies from "../../shared/components/TopCompanies";
 import { salary_range } from "../../shared/utils/constant";
+import JobSuggestions from "../../shared/components/JobSuggestions";
 
 const slides = [
     "../../../images/slide_1.png",
@@ -220,6 +221,7 @@ function Home() {
                 </div>
             </div>
             <TopCompanies />
+            <JobSuggestions />
         </>
     );
 }

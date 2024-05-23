@@ -1,4 +1,3 @@
-import React from "react";
 import TopCompanyItem from "./TopCompanyItem";
 
 const topCompanies = [
@@ -28,7 +27,7 @@ const topCompanies = [
     },
 ];
 
-const TopCompanies = (props) => {
+const TopCompanies = () => {
     return (
         <>
             <div className="w-full px-[170px] bg-white">
