@@ -16,6 +16,7 @@ export interface ReadAllApplicationByUserIdRequest {
   page: number;
   limit: number;
   userId: string;
+  status?: boolean | undefined;
 }
 
 export interface ReadAllApplicationByCampaignIdRequest {

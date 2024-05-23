@@ -67,12 +67,19 @@ export class ApplicationService implements OnModuleInit {
     return applications$;
   }
 
-  findAllByUserId(page: number, limit: number, userId: string) {
+  findAllByUserId(
+    page: number,
+    limit: number,
+    userId: string,
+    status: boolean | null,
+  ) {
+    // console.log(status);
     const applications$ =
       this.applicationServiceClient.readAllApplicationByUserId({
         page,
         limit,
         userId,
+        status,
       });
     return applications$;
   }

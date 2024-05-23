@@ -42,7 +42,6 @@ export class ApplicationController {
     );
     const employerId = campaign.employerId;
 
-    console.log(employerId);
     const notification = await firstValueFrom(
       this.notificationService.create(
         [new NotificationUserId(employerId, NotificationUserRole.HR)],
@@ -93,9 +92,17 @@ export class ApplicationController {
     @Param('userId') userId: string,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
+    @Query(
+      'status',
+      new ParseBoolPipe({
+        optional: true,
+      }),
+    )
+    status: boolean | null,
   ) {
+    console.log(status);
     const { applications = [], ...data } = await firstValueFrom(
-      this.applicationService.findAllByUserId(page, limit, userId),
+      this.applicationService.findAllByUserId(page, limit, userId, status),
     );
 
     return {
