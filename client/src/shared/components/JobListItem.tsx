@@ -10,7 +10,7 @@ function JobListItem({ item }: { item: any }) {
       onClick={() => {
         navigation(`/detail-job/${item.id}`);
       }}
-      className="job-item-search-result max-h-60 bg-white px-3 py-3.5 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3"
+      className="job-item-search-result max-h-60 bg-white px-3 py-3.5 mb-3 border border-transparent rounded-lg shadow-md flex gap-3"
     >
       <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
         <img src={item.company?.image ? item.company?.image : "no "} />

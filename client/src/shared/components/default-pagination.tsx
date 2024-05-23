@@ -1,8 +1,5 @@
-import { Button } from "@material-tailwind/react";
-import {
-  ArrowRightIcon,
-  ArrowLeftIcon,
-} from "@heroicons/react/24/outline";
+import { Button } from '@material-tailwind/react';
+import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline';
 
 export function DefaultPagination({
   active,
@@ -26,14 +23,13 @@ export function DefaultPagination({
   };
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-4 text-black">
       <Button
-        variant="text"
-        className="flex items-center gap-2"
+        className="flex items-center bg-slate-200 px-3"
         onClick={prev}
         disabled={active === 1}
       >
-        <ArrowLeftIcon strokeWidth={2} className="w-4 h-4" /> Previous
+        <ChevronLeftIcon strokeWidth={2} className="w-4 h-4 text-slate-900" />
       </Button>
       <div className="flex items-center gap-2">
         {[...Array(totalPage).keys()].map((i) => {
@@ -41,10 +37,10 @@ export function DefaultPagination({
             <button
               key={i}
               onClick={() => setActive(i + 1)}
-              className={`py-1 px-3 bg-slate-400 ${
+              className={`py-1 px-3 bg-green-500 ${
                 i + 1 == active
-                  ? "bg-[#22C55E] text-white"
-                  : "bg-white border border-[#22C55E]"
+                  ? 'bg-[#22C55E] text-white'
+                  : 'bg-white border border-[#22C55E]'
               }  rounded-md`}
             >
               {i + 1}
@@ -53,13 +49,11 @@ export function DefaultPagination({
         })}
       </div>
       <Button
-        variant="text"
-        className="flex items-center gap-2"
+        className="flex items-center bg-slate-200 px-3"
         onClick={next}
         disabled={active === 5}
       >
-        Next
-        <ArrowRightIcon strokeWidth={2} className="w-4 h-4" />
+        <ChevronRightIcon strokeWidth={2} className="w-4 h-4 text-slate-900" />
       </Button>
     </div>
   );
