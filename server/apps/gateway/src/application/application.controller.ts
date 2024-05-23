@@ -6,17 +6,12 @@ import {
   Patch,
   Param,
   Query,
-  ForbiddenException,
   ParseBoolPipe,
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
 import { CompanyService } from '../company/company.service';
 import { UserService } from '../user/user.service';
-import {
-  NotificationService,
-  NotificationUserId,
-  NotificationUserRole,
-} from '../notification/notification.service';
+import { NotificationService } from '../notification/notification.service';
 import { CreateApplicationRequest } from '@app/common/proto/application';
 import { firstValueFrom } from 'rxjs';
 
@@ -33,25 +28,7 @@ export class ApplicationController {
 
   @Post()
   async create(@Body() createApplicationRequest: CreateApplicationRequest) {
-    const application = await firstValueFrom(
-      this.applicationService.create(createApplicationRequest),
-    );
-
-    const campaign = await firstValueFrom(
-      this.companyService.findCampaignById(createApplicationRequest.campaignId),
-    );
-    const employerId = campaign.employerId;
-
-    const notification = await firstValueFrom(
-      this.notificationService.create(
-        [new NotificationUserId(employerId, NotificationUserRole.HR)],
-        {
-          content: `Ứng viên ${application.fullname}- ${campaign.name}`,
-          link: `application/${application.id}`,
-          title: `CV mới ứng tuyển`,
-        },
-      ),
-    );
+    await this.applicationService.create(createApplicationRequest);
     return 'Success';
   }
 
