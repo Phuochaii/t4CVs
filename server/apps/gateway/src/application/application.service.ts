@@ -40,11 +40,26 @@ export class ApplicationService implements OnModuleInit {
       );
   }
 
-  create(createApplicationRequest: CreateApplicationRequest) {
-    // console.log(createApplicationRequest);
-    return this.applicationServiceClient.createApplication(
-      createApplicationRequest,
+  async create(createApplicationRequest: CreateApplicationRequest) {
+    const application = await firstValueFrom(
+      this.applicationServiceClient.createApplication(createApplicationRequest),
     );
+    const campaign = await firstValueFrom(
+      this.companyService.findCampaignById(createApplicationRequest.campaignId),
+    );
+    const employerId = campaign.employerId;
+
+    await firstValueFrom(
+      this.notificationService.create(
+        [new NotificationUserId(employerId, NotificationUserRole.HR)],
+        {
+          content: `Ứng viên ${application.fullname}- ${campaign.name}`,
+          link: `application/${application.id}`,
+          title: `CV mới ứng tuyển`,
+        },
+      ),
+    );
+    return application;
   }
 
   findOne(id: number) {
@@ -67,12 +82,19 @@ export class ApplicationService implements OnModuleInit {
     return applications$;
   }
 
-  findAllByUserId(page: number, limit: number, userId: string) {
+  findAllByUserId(
+    page: number,
+    limit: number,
+    userId: string,
+    status: boolean | null,
+  ) {
+    // console.log(status);
     const applications$ =
       this.applicationServiceClient.readAllApplicationByUserId({
         page,
         limit,
         userId,
+        status,
       });
     return applications$;
   }

@@ -46,7 +46,7 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { CvApplication } from './domain/cv.application';
-import { CreateCvDto, UpdateCvDto, CvDto } from './domain/dto';
+import { CreateCvDto, UpdateCvDto } from './domain/dto';
 
 @Controller()
 export class CvController {
@@ -59,13 +59,17 @@ export class CvController {
 
   @MessagePattern({ cmd: 'updateCV' })
   async update(cv: UpdateCvDto): Promise<any> {
-    console.log(cv);
     return this.cvApplication.updateCv(cv);
   }
 
   @MessagePattern({ cmd: 'getCVById' })
   async findOne(id: number) {
     return await this.cvApplication.getCv({ id });
+  }
+
+  @MessagePattern({ cmd: 'getCVsById' })
+  async findCvs(id: number[]) {
+    return await this.cvApplication.getCvs({ id });
   }
 
   @MessagePattern({ cmd: 'getAllCVs' })

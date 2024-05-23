@@ -1,10 +1,11 @@
-import { CreateCvDto, UpdateCvDto, GetCvDto } from './dto';
+import { CreateCvDto, UpdateCvDto, GetCvDto, GetArrayCvDto } from './dto';
 import {
   CreateCvService,
   UpdateCvService,
   GetCvService,
   GetAllCvService,
   DeleteCvService,
+  GetArrayCvService,
 } from './service';
 import { Cv } from './entity';
 
@@ -15,6 +16,7 @@ export class CvApplication {
     private readonly getCvService: GetCvService,
     private readonly getAllCvService: GetAllCvService,
     private readonly deleteCvService: DeleteCvService,
+    private readonly getArrayCvService: GetArrayCvService,
   ) {}
 
   async createCv(request: CreateCvDto): Promise<Cv> {
@@ -31,6 +33,10 @@ export class CvApplication {
 
   async getAllCv(): Promise<Cv[]> {
     return await this.getAllCvService.execute();
+  }
+
+  async getCvs(request: GetArrayCvDto): Promise<Cv[]> {
+    return await this.getArrayCvService.execute(request);
   }
 
   async deleteCv(request: GetCvDto): Promise<Cv> {

@@ -66,8 +66,7 @@ export class ApplicationApplication {
   async getByUserIdApplication(
     request: GetByUserIdApplicationDto,
   ): Promise<Application[]> {
-    console.log(this.getByUserIdApplicationService.execute(request.userId));
-    return await this.getByUserIdApplicationService.execute(request.userId);
+    return await this.getByUserIdApplicationService.execute(request);
   }
 
   async getByUserIdPaginationApplication(

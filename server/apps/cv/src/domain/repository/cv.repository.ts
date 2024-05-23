@@ -1,4 +1,4 @@
-import { CvDto } from '../dto';
+import { CvDto, GetArrayCvDto } from '../dto';
 import { Cv } from '../entity';
 
 export abstract class CvRepository {
@@ -7,6 +7,8 @@ export abstract class CvRepository {
   abstract updateCv(cv: CvDto): Promise<Cv>;
 
   abstract getCv(cv: CvDto): Promise<Cv>;
+
+  abstract getCvs(cv: GetArrayCvDto): Promise<Cv[]>;
 
   abstract getAllCv(): Promise<Cv[]>;
 
