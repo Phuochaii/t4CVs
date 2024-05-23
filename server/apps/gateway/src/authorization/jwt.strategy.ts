@@ -3,11 +3,12 @@ import { PassportStrategy } from '@nestjs/passport'
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { passportJwtSecret } from 'jwks-rsa'
+import { UserClaims } from './entity/user-claims.entity';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
     constructor(
-        private readonly configService: ConfigService,
+        configService: ConfigService,
     ) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -22,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             }),
         });
     }
-    async validate(payload: any) {
+    async validate(payload: UserClaims): Promise<UserClaims> {
         return payload;
     }
 }
