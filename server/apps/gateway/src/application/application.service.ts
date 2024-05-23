@@ -100,18 +100,18 @@ export class ApplicationService implements OnModuleInit {
     console.log(cvIds);
     const cvs = await firstValueFrom(this.cvService.getCVsById(cvIds));
     console.log(cvs);
-    // const array = [];
 
-    // for (const cv of cvs) {
-    //   array.push(cv.link);
-    // }
-    // console.log(array);
+    const arrayCV = cvs.map((cv) => cv.link);
+    console.log(arrayCV);
+
+    const ApplicationsWithLinkCV = applications.map((application, index) => {
+      const cvLink = arrayCV[index];
+      return { ...application, link: cvLink };
+    });
     return {
       ...data,
-      applications,
+      ApplicationsWithLinkCV,
     };
-
-    // return applications$;
   }
 
   async update(id: number) {
