@@ -60,9 +60,6 @@ export class ApplicationController implements ApplicationServiceController {
   ): Promise<Applications> {
     const userId = request.userId;
     const status = request.status;
-    if (status === null) {
-      console.log(1);
-    }
     const total_data = await this.applicationApplication.getByUserIdApplication(
       {
         userId,

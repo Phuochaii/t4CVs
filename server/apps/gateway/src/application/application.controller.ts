@@ -100,7 +100,6 @@ export class ApplicationController {
     )
     status: boolean | null,
   ) {
-    console.log(status);
     const { applications = [], ...data } = await firstValueFrom(
       this.applicationService.findAllByUserId(page, limit, userId, status),
     );

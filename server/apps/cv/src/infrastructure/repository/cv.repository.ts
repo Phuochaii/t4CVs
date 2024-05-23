@@ -1,8 +1,8 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { CvRepository } from '../../domain/repository';
 import { CvSchema } from '../schema';
-import { Repository } from 'typeorm';
-import { CvDto, UpdateCvDto, GetCvDto } from '../../domain/dto';
+import { Repository, In } from 'typeorm';
+import { CvDto, UpdateCvDto, GetCvDto, GetArrayCvDto } from '../../domain/dto';
 import { Cv } from '../../domain/entity';
 
 export class TypeOrmCvRepository extends CvRepository {
@@ -29,6 +29,15 @@ export class TypeOrmCvRepository extends CvRepository {
 
   async getCv(cv: GetCvDto): Promise<any> {
     return await this.cvRepository.findOneBy(cv);
+  }
+
+  async getCvs(cv: GetArrayCvDto): Promise<any[]> {
+    const data = await this.cvRepository.find({
+      where: {
+        id: In(cv.id),
+      },
+    });
+    return data;
   }
 
   async getAllCv(): Promise<Cv[]> {
