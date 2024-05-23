@@ -46,22 +46,13 @@ export class ApplicationController {
     )
     status: boolean | null, //truyen vao false or null //filter
   ) {
-    const campaignRes = await firstValueFrom(
-      this.companyService.findCampaignByEmployerId(hrId, 1, 100),
+    return this.applicationService.findAll(
+      page,
+      limit,
+      campaignId,
+      status,
+      hrId,
     );
-
-    let campaignIds = campaignRes.data.map((campaign) => campaign.id);
-    if (campaignId) {
-      campaignIds = [campaignId];
-    }
-    const { applications = [], ...data } = await firstValueFrom(
-      this.applicationService.findAll(page, limit, campaignIds, status),
-    );
-
-    return {
-      ...data,
-      applications,
-    };
   }
 
   @Get('/user/:userId')
@@ -87,13 +78,7 @@ export class ApplicationController {
 
   @Get(':id')
   async findOne(@Param('id') id: number) {
-    let campaignId;
-    const result = await this.applicationService.findOne(id);
-    this.applicationService.findOne(id).subscribe((value) => {
-      campaignId = value.fullname;
-    });
-
-    return result;
+    return this.applicationService.findOne(id);
   }
 
   @Patch(':id')

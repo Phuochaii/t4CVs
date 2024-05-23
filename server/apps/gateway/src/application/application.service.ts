@@ -62,24 +62,48 @@ export class ApplicationService implements OnModuleInit {
     return application;
   }
 
-  findOne(id: number) {
-    return this.applicationServiceClient.readApplication({ id });
+  async findOne(id: number) {
+    return await firstValueFrom(
+      this.applicationServiceClient.readApplication({ id }),
+    );
   }
 
-  findAll(
+  async findAll(
     page: number,
     limit: number,
-    campaignIds: number[],
+    campaignId: number,
     status: boolean | null,
+    hrId: string,
   ) {
-    const applications$ =
+    const campaignRes = await firstValueFrom(
+      this.companyService.findCampaignByEmployerId(hrId, 1, 100),
+    );
+
+    let campaignIds = campaignRes.data.map((campaign) => campaign.id);
+    if (campaignId) {
+      campaignIds = [campaignId];
+    }
+    const { applications = [], ...data } = await firstValueFrom(
       this.applicationServiceClient.readAllApplicationByCampaignId({
         page,
         limit,
         campaignIds,
         status,
-      });
-    return applications$;
+      }),
+    );
+
+    return {
+      ...data,
+      applications,
+    };
+    // const applications$ =
+    //   this.applicationServiceClient.readAllApplicationByCampaignId({
+    //     page,
+    //     limit,
+    //     campaignIds,
+    //     status,
+    //   });
+    // return applications$;
   }
 
   async findAllByUserId(
@@ -97,17 +121,16 @@ export class ApplicationService implements OnModuleInit {
       }),
     );
     const cvIds = applications.map((application) => application.cvId);
-    console.log(cvIds);
     const cvs = await firstValueFrom(this.cvService.getCVsById(cvIds));
-    console.log(cvs);
-
     const arrayCV = cvs.map((cv) => cv.link);
-    console.log(arrayCV);
 
+    //map link into application
     const ApplicationsWithLinkCV = applications.map((application, index) => {
       const cvLink = arrayCV[index];
       return { ...application, link: cvLink };
     });
+
+    //map job into application (pending)
     return {
       ...data,
       ApplicationsWithLinkCV,
