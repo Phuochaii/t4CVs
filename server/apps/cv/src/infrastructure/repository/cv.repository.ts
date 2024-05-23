@@ -37,6 +37,7 @@ export class TypeOrmCvRepository extends CvRepository {
         id: In(cv.id),
       },
     });
+
     const orderedData = cv.id.map((id) => data.find((item) => item.id === id));
     return orderedData;
   }

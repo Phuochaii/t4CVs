@@ -9,22 +9,13 @@ import {
   ParseBoolPipe,
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
-import { CompanyService } from '../company/company.service';
-import { UserService } from '../user/user.service';
-import { NotificationService } from '../notification/notification.service';
 import { CreateApplicationRequest } from '@app/common/proto/application';
-import { firstValueFrom } from 'rxjs';
 
 // import { firstValueFrom } from 'rxjs';
 
 @Controller('application')
 export class ApplicationController {
-  constructor(
-    private readonly applicationService: ApplicationService,
-    private readonly companyService: CompanyService,
-    private readonly notificationService: NotificationService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly applicationService: ApplicationService) {}
 
   @Post()
   async create(@Body() createApplicationRequest: CreateApplicationRequest) {
