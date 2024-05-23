@@ -1,12 +1,15 @@
 // khoa
-import { useState, useEffect } from "react";
-import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { useState, useEffect, SetStateAction } from "react";
+import { ChevronRightIcon, ChevronLeftIcon, XMarkIcon, HeartIcon } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
 import JobService from "../../modules/job-module";
-
 import SearchBoxComponent from "../../layouts/UserLayout/components/SearchBoxComponent";
 import { salary_range } from "../../shared/utils/constant";
-
+import SingleDropdown from "../../shared/components/SingleDropDown";
+import { SingleValue } from "react-select";
+import FPT from '../../shared/assets/images/FPT.jpg';
+import VNRS from '../../shared/assets/images/VNRS.png';
+import { Heart } from "lucide-react";
 const slides = [
   "../../../images/slide_1.png",
   "../../../images/slide_2.png",
@@ -63,7 +66,38 @@ function Home() {
   const setTitleRecruitment = (value: string) => {
     setFilter((prevState) => ({ ...prevState, titleRecruitment: value }));
   };
-
+  const options = [
+    { value: "Địa điểm", label: "Địa điểm" },
+    { value: "Mức lương", label: "Mức lương" },
+    { value: "Kinh nghiệm", label: "Kinh nghiệm" },
+    { value: "Ngành nghề", label: "Ngành nghề" },
+  ];
+  const data = [
+    { value: "Ngẫu nhiên", label: "Ngẫu nhiên" },
+    { value: "Hà Nội", label: "Hà Nội" },
+    { value: "Thành Phố Hồ Chí Minh", label: "Thành Phố Hồ Chí Minh" },
+    { value: "Miền Bắc", label: "Miền Bắc" },
+    { value: "Miền Nam", label: "Miền Nam" },
+  ];
+  const companies = [
+    { id: 1, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', logo: VNRS, location: 'Đà Nẵng', salary: '3 - 5 triệu' },
+    { id: 2, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
+    { id: 3, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', logo: VNRS, location: 'Đà Nẵng', salary: '3 - 5 triệu' },
+    { id: 4, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
+    { id: 5, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', logo: VNRS, location: 'Đà Nẵng', salary: '3 - 5 triệu' },
+    { id: 6, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
+    { id: 7, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
+    { id: 8, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', logo: VNRS, location: 'Đà Nẵng', salary: '3 - 5 triệu' },
+    { id: 9, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
+    { id: 10, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
+    { id: 11, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', logo: VNRS, location: 'Đà Nẵng', salary: '3 - 5 triệu' },
+    { id: 12, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
+  ];
+  const [selectedKey, setSelectedKey] = useState('Ngẫu nhiên')
+  const [option, setOptions] = useState<SingleValue<{
+    value: string;
+    label: string;
+  }> | null>(null);
   const SelectSalary = (value: number) => {
     if (value !== 0) {
       const foundRange = salary_range.find(
@@ -200,6 +234,135 @@ function Home() {
               className="absolute w-10 h-10 top-1/2 -right-5 bg-white text-green-500 rounded-full transform -translate-y-1/2 shadow-lg shadow-grey-500 hover:bg-green-500 hover:text-white ease-out duration-300"
             >
               <ChevronRightIcon className="mx-3 w-5 h-5" />
+            </button>
+          </div>
+        </div>
+        {/* Việc làm tốt nhất */}
+        <div className="flex flex-col ml-20 mt-5  ">
+          <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg">
+            <div className="flex flex-row items-center">
+              <h1 className="title ">
+                Việc làm tốt nhất
+              </h1>
+              <p className="font-thin text-[30px] mx-5"> | </p>
+              <div className="flex flex-col">
+                <p className="font-bold">Đề xuất bởi</p>
+                <p className="font-extrabold text-[18px]">TOPPY<span className="text-green-500 font-extrabold text-[18px]">AI</span></p>
+              </div>
+            </div>
+            <div className="flex flex-row space-x-4 items-center">
+              <button className="text-black bg-green-50 underline underline-offset-4" onClick={() => { }}>Xem tất cả</button>
+              <button
+                onClick={() => { }}
+                className=" w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
+              >
+                <ChevronLeftIcon className="mx-2 w-5 h-5" />
+              </button>
+              <button
+                onClick={() => { }}
+                className="w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
+              >
+                <ChevronRightIcon className="mx-2 w-5 h-5" />
+              </button>
+            </div>
+          </div>
+          <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg mt-3">
+            <div className="w-3/12">
+              <SingleDropdown
+                placeholder="Chọn bộ lọc"
+                options={options}
+                onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setOptions(e)}
+              />
+            </div>
+            <div className=" flex flex-row items-center space-x-2">
+              <button
+                onClick={() => { }}
+                className=" w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
+              >
+                <ChevronLeftIcon className="mx-2 w-5 h-5" />
+              </button>
+              {data.map((e) => {
+                return (<button className={`px-4 py-2 rounded-full ${selectedKey === e.label ? 'bg-green-500 text-white' : 'bg-gray-200 text-black'} border hover:border-green-500`}
+                  onClick={() => setSelectedKey(e.value)}>
+                  {e.label}
+                </button>)
+              })}
+              <button
+                onClick={() => { }}
+                className=" w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
+              >
+                <ChevronRightIcon className="mx-2 w-5 h-5" />
+              </button>
+            </div>
+          </div>
+          <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg mt-6 bg-blue-100 rounded-lg p-2">
+            <div className="flex flex-row items-center">
+              <p className="font-bold">Gợi ý: <span className="font-normal">Di chuột vào tiêu đề việc làm để xem thêm thông tin chi tiết</span></p>
+            </div>
+            <button onClick={() => { }}>
+              <XMarkIcon className="bg-blue-100 w-5 h-5"></XMarkIcon>
+            </button>
+          </div>
+          <div className="ml-6 mt-4 max-w-screen-lg grid grid-cols-1 md:grid-cols-3 gap-4">
+            {companies.length > 0 ? (
+              companies.map((item, index) => (
+                <div
+                  key={index}
+                  onClick={() => {
+                    // navigation(`/detail-job/${item.id}`);
+                  }}
+                  className="job-item-search-result max-h-60 bg-white px-3 py-3.5 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3 hover:border-green-500"
+                >
+                  <div className="job-logo-company justify-center w-32 h-24 flex items-center border rounded-lg overflow-hidden">
+                    <img
+                      src={item.logo}
+                      alt={`${item.name} logo`}
+                      className="object-contain"
+                    />
+                  </div>
+                  <div className="job-detail w-full h-full overflow-hidden">
+                    <div className="flex flex-col justify-center space-y-2">
+                      <div className="flex flex-row justify-between">
+                        <span className="job-title text-black font-semibold text-lg truncate w-4/5">
+                          {item.job_title}
+                        </span>
+                      </div>
+                      <span className="job-company-name text-slate-600 text-sm truncate w-4/5">
+                        {item.name}
+                      </span>
+                      <div className="flex flex-row justify-between items-center">
+                        <div className="flex flex-row space-x-2">
+                          <div className="text-sm bg-gray-200 px-2 py-1 w-fit rounded-lg">{item.salary}</div>
+                          <div className="text-sm bg-gray-200 px-2 py-1 w-fit rounded-lg">{item.location}</div>
+                        </div>
+                        <div className="bg-white"><button onClick={() => { }}><Heart className="bg-white text-green-500"></Heart></button></div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              ))
+            ) : (
+              <div>Không có dữ liệu</div>
+            )}
+          </div>
+          <div className="max-w-screen-lg flex flex-row justify-center space-x-2">
+            <button
+              onClick={() => { }}
+              className=" w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
+            >
+              <ChevronLeftIcon className="mx-2 w-5 h-5" />
+            </button>
+            <div className="flex flex-row items-center text-sm">
+                <p className="text-green-500">5</p>
+                <p className="mx-1 text-gray-400">/</p>
+                <p className="text-gray-400">56 trang</p>
+            </div>
+            <button
+              onClick={() => { }}
+              className=" w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
+            >
+              <ChevronRightIcon className="mx-2 w-5 h-5" />
             </button>
           </div>
         </div>
