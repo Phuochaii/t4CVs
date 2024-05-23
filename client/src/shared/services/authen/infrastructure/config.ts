@@ -10,3 +10,4 @@ export enum AUTH0_REALM{
 export const AUTH0_SCOPE = 'openid email profile offline_access';
 export const AUTH0_LOGIN_RESPONSE_TYPE = 'code';
 export const AUTH0_LOGOUT_URL = 'http://localhost:5173';
+export const AUTH0_BACKEND_AUDIENCE = 'http://localhost:300/';

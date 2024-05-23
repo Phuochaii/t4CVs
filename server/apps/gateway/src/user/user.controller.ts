@@ -6,12 +6,15 @@ import {
   Param,
   UseInterceptors,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Observable } from 'rxjs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateUserDTO } from './dto/Req/createUser.dto';
 import { CreateUserDto as CreateUserAccountDto} from '../authentication/dto/create-user.dto'
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
 
 @Controller('user')
 export class UserController {
@@ -22,26 +25,30 @@ export class UserController {
     return this.userService.findAllUsers();
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
+  @Get('check')
+  checkUser(@GetUser() user: UserClaims): Observable<boolean> {
+    return this.userService.checkUser(user.sub);
+  }
+
   @Get(':id')
   findUserById(@Param('id') id: number): Observable<string> {
     return this.userService.findUserById(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('create')
-  // @UseInterceptors(FileInterceptor('image'))
   createUser(
-    // @UploadedFile() image: Express.Multer.File,
-    @Body() user: CreateUserDTO,
+    @GetUser() userClaims: UserClaims,
+    @Body() user: Omit<CreateUserDTO, 'id'>,
   ): Promise<Observable<string>> {
-    return this.userService.createUser(user);
+    return this.userService.createUser({
+      id: userClaims.sub,
+      ...user,
+    });
   }
 
-  @Get('check/:id')
-  checkUser(@Param('id') id: number): Observable<boolean> {
-    return this.userService.checkUser(id);
-  }
-
-  @Post('/register')
+  @Post('register')
   registerAccount(@Body() user: CreateUserAccountDto): Promise<Observable<string>> {
     return this.userService.registerAccount(user);
   }

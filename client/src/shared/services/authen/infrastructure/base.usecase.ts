@@ -1,5 +1,5 @@
 import { WebAuth } from "auth0-js";
-import { AUTH0_CLIENT_ID, AUTH0_DOMAIN, AUTH0_LOGIN_REDIRECT_URL, AUTH0_LOGIN_RESPONSE_TYPE, AUTH0_REALM, AUTH0_SCOPE } from "./config";
+import { AUTH0_BACKEND_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN, AUTH0_LOGIN_REDIRECT_URL, AUTH0_LOGIN_RESPONSE_TYPE, AUTH0_REALM, AUTH0_SCOPE } from "./config";
 
 interface Transaction {
     state: string,
@@ -42,13 +42,14 @@ const setAuth0Transaction = (transation: Transaction) => {
 interface Auth0Config {
     redirectUri: string,
     responseType: string,
+    audience: string,
 }
 
 export interface Auth0CallCredentials {
     realm: AUTH0_REALM,
     auht0Config: Auth0Config,
     transaction: Transaction,
-    auth: WebAuth
+    auth: WebAuth,
 }
 
 export abstract class Auth0OperationUseCase {
@@ -63,6 +64,7 @@ export abstract class Auth0OperationUseCase {
         private config: Auth0Config = {
             redirectUri: AUTH0_LOGIN_REDIRECT_URL,
             responseType: AUTH0_LOGIN_RESPONSE_TYPE,
+            audience: AUTH0_BACKEND_AUDIENCE,
         }
     ) { }
 
@@ -83,6 +85,7 @@ export abstract class Auth0OperationUseCase {
             realm: this.realm,
             transaction,
             auth: this.auth,
+            
         });
     }
 }

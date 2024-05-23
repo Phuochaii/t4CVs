@@ -45,6 +45,7 @@
     "@nestjs/typeorm": "^10.0.2",
     "@types/multer": "^1.4.11",
     "apollo-server-express": "^3.13.0",
+    "auth0": "^4.4.0",
     "axios": "^1.6.8",
     "class-transformer": "^0.5.1",
     "file-type-mime": "^0.3.10",

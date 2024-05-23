@@ -16,6 +16,7 @@ export class SocialLoginUseCase extends Auth0OperationUseCase {
       state: transaction.state,
       nonce: transaction.nonce,
       scope: transaction.scope,
+      audience: auht0Config.audience,
     });
   }
 }

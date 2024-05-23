@@ -9,7 +9,7 @@ import routes from "./routes";
 import EmptyLayout from "./layouts/EmptyLayout";
 import React, { createContext } from "react";
 import { Auth0Provider } from "@auth0/auth0-react";
-import { AUTH0_CLIENT_ID, AUTH0_DOMAIN } from "./shared/services/authen/infrastructure/config";
+import { AUTH0_BACKEND_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from "./shared/services/authen/infrastructure/config";
 import { RoleProvider } from "./shared/services/authen/domain/context";
 import { withRoleCheck } from "./shared/services/authen/domain/withRoleCheck";
 import { accountList } from "./shared/utils/constant";

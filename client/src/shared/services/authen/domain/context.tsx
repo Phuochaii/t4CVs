@@ -4,9 +4,10 @@ import axios from "axios";
 import { Modal } from '@mui/material';
 import Spinner from '../../../../pages/Spinner';
 import { useNavigate } from 'react-router-dom';
+import { AUTH0_BACKEND_AUDIENCE } from '../infrastructure/config';
 
 export interface Role {
-    check: (userId:string) => Promise<boolean>,
+    check: (token:string) => Promise<boolean>,
     redirectUrl: string,
     RegisterProfile: () => JSX.Element,
     loginUrl: string,
@@ -34,9 +35,13 @@ export const Roles: { [key in "HR" | "USER"]: Role } = {
         loginUrl: '/hr-login',
     },
     USER: {
-        check: async (userId) => {
+        check: async (token) => {
             try {
-                const result = await axios.get(`http://localhost:3000/user/check/${userId}`)
+                const result = await axios.get(`http://localhost:3000/user/check`,{
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    }
+                })
                     .then(res => res.data) as boolean;
                 return result;
             } catch (e) {
@@ -45,33 +50,43 @@ export const Roles: { [key in "HR" | "USER"]: Role } = {
         },
         redirectUrl: '/',
         RegisterProfile: () => {
-            const { user } = useAuth0();
+            const { user, isLoading, getAccessTokenSilently,isAuthenticated } = useAuth0();
             const navigate = useNavigate();
             const {setRole} = useRoleContext();
+            const {name, phone_number} = user || {};
             useEffect(() => {
-                if(!user) {
-                    console.log('RegisterProfile: user is null');
+                if(isLoading) return;
+                if(!isAuthenticated) {
                     navigate(Roles.USER.loginUrl);
                     return;
                 };
+            }, [isLoading, isAuthenticated]);
+            useEffect(() => {
+                if(!name || !phone_number) return;
                 const registerProfile = async () => {
                     try {
+                        const token = await getAccessTokenSilently({
+                            cacheMode: 'off'
+                        });
+                        console.log('token:', token);
                         await axios.post(`http://localhost:3000/user/create`, {
-                            id: user.sub,
-                            fullname: user.name,
-                            phone: user.phone_number,
+                            fullname: name,
+                            phone: phone_number,
+                        },{
+                            headers: {
+                                authorization: `Bearer ${token}`,
+                            }
                         });
                         setRole(Roles.USER)
                     } catch (error) {
+                        console.error(error);
                         alert('Register user profile failed!');
                         window.location.reload();
                     }
                 }
                 registerProfile();
-            }, []);
-            return <Modal open={true}>
-                <Spinner/>
-            </Modal>
+            }, [name, phone_number, getAccessTokenSilently, setRole]);
+            return <Spinner/>
         },
         loginUrl: '/user-login',
     },
