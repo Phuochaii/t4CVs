@@ -84,6 +84,7 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
         campaignId: In(application.campaignIds),
       },
     });
+
     return data;
   }
 

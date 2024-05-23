@@ -59,10 +59,12 @@ export class ApplicationController implements ApplicationServiceController {
     request: ReadAllApplicationByUserIdRequest,
   ): Promise<Applications> {
     const userId = request.userId;
-    const total_data = this.applicationApplication.getByUserIdApplication({
-      userId,
-    });
-    const total = (await total_data).length;
+    const total_data = await this.applicationApplication.getByUserIdApplication(
+      {
+        userId,
+      },
+    );
+    const total = total_data.length;
     const data =
       await this.applicationApplication.getByUserIdPaginationApplication(
         request,
