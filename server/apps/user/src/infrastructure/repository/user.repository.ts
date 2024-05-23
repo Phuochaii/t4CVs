@@ -22,4 +22,8 @@ export class TypeOrmUserRepository {
   async createUser(user: CreateUserDTO) {
     return await this.userRepository.save(user);
   }
+
+  async isUserExist(id: string) {
+    return !!(await this.userRepository.findOne({ where: { id } }));
+  }
 }
