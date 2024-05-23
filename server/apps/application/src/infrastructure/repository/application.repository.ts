@@ -91,7 +91,6 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
   async getByUserIdApplication(
     application: GetByUserIdApplicationDto,
   ): Promise<Application[]> {
-    console.log(application.status);
     const data = await this.applicationRepository.find({
       where: {
         userId: application.userId,

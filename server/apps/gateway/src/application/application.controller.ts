@@ -77,14 +77,7 @@ export class ApplicationController {
     )
     status: boolean | null,
   ) {
-    const { applications = [], ...data } = await firstValueFrom(
-      this.applicationService.findAllByUserId(page, limit, userId, status),
-    );
-
-    return {
-      ...data,
-      applications,
-    };
+    return this.applicationService.findAllByUserId(page, limit, userId, status);
   }
 
   @Get(':id/cv')

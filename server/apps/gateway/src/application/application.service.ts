@@ -82,27 +82,43 @@ export class ApplicationService implements OnModuleInit {
     return applications$;
   }
 
-  findAllByUserId(
+  async findAllByUserId(
     page: number,
     limit: number,
     userId: string,
     status: boolean | null,
   ) {
-    // console.log(status);
-    const applications$ =
+    const { applications = [], ...data } = await firstValueFrom(
       this.applicationServiceClient.readAllApplicationByUserId({
         page,
         limit,
         userId,
         status,
-      });
-    return applications$;
+      }),
+    );
+    const cvIds = applications.map((application) => application.cvId);
+    console.log(cvIds);
+    const cvs = await firstValueFrom(this.cvService.getCVsById(cvIds));
+    console.log(cvs);
+    // const array = [];
+
+    // for (const cv of cvs) {
+    //   array.push(cv.link);
+    // }
+    // console.log(array);
+    return {
+      ...data,
+      applications,
+    };
+
+    // return applications$;
   }
 
   async update(id: number) {
     const data = await firstValueFrom(
       this.applicationServiceClient.updateApplication({ id }),
     );
+
     return data;
   }
 
