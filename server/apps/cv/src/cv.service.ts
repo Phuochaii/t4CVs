@@ -1,17 +1,39 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as sqlite3 from 'sqlite3';
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 import { CV } from './entities/cv.entity';
-import { Client, ClientProxy } from '@nestjs/microservices';
 import { CVDto } from './dto/cv.dto';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { ConfigService } from '@nestjs/config';
+import { Readable } from 'stream';
+
+// env
+const AWS_ACCESS_KEY = 'AKIAQKSEVUV3HYYNEI7P';
+const AWS_SECRET_ACCESS_KEY = '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';
+const AWS_S3_REGION = 'us-east-1';
+const BUCKET_NAME = 'nestjsdacnpm';
 
 @Injectable()
 export class CVService {
   private readonly db: sqlite3.Database;
 
-  constructor() {
+  private s3Client: S3Client;
+
+  constructor(private readonly config_service: ConfigService) {
+    this.s3Client = new S3Client({
+      region: 'us-east-1',
+      credentials: {
+        accessKeyId: 'AKIAQKSEVUV3HYYNEI7P',
+        secretAccessKey: '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',
+      },
+    });
+
     this.db = new sqlite3.Database('./apps/cv/table.sql');
     this.initializeDatabase();
   }
@@ -116,17 +138,31 @@ export class CVService {
       fs.mkdirSync(uploadPath, { recursive: true });
     }
 
+    console.log(JSON.stringify(file));
+
+    const fileBuffer = await fs.promises.readFile(file.path);
+
     try {
       await fs.promises.rename(file.path, `${uploadPath}/${newFilename}`);
       const cvDto = new CVDto();
       cvDto.userId = Number(userId.userId);
       cvDto.templateId = 1;
-      cvDto.link = `localhost:3000/cv/${newFilename}`;
+      cvDto.link = `http://${BUCKET_NAME}.s3-website-${AWS_S3_REGION}.amazonaws.com/${newFilename}`;
       cvDto.creationAt = new Date();
       cvDto.isPublic = true;
       cvDto.lastModified = new Date();
 
-      console.log(JSON.stringify(cvDto));
+      console.log(JSON.stringify(file));
+
+      const putObjectCommand = new PutObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: newFilename,
+        Body: fileBuffer,
+        ContentDisposition: 'inline',
+        ContentType: file.mimetype,
+      });
+
+      await this.s3Client.send(putObjectCommand);
 
       const result = await this.create(cvDto);
 
@@ -188,30 +224,30 @@ export class CVService {
       const cv = await this.findOne(id);
 
       const linkParts = cv.link.split('/');
+      const bucketName = linkParts[2];
       const filename = linkParts[linkParts.length - 1];
-      const fileExtension = path.extname(filename);
 
-      const filePath = path.join('./uploads', filename);
-      const fileData = fs.readFileSync(filePath);
+      const getObjectCommand = new GetObjectCommand({
+        Bucket: 'nestjsdacnpm',
+        Key: filename,
+      });
+      const { Body } = await this.s3Client.send(getObjectCommand);
 
-      switch (fileExtension.toLowerCase()) {
-        case '.pdf':
-          return { data: fileData, contentType: 'application/pdf' };
-        case '.doc':
-          return { data: fileData, contentType: 'application/msword' };
-        case '.docx':
-          return {
-            data: fileData,
-            contentType:
-              'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-          };
-        default:
-          throw new HttpException(
-            'Unsupported file format',
-            HttpStatus.BAD_REQUEST,
-          );
-      }
+      const readableStream = Readable.from(Body as any);
+
+      const filePath = `D:\\${filename}`;
+      const fileStream = fs.createWriteStream(filePath);
+
+      readableStream.pipe(fileStream);
+
+      await new Promise((resolve, reject) => {
+        fileStream.on('finish', resolve);
+        fileStream.on('error', reject);
+      });
+
+      return filePath;
     } catch (error: any) {
+      console.error(error);
       throw new HttpException('CV not found', HttpStatus.NOT_FOUND);
     }
   }

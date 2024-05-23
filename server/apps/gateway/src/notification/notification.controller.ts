@@ -14,7 +14,7 @@ import {
   NotificationUserRole,
 } from './notification.service';
 import { status } from '@app/common/proto/notification';
-import { PaginationRequest } from '@app/common';
+import { PaginationRequest } from '@app/common/dto/pagination';
 
 @Controller('notification')
 export class NotificationController {
@@ -22,7 +22,7 @@ export class NotificationController {
 
   @Get('/:role/:userId')
   getAllOfUser(
-    @Param('userId') userId: number,
+    @Param('userId') userId: string,
     @Param('role') role: NotificationUserRole,
     @Query() paginationRequest: PaginationRequest = new PaginationRequest(),
   ) {
@@ -38,7 +38,7 @@ export class NotificationController {
 
   @Put('/:role/:userId/:notificationId')
   updateStatusOfUser(
-    @Param('userId') userId: number,
+    @Param('userId') userId: string,
     @Param('role') role: NotificationUserRole,
     @Param('notificationId') notificationId: number,
     @Body('status') status: status,

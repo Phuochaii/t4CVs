@@ -5,7 +5,11 @@ interface LayoutProp {
 }
 
 function EmptyLayout({ children }: LayoutProp) {
-  return <>{React.cloneElement(children as React.ReactElement<any>)}</>;
+  return (
+    <div style={{ backgroundColor: "#FFFFFF" }}>
+      {React.cloneElement(children as React.ReactElement<any>)}
+    </div>
+  );
 }
 
 export default EmptyLayout;

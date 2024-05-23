@@ -8,17 +8,14 @@ import { GatewayService } from './gateway.service';
 import { CVModule } from './cv/cv.module';
 import { NotificationModule } from './notification/notification.module';
 import { UserModule } from './user/user.module';
+import { ConfigModule } from '@nestjs/config';
 import { EmployerModule } from './employer/employer.module';
 import { AuthorizationModule } from './authorization/authorization.module';
-import { ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './authorization';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: './configs/.env',
-    }),
     PassportModule.register({ defaultStrategy: 'jwt'}), 
     ApplicationModule,
     NotificationModule,
@@ -29,6 +26,8 @@ import { JwtStrategy } from './authorization';
     CVModule,
     AuthorizationModule,
     // EmployerModule,
+    ConfigModule.forRoot({ envFilePath: './configs/.env' }),
+    EmployerModule,
   ],
   controllers: [GatewayController],
   providers: [GatewayService, JwtStrategy],

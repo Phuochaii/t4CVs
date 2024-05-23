@@ -8,5 +8,4 @@ export class CreateCompanyDto {
   phone: string;
   companySize: number;
   description: string;
-  status: boolean;
 }

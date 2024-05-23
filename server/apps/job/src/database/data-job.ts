@@ -1,31 +1,4 @@
-import { CreateJobDto } from '../dto/Req/create-job.dto';
-
-// export const jobs: CreateJobDto[] = [
-//   {
-//     titleRecruitment: 'Software Engineer',
-//     majorId: 1,
-//     fieldsId: [2, 3],
-//     typeId: 1,
-//     currencyId: 1,
-//     levelId: 2,
-//     campaignId: 1,
-//     companyId: 1,
-//     salaryMin: 60000,
-//     salaryMax: 80000,
-//     expId: 3,
-//     locationsId: [4, 5],
-//     expiredDate: '2024-05-01',
-//     quantity: 1,
-//     jobSchedule: '8:00am-17:00pm T2-T6',
-//     gender: 'Any',
-//     description:
-//       'We are looking for a skilled Software Engineer to join our team...',
-//     benefit: 'Competitive salary, health benefits, flexible working hours...',
-//     requirement:
-//       "Bachelor's degree in Computer Science or related field, 3+ years of experience...",
-//     skill: 'Java, Python, JavaScript, SQL',
-//   },
-// ];
+import { CreateJobDto } from '../domain/dto/Req/create-job.dto';
 
 export const jobs: CreateJobDto[] = [
   {
@@ -394,7 +367,7 @@ export const jobs: CreateJobDto[] = [
     expiredDate: '2024-09-14',
     levelId: 4,
     status: true,
-    companyId: 12,
+    companyId: 5,
     typeId: 1,
     quantity: 6,
     jobSchedule: 'Full time: Làm việc từ thứ Hai đến thứ Sáu.',
@@ -421,7 +394,7 @@ export const jobs: CreateJobDto[] = [
     expiredDate: '2024-11-25',
     levelId: 5,
     status: true,
-    companyId: 13,
+    companyId: 7,
     typeId: 1,
     quantity: 3,
     jobSchedule: 'Full time: Làm việc từ thứ Hai đến thứ Sáu.',
@@ -448,7 +421,7 @@ export const jobs: CreateJobDto[] = [
     expiredDate: '2024-08-30',
     levelId: 7,
     status: true,
-    companyId: 14,
+    companyId: 8,
     typeId: 1,
     quantity: 4,
     jobSchedule: 'Full time: Làm việc từ thứ Hai đến thứ Sáu.',
@@ -475,7 +448,7 @@ export const jobs: CreateJobDto[] = [
     expiredDate: '2024-11-09',
     levelId: 8,
     status: true,
-    companyId: 15,
+    companyId: 3,
     typeId: 1,
     quantity: 3,
     jobSchedule: 'Full time: Làm việc từ thứ Hai đến thứ Sáu.',
@@ -502,7 +475,7 @@ export const jobs: CreateJobDto[] = [
     expiredDate: '2024-12-18',
     levelId: 6,
     status: true,
-    companyId: 16,
+    companyId: 2,
     typeId: 1,
     quantity: 4,
     jobSchedule: 'Full time: Làm việc từ thứ Hai đến thứ Sáu.',
@@ -530,7 +503,7 @@ export const jobs: CreateJobDto[] = [
     expiredDate: '2024-11-28',
     levelId: 4,
     status: true,
-    companyId: 17,
+    companyId: 10,
     typeId: 1,
     quantity: 3,
     jobSchedule: 'Full time: Làm việc từ thứ Hai đến thứ Sáu.',
@@ -557,7 +530,7 @@ export const jobs: CreateJobDto[] = [
     expiredDate: '2024-12-07',
     levelId: 5,
     status: true,
-    companyId: 18,
+    companyId: 8,
     typeId: 1,
     quantity: 4,
     jobSchedule: 'Full time: Làm việc từ thứ Hai đến thứ Sáu.',

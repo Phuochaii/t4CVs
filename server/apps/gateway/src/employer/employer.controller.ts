@@ -8,7 +8,7 @@ export class EmployerController {
   constructor(private readonly employerService: EmployerService) {}
 
   @Post('create')
-  createEmployer(@Body() data: CreateEmployerDto): Observable<string> {
+  async createEmployer(@Body() data: CreateEmployerDto): Promise<Observable<string>> {
     return this.employerService.createEmployer(data);
   }
 
@@ -21,7 +21,7 @@ export class EmployerController {
   }
 
   @Get(':id')
-  findEmployerById(@Param('id') id: number) {
+  findEmployerById(@Param('id') id: string) {
     return this.employerService.findEmployerById(id);
   }
 
@@ -33,5 +33,15 @@ export class EmployerController {
   @Get('position/:id')
   findPositionById(@Param('id') id: number): Observable<string> {
     return this.employerService.findPositionById(id);
+  }
+
+  @Get('check/:id')
+  checkEmployer(@Param('id') id: string): Observable<boolean> {
+    return this.employerService.checkEmployer(id);
+  }
+
+  @Get(':id/can-update-profile')
+  canUpdateProfile(@Param('id') id: string): Promise<boolean> {
+    return this.employerService.canUpdateProfile(id);
   }
 }

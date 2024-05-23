@@ -24,6 +24,7 @@ export class CVService {
   }
 
   uploadCV(file: any, userId: number): Observable<any> {
+    console.log(JSON.stringify(file));
     return this.cvClient.send({ cmd: 'uploadCV' }, { file, userId });
   }
   updateCV(id: number, cvDto: CVDto): Observable<any> {
@@ -35,7 +36,6 @@ export class CVService {
   }
 
   downloadCV(id: number): Observable<any> {
-    console.log(1)
     return this.cvClient.send({ cmd: 'downloadCV' }, id);
   }
 }
