@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package Application;
+
+// The job application service definition.
+service ApplicationService {
+  rpc CreateApplication (CreateApplicationRequest) returns (Application) {}
+  rpc ReadApplication (ReadApplicationRequest) returns (Application) {}
+  rpc ReadAllApplication (Pagination) returns (Applications) {}
+  rpc ReadAllApplicationByCampaignId (ReadAllApplicationByCampaignIdRequest) returns (Applications) {}
+  rpc ReadAllApplicationByUserId (ReadAllApplicationByUserIdRequest) returns (Applications) {}
+  rpc UpdateApplication (UpdateApplicationRequest) returns (Application) {}
+  rpc DeleteApplication (DeleteApplicationRequest) returns (Empty) {}
+}
+
+message DeleteApplicationRequest {
+    int32 id = 1;
+}
+
+message ReadApplicationRequest {
+    int32 id = 1;
+}
+
+message ReadAllApplicationByUserIdRequest {
+  int32 page = 1;
+  int32 limit = 2;
+  string userId = 3;
+  optional bool status = 4;
+}
+
+message ReadAllApplicationByCampaignIdRequest {
+  int32 page = 1;
+  int32 limit = 2;
+  repeated int32 campaignIds = 3;
+  optional bool status = 4;
+}
+
+message CreateApplicationRequest {
+  int32 id = 1;
+  string fullname=2;
+  string phone =3;
+  string email=4;
+  string coverLetter =5;
+  int32 campaignId=6;
+  string userId=7;
+  int32 cvId=8;
+}
+
+message UpdateApplicationRequest {
+  int32 id = 1;
+}
+
+
+message Empty {}
+
+message Pagination {
+  int32 page=1;
+  int32 limit=2;
+}
+
+// The JobApplication message represents a job application record.
+message Application {
+  int32 id = 1;
+  bool status = 2;
+  string fullname=3;
+  string phone =4;
+  string email=5;
+  string coverLetter =6;
+  string createdAt = 7;
+  string updateAt = 8;
+  int32 campaignId=9;
+  string userId=10;
+  int32 cvId=11;
+}
+
+message Applications {
+  int32 page=1;
+  int32 limit=2;
+  int32 total=3;
+  int32 total_page=4;
+  repeated Application applications = 5;
+}

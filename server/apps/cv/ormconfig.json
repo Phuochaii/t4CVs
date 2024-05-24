@@ -1,0 +1,11 @@
+{
+    "type": "sqlite",
+    "database": "./cv/src/table.sql",
+    "synchronize": true,
+    "entities": [
+        "./cv/**/*.entity.ts"
+    ],
+    "cli": {
+        "entitiesDir": "./cv/entities"
+    }
+}
