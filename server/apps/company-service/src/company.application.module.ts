@@ -4,6 +4,7 @@ import { CompanyRepository } from './domain/repository';
 import { CompanyApplication } from './domain';
 import {
   CreateCompanyService,
+  FindCompanyByArrayIdService,
   FindCompanyByIdService,
   GetAllCompanyPaginationService,
   GetTotalCompaniesService,
@@ -57,6 +58,13 @@ import {
       inject: [CompanyRepository],
     },
     {
+      provide: FindCompanyByArrayIdService,
+      useFactory: (companyRepository: CompanyRepository) => {
+        return new FindCompanyByArrayIdService(companyRepository);
+      },
+      inject: [CompanyRepository],
+    },
+    {
       provide: CompanyApplication,
       useFactory: (
         createCompanyService: CreateCompanyService,
@@ -65,6 +73,7 @@ import {
         findCompanyById: FindCompanyByIdService,
         updateCompany: UpdateCompanyService,
         removeCompany: RemoveCompanyService,
+        findCompanyByArrayId: FindCompanyByArrayIdService,
       ) => {
         return new CompanyApplication(
           createCompanyService,
@@ -73,6 +82,7 @@ import {
           findCompanyById,
           updateCompany,
           removeCompany,
+          findCompanyByArrayId,
         );
       },
       inject: [
@@ -82,6 +92,7 @@ import {
         FindCompanyByIdService,
         UpdateCompanyService,
         RemoveCompanyService,
+        FindCompanyByArrayIdService,
       ],
     },
   ],

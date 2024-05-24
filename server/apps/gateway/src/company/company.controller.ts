@@ -46,6 +46,12 @@ export class CompanyController {
     return this.companyService.removeCompany(id);
   }
 
+  //Test api cho hàm find company by array id
+  // @Get()
+  // findCompanyByArrayId(): Observable<any[]> {
+  //   return this.companyService.findCompanyByArrayId();
+  // }
+
   @Post('campaign/create')
   createCampaign(@Body() data: CreateCampaignDto): Observable<string> {
     return this.companyService.createCampaign(data);

@@ -30,6 +30,10 @@ export class CompanyService {
     );
   }
 
+  findCompanyByArrayId(id: number[]): Observable<any[]> {
+    return this.companyClient.send({ cmd: 'find_company_by_array_id' }, id);
+  }
+
   updateCompany(data: UpdateCompanyDto): Observable<string> {
     return this.companyClient.send({ cmd: 'update_company' }, data);
   }
