@@ -93,7 +93,11 @@ function Header() {
                     <li>
                       <hr />
                     </li>
-                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li 
+                      onClick={() => {
+                        navigation('/your-application');
+                      }}
+                      className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
