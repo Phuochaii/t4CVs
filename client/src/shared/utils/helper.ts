@@ -5,6 +5,8 @@ import { EmployerFromServer } from "../types/Employer.type"
 import { Field, RecruitmentFromServer } from "../types/Recruitment.type"
 import { ApplicationFromServer } from "../types/Application.type"
 import { UserFromServer } from "../types/User.type"
+import { getCVByApplicationID } from "../../modules/hr-module"
+import { UserCV } from "../types/CV_user.type"
 
 const serverURL = 'http://localhost:3000'
 
@@ -106,6 +108,29 @@ export async function getUserById(userId: number) {
         const response = await axios.get(`${serverURL}/user/${userId}`);
         const user: UserFromServer = response.data;
         return user;
+    }
+    catch (e) {
+        return null;
+    }
+}
+export async function getCVById(cvId: number) {
+    try {
+        const response = await axios.get(`${serverURL}/cv/${cvId}`);
+        const CV: UserCV = response.data;
+        return CV;
+    }
+    catch (e) {
+        return null;
+    }
+}
+export async function getApplications(userId: number) {
+    try {
+        const response = await axios.get(`${serverURL}/application/user/${userId}?page=1&limit=5/`);
+        const applications: ApplicationFromServer[] = response.data.applications;
+        const campaignIds = applications.map((application: ApplicationFromServer) => application.campaignId);
+        const promiseJobs = campaignIds.map(id => getJobByCampaignId(id))
+        const jobs = (await Promise.all(promiseJobs)).filter(job => job !== null) as RecruitmentFromServer[];
+        return {applications:applications,jobs:jobs};
     }
     catch (e) {
         return null;
