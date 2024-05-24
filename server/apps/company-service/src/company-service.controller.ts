@@ -57,6 +57,11 @@ export class CompanyServiceController {
     return this.companyApplication.removeCompany(id);
   }
 
+  @MessagePattern({ cmd: 'find_company_by_array_id' })
+  async findCompanyByArrayId(id: number[]) {
+    return await this.companyApplication.findCompanyByArrayId(id);
+  }
+
   @MessagePattern({ cmd: 'create_campaign' })
   createCampaign(campaign: CreateCampaignDTO) {
     return this.campaignApplication.createCampaign(campaign);
