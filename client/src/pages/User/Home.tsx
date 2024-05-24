@@ -19,6 +19,8 @@ import { SingleValue } from 'react-select';
 import FPT from '../../shared/assets/images/FPT.jpg';
 import VNRS from '../../shared/assets/images/VNRS.png';
 import { Heart } from 'lucide-react';
+import TopCompanies from '../../shared/components/TopCompanies';
+import JobSuggestions from '../../shared/components/JobSuggestions';
 // import { salary_range } from '../../shared/utils/constant';
 
 const vip_company_slides = [
@@ -615,6 +617,8 @@ function Home() {
           </div>
         </div>
       </div>
+      <TopCompanies />
+      <JobSuggestions />
     </>
   );
 }
