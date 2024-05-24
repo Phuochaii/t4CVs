@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  UseInterceptors,
-  UploadedFile,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Observable } from 'rxjs';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateUserDTO } from './dto/Req/createUser.dto';
 
 @Controller('user')
@@ -21,8 +12,13 @@ export class UserController {
     return this.userService.findAllUsers();
   }
 
+  @Get('check/:id')
+  isUserExist(@Param('id') id: string) {
+    return this.userService.isUserExist(id);
+  }
+
   @Get(':id')
-  findUserById(@Param('id') id: number): Observable<string> {
+  findUserById(@Param('id') id: string) {
     return this.userService.findUserById(id);
   }
 
@@ -31,7 +27,7 @@ export class UserController {
   createUser(
     // @UploadedFile() image: Express.Multer.File,
     @Body() user: CreateUserDTO,
-  ): Observable<string> {
+  ) {
     return this.userService.createUser(user);
   }
 }

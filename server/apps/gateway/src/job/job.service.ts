@@ -16,27 +16,37 @@ export class JobService {
   async getAllJobs(query: any) {
     const res = this.jobClient.send({ cmd: 'get_all_jobs' }, query);
     const lastRes = await lastValueFrom(res);
-    const jobs = lastRes.data.map(async (job) => {
-      const company = this.companyService.findCompanyById(job.companyId);
-      const lastCompany = await lastValueFrom(company);
+    const jobs = lastRes.data;
+    const companiesId = jobs.map((job) => job.companyId);
+    const companies = this.companyService.findCompanyByArrayId(companiesId);
+    const lastCompanies = await lastValueFrom(companies);
+    const jobsFinal = lastRes.data.map((job) => {
+      const company =
+        lastCompanies.find(
+          (company) => company !== null && company.id === job.companyId,
+        ) ?? null;
       delete job.companyId;
-      const result = { ...job, company: lastCompany };
-      return result;
+      return { ...job, company };
     });
-    lastRes.data = await Promise.all(jobs);
+    lastRes.data = jobsFinal;
     return lastRes;
   }
   async getValidJobs(query: any) {
     const res = this.jobClient.send({ cmd: 'get_valid_jobs' }, query);
     const lastRes = await lastValueFrom(res);
-    const jobs = lastRes.data.map(async (job) => {
-      const company = this.companyService.findCompanyById(job.companyId);
-      const lastCompany = await lastValueFrom(company);
+    const jobs = lastRes.data;
+    const companiesId = jobs.map((job) => job.companyId);
+    const companies = this.companyService.findCompanyByArrayId(companiesId);
+    const lastCompanies = await lastValueFrom(companies);
+    const jobsFinal = lastRes.data.map((job) => {
+      const company =
+        lastCompanies.find(
+          (company) => company !== null && company.id === job.companyId,
+        ) ?? null;
       delete job.companyId;
-      const result = { ...job, company: lastCompany };
-      return result;
+      return { ...job, company };
     });
-    lastRes.data = await Promise.all(jobs);
+    lastRes.data = jobsFinal;
     return lastRes;
   }
 
@@ -65,7 +75,9 @@ export class JobService {
     );
     const lastJob = await lastValueFrom(job);
     if (lastJob === null) {
-      throw new BadRequestException(`Job doesn't exit!`);
+      throw new BadRequestException(
+        `Doesn't exit job with campaign ID = ${campaignId}!`,
+      );
     }
     const company = this.companyService.findCompanyById(lastJob.companyId);
     const lastCompany = await lastValueFrom(company);
@@ -74,8 +86,13 @@ export class JobService {
     return result;
   }
 
-  updateJobStatus(data: UpdateJobDto): Observable<string> {
-    return this.jobClient.send({ cmd: 'update_job_status' }, data);
+  updateJobStatus(data: UpdateJobDto) {
+    const status = this.jobClient.send({ cmd: 'update_job_status' }, data);
+    const lastStatus = lastValueFrom(status);
+    if (lastStatus) {
+      return 'Updated successfully!';
+    }
+    return new BadRequestException(`Update failed!`);
   }
 
   createJobInfo(): Observable<string> {

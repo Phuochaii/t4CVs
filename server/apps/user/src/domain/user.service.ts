@@ -1,4 +1,3 @@
-import { RpcException } from '@nestjs/microservices';
 import { CreateUserDTO } from './dto/Req';
 import { UserRepository } from './repository';
 
@@ -6,10 +5,11 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
   async findById(id: string) {
     const user = await this.userRepository.findById(id);
-    if (!user) {
-      throw new RpcException('User not found');
-    }
     return user;
+  }
+
+  async isUserExist(id: string) {
+    return await this.userRepository.isUserExist(id);
   }
 
   async findAll() {
@@ -19,10 +19,9 @@ export class UserService {
   async createUser(createUserDTO: CreateUserDTO) {
     const user = await this.userRepository.findById(createUserDTO.id);
     if (user) {
-      throw new RpcException('User exists!');
+      return null;
     }
-    await this.userRepository.createUser(user);
-    return 'User created successfully!';
+    return await this.userRepository.createUser(createUserDTO);
 
     // const userEntity = await this.userRepository.save({
     //   ...user,
