@@ -14,13 +14,13 @@ import {
   BriefcaseBusiness,
   Image,
   Video,
-} from "lucide-react";
-import { SetStateAction, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import Select, { MultiValue, SingleValue } from "react-select";
-import SingleDropdown from "../../../../shared/components/SingleDropDown";
-import MultiDropdown from "../../../../shared/components/MultiDropDown";
+} from 'lucide-react';
+import { SetStateAction, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import Select, { MultiValue, SingleValue } from 'react-select';
+import SingleDropdown from '../../../../shared/components/SingleDropDown';
+import MultiDropdown from '../../../../shared/components/MultiDropDown';
 function PostCompaign1({
   next,
   previous,
@@ -32,9 +32,9 @@ function PostCompaign1({
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm();
-  const [userChoice, setUserChoice] = useState<SingleValue<{
+  const [, setUserChoice] = useState<SingleValue<{
     value: string;
     label: string;
   }> | null>(null);
@@ -46,7 +46,7 @@ function PostCompaign1({
     value: string;
     label: string;
   }> | null>(null);
-  const [district, setDistrictOptions] = useState<SingleValue<{
+  const [, setDistrictOptions] = useState<SingleValue<{
     value: string;
     label: string;
   }> | null>(null);
@@ -77,11 +77,11 @@ function PostCompaign1({
   const [salaryError, setSalaryError] = useState(true);
   const [salaryMaxError, setSalaryMaxError] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [salary, setSalary] = useState("");
-  const [salaryMax, setSalaryMax] = useState("");
-  const [date, setDate] = useState("");
-  const [item, setItem] = useState({
-    titleRecruitment: "",
+  const [salary, setSalary] = useState('');
+  const [salaryMax, setSalaryMax] = useState('');
+  const [date, setDate] = useState('');
+  const [item] = useState({
+    titleRecruitment: '',
     majorId: 0,
     fieldsId: [] as number[],
     typeId: 0,
@@ -93,46 +93,54 @@ function PostCompaign1({
     salaryMax: 0,
     expId: 0,
     locationsId: [] as number[], // Specify the type explicitly
-    expiredDate: "",
+    expiredDate: '',
     quantity: 0,
-    jobSchedule: "",
-    gender: "",
-    description: "",
-    benefit: "",
-    requirement: "",
-    skills: "",
+    jobSchedule: '',
+    gender: '',
+    description: '',
+    benefit: '',
+    requirement: '',
+    skills: '',
   });
-  const onSubmit = async (
-    data: any,
-    event: any
-  ) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = async (data: any, event: any) => {
     console.log(fieldOptions);
 
-    if (!salaryError && !salaryMaxError
-    ) {
-      let updatedItem = { ...item };
+    if (!salaryError && !salaryMaxError) {
+      const updatedItem = { ...item };
 
       // Modify each property
       updatedItem.titleRecruitment = data.title;
-      updatedItem.majorId = Number.parseInt(careerOptions?.value!);
+      updatedItem.majorId = Number.parseInt(
+        careerOptions?.value !== undefined ? careerOptions?.value : '0',
+      );
       updatedItem.fieldsId = fieldOptions
         ? fieldOptions.map((option) => parseInt(option.value))
-        : []; // Replace [2, 3] with your desired array of field IDs
-      updatedItem.typeId = Number.parseInt(jobTypeOptions?.value!);
-      updatedItem.currencyId = Number.parseInt(currencyOptions?.value!);
-      updatedItem.levelId = Number.parseInt(levelOptions?.value!);
+        : [];
+      updatedItem.typeId = Number.parseInt(
+        jobTypeOptions?.value !== undefined ? jobTypeOptions?.value : '0',
+      );
+      updatedItem.currencyId = Number.parseInt(
+        currencyOptions?.value !== undefined ? currencyOptions?.value : '0',
+      );
+      updatedItem.levelId = Number.parseInt(
+        levelOptions?.value !== undefined ? levelOptions.value : '0',
+      );
       updatedItem.campaignId = Number.parseInt(compaignId as string) as number;
       updatedItem.companyId = 1;
-      updatedItem.salaryMin = salary !== "" ? Number.parseInt(salary) : 0;
-      updatedItem.salaryMax = salaryMax !== "" ? Number.parseInt(salaryMax) : 0;
-      updatedItem.expId = Number.parseInt(expOptions?.value!);
+      updatedItem.salaryMin = salary !== '' ? Number.parseInt(salary) : 0;
+      updatedItem.salaryMax = salaryMax !== '' ? Number.parseInt(salaryMax) : 0;
+      updatedItem.expId = Number.parseInt(
+        expOptions?.value !== undefined ? expOptions?.value : '0',
+      );
       updatedItem.locationsId = cityOption
         ? cityOption.map((option) => parseInt(option.value))
-        : []; // Replace [4, 5] with your desired array of location IDs
+        : [];
       updatedItem.expiredDate = date;
       updatedItem.quantity = Number.parseInt(data.quantity);
       updatedItem.jobSchedule = data.schedule;
-      updatedItem.gender = genderOptions?.value!;
+      updatedItem.gender =
+        genderOptions?.value !== undefined ? genderOptions?.value : '0';
       updatedItem.description = data.description;
       updatedItem.benefit = data.benefit;
       updatedItem.requirement = data.requirement;
@@ -140,23 +148,23 @@ function PostCompaign1({
       //debug line
       console.log(updatedItem);
       try {
-        const response = await fetch("http://localhost:3000/job/create", {
-          method: "POST",
+        const response = await fetch('http://localhost:3000/job/create', {
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(updatedItem),
         });
 
         if (!response.ok) {
-          throw new Error("Failed to post data to API");
+          throw new Error('Failed to post data to API');
         }
 
-        console.log("Data posted successfully");
+        console.log('Data posted successfully');
       } catch (error) {
-        console.error("Error posting data:", error);
+        console.error('Error posting data:', error);
       }
-      next(event)
+      next(event);
     } else {
       //Do nothing
     }
@@ -177,33 +185,34 @@ function PostCompaign1({
       setSalaryMaxError(false);
     }
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [fields, setFields] = useState<any>(null);
 
   useEffect(() => {
     // Fetch data from your API
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/job/create-info", {
-          method: "GET",
+        const response = await fetch('http://localhost:3000/job/create-info', {
+          method: 'GET',
           headers: {
-            "Access-control-allow-origin": "http://localhost:3000",
-            "Content-type": "application/json",
+            'Access-control-allow-origin': 'http://localhost:3000',
+            'Content-type': 'application/json',
           },
-        }); 
+        });
         if (!response.ok) {
-          throw new Error("Failed to fetch data");
+          throw new Error('Failed to fetch data');
         }
         const data = await response.json();
         setFields(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       }
     };
 
     fetchData();
   }, []);
 
-  const convertToOptions = (data: { id: any; name: any }[]) => {
+  const convertToOptions = (data: { id: string; name: string }[]) => {
     if (!data) return [];
     return data.map(({ id, name }) => ({ value: id.toString(), label: name }));
   };
@@ -215,10 +224,10 @@ function PostCompaign1({
   const exp = convertToOptions(fields?.exp);
   const typeOptions = convertToOptions(fields?.type);
   const togglePopup = (
-    choice: SetStateAction<SingleValue<{ value: string; label: string }>>
+    choice: SetStateAction<SingleValue<{ value: string; label: string }>>,
   ) => {
     if (choice !== null) {
-      if (typeof choice !== "function" && choice.value === "Trong khoảng") {
+      if (typeof choice !== 'function' && choice.value === 'Trong khoảng') {
         setShowPopup(true);
         setSalaryError(true);
         setSalaryMaxError(true);
@@ -235,22 +244,22 @@ function PostCompaign1({
     setUserChoice(choice);
   };
   const gender = [
-    { value: "Không quan trọng", label: "Không quan trọng" },
-    { value: "Nam", label: "Nam" },
-    { value: "Nữ", label: "Nữ" },
+    { value: 'Không quan trọng', label: 'Không quan trọng' },
+    { value: 'Nam', label: 'Nam' },
+    { value: 'Nữ', label: 'Nữ' },
   ];
   const cityOptions = [
-    { value: "Hồ Chí Minh", label: "Hồ Chí Minh" },
-    { value: "Bình Dương", label: "Bình Dương" },
-    { value: "Bắc Ninh", label: "Bắc Ninh" },
-    { value: "Đồng Nai", label: "Đồng Nai" },
-    { value: "Hưng Yên", label: "Hưng Yên" },
-    { value: "Hải Dương", label: "Hải Dương" },
-    { value: "Đà Nẵng", label: "Đà Nẵng" },
+    { value: 'Hồ Chí Minh', label: 'Hồ Chí Minh' },
+    { value: 'Bình Dương', label: 'Bình Dương' },
+    { value: 'Bắc Ninh', label: 'Bắc Ninh' },
+    { value: 'Đồng Nai', label: 'Đồng Nai' },
+    { value: 'Hưng Yên', label: 'Hưng Yên' },
+    { value: 'Hải Dương', label: 'Hải Dương' },
+    { value: 'Đà Nẵng', label: 'Đà Nẵng' },
   ];
   const salaryOptions = [
-    { value: "Trong khoảng", label: "Trong khoảng" },
-    { value: "Thỏa thuận", label: "Thỏa thuận" },
+    { value: 'Trong khoảng', label: 'Trong khoảng' },
+    { value: 'Thỏa thuận', label: 'Thỏa thuận' },
   ];
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -261,7 +270,7 @@ function PostCompaign1({
         <div className="bg-white p-4 rounded-sm mb-5 border-l-2 border-green-700">
           <span>
             Tin tuyển dụng của bạn sẽ được kiểm duyệt trước khi chính thức hiển
-            thị với các ứng viên tiềm năng.{" "}
+            thị với các ứng viên tiềm năng.{' '}
             <button className="text-green-500 bg-white">
               Tìm hiểu về Quy định đăng tin tại TopCV.
             </button>
@@ -272,9 +281,9 @@ function PostCompaign1({
             <div className="border-2 p-1 bg-gray-200 rounded-full w-fit h-fit mb-10 ">
               <Pencil
                 style={{
-                  fill: "black",
-                  stroke: "#EEEEEE",
-                  color: "white",
+                  fill: 'black',
+                  stroke: '#EEEEEE',
+                  color: 'white',
                   width: 20,
                   height: 20,
                 }}
@@ -286,7 +295,7 @@ function PostCompaign1({
                 type="text"
                 className=" bg-white border-b-2 border-slate-100 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                 placeholder="VD: Nhân viên Marketing"
-                {...register("title", {
+                {...register('title', {
                   required: true,
                 })}
               />
@@ -301,9 +310,9 @@ function PostCompaign1({
             <div className="border-2 p-1 bg-gray-200 rounded-full w-fit h-fit mb-10 ">
               <Folder
                 style={{
-                  fill: "black",
-                  stroke: "#EEEEEE",
-                  color: "white",
+                  fill: 'black',
+                  stroke: '#EEEEEE',
+                  color: 'white',
                   width: 20,
                   height: 20,
                 }}
@@ -317,7 +326,15 @@ function PostCompaign1({
                     Ngành nghề chính
                   </span>
                   <div>
-                    <SingleDropdown placeholder="Lựa chọn tối đa một ngành nghề chính cho tin tuyển dụng" options={major} onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setCareerOptions(e)} />
+                    <SingleDropdown
+                      placeholder="Lựa chọn tối đa một ngành nghề chính cho tin tuyển dụng"
+                      options={major}
+                      onChange={(
+                        e: SetStateAction<
+                          SingleValue<{ value: string; label: string }>
+                        >,
+                      ) => setCareerOptions(e)}
+                    />
                   </div>
                 </div>
                 <div className="w-8/12 space-y-2">
@@ -329,39 +346,39 @@ function PostCompaign1({
                       styles={{
                         control: (base) => ({
                           ...base,
-                          boxShadow: "none",
-                          borderColor: "#6B728064",
-                          "&:hover": {
-                            borderColor: "green",
+                          boxShadow: 'none',
+                          borderColor: '#6B728064',
+                          '&:hover': {
+                            borderColor: 'green',
                           },
                         }),
                         option: (base) => ({
                           ...base,
-                          backgroundColor: "white",
-                          "&:hover": {
-                            backgroundColor: "lightgrey",
-                            fontWeight: "bold",
+                          backgroundColor: 'white',
+                          '&:hover': {
+                            backgroundColor: 'lightgrey',
+                            fontWeight: 'bold',
                           },
                         }),
                         multiValue: (base) => ({
                           ...base,
-                          backgroundColor: "#C4F0D5",
+                          backgroundColor: '#C4F0D5',
                         }),
                         multiValueLabel: (base) => ({
                           ...base,
-                          color: "black",
+                          color: 'black',
                         }),
 
                         placeholder: (base) => ({
                           ...base,
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
                         }),
                         menu: (base) => ({
                           ...base,
-                          maxHeight: "200px",
-                          overflowY: "auto",
+                          maxHeight: '200px',
+                          overflowY: 'auto',
                         }),
                       }}
                       isClearable
@@ -372,7 +389,9 @@ function PostCompaign1({
                       className="basic-multi-select"
                       classNamePrefix="select"
                       onChange={(e) => setFieldOptions(e)}
-                      isOptionDisabled={() => fieldOptions?.length! >= 2}
+                      isOptionDisabled={() =>
+                        fieldOptions !== null ? fieldOptions.length >= 2 : false
+                      }
                       required
                     />
                   </div>
@@ -402,7 +421,7 @@ function PostCompaign1({
                       type="text"
                       className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                       placeholder="Nhập số lượng"
-                      {...register("quantity", {
+                      {...register('quantity', {
                         required: true,
                       })}
                     />
@@ -421,7 +440,11 @@ function PostCompaign1({
                       <SingleDropdown
                         placeholder="-- Chọn loại công việc --"
                         options={typeOptions}
-                        onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setjobTypeOptions(e)}
+                        onChange={(
+                          e: SetStateAction<
+                            SingleValue<{ value: string; label: string }>
+                          >,
+                        ) => setjobTypeOptions(e)}
                       />
                     </div>
                   </div>
@@ -433,7 +456,7 @@ function PostCompaign1({
                       type="text"
                       className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                       placeholder="Nhập thời gian làm việc"
-                      {...register("schedule", {
+                      {...register('schedule', {
                         required: true,
                       })}
                     />
@@ -446,7 +469,11 @@ function PostCompaign1({
                       <SingleDropdown
                         placeholder="-- Chọn giới tính --"
                         options={gender}
-                        onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setGenderOptions(e)}
+                        onChange={(
+                          e: SetStateAction<
+                            SingleValue<{ value: string; label: string }>
+                          >,
+                        ) => setGenderOptions(e)}
                       />
                     </div>
                   </div>
@@ -456,7 +483,11 @@ function PostCompaign1({
                       <SingleDropdown
                         placeholder="-- Chọn cấp bậc --"
                         options={level}
-                        onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setLevelOptions(e)}
+                        onChange={(
+                          e: SetStateAction<
+                            SingleValue<{ value: string; label: string }>
+                          >,
+                        ) => setLevelOptions(e)}
                       />
                     </div>
                   </div>
@@ -466,7 +497,11 @@ function PostCompaign1({
                       <SingleDropdown
                         placeholder="-- Chọn kinh nghiệm --"
                         options={exp}
-                        onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setExpOptions(e)}
+                        onChange={(
+                          e: SetStateAction<
+                            SingleValue<{ value: string; label: string }>
+                          >,
+                        ) => setExpOptions(e)}
                       />
                     </div>
                   </div>
@@ -474,18 +509,26 @@ function PostCompaign1({
                 <div className="text-base font-semibold mt-4">Mức lương</div>
                 <div className="flex flex-row space-x-10 items-center">
                   <div className="space-y-2 w-3/12">
-                    <span className="text-base font-semibold">Loại tiền tệ</span>
+                    <span className="text-base font-semibold">
+                      Loại tiền tệ
+                    </span>
                     <div>
                       <SingleDropdown
                         placeholder="-- Chọn loại tiền tệ --"
                         options={currency}
-                        onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setCurrencyOptions(e)}
+                        onChange={(
+                          e: SetStateAction<
+                            SingleValue<{ value: string; label: string }>
+                          >,
+                        ) => setCurrencyOptions(e)}
                       />
                     </div>
                   </div>
                   <div className="space-y-2 w-3/12">
                     <div className="flex flex-row space-x-1 items-center">
-                      <span className="text-base font-semibold">Kiểu lương</span>
+                      <span className="text-base font-semibold">
+                        Kiểu lương
+                      </span>
                     </div>
                     <div>
                       <SingleDropdown
@@ -525,16 +568,25 @@ function PostCompaign1({
                   <div className="flex flex-row items-center w-full ">
                     <MapPin
                       style={{
-                        fill: "black",
-                        stroke: "#EEEEEE",
-                        color: "white",
+                        fill: 'black',
+                        stroke: '#EEEEEE',
+                        color: 'white',
                         width: 20,
                         height: 20,
                       }}
                     ></MapPin>
                     <div className="font-bold text-base mr-10">Khu vực 1: </div>
                     <div className="w-5/12">
-                      <MultiDropdown placeholder="Chọn Tỉnh/ Thành phố" onChange={(e: SetStateAction<MultiValue<{ value: string; label: string; }> | null>) => setCityOptions(e)} options={city}/>
+                      <MultiDropdown
+                        placeholder="Chọn Tỉnh/ Thành phố"
+                        onChange={(
+                          e: SetStateAction<MultiValue<{
+                            value: string;
+                            label: string;
+                          }> | null>,
+                        ) => setCityOptions(e)}
+                        options={city}
+                      />
                     </div>
                   </div>
                   <div className="flex flex-row space-x-10">
@@ -542,14 +594,19 @@ function PostCompaign1({
                       <SingleDropdown
                         placeholder="Chọn Quận/ Huyện"
                         options={cityOptions}
-                        onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setDistrictOptions(e)} />
+                        onChange={(
+                          e: SetStateAction<
+                            SingleValue<{ value: string; label: string }>
+                          >,
+                        ) => setDistrictOptions(e)}
+                      />
                     </div>
                     <div className="w-8/12">
                       <input
                         type="text"
                         className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                         placeholder="Nhập địa điểm làm việc cụ thể"
-                        {...register("address", {
+                        {...register('address', {
                           required: true,
                         })}
                       />
@@ -570,19 +627,19 @@ function PostCompaign1({
             salaryError ||
             errors.schedule ||
             errors.address) && (
-              <div className="ml-14 text-red-700">
-                Vui lòng điền đầy đủ thông tin
-              </div>
-            )}
+            <div className="ml-14 text-red-700">
+              Vui lòng điền đầy đủ thông tin
+            </div>
+          )}
         </div>
         <div className="bg-white p-4 rounded-sm mb-5">
           <div className="flex flex-row space-x-5 mb-4">
             <div className="border-2 p-1 bg-gray-200 rounded-full w-fit h-fit mb-10 ">
               <ThumbsUp
                 style={{
-                  fill: "black",
-                  stroke: "#EEEEEE",
-                  color: "white",
+                  fill: 'black',
+                  stroke: '#EEEEEE',
+                  color: 'white',
                   width: 20,
                   height: 20,
                 }}
@@ -597,9 +654,9 @@ function PostCompaign1({
               </span>
               <div className="space-y-4">
                 <span className="text-base text-black">
-                  Bổ sung{" "}
-                  <span className="text-base font-bold">Lý do ứng tuyển</span> sẽ
-                  giúp tin tuyển dụng của bạn trở nên nổi bật và hấp dẫ
+                  Bổ sung{' '}
+                  <span className="text-base font-bold">Lý do ứng tuyển</span>{' '}
+                  sẽ giúp tin tuyển dụng của bạn trở nên nổi bật và hấp dẫn
                   <button className="bg-white text-green-600">Tại đây</button>
                 </span>
                 <div className="flex flex-row space-x-20 items-center">
@@ -634,7 +691,7 @@ function PostCompaign1({
           <div className="flex flex-row space-x-5 mb-4">
             <div className="border-2 p-1 bg-gray-200 rounded-full w-fit h-fit mb-10 ">
               <AlignLeft
-                style={{ fill: "black", color: "black", width: 20, height: 20 }}
+                style={{ fill: 'black', color: 'black', width: 20, height: 20 }}
               ></AlignLeft>
             </div>
             <div className="w-full space-y-8">
@@ -642,15 +699,15 @@ function PostCompaign1({
               <button
                 className="btn text-base p-1 flex flex-row items-center w-fit"
                 style={{
-                  backgroundColor: "#EBF3FF",
-                  color: "#2D7CF1",
-                  marginBottom: "15.96px",
+                  backgroundColor: '#EBF3FF',
+                  color: '#2D7CF1',
+                  marginBottom: '15.96px',
                 }}
               >
                 <WandSparklesIcon
                   style={{
-                    strokeWidth: "0.5px",
-                    color: "blue",
+                    strokeWidth: '0.5px',
+                    color: 'blue',
                     width: 15,
                     height: 15,
                     marginRight: 2,
@@ -667,8 +724,8 @@ function PostCompaign1({
                   <button className="bg-gray-300">
                     <Bold
                       style={{
-                        strokeWidth: "4px",
-                        color: "black",
+                        strokeWidth: '4px',
+                        color: 'black',
                         width: 15,
                         height: 15,
                         marginRight: 2,
@@ -678,8 +735,8 @@ function PostCompaign1({
                   <button className="bg-gray-300">
                     <Italic
                       style={{
-                        strokeWidth: "2px",
-                        color: "black",
+                        strokeWidth: '2px',
+                        color: 'black',
                         width: 15,
                         height: 15,
                         marginRight: 2,
@@ -689,8 +746,8 @@ function PostCompaign1({
                   <button className="bg-gray-300">
                     <Underline
                       style={{
-                        strokeWidth: "2px",
-                        color: "black",
+                        strokeWidth: '2px',
+                        color: 'black',
                         width: 15,
                         height: 15,
                         marginRight: 2,
@@ -700,8 +757,8 @@ function PostCompaign1({
                   <button className="bg-gray-300">
                     <List
                       style={{
-                        strokeWidth: "2px",
-                        color: "black",
+                        strokeWidth: '2px',
+                        color: 'black',
                         width: 15,
                         height: 15,
                         marginRight: 2,
@@ -711,8 +768,8 @@ function PostCompaign1({
                   <button className="bg-gray-300">
                     <ListOrdered
                       style={{
-                        strokeWidth: "2px",
-                        color: "black",
+                        strokeWidth: '2px',
+                        color: 'black',
                         width: 15,
                         height: 15,
                         marginRight: 2,
@@ -723,7 +780,7 @@ function PostCompaign1({
                 <textarea
                   className="w-full bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
                   placeholder="Nhập nội dung mô tả công việc"
-                  {...register("description", {
+                  {...register('description', {
                     required: true,
                   })}
                 />
@@ -740,7 +797,7 @@ function PostCompaign1({
           <div className="flex flex-row space-x-5 mb-4">
             <div className="border-2 p-1 bg-gray-200 rounded-full w-fit h-fit mb-10 ">
               <AlignLeft
-                style={{ fill: "black", color: "black", width: 20, height: 20 }}
+                style={{ fill: 'black', color: 'black', width: 20, height: 20 }}
               ></AlignLeft>
             </div>
             <div className="w-full space-y-8">
@@ -748,15 +805,15 @@ function PostCompaign1({
               <button
                 className="btn text-base p-1 flex flex-row items-center w-fit"
                 style={{
-                  backgroundColor: "#EBF3FF",
-                  color: "#2D7CF1",
-                  marginBottom: "15.96px",
+                  backgroundColor: '#EBF3FF',
+                  color: '#2D7CF1',
+                  marginBottom: '15.96px',
                 }}
               >
                 <WandSparklesIcon
                   style={{
-                    strokeWidth: "0.5px",
-                    color: "blue",
+                    strokeWidth: '0.5px',
+                    color: 'blue',
                     width: 15,
                     height: 15,
                     marginRight: 2,
@@ -775,8 +832,8 @@ function PostCompaign1({
                   <button className="bg-gray-300">
                     <Bold
                       style={{
-                        strokeWidth: "4px",
-                        color: "black",
+                        strokeWidth: '4px',
+                        color: 'black',
                         width: 15,
                         height: 15,
                         marginRight: 2,
@@ -786,8 +843,8 @@ function PostCompaign1({
                   <button className="bg-gray-300">
                     <Italic
                       style={{
-                        strokeWidth: "2px",
-                        color: "black",
+                        strokeWidth: '2px',
+                        color: 'black',
                         width: 15,
                         height: 15,
                         marginRight: 2,
@@ -797,8 +854,8 @@ function PostCompaign1({
                   <button className="bg-gray-300">
                     <Underline
                       style={{
-                        strokeWidth: "2px",
-                        color: "black",
+                        strokeWidth: '2px',
+                        color: 'black',
                         width: 15,
                         height: 15,
                         marginRight: 2,
@@ -808,8 +865,8 @@ function PostCompaign1({
                   <button className="bg-gray-300">
                     <List
                       style={{
-                        strokeWidth: "2px",
-                        color: "black",
+                        strokeWidth: '2px',
+                        color: 'black',
                         width: 15,
                         height: 15,
                         marginRight: 2,
@@ -819,8 +876,8 @@ function PostCompaign1({
                   <button className="bg-gray-300">
                     <ListOrdered
                       style={{
-                        strokeWidth: "2px",
-                        color: "black",
+                        strokeWidth: '2px',
+                        color: 'black',
                         width: 15,
                         height: 15,
                         marginRight: 2,
@@ -831,7 +888,7 @@ function PostCompaign1({
                 <textarea
                   className="w-full bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
                   placeholder="Nhập nội dung yêu cầu công việc"
-                  {...register("requirement", {
+                  {...register('requirement', {
                     required: true,
                   })}
                 />
@@ -842,7 +899,7 @@ function PostCompaign1({
                     type="text"
                     className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                     placeholder="Nhập kỹ năng liên quan"
-                    {...register("skill", {
+                    {...register('skill', {
                       required: true,
                     })}
                   />
@@ -863,7 +920,7 @@ function PostCompaign1({
           <div className="flex flex-row space-x-5 mb-4">
             <div className="border-2 p-1 bg-gray-200 rounded-full w-fit h-fit mb-10 ">
               <AlignLeft
-                style={{ fill: "black", color: "black", width: 20, height: 20 }}
+                style={{ fill: 'black', color: 'black', width: 20, height: 20 }}
               ></AlignLeft>
             </div>
             <div className="w-full space-y-8">
@@ -871,15 +928,15 @@ function PostCompaign1({
               <button
                 className="btn text-base p-1 flex flex-row items-center w-fit"
                 style={{
-                  backgroundColor: "#EBF3FF",
-                  color: "#2D7CF1",
-                  marginBottom: "15.96px",
+                  backgroundColor: '#EBF3FF',
+                  color: '#2D7CF1',
+                  marginBottom: '15.96px',
                 }}
               >
                 <WandSparklesIcon
                   style={{
-                    strokeWidth: "0.5px",
-                    color: "blue",
+                    strokeWidth: '0.5px',
+                    color: 'blue',
                     width: 15,
                     height: 15,
                     marginRight: 2,
@@ -896,8 +953,8 @@ function PostCompaign1({
                   <button className="bg-gray-300">
                     <Bold
                       style={{
-                        strokeWidth: "4px",
-                        color: "black",
+                        strokeWidth: '4px',
+                        color: 'black',
                         width: 15,
                         height: 15,
                         marginRight: 2,
@@ -907,8 +964,8 @@ function PostCompaign1({
                   <button className="bg-gray-300">
                     <Italic
                       style={{
-                        strokeWidth: "2px",
-                        color: "black",
+                        strokeWidth: '2px',
+                        color: 'black',
                         width: 15,
                         height: 15,
                         marginRight: 2,
@@ -918,8 +975,8 @@ function PostCompaign1({
                   <button className="bg-gray-300">
                     <Underline
                       style={{
-                        strokeWidth: "2px",
-                        color: "black",
+                        strokeWidth: '2px',
+                        color: 'black',
                         width: 15,
                         height: 15,
                         marginRight: 2,
@@ -929,8 +986,8 @@ function PostCompaign1({
                   <button className="bg-gray-300">
                     <List
                       style={{
-                        strokeWidth: "2px",
-                        color: "black",
+                        strokeWidth: '2px',
+                        color: 'black',
                         width: 15,
                         height: 15,
                         marginRight: 2,
@@ -940,8 +997,8 @@ function PostCompaign1({
                   <button className="bg-gray-300">
                     <ListOrdered
                       style={{
-                        strokeWidth: "2px",
-                        color: "black",
+                        strokeWidth: '2px',
+                        color: 'black',
                         width: 15,
                         height: 15,
                         marginRight: 2,
@@ -952,7 +1009,7 @@ function PostCompaign1({
                 <textarea
                   className="w-full bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
                   placeholder="Nhập quyền lợi trong công việc"
-                  {...register("benefit", {
+                  {...register('benefit', {
                     required: true,
                   })}
                 />
@@ -969,7 +1026,12 @@ function PostCompaign1({
           <div className="flex flex-row space-x-5 mb-4">
             <div className="border-2 p-1 bg-gray-200 rounded-full w-fit h-fit mb-10 ">
               <BriefcaseBusiness
-                style={{ stroke: "black", color: "black", width: 20, height: 20 }}
+                style={{
+                  stroke: 'black',
+                  color: 'black',
+                  width: 20,
+                  height: 20,
+                }}
               ></BriefcaseBusiness>
             </div>
             <div className="w-full space-y-8">
@@ -996,7 +1058,7 @@ function PostCompaign1({
                     type="text"
                     className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                     placeholder="Họ tên"
-                    {...register("name", {
+                    {...register('name', {
                       required: true,
                     })}
                   />
@@ -1007,7 +1069,7 @@ function PostCompaign1({
                     type="text"
                     className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                     placeholder="Số điện thoại"
-                    {...register("phone", {
+                    {...register('phone', {
                       required: true,
                     })}
                   />
@@ -1018,7 +1080,7 @@ function PostCompaign1({
                     type="text"
                     className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                     placeholder="Email"
-                    {...register("email", {
+                    {...register('email', {
                       required: true,
                     })}
                   />
@@ -1036,7 +1098,12 @@ function PostCompaign1({
           <div className="flex flex-row space-x-5 mb-4">
             <div className="border-2 p-1 bg-gray-200 rounded-full w-fit h-fit mb-10 ">
               <Image
-                style={{ stroke: "black", color: "black", width: 20, height: 20 }}
+                style={{
+                  stroke: 'black',
+                  color: 'black',
+                  width: 20,
+                  height: 20,
+                }}
               ></Image>
             </div>
             <div className="w-full space-y-8">
@@ -1048,17 +1115,17 @@ function PostCompaign1({
               </span>
               <div className="text-base">
                 Bổ sung Hình ảnh/video sẽ giúp thông tin công ty được hiển thị
-                chuyên nghiệp hơn, ứng viên cảm nhận rõ ràng hơn về môi trường làm
-                việc chuyên nghiệp, bản sắc tinh thần, giúp tăng đáng kể tỷ lệ ứng
-                tuyển khi ứng viên xem tin tuyển dụng của bạn. Vui lòng tham khảo
-                hướng dẫn chuẩn bị hình ảnh/video chất lượng của TopCV{" "}
+                chuyên nghiệp hơn, ứng viên cảm nhận rõ ràng hơn về môi trường
+                làm việc chuyên nghiệp, bản sắc tinh thần, giúp tăng đáng kể tỷ
+                lệ ứng tuyển khi ứng viên xem tin tuyển dụng của bạn. Vui lòng
+                tham khảo hướng dẫn chuẩn bị hình ảnh/video chất lượng của TopCV{' '}
                 <button className="bg-white text-green-600">Tại đây</button>
               </div>
               <div className="flex flex-row items-center space-x-5">
                 <button className="flex px-4 py-2 text-green-600 bg-green-200">
                   <Image
                     style={{
-                      color: "green",
+                      color: 'green',
                       width: 20,
                       height: 20,
                       marginRight: 2,
@@ -1069,8 +1136,8 @@ function PostCompaign1({
                 <button className="flex px-4 py-2 text-green-600 bg-green-200">
                   <Video
                     style={{
-                      stroke: "none",
-                      fill: "green",
+                      stroke: 'none',
+                      fill: 'green',
                       width: 20,
                       height: 20,
                       marginRight: 2,
