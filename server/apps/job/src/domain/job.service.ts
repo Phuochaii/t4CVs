@@ -15,6 +15,7 @@ import { FindJobRespDTO } from './dto/Resp/findJobResp.dto';
 import { QueryDTO } from './dto/Req/query.dto';
 import { JobAggregate } from './aggregate/job.aggregate';
 import { JobRepository } from './repository';
+import { FindJobByCampaignIdDto } from './dto/Resp/find-job-by-campaignId.dto';
 @Injectable()
 export class JobService {
   constructor(
@@ -29,9 +30,18 @@ export class JobService {
     private typeService: TypeService,
   ) {}
 
-  async findJobByCampaignId(campaignId: number): Promise<JobAggregate> {
+  async findJobByCampaignId(
+    campaignId: number,
+  ): Promise<FindJobByCampaignIdDto> {
     const job = await this.jobRepository.findJobByCampaignId(campaignId);
     return job;
+  }
+
+  async findJobsByCampaignIds(
+    campaignIds: number[],
+  ): Promise<FindJobByCampaignIdDto[]> {
+    const jobs = await this.jobRepository.findJobsByCampaignIds(campaignIds);
+    return jobs;
   }
 
   async create(createJobDto: CreateJobDto) {
