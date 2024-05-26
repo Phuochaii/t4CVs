@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import { useNavigate } from "react-router-dom";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import { useNavigate } from 'react-router-dom';
 
 interface CVCardProps {
   cv: string;
@@ -37,21 +37,21 @@ const CVCard: React.FC<CVCardProps> = ({ cv, tag, name }) => {
         className="size-72 bg-gray-200 relative m-auto"
         style={{
           backgroundImage: `url(${cv})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
       >
         {/* Hiển thị nút khi hover */}
         {hovered && (
           <div className="absolute bottom-4 left-0 w-full h-full flex flex-col items-center justify-end">
             <button
-              onClick={() => navigate("/create-cv")}
+              onClick={() => navigate('/create-cv')}
               className="text-sm font-bold bg-transparent text-white border border-white rounded-lg mb-2 w-3/4"
             >
               Xem trước
             </button>
             <button
-              onClick={() => navigate("/create-cv")}
+              onClick={() => navigate('/create-cv')}
               className="bg-green-500 text-white rounded-lg w-3/4 text-sm font-bold"
             >
               Dùng mẫu
@@ -67,9 +67,9 @@ const CVCard: React.FC<CVCardProps> = ({ cv, tag, name }) => {
               key={index}
               className="bg-gray-300 rounded-md p-1 mr-1 mb-1 px-2 overflow-hidden"
               style={{
-                maxWidth: "100px",
-                maxHeight: "35px",
-                justifyContent: "center",
+                maxWidth: '100px',
+                maxHeight: '35px',
+                justifyContent: 'center',
               }}
             >
               {tagItem}
@@ -79,9 +79,9 @@ const CVCard: React.FC<CVCardProps> = ({ cv, tag, name }) => {
             <div
               className="bg-gray-300 rounded-md p-1 mr-1 mb-1"
               style={{
-                maxWidth: "100px",
-                maxHeight: "35px",
-                justifyContent: "center",
+                maxWidth: '100px',
+                maxHeight: '35px',
+                justifyContent: 'center',
               }}
             >
               +{remainingTagsCount}

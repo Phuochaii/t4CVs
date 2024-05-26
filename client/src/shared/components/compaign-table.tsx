@@ -1,9 +1,9 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from 'react';
 // import Switch from "../../shared/components/CustomSwitch";
-import { Link, useNavigate } from "react-router-dom";
-import { Campaign } from "../types/Campaign.type";
-import { getUserById } from "../utils/helper";
-import { UserFromServer } from "../types/User.type";
+import { Link, useNavigate } from 'react-router-dom';
+import { Campaign } from '../types/Campaign.type';
+import { getUserById } from '../utils/helper';
+import { UserFromServer } from '../types/User.type';
 
 export interface CampaignTableProps {
   data: Campaign[];
@@ -42,7 +42,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
         async (application) => {
           const applicant = await getUserById(application.userId);
           return applicant;
-        }
+        },
       );
       setApplicants(await Promise.all(applicantPromises));
     }
@@ -72,7 +72,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
             <h3 className="font-bold">{campaign.campaignName}</h3>
             <span className="font-bold text-slate-400">
               {applicants.length === 0 ? (
-                "Chưa có CV nào"
+                'Chưa có CV nào'
               ) : (
                 <div className="flex items-center gap-1">
                   {applicants.slice(0, 5).map((candidate, item) => {
@@ -81,12 +81,12 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
                         key={item}
                         src={
                           candidate?.image ||
-                          "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg"
+                          'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'
                         }
                         className="object-cover rounded-full w-9 h-9"
                         onError={(e) =>
                           (e.currentTarget.src =
-                            "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg")
+                            'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg')
                         }
                       />
                     );
@@ -105,7 +105,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
             {
               <div
                 className={`flex items-center gap-2 font-bold ${
-                  isHovered ? "visible" : "invisible"
+                  isHovered ? 'visible' : 'invisible'
                 }`}
               >
                 <a href="#">Sửa chiến dịch</a>
@@ -134,7 +134,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
             </div>
             <div
               className={`flex items-center gap-2 ${
-                isHovered ? "visible" : "invisible"
+                isHovered ? 'visible' : 'invisible'
               }`}
             >
               <Link
@@ -169,7 +169,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
               ? "Đã kích hoạt"
               : "Chưa kích hoạt Scout AI"}
           </h3> */}
-          <button className={`${isHovered ? "visible" : "invisible"}`}>
+          <button className={`${isHovered ? 'visible' : 'invisible'}`}>
             Xem chi tiết
           </button>
         </div>

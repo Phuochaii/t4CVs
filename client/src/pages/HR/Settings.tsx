@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import Icon from "../../shared/components/regular-icon";
+import React, { useState } from 'react';
+import Icon from '../../shared/components/regular-icon';
 import {
   LucideProps,
   Lock,
@@ -7,10 +7,10 @@ import {
   File,
   Building,
   Share2,
-} from "lucide-react";
-import Profile from "../../shared/components/profile";
-import Certificate from "../../shared/components/certificate";
-import CompanyInfo from "../../shared/components/company-info";
+} from 'lucide-react';
+import Profile from '../../shared/components/profile';
+import Certificate from '../../shared/components/certificate';
+import CompanyInfo from '../../shared/components/company-info';
 const Item = ({
   icon,
   iconSize = 16,
@@ -30,19 +30,19 @@ const Item = ({
     <li
       onClick={onClick}
       className={`flex items-center space-x-2 cursor-pointer text-sm font-semibold hover:text-green-500 active:text-green-500 ${
-        isChosen ? "bg-white text-green-500" : ""
-      } ${!available?"text-gray-400":""}`}
+        isChosen ? 'bg-white text-green-500' : ''
+      } ${!available ? 'text-gray-400' : ''}`}
       style={{
-        padding: "12px 14px",
+        padding: '12px 14px',
         margin: 0,
       }}
     >
       {icon && (
         <div
           style={{
-            textAlign: "center",
-            marginRight: "10px",
-            marginLeft: "10px",
+            textAlign: 'center',
+            marginRight: '10px',
+            marginLeft: '10px',
           }}
         >
           <Icon icon={icon} size={iconSize} />
@@ -58,44 +58,46 @@ const Settings = () => {
   const sidebarItems = [
     {
       icon: Lock,
-      title: "Đổi mật khẩu",
-      key: "ChangePassword",
+      title: 'Đổi mật khẩu',
+      key: 'ChangePassword',
       component: <div>Change Password</div>,
     },
     {
       icon: UserRound,
-      title: "Thông tin cá nhân",
-      key: "Profile",
+      title: 'Thông tin cá nhân',
+      key: 'Profile',
       component: <Profile />,
       available: true,
     },
     {
       icon: File,
-      title: "Giấy phép kinh doanh",
-      key: "Certificate",
+      title: 'Giấy phép kinh doanh',
+      key: 'Certificate',
       component: <Certificate />,
       available: true,
     },
     {
       icon: Building,
-      title: "Thông tin công ty",
-      key: "CompanyInfo",
+      title: 'Thông tin công ty',
+      key: 'CompanyInfo',
       component: <CompanyInfo />,
       available: true,
     },
     {
       icon: Share2,
-      title: "Kết nối API",
-      key: "APIConnection",
+      title: 'Kết nối API',
+      key: 'APIConnection',
       component: <div>API Connection</div>,
     },
   ];
   const [selectedKey, setSelectedKey] = useState('ChangePassword');
-  const selectedComponent = sidebarItems.find(item => item.key === selectedKey)?.component;
+  const selectedComponent = sidebarItems.find(
+    (item) => item.key === selectedKey,
+  )?.component;
   return (
     <div className="flex flex-row h-fit m-5">
       <div className="w-[22%] bg-gray-100">
-          <ul className="space-y-2">
+        <ul className="space-y-2">
           {sidebarItems.map((item) => (
             <Item
               key={item.key}
@@ -107,11 +109,8 @@ const Settings = () => {
             />
           ))}
         </ul>
-   
       </div>
-      <div className="w-[78%] flex-grow bg-white">
-         {selectedComponent}
-      </div>
+      <div className="w-[78%] flex-grow bg-white">{selectedComponent}</div>
     </div>
   );
 };

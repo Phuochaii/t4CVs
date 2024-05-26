@@ -1,5 +1,5 @@
-import { useTranslation } from "react-i18next";
-import NavTab from "./nav-tab";
+import { useTranslation } from 'react-i18next';
+import NavTab from './nav-tab';
 
 function NavBar<T>({
   tabs,
@@ -38,13 +38,13 @@ function NavBar<T>({
       </div>
       <div className="flex items-center">
         <button className="text-green-600 border hover:bg-green-50 border-green-600 hover:bg-light-green font-bold py-2 px-4 rounded mr-2 dark:hover:bg-green-600 dark:hover:text-gray-800">
-          {t("Login")}
+          {t('Login')}
         </button>
         <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">
-          {t("Register")}
+          {t('Register')}
         </button>
         <button className="bg-gray-800 text-white py-2 px-4 rounded">
-          {t("Recruitment & Find Profiles")}
+          {t('Recruitment & Find Profiles')}
         </button>
       </div>
     </nav>

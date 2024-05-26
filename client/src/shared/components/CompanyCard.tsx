@@ -1,7 +1,7 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 const name = ({ company }) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const navigation = useNavigate();
   return (
     <div
@@ -13,9 +13,9 @@ const name = ({ company }) => {
           src={company.image}
           alt="mini logo"
           style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
           }}
         />
       </div>
@@ -24,16 +24,16 @@ const name = ({ company }) => {
           src={company.image}
           alt="company banner"
           style={{
-            height: "100%",
-            width: "100%",
-            objectFit: "cover",
+            height: '100%',
+            width: '100%',
+            objectFit: 'cover',
           }}
         />
       </div>
       <div className="px-5 mt-12">
         <div className="name font-bold cursor-pointer">{company.name}</div>
         <div className="mt-4">
-          <span className="line-clamp-6">" {company.description} "</span>{" "}
+          <span className="line-clamp-6">" {company.description} "</span>{' '}
         </div>
       </div>
     </div>

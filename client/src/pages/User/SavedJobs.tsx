@@ -1,11 +1,11 @@
-import { useState } from "react";
-import React from "react";
-import JobService from "../../modules/job-module";
-import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { useState } from 'react';
+import React from 'react';
+import JobService from '../../modules/job-module';
+import { CurrencyDollarIcon } from '@heroicons/react/20/solid';
+import { TrashIcon } from '@heroicons/react/24/outline';
 
-import InterestedJobComponent from "../../layouts/UserLayout/components/InterestedJobComponent";
-import JobListItem from "../../shared/components/JobListItem";
+import InterestedJobComponent from '../../layouts/UserLayout/components/InterestedJobComponent';
+import JobListItem from '../../shared/components/JobListItem';
 
 function SavedJobs() {
   const [jobResult, setJobResult] = useState([]);
@@ -18,7 +18,7 @@ function SavedJobs() {
     JobService.searchJob({
       page: 1,
       limit: 5,
-      titleRecruitment: "",
+      titleRecruitment: '',
       salaryMin: 0,
       salaryMax: 0,
       fieldId: 0,
