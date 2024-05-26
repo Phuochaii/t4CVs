@@ -120,20 +120,35 @@ export class ApplicationService implements OnModuleInit {
         status,
       }),
     );
+    //array obj cvId
     const cvIds = applications.map((application) => application.cvId);
+    //array obj campaginId
+    const campaginIds = applications.map(
+      (application) => application.campaignId,
+    );
+    //array obj Job attach company
+    const arrayJob = await this.jobService.findJobsByCampaignIds(campaginIds);
+    //array obj CV
     const cvs = await firstValueFrom(this.cvService.getCVsById(cvIds));
-    const arrayCV = cvs.map((cv) => cv.link);
-
-    //map link into application
-    const ApplicationsWithLinkCV = applications.map((application, index) => {
-      const cvLink = arrayCV[index];
-      return { ...application, link: cvLink };
+    //array obj both link + id
+    const arrayCV = cvs.map((cv) => ({ id: cv.id, link: cv.link }));
+    //map Cv(id+link) and Job attach company into application
+    const applicationsFinal = applications.map((application) => {
+      const cvLink = arrayCV.find((cvItem) => cvItem.id === application.cvId);
+      const job = arrayJob.find(
+        (cvItem) => cvItem.campaignId === application.campaignId,
+      );
+      return {
+        ...application,
+        cv: cvLink,
+        jobs: job,
+        campaignId: application.campaignId,
+      };
     });
 
-    //map job into application (pending)
     return {
       ...data,
-      ApplicationsWithLinkCV,
+      applicationsFinal,
     };
   }
 
