@@ -21,4 +21,8 @@ export class UserController {
   findAll() {
     return this.userService.findAll();
   }
+  @MessagePattern({ cmd: 'is_user_exist' })
+  isUserExist(id: string) {
+    return this.userService.isUserExist(id);
+  }
 }

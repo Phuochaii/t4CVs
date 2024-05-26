@@ -6,6 +6,7 @@ import {
   GetCvService,
   GetAllCvService,
   DeleteCvService,
+  GetArrayCvService,
 } from './domain/service';
 import { CvPersistenceModule } from './infrastructure/cv-persistence.module';
 import { CvRepository } from './domain/repository';
@@ -34,6 +35,13 @@ import { CvRepository } from './domain/repository';
       },
       inject: [CvRepository],
     },
+    {
+      provide: GetArrayCvService,
+      useFactory: (cvRepository: CvRepository) => {
+        return new GetArrayCvService(cvRepository);
+      },
+      inject: [CvRepository],
+    },
 
     {
       provide: GetAllCvService,
@@ -59,6 +67,7 @@ import { CvRepository } from './domain/repository';
         getCvService: GetCvService,
         getAllCvService: GetAllCvService,
         deleteCvService: DeleteCvService,
+        getArrayCvService: GetArrayCvService,
       ) => {
         return new CvApplication(
           createCvService,
@@ -66,6 +75,7 @@ import { CvRepository } from './domain/repository';
           getCvService,
           getAllCvService,
           deleteCvService,
+          getArrayCvService,
         );
       },
       inject: [
@@ -74,6 +84,7 @@ import { CvRepository } from './domain/repository';
         GetCvService,
         GetAllCvService,
         DeleteCvService,
+        GetArrayCvService,
       ],
     },
   ],

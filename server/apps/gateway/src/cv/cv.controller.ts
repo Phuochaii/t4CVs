@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CVService } from './cv.service';
-import { CVDto } from './dto/cv.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Response } from 'express';
@@ -72,4 +71,9 @@ export class CVController {
   downloadCV(@Param('id') id: number, @Res() res: Response): Observable<any> {
     return this.cvService.downloadCV(id, res);
   }
+
+  // @Get('/test')
+  // getCVsById(): Observable<any[]> {
+  //   return this.cvService.getCVsById();
+  // }
 }

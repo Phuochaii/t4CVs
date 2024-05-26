@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { CompanyRepository } from '../../domain/repository';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CompanySchema } from '../schema';
 import { Company } from '../../domain/entity';
 import { CreateCompanyDTO, UpdateCompanyDTO } from '../../domain/dto';
@@ -64,5 +64,17 @@ export class TypeOrmCompanyRepository extends CompanyRepository {
     await this.companyRepository.delete(id);
 
     return 'Delete Company Success';
+  }
+
+  async findCompanyByArrayId(id: number[]): Promise<Company[]> {
+    const result = await this.companyRepository.find({
+      where: {
+        id: In(id),
+      },
+    });
+
+    const orderedData = id.map((key) => result.find((item) => item.id === key));
+
+    return orderedData;
   }
 }

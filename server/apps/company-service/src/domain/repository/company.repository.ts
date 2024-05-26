@@ -16,4 +16,6 @@ export abstract class CompanyRepository {
   abstract updateCompany(company: UpdateCompanyDTO): Promise<Company>;
 
   abstract removeCompany(id: number): Promise<string>;
+
+  abstract findCompanyByArrayId(id: number[]): Promise<Company[]>;
 }

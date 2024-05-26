@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { from, Observable, switchMap, tap } from 'rxjs';
-import { CVDto } from './dto/cv.dto';
+import { from, Observable, switchMap } from 'rxjs';
+// import { CVDto } from './dto/cv.dto';
 import { ClientProxy } from '@nestjs/microservices';
 import { UploadService } from '../upload/upload.service';
 import { Response } from 'express';
@@ -22,6 +22,10 @@ export class CVService {
 
   getCVById(id: number): Observable<any> {
     return this.cvClient.send({ cmd: 'getCVById' }, id);
+  }
+  getCVsById(Ids: number[]): Observable<any[]> {
+    // const Ids: number[] = [1, 2];
+    return this.cvClient.send({ cmd: 'getCVsById' }, Ids);
   }
 
   createCV(file: any, userId: number, templateId: number): Observable<any> {
