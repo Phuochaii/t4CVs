@@ -56,17 +56,23 @@ export class EmployerService {
     );
   }
 
-  updateEmployerLicenseStatus(employerId: string): Observable<string> {
+  updateEmployerLicenseStatus(
+    employerId: string,
+    licenseStatus: boolean,
+  ): Observable<string> {
     return this.employerClient.send(
       { cmd: 'update_employer_license_status' },
-      employerId,
+      { employerId, licenseStatus },
     );
   }
 
-  updateEmployerPhoneStatus(employerId: string): Observable<string> {
+  updateEmployerPhoneStatus(
+    employerId: string,
+    phoneNumberStatus: boolean,
+  ): Observable<string> {
     return this.employerClient.send(
       { cmd: 'update_employer_phone_status' },
-      employerId,
+      { employerId, phoneNumberStatus },
     );
   }
 

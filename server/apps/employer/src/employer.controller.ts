@@ -85,9 +85,14 @@ export class EmployerController {
   }
 
   @MessagePattern({ cmd: 'update_employer_license_status' })
-  updateEmployerLicenseStatus(employerId: string) {
-    const result =
-      this.employerApplication.updateEmployerLicenseStatus(employerId);
+  updateEmployerLicenseStatus(@Payload() data: any) {
+    const employerId = String(data.employerId);
+    const licenseStatus = Boolean(data.licenseStatus);
+
+    const result = this.employerApplication.updateEmployerLicenseStatus(
+      employerId,
+      licenseStatus,
+    );
 
     if (result) {
       return result;
@@ -97,9 +102,14 @@ export class EmployerController {
   }
 
   @MessagePattern({ cmd: 'update_employer_phone_status' })
-  updateEmployerPhoneStatus(employerId: string) {
-    const result =
-      this.employerApplication.updateEmployerPhoneStatus(employerId);
+  updateEmployerPhoneStatus(@Payload() data: any) {
+    const employerId = String(data.employerId);
+    const phoneNumberStatus = Boolean(data.phoneNumberStatus);
+
+    const result = this.employerApplication.updateEmployerPhoneStatus(
+      employerId,
+      phoneNumberStatus,
+    );
 
     if (result) {
       return result;
