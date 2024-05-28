@@ -19,7 +19,13 @@ export abstract class EmployerRepository {
     employerCompany: UpdateEmployerCompanyDTO,
   ): Promise<Employer>;
 
-  abstract updateEmployerPhoneStatus(id: string): Promise<Employer>;
+  abstract updateEmployerPhoneStatus(
+    id: string,
+    phoneNumberStatus: boolean,
+  ): Promise<Employer>;
 
-  abstract updateEmployerLicenseStatus(id: string): Promise<Employer>;
+  abstract updateEmployerLicenseStatus(
+    id: string,
+    licenseStatus: boolean,
+  ): Promise<Employer>;
 }

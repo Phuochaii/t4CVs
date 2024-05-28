@@ -7,8 +7,11 @@ export class UpdateEmployerLicenseStatusService
 {
   constructor(private readonly employerRepository: EmployerRepository) {}
 
-  execute(id: string): Promise<Employer> {
-    const result = this.employerRepository.updateEmployerLicenseStatus(id);
+  execute(id: string, licenseStatus: boolean): Promise<Employer> {
+    const result = this.employerRepository.updateEmployerLicenseStatus(
+      id,
+      licenseStatus,
+    );
 
     return result;
   }

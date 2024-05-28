@@ -7,6 +7,7 @@ import {
   Query,
   UploadedFile,
   UseInterceptors,
+  Put,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { EmployerService } from './employer.service';
@@ -37,14 +38,14 @@ export class EmployerController {
     return this.employerService.findEmployerById(id);
   }
 
-  @Post('update/companyid')
+  @Put('update/companyid')
   updateEmployerCompanyId(
     @Body() data: UpdateEmployerCompanyDTO,
   ): Observable<any> {
     return this.employerService.updateEmployerCompanyId(data);
   }
 
-  @Post('update/license')
+  @Put('update/license')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -59,14 +60,23 @@ export class EmployerController {
     return this.employerService.updateEmployerLicense(file, employerId);
   }
 
-  @Get('update/licenseStatus/:id')
-  updateEmployerLicenseStatus(@Param('id') id: string): Observable<any> {
-    return this.employerService.updateEmployerLicenseStatus(id);
+  @Put('update/licenseStatus/:id')
+  updateEmployerLicenseStatus(
+    @Param('id') id: string,
+    @Body() licenseStatus: boolean,
+  ): Observable<any> {
+    return this.employerService.updateEmployerLicenseStatus(id, licenseStatus);
   }
 
-  @Get('update/phoneStatus/:id')
-  updateEmployerPhoneStatus(@Param('id') id: string): Observable<any> {
-    return this.employerService.updateEmployerPhoneStatus(id);
+  @Put('update/phoneNumberStatus/:id')
+  updateEmployerPhoneStatus(
+    @Param('id') id: string,
+    @Body() phoneNumberStatus: boolean,
+  ): Observable<any> {
+    return this.employerService.updateEmployerPhoneStatus(
+      id,
+      phoneNumberStatus,
+    );
   }
 
   @Get('position/all')

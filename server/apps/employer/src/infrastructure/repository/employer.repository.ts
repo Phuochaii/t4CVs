@@ -19,6 +19,9 @@ export class TypeOrmEmployerRepository extends EmployerRepository {
     const employers = await this.employerRepository.find({
       skip: skip,
       take: limit,
+      order: {
+        fullname: 'ASC', // Sắp xếp theo fullname theo thứ tự tăng dần
+      },
     });
 
     return employers;
@@ -68,21 +71,23 @@ export class TypeOrmEmployerRepository extends EmployerRepository {
     return result;
   }
 
-  async updateEmployerPhoneStatus(id: string): Promise<Employer> {
-    const employer = await this.getEmployerById(id);
-
-    await this.employerRepository.update(employer.id, {
-      phoneNumberStatus: !employer.phoneNumberStatus,
+  async updateEmployerPhoneStatus(
+    id: string,
+    phoneNumberStatus: boolean,
+  ): Promise<Employer> {
+    await this.employerRepository.update(id, {
+      phoneNumberStatus: phoneNumberStatus,
     });
 
     return await this.getEmployerById(id);
   }
 
-  async updateEmployerLicenseStatus(id: string): Promise<Employer> {
-    const employer = await this.getEmployerById(id);
-
-    await this.employerRepository.update(employer.id, {
-      licenseStatus: !employer.licenseStatus,
+  async updateEmployerLicenseStatus(
+    id: string,
+    licenseStatus: boolean,
+  ): Promise<Employer> {
+    await this.employerRepository.update(id, {
+      licenseStatus: licenseStatus,
     });
 
     return await this.getEmployerById(id);

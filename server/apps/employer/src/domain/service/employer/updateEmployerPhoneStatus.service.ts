@@ -5,8 +5,11 @@ import { BaseService } from '../base.service';
 export class UpdateEmployerPhoneStatusService implements BaseService<Employer> {
   constructor(private readonly employerRepository: EmployerRepository) {}
 
-  execute(id: string): Promise<Employer> {
-    const result = this.employerRepository.updateEmployerPhoneStatus(id);
+  execute(id: string, phoneNumberStatus: boolean): Promise<Employer> {
+    const result = this.employerRepository.updateEmployerPhoneStatus(
+      id,
+      phoneNumberStatus,
+    );
 
     return result;
   }
