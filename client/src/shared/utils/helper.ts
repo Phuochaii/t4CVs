@@ -5,7 +5,6 @@ import { EmployerFromServer } from "../types/Employer.type"
 import { Field, RecruitmentFromServer } from "../types/Recruitment.type"
 import { ApplicationFromServer } from "../types/Application.type"
 import { UserFromServer } from "../types/User.type"
-import { getCVByApplicationID } from "../../modules/hr-module"
 import { UserCV } from "../types/CV_user.type"
 
 const serverURL = 'http://localhost:3000'
