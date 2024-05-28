@@ -23,10 +23,10 @@ export class ApplicationSchema implements _ {
   @Column('varchar', { nullable: true })
   coverLetter: string | null;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: 'timestamp without time zone', nullable: true })
   createdAt: string | null;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: 'timestamp without time zone', nullable: true })
   updateAt: string | null;
 
   @Column('int', { nullable: true })
