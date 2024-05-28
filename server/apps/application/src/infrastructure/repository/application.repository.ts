@@ -23,6 +23,10 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
   }
 
   async createApplication(application: ApplicationDto): Promise<Application> {
+    application.status = false;
+    const now = new Date();
+    application.createdAt = now.toISOString();
+    application.updateAt = now.toISOString();
     return await this.applicationRepository.save(application);
   }
 
