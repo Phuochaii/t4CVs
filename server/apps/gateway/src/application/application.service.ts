@@ -63,9 +63,13 @@ export class ApplicationService implements OnModuleInit {
   }
 
   async findOne(id: number) {
-    return await firstValueFrom(
+    const data = await firstValueFrom(
       this.applicationServiceClient.readApplication({ id }),
     );
+    if (Object.keys(data).length === 0) {
+      return 'Id does not exist';
+    }
+    return data;
   }
 
   async findAll(
