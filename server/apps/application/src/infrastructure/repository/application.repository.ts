@@ -31,7 +31,13 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
   }
 
   async getApplication(application: GetApplicationDto): Promise<Application> {
-    return await this.applicationRepository.findOneBy(application);
+    const result = await this.applicationRepository.findOneBy(application);
+
+    if (!result) {
+      return {} as Application;
+    }
+
+    return result;
   }
 
   async getAllApplication(
@@ -54,10 +60,14 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
   async updateApplication(
     application: UpdateApplicationDto,
   ): Promise<Application> {
-    await this.applicationRepository.update(application.id, {
-      status: true,
-    });
+    const result = await this.applicationRepository.findOneBy(application);
 
+    if (!result) {
+      return {} as Application;
+    }
+    await this.applicationRepository.update(application.id, {
+      status: application.status,
+    });
     return await this.applicationRepository.findOneBy(application);
   }
 

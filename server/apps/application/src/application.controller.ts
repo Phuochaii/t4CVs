@@ -83,6 +83,7 @@ export class ApplicationController implements ApplicationServiceController {
   }
 
   async readAllApplication(request: Pagination): Promise<Applications> {
+    request;
     return null;
   }
 
@@ -91,6 +92,7 @@ export class ApplicationController implements ApplicationServiceController {
   }
 
   deleteApplication(request: DeleteApplicationRequest) {
+    request;
     return null;
   }
 }
