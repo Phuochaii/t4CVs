@@ -141,3 +141,11 @@ export async function getAllFields() {
     const fields: Field[] = response.data;
     return fields;
 }
+
+export async function updateCompanyStatus(id: number, status: boolean) {
+    const response = await axios.post(`${serverURL}/company/update`, {
+        id: id,
+        status: status,
+    });
+    return response;
+}
