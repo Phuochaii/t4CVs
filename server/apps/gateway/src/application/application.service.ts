@@ -63,9 +63,13 @@ export class ApplicationService implements OnModuleInit {
   }
 
   async findOne(id: number) {
-    return await firstValueFrom(
+    const data = await firstValueFrom(
       this.applicationServiceClient.readApplication({ id }),
     );
+    if (Object.keys(data).length === 0) {
+      return 'Id does not exist';
+    }
+    return data;
   }
 
   async findAll(
@@ -96,14 +100,6 @@ export class ApplicationService implements OnModuleInit {
       ...data,
       applications,
     };
-    // const applications$ =
-    //   this.applicationServiceClient.readAllApplicationByCampaignId({
-    //     page,
-    //     limit,
-    //     campaignIds,
-    //     status,
-    //   });
-    // return applications$;
   }
 
   async findAllByUserId(
@@ -152,16 +148,23 @@ export class ApplicationService implements OnModuleInit {
     };
   }
 
-  async update(id: number) {
+  async update(id: number, status: boolean) {
     const data = await firstValueFrom(
-      this.applicationServiceClient.updateApplication({ id }),
+      this.applicationServiceClient.updateApplication({ id, status }),
     );
+    if (Object.keys(data).length === 0) {
+      return 'Id does not exist';
+    }
 
     return data;
   }
 
   async hrGetCv(id: number) {
-    const application = await this.update(id);
+    const status = true;
+    const application = await this.update(id, status);
+    if (application === 'Id does not exist') {
+      return application;
+    }
     const cv = (await firstValueFrom(
       this.cvService.getCVById(application.cvId),
     )) as CVDto;
@@ -186,6 +189,7 @@ export class ApplicationService implements OnModuleInit {
         },
       ),
     );
+
     return cv;
   }
 }

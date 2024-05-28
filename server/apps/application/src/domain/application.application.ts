@@ -59,8 +59,9 @@ export class ApplicationApplication {
     return await this.getAllByCampaignIdApplicationService.execute(request);
   }
 
-  async updateApplication(request: UpdateApplicationDto): Promise<Application> {
-    return await this.updateApplicationService.execute(request);
+  async updateApplication(request: UpdateApplicationDto) {
+    const result = await this.updateApplicationService.execute(request);
+    return result;
   }
 
   async getByUserIdApplication(

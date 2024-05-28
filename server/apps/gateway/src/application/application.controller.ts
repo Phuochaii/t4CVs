@@ -73,8 +73,8 @@ export class ApplicationController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: number) {
-    return this.applicationService.update(id);
+  update(@Param('id') id: number, @Body('status') status: boolean) {
+    return this.applicationService.update(id, status);
   }
 
   // @Delete(':id')
