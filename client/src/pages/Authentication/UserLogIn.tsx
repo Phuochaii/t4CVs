@@ -6,10 +6,9 @@ import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import img from "../../shared/assets/images/Sign-up user.png";
-import { MyContext } from "../../App";
+import { accountList } from "../../shared/utils/constant";
 
 function UserLogIn() {
-  const { accountList } = useContext(MyContext);
   const navigation = useNavigate();
 
   const [formData, setFormData] = useState({

@@ -1,133 +1,147 @@
 // khoa
-import { useState, useEffect } from "react";
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { Tooltip } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
+import { DefaultPagination } from '../../shared/components/default-pagination';
 import {
-  TextField,
-  FormControl,
-  OutlinedInput,
-  InputAdornment,
-  MenuItem,
-  Button,
-} from "@mui/material";
-import {
-  MagnifyingGlassIcon,
   ChevronRightIcon,
   ChevronLeftIcon,
-} from "@heroicons/react/24/solid";
-import {
-  MapPinIcon,
-  StarIcon,
-  // CurrencyDollarIcon,
-} from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
-import JobService from "../../modules/job-module";
+  XMarkIcon,
+  HeartIcon,
+} from '@heroicons/react/24/solid';
+import JobService from '../../modules/job-module';
+import SearchBoxComponent from '../../layouts/UserLayout/components/SearchBoxComponent';
+import { salary_range } from '../../shared/utils/constant';
+import SingleDropdown from '../../shared/components/SingleDropDown';
+import { SingleValue } from 'react-select';
+import FPT from '../../shared/assets/images/FPT.jpg';
+import VNRS from '../../shared/assets/images/VNRS.png';
+import { Heart } from 'lucide-react';
+import TopCompanies from '../../shared/components/TopCompanies';
+import JobSuggestions from '../../shared/components/JobSuggestions';
+// import { salary_range } from '../../shared/utils/constant';
 
-const salary_range = [
-  {
-    value: "0",
-    label: "Tất cả mức lương",
-    minSalary: 0,
-    maxSalary: 0,
-  },
-  {
-    value: "1",
-    label: "Dưới 10 triệu",
-    minSalary: 0,
-    maxSalary: 10,
-  },
-  {
-    value: "2",
-    label: "10 - 15 triệu",
-    minSalary: 10,
-    maxSalary: 15,
-  },
-  {
-    value: "3",
-    label: "15 - 20 triệu",
-    minSalary: 15,
-    maxSalary: 20,
-  },
-  {
-    value: "4",
-    label: "20 - 25 triệu",
-    minSalary: 20,
-    maxSalary: 25,
-  },
-  {
-    value: "5",
-    label: "25 - 30 triệu",
-    minSalary: 25,
-    maxSalary: 30,
-  },
-  {
-    value: "6",
-    label: "30 - 50 triệu",
-    minSalary: 30,
-    maxSalary: 50,
-  },
-  {
-    value: "7",
-    label: "Trên 50 triệu",
-    minSalary: 50,
-    maxSalary: 0,
-  },
-  {
-    value: "8",
-    label: "Thỏa thuận",
-    minSalary: 0,
-    maxSalary: 0,
-  },
+const vip_company_slides = [
+  '../../../images/slide_1.png',
+  '../../../images/slide_2.png',
+  '../../../images/slide_3.png',
+  '../../../images/slide_4.png',
+  '../../../images/slide_5.png',
 ];
 
-const slides = [
-  "../../../images/slide_1.png",
-  "../../../images/slide_2.png",
-  "../../../images/slide_3.png",
-  "../../../images/slide_4.png",
-  "../../../images/slide_5.png",
+const small_interested_jobs_slides = [
+  '../../../images/small_slide-interested_jobs_1.png',
+  '../../../images/small_slide-interested_jobs_2.png',
+  '../../../images/small_slide-interested_jobs_3.png',
+  '../../../images/small_slide-interested_jobs_4.png',
+  '../../../images/small_slide-interested_jobs_1.png',
+  '../../../images/small_slide-interested_jobs_2.png',
+  '../../../images/small_slide-interested_jobs_3.png',
+  '../../../images/small_slide-interested_jobs_4.png',
+  '../../../images/small_slide-interested_jobs_1.png',
+];
+
+const big_interested_jobs_slides = [
+  '../../../images/big_slide-interested_jobs_1.png',
+  '../../../images/big_slide-interested_jobs_2.png',
+  '../../../images/big_slide-interested_jobs_3.png',
+  '../../../images/big_slide-interested_jobs_4.png',
+  '../../../images/big_slide-interested_jobs_5.png',
 ];
 
 interface filterSearch {
-  titleRecruitment: string
-  salaryMin: number
-  salaryMax: number
-  locationId: number
-  expId: number
+  titleRecruitment: string;
+  salaryMin: number;
+  salaryMax: number;
+  locationId: number;
+  expId: number;
 }
 
 function Home() {
   const autoSlideInterval = 5000;
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [vip_company_currentSlide, setVipCompanyCurrentSlide] = useState(0);
+  const [
+    small_interested_jobs_currentSlide,
+    setSmallInterestedJobsCurrentSlide,
+  ] = useState(0);
+  const [big_interested_jobs_currentSlide, setBigInterestedJobsCurrentSlide] =
+    useState(0);
 
-  const [cities, setCities] = useState<any[]>([]);
-  const [exp_year, setExpYear] = useState<any[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
+  const [exp_year, setExpYear] = useState<string[]>([]);
 
   const [filter, setFilter] = useState<filterSearch>({
-    titleRecruitment: "",
+    titleRecruitment: '',
     salaryMin: 0,
     salaryMax: 0,
     locationId: 0,
     expId: 0,
   });
 
-  // const [titleRecruitment, setTitleRecruitment] = useState("");
-  // const [location, setLocation] = useState(0);
-  // const [exp, setExp] = useState(0);
+  const [jobResult, setJobResult] = useState([]);
+  const [totalPage, setTotalPage] = useState(1);
+  const [page, setPage] = useState(1);
 
-  const previous = () => {
-    setCurrentSlide((current) =>
-      current == 0 ? slides.length - 1 : current - 1
-    );
-  };
-
-  const next = () => {
-    setCurrentSlide((current) =>
-      current == slides.length - 1 ? 0 : current + 1
-    );
-  };
-
-  useEffect(() => {
-    setInterval(next, autoSlideInterval);
+  React.useEffect(() => {
+    searchJob();
   }, []);
+
+  React.useEffect(() => {
+    searchJob();
+  }, [page]);
+
+  const searchJob = () => {
+    JobService.searchJob({
+      page: page,
+      limit: 8,
+      titleRecruitment: '',
+      salaryMin: 0,
+      salaryMax: 0,
+      fieldId: 0,
+      locationId: 0,
+      expId: 0,
+      majorId: 0,
+      typeId: 0,
+      levelId: 0,
+    }).then((response) => {
+      console.log(response);
+
+      setJobResult(response.data);
+      setTotalPage(response.total_pages);
+    });
+  };
+
+  const vip_company_previous = () => {
+    setVipCompanyCurrentSlide((current) =>
+      current == 0 ? vip_company_slides.length - 1 : current - 1,
+    );
+  };
+
+  const vip_company_next = () => {
+    setVipCompanyCurrentSlide((current) =>
+      current == vip_company_slides.length - 1 ? 0 : current + 1,
+    );
+  };
+
+  const small_interested_jobs_previous = () => {
+    setSmallInterestedJobsCurrentSlide((current) =>
+      current == 0 ? small_interested_jobs_slides.length / 3 - 1 : current - 1,
+    );
+  };
+
+  const small_interested_jobs_next = () => {
+    setSmallInterestedJobsCurrentSlide((current) =>
+      current == small_interested_jobs_slides.length / 3 - 1 ? 0 : current + 1,
+    );
+  };
+
+  const big_interested_jobs_next = () => {
+    setBigInterestedJobsCurrentSlide((current) =>
+      current == big_interested_jobs_slides.length - 1 ? 0 : current + 1,
+    );
+  };
 
   const navigation = useNavigate();
 
@@ -139,9 +153,46 @@ function Home() {
     setFilter((prevState) => ({ ...prevState, expId: value }));
   };
 
+  const setTitleRecruitment = (value: string) => {
+    setFilter((prevState) => ({ ...prevState, titleRecruitment: value }));
+  };
+  const options = [
+    { value: 'Địa điểm', label: 'Địa điểm' },
+    { value: 'Mức lương', label: 'Mức lương' },
+    { value: 'Kinh nghiệm', label: 'Kinh nghiệm' },
+    { value: 'Ngành nghề', label: 'Ngành nghề' },
+  ];
+  const data = [
+    { value: 'Ngẫu nhiên', label: 'Ngẫu nhiên' },
+    { value: 'Hà Nội', label: 'Hà Nội' },
+    { value: 'Thành Phố Hồ Chí Minh', label: 'Thành Phố Hồ Chí Minh' },
+    { value: 'Miền Bắc', label: 'Miền Bắc' },
+    { value: 'Miền Nam', label: 'Miền Nam' },
+  ];
+  const companies = [
+    { id: 1, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', logo: VNRS, location: 'Đà Nẵng', salary: '3 - 5 triệu' },
+    { id: 2, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
+    { id: 3, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', logo: VNRS, location: 'Đà Nẵng', salary: '3 - 5 triệu' },
+    { id: 4, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
+    { id: 5, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', logo: VNRS, location: 'Đà Nẵng', salary: '3 - 5 triệu' },
+    { id: 6, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
+    { id: 7, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
+    { id: 8, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', logo: VNRS, location: 'Đà Nẵng', salary: '3 - 5 triệu' },
+    { id: 9, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
+    { id: 10, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
+    { id: 11, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', logo: VNRS, location: 'Đà Nẵng', salary: '3 - 5 triệu' },
+    { id: 12, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
+  ];
+  const [selectedKey, setSelectedKey] = useState('Ngẫu nhiên')
+  const [option, setOptions] = useState<SingleValue<{
+    value: string;
+    label: string;
+  }> | null>(null);
   const SelectSalary = (value: number) => {
     if (value !== 0) {
-      const foundRange = salary_range.find((range) => Number(range.value) === value);
+      const foundRange = salary_range.find(
+        (range) => Number(range.value) === value
+      );
       if (foundRange) {
         setFilter((prevFilter) => ({
           ...prevFilter,
@@ -149,18 +200,19 @@ function Home() {
           salaryMax: foundRange.maxSalary,
         }));
       }
-    }
-    else
-    {
+    } else {
       setFilter((prevFilter) => ({
         ...prevFilter,
         salaryMin: 0,
         salaryMax: 0,
       }));
     }
-  }
+  };
 
   useEffect(() => {
+    setInterval(vip_company_next, autoSlideInterval);
+    setInterval(small_interested_jobs_next, autoSlideInterval);
+    setInterval(big_interested_jobs_next, autoSlideInterval);
     const fetchData = async () => {
       try {
         const locationResponse = await JobService.getAllLocation();
@@ -169,7 +221,7 @@ function Home() {
         const expResponse = await JobService.getAllExp();
         setExpYear(expResponse);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       }
     };
 
@@ -178,18 +230,22 @@ function Home() {
 
   const handleSearch = () => {
     const queryParams = {
-      titleRecruitment: filter.titleRecruitment !== "" ? `titleRecruitment=${filter.titleRecruitment}` : "",
-      salaryMin: filter.salaryMin !== 0 ? `salaryMin=${filter.salaryMin}` : "",
-      salaryMax: filter.salaryMax !== 0 ? `salaryMax=${filter.salaryMax}` : "",
-      locationId: filter.locationId !== 0 ? `locationId=${filter.locationId}` : "",
-      expId: filter.expId !== 0 ? `expId=${filter.expId}` : "",
+      titleRecruitment:
+        filter.titleRecruitment !== ''
+          ? `titleRecruitment=${filter.titleRecruitment}`
+          : '',
+      salaryMin: filter.salaryMin !== 0 ? `salaryMin=${filter.salaryMin}` : '',
+      salaryMax: filter.salaryMax !== 0 ? `salaryMax=${filter.salaryMax}` : '',
+      locationId:
+        filter.locationId !== 0 ? `locationId=${filter.locationId}` : '',
+      expId: filter.expId !== 0 ? `expId=${filter.expId}` : '',
     };
-    
-    const queryString = Object.values(queryParams).filter(param => param !== "").join("&");
 
-    navigation(
-      `/results?${queryString}`
-    );
+    const queryString = Object.values(queryParams)
+      .filter((param) => param !== '')
+      .join('&');
+
+    navigation(`/results?${queryString}`);
   };
 
   return (
@@ -208,146 +264,19 @@ function Home() {
           </div>
 
           <div className="max-w-screen-lg mx-auto">
-            <form className="search-job grid grid-cols-7 justify-center gap-x-4">
-              <div className="group-search col-span-3 grid grid-cols-2">
-                <div className="item item-search">
-                  <FormControl>
-                    <OutlinedInput
-                      id="outlined-adornment-amount"
-                      placeholder="Vị trí tuyển dụng"
-                      onChange={(e) => {
-                        // setTitleRecruitment(e.target.value);
-                        setFilter(prevState => ({ ...prevState, titleRecruitment: e.target.value }));
-                      }}
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <MagnifyingGlassIcon className="w-6" />
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
-                </div>
-                <div className="item search-city">
-                  <TextField
-                    id="outlined-select-currency"
-                    select
-                    defaultValue="0"
-                    className="w-full"
-                    onChange={(e) => SelectLocation(Number(e.target.value))}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <MapPinIcon className="w-7" />
-                        </InputAdornment>
-                      ),
-                    }}
-                    SelectProps={{
-                      MenuProps: {
-                        PaperProps: {
-                          style: {
-                            maxHeight: 200, // Đặt chiều cao tối đa cho danh sách dropdown ở đây
-                          },
-                        },
-                      },
-                    }}
-                  >
-                    <MenuItem key="0" value="0">
-                      Tất cả tỉnh/thành phố
-                    </MenuItem>
-                    {cities
-                      ? cities.map((city: any) => (
-                        <MenuItem key={city.id} value={city.id}>
-                          {city.name}
-                        </MenuItem>
-                      ))
-                      : "Error to fetch cities"}
-                  </TextField>
-                </div>
-              </div>
-              <div className="group col-span-3 grid grid-cols-2 gap-x-4">
-                {/* Số năm kinh nghiệm */}
-                <div className="item col-span-1">
-                  <TextField
-                    id="outlined-select-currency"
-                    select
-                    defaultValue="0"
-                    className="w-full"
-                    onChange={(e) => SelectExp(Number(e.target.value))}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <StarIcon className="w-6 border-2 border-neutral-500 rounded-full" />
-                        </InputAdornment>
-                      ),
-                    }}
-                    SelectProps={{
-                      MenuProps: {
-                        PaperProps: {
-                          style: {
-                            maxHeight: 200, // Đặt chiều cao tối đa cho danh sách dropdown ở đây
-                          },
-                        },
-                      },
-                    }}
-                  >
-                    <MenuItem key="0" value="0">
-                      Tất cả kinh nghiệm
-                    </MenuItem>
-                    {exp_year
-                      ? exp_year.map((exp: any) => (
-                        <MenuItem key={exp.id} value={exp.id}>
-                          {exp.name}
-                        </MenuItem>
-                      ))
-                      : "Error to fetch experience"}
-                  </TextField>
-                </div>
-
-                {/* Lương */}
-                <div className="item col-span-1">
-                  <TextField
-                    id="outlined-select-currency"
-                    select
-                    defaultValue="0"
-                    className="w-full"
-                    onChange={(e) => SelectSalary(Number(e.target.value))}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            className="w-6 h-6"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              stroke-linejoin="round"
-                              d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                            />
-                          </svg>
-                        </InputAdornment>
-                      ),
-                    }}
-                  >
-                    {salary_range.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </div>
-              </div>
-              <Button
-                className="btn-search"
-                variant="contained"
-                onClick={handleSearch}
-              >
-                Tìm kiếm
-              </Button>
-            </form>
+            <SearchBoxComponent
+              cities={cities}
+              setCities={setCities}
+              exp_year={exp_year}
+              setExpYear={setExpYear}
+              locationId={filter.locationId}
+              setLocationId={SelectLocation}
+              expId={filter.expId}
+              setExpId={SelectExp}
+              titleRecruitment={filter.titleRecruitment}
+              setTitleRecruitment={setTitleRecruitment}
+              handleSearch={handleSearch}
+            />
           </div>
         </div>
 
@@ -379,28 +308,317 @@ function Home() {
             <div className="overflow-hidden rounded-lg">
               <div
                 className="flex transition-transform duration-500 ease-out w-full"
-                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                style={{
+                  transform: `translateX(-${vip_company_currentSlide * 100}%)`,
+                }}
               >
-                {slides.map((slide) => (
-                  <img src={slide} />
+                {vip_company_slides.map((slide, index) => (
+                  <img src={slide} key={index} className="cursor-pointer" />
                 ))}
               </div>
             </div>
             <button
-              onClick={previous}
+              onClick={vip_company_previous}
               className="absolute w-10 h-10 top-1/2 -left-5 bg-white text-green-500 rounded-full transform -translate-y-1/2 shadow-lg shadow-grey-500/40 hover:bg-green-500 hover:text-white ease-out duration-300"
             >
               <ChevronLeftIcon className="mx-2 w-5 h-5" />
             </button>
             <button
-              onClick={next}
+              onClick={vip_company_next}
               className="absolute w-10 h-10 top-1/2 -right-5 bg-white text-green-500 rounded-full transform -translate-y-1/2 shadow-lg shadow-grey-500 hover:bg-green-500 hover:text-white ease-out duration-300"
             >
               <ChevronRightIcon className="mx-3 w-5 h-5" />
             </button>
           </div>
         </div>
+        {/* Việc làm tốt nhất */}
+        <div className="flex flex-col ml-20 mt-5  ">
+          <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg">
+            <div className="flex flex-row items-center">
+              <h1 className="title">
+                Việc làm tốt nhất
+              </h1>
+              <p className="font-thin text-[30px] mx-5"> | </p>
+              <div className="flex flex-col">
+                <p className="font-bold">Đề xuất bởi</p>
+                <p className="font-extrabold text-[18px]">TOPPY<span className="text-green-500 font-extrabold text-[18px]">AI</span></p>
+              </div>
+            </div>
+            <div className="flex flex-row space-x-4 items-center">
+              <button className="text-black bg-green-50 underline underline-offset-4" onClick={() => { }}>Xem tất cả</button>
+              <button
+                onClick={() => { }}
+                className=" w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
+              >
+                <ChevronLeftIcon className="mx-2 w-5 h-5" />
+              </button>
+              <button
+                onClick={() => { }}
+                className="w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
+              >
+                <ChevronRightIcon className="mx-2 w-5 h-5" />
+              </button>
+            </div>
+          </div>
+          <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg mt-3">
+            <div className="w-3/12">
+              <SingleDropdown
+                placeholder="Chọn bộ lọc"
+                options={options}
+                onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setOptions(e)}
+              />
+            </div>
+            <div className=" flex flex-row items-center space-x-2">
+              <button
+                onClick={() => { }}
+                className=" w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
+              >
+                <ChevronLeftIcon className="mx-2 w-5 h-5" />
+              </button>
+              {data.map((e) => {
+                return (<button className={`px-4 py-2 rounded-full ${selectedKey === e.label ? "bg-green-500 text-white" : "bg-gray-200 text-black"} border hover:border-green-500`}
+                  onClick={() => setSelectedKey(e.value)}>
+                  {e.label}
+                </button>)
+              })}
+              <button
+                onClick={() => { }}
+                className=" w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
+              >
+                <ChevronRightIcon className="mx-2 w-5 h-5" />
+              </button>
+            </div>
+          </div>
+          <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg mt-6 bg-blue-100 rounded-lg p-2">
+            <div className="flex flex-row items-center">
+              <p className="font-bold">Gợi ý: <span className="font-normal">Di chuột vào tiêu đề việc làm để xem thêm thông tin chi tiết</span></p>
+            </div>
+            <button onClick={() => { }}>
+              <XMarkIcon className="bg-blue-100 w-5 h-5"></XMarkIcon>
+            </button>
+          </div>
+          <div className="ml-6 mt-4 max-w-screen-lg grid grid-cols-1 md:grid-cols-3 gap-4">
+            {companies.length > 0 ? (
+              companies.map((item, index) => (
+                <div
+                  key={index}
+                  onClick={() => {
+                    // navigation(`/detail-job/${item.id}`);
+                  }}
+                  className="job-item-search-result max-h-60 bg-white px-3 py-3.5 mb-3 border border-transparent rounded-lg shadow-md flex items-center gap-3 hover:border-green-500"
+                >
+                  <div className="job-logo-company justify-center w-32 h-24 flex items-center border rounded-lg overflow-hidden">
+                    <img
+                      src={item.logo}
+                      alt={`${item.name} logo`}
+                      className="object-contain"
+                    />
+                  </div>
+                  <div className="job-detail w-full h-full overflow-hidden">
+                    <div className="flex flex-col justify-center space-y-2">
+                      <div className="flex flex-row justify-between">
+                        <span className="job-title text-black font-semibold text-lg truncate w-4/5">
+                          {item.job_title}
+                        </span>
+                      </div>
+                      <span className="job-company-name text-slate-600 text-sm truncate w-4/5">
+                        {item.name}
+                      </span>
+                      <div className="flex flex-row justify-between items-center">
+                        <div className="flex flex-row space-x-2">
+                          <div className="text-sm bg-gray-200 px-2 py-1 w-fit rounded-lg">{item.salary}</div>
+                          <div className="text-sm bg-gray-200 px-2 py-1 w-fit rounded-lg">{item.location}</div>
+                        </div>
+                        <div className="bg-white"><button onClick={() => { }}><Heart className="bg-white text-green-500"></Heart></button></div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              ))
+            ) : (
+              <div>Không có dữ liệu</div>
+            )}
+          </div>
+          <div className="max-w-screen-lg flex flex-row justify-center space-x-2">
+            <button
+              onClick={() => { }}
+              className=" w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
+            >
+              <ChevronLeftIcon className="mx-2 w-5 h-5" />
+            </button>
+            <div className="flex flex-row items-center text-sm">
+                <p className="text-green-500">5</p>
+                <p className="mx-1 text-gray-400">/</p>
+                <p className="text-gray-400">56 trang</p>
+            </div>
+            <button
+              onClick={() => { }}
+              className=" w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
+            >
+              <ChevronRightIcon className="mx-2 w-5 h-5" />
+            </button>
+          </div>
+        </div>
       </div>
+
+      <div className="section-body">
+        <div className="section-sub-body bg-white py-8 border-y border-slate-100">
+          <div className="section-banner-interested-jobs flex justify-center">
+            <div className="max-w-screen-lg relative">
+              <div className="overflow-hidden">
+                <div
+                  className="flex transition-transform duration-500 ease-out w-full"
+                  style={{
+                    transform: `translateX(-${small_interested_jobs_currentSlide * 100}%)`,
+                  }}
+                >
+                  {small_interested_jobs_slides.map((slide, index) => (
+                    <img
+                      src={slide}
+                      key={index}
+                      className="w-1/3 rounded-2xl px-2 cursor-pointer"
+                    />
+                  ))}
+                </div>
+              </div>
+              <button
+                onClick={small_interested_jobs_previous}
+                className="absolute w-10 h-10 top-1/2 -left-5 bg-white text-green-500 rounded-full transform -translate-y-1/2 shadow-lg shadow-grey-500/40 hover:bg-green-500 hover:text-white ease-out duration-300"
+              >
+                <ChevronLeftIcon className="mx-2 w-5 h-5" />
+              </button>
+              <button
+                onClick={small_interested_jobs_next}
+                className="absolute w-10 h-10 top-1/2 -right-5 bg-white text-green-500 rounded-full transform -translate-y-1/2 shadow-lg shadow-grey-500 hover:bg-green-500 hover:text-white ease-out duration-300"
+              >
+                <ChevronRightIcon className="mx-3 w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="section-sub-body bg-slate-100 pt-8 pb-3">
+          <div className="section-detail-interested-jobs flex justify-center">
+            <div className="max-w-screen-lg relative grid grid-cols-3 gap-4">
+              <div className="left-detail col-span-2 flex flex-col gap-3">
+                <div className="left-detail--item flex flex-row justify-between items-center">
+                  <div className="sub-item--label flex flex-row gap-3 items-center">
+                    <span className="title text-3xl text-green-500 py-1 pr-3 border-r-2 border-slate-300 font-bold">
+                      Việc làm hấp dẫn
+                    </span>
+                    <img
+                      src="../../images/logo-interested_jobs.png"
+                      className="max-h-8"
+                    />
+                  </div>
+                  <div className="item-actions flex flex-row gap-3 items-center">
+                    <span className="action-show_all text-[13px] font-medium text-slate-900 underline underline-offset-1 cursor-pointer hover:text-green-600">
+                      Xem tất cả
+                    </span>
+
+                    {/* <span className="action-show_previous rounded-full border border-green-600 p-2 text-green-600 cursor-pointer hover:bg-green-600 hover:text-white">
+                      <ChevronLeftIcon className="w-5 h-5" />
+                    </span>
+
+                    <span className="action-show_previous rounded-full border border-green-600 p-2 text-green-600 cursor-pointer hover:bg-green-600 hover:text-white">
+                      <ChevronRightIcon className="w-5 h-5" />
+                    </span> */}
+                  </div>
+                </div>
+                <div className="left-detail--item"></div>
+                <div className="left-detail--item grid grid-cols-2 gap-5">
+                  {jobResult.length > 0 ? (
+                    jobResult.map((item: any) => {
+                      return (
+                        <div
+                          key={item.id}
+                          onClick={() => {
+                            navigation(`/detail-job/${item.id}`);
+                          }}
+                          className="job-item-search-result max-h-60 bg-white p-2 border border-transparent rounded-lg shadow-md flex gap-3"
+                        >
+                          <div className="job-logo-company w-24 h-24 min-w-24 flex items-center border rounded-lg">
+                            <img
+                              src={
+                                item.company?.image
+                                  ? item.company?.image
+                                  : "no "
+                              }
+                            />
+                          </div>
+                          <div className="job-details flex flex-col w-full">
+                            <div className="job-title text-black font-semibold col-span-3 text-lg">
+                              {item.titleRecruitment}
+                              {/* <div className="job-salary col-start-4 flex items-center">
+                                <CurrencyDollarIcon className="w-5 mr-2" />
+                                <strong className="salary-count">
+                                  {item.salaryMin == 0 && item.salaryMax == 0
+                                    ? "Thoả thuận"
+                                    : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{" "}
+                                </strong>
+                              </div> */}
+                            </div>
+                            <span className="job-company-name text-slate-600 text-sm col-span-3 mb-2">
+                              {item.company?.name
+                                ? item.company?.name
+                                : "no name"}
+                            </span>
+                            <div className="job-action row-start-4 flex flex-row items-end justify-between">
+                              <div className="job-detail flex flex-col gap-1">
+                                <div className="job-salary_range p-1 rounded bg-slate-200 text-slate-900 text-xs font-medium">
+                                  {item.salaryMin == 0 && item.salaryMax == 0
+                                    ? "Thoả thuận"
+                                    : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{" "}
+                                </div>
+                                <div className="job-location p-1 rounded bg-slate-200 text-slate-900 text-xs font-medium">
+                                  {item.locations[0].name}
+                                  {item.locations.length > 1
+                                    ? ` & ${item.locations.length - 1} nơi khác`
+                                    : ""}
+                                </div>
+                              </div>
+                              <span className="btn-save p-2">
+                                <Tooltip title="Lưu" placement="top">
+                                  <HeartIcon className="w-5 text-slate-500 cursor-pointer hover:text-green-600 hover:bg-slate-100" />
+                                </Tooltip>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div>Không có dữ liệu</div>
+                  )}
+                </div>
+                <div className="left-detail--item m-auto">
+                  <DefaultPagination
+                    totalPage={totalPage}
+                    active={page}
+                    setActive={setPage}
+                  />
+                </div>
+              </div>
+              <div className="right-detail min-h-[600px]">
+                <div className="overflow-hidden h-full">
+                  <div
+                    className="flex transition-transform duration-500 ease-out w-full h-full"
+                    style={{
+                      transform: `translateX(-${big_interested_jobs_currentSlide * 100}%)`,
+                    }}
+                  >
+                    {big_interested_jobs_slides.map((slide, index) => (
+                      <img src={slide} key={index} className="cursor-pointer" />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <TopCompanies />
+      <JobSuggestions />
     </>
   );
 }

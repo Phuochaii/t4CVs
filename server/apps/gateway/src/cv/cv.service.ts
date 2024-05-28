@@ -1,11 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { CVDto } from './dto/cv.dto';
+import { from, Observable, switchMap } from 'rxjs';
+// import { CVDto } from './dto/cv.dto';
 import { ClientProxy } from '@nestjs/microservices';
+import { UploadService } from '../upload/upload.service';
+import { Response } from 'express';
 
 @Injectable()
 export class CVService {
-  constructor(@Inject('CV') private readonly cvClient: ClientProxy) {}
+  constructor(
+    @Inject('CV') private readonly cvClient: ClientProxy,
+    private readonly uploadService: UploadService,
+  ) {}
 
   getHello(): Observable<any> {
     return this.cvClient.send({ cmd: 'hello' }, {});
@@ -18,24 +23,36 @@ export class CVService {
   getCVById(id: number): Observable<any> {
     return this.cvClient.send({ cmd: 'getCVById' }, id);
   }
-
-  createCV(cvDto: CVDto): Observable<any> {
-    return this.cvClient.send({ cmd: 'createCV' }, cvDto);
+  getCVsById(Ids: number[]): Observable<any[]> {
+    // const Ids: number[] = [1, 2];
+    return this.cvClient.send({ cmd: 'getCVsById' }, Ids);
   }
 
-  uploadCV(file: any, userId: number): Observable<any> {
-    console.log(JSON.stringify(file));
-    return this.cvClient.send({ cmd: 'uploadCV' }, { file, userId });
+  createCV(file: any, userId: number, templateId: number): Observable<any> {
+    const uploadLink$ = from(this.uploadService.upload(file));
+    return uploadLink$.pipe(
+      switchMap((link: string) =>
+        this.cvClient.send({ cmd: 'createCV' }, { userId, link, templateId }),
+      ),
+    );
   }
-  updateCV(id: number, cvDto: CVDto): Observable<any> {
-    return this.cvClient.send({ cmd: 'updateCV' }, { id, cvDto });
+
+  updateCV(id: number, isPublic: boolean): Observable<any> {
+    return this.cvClient.send({ cmd: 'updateCV' }, { id, isPublic });
   }
 
   deleteCV(id: number): Observable<any> {
     return this.cvClient.send({ cmd: 'deleteCV' }, id);
   }
 
-  downloadCV(id: number): Observable<any> {
-    return this.cvClient.send({ cmd: 'downloadCV' }, id);
+  downloadCV(id: number, res: Response): Observable<any> {
+    return this.cvClient.send({ cmd: 'getCVById' }, id).pipe(
+      switchMap((cv: any) => {
+        if (!cv || !cv.link) {
+          throw new Error('CV not found or link not available');
+        }
+        return this.uploadService.download(cv.link, res);
+      }),
+    );
   }
 }

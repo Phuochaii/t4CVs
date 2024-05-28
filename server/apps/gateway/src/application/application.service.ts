@@ -40,46 +40,123 @@ export class ApplicationService implements OnModuleInit {
       );
   }
 
-  create(createApplicationRequest: CreateApplicationRequest) {
-    return this.applicationServiceClient.createApplication(
-      createApplicationRequest,
+  async create(createApplicationRequest: CreateApplicationRequest) {
+    const application = await firstValueFrom(
+      this.applicationServiceClient.createApplication(createApplicationRequest),
+    );
+    const campaign = await firstValueFrom(
+      this.companyService.findCampaignById(createApplicationRequest.campaignId),
+    );
+    const employerId = campaign.employerId;
+
+    await firstValueFrom(
+      this.notificationService.create(
+        [new NotificationUserId(employerId, NotificationUserRole.HR)],
+        {
+          content: `Ứng viên ${application.fullname}- ${campaign.name}`,
+          link: `application/${application.id}`,
+          title: `CV mới ứng tuyển`,
+        },
+      ),
+    );
+    return application;
+  }
+
+  async findOne(id: number) {
+    return await firstValueFrom(
+      this.applicationServiceClient.readApplication({ id }),
     );
   }
 
-  findOne(id: number) {
-    return this.applicationServiceClient.readApplication({ id });
-  }
-
-  findAll(
+  async findAll(
     page: number,
     limit: number,
-    campaignIds: number[],
+    campaignId: number,
     status: boolean | null,
+    hrId: string,
   ) {
-    const applications$ =
+    const campaignRes = await firstValueFrom(
+      this.companyService.findCampaignByEmployerId(hrId, 1, 100),
+    );
+
+    let campaignIds = campaignRes.data.map((campaign) => campaign.id);
+    if (campaignId) {
+      campaignIds = [campaignId];
+    }
+    const { applications = [], ...data } = await firstValueFrom(
       this.applicationServiceClient.readAllApplicationByCampaignId({
         page,
         limit,
         campaignIds,
         status,
-      });
-    return applications$;
+      }),
+    );
+
+    return {
+      ...data,
+      applications,
+    };
+    // const applications$ =
+    //   this.applicationServiceClient.readAllApplicationByCampaignId({
+    //     page,
+    //     limit,
+    //     campaignIds,
+    //     status,
+    //   });
+    // return applications$;
   }
 
-  findAllByUserId(page: number, limit: number, userId: number) {
-    const applications$ =
+  async findAllByUserId(
+    page: number,
+    limit: number,
+    userId: string,
+    status: boolean | null,
+  ) {
+    const { applications = [], ...data } = await firstValueFrom(
       this.applicationServiceClient.readAllApplicationByUserId({
         page,
         limit,
         userId,
-      });
-    return applications$;
+        status,
+      }),
+    );
+    //array obj cvId
+    const cvIds = applications.map((application) => application.cvId);
+    //array obj campaginId
+    const campaginIds = applications.map(
+      (application) => application.campaignId,
+    );
+    //array obj Job attach company
+    const arrayJob = await this.jobService.findJobsByCampaignIds(campaginIds);
+    //array obj CV
+    const cvs = await firstValueFrom(this.cvService.getCVsById(cvIds));
+    //array obj both link + id
+    const arrayCV = cvs.map((cv) => ({ id: cv.id, link: cv.link }));
+    //map Cv(id+link) and Job attach company into application
+    const applicationsFinal = applications.map((application) => {
+      const cvLink = arrayCV.find((cvItem) => cvItem.id === application.cvId);
+      const job = arrayJob.find(
+        (cvItem) => cvItem.campaignId === application.campaignId,
+      );
+      return {
+        ...application,
+        cv: cvLink,
+        jobs: job,
+        campaignId: application.campaignId,
+      };
+    });
+
+    return {
+      ...data,
+      applicationsFinal,
+    };
   }
 
   async update(id: number) {
     const data = await firstValueFrom(
       this.applicationServiceClient.updateApplication({ id }),
     );
+
     return data;
   }
 

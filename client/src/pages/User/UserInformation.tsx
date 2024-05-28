@@ -53,8 +53,8 @@ function UserInformation() {
   };
 
   return (
-    <main className="flex items-start justify-center gap-8 p-2 bg-slate-500">
-      <div className="flex w-[40%] flex-col gap-4 p-4 bg-white rounded-lg">
+    <main className="flex items-start justify-center gap-8 p-2 py-8 text-black bg-neutral-200">
+      <div className="flex w-[45%] flex-col gap-4 p-4 bg-white rounded-lg">
         <h1 className="text-lg font-bold">
           Cài đặt thông tin cá nhân
         </h1>
@@ -79,7 +79,7 @@ function UserInformation() {
                 name="full-name"
                 type="text"
                 className={clsx(
-                  "px-4 py-2 border rounded-lg",
+                  "px-4 py-2 border rounded-lg bg-white",
                   item.disabled
                     ? "text-gray-500 cursor-not-allowed"
                     : ""

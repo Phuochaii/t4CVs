@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
-import { JobService } from './job.service';
-import { CreateJobDto } from './dto/Req/create-job.dto';
+import { JobService } from './domain/job.service';
+import { CreateJobDto } from './domain/dto/Req/create-job.dto';
 import { MessagePattern } from '@nestjs/microservices';
-import { UpdateJobDto } from './dto/Req/update-job.dto';
-import { CreateBaseDto } from './dto/Req/createBase.dto';
-import { QueryDTO } from './dto/Req/query.dto';
+import { UpdateJobDto } from './domain/dto/Req/update-job.dto';
+import { CreateBaseDto } from './domain/dto/Req/createBase.dto';
+import { QueryDTO } from './domain/dto/Req/query.dto';
 
 @Controller()
 export class JobController {
@@ -48,6 +48,11 @@ export class JobController {
   @MessagePattern({ cmd: 'get_job_info' })
   getJobInfo() {
     return this.jobService.createJobInfo();
+  }
+
+  @MessagePattern({ cmd: 'find_jobs_by_campaignIds' })
+  findJobsByCampaignIds(campaignIds: number[]) {
+    return this.jobService.findJobsByCampaignIds(campaignIds);
   }
 
   @MessagePattern({ cmd: 'create_major' })

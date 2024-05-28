@@ -15,7 +15,8 @@ export interface ReadApplicationRequest {
 export interface ReadAllApplicationByUserIdRequest {
   page: number;
   limit: number;
-  userId: number;
+  userId: string;
+  status?: boolean | undefined;
 }
 
 export interface ReadAllApplicationByCampaignIdRequest {
@@ -32,7 +33,7 @@ export interface CreateApplicationRequest {
   email: string;
   coverLetter: string;
   campaignId: number;
-  userId: number;
+  userId: string;
   cvId: number;
 }
 
@@ -59,7 +60,7 @@ export interface Application {
   createdAt: string;
   updateAt: string;
   campaignId: number;
-  userId: number;
+  userId: string;
   cvId: number;
 }
 

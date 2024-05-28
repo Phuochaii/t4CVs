@@ -1,13 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { Observable, from, switchMap } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
-import { CreateEmployerDto } from 'apps/employer/src/dto/Req/create-employer.dto';
-import { FindEmployerDTOResponse } from 'apps/employer/src/dto/Res/find_employer.dto';
+import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
+import { FindEmployerDTOResponse } from './dto/Res/find_employer.dto';
+import { UpdateEmployerCompanyDTO } from './dto/Req/updateEmployerCompany.dto';
+import { UploadService } from '../upload/upload.service';
 
 @Injectable()
 export class EmployerService {
   constructor(
     @Inject('EMPLOYER') private readonly employerClient: ClientProxy,
+    private readonly uploadService: UploadService,
   ) {}
 
   createEmployer(createEmployerDTO: CreateEmployerDto): Observable<string> {
@@ -24,10 +27,46 @@ export class EmployerService {
     );
   }
 
-  findEmployerById(id: number): Observable<FindEmployerDTOResponse> {
+  findEmployerById(id: string): Observable<FindEmployerDTOResponse> {
     return this.employerClient.send<FindEmployerDTOResponse>(
       { cmd: 'find_employer_by_id' },
       id,
+    );
+  }
+
+  updateEmployerCompanyId(
+    updateEmployerCompanyDTO: UpdateEmployerCompanyDTO,
+  ): Observable<string> {
+    return this.employerClient.send(
+      { cmd: 'update_employer_companyid' },
+      updateEmployerCompanyDTO,
+    );
+  }
+
+  updateEmployerLicense(file: any, employerId: string): Observable<any> {
+    const uploadLink$ = from(this.uploadService.upload(file));
+
+    return uploadLink$.pipe(
+      switchMap((license: string) =>
+        this.employerClient.send(
+          { cmd: 'update_employer_license' },
+          { employerId, license },
+        ),
+      ),
+    );
+  }
+
+  updateEmployerLicenseStatus(employerId: string): Observable<string> {
+    return this.employerClient.send(
+      { cmd: 'update_employer_license_status' },
+      employerId,
+    );
+  }
+
+  updateEmployerPhoneStatus(employerId: string): Observable<string> {
+    return this.employerClient.send(
+      { cmd: 'update_employer_phone_status' },
+      employerId,
     );
   }
 

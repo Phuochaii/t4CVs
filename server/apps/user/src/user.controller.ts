@@ -1,14 +1,14 @@
 import { Controller } from '@nestjs/common';
-import { UserService } from './user.service';
+import { UserService } from './domain/user.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { CreateUserDTO } from './dto/Req/createUser.dto';
+import { CreateUserDTO } from './domain/dto/Req';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @MessagePattern({ cmd: 'find_user_by_id' })
-  findById(id: number) {
+  findById(id: string) {
     return this.userService.findById(id);
   }
 
@@ -20,5 +20,9 @@ export class UserController {
   @MessagePattern({ cmd: 'find_all_users' })
   findAll() {
     return this.userService.findAll();
+  }
+  @MessagePattern({ cmd: 'is_user_exist' })
+  isUserExist(id: string) {
+    return this.userService.isUserExist(id);
   }
 }

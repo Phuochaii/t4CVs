@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+import SearchCompany from "../../shared/components/SearchCompany";
 import CompanyCard from "../../shared/components/CompanyCard";
 
 function Companies() {
@@ -24,16 +25,19 @@ function Companies() {
         }
     };
     return (
-        <div className="w-full bg-white text-black">
-            <div className="text-center py-6 text-[#333] text-2xl font-semibold">
-                DANH SÁCH CÁC CÔNG TY NỔI BẬT
+        <>
+            <SearchCompany />
+            <div className="w-full bg-white text-black">
+                <div className="text-center py-6 text-[#333] text-2xl font-semibold">
+                    DANH SÁCH CÁC CÔNG TY NỔI BẬT
+                </div>
+                <div className="px-20 grid grid-cols-3 gap-4">
+                    {companies.map((company) => (
+                        <CompanyCard key={company.id} company={company} />
+                    ))}
+                </div>
             </div>
-            <div className="px-20 grid grid-cols-3 gap-4">
-                {companies.map((company) => (
-                    <CompanyCard key={company.id} company={company} />
-                ))}
-            </div>
-        </div>
+        </>
     );
 }
 
