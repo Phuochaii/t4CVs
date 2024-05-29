@@ -5,7 +5,6 @@ import { EmployerFromServer } from "../types/Employer.type"
 import { Field, RecruitmentFromServer } from "../types/Recruitment.type"
 import { ApplicationFromServer } from "../types/Application.type"
 import { UserFromServer } from "../types/User.type"
-import { getCVByApplicationID } from "../../modules/hr-module"
 import { UserCV } from "../types/CV_user.type"
 
 const serverURL = 'http://localhost:3000'
@@ -141,4 +140,12 @@ export async function getAllFields() {
     const response = await axios.get(`${serverURL}/job/field/all`);
     const fields: Field[] = response.data;
     return fields;
+}
+
+export async function updateCompanyStatus(id: number, status: boolean) {
+    const response = await axios.post(`${serverURL}/company/update`, {
+        id: id,
+        status: status,
+    });
+    return response;
 }

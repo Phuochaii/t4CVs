@@ -17,7 +17,9 @@ function Header() {
     localStorage.getItem("user") == null
       ? ""
       : JSON.parse(localStorage.getItem("user") as string).id;
-  const [isAuthenticated, setIsAuthenticated] = React.useState(userId != "");
+  const [isAuthenticated, setIsAuthenticated] = React.useState(
+    userId != ""
+  );
   const fetchNotification = ({
     id,
     limit = 3,
@@ -25,12 +27,14 @@ function Header() {
     id: string;
     limit?: number;
   }) => {
-    UserModule.getNotification({ userId: id, limit: limit }).then((res) => {
-      console.log(res);
+    UserModule.getNotification({ userId: id, limit: limit }).then(
+      (res) => {
+        console.log(res);
 
-      setNotifications(res.data);
-      setTotal(res.pagination.total);
-    });
+        setNotifications(res.data);
+        setTotal(res.pagination.total);
+      }
+    );
   };
   React.useEffect(() => {
     if (userId != "") fetchNotification({ id: userId });
@@ -93,11 +97,12 @@ function Header() {
                     <li>
                       <hr />
                     </li>
-                    <li 
+                    <li
                       onClick={() => {
-                        navigation('/your-application');
+                        navigation("/your-application");
                       }}
-                      className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                      className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
+                    >
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -333,10 +338,30 @@ function Header() {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 512 512"
                       >
-                        <rect width="109.2" x="82.3" y="96.9" height="20.8" />
-                        <rect width="109.2" x="82.3" y="158.2" height="20.8" />
-                        <rect width="256.9" x="82.3" y="218.6" height="20.8" />
-                        <rect width="256.9" x="82.3" y="278.9" height="20.8" />
+                        <rect
+                          width="109.2"
+                          x="82.3"
+                          y="96.9"
+                          height="20.8"
+                        />
+                        <rect
+                          width="109.2"
+                          x="82.3"
+                          y="158.2"
+                          height="20.8"
+                        />
+                        <rect
+                          width="256.9"
+                          x="82.3"
+                          y="218.6"
+                          height="20.8"
+                        />
+                        <rect
+                          width="256.9"
+                          x="82.3"
+                          y="278.9"
+                          height="20.8"
+                        />
                         <path d="m487.9,249.7c-16.3-16.3-42.7-16.3-59,0l-22.1,22.1v-112.5c0-3.1-1-5.2-3.1-7.3l-137.3-137.3c-2.1-2.1-4.2-3.1-7.3-3.1h-237.2c-6.2,0-10.4,4.2-10.4,10.4v468.1c0,6.2 4.2,10.4 10.4,10.4h374.5c6.2,0 10.4-4.2 10.4-11.4v-99.3l81.1-81.1c16.3-16.3 16.3-42.7 0-59zm-218.4-202.8l101.9,101.9h-101.9v-101.9zm116.5,432.8h-353.7v-447.3h216.4v126.9c0,6.2 4.2,10.4 10.4,10.4h126.9v122.9l-99.2,99.2-8.8,67.8 67.8-8.8 40.3-40.3v69.2zm87.2-186.1l-136.8,136.8-35,5.7 5.7-35 136.8-136.8c8.1-8.1 21.2-8.1 29.3,0 8.1,8.1 8.1,21.2 0,29.3z" />
                       </svg>
                       Hướng dẫn viết CV theo ngành nghề
@@ -907,31 +932,39 @@ function Header() {
                       <p className="px-3">Không có thông báo</p>
                     ) : (
                       <>
-                        {notifications.map((item: any, index: number) => (
-                          <a
-                            onClick={(e) => {
-                              e.preventDefault();
-                              UserModule.updateStatusNotification({
-                                userId: userId,
-                                notificationId: item.id,
-                              });
-                              fetchNotification({ id: userId });
-                              window.open(item.link, "_blank", "noopener");
-                            }}
-                            key={index}
-                            className="px-4 py-2 border border-b-gray-200 hover:text-green-500"
-                          >
-                            <span className="font-semibold cursor-pointer hover:text-green-500">
-                              {item.content}
-                            </span>
-                            <p className="mt-2 text-sm text-right text-slate-500">
-                              {item.createdAt.split("T")[0] + "  "}
-                              {item.status && (
-                                <span className="text-green-500">✓</span>
-                              )}
-                            </p>
-                          </a>
-                        ))}
+                        {notifications.map(
+                          (item: any, index: number) => (
+                            <a
+                              onClick={(e) => {
+                                e.preventDefault();
+                                UserModule.updateStatusNotification({
+                                  userId: userId,
+                                  notificationId: item.id,
+                                });
+                                fetchNotification({ id: userId });
+                                window.open(
+                                  item.link,
+                                  "_blank",
+                                  "noopener"
+                                );
+                              }}
+                              key={index}
+                              className="px-4 py-2 border border-b-gray-200 hover:text-green-500"
+                            >
+                              <span className="font-semibold cursor-pointer hover:text-green-500">
+                                {item.content}
+                              </span>
+                              <p className="mt-2 text-sm text-right text-slate-500">
+                                {item.createdAt.split("T")[0] + "  "}
+                                {item.status && (
+                                  <span className="text-green-500">
+                                    ✓
+                                  </span>
+                                )}
+                              </p>
+                            </a>
+                          )
+                        )}
                       </>
                     )}
                     {total > notifications.length ? (
@@ -949,7 +982,9 @@ function Header() {
                     ) : notifications.length > 3 ? (
                       <button
                         className="w-full mt-2 font-semibold text-green-500 hover:underline"
-                        onClick={() => fetchNotification({ id: userId })}
+                        onClick={() =>
+                          fetchNotification({ id: userId })
+                        }
                       >
                         Ẩn bớt
                       </button>
