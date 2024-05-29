@@ -21,7 +21,6 @@ import VNRS from '../../shared/assets/images/VNRS.png';
 import { Heart } from 'lucide-react';
 import TopCompanies from '../../shared/components/TopCompanies';
 import JobSuggestions from '../../shared/components/JobSuggestions';
-// import { salary_range } from '../../shared/utils/constant';
 
 const vip_company_slides = [
   '../../../images/slide_1.png',
@@ -170,18 +169,102 @@ function Home() {
     { value: 'Miền Nam', label: 'Miền Nam' },
   ];
   const companies = [
-    { id: 1, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', logo: VNRS, location: 'Đà Nẵng', salary: '3 - 5 triệu' },
-    { id: 2, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
-    { id: 3, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', logo: VNRS, location: 'Đà Nẵng', salary: '3 - 5 triệu' },
-    { id: 4, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
-    { id: 5, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', logo: VNRS, location: 'Đà Nẵng', salary: '3 - 5 triệu' },
-    { id: 6, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
-    { id: 7, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
-    { id: 8, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', logo: VNRS, location: 'Đà Nẵng', salary: '3 - 5 triệu' },
-    { id: 9, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
-    { id: 10, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
-    { id: 11, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG', logo: VNRS, location: 'Đà Nẵng', salary: '3 - 5 triệu' },
-    { id: 12, job_title: 'Thực tập sinh kiểm thử phần mềm', name: 'FPT information system', logo: FPT, location: 'Hồ Chí Minh', salary: 'Thỏa thuận' },
+    {
+      id: 1,
+      job_title: 'Thực tập sinh kiểm thử phần mềm',
+      name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG',
+      logo: VNRS,
+      location: 'Đà Nẵng',
+      salary: '3 - 5 triệu',
+    },
+    {
+      id: 2,
+      job_title: 'Thực tập sinh kiểm thử phần mềm',
+      name: 'FPT information system',
+      logo: FPT,
+      location: 'Hồ Chí Minh',
+      salary: 'Thỏa thuận',
+    },
+    {
+      id: 3,
+      job_title: 'Thực tập sinh kiểm thử phần mềm',
+      name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG',
+      logo: VNRS,
+      location: 'Đà Nẵng',
+      salary: '3 - 5 triệu',
+    },
+    {
+      id: 4,
+      job_title: 'Thực tập sinh kiểm thử phần mềm',
+      name: 'FPT information system',
+      logo: FPT,
+      location: 'Hồ Chí Minh',
+      salary: 'Thỏa thuận',
+    },
+    {
+      id: 5,
+      job_title: 'Thực tập sinh kiểm thử phần mềm',
+      name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG',
+      logo: VNRS,
+      location: 'Đà Nẵng',
+      salary: '3 - 5 triệu',
+    },
+    {
+      id: 6,
+      job_title: 'Thực tập sinh kiểm thử phần mềm',
+      name: 'FPT information system',
+      logo: FPT,
+      location: 'Hồ Chí Minh',
+      salary: 'Thỏa thuận',
+    },
+    {
+      id: 7,
+      job_title: 'Thực tập sinh kiểm thử phần mềm',
+      name: 'FPT information system',
+      logo: FPT,
+      location: 'Hồ Chí Minh',
+      salary: 'Thỏa thuận',
+    },
+    {
+      id: 8,
+      job_title: 'Thực tập sinh kiểm thử phần mềm',
+      name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG',
+      logo: VNRS,
+      location: 'Đà Nẵng',
+      salary: '3 - 5 triệu',
+    },
+    {
+      id: 9,
+      job_title: 'Thực tập sinh kiểm thử phần mềm',
+      name: 'FPT information system',
+      logo: FPT,
+      location: 'Hồ Chí Minh',
+      salary: 'Thỏa thuận',
+    },
+    {
+      id: 10,
+      job_title: 'Thực tập sinh kiểm thử phần mềm',
+      name: 'FPT information system',
+      logo: FPT,
+      location: 'Hồ Chí Minh',
+      salary: 'Thỏa thuận',
+    },
+    {
+      id: 11,
+      job_title: 'Thực tập sinh kiểm thử phần mềm',
+      name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG',
+      logo: VNRS,
+      location: 'Đà Nẵng',
+      salary: '3 - 5 triệu',
+    },
+    {
+      id: 12,
+      job_title: 'Thực tập sinh kiểm thử phần mềm',
+      name: 'FPT information system',
+      logo: FPT,
+      location: 'Hồ Chí Minh',
+      salary: 'Thỏa thuận',
+    },
   ];
   const [selectedKey, setSelectedKey] = useState('Ngẫu nhiên')
   const [option, setOptions] = useState<SingleValue<{
@@ -335,25 +418,33 @@ function Home() {
         <div className="flex flex-col ml-20 mt-5  ">
           <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg">
             <div className="flex flex-row items-center">
-              <h1 className="title">
-                Việc làm tốt nhất
-              </h1>
+              <h1 className="title">Việc làm tốt nhất</h1>
               <p className="font-thin text-[30px] mx-5"> | </p>
               <div className="flex flex-col">
                 <p className="font-bold">Đề xuất bởi</p>
-                <p className="font-extrabold text-[18px]">TOPPY<span className="text-green-500 font-extrabold text-[18px]">AI</span></p>
+                <p className="font-extrabold text-[18px]">
+                  TOPPY
+                  <span className="text-green-500 font-extrabold text-[18px]">
+                    AI
+                  </span>
+                </p>
               </div>
             </div>
             <div className="flex flex-row space-x-4 items-center">
-              <button className="text-black bg-green-50 underline underline-offset-4" onClick={() => { }}>Xem tất cả</button>
               <button
-                onClick={() => { }}
+                className="text-black bg-green-50 underline underline-offset-4"
+                onClick={() => {}}
+              >
+                Xem tất cả
+              </button>
+              <button
+                onClick={() => {}}
                 className=" w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
               >
                 <ChevronLeftIcon className="mx-2 w-5 h-5" />
               </button>
               <button
-                onClick={() => { }}
+                onClick={() => {}}
                 className="w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
               >
                 <ChevronRightIcon className="mx-2 w-5 h-5" />
@@ -365,24 +456,35 @@ function Home() {
               <SingleDropdown
                 placeholder="Chọn bộ lọc"
                 options={options}
-                onChange={(e: SetStateAction<SingleValue<{ value: string; label: string; }>>) => setOptions(e)}
+                onChange={(
+                  e: SetStateAction<
+                    SingleValue<{
+                      value: string;
+                      label: string;
+                    }>
+                  >,
+                ) => setOptions(e)}
               />
             </div>
             <div className=" flex flex-row items-center space-x-2">
               <button
-                onClick={() => { }}
+                onClick={() => {}}
                 className=" w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
               >
                 <ChevronLeftIcon className="mx-2 w-5 h-5" />
               </button>
               {data.map((e) => {
-                return (<button className={`px-4 py-2 rounded-full ${selectedKey === e.label ? "bg-green-500 text-white" : "bg-gray-200 text-black"} border hover:border-green-500`}
-                  onClick={() => setSelectedKey(e.value)}>
-                  {e.label}
-                </button>)
+                return (
+                  <button
+                    className={`px-4 py-2 rounded-full ${selectedKey === e.label ? 'bg-green-500 text-white' : 'bg-gray-200 text-black'} border hover:border-green-500`}
+                    onClick={() => setSelectedKey(e.value)}
+                  >
+                    {e.label}
+                  </button>
+                );
               })}
               <button
-                onClick={() => { }}
+                onClick={() => {}}
                 className=" w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
               >
                 <ChevronRightIcon className="mx-2 w-5 h-5" />
@@ -391,9 +493,14 @@ function Home() {
           </div>
           <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg mt-6 bg-blue-100 rounded-lg p-2">
             <div className="flex flex-row items-center">
-              <p className="font-bold">Gợi ý: <span className="font-normal">Di chuột vào tiêu đề việc làm để xem thêm thông tin chi tiết</span></p>
+              <p className="font-bold">
+                Gợi ý:
+                <span className="font-normal">
+                  Di chuột vào tiêu đề việc làm để xem thêm thông tin chi tiết
+                </span>
+              </p>
             </div>
-            <button onClick={() => { }}>
+            <button onClick={() => {}}>
               <XMarkIcon className="bg-blue-100 w-5 h-5"></XMarkIcon>
             </button>
           </div>
@@ -426,14 +533,21 @@ function Home() {
                       </span>
                       <div className="flex flex-row justify-between items-center">
                         <div className="flex flex-row space-x-2">
-                          <div className="text-sm bg-gray-200 px-2 py-1 w-fit rounded-lg">{item.salary}</div>
-                          <div className="text-sm bg-gray-200 px-2 py-1 w-fit rounded-lg">{item.location}</div>
+                          <div className="text-sm bg-gray-200 px-2 py-1 w-fit rounded-lg">
+                            {item.salary}
+                          </div>
+                          <div className="text-sm bg-gray-200 px-2 py-1 w-fit rounded-lg">
+                            {item.location}
+                          </div>
                         </div>
-                        <div className="bg-white"><button onClick={() => { }}><Heart className="bg-white text-green-500"></Heart></button></div>
+                        <div className="bg-white">
+                          <button onClick={() => {}}>
+                            <Heart className="bg-white text-green-500"></Heart>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-
                 </div>
               ))
             ) : (
@@ -442,18 +556,18 @@ function Home() {
           </div>
           <div className="max-w-screen-lg flex flex-row justify-center space-x-2">
             <button
-              onClick={() => { }}
+              onClick={() => {}}
               className=" w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
             >
               <ChevronLeftIcon className="mx-2 w-5 h-5" />
             </button>
             <div className="flex flex-row items-center text-sm">
-                <p className="text-green-500">5</p>
-                <p className="mx-1 text-gray-400">/</p>
-                <p className="text-gray-400">56 trang</p>
+              <p className="text-green-500">5</p>
+              <p className="mx-1 text-gray-400">/</p>
+              <p className="text-gray-400">56 trang</p>
             </div>
             <button
-              onClick={() => { }}
+              onClick={() => {}}
               className=" w-10 h-10  bg-white text-green-500 rounded-full border-2 border-green-400"
             >
               <ChevronRightIcon className="mx-2 w-5 h-5" />
@@ -542,7 +656,7 @@ function Home() {
                               src={
                                 item.company?.image
                                   ? item.company?.image
-                                  : "no "
+                                  : 'no '
                               }
                             />
                           </div>
@@ -561,20 +675,20 @@ function Home() {
                             <span className="job-company-name text-slate-600 text-sm col-span-3 mb-2">
                               {item.company?.name
                                 ? item.company?.name
-                                : "no name"}
+                                : 'no name'}
                             </span>
                             <div className="job-action row-start-4 flex flex-row items-end justify-between">
                               <div className="job-detail flex flex-col gap-1">
                                 <div className="job-salary_range p-1 rounded bg-slate-200 text-slate-900 text-xs font-medium">
                                   {item.salaryMin == 0 && item.salaryMax == 0
-                                    ? "Thoả thuận"
-                                    : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{" "}
+                                    ? 'Thoả thuận'
+                                    : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{' '}
                                 </div>
                                 <div className="job-location p-1 rounded bg-slate-200 text-slate-900 text-xs font-medium">
                                   {item.locations[0].name}
                                   {item.locations.length > 1
                                     ? ` & ${item.locations.length - 1} nơi khác`
-                                    : ""}
+                                    : ''}
                                 </div>
                               </div>
                               <span className="btn-save p-2">

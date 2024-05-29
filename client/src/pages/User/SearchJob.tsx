@@ -1,41 +1,35 @@
 // khoa
-import { useState } from "react";
-import React from "react";
-import JobService from "../../modules/job-module";
-import { TextField, InputAdornment, MenuItem } from "@mui/material";
+import { useState } from 'react';
+import React from 'react';
+import JobService from '../../modules/job-module';
+import { TextField, InputAdornment, MenuItem } from '@mui/material';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  CurrencyDollarIcon,
-} from "@heroicons/react/20/solid";
-import {
-  HeartIcon,
   BriefcaseIcon,
   CubeIcon,
   ClockIcon,
   AcademicCapIcon,
   FolderIcon,
   Bars3Icon,
-} from "@heroicons/react/24/outline";
-import { Tooltip } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
-import { DefaultPagination } from "../../shared/components/default-pagination";
-import SearchBoxComponent from "../../layouts/UserLayout/components/SearchBoxComponent";
-import InterestedJobComponent from "../../layouts/UserLayout/components/InterestedJobComponent";
-import JobListItem from "../../shared/components/JobListItem";
+} from '@heroicons/react/24/outline';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { DefaultPagination } from '../../shared/components/default-pagination';
+import SearchBoxComponent from '../../layouts/UserLayout/components/SearchBoxComponent';
+import InterestedJobComponent from '../../layouts/UserLayout/components/InterestedJobComponent';
+import JobListItem from '../../shared/components/JobListItem';
 
 const news_type = [
   {
-    value: "0",
-    label: "Tất cả loại tin",
+    value: '0',
+    label: 'Tất cả loại tin',
   },
   {
-    value: "1",
-    label: "Tin đăng NTD tương tác thường xuyên",
+    value: '1',
+    label: 'Tin đăng NTD tương tác thường xuyên',
   },
   {
-    value: "2",
-    label: "Tin đăng thường",
+    value: '2',
+    label: 'Tin đăng thường',
   },
 ];
 interface filterSearch {
@@ -70,7 +64,7 @@ function SearchJob() {
   const [levels, setLevel] = useState<any[]>([]);
 
   const [filter, setFilter] = useState<filterSearch>({
-    titleRecruitment: "",
+    titleRecruitment: '',
     salaryMin: 0,
     salaryMax: 0,
     locationId: 0,
@@ -78,7 +72,7 @@ function SearchJob() {
   });
 
   const [searchParam, setSearchParam] = useState<SearchParams>({
-    titleRecruitment: "",
+    titleRecruitment: '',
     salaryMin: 0,
     salaryMax: 0,
     locationId: 0,
@@ -94,11 +88,11 @@ function SearchJob() {
 
     const params = new URLSearchParams(window.location.search);
 
-    const newLocationId = Number(params.get("locationId")) ?? 0;
-    const newExpId = Number(params.get("expId")) ?? 0;
-    const newTitleRecruitment = params.get("titleRecruitment") ?? "";
-    const newSalaryMin = Number(params.get("salaryMin")) ?? 0;
-    const newSalaryMax = Number(params.get("salaryMax")) ?? 0;
+    const newLocationId = Number(params.get('locationId')) ?? 0;
+    const newExpId = Number(params.get('expId')) ?? 0;
+    const newTitleRecruitment = params.get('titleRecruitment') ?? '';
+    const newSalaryMin = Number(params.get('salaryMin')) ?? 0;
+    const newSalaryMax = Number(params.get('salaryMax')) ?? 0;
 
     setSearchParam({
       titleRecruitment: newTitleRecruitment,
@@ -118,7 +112,7 @@ function SearchJob() {
   }, []);
 
   const [isActive, setIsActive] = useState(false);
-  const [iconDirection, setIconDirection] = useState("down");
+  const [iconDirection, setIconDirection] = useState('down');
   const [boxOptionShow, setBoxOptionShow] = useState(false);
 
   const [jobResult, setJobResult] = useState([]);
@@ -146,7 +140,7 @@ function SearchJob() {
       const levelResponse = await JobService.getAllLevel();
       setLevel(levelResponse);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
   };
 
@@ -194,26 +188,26 @@ function SearchJob() {
 
   const handleClick = () => {
     setIsActive(!isActive);
-    setIconDirection(iconDirection === "down" ? "up" : "down");
+    setIconDirection(iconDirection === 'down' ? 'up' : 'down');
     setBoxOptionShow(!boxOptionShow);
   };
 
   const handleSearch = () => {
     const queryParams = {
       titleRecruitment:
-        filter.titleRecruitment !== ""
+        filter.titleRecruitment !== ''
           ? `titleRecruitment=${filter.titleRecruitment}`
-          : "",
-      salaryMin: filter.salaryMin !== 0 ? `salaryMin=${filter.salaryMin}` : "",
-      salaryMax: filter.salaryMax !== 0 ? `salaryMax=${filter.salaryMax}` : "",
+          : '',
+      salaryMin: filter.salaryMin !== 0 ? `salaryMin=${filter.salaryMin}` : '',
+      salaryMax: filter.salaryMax !== 0 ? `salaryMax=${filter.salaryMax}` : '',
       locationId:
-        filter.locationId !== 0 ? `locationId=${filter.locationId}` : "",
-      expId: filter.expId !== 0 ? `expId=${filter.expId}` : "",
+        filter.locationId !== 0 ? `locationId=${filter.locationId}` : '',
+      expId: filter.expId !== 0 ? `expId=${filter.expId}` : '',
     };
 
     const queryString = Object.values(queryParams)
-      .filter((param) => param !== "")
-      .join("&");
+      .filter((param) => param !== '')
+      .join('&');
 
     navigation(`/results?${queryString}`);
 
@@ -251,12 +245,12 @@ function SearchJob() {
                   </span>
                 </div>
                 <div
-                  className={`search-result-tool ml-28 flex flex-row items-center py-2 px-4 border border-transparent font-bold text-white rounded-md ${isActive ? "active" : ""}`}
+                  className={`search-result-tool ml-28 flex flex-row items-center py-2 px-4 border border-transparent font-bold text-white rounded-md ${isActive ? 'active' : ''}`}
                   onClick={handleClick}
                 >
                   <Bars3Icon className="w-8 mr-2" />
                   <span>Lọc nâng cao</span>
-                  {iconDirection === "down" ? (
+                  {iconDirection === 'down' ? (
                     <ChevronDownIcon className="w-8" />
                   ) : (
                     <ChevronUpIcon className="w-8" />
@@ -304,7 +298,7 @@ function SearchJob() {
                               {major.name}
                             </MenuItem>
                           ))
-                        : "Error to fetch majors"}
+                        : 'Error to fetch majors'}
                     </TextField>
                   </div>
                   <div className="item">
@@ -345,7 +339,7 @@ function SearchJob() {
                               {field.name}
                             </MenuItem>
                           ))
-                        : "Error to fetch fields"}
+                        : 'Error to fetch fields'}
                     </TextField>
                   </div>
                   <div className="item">
@@ -377,7 +371,7 @@ function SearchJob() {
                               {type.name}
                             </MenuItem>
                           ))
-                        : "Error to fetch types"}
+                        : 'Error to fetch types'}
                     </TextField>
                   </div>
                   <div className="item">
@@ -418,7 +412,7 @@ function SearchJob() {
                               {level.name}
                             </MenuItem>
                           ))
-                        : "Error to fetch levels"}
+                        : 'Error to fetch levels'}
                     </TextField>
                   </div>
                   <div className="item">
