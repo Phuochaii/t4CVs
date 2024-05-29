@@ -3,8 +3,13 @@ import { useState } from 'react';
 import React from 'react';
 import JobService from '../../modules/job-module';
 import { TextField, InputAdornment, MenuItem } from '@mui/material';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  CurrencyDollarIcon,
+} from '@heroicons/react/20/solid';
+import {
+  HeartIcon,
   BriefcaseIcon,
   CubeIcon,
   ClockIcon,

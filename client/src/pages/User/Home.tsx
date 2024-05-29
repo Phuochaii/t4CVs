@@ -1,5 +1,5 @@
 // khoa
-import React from 'react';
+import React, { SetStateAction } from 'react';
 import { useState, useEffect } from 'react';
 import { Tooltip } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -266,7 +266,7 @@ function Home() {
       salary: 'Thỏa thuận',
     },
   ];
-  const [selectedKey, setSelectedKey] = useState('Ngẫu nhiên')
+  const [selectedKey, setSelectedKey] = useState('Ngẫu nhiên');
   const [option, setOptions] = useState<SingleValue<{
     value: string;
     label: string;
@@ -274,7 +274,7 @@ function Home() {
   const SelectSalary = (value: number) => {
     if (value !== 0) {
       const foundRange = salary_range.find(
-        (range) => Number(range.value) === value
+        (range) => Number(range.value) === value,
       );
       if (foundRange) {
         setFilter((prevFilter) => ({
@@ -458,10 +458,7 @@ function Home() {
                 options={options}
                 onChange={(
                   e: SetStateAction<
-                    SingleValue<{
-                      value: string;
-                      label: string;
-                    }>
+                    SingleValue<{ value: string; label: string }>
                   >,
                 ) => setOptions(e)}
               />
@@ -494,7 +491,7 @@ function Home() {
           <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg mt-6 bg-blue-100 rounded-lg p-2">
             <div className="flex flex-row items-center">
               <p className="font-bold">
-                Gợi ý:
+                Gợi ý:{' '}
                 <span className="font-normal">
                   Di chuột vào tiêu đề việc làm để xem thêm thông tin chi tiết
                 </span>

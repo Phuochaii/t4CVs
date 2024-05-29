@@ -1,5 +1,5 @@
-import { Clock, Phone, Mail } from "lucide-react";
-import { ApplicationFromServer } from "../types/Application.type";
+import { Clock, Phone, Mail } from 'lucide-react';
+import { ApplicationFromServer } from '../types/Application.type';
 
 interface TableProps {
   data: ApplicationFromServer[];
@@ -7,12 +7,12 @@ interface TableProps {
 
 function FollowingCVTable({ data }: TableProps) {
   return (
-    <table className="p-5" style={{ width: "100%" }}>
+    <table className="p-5" style={{ width: '100%' }}>
       <thead className="border-b-2 border-gray-100 capitalize pb-2">
         <tr>
           <th className="text-left capitalize">CV Ứng viên</th>
           <th className="text-left">Thông tin liên hệ</th>
-          <th className="text-left" style={{ width: "400px" }}>
+          <th className="text-left" style={{ width: '400px' }}>
             Insighs
           </th>
           <th className="text-left">Trạng thái</th>
@@ -23,9 +23,9 @@ function FollowingCVTable({ data }: TableProps) {
           <tr
             key={index}
             className="font-medium my-5 mx-3"
-            style={{ fontSize: "13px" }}
+            style={{ fontSize: '13px' }}
           >
-            <td className="flex items-center" style={{ maxWidth: "300px" }}>
+            <td className="flex items-center" style={{ maxWidth: '300px' }}>
               <div className="w-20 rounded-full inline-block mr-5 border-black border-2">
                 <img
                   className="w-full"
@@ -49,7 +49,7 @@ function FollowingCVTable({ data }: TableProps) {
                 <Mail
                   size={15}
                   color="#38A34D"
-                  style={{ marginRight: "5px" }}
+                  style={{ marginRight: '5px' }}
                 />
                 {item.email}
               </a>
@@ -60,7 +60,7 @@ function FollowingCVTable({ data }: TableProps) {
                 <Phone
                   color="#38A34D"
                   size={18}
-                  style={{ marginRight: "5px" }}
+                  style={{ marginRight: '5px' }}
                 />
                 {item.phone}
               </a>
@@ -70,7 +70,7 @@ function FollowingCVTable({ data }: TableProps) {
                 <Mail
                   size={15}
                   color="#38A34D"
-                  style={{ marginRight: "5px" }}
+                  style={{ marginRight: '5px' }}
                 />
                 Tìm việc
               </p>
@@ -78,7 +78,7 @@ function FollowingCVTable({ data }: TableProps) {
                 <Clock
                   size={15}
                   color="#38A34D"
-                  style={{ marginRight: "5px" }}
+                  style={{ marginRight: '5px' }}
                 />
                 {item.updateAt}
               </p>
@@ -88,9 +88,9 @@ function FollowingCVTable({ data }: TableProps) {
             </td>
             <td>
               <div
-                className={`rounded-full ${item.status ? "bg-orange-100 text-orange-400" : "bg-blue-200 text-blue-500"} px-3`}
+                className={`rounded-full ${item.status ? 'bg-orange-100 text-orange-400' : 'bg-blue-200 text-blue-500'} px-3`}
               >
-                {item.status ? "Đã xem" : "Chưa xem"}
+                {item.status ? 'Đã xem' : 'Chưa xem'}
               </div>
             </td>
           </tr>
