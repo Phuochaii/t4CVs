@@ -48,6 +48,7 @@ message CreateApplicationRequest {
 
 message UpdateApplicationRequest {
   int32 id = 1;
+  bool status = 2;
 }
 
 

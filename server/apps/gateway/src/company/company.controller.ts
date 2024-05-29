@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   Query,
+  Put,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CompanyService } from './company.service';
@@ -36,7 +37,7 @@ export class CompanyController {
     return this.companyService.findCompanyById(id);
   }
 
-  @Post('update')
+  @Put('update')
   updateCompany(@Body() data: UpdateCompanyDto): Observable<string> {
     return this.companyService.updateCompany(data);
   }

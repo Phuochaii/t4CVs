@@ -26,6 +26,9 @@ export class TypeOrmCompanyRepository extends CompanyRepository {
     const companies = await this.companyRepository.find({
       skip: skip,
       take: limit,
+      order: {
+        id: 'ASC',
+      },
     });
 
     return companies;
@@ -48,16 +51,10 @@ export class TypeOrmCompanyRepository extends CompanyRepository {
 
   async updateCompany(company: UpdateCompanyDTO): Promise<Company> {
     await this.companyRepository.update(company.id, {
-      website: company.website,
-      image: company.image,
-      address: company.address,
-      phone: company.phone,
-      companySize: company.companySize,
-      description: company.description,
       status: company.status,
     });
 
-    return await this.findCompanyById(company.id);
+    return this.findCompanyById(company.id);
   }
 
   async removeCompany(id: number): Promise<string> {

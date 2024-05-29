@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CreateJobDto } from './dto/Req/createJob.dto';
 import { JobService } from './job.service';
@@ -53,7 +53,7 @@ export class JobController {
     return this.jobService.findJobById(id);
   }
 
-  @Post('update-status')
+  @Put('update-status')
   updateJobStatus(@Body() data: UpdateJobDto) {
     return this.jobService.updateJobStatus(data);
   }

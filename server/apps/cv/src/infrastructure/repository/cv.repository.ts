@@ -24,7 +24,7 @@ export class TypeOrmCvRepository extends CvRepository {
       isPublic: cv.isPublic,
       lastModified: lastModified,
     });
-    return 'success';
+    return await this.cvRepository.findOneBy(cv);
   }
 
   async getCv(cv: GetCvDto): Promise<any> {
@@ -43,7 +43,11 @@ export class TypeOrmCvRepository extends CvRepository {
   }
 
   async getAllCv(): Promise<Cv[]> {
-    return await this.cvRepository.find();
+    return await this.cvRepository.find({
+      order: {
+        id: 'ASC',
+      },
+    });
   }
 
   async deleteCv(cv: GetCvDto): Promise<Cv> {

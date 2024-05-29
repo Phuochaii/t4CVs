@@ -23,11 +23,21 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
   }
 
   async createApplication(application: ApplicationDto): Promise<Application> {
+    application.status = false;
+    const now = new Date();
+    application.createdAt = now.toISOString();
+    application.updateAt = now.toISOString();
     return await this.applicationRepository.save(application);
   }
 
   async getApplication(application: GetApplicationDto): Promise<Application> {
-    return await this.applicationRepository.findOneBy(application);
+    const result = await this.applicationRepository.findOneBy(application);
+
+    if (!result) {
+      return {} as Application;
+    }
+
+    return result;
   }
 
   async getAllApplication(
@@ -50,10 +60,14 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
   async updateApplication(
     application: UpdateApplicationDto,
   ): Promise<Application> {
-    await this.applicationRepository.update(application.id, {
-      status: true,
-    });
+    const result = await this.applicationRepository.findOneBy(application);
 
+    if (!result) {
+      return {} as Application;
+    }
+    await this.applicationRepository.update(application.id, {
+      status: application.status,
+    });
     return await this.applicationRepository.findOneBy(application);
   }
 

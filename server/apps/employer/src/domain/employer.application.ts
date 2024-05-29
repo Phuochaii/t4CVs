@@ -52,11 +52,23 @@ export class EmployerApplication {
     return await this.updateEmployerLicenseService.execute(employerId, license);
   }
 
-  async updateEmployerLicenseStatus(id: string): Promise<Employer> {
-    return await this.updateEmployerLicenseStatusService.execute(id);
+  async updateEmployerLicenseStatus(
+    id: string,
+    licenseStatus: boolean,
+  ): Promise<Employer> {
+    return await this.updateEmployerLicenseStatusService.execute(
+      id,
+      licenseStatus,
+    );
   }
 
-  async updateEmployerPhoneStatus(id: string): Promise<Employer> {
-    return await this.updateEmployerPhoneStatusService.execute(id);
+  async updateEmployerPhoneStatus(
+    id: string,
+    phoneNumberStatus: boolean,
+  ): Promise<Employer> {
+    return await this.updateEmployerPhoneStatusService.execute(
+      id,
+      phoneNumberStatus,
+    );
   }
 }
