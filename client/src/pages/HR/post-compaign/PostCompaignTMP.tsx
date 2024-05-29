@@ -33,9 +33,9 @@ function PostCompaign() {
             </h1>
           </div>
           <p className="text-xs text-black">
-            Hoạt động tuyển dụng của doanh nghiệp được tiến hành theo từng giai
-            đoạn với các mục tiêu tuyển dụng khác nhau. Chiến dịch tuyển dụng là
-            nơi tổng hợp cách hoạt động khác nhau của một đợt
+            Hoạt động tuyển dụng của doanh nghiệp được tiến hành theo tiêu tuyển
+            dụng khác nhau. Chiến dịch tuyển dụng là nơi tổng nơi nơi tổng hợp
+            cách hoạt động khác nhau của một đợt
           </p>
           <p className="text-xs text-black">
             tuyển dụng được thực hiện trên nền tảng TopCV.
