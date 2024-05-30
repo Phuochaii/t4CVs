@@ -10,6 +10,7 @@ import { getApplications } from '../../shared/utils/helper';
 import { ApplicationFromServer } from '../../shared/types/Application.type';
 import { RecruitmentFromServer } from '../../shared/types/Recruitment.type';
 import { UserCV } from '../../shared/types/CV_user.type';
+import moment from 'moment'
 const option = [
   { value: 'Đã ứng tuyển', label: 'Đã ứng tuyển' },
   { value: 'NTD đã xem hồ sơ', label: 'NTD đã xem hồ sơ' },
@@ -25,8 +26,17 @@ function YourApplications() {
   const [CVs] = useState<UserCV[] | null>([]);
   useEffect(() => {
     const fetchApplications = async () => {
+      //Get user id
+      // let id = '0'
+      // const result = localStorage.getItem("user")
+      // console.log(result)
+      // if (result) {
+      //   const user = JSON.parse(result)
+      //   id = user.id;
+      // }
       try {
-        const result = await getApplications(22); // Wait for the result
+        const result = await getApplications('22');
+        console.log(result)
         if (result) {
           const { applications, jobs } = result;
           console.log(applications);
@@ -144,6 +154,8 @@ function YourApplications() {
 
             {applications!.length! > 0 ? (
               applications!.map((item) => {
+                const createdAt = moment(new Date(item.createdAt)).format('DD-MM-YYYY HH:mm:ss');
+                const updatedAt = moment(new Date(item.updateAt) ).format('DD-MM-YYYY HH:mm:ss');
                 return (
                   <div
                     key={item.id}
@@ -195,7 +207,7 @@ function YourApplications() {
                       </div>
                       <div className="flex flex-col space-y-2">
                         <div className="flex flex-row space-x-1">
-                          <p>Thời gian ứng tuyển: {item.createdAt}</p>
+                          <p>Thời gian ứng tuyển: {createdAt}</p>
                         </div>
                       </div>
                       <div className="flex justify-between items-center">
@@ -243,7 +255,7 @@ function YourApplications() {
                               : 'Đã ứng tuyển'}
                           </span>
                         </p>
-                        <p>Vào lúc: {item.updateAt}</p>
+                        <p>Vào lúc: {updatedAt}</p>
                       </div>
                     </div>
                   </div>
@@ -367,7 +379,7 @@ function YourApplications() {
             </div>
             <button
               className="mt-4 px-4 py-2 text-xs font-bold w-40 h-8 border border-green-500 rounded text-green-500 hover:bg-green-500 hover:text-white transition duration-300"
-              onClick={() => {}}
+              onClick={() => { }}
             >
               Tạo TopCV Profile
             </button>
