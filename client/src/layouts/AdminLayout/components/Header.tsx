@@ -24,7 +24,7 @@ function Header() {
   const [displayAccountTab, setDisplayAccountTab] = useState(false);
 
   return (
-    <div className="flex items-center justify-between h-16 gap-6 px-4">
+    <div className="flex fixed bg-white items-center justify-between h-16 gap-6 px-4 top-0 left-0 right-0 z-50">
       <div className="flex-1 h-full">
         <img
           src="/topcv-logo-6.webp"
