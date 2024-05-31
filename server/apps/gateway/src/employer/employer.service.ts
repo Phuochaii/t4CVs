@@ -5,7 +5,7 @@ import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
 import { FindEmployerDTOResponse } from './dto/Res/find_employer.dto';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { Role } from '../authentication/dto/role.dto';
-import { CreateHrDto as CreateEmployerAccountDto } from '../authentication/dto/create-hr.dto';
+import { CreateEmployerAccountDto } from './dto/Req/create-hr.dto';
 
 @Injectable()
 export class EmployerService {
@@ -30,7 +30,15 @@ export class EmployerService {
   async createEmployerAccount(
     createEmployerAccountDto: CreateEmployerAccountDto,
   ) {
-    return this.authenticationService.createHrAccount(createEmployerAccountDto);
+    const auth0Account = await this.authenticationService.createAccount({
+      email: createEmployerAccountDto.email,
+      password: createEmployerAccountDto.password,
+    });
+    await this.authenticationService.asignRole({
+      userId: auth0Account.data.user_id,
+      role: Role.HR,
+    });
+    return auth0Account;
   }
 
   getAllEmployers(page: number, limit: number): Observable<string> {
@@ -57,9 +65,5 @@ export class EmployerService {
 
   checkEmployer(id: string): Observable<boolean> {
     return this.employerClient.send({ cmd: 'check_employer' }, id);
-  }
-
-  canUpdateProfile(id: string): Promise<boolean> {
-    return this.authenticationService.canUpdateProfile(id);
   }
 }

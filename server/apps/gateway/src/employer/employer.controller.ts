@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import { EmployerService } from './employer.service';
 import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
 import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
-import { CreateHrDto as CreateEmployerAccountDto } from '../authentication/dto/create-hr.dto';
+import { CreateEmployerAccountDto } from './dto/Req/create-hr.dto';
 
 @Controller('employer')
 export class EmployerController {
@@ -69,10 +69,5 @@ export class EmployerController {
   @Get('position/:id')
   findPositionById(@Param('id') id: number): Observable<string> {
     return this.employerService.findPositionById(id);
-  }
-
-  @Get(':id/can-update-profile')
-  canUpdateProfile(@Param('id') id: string): Promise<boolean> {
-    return this.employerService.canUpdateProfile(id);
   }
 }

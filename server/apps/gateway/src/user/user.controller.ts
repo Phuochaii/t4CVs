@@ -12,7 +12,7 @@ import { UserService } from './user.service';
 import { Observable } from 'rxjs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateUserDTO } from './dto/Req/createUser.dto';
-import { CreateUserDto as CreateUserAccountDto } from '../authentication/dto/create-user.dto';
+import { CreateUserAccountDto } from './dto/Req/create-user-account.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
 

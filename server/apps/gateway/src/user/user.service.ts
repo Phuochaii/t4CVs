@@ -4,7 +4,7 @@ import { Observable, lastValueFrom } from 'rxjs';
 import { CreateUserDTO } from './dto/Req/createUser.dto';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { Role } from '../authentication/dto/role.dto';
-import { CreateUserDto as CreateUserAccountDto } from '../authentication/dto/create-user.dto';
+import { CreateUserAccountDto } from './dto/Req/create-user-account.dto';
 
 @Injectable()
 export class UserService {
@@ -40,10 +40,13 @@ export class UserService {
   }
 
   async createAccount(user: CreateUserAccountDto): Promise<Observable<string>> {
-    const auth0Account = await this.authenticationService.createUserAccount({
+    const auth0Account = await this.authenticationService.createAccount({
       email: user.email,
       password: user.password,
-      fullname: user.fullname,
+    });
+    await this.authenticationService.asignRole({
+      userId: auth0Account.data.user_id,
+      role: Role.USER,
     });
     const createUserDto: CreateUserDTO = {
       id: auth0Account.data.user_id,
