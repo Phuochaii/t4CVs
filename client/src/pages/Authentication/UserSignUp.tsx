@@ -12,7 +12,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import Spinner from '../Spinner';
 
 function UserSignUp() {
-  const {isAuthenticated, isLoading} = useAuth0();
+  const {isAuthenticated} = useAuth0();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -120,12 +120,11 @@ function UserSignUp() {
 
   const navigate = useNavigate();
   useEffect(() => {
-    if (isLoading) return;
     if (isAuthenticated) {
       navigate(Roles.USER.redirectUrl);
     }
-  }, [isAuthenticated, isLoading]);
-  if(isLoading || isAuthenticated) return <Spinner/>;
+  }, [isAuthenticated]);
+  if(isAuthenticated) return <Spinner/>;
 
   return (
     <div className="grid grid-cols-3 gap-4 ">

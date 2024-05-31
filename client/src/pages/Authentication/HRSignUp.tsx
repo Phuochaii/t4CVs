@@ -79,7 +79,7 @@ interface ValidateMessages {
 
 function HRSignUp() {
   const navigate = useNavigate();
-  const {isAuthenticated, isLoading} = useAuth0();
+  const {isAuthenticated} = useAuth0();
   const {register} = useAuthen();
 
   const [formData, setFormData] = useState<FormData>({
@@ -282,13 +282,12 @@ function HRSignUp() {
   };
 
   useEffect(() => {
-    if(isLoading) return;
     if (isAuthenticated) {
       navigate(Roles.HR.redirectUrl);
       return;
     }
-  }, [isAuthenticated, isLoading]);
-  if(isLoading || isAuthenticated) return <Spinner/>;
+  }, [isAuthenticated]);
+  if( isAuthenticated) return <Spinner/>;
 
   return (
     <>

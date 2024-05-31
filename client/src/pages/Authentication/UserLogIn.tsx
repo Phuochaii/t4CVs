@@ -13,7 +13,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import Spinner from "../Spinner";
 
 function UserLogIn() {
-  const {isAuthenticated, isLoading} = useAuth0();
+  const {isAuthenticated} = useAuth0();
   
   const navigation = useNavigate();
   const {usernamePasswordLogin, googleLogin, linkedInLogin, facebookLogin} = useAuthen();
@@ -37,13 +37,12 @@ function UserLogIn() {
   };
 
   useEffect(() => {
-    if(isLoading) return
     if (isAuthenticated) {
       navigation(Roles.USER.redirectUrl);
       return;
     }
-  },[isAuthenticated, isLoading]);
-  if(isLoading || isAuthenticated) return <Spinner/>;
+  },[isAuthenticated]);
+  if(isAuthenticated) return <Spinner/>;
 
   const isEmailValid = (email: string) => {
     // Biểu thức chính quy để kiểm tra định dạng email

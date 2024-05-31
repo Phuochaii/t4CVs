@@ -17,6 +17,7 @@ export class UserService {
   }
 
   async createUser(createUserDTO: CreateUserDTO) {
+    console.log('createUserDTO', createUserDTO);
     const user = await this.userRepository.findById(createUserDTO.id);
     if (user) {
       throw new RpcException('User exists!');

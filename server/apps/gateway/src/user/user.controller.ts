@@ -31,8 +31,14 @@ export class UserController {
     return this.userService.checkUser(user.sub);
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
+  @Get('/profile')
+  getUserProfile(@GetUser() user: UserClaims): Observable<string> {
+    return this.userService.findUserById(user.sub);
+  }
+
   @Get(':id')
-  findUserById(@Param('id') id: number): Observable<string> {
+  findUserById(@Param('id') id: string): Observable<string> {
     return this.userService.findUserById(id);
   }
 
@@ -49,10 +55,10 @@ export class UserController {
     });
   }
 
-  @Post('register')
+  @Post('account')
   registerAccount(
     @Body() user: CreateUserAccountDto,
   ): Promise<Observable<string>> {
-    return this.userService.registerAccount(user);
+    return this.userService.createAccount(user);
   }
 }

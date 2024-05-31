@@ -11,7 +11,7 @@ export class UserService {
   constructor(
     @Inject('USER') private readonly userClient: ClientProxy,
     private readonly authenticationService: AuthenticationService,
-  ) { }
+  ) {}
 
   findAllUsers(): Observable<string> {
     return this.userClient.send({ cmd: 'find_all_users' }, {});
@@ -31,7 +31,7 @@ export class UserService {
     return this.userClient.send({ cmd: 'create_user' }, user);
   }
 
-  findUserById(id: number): Observable<string> {
+  findUserById(id: string): Observable<string> {
     return this.userClient.send({ cmd: 'find_user_by_id' }, id);
   }
 
@@ -39,7 +39,7 @@ export class UserService {
     return this.userClient.send({ cmd: 'check_user' }, id);
   }
 
-  async registerAccount(user: CreateUserAccountDto): Promise<Observable<string>> {
+  async createAccount(user: CreateUserAccountDto): Promise<Observable<string>> {
     const auth0Account = await this.authenticationService.createUserAccount({
       email: user.email,
       password: user.password,
@@ -50,7 +50,7 @@ export class UserService {
       fullname: user.fullname,
       phone: auth0Account.data.phone_number,
       image: auth0Account.data.picture,
-    }
+    };
     return this.userClient.send({ cmd: 'create_user' }, createUserDto);
   }
 }

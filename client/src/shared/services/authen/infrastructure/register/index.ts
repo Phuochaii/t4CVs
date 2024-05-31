@@ -7,14 +7,15 @@ import axios from 'axios';
 export class RegisterUseCase extends Auth0OperationUseCase {
     constructor(
         private credentials: RegisterCredentials,
-        role: Role,
+        private role: Role,
         private usernamePasswordLogin: UsernamePasswordLoginUseCase
             = new UsernamePasswordLoginUseCase(credentials, role),
     ) {
         super(AUTH0_REALM.UsernamePassword);
     }
+
     auth0Call(credentials: Auth0CallCredentials): void {
-        axios.post('http://localhost:3000/user/register', {
+        axios.post(this.role.registerApiUrl, {
             email: this.credentials.username,
             password: this.credentials.password,
             fullname: this.credentials.fullname,
