@@ -12,7 +12,7 @@ import { UserService } from './user.service';
 import { Observable } from 'rxjs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateUserDTO } from './dto/Req/createUser.dto';
-import { CreateUserDto as CreateUserAccountDto} from '../authentication/dto/create-user.dto'
+import { CreateUserDto as CreateUserAccountDto } from '../authentication/dto/create-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
 
@@ -42,6 +42,7 @@ export class UserController {
     @GetUser() userClaims: UserClaims,
     @Body() user: Omit<CreateUserDTO, 'id'>,
   ): Promise<Observable<string>> {
+    console.log('create user', userClaims.sub);
     return this.userService.createUser({
       id: userClaims.sub,
       ...user,
@@ -49,7 +50,9 @@ export class UserController {
   }
 
   @Post('register')
-  registerAccount(@Body() user: CreateUserAccountDto): Promise<Observable<string>> {
+  registerAccount(
+    @Body() user: CreateUserAccountDto,
+  ): Promise<Observable<string>> {
     return this.userService.registerAccount(user);
   }
 }

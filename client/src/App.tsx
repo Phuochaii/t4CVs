@@ -23,6 +23,7 @@ function App() {
     clientId={AUTH0_CLIENT_ID}
     authorizationParams={{
       redirect_uri: window.location.origin,
+      audience: AUTH0_BACKEND_AUDIENCE,
     }}>
       <RoleProvider>
         <MyContext.Provider value={{ accountList: accountList }}>

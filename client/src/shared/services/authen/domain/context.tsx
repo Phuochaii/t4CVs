@@ -1,7 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import axios from "axios";
-import { Modal } from '@mui/material';
 import Spinner from '../../../../pages/Spinner';
 import { useNavigate } from 'react-router-dom';
 import { AUTH0_BACKEND_AUDIENCE } from '../infrastructure/config';
@@ -15,14 +14,15 @@ export interface Role {
   
 export const Roles: { [key in "HR" | "USER"]: Role } = {
     HR: {
-        check: async (userId) => {
-            try {
-                const result = await axios.get(`http://localhost:3000/employer/check/${userId}`)
-                    .then(res => res.data) as boolean;
-                return result;
-            } catch (e) {
-                return false
-            }
+        check: async (token) => {
+            const result = await axios.get(`http://localhost:3000/employer/check`,{
+                headers: {
+                    authorization: `Bearer ${token}`,
+                }
+            })
+                .then(res => res.data as boolean)
+                .catch(() => false);
+            return result;
         },
         RegisterProfile: () => {
             const navigate = useNavigate();
@@ -36,42 +36,39 @@ export const Roles: { [key in "HR" | "USER"]: Role } = {
     },
     USER: {
         check: async (token) => {
-            try {
-                const result = await axios.get(`http://localhost:3000/user/check`,{
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                    }
-                })
-                    .then(res => res.data) as boolean;
-                return result;
-            } catch (e) {
-                return false;
-            }
+            const result = await axios.get(`http://localhost:3000/user/check`,{
+                headers: {
+                    authorization: `Bearer ${token}`,
+                }
+            })
+                .then(res => res.data as boolean)
+                .catch(() => false);
+            return result;
         },
         redirectUrl: '/',
         RegisterProfile: () => {
-            const { user, isLoading, getAccessTokenSilently,isAuthenticated } = useAuth0();
+            const { user, isLoading, getAccessTokenSilently, isAuthenticated } = useAuth0();
             const navigate = useNavigate();
             const {setRole} = useRoleContext();
-            const {name, phone_number} = user || {};
             useEffect(() => {
                 if(isLoading) return;
                 if(!isAuthenticated) {
                     navigate(Roles.USER.loginUrl);
                     return;
                 };
-            }, [isLoading, isAuthenticated]);
-            useEffect(() => {
-                if(!name || !phone_number) return;
+                if(!user) return console.error('isAuthenticated is true but user is null!');
                 const registerProfile = async () => {
                     try {
                         const token = await getAccessTokenSilently({
+                            authorizationParams: {
+                                audience: AUTH0_BACKEND_AUDIENCE,
+                            },
                             cacheMode: 'off'
                         });
                         console.log('token:', token);
                         await axios.post(`http://localhost:3000/user/create`, {
-                            fullname: name,
-                            phone: phone_number,
+                            fullname: user.name,
+                            phone: user.phone_number,
                         },{
                             headers: {
                                 authorization: `Bearer ${token}`,
@@ -85,7 +82,7 @@ export const Roles: { [key in "HR" | "USER"]: Role } = {
                     }
                 }
                 registerProfile();
-            }, [name, phone_number, getAccessTokenSilently, setRole]);
+            }, [isLoading, isAuthenticated]);
             return <Spinner/>
         },
         loginUrl: '/user-login',
