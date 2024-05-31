@@ -1,4 +1,4 @@
-import { Major } from '../infrastructure/schemas/major.schema';
+import { Major } from '../entities/major.entity';
 
 export const majors: Major[] = [
   {

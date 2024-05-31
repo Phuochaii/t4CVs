@@ -19,7 +19,30 @@ export class ApplicationController {
 
   @Post()
   async create(@Body() createApplicationRequest: CreateApplicationRequest) {
+<<<<<<< HEAD
     await this.applicationService.create(createApplicationRequest);
+=======
+    const application = await firstValueFrom(
+      this.applicationService.create(createApplicationRequest),
+    );
+
+    const campaign = await firstValueFrom(
+      this.companyService.findCampaignById(createApplicationRequest.campaignId),
+    );
+    const employerId = campaign.employerId;
+
+    // console.log(employerId);
+    const notification = await firstValueFrom(
+      this.notificationService.create(
+        [new NotificationUserId(employerId, NotificationUserRole.HR)],
+        {
+          content: `Ứng viên ${application.fullname}- ${campaign.name}`,
+          link: `application/${application.id}`,
+          title: `CV mới ứng tuyển`,
+        },
+      ),
+    );
+>>>>>>> 80f65bf8591fcdecb03f2f3aa8bdd4d9670c9256
     return 'Success';
   }
 

@@ -67,14 +67,14 @@ export class CompanyService {
     return this.companyClient.send({ cmd: 'update_campaign' }, data);
   }
 
-  findCampaignByEmployerId(employerId: string, page: number, limit: number) {
+  findCampaignByEmployerId(employerId: number, page: number, limit: number) {
     return this.companyClient.send<{ data: FindCampaignDTOResponse[] }>(
       { cmd: 'find_campaign_by_employerId' },
       { employerId, page, limit },
     );
   }
 
-  findAllCampaignByEmployerId(employerId: string) {
+  findAllCampaignByEmployerId(employerId: number) {
     return this.companyClient.send<{ data: FindCampaignDTOResponse[] }>(
       { cmd: 'find_all_campaign_by_employerid' },
       employerId,

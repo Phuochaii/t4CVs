@@ -14,7 +14,7 @@ import {
   NotificationUserRole,
 } from './notification.service';
 import { status } from '@app/common/proto/notification';
-import { PaginationRequest } from '@app/common/dto/pagination';
+import { PaginationRequest } from '@app/common';
 
 @Controller('notification')
 export class NotificationController {

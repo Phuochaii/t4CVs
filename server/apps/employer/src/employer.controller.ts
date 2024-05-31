@@ -1,24 +1,24 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+<<<<<<< HEAD
 import { EmployerApplication, PositionApplication } from './domain';
 import { CreateEmployerDTO, UpdateEmployerCompanyDTO } from './domain/dto';
+=======
+import { EmployerService } from './employer.service';
+import { PositionService } from './position/position.service';
+import { CreateEmployerDto } from './dto/Req/create-employer.dto';
+>>>>>>> 80f65bf8591fcdecb03f2f3aa8bdd4d9670c9256
 
 @Controller()
 export class EmployerController {
   constructor(
-    private readonly employerApplication: EmployerApplication,
-    private readonly positionApplication: PositionApplication,
+    private readonly employerService: EmployerService,
+    private readonly positionService: PositionService,
   ) {}
 
   @MessagePattern({ cmd: 'create_employer' })
-  async createEmployer(employer: CreateEmployerDTO) {
-    const result = await this.employerApplication.createEmployer(employer);
-
-    if (result) {
-      return result;
-    } else {
-      return 'Your company id not exists';
-    }
+  createEmployer(employer: CreateEmployerDto) {
+    return this.employerService.createEmployer(employer);
   }
 
   @MessagePattern({ cmd: 'get_all_employers' })
@@ -26,13 +26,10 @@ export class EmployerController {
     const page = Number(data.page);
     const limit = Number(data.limit);
 
-    const total = Number(await this.employerApplication.getTotalEmployer());
+    const total = Number(await this.employerService.getTotalEmployers());
     const total_page = Math.ceil(total / limit);
 
-    const data_find = await this.employerApplication.getAllEmployer(
-      page,
-      limit,
-    );
+    const data_find = await this.employerService.findAllEmployers(page, limit);
 
     const result = {
       page: page,
@@ -46,14 +43,8 @@ export class EmployerController {
   }
 
   @MessagePattern({ cmd: 'find_employer_by_id' })
-  findEmployerById(id: string) {
-    const employer = this.employerApplication.getEmployerById(id);
-
-    if (employer) {
-      return employer;
-    } else {
-      return 'Your employerId not exsist';
-    }
+  findEmployerById(id: number) {
+    return this.employerService.findEmployerById(id);
   }
 
   @MessagePattern({ cmd: 'update_employer_companyid' })
@@ -110,11 +101,11 @@ export class EmployerController {
 
   @MessagePattern({ cmd: 'get_all_positions' })
   findAllPosition() {
-    return this.positionApplication.getAllPosition();
+    return this.positionService.findAllPositions();
   }
 
   @MessagePattern({ cmd: 'find_position_by_id' })
   findPositionById(id: number) {
-    return this.positionApplication.getPositionById(id);
+    return this.positionService.findPositionById(id);
   }
 }

@@ -1,10 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Observable, from, switchMap } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
+<<<<<<< HEAD
 import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
 import { FindEmployerDTOResponse } from './dto/Res/find_employer.dto';
 import { UpdateEmployerCompanyDTO } from './dto/Req/updateEmployerCompany.dto';
 import { UploadService } from '../upload/upload.service';
+=======
+import { CreateEmployerDto } from 'apps/employer/src/dto/Req/create-employer.dto';
+import { FindEmployerDTOResponse } from 'apps/employer/src/dto/Res/find_employer.dto';
+>>>>>>> 80f65bf8591fcdecb03f2f3aa8bdd4d9670c9256
 
 @Injectable()
 export class EmployerService {
@@ -27,7 +32,7 @@ export class EmployerService {
     );
   }
 
-  findEmployerById(id: string): Observable<FindEmployerDTOResponse> {
+  findEmployerById(id: number): Observable<FindEmployerDTOResponse> {
     return this.employerClient.send<FindEmployerDTOResponse>(
       { cmd: 'find_employer_by_id' },
       id,

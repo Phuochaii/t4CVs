@@ -1,4 +1,4 @@
-import { Experience } from '../infrastructure/schemas/experience.schema';
+import { Experience } from '../entities/experience.entity';
 
 export const experiences: Experience[] = [
   {

@@ -1,5 +1,5 @@
 export class FindEmployerDTOResponse {
-  id: string;
+  id: number;
   fullname: string;
   gender: string;
   positionId: number;

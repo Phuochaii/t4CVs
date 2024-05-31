@@ -1,4 +1,4 @@
-import { Type } from '../infrastructure/schemas/type.schema';
+import { Type } from '../entities/type.entity';
 
 export const types: Type[] = [
   {

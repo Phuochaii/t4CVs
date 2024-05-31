@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
-import { JobService } from './domain/job.service';
-import { CreateJobDto } from './domain/dto/Req/create-job.dto';
+import { JobService } from './job.service';
+import { CreateJobDto } from './dto/Req/create-job.dto';
 import { MessagePattern } from '@nestjs/microservices';
-import { UpdateJobDto } from './domain/dto/Req/update-job.dto';
-import { CreateBaseDto } from './domain/dto/Req/createBase.dto';
-import { QueryDTO } from './domain/dto/Req/query.dto';
+import { UpdateJobDto } from './dto/Req/update-job.dto';
+import { CreateBaseDto } from './dto/Req/createBase.dto';
+import { QueryDTO } from './dto/Req/query.dto';
 
 @Controller()
 export class JobController {

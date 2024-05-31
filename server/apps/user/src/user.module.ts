@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
-import { UserService } from './domain/user.service';
+import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './infrastructure/schemas/user.schema';
+import { User } from './entities/user.entity';
 import * as path from 'path';
 import { DatabaseConfiger, DatabaseOptions } from './database/init';
-import { TypeOrmUserRepository } from './infrastructure/repository';
-import { UserRepository } from './domain/repository';
 
 @Module({
   imports: [
@@ -36,18 +34,6 @@ import { UserRepository } from './domain/repository';
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [UserController],
-  providers: [
-    {
-      provide: UserService,
-      useFactory: (userRepository: UserRepository) => {
-        return new UserService(userRepository);
-      },
-      inject: [UserRepository],
-    },
-    {
-      provide: UserRepository,
-      useClass: TypeOrmUserRepository,
-    },
-  ],
+  providers: [UserService],
 })
 export class UserModule {}

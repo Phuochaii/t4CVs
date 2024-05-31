@@ -1,4 +1,6 @@
-import Agents from "./Agents";
-import Compaign from "./Compaign";
+import Campaign from "./Campaign";
+import Overview from "./Overview";
+import Company from "./Company";
+import Recruitment from "./Recruitment";
 
-export { Agents, Compaign };
+export { Overview, Campaign, Company, Recruitment };

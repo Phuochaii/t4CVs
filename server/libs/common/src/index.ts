@@ -1,1 +1,1 @@
-export * from './conveters';
+export * from './pagination';

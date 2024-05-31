@@ -1,4 +1,5 @@
 import { Controller } from '@nestjs/common';
+import { NotificationServiceService } from './services';
 import {
   GetUserNotificationsRequest,
   GetUserNotificationsResponse,
@@ -11,31 +12,31 @@ import {
   status,
 } from '@app/common/proto/notification';
 import { Observable } from 'rxjs';
-import { PaginationRequest } from '@app/common/dto/pagination';
+import { PaginationRequest, PaginationResponse } from '@app/common';
+import { NotificationStatus } from './entities';
 import { DateTimestampConverter } from '@app/common/conveters';
-import { NotificationApplication } from './domain/notification.application';
-import { UserNotificationAggregate } from './domain/aggregate';
 
 @Controller()
 @NotificationServiceControllerMethods()
 export class NotificationController implements NotificationServiceController {
   constructor(
-    private readonly notificationApplication: NotificationApplication,
-  ) { }
+    private readonly notificationServiceService: NotificationServiceService,
+  ) {}
 
   async updateNotificationStatus({
     user: { id: userId },
     notificationId,
     status,
   }: UpdateNotificationStatusRequest): Promise<UpdateNotificationStatusResponse> {
-    const updatedStatus = await this.notificationApplication.updateNotificationStatus({
-      user: { id: userId },
-      notificationId,
-      status: status as unknown as UserNotificationAggregate['status'],
-    });
-  
+    const userNotification =
+      await this.notificationServiceService.updateNotificationStatus(
+        userId,
+        notificationId,
+        status as unknown as NotificationStatus,
+      );
+
     return {
-      status: updatedStatus.status as unknown as status,
+      status: userNotification.status as unknown as status,
     };
   }
 
@@ -44,34 +45,39 @@ export class NotificationController implements NotificationServiceController {
     paginationRequest,
   }: GetUserNotificationsRequest): Promise<GetUserNotificationsResponse> {
     const paginationReq = new PaginationRequest(paginationRequest);
-    const notifications = await this.notificationApplication.getNotifications({
-      user,
-      paginationRequest: paginationReq,
-    });
 
+    const userNotifications =
+      await this.notificationServiceService.getNotifications(
+        user.id,
+        paginationReq,
+      );
+    const total = await this.notificationServiceService.getTotalNotifications(
+      user.id,
+    );
     return {
-      pagination: notifications.pagination,
-      data: notifications.data.map((notification) => {
+      pagination: new PaginationResponse(
+        total,
+        userNotifications,
+        paginationReq,
+      ),
+      data: userNotifications.map((userNotification) => {
+        const notification = userNotification.notification;
         return {
-          ...notification,
-          status: notification.status as unknown as status,
+          id: notification.id,
+          title: notification.title,
+          content: notification.content,
+          link: notification.link,
+          status: userNotification.status as unknown as status,
           createdAt: DateTimestampConverter.toTimestamp(notification.createdAt),
         };
       }),
-    }
+    };
   }
 
   async sendNotification(
     request: SendNotificationRequest,
   ): Promise<SendNotificationResponse | Observable<SendNotificationResponse>> {
-    await this.notificationApplication.createNotification({
-      notification: {
-        title: request.title,
-        content: request.content,
-        link: request.link,
-      },
-      users: request.users,
-    });
+    await this.notificationServiceService.createNotification(request);
     return true;
   }
 }

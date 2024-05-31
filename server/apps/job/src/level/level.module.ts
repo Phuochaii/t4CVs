@@ -1,26 +1,12 @@
 import { Module } from '@nestjs/common';
-import { LevelService } from '../domain/services/level.service';
+import { LevelService } from './level.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Level } from '../infrastructure/schemas';
-import { LevelRepository } from '../domain/repository';
-import { TypeOrmLevelyRepository } from '../infrastructure/repository';
+import { Level } from '../entities/level.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Level])],
   controllers: [],
-  providers: [
-    {
-      provide: LevelService,
-      useFactory: (levelRepository: LevelRepository) => {
-        return new LevelService(levelRepository);
-      },
-      inject: [LevelRepository],
-    },
-    {
-      provide: LevelRepository,
-      useClass: TypeOrmLevelyRepository,
-    },
-  ],
+  providers: [LevelService],
   exports: [LevelService],
 })
 export class LevelModule {}

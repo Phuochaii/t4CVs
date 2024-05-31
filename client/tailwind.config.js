@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
-export default {
-  darkMode: 'class',
+/*eslint-env es6*/
+
+module.exports = {
+  darkMode: "class",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
@@ -13,8 +15,13 @@ export default {
         color1: "#123139",
         color2: "#17844b",
       },
+      maxWidth: {
+        "1/4": "25%",
+        "1/2": "300px",
+        "1/3": "60%",
+        "2/3": "40%",
+      },
     },
   },
   plugins: [],
 };
-

@@ -1,5 +1,5 @@
 function Footer() {
-  return <div>footer of hr</div>;
+    return <div></div>;
 }
 
 export default Footer;

@@ -1,4 +1,4 @@
-import { Field } from '../infrastructure/schemas/field.schema';
+import { Field } from '../entities/field.entity';
 
 export const fields: Field[] = [
   {

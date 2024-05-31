@@ -1,4 +1,4 @@
-import { CreateJobDto } from '../domain/dto/Req/create-job.dto';
+import { CreateJobDto } from '../dto/Req/create-job.dto';
 
 export const jobs: CreateJobDto[] = [
   {

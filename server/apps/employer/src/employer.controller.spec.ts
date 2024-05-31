@@ -15,8 +15,8 @@ describe('EmployerController', () => {
   });
 
   describe('root', () => {
-    it('should be defined', () => {
-      expect(employerController).toBeDefined();
+    it('should return "Hello World!"', () => {
+      expect(employerController.getHello()).toBe('Hello World!');
     });
   });
 });

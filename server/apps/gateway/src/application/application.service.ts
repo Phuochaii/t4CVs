@@ -40,6 +40,7 @@ export class ApplicationService implements OnModuleInit {
       );
   }
 
+<<<<<<< HEAD
   async create(createApplicationRequest: CreateApplicationRequest) {
     const application = await firstValueFrom(
       this.applicationServiceClient.createApplication(createApplicationRequest),
@@ -65,6 +66,11 @@ export class ApplicationService implements OnModuleInit {
   async findOne(id: number) {
     return await firstValueFrom(
       this.applicationServiceClient.readApplication({ id }),
+=======
+  create(createApplicationRequest: CreateApplicationRequest) {
+    return this.applicationServiceClient.createApplication(
+      createApplicationRequest,
+>>>>>>> 80f65bf8591fcdecb03f2f3aa8bdd4d9670c9256
     );
   }
 
