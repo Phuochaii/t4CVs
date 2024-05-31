@@ -301,7 +301,7 @@ function ApplyCV() {
     navigation(`/results?${queryString}`);
   };
 
-  const ApplyModal = withRoleCheck(Roles.USER)(() => (
+  const ApplyModal = withRoleCheck(Roles.USER, () => (
     <Modal
         open={true}
         onClose={handleCloseModal}

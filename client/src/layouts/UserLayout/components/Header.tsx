@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../../../App.css';
 import React from 'react';
 import * as UserModule from '../../../modules/user-module';
@@ -10,7 +10,6 @@ import { Roles, useProfileContext } from '../../../shared/services/authen/domain
 function Header() {
   const navigation = useNavigate();
   const {isAuthenticated, user, logout, isLoading} = useAuth0();
-  const {profile} = useProfileContext();
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
@@ -41,8 +40,10 @@ function Header() {
   const [isSupportsHovered, setIsSupportsHovered] = useState(false);
   const [isAccountHovered, setIsAccountHovered] = useState(false);
 
-
-  const HeaderProfileSection = withRoleCheck(Roles.USER)(() => (
+  const HeaderProfileSection = withRoleCheck(Roles.USER, () => {
+  const {profile} = useProfileContext();
+    
+    return (
     <>
       <li
         className="relative flex flex-col justify-center list-none"
@@ -350,7 +351,7 @@ function Header() {
         )}
       </li>
     </>
-  ));
+  )});
   return (
     <header className="fixed top-0 left-0 right-0 z-50 text-black bg-white border menu-top border-1 border-slate-300">
       <div className="flex flex-row items-center justify-between px-8 ">

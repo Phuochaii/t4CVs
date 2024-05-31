@@ -5,8 +5,8 @@ import Spinner from '../../../../pages/Spinner';
 import { useAuth0 } from '@auth0/auth0-react';
 import { AUTH0_BACKEND_AUDIENCE } from '../infrastructure/config';
 
-export const withRoleCheck = (role: Role) => (WrappedComponent: FC) => {
-  const AuthHOC: FC = (props) => {
+export const withRoleCheck = (role: Role, WrappedComponent: FC) : FC => {
+  return (props) => {
     const navigate = useNavigate();
     const {getAccessTokenSilently, isAuthenticated, isLoading} = useAuth0();
     const {role: currentRole, setRole} = useProfileContext();
@@ -19,26 +19,22 @@ export const withRoleCheck = (role: Role) => (WrappedComponent: FC) => {
       }
       if(currentRole !== undefined) return;
       const checkRole = async () => {
-        try {
           const token = await getAccessTokenSilently({
             authorizationParams: {
               audience: AUTH0_BACKEND_AUDIENCE
             },
             cacheMode: 'off'
           });
-          const result = await role.check(token);
+          const result = await role.check(token).catch(e => false);
+          if(currentRole !== undefined) return;
           if(result) {
             setRole(role);
             return;
           }
           setRole(null);
-        } catch (e) {
-          console.error(e);
-          setRole(null);
-        }
       }
       checkRole();
-    }, [isAuthenticated, currentRole, setRole, role, navigate, isLoading]);
+    }, [isAuthenticated, isLoading, currentRole, setRole, role, navigate,]);
     if(isLoading || !isAuthenticated || currentRole === undefined) {
       return <Spinner/>;
     }
@@ -52,6 +48,4 @@ export const withRoleCheck = (role: Role) => (WrappedComponent: FC) => {
     }
     return <Spinner/>;
   };
-
-  return AuthHOC;
 }

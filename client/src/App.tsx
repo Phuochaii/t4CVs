@@ -8,25 +8,16 @@ import {
 import routes from "./routes";
 import EmptyLayout from "./layouts/EmptyLayout";
 import { createContext } from "react";
-import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
-import { AUTH0_BACKEND_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from "./shared/services/authen/infrastructure/config";
-import { ProfileProvider } from "./shared/services/authen/domain/context";
+import { useAuth0 } from "@auth0/auth0-react";
 import { withRoleCheck } from "./shared/services/authen/domain/withRoleCheck";
 import { accountList } from "./shared/utils/constant";
 import Spinner from "./pages/Spinner";
+
 
 export const MyContext = createContext({});
 
 function App() {
   return (
-    <Auth0Provider
-      domain={AUTH0_DOMAIN}
-      clientId={AUTH0_CLIENT_ID}
-      authorizationParams={{
-        redirect_uri: window.location.origin,
-        audience: AUTH0_BACKEND_AUDIENCE,
-      }}>
-      <ProfileProvider>
         <MyContext.Provider value={{ accountList: accountList }}>
           <Router>
             <Routes>
@@ -41,7 +32,7 @@ function App() {
                   </Layout>
                 );
                 const ElementWithRoleCheck = role
-                  ? withRoleCheck(role)(() => <Element />)
+                  ? withRoleCheck(role, Element)
                   : Element;
                 return (
                   <Route
@@ -50,7 +41,7 @@ function App() {
                     element={
                       isLoading
                         ? <Spinner/>
-                        : <ElementWithRoleCheck />
+                      : <ElementWithRoleCheck/>
                     }
                   />
                 );
@@ -62,9 +53,6 @@ function App() {
             </Routes>
           </Router>
         </MyContext.Provider>
-      </ProfileProvider>
-    </Auth0Provider>
-
   );
 }
 

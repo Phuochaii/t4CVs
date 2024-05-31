@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { createContext, useContext, useEffect, useState } from 'react';
+import React, { SetStateAction, createContext, useContext, useEffect, useState } from 'react';
 import Spinner from '../../../../pages/Spinner';
 import { useNavigate } from 'react-router-dom';
 import { AUTH0_BACKEND_AUDIENCE } from '../infrastructure/config';
@@ -51,7 +51,7 @@ export const Roles: { [key in "HR" | "USER"]: Role } = {
             console.log('Register user profile')
             const { user, getAccessTokenSilently, isAuthenticated, isLoading } = useAuth0();
             const navigate = useNavigate();
-            const { setRole } = useProfileContext();
+            const { role, setRole } = useProfileContext();
             useEffect(() => {
                 if(isLoading) return;
                 if (!isAuthenticated) {
@@ -67,6 +67,7 @@ export const Roles: { [key in "HR" | "USER"]: Role } = {
                             },
                             cacheMode: 'off'
                         });
+                        
                         await createUser({
                             fullname: user.name as string,
                             phone: user.phone_number,
@@ -76,8 +77,6 @@ export const Roles: { [key in "HR" | "USER"]: Role } = {
                         setRole(Roles.USER)
                     } catch (error) {
                         console.error(error);
-                        alert('Register user profile failed!');
-                        window.location.reload();
                     }
                 }
                 registerProfile();
@@ -100,7 +99,7 @@ type ProfileContextInterface = {
     profile?: Profile,
     setProfile: (user: Profile) => void,
     role?: Role | null,
-    setRole: (role: Role | null | undefined) => void,
+    setRole: (role: Role | null | undefined ) => void,
 };
 const ProfileContext = createContext<ProfileContextInterface>({
     setProfile: () => { },
