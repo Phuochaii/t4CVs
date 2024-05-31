@@ -5,27 +5,32 @@ import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
 import { FindEmployerDTOResponse } from './dto/Res/find_employer.dto';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { Role } from '../authentication/dto/role.dto';
+import { CreateHrDto as CreateEmployerAccountDto } from '../authentication/dto/create-hr.dto';
 
 @Injectable()
 export class EmployerService {
   constructor(
     @Inject('EMPLOYER') private readonly employerClient: ClientProxy,
     private readonly authenticationService: AuthenticationService,
-  ) { }
+  ) {}
 
-  async createEmployer(createEmployerDTO: CreateEmployerDto): Promise<Observable<string>> {
+  async createEmployer(
+    createEmployerDTO: CreateEmployerDto,
+  ): Promise<Observable<string>> {
     await this.authenticationService.asignRole({
       userId: createEmployerDTO.id,
       role: Role.HR,
-    });
-    await this.authenticationService.setUpProfile({
-      id: createEmployerDTO.id,
-      name: createEmployerDTO.fullname,
     });
     return this.employerClient.send(
       { cmd: 'create_employer' },
       createEmployerDTO,
     );
+  }
+
+  async createEmployerAccount(
+    createEmployerAccountDto: CreateEmployerAccountDto,
+  ) {
+    return this.authenticationService.createHrAccount(createEmployerAccountDto);
   }
 
   getAllEmployers(page: number, limit: number): Observable<string> {

@@ -22,18 +22,17 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { User, Mail, Lock, Phone, Building } from "lucide-react";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import { styled } from "@mui/material/styles";
 import "../../shared/assets/styles/hr-signup.css";
 import { data_provinces } from "../auth-page/signup-page/provinces-data";
 import { data_districts } from "../auth-page/signup-page/districts-data";
 import Input from "../auth-page/signup-page/Input";
-import { createEmpolyer, getCanUpdateProfile, getPosition } from "../../modules/hr-module";
+import { createEmpolyer, getPosition } from "../../modules/hr-module";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Roles, useRoleContext } from "../../shared/services/authen/domain/context";
+import { Roles, useProfileContext } from "../../shared/services/authen/domain/context";
 import Spinner from "../Spinner";
-import { AUTH0_CLIENT_ID } from "../../shared/services/authen/infrastructure/config";
+import { AUTH0_BACKEND_AUDIENCE, AUTH0_CLIENT_ID } from "../../shared/services/authen/infrastructure/config";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -90,14 +89,13 @@ interface ValidateMessages {
 }
 
 function HRProfileRegister() {
-  const {user, isLoading, logout, getAccessTokenSilently, isAuthenticated} = useAuth0();
-  const {role, setRole} = useRoleContext();
+  const { user, logout, getAccessTokenSilently, isAuthenticated, isLoading } = useAuth0();
+  const { role, setRole } = useProfileContext();
   const navigate = useNavigate();
-  const [canUpdateProfile, setCanUpdateProfile] = useState<boolean | undefined>(undefined);
   const [formData, setFormData] = useState<FormData>({
     agreeToTerms: false,
     role: "",
-    name: "",
+    name: user?.name || "",
     sex: "",
     phone: "",
     company: "",
@@ -143,26 +141,9 @@ function HRProfileRegister() {
       console.error("Error fetching data:", error);
     }
   };
-  const fetchCanUpdateProfile = async (id: string) => {
-    try {
-      const response = await getCanUpdateProfile(id);
-      if(!response)  setFormData((prevFormData) => ({
-        ...prevFormData,
-        name: user?.name || "",
-      }));
-      setCanUpdateProfile(response);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
   useEffect(() => {
     fetchDataPosition();
   }, []);
-
-  useEffect(() => {
-    if(!user) return;
-    fetchCanUpdateProfile(user.sub as string);
-  }, [user]);
 
   const isPhoneValid = (phone: string) => {
     setValidateMessages((prevState) => ({
@@ -191,7 +172,7 @@ function HRProfileRegister() {
     setExpanded(!expanded);
   };
 
-  const handleSignUp = (e: { preventDefault: () => void }) => {
+  const handleSignUp = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     let error = false;
@@ -270,7 +251,7 @@ function HRProfileRegister() {
       setErrorMessage("");
     }, 3000);
 
-    if(error) return;
+    if (error) return;
 
     createEmpolyer({
       id: user?.sub as string,
@@ -280,8 +261,14 @@ function HRProfileRegister() {
       skype: formData.skype_account,
       phoneNumber: formData.phone,
       image: user?.picture as string,
+      token: await getAccessTokenSilently({
+        authorizationParams: {
+          audience: AUTH0_BACKEND_AUDIENCE,
+        },
+        cacheMode: 'off'
+      })
     })
-      .then(() =>  console.log("Success register profile"))
+      .then(() => console.log("Success register profile"))
       .then(() => setErrorMessage(""))
       .then(() => setShowSuccessMessage(true))
       .then(() => getAccessTokenSilently({
@@ -292,31 +279,40 @@ function HRProfileRegister() {
   };
 
   useEffect(() => {
-    if(isLoading) return;
-    if(!isAuthenticated) {
+    if(isLoading) return; 
+    if (!isAuthenticated) {
       navigate(Roles.HR.loginUrl);
       return;
     }
-    if(!user) return console.error("isAuthenticated is true but user is null");
-    if(role === undefined) {
-      Roles.HR.check(user?.sub as string)
-        .then((isAuthenticated) => {
-          if(isAuthenticated) {
+    if (!user) return console.error("isAuthenticated is true but user is null");
+    if (role === undefined) {
+      const checkRole = async () => {
+        try {
+          const token = await getAccessTokenSilently({
+            authorizationParams: {
+              audience: AUTH0_BACKEND_AUDIENCE
+            },
+            cacheMode: 'off'
+          });
+          const result = await Roles.HR.check(token);
+          if (result) {
             setRole(Roles.HR);
             return;
           }
           setRole(null);
-        })
-        .catch(() => {
+        } catch (e) {
+          console.error(e);
           setRole(null);
-        });
+        }
+      }
+      checkRole();
     }
-    if(role === Roles.HR){
+    if (role === Roles.HR) {
       navigate(Roles.HR.redirectUrl);
       return;
     }
-  }, [role, isLoading, isAuthenticated])
-  if(isLoading || !isAuthenticated || role === undefined ||role === Roles.HR) return <Spinner/>;
+  }, [role, isAuthenticated, isLoading])
+  if (isLoading || !isAuthenticated || role === undefined || role === Roles.HR) return <Spinner />;
 
   return (
     <>
@@ -352,9 +348,8 @@ function HRProfileRegister() {
                   name="name"
                   type="text"
                   placeholder="Họ và tên"
-                  disabled={canUpdateProfile === false}
                   value={formData.name}
-                  onChange={(e) =>{
+                  onChange={(e) => {
                     setFormData((prevFormData) => ({
                       ...prevFormData,
                       name: e.target.value,
@@ -647,7 +642,7 @@ function HRProfileRegister() {
                 logout({
                   clientId: AUTH0_CLIENT_ID,
                   logoutParams: {
-                    returnTo: `${window.location.origin}${Roles.HR.loginUrl}` ,
+                    returnTo: `${window.location.origin}${Roles.HR.loginUrl}`,
                   }
                 })
               }}

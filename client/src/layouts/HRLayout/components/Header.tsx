@@ -13,7 +13,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import * as HRModule from "../../../modules/hr-module";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Roles } from "../../../shared/services/authen/domain/context";
+import { Roles, useProfileContext } from "../../../shared/services/authen/domain/context";
 import { AUTH0_CLIENT_ID } from "../../../shared/services/authen/infrastructure/config";
 
 const list_btn1 = [
@@ -66,6 +66,7 @@ const accountButton = {
 function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
   const navigation = useNavigate();
   const {user, logout} = useAuth0();
+  const { profile} = useProfileContext();
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [displayAccountTab, setDisplayAccountTab] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
@@ -236,7 +237,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
               <RoundedButton
                 text={accountButton.name}
                 icon={accountButton.icon}
-                image={user?.picture || accountButton.image}
+                image={profile?.picture || accountButton.image}
                 iconSize={accountButton.iconSize}
                 onClick={() => {
                   navigation(accountButton.link);

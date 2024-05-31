@@ -1,62 +1,64 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { createContext, useContext, useEffect, useState } from 'react';
-import axios from "axios";
 import Spinner from '../../../../pages/Spinner';
 import { useNavigate } from 'react-router-dom';
 import { AUTH0_BACKEND_AUDIENCE } from '../infrastructure/config';
+import { isUser, getProfile as getUserProfile, createUser } from '../../../../modules/user-module';
+import { getProfile as getHrProfile, isHr } from '../../../../modules/hr-module';
 
+type Profile = {
+    name: string,
+    picture?: string,
+}
 export interface Role {
-    check: (token:string) => Promise<boolean>,
+    check: (token: string) => Promise<boolean>,
     redirectUrl: string,
     RegisterProfile: () => JSX.Element,
     loginUrl: string,
+    registerApiUrl: string,
+    getProfile: (token: string) => Promise<Profile>,
 }
-  
+
 export const Roles: { [key in "HR" | "USER"]: Role } = {
     HR: {
         check: async (token) => {
-            const result = await axios.get(`http://localhost:3000/employer/check`,{
-                headers: {
-                    authorization: `Bearer ${token}`,
-                }
-            })
-                .then(res => res.data as boolean)
-                .catch(() => false);
-            return result;
+            return await isHr(token);
         },
         RegisterProfile: () => {
             const navigate = useNavigate();
             useEffect(() => {
                 navigate('/hr-profile-register');
             }, [navigate]);
-            return <Spinner/>
+            return <Spinner />
         },
         redirectUrl: '/hr/news',
         loginUrl: '/hr-login',
+        registerApiUrl: 'http://localhost:3000/employer/account',
+        getProfile: async (token) => {
+            const profile = await getHrProfile(token);
+            return {
+                name: profile.fullname,
+                picture: profile.image,
+            }
+        },
     },
     USER: {
         check: async (token) => {
-            const result = await axios.get(`http://localhost:3000/user/check`,{
-                headers: {
-                    authorization: `Bearer ${token}`,
-                }
-            })
-                .then(res => res.data as boolean)
-                .catch(() => false);
-            return result;
+            return await isUser(token);
         },
         redirectUrl: '/',
         RegisterProfile: () => {
-            const { user, isLoading, getAccessTokenSilently, isAuthenticated } = useAuth0();
+            console.log('Register user profile')
+            const { user, getAccessTokenSilently, isAuthenticated, isLoading } = useAuth0();
             const navigate = useNavigate();
-            const {setRole} = useRoleContext();
+            const { setRole } = useProfileContext();
             useEffect(() => {
                 if(isLoading) return;
-                if(!isAuthenticated) {
+                if (!isAuthenticated) {
                     navigate(Roles.USER.loginUrl);
                     return;
                 };
-                if(!user) return console.error('isAuthenticated is true but user is null!');
+                if (!user) return console.error('isAuthenticated is true but user is null!');
                 const registerProfile = async () => {
                     try {
                         const token = await getAccessTokenSilently({
@@ -65,14 +67,11 @@ export const Roles: { [key in "HR" | "USER"]: Role } = {
                             },
                             cacheMode: 'off'
                         });
-                        console.log('token:', token);
-                        await axios.post(`http://localhost:3000/user/create`, {
-                            fullname: user.name,
+                        await createUser({
+                            fullname: user.name as string,
                             phone: user.phone_number,
-                        },{
-                            headers: {
-                                authorization: `Bearer ${token}`,
-                            }
+                            image: user.picture,
+                            token,
                         });
                         setRole(Roles.USER)
                     } catch (error) {
@@ -82,30 +81,66 @@ export const Roles: { [key in "HR" | "USER"]: Role } = {
                     }
                 }
                 registerProfile();
-            }, [isLoading, isAuthenticated]);
-            return <Spinner/>
+            }, [isAuthenticated,isLoading]);
+            return <Spinner />
         },
         loginUrl: '/user-login',
+        registerApiUrl: 'http://localhost:3000/user/account',
+        getProfile: async (token) => {
+            const profile = await getUserProfile(token);
+            return {
+                name: profile.fullname,
+                picture: profile.image,
+            }
+        },
     },
 }
 
-type RoleContextInterface = {
+type ProfileContextInterface = {
+    profile?: Profile,
+    setProfile: (user: Profile) => void,
     role?: Role | null,
     setRole: (role: Role | null | undefined) => void,
 };
-const RoleContext = createContext<RoleContextInterface>({
+const ProfileContext = createContext<ProfileContextInterface>({
+    setProfile: () => { },
     setRole: () => { },
 });
-export function RoleProvider({ children }: { children: React.ReactNode }) {
+export function ProfileProvider({ children }: { children: React.ReactNode }) {
+    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+    const [profile, setProfile] = useState<Profile | undefined>(undefined);
     const [role, setRole] = useState<Role | undefined | null>(undefined);
     const value = {
+        profile,
+        setProfile,
         role,
         setRole,
     };
+    useEffect(() => {
+        if (!isAuthenticated || !role) return;
+        const getProfile = async () => {
+            try {
+                const token = await getAccessTokenSilently({
+                    authorizationParams: {
+                        audience: AUTH0_BACKEND_AUDIENCE,
+                    },
+                    cacheMode: 'off',
+                });
+                const profile = await role.getProfile(token);
+                setProfile(profile);
+            } catch (error) {
+                console.error(error);
+                alert('Get user profile failed!');
+                window.location.reload();
+            }
+        }
+        getProfile();
+    }, [isAuthenticated, role])
+
     return (
-        <RoleContext.Provider value={value}>
+        <ProfileContext.Provider value={value}>
             {children}
-        </RoleContext.Provider>
+        </ProfileContext.Provider>
     );
 }
-export const useRoleContext = () => useContext(RoleContext);
+export const useProfileContext = () => useContext(ProfileContext);

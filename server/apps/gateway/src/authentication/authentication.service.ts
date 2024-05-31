@@ -4,6 +4,7 @@ import { ManagementClient } from 'auth0';
 import { Role } from './dto/role.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { SetUpProfileDto } from './dto/setup-profile.dto';
+import { CreateHrDto } from './dto/create-hr.dto';
 
 
 
@@ -30,7 +31,6 @@ export class AuthenticationService {
         throw new InternalServerErrorException('Invalid role');
     }
   }
-
 
   async asignRole({
     userId,
@@ -63,6 +63,22 @@ export class AuthenticationService {
     await this.asignRole({
       userId: response.data.user_id,
       role: Role.USER,
+    });
+    return response;
+  }
+
+  async createHrAccount({
+    email, password,
+  }: CreateHrDto) {
+    const response = await this.auth0.users.create({
+      email,
+      password,
+      connection: 'Username-Password-Authentication',
+      email_verified: false,
+    });
+    await this.asignRole({
+      userId: response.data.user_id,
+      role: Role.HR,
     });
     return response;
   }
