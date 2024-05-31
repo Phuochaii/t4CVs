@@ -6,7 +6,6 @@ import React from 'react';
 import * as UserModule from '../../../modules/user-module';
 import { useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
-import Spinner from '../../../pages/Spinner';
 
 function Header() {
   const navigation = useNavigate();

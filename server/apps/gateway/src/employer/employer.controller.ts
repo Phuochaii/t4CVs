@@ -1,15 +1,32 @@
-import { Controller, Get, Param, Post, Body, Query } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { EmployerService } from './employer.service';
 import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
+import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
 
 @Controller('employer')
 export class EmployerController {
   constructor(private readonly employerService: EmployerService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('create')
-  async createEmployer(@Body() data: CreateEmployerDto): Promise<Observable<string>> {
-    return this.employerService.createEmployer(data);
+  async createEmployer(
+    @GetUser() user: UserClaims,
+    @Body() data: Omit<CreateEmployerDto, 'id'>,
+  ): Promise<Observable<string>> {
+    return this.employerService.createEmployer({
+      id: user.sub,
+      ...data,
+    });
   }
 
   @Get('all')
@@ -35,9 +52,10 @@ export class EmployerController {
     return this.employerService.findPositionById(id);
   }
 
-  @Get('check/:id')
-  checkEmployer(@Param('id') id: string): Observable<boolean> {
-    return this.employerService.checkEmployer(id);
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
+  @Get('check')
+  checkEmployer(@GetUser() user: UserClaims): Observable<boolean> {
+    return this.employerService.checkEmployer(user.sub);
   }
 
   @Get(':id/can-update-profile')

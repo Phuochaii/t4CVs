@@ -28,7 +28,7 @@ const images = [
 
 function HRLogIn() {
   const navigate = useNavigate();
-  const {user, isLoading} = useAuth0();
+  const {isAuthenticated, isLoading} = useAuth0();
   
 
   const [formData, setFormData] = useState({
@@ -97,12 +97,12 @@ function HRLogIn() {
 
   React.useEffect(() => {
     if(isLoading) return;
-    if (user) {
+    if (isAuthenticated) {
       navigate(Roles.HR.redirectUrl);
       return;
     }
-  }, [user, isLoading]);
-  if(isLoading || user) return <Spinner/>;
+  }, [isAuthenticated, isLoading]);
+  if(isLoading || isAuthenticated) return <Spinner/>;
 
   return (
     <div className="grid grid-cols-3 gap-4">

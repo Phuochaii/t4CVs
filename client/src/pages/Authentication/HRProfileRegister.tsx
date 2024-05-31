@@ -90,7 +90,7 @@ interface ValidateMessages {
 }
 
 function HRProfileRegister() {
-  const {user, isLoading, logout, getAccessTokenSilently} = useAuth0();
+  const {user, isLoading, logout, getAccessTokenSilently, isAuthenticated} = useAuth0();
   const {role, setRole} = useRoleContext();
   const navigate = useNavigate();
   const [canUpdateProfile, setCanUpdateProfile] = useState<boolean | undefined>(undefined);
@@ -293,12 +293,13 @@ function HRProfileRegister() {
 
   useEffect(() => {
     if(isLoading) return;
-    if(!user) {
+    if(!isAuthenticated) {
       navigate(Roles.HR.loginUrl);
       return;
     }
+    if(!user) return console.error("isAuthenticated is true but user is null");
     if(role === undefined) {
-      Roles.HR.check(user.sub as string)
+      Roles.HR.check(user?.sub as string)
         .then((isAuthenticated) => {
           if(isAuthenticated) {
             setRole(Roles.HR);
@@ -314,8 +315,8 @@ function HRProfileRegister() {
       navigate(Roles.HR.redirectUrl);
       return;
     }
-  }, [user, role, isLoading])
-  if(isLoading || !user || role === undefined ||role === Roles.HR) return <Spinner/>;
+  }, [role, isLoading, isAuthenticated])
+  if(isLoading || !isAuthenticated || role === undefined ||role === Roles.HR) return <Spinner/>;
 
   return (
     <>
