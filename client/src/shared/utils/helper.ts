@@ -5,6 +5,7 @@ import { EmployerFromServer } from "../types/Employer.type"
 import { Field, RecruitmentFromServer } from "../types/Recruitment.type"
 import { ApplicationFromServer } from "../types/Application.type"
 import { UserFromServer } from "../types/User.type"
+import { UserCV } from "../types/CV_user.type"
 
 const serverURL = 'http://localhost:3000'
 
@@ -37,7 +38,7 @@ export async function getAllCompanies(page: number = 1) {
     return {allCompanies: rawCompanies, totalPages: totalPages, total: total};
 }
 
-export async function getCompanyById(id:number) {
+export async function getCompanyById(id: number | string) {
     const response = await axios.get(`${serverURL}/company/${id}`);
     if (response.status != 200) return null;
     const rawCompany: CompanyFromServer = response.data;
@@ -111,9 +112,41 @@ export async function getUserById(userId: number) {
         return null;
     }
 }
+export async function getCVById(cvId: number) {
+    try {
+        const response = await axios.get(`${serverURL}/cv/${cvId}`);
+        const CV: UserCV = response.data;
+        return CV;
+    }
+    catch (e) {
+        return null;
+    }
+}
+export async function getApplications(userId: string) {
+    try {
+        const response = await axios.get(`${serverURL}/application/user/${userId}?page=1&limit=5/`);
+        const applications: ApplicationFromServer[] = response.data.applicationsFinal;
+        console.log(response)
+        const campaignIds = applications.map((application: ApplicationFromServer) => application.campaignId);
+        const promiseJobs = campaignIds.map(id => getJobByCampaignId(id))
+        const jobs = (await Promise.all(promiseJobs)).filter(job => job !== null) as RecruitmentFromServer[];
+        return {applications:applications,jobs:jobs};
+    }
+    catch (e) {
+        return null;
+    }
+}
 
 export async function getAllFields() {
     const response = await axios.get(`${serverURL}/job/field/all`);
     const fields: Field[] = response.data;
     return fields;
+}
+
+export async function updateCompanyStatus(id: number, status: boolean) {
+    const response = await axios.put(`${serverURL}/company/update`, {
+        id: id,
+        status: status,
+    });
+    return response;
 }

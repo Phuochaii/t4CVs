@@ -1,18 +1,18 @@
-import { useState } from "react";
-import { Switch, colors } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { Switch, colors } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 
-import ManganeBanner from "../../shared/assets/images/manage-cv-banner.webp";
-import NoCVImage from "../../shared/assets/images/no-cv.webp";
-import NoCVUploadImage from "../../shared/assets/images/no-cv-upload.webp";
-import NoProfileImage from "../../shared/assets/images/no-profile.webp";
-import Avatar from "../../shared/assets/images/vietnam-flag-icon.png";
+import ManganeBanner from '../../shared/assets/images/manage-cv-banner.webp';
+import NoCVImage from '../../shared/assets/images/no-cv.webp';
+import NoCVUploadImage from '../../shared/assets/images/no-cv-upload.webp';
+import NoProfileImage from '../../shared/assets/images/no-profile.webp';
+import Avatar from '../../shared/assets/images/vietnam-flag-icon.png';
 
 const TemplateCV = () => {
   const [isOn, setIsOn] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('');
 
   const navigate = useNavigate();
 
@@ -33,7 +33,10 @@ const TemplateCV = () => {
   };
 
   return (
-    <div className="justify-center flex flex-row" style={{ backgroundColor: "#f1f2f6" }}>
+    <div
+      className="justify-center flex flex-row"
+      style={{ backgroundColor: '#f1f2f6' }}
+    >
       <div className="w-1/2 flex flex-col m-8">
         <div className="w-full mb-2">
           <img
@@ -57,7 +60,7 @@ const TemplateCV = () => {
           <div>
             <button
               className="bg-green-600 rounded-full text-white leading-none px-4 py-3 hover:bg-green-700"
-              onClick={() => navigate("/list-cv")}
+              onClick={() => navigate('/list-cv')}
             >
               <span className="font-bold"> + Tạo mới</span>
             </button>
@@ -107,7 +110,6 @@ const TemplateCV = () => {
             </button>
           </div>
         </div>
-
       </div>
 
       <div className="w-3/12 m-8 flex flex-col">
@@ -137,20 +139,20 @@ const TemplateCV = () => {
               <Switch
                 checked={isOn}
                 onChange={toggleSwitch}
-                inputProps={{ "aria-label": "controlled" }}
+                inputProps={{ 'aria-label': 'controlled' }}
                 sx={{
-                  "& .MuiSwitch-thumb": {
-                    bgcolor: isOn ? "green" : "gray",
+                  '& .MuiSwitch-thumb': {
+                    bgcolor: isOn ? 'green' : 'gray',
                   },
-                  "& .MuiSwitch-track": {
-                    bgcolor: isOn ? "green" : "gray",
+                  '& .MuiSwitch-track': {
+                    bgcolor: isOn ? 'green' : 'gray',
                   },
                 }}
               />
               <span
-                className={`ml-2 ${isOn ? "text-green-500" : "text-gray-400"} font-bold`}
+                className={`ml-2 ${isOn ? 'text-green-500' : 'text-gray-400'} font-bold`}
               >
-                {isOn ? "Đang Bật Tìm Việc" : "Đang Tắt Tìm Việc"}
+                {isOn ? 'Đang Bật Tìm Việc' : 'Đang Tắt Tìm Việc'}
               </span>
             </div>
             <p>
@@ -161,22 +163,22 @@ const TemplateCV = () => {
               <Switch
                 checked={isOn}
                 onChange={toggleSwitch}
-                inputProps={{ "aria-label": "controlled" }}
+                inputProps={{ 'aria-label': 'controlled' }}
                 sx={{
-                  "& .MuiSwitch-thumb": {
-                    bgcolor: isOn ? "green" : "gray",
+                  '& .MuiSwitch-thumb': {
+                    bgcolor: isOn ? 'green' : 'gray',
                   },
-                  "& .MuiSwitch-track": {
-                    bgcolor: isOn ? "green" : "gray",
+                  '& .MuiSwitch-track': {
+                    bgcolor: isOn ? 'green' : 'gray',
                   },
                 }}
               />
               <span
-                className={`ml-2 ${isOn ? "text-green-500" : "text-gray-400"} font-bold`}
+                className={`ml-2 ${isOn ? 'text-green-500' : 'text-gray-400'} font-bold`}
               >
                 {isOn
-                  ? "Đang cho phép NTD tìm kiếm hồ sơ"
-                  : "Chưa cho phép NTD tìm kiếm hồ sơ"}
+                  ? 'Đang cho phép NTD tìm kiếm hồ sơ'
+                  : 'Chưa cho phép NTD tìm kiếm hồ sơ'}
               </span>
             </div>
             <p>
@@ -209,7 +211,9 @@ const TemplateCV = () => {
           <div className="flex flex-row mt-4">
             <div className="w-2/3 mr-4">
               <label className="relative items-center">
-                <span className="text-gray-500 mr-2 absolute left-3 top-1/2 transform -translate-y-1/2">@</span>
+                <span className="text-gray-500 mr-2 absolute left-3 top-1/2 transform -translate-y-1/2">
+                  @
+                </span>
                 <span className="sr-only">Nhập tên miền email</span>
                 <input
                   type="text"
@@ -234,9 +238,11 @@ const TemplateCV = () => {
               <h1 className="font-bold">Các NTD thuộc công ty</h1>
             </div>
             <div className="mt-4 relative">
-              <Search className={`
+              <Search
+                className={`
                   w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500
-                  `} />
+                  `}
+              />
               <input
                 type="text"
                 value={searchValue}
@@ -276,7 +282,6 @@ const TemplateCV = () => {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

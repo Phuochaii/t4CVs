@@ -1,27 +1,27 @@
 // khoa
-import { useState, useRef, useEffect } from "react";
-import { TextField, InputLabel, Modal, Box } from "@mui/material";
-import { HeartIcon } from "@heroicons/react/24/outline";
-import { useNavigate, useParams } from "react-router-dom";
-import moment from "moment";
-import JobService from "../../modules/job-module";
-import SearchBoxComponent from "../../layouts/UserLayout/components/SearchBoxComponent";
-import RelatedJobComponent from "../../layouts/UserLayout/components/RelatedJobComponent";
-import InterestedJobComponent from "../../layouts/UserLayout/components/InterestedJobComponent";
-import { salary_range } from "../../shared/utils/constant";
+import { useState, useRef, useEffect } from 'react';
+import { TextField, InputLabel, Modal, Box } from '@mui/material';
+import { HeartIcon } from '@heroicons/react/24/outline';
+import { useNavigate, useParams } from 'react-router-dom';
+import moment from 'moment';
+import JobService from '../../modules/job-module';
+import SearchBoxComponent from '../../layouts/UserLayout/components/SearchBoxComponent';
+import RelatedJobComponent from '../../layouts/UserLayout/components/RelatedJobComponent';
+import InterestedJobComponent from '../../layouts/UserLayout/components/InterestedJobComponent';
+import { salary_range } from '../../shared/utils/constant';
 import { withRoleCheck } from "../../shared/services/authen/domain/withRoleCheck";
 import { Roles } from "../../shared/services/authen/domain/context";
 
 const modalApplyStyle = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  width: "40%",
-  transform: "translate(-50%, -50%)",
-  bgcolor: "background.paper",
-  borderRadius: "10px",
+  position: 'absolute' as const,
+  top: '50%',
+  left: '50%',
+  width: '40%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  borderRadius: '10px',
   boxShadow: 24,
-  color: "black",
+  color: 'black',
 };
 
 interface filterSearch {
@@ -36,11 +36,11 @@ function ApplyCV() {
   const { id: jobId } = useParams();
   // const jobId = state.id;
   const userId =
-    localStorage.getItem("user") == null
-      ? ""
-      : JSON.parse(localStorage.getItem("user") as string).id;
-  // const jobId = "3";
-  // const userId = "2";
+    localStorage.getItem('user') == null
+      ? ''
+      : JSON.parse(localStorage.getItem('user') as string).id;
+  // const jobId = '3';
+  // const userId = '2';
 
   const [showModal, setShowModal] = useState(false);
 
@@ -57,7 +57,7 @@ function ApplyCV() {
   const [exp_year, setExpYear] = useState<any[]>([]);
 
   const [filter, setFilter] = useState<filterSearch>({
-    titleRecruitment: "",
+    titleRecruitment: '',
     salaryMin: 0,
     salaryMax: 0,
     locationId: 0,
@@ -105,7 +105,7 @@ function ApplyCV() {
       const expResponse = await JobService.getAllExp();
       setExpYear(expResponse);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
   };
 
@@ -115,13 +115,13 @@ function ApplyCV() {
       try {
         const response = await fetch(`http://localhost:3000/job/${jobId}`);
         if (!response.ok) {
-          throw new Error("Failed to fetch data");
+          throw new Error('Failed to fetch data');
         }
         const data = await response.json();
         console.log(data);
         setJobData(data);
       } catch (error) {
-        console.log("Error fetching data. Please try again.");
+        console.log('Error fetching data. Please try again.');
       }
     };
 
@@ -147,24 +147,24 @@ function ApplyCV() {
       // 5MB limit
       const fileType = file.type;
       if (
-        fileType === "application/msword" || // .doc
+        fileType === 'application/msword' || // .doc
         fileType ===
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || // .docx
-        fileType === "application/pdf"
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || // .docx
+        fileType === 'application/pdf'
       ) {
         // pdf
         setSelectedFile(file);
       } else {
-        alert("Only .doc, .docx, and pdf files are allowed.");
+        alert('Only .doc, .docx, and pdf files are allowed.');
       }
     } else {
-      alert("File size exceeds 5MB limit.");
+      alert('File size exceeds 5MB limit.');
     }
   };
   const handleDeleteFile = () => {
     setSelectedFile(null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+      fileInputRef.current.value = '';
       setFormData({
         ...formData,
         file: null,
@@ -173,23 +173,23 @@ function ApplyCV() {
   };
 
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
+    name: '',
+    email: '',
+    phone: '',
     file: null,
-    cover_letter: "",
+    cover_letter: '',
   });
 
   const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    file: "",
+    name: '',
+    email: '',
+    phone: '',
+    file: '',
   });
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
-    const inputValue = type === "file" ? files[0] : value;
+    const inputValue = type === 'file' ? files[0] : value;
     setFormData({
       ...formData,
       [name]: inputValue,
@@ -202,37 +202,37 @@ function ApplyCV() {
     // Custom validation logic
     let errors = {};
     if (!formData.name) {
-      errors.name = "Name is required";
+      errors.name = 'Name is required';
     }
     if (!formData.email) {
-      errors.email = "Email is required";
+      errors.email = 'Email is required';
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(formData.email)
     ) {
-      errors.email = "Invalid email address";
+      errors.email = 'Invalid email address';
     }
     if (!formData.phone) {
-      errors.phone = "Phone number is required";
+      errors.phone = 'Phone number is required';
     } else if (!/^\d{10}$/i.test(formData.phone)) {
-      errors.phone = "Invalid phone number";
+      errors.phone = 'Invalid phone number';
     }
     if (!formData.file) {
-      errors.file = "File is required";
+      errors.file = 'File is required';
     }
 
     if (Object.keys(errors).length === 0) {
       // Upload CV
       const postData = new FormData();
-      postData.append("file", formData.file);
-      postData.append("userId", userId);
+      postData.append('file', formData.file);
+      postData.append('userId', userId);
 
-      const response = await fetch("http://localhost:3000/cv/upload", {
-        method: "POST",
+      const response = await fetch('http://localhost:3000/cv', {
+        method: 'POST',
         body: postData,
       });
 
       if (!response.ok) {
-        throw new Error("Failed to upload CV");
+        throw new Error('Failed to upload CV');
       }
 
       const newUploadCV = await response.json();
@@ -249,32 +249,32 @@ function ApplyCV() {
         cvId: newUploadCV.id,
       };
 
-      const appRes = await fetch("http://localhost:3000/application", {
-        method: "POST",
+      const appRes = await fetch('http://localhost:3000/application', {
+        method: 'POST',
         headers: {
-          Accept: "*/*",
-          "Content-Type": "application/json",
+          Accept: '*/*',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(appData),
       });
 
       if (!appRes.ok) {
-        throw new Error("Failed to create Application");
+        throw new Error('Failed to create Application');
       }
 
       console.log(appRes);
       // Optionally, you can reset the form after successful submission
       handleDeleteFile();
       setFormData({
-        name: "",
-        email: "",
-        phone: "",
+        name: '',
+        email: '',
+        phone: '',
         file: null,
-        cover_letter: "",
+        cover_letter: '',
       });
       handleCloseModal();
 
-      alert("Create Application successfully");
+      alert('Create Application successfully');
     } else {
       setErrors(errors);
       console.log(errors);
@@ -284,19 +284,19 @@ function ApplyCV() {
   const handleSearch = () => {
     const queryParams = {
       titleRecruitment:
-        filter.titleRecruitment !== ""
+        filter.titleRecruitment !== ''
           ? `titleRecruitment=${filter.titleRecruitment}`
-          : "",
-      salaryMin: filter.salaryMin !== 0 ? `salaryMin=${filter.salaryMin}` : "",
-      salaryMax: filter.salaryMax !== 0 ? `salaryMax=${filter.salaryMax}` : "",
+          : '',
+      salaryMin: filter.salaryMin !== 0 ? `salaryMin=${filter.salaryMin}` : '',
+      salaryMax: filter.salaryMax !== 0 ? `salaryMax=${filter.salaryMax}` : '',
       locationId:
-        filter.locationId !== 0 ? `locationId=${filter.locationId}` : "",
-      expId: filter.expId !== 0 ? `expId=${filter.expId}` : "",
+        filter.locationId !== 0 ? `locationId=${filter.locationId}` : '',
+      expId: filter.expId !== 0 ? `expId=${filter.expId}` : '',
     };
 
     const queryString = Object.values(queryParams)
-      .filter((param) => param !== "")
-      .join("&");
+      .filter((param) => param !== '')
+      .join('&');
 
     navigation(`/results?${queryString}`);
   };
@@ -665,7 +665,7 @@ function ApplyCV() {
                     <h1 className="job-detail__info--title text-2xl font-bold">
                       {jobData?.titleRecruitment
                         ? jobData?.titleRecruitment
-                        : ""}
+                        : ''}
                     </h1>
                     <div className="job-detail__info--sections grid grid-cols-3 gap-x-4 justify-center">
                       <div className="job-detail__info--section flex flex-row gap-x-4">
@@ -715,11 +715,14 @@ function ApplyCV() {
                           </span>
                           {jobData?.locations
                             ? jobData?.locations.map((location: any) => (
-                              <strong className="job-detail__info--section-content-value" key={location.id}>
-                                {location.name}
-                              </strong>
+                                <strong
+                                  className="job-detail__info--section-content-value"
+                                  key={location.id}
+                                >
+                                  {location.name}
+                                </strong>
                               ))
-                            : ""}
+                            : ''}
                         </div>
                       </div>
                       <div className="job-detail__info--section flex flex-row gap-x-4">
@@ -747,8 +750,8 @@ function ApplyCV() {
                             {jobData?.exp
                               ? jobData?.exp?.name
                                 ? jobData?.exp?.name
-                                : ""
-                              : ""}
+                                : ''
+                              : ''}
                           </strong>
                         </div>
                       </div>
@@ -785,10 +788,10 @@ function ApplyCV() {
                             />
                           </svg>
                         </div>
-                        Hạn nộp hồ sơ:{" "}
+                        Hạn nộp hồ sơ:{' '}
                         {moment
-                          .utc(jobData?.expiredDate ? jobData?.expiredDate : "")
-                          .format("DD/MM/YYYY")}
+                          .utc(jobData?.expiredDate ? jobData?.expiredDate : '')
+                          .format('DD/MM/YYYY')}
                       </div>
                     </div>
                     <div className="job-detail__info--actions grid grid-cols-5 gap-x-3">
@@ -833,8 +836,8 @@ function ApplyCV() {
                               {jobData?.jobDetail
                                 ? jobData?.jobDetail?.requirement
                                   ? jobData?.jobDetail?.requirement
-                                  : ""
-                                : ""}
+                                  : ''
+                                : ''}
                             </p>
                           </div>
                         </div>
@@ -846,12 +849,12 @@ function ApplyCV() {
                             {jobData?.jobDetail
                               ? jobData?.jobDetail?.skills
                                 ? jobData?.jobDetail?.skills
-                                    .split(", ")
+                                    .split(', ')
                                     .map((skill: any, index: number) => (
                                       <p key={index}>- {skill}</p>
                                     ))
-                                : ""
-                              : ""}
+                                : ''
+                              : ''}
                           </div>
                         </div>
                         <div className="job-description__item">
@@ -863,8 +866,8 @@ function ApplyCV() {
                               {jobData?.jobDetail
                                 ? jobData?.jobDetail?.description
                                   ? jobData?.jobDetail?.description
-                                  : ""
-                                : ""}
+                                  : ''
+                                : ''}
                             </p>
                           </div>
                         </div>
@@ -877,8 +880,8 @@ function ApplyCV() {
                               {jobData?.jobDetail
                                 ? jobData?.jobDetail?.benefit
                                   ? jobData?.jobDetail?.benefit
-                                  : ""
-                                : ""}
+                                  : ''
+                                : ''}
                             </p>
                           </div>
                         </div>
@@ -890,7 +893,7 @@ function ApplyCV() {
                             <p>
                               {jobData.company?.address
                                 ? jobData.company?.address
-                                : ""}
+                                : ''}
                             </p>
                           </div>
                         </div>
@@ -920,10 +923,10 @@ function ApplyCV() {
                         </span>
                       </div>
                       <div className="job-detail__information-detail--actions-label">
-                        Hạn nộp hồ sơ:{" "}
+                        Hạn nộp hồ sơ:{' '}
                         {moment
-                          .utc(jobData?.expiredDate ? jobData?.expiredDate : "")
-                          .format("DD/MM/YYYY")}
+                          .utc(jobData?.expiredDate ? jobData?.expiredDate : '')
+                          .format('DD/MM/YYYY')}
                       </div>
                       <div className="quantity-applied-user w-fit flex flex-rows items-center text-sm text-slate-600 p-2 bg-slate-100 rounded-lg">
                         <div className="quantity-applied-user__icon mr-2">
@@ -980,13 +983,12 @@ function ApplyCV() {
                             src={
                               jobData.company?.image
                                 ? jobData.company?.image
-                                : ""
+                                : ''
                             }
-                            alt=""
                           />
                         </div>
                         <span className="job-detail__company--information-item__name col-span-2 text-lg font-bold">
-                          {jobData.company?.name ? jobData.company?.name : ""}
+                          {jobData.company?.name ? jobData.company?.name : ''}
                         </span>
                       </div>
                       <div className="job-detail__company--information-item company-scale grid grid-cols-3 gap-3">
@@ -1004,7 +1006,7 @@ function ApplyCV() {
                         <span className="company-scale__info col-span-2 font-semibold">
                           {jobData.company?.companySize
                             ? jobData.company?.companySize
-                            : ""}{" "}
+                            : ''}{' '}
                           nhân viên
                         </span>
                       </div>
@@ -1027,13 +1029,13 @@ function ApplyCV() {
                         <span className="company-scale__info col-span-2 font-semibold">
                           {jobData.company?.address
                             ? jobData.company?.address
-                            : ""}
+                            : ''}
                         </span>
                       </div>
                       <div
                         onClick={() =>
                           navigation(
-                            `/companies/${jobData?.companyId ? jobData?.companyId : ""}`
+                            `/companies/${jobData?.companyId ? jobData?.companyId : ''}`,
                           )
                         }
                         className="job-detail__company--action font-bold text-green-500 flex flex-row gap-2 items-center justify-center cursor-pointer hover:underline"
@@ -1112,8 +1114,8 @@ function ApplyCV() {
                             {jobData?.exp
                               ? jobData?.exp?.name
                                 ? jobData?.exp?.name
-                                : ""
-                              : ""}
+                                : ''
+                              : ''}
                           </span>
                         </div>
                       </div>
@@ -1151,8 +1153,8 @@ function ApplyCV() {
                             {jobData?.jobDetail
                               ? jobData?.jobDetail?.quantity
                                 ? jobData?.jobDetail?.quantity
-                                : ""
-                              : ""}
+                                : ''
+                              : ''}
                           </span>
                         </div>
                       </div>
@@ -1182,8 +1184,8 @@ function ApplyCV() {
                             {jobData?.jobDetail
                               ? jobData?.jobDetail?.jobSchedule
                                 ? jobData?.jobDetail?.jobSchedule
-                                : ""
-                              : ""}
+                                : ''
+                              : ''}
                           </span>
                         </div>
                       </div>
@@ -1213,10 +1215,10 @@ function ApplyCV() {
                             {(jobData?.jobDetail
                               ? jobData?.jobDetail?.gender
                                 ? jobData?.jobDetail?.gender
-                                : ""
-                              : "") == "Male"
-                              ? "Nam"
-                              : "Nữ"}
+                                : ''
+                              : '') == 'Male'
+                              ? 'Nam'
+                              : 'Nữ'}
                           </span>
                         </div>
                       </div>
@@ -1238,7 +1240,7 @@ function ApplyCV() {
                                 {field.name}
                               </span>
                             ))
-                          : ""}
+                          : ''}
                       </div>
                     </div>
                     <div className="box-category">
@@ -1250,8 +1252,8 @@ function ApplyCV() {
                           {jobData?.locations
                             ? jobData?.locations[0]?.name
                               ? jobData?.locations[0]?.name
-                              : ""
-                            : ""}
+                              : ''
+                            : ''}
                         </span>
                       </div>
                     </div>

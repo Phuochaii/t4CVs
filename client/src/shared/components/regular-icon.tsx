@@ -1,4 +1,4 @@
-import { LucideProps } from "lucide-react";
+import { LucideProps } from 'lucide-react';
 function RegularIcon({
   icon: Icon,
   size,
@@ -14,4 +14,3 @@ function RegularIcon({
 }
 
 export default RegularIcon;
-

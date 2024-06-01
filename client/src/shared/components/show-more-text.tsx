@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 const TextWithToggle = ({ text }: { text: string }) => {
   const [showAll, setShowAll] = useState(false);
@@ -7,12 +7,12 @@ const TextWithToggle = ({ text }: { text: string }) => {
   const countLines = (text: string) => {
     const lineHeight = 18; // Điều chỉnh độ cao của mỗi dòng theo cần thiết
     const height = lineHeight * 2; // Số dòng tối đa là 2
-    const div = document.createElement("div");
-    div.style.visibility = "hidden";
-    div.style.position = "absolute";
-    div.style.width = "fit-content";
-    div.style.whiteSpace = "pre-wrap";
-    div.style.lineHeight = lineHeight + "px";
+    const div = document.createElement('div');
+    div.style.visibility = 'hidden';
+    div.style.position = 'absolute';
+    div.style.width = 'fit-content';
+    div.style.whiteSpace = 'pre-wrap';
+    div.style.lineHeight = lineHeight + 'px';
     div.textContent = text;
     document.body.appendChild(div);
     const lines = Math.ceil(div.clientHeight / height);

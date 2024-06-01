@@ -41,7 +41,7 @@ function Sidebar({ className }: SidebarProps) {
     <div
       className={clsx(
         className,
-        "sticky overflow-hidden min-h-[90vh] w-[12vw] flex flex-col pt-4 gap-8 mr-4"
+        "sticky min-h-[90vh] w-[16vw] flex flex-col pt-4 gap-8 mr-4"
       )}
     >
       {links.map((item, index) => {

@@ -1,8 +1,8 @@
-import { LucideProps } from "lucide-react";
+import { LucideProps } from 'lucide-react';
 function FillIcon({
   icon: Icon,
   size,
-  color = "white",
+  color = 'white',
   strokeWidth = 0,
 }: {
   icon: React.FC<LucideProps>;

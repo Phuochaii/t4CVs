@@ -1,22 +1,22 @@
-import { Briefcase } from "../../layouts/HRLayout/components/Icons";
+import { Briefcase } from '../../layouts/HRLayout/components/Icons';
 import {
   ChevronDown,
   ChevronLeftCircle,
   ChevronRightCircle,
   Search,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { CampaignTable } from "../../shared/components/compaign-table";
-import { Campaign as CampaignType } from "../../shared/types/Campaign.type";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CampaignTable } from '../../shared/components/compaign-table';
+import { Campaign as CampaignType } from '../../shared/types/Campaign.type';
 import {
   getApplicationsByCampaignId,
   getCampaignByHRId,
   getCompanyById,
   getEmployerById,
   getJobByCampaignId,
-} from "../../shared/utils/helper";
+} from '../../shared/utils/helper';
 
 function Campaign() {
   const [campaigns, setCampaigns] = useState<CampaignType[]>([]);
@@ -25,7 +25,7 @@ function Campaign() {
   const navigation = useNavigate();
 
   useEffect(() => {
-    const hrId = JSON.parse(localStorage.getItem("hr") as string).id;
+    const hrId = JSON.parse(localStorage.getItem('hr') as string).id;
 
     const getAllCompaigns = async () => {
       const { allCampaigns, totalPages } = await getCampaignByHRId(hrId, 1);
@@ -40,7 +40,7 @@ function Campaign() {
 
         const { applications } = await getApplicationsByCampaignId(
           item.employerId,
-          item.id
+          item.id,
         );
         const rawCampaign: CampaignType = {
           campaignName: item.name,
@@ -68,7 +68,7 @@ function Campaign() {
       <div className="flex flex-col items-center justify-between gap-2 py-8 w-[90%]">
         <div className="flex items-center justify-between w-full gap-2">
           <button
-            onClick={() => navigation("/hr/post-compaign")}
+            onClick={() => navigation('/hr/post-compaign')}
             className="flex items-center h-full gap-2 px-4 py-2 text-white bg-green-600 rounded-sm"
           >
             <Briefcase stroke="white" /> Chiến dịch mới

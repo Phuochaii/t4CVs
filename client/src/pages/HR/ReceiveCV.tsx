@@ -1,14 +1,14 @@
-import React from "react";
-import CustomSelectOption from "../../layouts/HRLayout/components/CustomSelectOption";
-import { ChevronRight, Search } from "lucide-react";
-import * as HRModule from "../../modules/hr-module";
-import { DefaultPagination } from "../../shared/components/default-pagination";
-import { ApplicationFromServer } from "../../shared/types/Application.type";
-import { cvState, cvLabel } from "../../shared/utils/constant";
-import ReceivedCVTable from "../../shared/components/ReceivedCVTable";
+import React from 'react';
+import CustomSelectOption from '../../layouts/HRLayout/components/CustomSelectOption';
+import { ChevronRight, Search } from 'lucide-react';
+import * as HRModule from '../../modules/hr-module';
+import { DefaultPagination } from '../../shared/components/default-pagination';
+import { ApplicationFromServer } from '../../shared/types/Application.type';
+import { cvState, cvLabel } from '../../shared/utils/constant';
+import ReceivedCVTable from '../../shared/components/ReceivedCVTable';
 
 function ReceiveCV() {
-  const hrId = JSON.parse(localStorage.getItem("hr") as string).id;
+  const hrId = JSON.parse(localStorage.getItem('hr') as string).id;
 
   const [campaign, setCampaign] = React.useState<any>();
   const [receivedCvState, setReceivedCvState] = React.useState<
@@ -39,9 +39,9 @@ function ReceiveCV() {
   const fetchAllCompaign = async () => {
     HRModule.getAllCompaignByHrId({ hrId: hrId }).then((res) => {
       setCompaignList([
-        { value: "", name: "Tất cả" },
+        { value: '', name: 'Tất cả' },
         ...res.data
-          .filter((item: any) => item.name != "")
+          .filter((item: any) => item.name != '')
           .map((item: any) => {
             return { value: item.id, name: item.name } as NameValue;
           }),
@@ -51,34 +51,34 @@ function ReceiveCV() {
 
   React.useEffect(() => {
     fetchAllCompaign();
-    fetchApplication(hrId, "");
+    fetchApplication(hrId, '');
   }, []);
 
   React.useEffect(() => {
-    fetchApplication(hrId, !campaign ? "" : campaign.value);
+    fetchApplication(hrId, !campaign ? '' : campaign.value);
   }, [campaign, receivedCvState, page]);
 
   return (
     <div className="flex flex-col items-center overflow-x-hidden">
       <div
         className="bg-white w-full"
-        style={{ marginLeft: "1px", paddingLeft: "20px" }}
+        style={{ marginLeft: '1px', paddingLeft: '20px' }}
       >
         <p
-          style={{ padding: "20px 15px", fontSize: "16px", fontWeight: "500" }}
+          style={{ padding: '20px 15px', fontSize: '16px', fontWeight: '500' }}
         >
           Quản lý CV ứng viên
         </p>
         <div className="flex py-2  flex-wrap">
           <div
             className="flex  mx-3.5 justify-between bg-white border border-gray-200"
-            style={{ width: "280px" }}
+            style={{ width: '280px' }}
           >
             <input
               type="search"
               id="search-dropdown"
               className="flex-grow pl-2.5 z-20 focus:outline-none"
-              style={{ fontSize: "14px" }}
+              style={{ fontSize: '14px' }}
               placeholder="Tìm kiếm tên, email, số điện thoại"
               required
             />
@@ -121,9 +121,9 @@ function ReceiveCV() {
         <div
           className="mt-6 mx-6 flex items-center rounded-lg"
           style={{
-            border: "1px solid green",
+            border: '1px solid green',
             background:
-              "linear-gradient(270deg, rgba(255,255,255,1) 0%, rgba(239,251,238,1) 28%, rgba(233,245,231,1) 48%, rgba(229,255,226,1) 60%, rgba(216,254,212,1) 100%)",
+              'linear-gradient(270deg, rgba(255,255,255,1) 0%, rgba(239,251,238,1) 28%, rgba(233,245,231,1) 48%, rgba(229,255,226,1) 60%, rgba(216,254,212,1) 100%)',
           }}
         >
           <img
@@ -133,29 +133,29 @@ function ReceiveCV() {
           />
           <p className="flex-grow mx-2">
             Đồng bộ hồ sơ ứng viên từ các website tuyển dụng, gửi email tự động,
-            đặt lịch phỏng vấn, lập báo cáo hiệu quả tuyển dụng với{" "}
+            đặt lịch phỏng vấn, lập báo cáo hiệu quả tuyển dụng với{' '}
             <span className="text-green-500 font-bold">SHring.ai</span>
           </p>
           <button
             className="pl-3 pr-8 text-green-600 bg-white flex"
-            style={{ borderLeft: "1px solid green " }}
+            style={{ borderLeft: '1px solid green ' }}
           >
-            <span style={{ fontSize: "13px" }} className="hover:text-green-900">
+            <span style={{ fontSize: '13px' }} className="hover:text-green-900">
               Đăng ký ngay
             </span>
             <ChevronRight size={18} />
           </button>
         </div>
         <div className="mt-6 mx-6 items-center rounded-lg bg-white">
-          <div className="flex justify-between" style={{ padding: "15.96px" }}>
+          <div className="flex justify-between" style={{ padding: '15.96px' }}>
             <p className="flex-grow">
               Tìm thấy <span className="text-green-500 font-bold">0</span> ứng
               viên
             </p>
-            <label style={{ transform: "translateY(5px)" }}>
+            <label style={{ transform: 'translateY(5px)' }}>
               <input
                 type="checkbox"
-                style={{ color: "pink" }}
+                style={{ color: 'pink' }}
                 // checked={receivedCvState == cvState[2]}
                 onChange={(e) => {
                   console.log(e.target.checked);
@@ -169,8 +169,8 @@ function ReceiveCV() {
               Chỉ hiện ứng viên chưa xem
             </label>
             <div className="mr-6"></div>
-            <label style={{ transform: "translateY(5px)" }}>
-              <input type="checkbox" style={{ color: "pink" }} />
+            <label style={{ transform: 'translateY(5px)' }}>
+              <input type="checkbox" style={{ color: 'pink' }} />
               Chỉ xem ứng viên Pro
             </label>
           </div>

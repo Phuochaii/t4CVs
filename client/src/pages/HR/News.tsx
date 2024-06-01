@@ -329,16 +329,16 @@ function News() {
                       </div>
                       <div className="content-upgrade--text text-sm">
                         <span className="font-semibold">
-                          Nâng cấp tài khoản:{" "}
+                          Nâng cấp tài khoản:{' '}
                         </span>
                         Để đạt
                         <span className="font semibold text-green-500">
-                          {" "}
-                          cấp 4/5,{" "}
+                          {' '}
+                          cấp 4/5,{' '}
                         </span>
                         Quý khách cần
                         <span className="font semibold text-green-500">
-                          {" "}
+                          {' '}
                           được duyệt Giấy phép kinh doanh và chưa có lịch sử bị
                           báo cáo tin đăng.
                         </span>
@@ -506,8 +506,8 @@ function News() {
                         <span className="font-semibold">Quyền lợi: </span>
                         Khi đạt
                         <span className="font semibold text-green-500">
-                          {" "}
-                          cấp 4/5,{" "}
+                          {' '}
+                          cấp 4/5,{' '}
                         </span>
                         nhà tuyển dụng có thể đăng tin tuyển dụng, tìm kiếm CV
                         và xem CV ứng viên từ công cụ tìm kiếm CV không giới

@@ -1,15 +1,14 @@
 import {
-  Check,
   ChevronDown,
   ChevronLeftCircle,
   ChevronRightCircle,
   Search,
-  X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
   getAllCompanies,
   getAllFields,
+  updateCompanyStatus,
 } from "../../shared/utils/helper";
 import { CompanyFromServer } from "../../shared/types/Company.type";
 import BasicTable, {
@@ -17,12 +16,14 @@ import BasicTable, {
   ObjectFromServer,
 } from "../../shared/components/basic-table";
 import { Field } from "../../shared/types/Recruitment.type";
+import Switch from "../../shared/components/CustomSwitch";
 
 function Company() {
   const [companies, setCompanies] = useState<CompanyFromServer[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [fields, setField] = useState<Field[]>([]);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     async function getData() {
@@ -41,14 +42,14 @@ function Company() {
       setField(fields);
     }
     getData();
-  }, [page]);
+  }, [page, refresh]);
 
   const columns: BasicColumnProps[] = useMemo(
     () => [
       {
         name: "ID",
         field: "id",
-        tableCellClassname: "w-24",
+        tableCellClassname: "",
         cell: (data: ObjectFromServer) => {
           const company = data as CompanyFromServer;
           return <div>{company.id}</div>;
@@ -57,45 +58,37 @@ function Company() {
       {
         name: "Thông tin công ty",
         field: "name",
-        tableCellClassname: "w-[480px]",
+        tableCellClassname: "w-[40vw]",
         cell: (data: ObjectFromServer) => {
           const company = data as CompanyFromServer;
           return (
-            <div className="flex items-center gap-4">
-              <img
-                src={company.image}
-                className="object-cover w-24 h-24 rounded-full"
-              ></img>
-              <div>
-                <div className="font-bold">{company.name}</div>
-                <div>{company.address}</div>
-                <div>{company.phone}</div>
-                <a
-                  className="font-bold text-blue-400"
-                  href={company.website}
-                >
-                  Link
-                </a>
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-4">
+                <img
+                  src={company.image}
+                  className="object-cover w-24 h-24 rounded-full"
+                ></img>
+                <div>
+                  <div className="font-bold">{company.name}</div>
+                  <div>{company.address}</div>
+                  <div>{company.phone}</div>
+                  <a
+                    className="font-bold text-blue-400"
+                    href={company.website}
+                  >
+                    Link
+                  </a>
+                </div>
               </div>
+              <p>{company.description}</p>
             </div>
-          );
-        },
-      },
-      {
-        name: "Mô tả",
-        field: "description",
-        tableCellClassname: "w-[560px]",
-        cell: (data: ObjectFromServer) => {
-          const company = data as CompanyFromServer;
-          return (
-            <div className="w-full px-2">{company.description}</div>
           );
         },
       },
       {
         name: "Số lượng nhân viên",
         field: "description",
-        tableCellClassname: "w-[160px]",
+        tableCellClassname: "w-[8vw]",
         cell: (data: ObjectFromServer) => {
           const company = data as CompanyFromServer;
           return <div>{company.companySize}</div>;
@@ -104,7 +97,7 @@ function Company() {
       {
         name: "Mã số thuế",
         field: "taxCode",
-        tableCellClassname: "w-[160px]",
+        tableCellClassname: "",
         cell: (data: ObjectFromServer) => {
           const company = data as CompanyFromServer;
           return <div>{company.taxCode}</div>;
@@ -113,7 +106,7 @@ function Company() {
       {
         name: "Lĩnh vực",
         field: "field",
-        tableCellClassname: "w-[160px]",
+        tableCellClassname: "w-[10vw]",
         cell: (data: ObjectFromServer) => {
           const company = data as CompanyFromServer;
           const field = fields.find(
@@ -125,13 +118,22 @@ function Company() {
       {
         name: "Trạng thái",
         field: "status",
-        tableCellClassname: "w-[160px]",
+        tableCellClassname: "",
         cell: (data: ObjectFromServer) => {
           const company = data as CompanyFromServer;
-          return company.status ? (
-            <Check className="text-green-500" />
-          ) : (
-            <X className="text-red-500" />
+          return (
+            <div>
+              <Switch
+                checked={company.status}
+                onChange={async () => {
+                  await updateCompanyStatus(
+                    company.id,
+                    !company.status
+                  );
+                  setRefresh(!refresh);
+                }}
+              />
+            </div>
           );
         },
       },

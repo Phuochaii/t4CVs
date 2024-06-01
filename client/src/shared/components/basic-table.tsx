@@ -2,7 +2,7 @@ import { CompanyFromServer } from "../types/Company.type";
 import { CampaignFromServer } from "../types/Campaign.type";
 import { RecruitmentFromServer } from "../types/Recruitment.type";
 import clsx from "clsx";
-
+import { useNavigate } from "react-router-dom";
 export type ObjectFromServer =
   | CompanyFromServer
   | CampaignFromServer
@@ -21,6 +21,7 @@ interface BasicTableProps {
 }
 
 function BasicTable({ data, columns }: BasicTableProps) {
+  const navigation = useNavigate();
   return (
     <table className="w-full bg-white">
       <thead>
@@ -44,11 +45,13 @@ function BasicTable({ data, columns }: BasicTableProps) {
               {columns.map((column, colIndex) => {
                 return (
                   <td
-                    className={clsx(
-                      "border",
-                      column.tableCellClassname
-                    )}
-                    key={"column-" + colIndex.toString()}
+                    className={clsx('border', column.tableCellClassname)}
+                    key={'column-' + colIndex.toString()}
+                    onClick={() => {
+                      if (colIndex === 1) {
+                        navigation(`/admin/company/${object.id}`);
+                      }
+                    }}
                   >
                     {column.cell(object)}
                   </td>
