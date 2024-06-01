@@ -14,7 +14,7 @@ export class CompanySchema implements _ {
   taxCode: string;
   @Column()
   name: string;
-  @Column()
+  @Column({ nullable: true })
   website: string;
   @Column({ nullable: true })
   image: string;

@@ -20,7 +20,7 @@ export class TypeOrmEmployerRepository extends EmployerRepository {
       skip: skip,
       take: limit,
       order: {
-        fullname: 'ASC', // Sắp xếp theo fullname theo thứ tự tăng dần
+        fullname: 'ASC',
       },
     });
 
@@ -44,6 +44,17 @@ export class TypeOrmEmployerRepository extends EmployerRepository {
     const total = await this.employerRepository.count();
 
     return total;
+  }
+
+  async getEmployerByCompanyId(companyId: number): Promise<Employer[]> {
+    const result = await this.employerRepository.find({
+      where: { companyId: companyId },
+      order: {
+        fullname: 'ASC',
+      },
+    });
+
+    return result;
   }
 
   async updateEmployerLincense(

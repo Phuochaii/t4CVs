@@ -10,6 +10,7 @@ import {
   GetTotalCompaniesService,
   RemoveCompanyService,
   UpdateCompanyService,
+  UpdateCompanyStatusService,
 } from './domain/service';
 
 @Module({
@@ -51,6 +52,13 @@ import {
       inject: [CompanyRepository],
     },
     {
+      provide: UpdateCompanyStatusService,
+      useFactory: (companyRepository: CompanyRepository) => {
+        return new UpdateCompanyStatusService(companyRepository);
+      },
+      inject: [CompanyRepository],
+    },
+    {
       provide: RemoveCompanyService,
       useFactory: (companyRepository: CompanyRepository) => {
         return new RemoveCompanyService(companyRepository);
@@ -72,6 +80,7 @@ import {
         getTotalCompanies: GetTotalCompaniesService,
         findCompanyById: FindCompanyByIdService,
         updateCompany: UpdateCompanyService,
+        updateCompanyStatus: UpdateCompanyStatusService,
         removeCompany: RemoveCompanyService,
         findCompanyByArrayId: FindCompanyByArrayIdService,
       ) => {
@@ -81,6 +90,7 @@ import {
           getTotalCompanies,
           findCompanyById,
           updateCompany,
+          updateCompanyStatus,
           removeCompany,
           findCompanyByArrayId,
         );
@@ -91,6 +101,7 @@ import {
         GetTotalCompaniesService,
         FindCompanyByIdService,
         UpdateCompanyService,
+        UpdateCompanyStatusService,
         RemoveCompanyService,
         FindCompanyByArrayIdService,
       ],

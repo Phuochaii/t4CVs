@@ -2,6 +2,7 @@ import { CreateEmployerDTO, UpdateEmployerCompanyDTO } from './dto';
 import { Employer } from './entity';
 import {
   CreateEmployerService,
+  GetAllEmployerByCompanyIdService,
   GetEmployerByIdService,
   GetEmployerService,
   GetTotalEmployerService,
@@ -17,6 +18,7 @@ export class EmployerApplication {
     private readonly getAllEmployerService: GetEmployerService,
     private readonly getTotalEmployerService: GetTotalEmployerService,
     private readonly getEmployerByIdService: GetEmployerByIdService,
+    private readonly getAllEmployerByCompanyIdService: GetAllEmployerByCompanyIdService,
     private readonly updateEmployerCompanyIdService: UpdateEmployerCompanyIdService,
     private readonly updateEmployerLicenseService: UpdateEmployerLicenseService,
     private readonly updateEmployerLicenseStatusService: UpdateEmployerLicenseStatusService,
@@ -37,6 +39,10 @@ export class EmployerApplication {
 
   async getEmployerById(id: string): Promise<Employer> {
     return await this.getEmployerByIdService.execute(id);
+  }
+
+  async getAllEmployerByCompanyId(companyId: number): Promise<Employer[]> {
+    return await this.getAllEmployerByCompanyIdService.execute(companyId);
   }
 
   async updateEmployerCompanyId(
