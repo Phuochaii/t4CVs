@@ -129,21 +129,16 @@ export class CompanyService {
   }
 
   async findAllCampaignByEmployerId(employerId: string) {
-    const employerO = this.employerService.findEmployerById(employerId);
-    const employer = await lastValueFrom(employerO);
+    const result = this.companyClient.send(
+      { cmd: 'find_all_campaign_by_employerid' },
+      employerId,
+    );
 
-    if (employer) {
-      const result = await this.companyClient.send<{
-        data: FindCampaignDTOResponse[];
-      }>({ cmd: 'find_all_campaign_by_employerid' }, employerId);
-
-      const campaign = await lastValueFrom(result);
-
-      if (campaign && Array.isArray(campaign) && campaign.length === 0) {
-        throw new BadRequestException('Employer have no campaign');
-      } else {
-        return campaign;
-      }
+    const campaign = await lastValueFrom(result);
+    if (campaign.data.length === 0) {
+      throw new BadRequestException('Cannot found campaign');
+    } else {
+      return campaign;
     }
   }
 

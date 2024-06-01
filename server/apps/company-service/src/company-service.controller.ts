@@ -194,8 +194,15 @@ export class CompanyServiceController {
   }
 
   @MessagePattern({ cmd: 'find_all_campaign_by_employerid' })
-  findAllCampaignByEmployerId(employerId: string) {
-    return this.campaignApplication.getAllCampaignByEmployerId(employerId);
+  async findAllCampaignByEmployerId(employerId: string) {
+    const campaign =
+      await this.campaignApplication.getAllCampaignByEmployerId(employerId);
+
+    const result = {
+      data: campaign,
+    };
+
+    return result;
   }
 
   @MessagePattern({ cmd: 'delete_campaign' })
