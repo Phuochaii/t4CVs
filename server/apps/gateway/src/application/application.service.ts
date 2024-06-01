@@ -13,7 +13,7 @@ import {
 
 import { ClientGrpc } from '@nestjs/microservices';
 import { CVService } from '../cv/cv.service';
-import { catchError, firstValueFrom, throwError } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import {
   NotificationService,
   NotificationUserId,
@@ -104,10 +104,20 @@ export class ApplicationService implements OnModuleInit {
     hrId: string,
   ) {
     const campaignRes = await firstValueFrom(
-      this.companyService.findCampaignByEmployerId(hrId, 1, 100),
+      this.companyService.findAllCampaignByEmployerId(hrId),
     );
 
-    let campaignIds = campaignRes.data.map((campaign) => campaign.id);
+    if (!Array.isArray(campaignRes)) {
+      throw new BadRequestException(
+        'Invalid response from findAllCampaignByEmployerId, expected an array',
+      );
+    }
+
+    if (campaignRes.length === 0) {
+      throw new BadRequestException(`hrId doesn't exist`);
+    }
+
+    let campaignIds = campaignRes.map((campaign) => campaign.id);
 
     if (campaignId) {
       campaignIds = [campaignId];
