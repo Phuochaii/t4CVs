@@ -55,6 +55,11 @@ export class CompanyController {
     return this.companyService.removeCompany(id);
   }
 
+  @Get('name/:name')
+  findCompanyByName(@Param('name') name: string) {
+    return this.companyService.findCompanyByName(name);
+  }
+
   @Post('campaign/create')
   createCampaign(@Body() data: CreateCampaignDto): Observable<string> {
     return this.companyService.createCampaign(data);
@@ -73,7 +78,7 @@ export class CompanyController {
     return this.companyService.findCampaignById(id);
   }
 
-  @Post('campaign/update')
+  @Put('campaign/update')
   updateCampaign(@Body() data: UpdateCampaignDto): Observable<string> {
     return this.companyService.updateCampaign(data);
   }
@@ -94,6 +99,11 @@ export class CompanyController {
   @Get('campaign/employer/all/:employerId')
   findAllCampaignByEmployerId(@Param('employerId') employerId: string) {
     return this.companyService.findAllCampaignByEmployerId(employerId);
+  }
+
+  @Delete('campaign/:id')
+  DeleteCampaignService(@Param('id') id: number) {
+    return this.companyService.deleteCampaign(id);
   }
 
   @Get('field/all')

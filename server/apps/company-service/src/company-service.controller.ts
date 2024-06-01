@@ -56,7 +56,6 @@ export class CompanyServiceController {
       const field = await this.fieldApplication.findFieldById(company.field);
 
       if (field) {
-        // Tạo đối tượng mới chứa thông tin công ty và tên lĩnh vực
         const companyWithFieldName = {
           ...company,
           fieldName: field.name,
@@ -73,12 +72,24 @@ export class CompanyServiceController {
 
   @MessagePattern({ cmd: 'update_company' })
   async updateCompany(data: UpdateCompanyDTO) {
-    return this.companyApplication.updateCompany(data);
+    const company = await this.companyApplication.updateCompany(data);
+
+    if (company) {
+      return company;
+    } else {
+      throw new RpcException(new BadRequestException('Company is not exist'));
+    }
   }
 
   @MessagePattern({ cmd: 'update_company_status' })
   async updateCompanyStatus(data: UpdateCompanyStatusDTO) {
-    return this.companyApplication.updateCompanyStatus(data);
+    const company = await this.companyApplication.updateCompanyStatus(data);
+
+    if (company) {
+      return company;
+    } else {
+      throw new RpcException(new BadRequestException('Company is not exist'));
+    }
   }
 
   @MessagePattern({ cmd: 'remove_company' })
@@ -89,6 +100,17 @@ export class CompanyServiceController {
   @MessagePattern({ cmd: 'find_company_by_array_id' })
   async findCompanyByArrayId(id: number[]) {
     return await this.companyApplication.findCompanyByArrayId(id);
+  }
+
+  @MessagePattern({ cmd: 'find_company_by_name' })
+  async findCompanyByNameId(name: string) {
+    const result = await this.companyApplication.findCompanyByName(name);
+
+    if (result.length <= 0) {
+      throw new RpcException(new BadRequestException('Cannot found company'));
+    } else {
+      return result;
+    }
   }
 
   @MessagePattern({ cmd: 'create_campaign' })
@@ -119,13 +141,27 @@ export class CompanyServiceController {
   }
 
   @MessagePattern({ cmd: 'find_campaign_by_id' })
-  findCampaignById(id: number) {
-    return this.campaignApplication.findCampaignById(id);
+  async findCampaignById(id: number) {
+    const campaign = await this.campaignApplication.findCampaignById(id);
+
+    if (campaign) {
+      return campaign;
+    } else {
+      throw new RpcException(
+        new BadRequestException('CampaignId is not exist'),
+      );
+    }
   }
 
   @MessagePattern({ cmd: 'update_campaign' })
-  updateCampaign(data: UpdateCampaignDTO) {
-    return this.campaignApplication.updateCampaign(data);
+  async updateCampaign(data: UpdateCampaignDTO) {
+    const campaign = await this.campaignApplication.updateCampaign(data);
+
+    if (campaign) {
+      return campaign;
+    } else {
+      throw new RpcException(new BadRequestException('Campaign is not exist'));
+    }
   }
 
   @MessagePattern({ cmd: 'find_campaign_by_employerId' })
@@ -158,8 +194,25 @@ export class CompanyServiceController {
   }
 
   @MessagePattern({ cmd: 'find_all_campaign_by_employerid' })
-  findAllCampaignByEmployerId(employerId: string) {
-    return this.campaignApplication.getAllCampaignByEmployerId(employerId);
+  async findAllCampaignByEmployerId(employerId: string) {
+    const campaign =
+      await this.campaignApplication.getAllCampaignByEmployerId(employerId);
+
+    const result = {
+      data: campaign,
+    };
+
+    return result;
+  }
+
+  @MessagePattern({ cmd: 'delete_campaign' })
+  async DeleteCampaignService(id: number) {
+    const result = await this.campaignApplication.deleteCampaign(id);
+    if (result === 'Delete Campaign Success') {
+      return result;
+    } else {
+      throw new RpcException(new BadRequestException('Campaign is not exist'));
+    }
   }
 
   @MessagePattern({ cmd: 'get_all_field' })

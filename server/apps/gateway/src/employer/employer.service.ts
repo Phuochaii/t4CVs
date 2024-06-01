@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Observable, from, switchMap } from 'rxjs';
+import { Observable, catchError, from, switchMap, throwError } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
 import { FindEmployerDTOResponse } from './dto/Res/find_employer.dto';
@@ -28,10 +28,13 @@ export class EmployerService {
   }
 
   findEmployerById(id: string): Observable<FindEmployerDTOResponse> {
-    return this.employerClient.send<FindEmployerDTOResponse>(
-      { cmd: 'find_employer_by_id' },
-      id,
-    );
+    return this.employerClient
+      .send<FindEmployerDTOResponse>({ cmd: 'find_employer_by_id' }, id)
+      .pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
   }
 
   getEmployerByCompanyId(companyId: number) {
@@ -44,10 +47,13 @@ export class EmployerService {
   updateEmployerCompanyId(
     updateEmployerCompanyDTO: UpdateEmployerCompanyDTO,
   ): Observable<string> {
-    return this.employerClient.send(
-      { cmd: 'update_employer_companyid' },
-      updateEmployerCompanyDTO,
-    );
+    return this.employerClient
+      .send({ cmd: 'update_employer_companyid' }, updateEmployerCompanyDTO)
+      .pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
   }
 
   updateEmployerLicense(file: any, employerId: string): Observable<any> {
@@ -55,10 +61,13 @@ export class EmployerService {
 
     return uploadLink$.pipe(
       switchMap((license: string) =>
-        this.employerClient.send(
-          { cmd: 'update_employer_license' },
-          { employerId, license },
-        ),
+        this.employerClient
+          .send({ cmd: 'update_employer_license' }, { employerId, license })
+          .pipe(
+            catchError((error) => {
+              return throwError(() => error.response);
+            }),
+          ),
       ),
     );
   }
@@ -67,20 +76,32 @@ export class EmployerService {
     employerId: string,
     licenseStatus: boolean,
   ): Observable<string> {
-    return this.employerClient.send(
-      { cmd: 'update_employer_license_status' },
-      { employerId, licenseStatus },
-    );
+    return this.employerClient
+      .send(
+        { cmd: 'update_employer_license_status' },
+        { employerId, licenseStatus },
+      )
+      .pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
   }
 
   updateEmployerPhoneStatus(
     employerId: string,
     phoneNumberStatus: boolean,
   ): Observable<string> {
-    return this.employerClient.send(
-      { cmd: 'update_employer_phone_status' },
-      { employerId, phoneNumberStatus },
-    );
+    return this.employerClient
+      .send(
+        { cmd: 'update_employer_phone_status' },
+        { employerId, phoneNumberStatus },
+      )
+      .pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
   }
 
   getAllPositions(): Observable<string> {
