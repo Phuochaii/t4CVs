@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { CompanyRepository } from '../../domain/repository';
-import { In, Repository } from 'typeorm';
+import { ILike, In, Repository } from 'typeorm';
 import { CompanySchema } from '../schema';
 import { Company } from '../../domain/entity';
 import {
@@ -96,5 +96,17 @@ export class TypeOrmCompanyRepository extends CompanyRepository {
     const orderedData = id.map((key) => result.find((item) => item.id === key));
 
     return orderedData;
+  }
+
+  async findCompanyByName(name: string): Promise<Company[]> {
+    const iName = ILike(`%${name}%`);
+
+    const result = await this.companyRepository.find({
+      where: {
+        name: iName,
+      },
+    });
+
+    return result;
   }
 }

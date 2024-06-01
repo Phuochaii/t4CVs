@@ -55,6 +55,11 @@ export class CompanyController {
     return this.companyService.removeCompany(id);
   }
 
+  @Get('name/:name')
+  findCompanyByName(@Param('name') name: string) {
+    return this.companyService.findCompanyByName(name);
+  }
+
   @Post('campaign/create')
   createCampaign(@Body() data: CreateCampaignDto): Observable<string> {
     return this.companyService.createCampaign(data);

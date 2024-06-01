@@ -65,7 +65,6 @@ export class TypeOrmCampaignRepository extends CampaignRepository {
         createdAt: 'DESC',
       },
     });
-
     return campaigns;
   }
 

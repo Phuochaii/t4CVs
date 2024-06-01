@@ -1,5 +1,5 @@
-import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { BadRequestException, Controller } from '@nestjs/common';
+import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 import { EmployerApplication, PositionApplication } from './domain';
 import { CreateEmployerDTO, UpdateEmployerCompanyDTO } from './domain/dto';
 
@@ -46,13 +46,13 @@ export class EmployerController {
   }
 
   @MessagePattern({ cmd: 'find_employer_by_id' })
-  findEmployerById(id: string) {
-    const employer = this.employerApplication.getEmployerById(id);
+  async findEmployerById(id: string) {
+    const employer = await this.employerApplication.getEmployerById(id);
 
     if (employer) {
       return employer;
     } else {
-      return 'Your employerId not exsist';
+      throw new RpcException(new BadRequestException('EmployerId not exsist'));
     }
   }
 
@@ -61,30 +61,27 @@ export class EmployerController {
     const employer =
       this.employerApplication.getAllEmployerByCompanyId(companyId);
 
-    if (employer) {
-      return employer;
-    } else {
-      return 'Your employerId not exsist';
-    }
+    return employer;
   }
 
   @MessagePattern({ cmd: 'update_employer_companyid' })
-  updateEmployerCompanyId(employer: UpdateEmployerCompanyDTO) {
-    const result = this.employerApplication.updateEmployerCompanyId(employer);
+  async updateEmployerCompanyId(employer: UpdateEmployerCompanyDTO) {
+    const result =
+      await this.employerApplication.updateEmployerCompanyId(employer);
 
     if (result) {
       return result;
     } else {
-      return 'Your employerId not exsist';
+      throw new RpcException(new BadRequestException('EmployerId not exsist'));
     }
   }
 
   @MessagePattern({ cmd: 'update_employer_license' })
-  updateEmployerLicense(@Payload() data: any) {
+  async updateEmployerLicense(@Payload() data: any) {
     const employerId = String(data.employerId);
     const license = String(data.license);
 
-    const result = this.employerApplication.updateEmployerLicense(
+    const result = await this.employerApplication.updateEmployerLicense(
       employerId,
       license,
     );
@@ -92,16 +89,16 @@ export class EmployerController {
     if (result) {
       return result;
     } else {
-      return 'Your employerId not exsist';
+      throw new RpcException(new BadRequestException('EmployerId not exsist'));
     }
   }
 
   @MessagePattern({ cmd: 'update_employer_license_status' })
-  updateEmployerLicenseStatus(@Payload() data: any) {
+  async updateEmployerLicenseStatus(@Payload() data: any) {
     const employerId = String(data.employerId);
     const licenseStatus = Boolean(data.licenseStatus);
 
-    const result = this.employerApplication.updateEmployerLicenseStatus(
+    const result = await this.employerApplication.updateEmployerLicenseStatus(
       employerId,
       licenseStatus,
     );
@@ -109,16 +106,16 @@ export class EmployerController {
     if (result) {
       return result;
     } else {
-      return 'Your employerId not exsist';
+      throw new RpcException(new BadRequestException('EmployerId not exsist'));
     }
   }
 
   @MessagePattern({ cmd: 'update_employer_phone_status' })
-  updateEmployerPhoneStatus(@Payload() data: any) {
+  async updateEmployerPhoneStatus(@Payload() data: any) {
     const employerId = String(data.employerId);
     const phoneNumberStatus = Boolean(data.phoneNumberStatus);
 
-    const result = this.employerApplication.updateEmployerPhoneStatus(
+    const result = await this.employerApplication.updateEmployerPhoneStatus(
       employerId,
       phoneNumberStatus,
     );
@@ -126,7 +123,7 @@ export class EmployerController {
     if (result) {
       return result;
     } else {
-      return 'Your employerId not exsist';
+      throw new RpcException(new BadRequestException('EmployerId not exsist'));
     }
   }
 
