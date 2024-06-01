@@ -13,7 +13,9 @@ import { Application } from '../entity';
 export abstract class ApplicationRepository {
   abstract createApplication(application: ApplicationDto): Promise<Application>;
 
-  abstract getApplication(application: GetApplicationDto): Promise<Application>;
+  abstract getApplication(
+    application: GetApplicationDto,
+  ): Promise<Application | null>;
 
   abstract getAllApplication(
     application: GetAllApplicationsDto,
@@ -21,21 +23,21 @@ export abstract class ApplicationRepository {
 
   abstract updateApplication(
     application: UpdateApplicationDto,
-  ): Promise<Application>;
+  ): Promise<Application | null>;
 
   abstract getByCampaignIdApplication(
     application: GetByCampaignIdApplicationDto,
-  ): Promise<Application[]>;
+  ): Promise<Application[] | null>;
 
   abstract getAllByCampaignIdApplication(
     application: GetAllByCampaignIdApplicationDto,
-  ): Promise<Application[]>;
+  ): Promise<Application[] | null>;
 
   abstract getByUserIdApplication(
     application: GetByUserIdApplicationDto,
-  ): Promise<Application[]>;
+  ): Promise<Application[] | null>;
 
   abstract getByUserIdPaginationApplication(
     application: GetByUserIdPaginationApplicationDto,
-  ): Promise<Application[]>;
+  ): Promise<Application[] | null>;
 }

@@ -30,12 +30,10 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
     return await this.applicationRepository.save(application);
   }
 
-  async getApplication(application: GetApplicationDto): Promise<Application> {
+  async getApplication(
+    application: GetApplicationDto,
+  ): Promise<Application | null> {
     const result = await this.applicationRepository.findOneBy(application);
-
-    if (!result) {
-      return {} as Application;
-    }
 
     return result;
   }
@@ -59,11 +57,11 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
 
   async updateApplication(
     application: UpdateApplicationDto,
-  ): Promise<Application> {
+  ): Promise<Application | null> {
     const result = await this.applicationRepository.findOneBy(application);
 
     if (!result) {
-      return {} as Application;
+      return;
     }
     await this.applicationRepository.update(application.id, {
       status: application.status,
@@ -73,7 +71,7 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
 
   async getByCampaignIdApplication(
     application: GetByCampaignIdApplicationDto,
-  ): Promise<Application[]> {
+  ): Promise<Application[] | null> {
     const skip = (application.page - 1) * application.limit;
     const data = await this.applicationRepository.find({
       where: {
@@ -87,37 +85,45 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
         id: 'DESC',
       },
     });
+    if (!data) {
+      return;
+    }
     return data;
   }
 
   async getAllByCampaignIdApplication(
     application: GetAllByCampaignIdApplicationDto,
-  ): Promise<Application[]> {
+  ): Promise<Application[] | null> {
     const data = await this.applicationRepository.find({
       where: {
         campaignId: In(application.campaignIds),
       },
     });
+    if (!data) {
+      return;
+    }
 
     return data;
   }
 
   async getByUserIdApplication(
     application: GetByUserIdApplicationDto,
-  ): Promise<Application[]> {
-    console.log(application.status);
+  ): Promise<Application[] | null> {
     const data = await this.applicationRepository.find({
       where: {
         userId: application.userId,
         status: application.status,
       },
     });
+    if (!data) {
+      return;
+    }
     return data;
   }
 
   async getByUserIdPaginationApplication(
     application: GetByUserIdPaginationApplicationDto,
-  ): Promise<Application[]> {
+  ): Promise<Application[] | null> {
     const skip = (application.page - 1) * application.limit;
     const data = await this.applicationRepository.find({
       where: {
@@ -131,6 +137,9 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
         id: 'DESC',
       },
     });
+    if (!data) {
+      return;
+    }
     return data;
   }
 }
