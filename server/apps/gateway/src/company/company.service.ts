@@ -85,4 +85,12 @@ export class CompanyService {
       employerId,
     );
   }
+
+  getAllField() {
+    return this.companyClient.send({ cmd: 'get_all_field' }, {});
+  }
+
+  findFieldById(id: number) {
+    return this.companyClient.send({ cmd: 'find_field_by_id' }, id);
+  }
 }

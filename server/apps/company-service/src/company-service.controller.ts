@@ -1,6 +1,10 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { CampaignApplication, CompanyApplication } from './domain';
+import {
+  CampaignApplication,
+  CompanyApplication,
+  FieldApplication,
+} from './domain';
 import {
   CreateCampaignDTO,
   CreateCompanyDTO,
@@ -14,6 +18,7 @@ export class CompanyServiceController {
   constructor(
     private readonly companyApplication: CompanyApplication,
     private readonly campaignApplication: CampaignApplication,
+    private readonly fieldApplication: FieldApplication,
   ) {}
 
   @MessagePattern({ cmd: 'create_company' })
@@ -137,5 +142,15 @@ export class CompanyServiceController {
   @MessagePattern({ cmd: 'find_all_campaign_by_employerid' })
   findAllCampaignByEmployerId(employerId: string) {
     return this.campaignApplication.getAllCampaignByEmployerId(employerId);
+  }
+
+  @MessagePattern({ cmd: 'get_all_field' })
+  getAllField() {
+    return this.fieldApplication.getAllField();
+  }
+
+  @MessagePattern({ cmd: 'find_field_by_id' })
+  findFieldById(id: number) {
+    return this.fieldApplication.findFieldById(id);
   }
 }

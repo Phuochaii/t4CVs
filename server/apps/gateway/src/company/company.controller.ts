@@ -95,4 +95,14 @@ export class CompanyController {
   findAllCampaignByEmployerId(@Param('employerId') employerId: string) {
     return this.companyService.findAllCampaignByEmployerId(employerId);
   }
+
+  @Get('field/all')
+  getAllField() {
+    return this.companyService.getAllField();
+  }
+
+  @Get('field/:id')
+  findFieldById(@Param('id') id: number) {
+    return this.companyService.findFieldById(id);
+  }
 }

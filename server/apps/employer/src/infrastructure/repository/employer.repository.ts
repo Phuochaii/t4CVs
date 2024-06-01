@@ -20,7 +20,7 @@ export class TypeOrmEmployerRepository extends EmployerRepository {
       skip: skip,
       take: limit,
       order: {
-        fullname: 'ASC', // Sắp xếp theo fullname theo thứ tự tăng dần
+        fullname: 'ASC',
       },
     });
 
