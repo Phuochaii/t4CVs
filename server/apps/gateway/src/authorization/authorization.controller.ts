@@ -12,15 +12,27 @@ export class AuthorizationController {
         return "You're authenticated!";
     }
 
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
+    @Get('user')
+    getUser() {
+        return "You're user!";
+    }
+
     @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
     @Get('hr')
     getHr() {
         return "You're hr!";
     }
 
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
+    @Get('admin')
+    getAdmin() {
+        return "You're admin!";
+    }
+
     @UseGuards(AuthGuard('jwt'))
     @Get('req/user')
-    getAdmin(@GetUser() user: UserClaims) {
+    getUserClaim(@GetUser() user: UserClaims) {
         return user;
     }
 }
