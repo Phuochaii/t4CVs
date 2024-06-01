@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import Switch from "../../shared/components/CustomSwitch";
-import {
-  updateCompanyStatus,
-} from "../../shared/utils/helper";
+import Switch from '../../shared/components/CustomSwitch';
+import { updateCompanyStatus, getCompanyById } from '../../shared/utils/helper';
 import { CompanyFromServer } from '../../shared/types/Company.type';
 
 function CompanyDetail() {
   const { id } = useParams();
-  const [companyInfo, setCompanyInfo] = useState<CompanyFromServer>();
+  const [companyInfo, setCompanyInfo] = useState<CompanyFromServer | null>();
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
@@ -22,8 +19,8 @@ function CompanyDetail() {
   }, [id, refresh]);
   const fetchCompanyInfo = async (id: string) => {
     try {
-      const response = await axios.get(`http://localhost:3000/company/${id}`);
-      setCompanyInfo(response.data);
+      const response = await getCompanyById(id);
+      setCompanyInfo(response);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -36,12 +33,12 @@ function CompanyDetail() {
             <ul className="flex items-center">
               <li className="">
                 <a className="text-[#212F3F] inline-block font-normal cursor-pointer">
-                  Danh sách Công ty <span>{""}</span>
+                  Danh sách Công ty <span>{''}</span>
                 </a>
               </li>
               <li className="">
-                <span className="text-[#b3b8bd] ml-2">{">"}</span>{" "}
-                {companyInfo?.name ? companyInfo?.name : " "}
+                <span className="text-[#b3b8bd] ml-2">{'>'}</span>{' '}
+                {companyInfo?.name ? companyInfo?.name : ' '}
               </li>
             </ul>
           </div>
