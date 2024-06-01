@@ -77,9 +77,13 @@ export class TypeOrmCompanyRepository extends CompanyRepository {
   }
 
   async removeCompany(id: number): Promise<string> {
-    await this.companyRepository.delete(id);
+    const result = await this.companyRepository.delete(id);
 
-    return 'Delete Company Success';
+    if (result.affected === 0) {
+      return 'Delete Company Fail';
+    } else {
+      return 'Delete Company Success';
+    }
   }
 
   async findCompanyByArrayId(id: number[]): Promise<Company[]> {

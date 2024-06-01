@@ -105,6 +105,14 @@ export class CompanyService {
     );
   }
 
+  deleteCampaign(id: number) {
+    return this.companyClient.send({ cmd: 'delete_campaign' }, id).pipe(
+      catchError((error) => {
+        return throwError(() => error.response);
+      }),
+    );
+  }
+
   getAllField() {
     return this.companyClient.send({ cmd: 'get_all_field' }, {});
   }

@@ -162,6 +162,16 @@ export class CompanyServiceController {
     return this.campaignApplication.getAllCampaignByEmployerId(employerId);
   }
 
+  @MessagePattern({ cmd: 'delete_campaign' })
+  async DeleteCampaignService(id: number) {
+    const result = await this.campaignApplication.deleteCampaign(id);
+    if (result === 'Delete Campaign Success') {
+      return result;
+    } else {
+      throw new RpcException(new BadRequestException('Campaign is not exist'));
+    }
+  }
+
   @MessagePattern({ cmd: 'get_all_field' })
   getAllField() {
     return this.fieldApplication.getAllField();
