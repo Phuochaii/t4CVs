@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateCompanyDto } from './dto/Req/createCompany.dto';
 import { UpdateCompanyDto } from './dto/Req/updateCompany.dto';
@@ -25,10 +25,13 @@ export class CompanyService {
   }
 
   findCompanyById(id: number) {
-    return this.companyClient.send<FindCompanyDTOResponse>(
-      { cmd: 'find_company_by_id' },
-      id,
-    );
+    return this.companyClient
+      .send<FindCompanyDTOResponse>({ cmd: 'find_company_by_id' }, id)
+      .pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
   }
 
   findCompanyByArrayId(id: number[]): Observable<any[]> {

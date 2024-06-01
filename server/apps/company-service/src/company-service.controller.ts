@@ -1,5 +1,5 @@
-import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { BadRequestException, Controller } from '@nestjs/common';
+import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 import {
   CampaignApplication,
   CompanyApplication,
@@ -50,7 +50,25 @@ export class CompanyServiceController {
 
   @MessagePattern({ cmd: 'find_company_by_id' })
   async findCompanyById(id: number) {
-    return await this.companyApplication.findCompanyById(id);
+    const company = await this.companyApplication.findCompanyById(id);
+
+    if (company) {
+      const field = await this.fieldApplication.findFieldById(company.field);
+
+      if (field) {
+        // Tạo đối tượng mới chứa thông tin công ty và tên lĩnh vực
+        const companyWithFieldName = {
+          ...company,
+          fieldName: field.name,
+        };
+
+        return companyWithFieldName;
+      } else {
+        throw new RpcException(new BadRequestException('Field is not exist'));
+      }
+    } else {
+      throw new RpcException(new BadRequestException('Company is not exist'));
+    }
   }
 
   @MessagePattern({ cmd: 'update_company' })
