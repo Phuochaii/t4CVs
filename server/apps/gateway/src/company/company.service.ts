@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { Observable, catchError, forkJoin, map, throwError } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateCompanyDto } from './dto/Req/createCompany.dto';
 import { UpdateCompanyDto } from './dto/Req/updateCompany.dto';
@@ -7,10 +7,15 @@ import { CreateCampaignDto } from './dto/Req/createCampaign.dto';
 import { UpdateCampaignDto } from './dto/Req/updateCampaign.dto';
 import { FindCampaignDTOResponse } from './dto/Res/find-campaign.dto';
 import { FindCompanyDTOResponse } from './dto/Res/find-company.dto';
+import { UpdateCompanyStatusDto } from './dto/Req/updateCompanyStatus.dto';
+import { EmployerService } from '../employer/employer.service';
 
 @Injectable()
 export class CompanyService {
-  constructor(@Inject('COMPANY') private readonly companyClient: ClientProxy) {}
+  constructor(
+    @Inject('COMPANY') private readonly companyClient: ClientProxy,
+    private readonly employerService: EmployerService,
+  ) {}
 
   createCompany(createCompanyDTO: CreateCompanyDto): Observable<string> {
     return this.companyClient.send({ cmd: 'create_company' }, createCompanyDTO);
@@ -24,14 +29,37 @@ export class CompanyService {
   }
 
   findCompanyById(id: number) {
-    return this.companyClient.send<FindCompanyDTOResponse>(
-      { cmd: 'find_company_by_id' },
-      id,
+    const company$ = this.companyClient
+      .send<FindCompanyDTOResponse>({ cmd: 'find_company_by_id' }, id)
+      .pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
+
+    const employers$ = this.employerService.getEmployerByCompanyId(id);
+
+    return forkJoin([company$, employers$]).pipe(
+      map(([company, employers]) => {
+        const result = {
+          ...company,
+          employers: employers,
+        };
+        return result;
+      }),
     );
+  }
+
+  findCompanyByArrayId(id: number[]): Observable<any[]> {
+    return this.companyClient.send({ cmd: 'find_company_by_array_id' }, id);
   }
 
   updateCompany(data: UpdateCompanyDto): Observable<string> {
     return this.companyClient.send({ cmd: 'update_company' }, data);
+  }
+
+  updateCompanyStatus(data: UpdateCompanyStatusDto): Observable<string> {
+    return this.companyClient.send({ cmd: 'update_company_status' }, data);
   }
 
   removeCompany(id: number): Observable<string> {
@@ -75,5 +103,13 @@ export class CompanyService {
       { cmd: 'find_all_campaign_by_employerid' },
       employerId,
     );
+  }
+
+  getAllField() {
+    return this.companyClient.send({ cmd: 'get_all_field' }, {});
+  }
+
+  findFieldById(id: number) {
+    return this.companyClient.send({ cmd: 'find_field_by_id' }, id);
   }
 }

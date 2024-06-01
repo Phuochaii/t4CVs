@@ -27,58 +27,25 @@ export class ApplicationController implements ApplicationServiceController {
 
   readApplication(request: ReadApplicationRequest) {
     const res = this.applicationApplication.getApplication(request);
-    // console.log(cre);
     return res;
   }
 
   async readAllApplicationByCampaignId(
     request: ReadAllApplicationByCampaignIdRequest,
-  ): Promise<Applications> {
-    const campaignIds = request.campaignIds;
-    const total_data =
-      this.applicationApplication.getAllByCampaignIdApplication({
-        campaignIds,
-      });
-    // console.log(total_data);
-    const total = (await total_data).length;
-    const data =
-      await this.applicationApplication.getByCampaignIdApplication(request);
-    // console.log(total);
-
-    const total_pages = Math.ceil(total / request.limit);
-    return {
-      page: request.page,
-      limit: request.limit,
-      total: total,
-      totalPage: total_pages,
-      applications: data,
-    };
+  ) {
+    return await this.applicationApplication.getByCampaignIdApplication(
+      request,
+    );
   }
 
-  async readAllApplicationByUserId(
-    request: ReadAllApplicationByUserIdRequest,
-  ): Promise<Applications> {
-    const userId = request.userId;
-    const total_data = this.applicationApplication.getByUserIdApplication({
-      userId,
-    });
-    const total = (await total_data).length;
-    const data =
-      await this.applicationApplication.getByUserIdPaginationApplication(
-        request,
-      );
-
-    const total_pages = Math.ceil(total / request.limit);
-    return {
-      page: request.page,
-      limit: request.limit,
-      total: total,
-      totalPage: total_pages,
-      applications: data,
-    };
+  async readAllApplicationByUserId(request: ReadAllApplicationByUserIdRequest) {
+    return await this.applicationApplication.getByUserIdPaginationApplication(
+      request,
+    );
   }
 
   async readAllApplication(request: Pagination): Promise<Applications> {
+    request;
     return null;
   }
 
@@ -87,6 +54,7 @@ export class ApplicationController implements ApplicationServiceController {
   }
 
   deleteApplication(request: DeleteApplicationRequest) {
+    request;
     return null;
   }
 }

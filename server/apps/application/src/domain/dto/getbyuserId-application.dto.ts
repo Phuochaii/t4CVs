@@ -1,3 +1,4 @@
 export class GetByUserIdApplicationDto {
-  userId: number;
+  userId: string;
+  status?: boolean | undefined;
 }

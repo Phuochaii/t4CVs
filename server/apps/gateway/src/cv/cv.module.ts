@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CVService } from './cv.service';
 import { CVController } from './cv.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { UploadModule } from '../upload/upload.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         },
       },
     ]),
+    UploadModule,
   ],
   controllers: [CVController],
   providers: [CVService],

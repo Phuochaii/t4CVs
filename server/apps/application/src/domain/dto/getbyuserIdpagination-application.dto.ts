@@ -1,5 +1,6 @@
 export class GetByUserIdPaginationApplicationDto {
   page: number;
   limit: number;
-  userId: number;
+  userId: string;
+  status?: boolean | undefined;
 }

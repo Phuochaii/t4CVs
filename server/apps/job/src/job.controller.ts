@@ -50,6 +50,11 @@ export class JobController {
     return this.jobService.createJobInfo();
   }
 
+  @MessagePattern({ cmd: 'find_jobs_by_campaignIds' })
+  findJobsByCampaignIds(campaignIds: number[]) {
+    return this.jobService.findJobsByCampaignIds(campaignIds);
+  }
+
   @MessagePattern({ cmd: 'create_major' })
   createMajor(majors: CreateBaseDto) {
     return this.jobService.createMajor(majors);

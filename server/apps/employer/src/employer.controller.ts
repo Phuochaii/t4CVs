@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { EmployerApplication, PositionApplication } from './domain';
-import { CreateEmployerDTO } from './domain/dto';
+import { CreateEmployerDTO, UpdateEmployerCompanyDTO } from './domain/dto';
 
 @Controller()
 export class EmployerController {
@@ -51,6 +51,80 @@ export class EmployerController {
 
     if (employer) {
       return employer;
+    } else {
+      return 'Your employerId not exsist';
+    }
+  }
+
+  @MessagePattern({ cmd: 'get_employer_by_companyid' })
+  getEmployerByComapnyId(companyId: number) {
+    const employer =
+      this.employerApplication.getAllEmployerByCompanyId(companyId);
+
+    if (employer) {
+      return employer;
+    } else {
+      return 'Your employerId not exsist';
+    }
+  }
+
+  @MessagePattern({ cmd: 'update_employer_companyid' })
+  updateEmployerCompanyId(employer: UpdateEmployerCompanyDTO) {
+    const result = this.employerApplication.updateEmployerCompanyId(employer);
+
+    if (result) {
+      return result;
+    } else {
+      return 'Your employerId not exsist';
+    }
+  }
+
+  @MessagePattern({ cmd: 'update_employer_license' })
+  updateEmployerLicense(@Payload() data: any) {
+    const employerId = String(data.employerId);
+    const license = String(data.license);
+
+    const result = this.employerApplication.updateEmployerLicense(
+      employerId,
+      license,
+    );
+
+    if (result) {
+      return result;
+    } else {
+      return 'Your employerId not exsist';
+    }
+  }
+
+  @MessagePattern({ cmd: 'update_employer_license_status' })
+  updateEmployerLicenseStatus(@Payload() data: any) {
+    const employerId = String(data.employerId);
+    const licenseStatus = Boolean(data.licenseStatus);
+
+    const result = this.employerApplication.updateEmployerLicenseStatus(
+      employerId,
+      licenseStatus,
+    );
+
+    if (result) {
+      return result;
+    } else {
+      return 'Your employerId not exsist';
+    }
+  }
+
+  @MessagePattern({ cmd: 'update_employer_phone_status' })
+  updateEmployerPhoneStatus(@Payload() data: any) {
+    const employerId = String(data.employerId);
+    const phoneNumberStatus = Boolean(data.phoneNumberStatus);
+
+    const result = this.employerApplication.updateEmployerPhoneStatus(
+      employerId,
+      phoneNumberStatus,
+    );
+
+    if (result) {
+      return result;
     } else {
       return 'Your employerId not exsist';
     }

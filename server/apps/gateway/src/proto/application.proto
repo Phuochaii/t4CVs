@@ -24,7 +24,8 @@ message ReadApplicationRequest {
 message ReadAllApplicationByUserIdRequest {
   int32 page = 1;
   int32 limit = 2;
-  int32 userId = 3;
+  string userId = 3;
+  optional bool status = 4;
 }
 
 message ReadAllApplicationByCampaignIdRequest {
@@ -41,12 +42,13 @@ message CreateApplicationRequest {
   string email=4;
   string coverLetter =5;
   int32 campaignId=6;
-  int32 userId=7;
+  string userId=7;
   int32 cvId=8;
 }
 
 message UpdateApplicationRequest {
   int32 id = 1;
+  bool status = 2;
 }
 
 
@@ -68,7 +70,7 @@ message Application {
   string createdAt = 7;
   string updateAt = 8;
   int32 campaignId=9;
-  int32 userId=10;
+  string userId=10;
   int32 cvId=11;
 }
 

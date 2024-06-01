@@ -1,16 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  UseInterceptors,
-  UploadedFile,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Observable } from 'rxjs';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateUserDTO } from './dto/Req/createUser.dto';
 import { CreateUserAccountDto } from './dto/Req/create-user-account.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -33,12 +23,17 @@ export class UserController {
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
   @Get('/profile')
-  getUserProfile(@GetUser() user: UserClaims): Observable<string> {
+  getUserProfile(@GetUser() user: UserClaims) {
     return this.userService.findUserById(user.sub);
   }
 
+  @Get('check/:id')
+  isUserExist(@Param('id') id: string) {
+    return this.userService.isUserExist(id);
+  }
+
   @Get(':id')
-  findUserById(@Param('id') id: string): Observable<string> {
+  findUserById(@Param('id') id: string) {
     return this.userService.findUserById(id);
   }
 

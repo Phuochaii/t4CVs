@@ -50,7 +50,6 @@ export class DatabaseConfiger {
   }
 
   private async insertData() {
-    console.log(1);
     const option = {
       ...this.defaultConfig,
       entities: [User],

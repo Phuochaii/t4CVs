@@ -4,11 +4,13 @@ import { CompanyRepository } from './domain/repository';
 import { CompanyApplication } from './domain';
 import {
   CreateCompanyService,
+  FindCompanyByArrayIdService,
   FindCompanyByIdService,
   GetAllCompanyPaginationService,
   GetTotalCompaniesService,
   RemoveCompanyService,
   UpdateCompanyService,
+  UpdateCompanyStatusService,
 } from './domain/service';
 
 @Module({
@@ -50,9 +52,23 @@ import {
       inject: [CompanyRepository],
     },
     {
+      provide: UpdateCompanyStatusService,
+      useFactory: (companyRepository: CompanyRepository) => {
+        return new UpdateCompanyStatusService(companyRepository);
+      },
+      inject: [CompanyRepository],
+    },
+    {
       provide: RemoveCompanyService,
       useFactory: (companyRepository: CompanyRepository) => {
         return new RemoveCompanyService(companyRepository);
+      },
+      inject: [CompanyRepository],
+    },
+    {
+      provide: FindCompanyByArrayIdService,
+      useFactory: (companyRepository: CompanyRepository) => {
+        return new FindCompanyByArrayIdService(companyRepository);
       },
       inject: [CompanyRepository],
     },
@@ -64,7 +80,9 @@ import {
         getTotalCompanies: GetTotalCompaniesService,
         findCompanyById: FindCompanyByIdService,
         updateCompany: UpdateCompanyService,
+        updateCompanyStatus: UpdateCompanyStatusService,
         removeCompany: RemoveCompanyService,
+        findCompanyByArrayId: FindCompanyByArrayIdService,
       ) => {
         return new CompanyApplication(
           createCompanyService,
@@ -72,7 +90,9 @@ import {
           getTotalCompanies,
           findCompanyById,
           updateCompany,
+          updateCompanyStatus,
           removeCompany,
+          findCompanyByArrayId,
         );
       },
       inject: [
@@ -81,7 +101,9 @@ import {
         GetTotalCompaniesService,
         FindCompanyByIdService,
         UpdateCompanyService,
+        UpdateCompanyStatusService,
         RemoveCompanyService,
+        FindCompanyByArrayIdService,
       ],
     },
   ],

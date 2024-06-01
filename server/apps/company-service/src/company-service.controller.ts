@@ -1,11 +1,16 @@
-import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
-import { CampaignApplication, CompanyApplication } from './domain';
+import { BadRequestException, Controller } from '@nestjs/common';
+import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
+import {
+  CampaignApplication,
+  CompanyApplication,
+  FieldApplication,
+} from './domain';
 import {
   CreateCampaignDTO,
   CreateCompanyDTO,
   UpdateCampaignDTO,
   UpdateCompanyDTO,
+  UpdateCompanyStatusDTO,
 } from './domain/dto';
 
 @Controller()
@@ -13,6 +18,7 @@ export class CompanyServiceController {
   constructor(
     private readonly companyApplication: CompanyApplication,
     private readonly campaignApplication: CampaignApplication,
+    private readonly fieldApplication: FieldApplication,
   ) {}
 
   @MessagePattern({ cmd: 'create_company' })
@@ -44,7 +50,25 @@ export class CompanyServiceController {
 
   @MessagePattern({ cmd: 'find_company_by_id' })
   async findCompanyById(id: number) {
-    return await this.companyApplication.findCompanyById(id);
+    const company = await this.companyApplication.findCompanyById(id);
+
+    if (company) {
+      const field = await this.fieldApplication.findFieldById(company.field);
+
+      if (field) {
+        // Tạo đối tượng mới chứa thông tin công ty và tên lĩnh vực
+        const companyWithFieldName = {
+          ...company,
+          fieldName: field.name,
+        };
+
+        return companyWithFieldName;
+      } else {
+        throw new RpcException(new BadRequestException('Field is not exist'));
+      }
+    } else {
+      throw new RpcException(new BadRequestException('Company is not exist'));
+    }
   }
 
   @MessagePattern({ cmd: 'update_company' })
@@ -52,9 +76,19 @@ export class CompanyServiceController {
     return this.companyApplication.updateCompany(data);
   }
 
+  @MessagePattern({ cmd: 'update_company_status' })
+  async updateCompanyStatus(data: UpdateCompanyStatusDTO) {
+    return this.companyApplication.updateCompanyStatus(data);
+  }
+
   @MessagePattern({ cmd: 'remove_company' })
   removeCompany(id: number) {
     return this.companyApplication.removeCompany(id);
+  }
+
+  @MessagePattern({ cmd: 'find_company_by_array_id' })
+  async findCompanyByArrayId(id: number[]) {
+    return await this.companyApplication.findCompanyByArrayId(id);
   }
 
   @MessagePattern({ cmd: 'create_campaign' })
@@ -126,5 +160,15 @@ export class CompanyServiceController {
   @MessagePattern({ cmd: 'find_all_campaign_by_employerid' })
   findAllCampaignByEmployerId(employerId: string) {
     return this.campaignApplication.getAllCampaignByEmployerId(employerId);
+  }
+
+  @MessagePattern({ cmd: 'get_all_field' })
+  getAllField() {
+    return this.fieldApplication.getAllField();
+  }
+
+  @MessagePattern({ cmd: 'find_field_by_id' })
+  findFieldById(id: number) {
+    return this.fieldApplication.findFieldById(id);
   }
 }
