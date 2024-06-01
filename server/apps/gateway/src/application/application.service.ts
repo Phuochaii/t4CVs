@@ -4,11 +4,16 @@ import {
   ApplicationServiceClient,
   CreateApplicationRequest,
 } from '@app/common/proto/application';
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  OnModuleInit,
+} from '@nestjs/common';
 
 import { ClientGrpc } from '@nestjs/microservices';
 import { CVService } from '../cv/cv.service';
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, throwError } from 'rxjs';
 import {
   NotificationService,
   NotificationUserId,
@@ -41,6 +46,22 @@ export class ApplicationService implements OnModuleInit {
   }
 
   async create(createApplicationRequest: CreateApplicationRequest) {
+    const requiredFields: string[] = [
+      'id',
+      'fullname',
+      'phone',
+      'email',
+      'coverLetter',
+      'campaignId',
+      'userId',
+      'cvId',
+    ];
+
+    if (requiredFields.some((field) => !createApplicationRequest[field])) {
+      throw new BadRequestException(
+        'Missing required fields in CreateApplicationRequest: All fields are mandatory.',
+      );
+    }
     const application = await firstValueFrom(
       this.applicationServiceClient.createApplication(createApplicationRequest),
     );
@@ -63,13 +84,16 @@ export class ApplicationService implements OnModuleInit {
   }
 
   async findOne(id: number) {
-    const data = await firstValueFrom(
-      this.applicationServiceClient.readApplication({ id }),
-    );
-    if (Object.keys(data).length === 0) {
-      return 'Id does not exist';
+    try {
+      const application = await firstValueFrom(
+        this.applicationServiceClient.readApplication({
+          id,
+        }),
+      );
+      return application;
+    } catch (err) {
+      throw new BadRequestException(err.message);
     }
-    return data;
   }
 
   async findAll(
@@ -84,9 +108,11 @@ export class ApplicationService implements OnModuleInit {
     );
 
     let campaignIds = campaignRes.data.map((campaign) => campaign.id);
+
     if (campaignId) {
       campaignIds = [campaignId];
     }
+
     const { applications = [], ...data } = await firstValueFrom(
       this.applicationServiceClient.readAllApplicationByCampaignId({
         page,
@@ -108,63 +134,65 @@ export class ApplicationService implements OnModuleInit {
     userId: string,
     status: boolean | null,
   ) {
-    const { applications = [], ...data } = await firstValueFrom(
-      this.applicationServiceClient.readAllApplicationByUserId({
-        page,
-        limit,
-        userId,
-        status,
-      }),
-    );
-    //array obj cvId
-    const cvIds = applications.map((application) => application.cvId);
-    //array obj campaginId
-    const campaginIds = applications.map(
-      (application) => application.campaignId,
-    );
-    //array obj Job attach company
-    const arrayJob = await this.jobService.findJobsByCampaignIds(campaginIds);
-    //array obj CV
-    const cvs = await firstValueFrom(this.cvService.getCVsById(cvIds));
-    //array obj both link + id
-    const arrayCV = cvs.map((cv) => ({ id: cv.id, link: cv.link }));
-    //map Cv(id+link) and Job attach company into application
-    const applicationsFinal = applications.map((application) => {
-      const cvLink = arrayCV.find((cvItem) => cvItem.id === application.cvId);
-      const job = arrayJob.find(
-        (cvItem) => cvItem.campaignId === application.campaignId,
+    try {
+      const { applications = [], ...data } = await firstValueFrom(
+        this.applicationServiceClient.readAllApplicationByUserId({
+          page,
+          limit,
+          userId,
+          status,
+        }),
       );
-      return {
-        ...application,
-        cv: cvLink,
-        jobs: job,
-        campaignId: application.campaignId,
-      };
-    });
+      //array obj cvId
+      const cvIds = applications.map((application) => application.cvId);
+      //array obj campaginId
+      const campaginIds = applications.map(
+        (application) => application.campaignId,
+      );
+      //array obj Job attach company
+      const arrayJob = await this.jobService.findJobsByCampaignIds(campaginIds);
+      //array obj CV
+      const cvs = await firstValueFrom(this.cvService.getCVsById(cvIds));
+      //array obj both link + id
+      const arrayCV = cvs.map((cv) => ({ id: cv.id, link: cv.link }));
+      //map Cv(id+link) and Job attach company into application
+      const applicationsFinal = applications.map((application) => {
+        const cvLink = arrayCV.find((cvItem) => cvItem.id === application.cvId);
+        const job = arrayJob.find(
+          (cvItem) => cvItem.campaignId === application.campaignId,
+        );
+        return {
+          ...application,
+          cv: cvLink,
+          jobs: job,
+          campaignId: application.campaignId,
+        };
+      });
 
-    return {
-      ...data,
-      applicationsFinal,
-    };
+      return {
+        ...data,
+        applicationsFinal,
+      };
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
   }
 
   async update(id: number, status: boolean) {
-    const data = await firstValueFrom(
-      this.applicationServiceClient.updateApplication({ id, status }),
-    );
-    if (Object.keys(data).length === 0) {
-      return 'Id does not exist';
+    try {
+      const data = await firstValueFrom(
+        this.applicationServiceClient.updateApplication({ id, status }),
+      );
+      return data;
+    } catch (err) {
+      throw new BadRequestException(err.message);
     }
-
-    return data;
   }
 
   async hrGetCv(id: number) {
     const status = true;
     const application = await this.update(id, status);
-    if (application === 'Id does not exist') {
-      return application;
-    }
+
     const cv = (await firstValueFrom(
       this.cvService.getCVById(application.cvId),
     )) as CVDto;
