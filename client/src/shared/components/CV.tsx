@@ -1,35 +1,35 @@
 function CV() {
   // Dữ liệu giả
   const fakeData = {
-    name: "John Doe",
-    title: "Software Developer",
-    email: "john.doe@example.com",
-    phone: "+1234567890",
-    address: "123 Street, City, Country",
+    name: 'John Doe',
+    title: 'Software Developer',
+    email: 'john.doe@example.com',
+    phone: '+1234567890',
+    address: '123 Street, City, Country',
     experience: [
       {
-        position: "Senior Developer",
-        company: "ABC Tech",
-        duration: "2018 - Present",
+        position: 'Senior Developer',
+        company: 'ABC Tech',
+        duration: '2018 - Present',
         description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
       },
       {
-        position: "Junior Developer",
-        company: "XYZ Inc.",
-        duration: "2016 - 2018",
+        position: 'Junior Developer',
+        company: 'XYZ Inc.',
+        duration: '2016 - 2018',
         description:
-          "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas...",
+          'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas...',
       },
     ],
     education: [
       {
-        degree: "Bachelor of Science in Computer Science",
-        institution: "University XYZ",
-        year: "2012 - 2016",
+        degree: 'Bachelor of Science in Computer Science',
+        institution: 'University XYZ',
+        year: '2012 - 2016',
       },
     ],
-    skills: ["JavaScript", "React", "Node.js", "HTML", "CSS", "Tailwind CSS"],
+    skills: ['JavaScript', 'React', 'Node.js', 'HTML', 'CSS', 'Tailwind CSS'],
   };
 
   return (

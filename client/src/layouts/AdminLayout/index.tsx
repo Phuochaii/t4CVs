@@ -1,7 +1,7 @@
-import React from "react";
-import Header from "./components/Header";
-import GradientFill from "./components/GradientFill";
-import Sidebar from "./components/SideBar";
+import React from 'react';
+import Header from './components/Header';
+import GradientFill from './components/GradientFill';
+import Sidebar from './components/SideBar';
 
 interface LayoutProp {
   children: React.ReactNode | React.ReactElement<any>;

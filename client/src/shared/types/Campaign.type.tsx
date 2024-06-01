@@ -1,8 +1,8 @@
-import { ApplicationFromServer } from "./Application.type";
-import { CompanyFromServer } from "./Company.type";
-import { EmployerFromServer } from "./Employer.type";
-import { RecruitmentFromServer } from "./Recruitment.type";
-import { UserFromServer } from "./User.type";
+import { ApplicationFromServer } from './Application.type';
+import { CompanyFromServer } from './Company.type';
+import { EmployerFromServer } from './Employer.type';
+import { RecruitmentFromServer } from './Recruitment.type';
+import { UserFromServer } from './User.type';
 
 export interface Campaign {
   campaignName: string;

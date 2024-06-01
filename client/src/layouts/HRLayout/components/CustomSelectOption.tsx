@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
-import { ChevronDown } from "lucide-react";
+import React, { useState, useRef, useEffect } from 'react';
+import { ChevronDown } from 'lucide-react';
 
 function CustomSelectOption({
   label,
-  labelColor = "#A9ACAF",
+  labelColor = '#A9ACAF',
   list = [],
   value,
-  width = "auto",
+  width = 'auto',
   onChange = () => {},
 }: {
   label: string;
@@ -30,9 +30,9 @@ function CustomSelectOption({
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -44,22 +44,22 @@ function CustomSelectOption({
         type="button"
         style={{
           width: width,
-          color: "#A9ACAF",
-          marginLeft: "12px",
-          minWidth: "170px",
-          maxWidth: "230px",
+          color: '#A9ACAF',
+          marginLeft: '12px',
+          minWidth: '170px',
+          maxWidth: '230px',
         }}
         onClick={handleToggle}
       >
         <div
           style={{
-            overflow: "hidden",
-            whiteSpace: "nowrap",
-            textOverflow: "ellipsis",
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
           }}
         >
-          <span style={{ color: value != null ? "black" : labelColor }}>
-            {" "}
+          <span style={{ color: value != null ? 'black' : labelColor }}>
+            {' '}
             {value != null ? value.name : label}
           </span>
         </div>
@@ -69,8 +69,8 @@ function CustomSelectOption({
         <ul
           className="absolute bg-white border border-gray-200 z-10"
           style={{
-            width: "100%",
-            marginLeft: "12px",
+            width: '100%',
+            marginLeft: '12px',
           }}
         >
           {list.map((item, index) => (
