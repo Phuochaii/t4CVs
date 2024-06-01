@@ -144,7 +144,7 @@ export async function getAllFields() {
 }
 
 export async function updateCompanyStatus(id: number, status: boolean) {
-    const response = await axios.post(`${serverURL}/company/update`, {
+    const response = await axios.put(`${serverURL}/company/update`, {
         id: id,
         status: status,
     });
