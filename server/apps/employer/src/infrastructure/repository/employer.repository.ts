@@ -46,6 +46,17 @@ export class TypeOrmEmployerRepository extends EmployerRepository {
     return total;
   }
 
+  async getEmployerByCompanyId(companyId: number): Promise<Employer[]> {
+    const result = await this.employerRepository.find({
+      where: { companyId: companyId },
+      order: {
+        fullname: 'ASC',
+      },
+    });
+
+    return result;
+  }
+
   async updateEmployerLincense(
     employerId: string,
     license: string,

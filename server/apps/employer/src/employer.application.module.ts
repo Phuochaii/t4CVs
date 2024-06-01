@@ -4,6 +4,7 @@ import { EmployerApplication } from './domain';
 import { EmployerRepository, PositionRepository } from './domain/repository';
 import {
   CreateEmployerService,
+  GetAllEmployerByCompanyIdService,
   GetEmployerByIdService,
   GetEmployerService,
   GetTotalEmployerService,
@@ -51,6 +52,13 @@ import {
       inject: [EmployerRepository],
     },
     {
+      provide: GetAllEmployerByCompanyIdService,
+      useFactory: (employerRepository: EmployerRepository) => {
+        return new GetAllEmployerByCompanyIdService(employerRepository);
+      },
+      inject: [EmployerRepository],
+    },
+    {
       provide: UpdateEmployerCompanyIdService,
       useFactory: (employerRepository: EmployerRepository) => {
         return new UpdateEmployerCompanyIdService(employerRepository);
@@ -85,6 +93,7 @@ import {
         getAllEmployerService: GetEmployerService,
         getTotalEmployerService: GetTotalEmployerService,
         getEmployerByIdService: GetEmployerByIdService,
+        getAllEmployerByCompanyIdService: GetAllEmployerByCompanyIdService,
         updateEmployerCompanyIdService: UpdateEmployerCompanyIdService,
         updateEmployerLicenseService: UpdateEmployerLicenseService,
         updateEmployerLicenseStatusService: UpdateEmployerLicenseStatusService,
@@ -95,6 +104,7 @@ import {
           getAllEmployerService,
           getTotalEmployerService,
           getEmployerByIdService,
+          getAllEmployerByCompanyIdService,
           updateEmployerCompanyIdService,
           updateEmployerLicenseService,
           updateEmployerLicenseStatusService,
@@ -106,6 +116,7 @@ import {
         GetEmployerService,
         GetTotalEmployerService,
         GetEmployerByIdService,
+        GetAllEmployerByCompanyIdService,
         UpdateEmployerCompanyIdService,
         UpdateEmployerLicenseService,
         UpdateEmployerLicenseStatusService,

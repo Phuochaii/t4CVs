@@ -56,6 +56,18 @@ export class EmployerController {
     }
   }
 
+  @MessagePattern({ cmd: 'get_employer_by_companyid' })
+  getEmployerByComapnyId(companyId: number) {
+    const employer =
+      this.employerApplication.getAllEmployerByCompanyId(companyId);
+
+    if (employer) {
+      return employer;
+    } else {
+      return 'Your employerId not exsist';
+    }
+  }
+
   @MessagePattern({ cmd: 'update_employer_companyid' })
   updateEmployerCompanyId(employer: UpdateEmployerCompanyDTO) {
     const result = this.employerApplication.updateEmployerCompanyId(employer);

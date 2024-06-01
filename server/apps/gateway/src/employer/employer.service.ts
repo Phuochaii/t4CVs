@@ -34,6 +34,13 @@ export class EmployerService {
     );
   }
 
+  getEmployerByCompanyId(companyId: number) {
+    return this.employerClient.send(
+      { cmd: 'get_employer_by_companyid' },
+      companyId,
+    );
+  }
+
   updateEmployerCompanyId(
     updateEmployerCompanyDTO: UpdateEmployerCompanyDTO,
   ): Observable<string> {

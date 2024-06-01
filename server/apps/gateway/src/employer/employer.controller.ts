@@ -38,6 +38,11 @@ export class EmployerController {
     return this.employerService.findEmployerById(id);
   }
 
+  @Get('company/:companyid')
+  getEmployerByCompanyId(@Param('companyid') companyid: number) {
+    return this.employerService.getEmployerByCompanyId(companyid);
+  }
+
   @Put('update/companyid')
   updateEmployerCompanyId(
     @Body() data: UpdateEmployerCompanyDTO,
