@@ -14,6 +14,7 @@ import { CreateCompanyDto } from './dto/Req/createCompany.dto';
 import { UpdateCompanyDto } from './dto/Req/updateCompany.dto';
 import { CreateCampaignDto } from './dto/Req/createCampaign.dto';
 import { UpdateCampaignDto } from './dto/Req/updateCampaign.dto';
+import { UpdateCompanyStatusDto } from './dto/Req/updateCompanyStatus.dto';
 
 @Controller('company')
 export class CompanyController {
@@ -42,16 +43,17 @@ export class CompanyController {
     return this.companyService.updateCompany(data);
   }
 
+  @Put('updateStatus')
+  updateCompanyStatus(
+    @Body() data: UpdateCompanyStatusDto,
+  ): Observable<string> {
+    return this.companyService.updateCompanyStatus(data);
+  }
+
   @Delete(':id')
   removeCompany(@Param('id') id: number): Observable<string> {
     return this.companyService.removeCompany(id);
   }
-
-  //Test api cho hàm find company by array id
-  // @Get()
-  // findCompanyByArrayId(): Observable<any[]> {
-  //   return this.companyService.findCompanyByArrayId();
-  // }
 
   @Post('campaign/create')
   createCampaign(@Body() data: CreateCampaignDto): Observable<string> {

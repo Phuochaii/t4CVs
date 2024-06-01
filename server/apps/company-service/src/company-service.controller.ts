@@ -6,6 +6,7 @@ import {
   CreateCompanyDTO,
   UpdateCampaignDTO,
   UpdateCompanyDTO,
+  UpdateCompanyStatusDTO,
 } from './domain/dto';
 
 @Controller()
@@ -50,6 +51,11 @@ export class CompanyServiceController {
   @MessagePattern({ cmd: 'update_company' })
   async updateCompany(data: UpdateCompanyDTO) {
     return this.companyApplication.updateCompany(data);
+  }
+
+  @MessagePattern({ cmd: 'update_company_status' })
+  async updateCompanyStatus(data: UpdateCompanyStatusDTO) {
+    return this.companyApplication.updateCompanyStatus(data);
   }
 
   @MessagePattern({ cmd: 'remove_company' })

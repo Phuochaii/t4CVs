@@ -3,7 +3,11 @@ import { CompanyRepository } from '../../domain/repository';
 import { In, Repository } from 'typeorm';
 import { CompanySchema } from '../schema';
 import { Company } from '../../domain/entity';
-import { CreateCompanyDTO, UpdateCompanyDTO } from '../../domain/dto';
+import {
+  CreateCompanyDTO,
+  UpdateCompanyDTO,
+  UpdateCompanyStatusDTO,
+} from '../../domain/dto';
 
 export class TypeOrmCompanyRepository extends CompanyRepository {
   constructor(
@@ -50,6 +54,21 @@ export class TypeOrmCompanyRepository extends CompanyRepository {
   }
 
   async updateCompany(company: UpdateCompanyDTO): Promise<Company> {
+    await this.companyRepository.update(company.id, {
+      field: company.field,
+      taxCode: company.taxCode,
+      website: company.website,
+      image: company.image,
+      address: company.address,
+      phone: company.phone,
+      companySize: company.companySize,
+      description: company.description,
+    });
+
+    return this.findCompanyById(company.id);
+  }
+
+  async updateCompanyStatus(company: UpdateCompanyStatusDTO): Promise<Company> {
     await this.companyRepository.update(company.id, {
       status: company.status,
     });
