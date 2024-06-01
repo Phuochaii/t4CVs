@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import Switch from "../../shared/components/CustomSwitch";
+
 
 function CompanyDetail() {
   const { id } = useParams();
@@ -116,37 +118,108 @@ function CompanyDetail() {
                 </div>
               </div>
             </div>
-            <div className="cursor-pointer box-follow flex items-center bg-white rounded-[8px] text-[#00b14f] text-lg h-[48px] w-[194px] py-[6px] px-[14px]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-                style={{
-                  width: "16px",
-                  height: "16px",
-                  fill: "#00b14f",
-                  marginRight: "11px",
+            <div className="cursor-pointer box-follow flex items-center bg-white rounded-[8px] text-[#00b14f] text-lg h-[48px] py-[6px] pl-[14px] pr-[18px]">
+              <Switch
+                checked={companyInfo?.status ? companyInfo?.status : false}
+                onChange={async () => {
+                  // await updateCompanyStatus(company.id, !company.status);
+                  // setRefresh(!refresh);
                 }}
-              >
-                <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-              </svg>
-              <span>Theo dõi công ty</span>
+              />
+              <b>Trạng thái</b>
             </div>
           </div>
         </div>
 
         <div className="flex justify-between gap-[30px] mb-[32px]">
-          <div className="w-2/3  bg-white">
-            <div className="rounded-[8px] overflow-hidden w-full">
-              <h2 className="p-5 bg-gradient-to-r from-[#212f3f] to-[#00b14f] text-white font-semibold text-lg">
-                Giới thiệu công ty
-              </h2>
-              <p className="px-5 pt-5 pb-7 max-w-[650px]">
-                {companyInfo?.description
-                  ? companyInfo?.description
-                  : "Không có mô tả"}
-              </p>
+          <div className="w-2/3 ">
+            {/* GIỚI THIỆU CÔNG TY */}
+            <div className="bg-white rounded-[8px] overflow-hidden mb-5">
+              <div className="w-full">
+                <h2 className="p-5 bg-gradient-to-r from-[#212f3f] to-[#00b14f] text-white font-semibold text-lg">
+                  Giới thiệu công ty
+                </h2>
+                <p className="px-5 pt-5 max-w-[650px]">
+                  {companyInfo?.description
+                    ? companyInfo?.description
+                    : "Không có mô tả"}
+                </p>
+                <p className="px-5 pt-5 pb-7 max-w-[650px]">
+                  Lĩnh vực:{" "}
+                  {companyInfo?.field ? companyInfo?.field : "Không có mô tả"}
+                </p>
+              </div>
             </div>
-            <div className="w-full rounded-[8px] overflow-hidden"></div>
+            {/* THÔNG TIN CHI TIẾT */}
+            <div className=" bg-white rounded-[8px] overflow-hidden ">
+              <div className="w-full">
+                <h2 className="p-5 bg-gradient-to-r from-[#212f3f] to-[#00b14f] text-white font-semibold text-lg">
+                  Thông tin chi tiết
+                </h2>
+                <p className="px-5 pt-5 max-w-[650px]">
+                  Số điện thoại:
+                  {companyInfo?.phone ? companyInfo?.phone : "Không có mô tả"}
+                </p>
+                <p className="px-5 pt-5 pb-7 max-w-[650px]">
+                  Mã số thuế:
+                  {companyInfo?.taxCode
+                    ? companyInfo?.taxCode
+                    : "Không có mô tả"}
+                </p>
+              </div>
+            </div>
+            {/* THÔNG TIN NHÀ TUYỂN DỤNG */}
+            <div className=" bg-white rounded-[8px] overflow-hidden ">
+              <div className="w-full">
+                <h2 className="p-5 bg-gradient-to-r from-[#212f3f] to-[#00b14f] text-white font-semibold text-lg">
+                  Nhà tuyển dụng
+                </h2>
+                <div>
+                  <p className="px-5 pt-5 max-w-[650px]">
+                    ID:{"    "}
+                    {/* {companyInfo?.phone ? companyInfo?.phone : "Không có mô tả"} */}
+                    Họ tên:
+                  </p>
+                  <p className="px-5 pt-5 max-w-[650px]">
+                    Số điện thoại:
+                    {/* {companyInfo?.phone ? companyInfo?.phone : "Không có mô tả"} */}
+                    Giới tính:
+                  </p>
+                  <p className="px-5 pt-5 max-w-[650px]">
+                    Skype:
+                    {/* {companyInfo?.phone ? companyInfo?.phone : "Không có mô tả"} */}
+                  </p>
+                  <p className="px-5 pt-5 pb-7 max-w-[650px]">
+                    Liense:
+                    {/* {companyInfo?.taxCode
+                      ? companyInfo?.taxCode
+                      : "Không có mô tả"} */}
+                  </p>
+                </div>
+                <div>
+                  <p className="flex items-center">
+                    <Switch
+                      checked={false}
+                      onChange={async () => {
+                        // await updateCompanyStatus(company.id, !company.status);
+                        // setRefresh(!refresh);
+                      }}
+                    />
+                    Xác minh số điện thoại
+                  </p>
+                  <p className="flex items-center">
+                    <Switch
+                      checked={false}
+                      onChange={async () => {
+                        // await updateCompanyStatus(company.id, !company.status);
+                        // setRefresh(!refresh);
+                      }}
+                    />
+                    Xác minh nhà tuyển dụng
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="w-1/3">
             <div className="rounded-[8px] overflow-hidden">
