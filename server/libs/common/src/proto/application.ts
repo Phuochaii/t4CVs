@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
-import { Observable } from "rxjs";
+import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
+import { Observable } from 'rxjs';
 
-export const protobufPackage = "Application";
+export const protobufPackage = 'Application';
 
 export interface DeleteApplicationRequest {
   id: number;
@@ -42,8 +42,7 @@ export interface UpdateApplicationRequest {
   status: boolean;
 }
 
-export interface Empty {
-}
+export interface Empty {}
 
 export interface Pagination {
   page: number;
@@ -73,7 +72,7 @@ export interface Applications {
   applications: Application[];
 }
 
-export const APPLICATION_PACKAGE_NAME = "Application";
+export const APPLICATION_PACKAGE_NAME = 'Application';
 
 /** The job application service definition. */
 
@@ -84,9 +83,13 @@ export interface ApplicationServiceClient {
 
   readAllApplication(request: Pagination): Observable<Applications>;
 
-  readAllApplicationByCampaignId(request: ReadAllApplicationByCampaignIdRequest): Observable<Applications>;
+  readAllApplicationByCampaignId(
+    request: ReadAllApplicationByCampaignIdRequest,
+  ): Observable<Applications>;
 
-  readAllApplicationByUserId(request: ReadAllApplicationByUserIdRequest): Observable<Applications>;
+  readAllApplicationByUserId(
+    request: ReadAllApplicationByUserIdRequest,
+  ): Observable<Applications>;
 
   updateApplication(request: UpdateApplicationRequest): Observable<Application>;
 
@@ -96,11 +99,17 @@ export interface ApplicationServiceClient {
 /** The job application service definition. */
 
 export interface ApplicationServiceController {
-  createApplication(request: CreateApplicationRequest): Promise<Application> | Observable<Application> | Application;
+  createApplication(
+    request: CreateApplicationRequest,
+  ): Promise<Application> | Observable<Application> | Application;
 
-  readApplication(request: ReadApplicationRequest): Promise<Application> | Observable<Application> | Application;
+  readApplication(
+    request: ReadApplicationRequest,
+  ): Promise<Application> | Observable<Application> | Application;
 
-  readAllApplication(request: Pagination): Promise<Applications> | Observable<Applications> | Applications;
+  readAllApplication(
+    request: Pagination,
+  ): Promise<Applications> | Observable<Applications> | Applications;
 
   readAllApplicationByCampaignId(
     request: ReadAllApplicationByCampaignIdRequest,
@@ -110,32 +119,50 @@ export interface ApplicationServiceController {
     request: ReadAllApplicationByUserIdRequest,
   ): Promise<Applications> | Observable<Applications> | Applications;
 
-  updateApplication(request: UpdateApplicationRequest): Promise<Application> | Observable<Application> | Application;
+  updateApplication(
+    request: UpdateApplicationRequest,
+  ): Promise<Application> | Observable<Application> | Application;
 
-  deleteApplication(request: DeleteApplicationRequest): Promise<Empty> | Observable<Empty> | Empty;
+  deleteApplication(
+    request: DeleteApplicationRequest,
+  ): Promise<Empty> | Observable<Empty> | Empty;
 }
 
 export function ApplicationServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
-      "createApplication",
-      "readApplication",
-      "readAllApplication",
-      "readAllApplicationByCampaignId",
-      "readAllApplicationByUserId",
-      "updateApplication",
-      "deleteApplication",
+      'createApplication',
+      'readApplication',
+      'readAllApplication',
+      'readAllApplicationByCampaignId',
+      'readAllApplicationByUserId',
+      'updateApplication',
+      'deleteApplication',
     ];
     for (const method of grpcMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcMethod("ApplicationService", method)(constructor.prototype[method], method, descriptor);
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(
+        constructor.prototype,
+        method,
+      );
+      GrpcMethod('ApplicationService', method)(
+        constructor.prototype[method],
+        method,
+        descriptor,
+      );
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcStreamMethod("ApplicationService", method)(constructor.prototype[method], method, descriptor);
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(
+        constructor.prototype,
+        method,
+      );
+      GrpcStreamMethod('ApplicationService', method)(
+        constructor.prototype[method],
+        method,
+        descriptor,
+      );
     }
   };
 }
 
-export const APPLICATION_SERVICE_NAME = "ApplicationService";
+export const APPLICATION_SERVICE_NAME = 'ApplicationService';
