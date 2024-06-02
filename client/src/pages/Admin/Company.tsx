@@ -126,10 +126,7 @@ function Company() {
               <Switch
                 checked={company.status}
                 onChange={async () => {
-                  await updateCompanyStatus(
-                    company.id,
-                    !company.status
-                  );
+                  await updateCompanyStatus(company.id, !company.status);
                   setRefresh(!refresh);
                 }}
               />
@@ -178,9 +175,7 @@ function Company() {
             stroke="green"
             className="cursor-pointer"
             strokeWidth={1}
-            onClick={() =>
-              setPage(page + 1 <= totalPages ? page + 1 : page)
-            }
+            onClick={() => setPage(page + 1 <= totalPages ? page + 1 : page)}
           />
         </div>
       </div>
