@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateJobDto } from './dto/Req/createJob.dto';
-import { Observable, lastValueFrom } from 'rxjs';
+import { Observable, catchError, lastValueFrom, throwError } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateBaseDto } from './dto/Req/createBase.dto';
 import { UpdateStatusJobDto } from './dto/Req/update-status-job.dto';
@@ -15,11 +15,19 @@ export class JobService {
   ) {}
 
   deleteJob(id: number) {
-    return this.jobClient.send({ cmd: 'delete_job' }, id);
+    return this.jobClient.send({ cmd: 'delete_job' }, id).pipe(
+      catchError((error) => {
+        return throwError(() => error.response);
+      }),
+    );
   }
 
   updateJob(data: UpdateJobDTO) {
-    return this.jobClient.send({ cmd: 'update_job' }, data);
+    return this.jobClient.send({ cmd: 'update_job' }, data).pipe(
+      catchError((error) => {
+        return throwError(() => error.response);
+      }),
+    );
   }
   async findJobsByCampaignIds(campaignIds: number[]) {
     const jobs = await lastValueFrom(
