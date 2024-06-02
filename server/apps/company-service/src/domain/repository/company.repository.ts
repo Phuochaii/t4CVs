@@ -26,4 +26,12 @@ export abstract class CompanyRepository {
   abstract removeCompany(id: number): Promise<string>;
 
   abstract findCompanyByArrayId(id: number[]): Promise<Company[]>;
+
+  abstract findCompanyByName(
+    name: string,
+    page: number,
+    limit: number,
+  ): Promise<Company[]>;
+
+  abstract getTotalCompanyByName(name: string): Promise<number>;
 }

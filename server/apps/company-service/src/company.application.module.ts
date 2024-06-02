@@ -6,8 +6,10 @@ import {
   CreateCompanyService,
   FindCompanyByArrayIdService,
   FindCompanyByIdService,
+  FindCompanyByNameService,
   GetAllCompanyPaginationService,
   GetTotalCompaniesService,
+  GetTotalCompanyByNameService,
   RemoveCompanyService,
   UpdateCompanyService,
   UpdateCompanyStatusService,
@@ -73,6 +75,20 @@ import {
       inject: [CompanyRepository],
     },
     {
+      provide: FindCompanyByNameService,
+      useFactory: (companyRepository: CompanyRepository) => {
+        return new FindCompanyByNameService(companyRepository);
+      },
+      inject: [CompanyRepository],
+    },
+    {
+      provide: GetTotalCompanyByNameService,
+      useFactory: (companyRepository: CompanyRepository) => {
+        return new GetTotalCompanyByNameService(companyRepository);
+      },
+      inject: [CompanyRepository],
+    },
+    {
       provide: CompanyApplication,
       useFactory: (
         createCompanyService: CreateCompanyService,
@@ -83,6 +99,8 @@ import {
         updateCompanyStatus: UpdateCompanyStatusService,
         removeCompany: RemoveCompanyService,
         findCompanyByArrayId: FindCompanyByArrayIdService,
+        findCompanyByNameService: FindCompanyByNameService,
+        getTotalCompanyByNameService: GetTotalCompanyByNameService,
       ) => {
         return new CompanyApplication(
           createCompanyService,
@@ -93,6 +111,8 @@ import {
           updateCompanyStatus,
           removeCompany,
           findCompanyByArrayId,
+          findCompanyByNameService,
+          getTotalCompanyByNameService,
         );
       },
       inject: [
@@ -104,6 +124,8 @@ import {
         UpdateCompanyStatusService,
         RemoveCompanyService,
         FindCompanyByArrayIdService,
+        FindCompanyByNameService,
+        GetTotalCompanyByNameService,
       ],
     },
   ],

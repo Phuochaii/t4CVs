@@ -1,4 +1,8 @@
-import { CreateEmployerDTO, UpdateEmployerCompanyDTO } from '../dto';
+import {
+  CreateEmployerDTO,
+  UpdateEmployerCompanyDTO,
+  UpdateEmployerDTO,
+} from '../dto';
 import { Employer } from '../entity';
 
 export abstract class EmployerRepository {
@@ -15,6 +19,7 @@ export abstract class EmployerRepository {
   abstract updateEmployerLincense(
     employerId: string,
     license: string,
+    supplement: string,
   ): Promise<Employer>;
 
   abstract updateEmployerCompany(
@@ -30,4 +35,14 @@ export abstract class EmployerRepository {
     id: string,
     licenseStatus: boolean,
   ): Promise<Employer>;
+
+  abstract updateEmployer(data: UpdateEmployerDTO): Promise<Employer>;
+
+  abstract getEmployerByName(
+    name: string,
+    page: number,
+    limit: number,
+  ): Promise<Employer[]>;
+
+  abstract getTotalEmployerByName(name: string): Promise<number>;
 }

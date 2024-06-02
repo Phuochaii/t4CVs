@@ -13,6 +13,8 @@ import {
   RemoveCompanyService,
   FindCompanyByArrayIdService,
   UpdateCompanyService,
+  FindCompanyByNameService,
+  GetTotalCompanyByNameService,
 } from './service';
 
 export class CompanyApplication {
@@ -25,6 +27,8 @@ export class CompanyApplication {
     private readonly updateCompanyStatusService: UpdateCompanyStatusService,
     private readonly removeCompanyService: RemoveCompanyService,
     private readonly findCompanyByArrayIdService: FindCompanyByArrayIdService,
+    private readonly findCompanyByNameService: FindCompanyByNameService,
+    private readonly getTotalCompanyByNameService: GetTotalCompanyByNameService,
   ) {}
 
   async createCompany(request: CreateCompanyDTO): Promise<Company> {
@@ -60,5 +64,17 @@ export class CompanyApplication {
 
   async findCompanyByArrayId(id: number[]): Promise<Company[]> {
     return await this.findCompanyByArrayIdService.execute(id);
+  }
+
+  async findCompanyByName(
+    name: string,
+    page: number,
+    limit: number,
+  ): Promise<Company[]> {
+    return await this.findCompanyByNameService.execute(name, page, limit);
+  }
+
+  async getTotalCompanyByName(name: string): Promise<number> {
+    return await this.getTotalCompanyByNameService.execute(name);
   }
 }

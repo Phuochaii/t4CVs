@@ -34,4 +34,6 @@ export class EmployerSchema implements _ {
   phoneNumberStatus: boolean;
   @Column({ nullable: true })
   image: string;
+  @Column({ nullable: true })
+  supplement: string;
 }
