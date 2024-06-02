@@ -10,4 +10,5 @@ export class Employer {
   licenseStatus: boolean;
   phoneNumberStatus: boolean;
   image: string;
+  supplement: string;
 }

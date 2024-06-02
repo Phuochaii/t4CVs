@@ -38,7 +38,7 @@ export async function getAllCompanies(page: number = 1) {
     return {allCompanies: rawCompanies, totalPages: totalPages, total: total};
 }
 
-export async function getCompanyById(id:number) {
+export async function getCompanyById(id: number | string) {
     const response = await axios.get(`${serverURL}/company/${id}`);
     if (response.status != 200) return null;
     const rawCompany: CompanyFromServer = response.data;
@@ -144,7 +144,7 @@ export async function getAllFields() {
 }
 
 export async function updateCompanyStatus(id: number, status: boolean) {
-    const response = await axios.put(`${serverURL}/company/update`, {
+    const response = await axios.put(`${serverURL}/company/updateStatus`, {
         id: id,
         status: status,
     });

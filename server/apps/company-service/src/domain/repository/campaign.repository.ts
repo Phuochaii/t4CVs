@@ -24,4 +24,6 @@ export abstract class CampaignRepository {
   ): Promise<Campaign[]>;
 
   abstract getTotalCampaignByEmployerId(employerId: string): Promise<number>;
+
+  abstract deleteCampaign(id: number): Promise<string>;
 }

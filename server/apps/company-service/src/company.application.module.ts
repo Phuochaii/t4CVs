@@ -6,10 +6,13 @@ import {
   CreateCompanyService,
   FindCompanyByArrayIdService,
   FindCompanyByIdService,
+  FindCompanyByNameService,
   GetAllCompanyPaginationService,
   GetTotalCompaniesService,
+  GetTotalCompanyByNameService,
   RemoveCompanyService,
   UpdateCompanyService,
+  UpdateCompanyStatusService,
 } from './domain/service';
 
 @Module({
@@ -51,6 +54,13 @@ import {
       inject: [CompanyRepository],
     },
     {
+      provide: UpdateCompanyStatusService,
+      useFactory: (companyRepository: CompanyRepository) => {
+        return new UpdateCompanyStatusService(companyRepository);
+      },
+      inject: [CompanyRepository],
+    },
+    {
       provide: RemoveCompanyService,
       useFactory: (companyRepository: CompanyRepository) => {
         return new RemoveCompanyService(companyRepository);
@@ -65,6 +75,20 @@ import {
       inject: [CompanyRepository],
     },
     {
+      provide: FindCompanyByNameService,
+      useFactory: (companyRepository: CompanyRepository) => {
+        return new FindCompanyByNameService(companyRepository);
+      },
+      inject: [CompanyRepository],
+    },
+    {
+      provide: GetTotalCompanyByNameService,
+      useFactory: (companyRepository: CompanyRepository) => {
+        return new GetTotalCompanyByNameService(companyRepository);
+      },
+      inject: [CompanyRepository],
+    },
+    {
       provide: CompanyApplication,
       useFactory: (
         createCompanyService: CreateCompanyService,
@@ -72,8 +96,11 @@ import {
         getTotalCompanies: GetTotalCompaniesService,
         findCompanyById: FindCompanyByIdService,
         updateCompany: UpdateCompanyService,
+        updateCompanyStatus: UpdateCompanyStatusService,
         removeCompany: RemoveCompanyService,
         findCompanyByArrayId: FindCompanyByArrayIdService,
+        findCompanyByNameService: FindCompanyByNameService,
+        getTotalCompanyByNameService: GetTotalCompanyByNameService,
       ) => {
         return new CompanyApplication(
           createCompanyService,
@@ -81,8 +108,11 @@ import {
           getTotalCompanies,
           findCompanyById,
           updateCompany,
+          updateCompanyStatus,
           removeCompany,
           findCompanyByArrayId,
+          findCompanyByNameService,
+          getTotalCompanyByNameService,
         );
       },
       inject: [
@@ -91,8 +121,11 @@ import {
         GetTotalCompaniesService,
         FindCompanyByIdService,
         UpdateCompanyService,
+        UpdateCompanyStatusService,
         RemoveCompanyService,
         FindCompanyByArrayIdService,
+        FindCompanyByNameService,
+        GetTotalCompanyByNameService,
       ],
     },
   ],

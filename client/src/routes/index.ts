@@ -165,6 +165,12 @@ const routes: RouteItem[] = [
     component: HR.Activities,
     layout: HRLayout,
   },
+  // ------------------------------------
+  {
+    path: '/admin/company/:id',
+    component: Admin.CompanyDetail,
+    layout: AdminLayout,
+  },
 ];
 
 export default routes;

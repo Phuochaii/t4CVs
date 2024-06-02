@@ -1,14 +1,22 @@
-import { CreateEmployerDTO, UpdateEmployerCompanyDTO } from './dto';
+import {
+  CreateEmployerDTO,
+  UpdateEmployerCompanyDTO,
+  UpdateEmployerDTO,
+} from './dto';
 import { Employer } from './entity';
 import {
   CreateEmployerService,
+  GetAllEmployerByCompanyIdService,
   GetEmployerByIdService,
+  GetEmployerByNameService,
   GetEmployerService,
+  GetTotalEmployerByNameService,
   GetTotalEmployerService,
   UpdateEmployerCompanyIdService,
   UpdateEmployerLicenseService,
   UpdateEmployerLicenseStatusService,
   UpdateEmployerPhoneStatusService,
+  UpdateEmployerService,
 } from './service';
 
 export class EmployerApplication {
@@ -17,10 +25,14 @@ export class EmployerApplication {
     private readonly getAllEmployerService: GetEmployerService,
     private readonly getTotalEmployerService: GetTotalEmployerService,
     private readonly getEmployerByIdService: GetEmployerByIdService,
+    private readonly getAllEmployerByCompanyIdService: GetAllEmployerByCompanyIdService,
     private readonly updateEmployerCompanyIdService: UpdateEmployerCompanyIdService,
     private readonly updateEmployerLicenseService: UpdateEmployerLicenseService,
     private readonly updateEmployerLicenseStatusService: UpdateEmployerLicenseStatusService,
     private readonly updateEmployerPhoneStatusService: UpdateEmployerPhoneStatusService,
+    private readonly updateEmployerService: UpdateEmployerService,
+    private readonly getEmployerByNameService: GetEmployerByNameService,
+    private readonly getTotalEmployerByNameService: GetTotalEmployerByNameService,
   ) {}
 
   async createEmployer(request: CreateEmployerDTO): Promise<Employer> {
@@ -39,6 +51,10 @@ export class EmployerApplication {
     return await this.getEmployerByIdService.execute(id);
   }
 
+  async getAllEmployerByCompanyId(companyId: number): Promise<Employer[]> {
+    return await this.getAllEmployerByCompanyIdService.execute(companyId);
+  }
+
   async updateEmployerCompanyId(
     request: UpdateEmployerCompanyDTO,
   ): Promise<Employer> {
@@ -48,8 +64,13 @@ export class EmployerApplication {
   async updateEmployerLicense(
     employerId: string,
     license: string,
+    supplement: string,
   ): Promise<Employer> {
-    return await this.updateEmployerLicenseService.execute(employerId, license);
+    return await this.updateEmployerLicenseService.execute(
+      employerId,
+      license,
+      supplement,
+    );
   }
 
   async updateEmployerLicenseStatus(
@@ -70,5 +91,21 @@ export class EmployerApplication {
       id,
       phoneNumberStatus,
     );
+  }
+
+  async updateEmployer(data: UpdateEmployerDTO): Promise<Employer> {
+    return await this.updateEmployerService.execute(data);
+  }
+
+  async getEmployerByName(
+    name: string,
+    page: number,
+    limit: number,
+  ): Promise<Employer[]> {
+    return await this.getEmployerByNameService.execute(name, page, limit);
+  }
+
+  async getTotalEmployerByName(name: string): Promise<number> {
+    return await this.getTotalEmployerByNameService.execute(name);
   }
 }

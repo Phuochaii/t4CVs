@@ -53,7 +53,7 @@ function Sidebar({ className }: SidebarProps) {
     <div
       className={clsx(
         className,
-        "sticky overflow-hidden min-h-[90vh] w-[12vw] flex flex-col pt-4 gap-8 mr-4"
+        "sticky min-h-[90vh] w-[16vw] flex flex-col pt-4 gap-8 mr-4"
       )}
     >
       {links.map((item, index) => {
@@ -62,7 +62,7 @@ function Sidebar({ className }: SidebarProps) {
             to={item.path}
             key={index}
             className={clsx(
-              `flex w-full gap-2 px-2 py-3`,
+              "flex w-full gap-2 px-2 py-3",
               pathname == item.path
                 ? "bg-gradient-to-b from-green-500 to-blue-500 rounded-r-[4rem]"
                 : ""

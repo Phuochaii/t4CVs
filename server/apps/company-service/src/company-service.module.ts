@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { CompanyApplicationModule } from './company.application.module';
 import { CompanyServiceController } from './company-service.controller';
 import { CampaignApplicationModule } from './campaign.application.module';
+import { FieldApplicationModule } from './field.application.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { CampaignApplicationModule } from './campaign.application.module';
     }),
     CompanyApplicationModule,
     CampaignApplicationModule,
+    FieldApplicationModule,
   ],
   controllers: [CompanyServiceController],
 })

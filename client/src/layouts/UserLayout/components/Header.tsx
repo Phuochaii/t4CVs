@@ -1,10 +1,10 @@
-import { useState } from "react";
-import "../../../App.css";
-import React from "react";
+import { useState } from 'react';
+import '../../../App.css';
+import React from 'react';
 // import { Button } from '@mui/material';
-// import { useAuth0 } from "@auth0/auth0-react";
-import * as UserModule from "../../../modules/user-module";
-import { useNavigate } from "react-router-dom";
+// import { useAuth0 } from '@auth0/auth0-react';
+import * as UserModule from '../../../modules/user-module';
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
   const navigation = useNavigate();
@@ -14,12 +14,10 @@ function Header() {
   const [total, setTotal] = React.useState(0);
   // const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const userId =
-    localStorage.getItem("user") == null
-      ? ""
-      : JSON.parse(localStorage.getItem("user") as string).id;
-  const [isAuthenticated, setIsAuthenticated] = React.useState(
-    userId != ""
-  );
+    localStorage.getItem('user') == null
+      ? ''
+      : JSON.parse(localStorage.getItem('user') as string).id;
+  const [isAuthenticated, setIsAuthenticated] = React.useState(userId != '');
   const fetchNotification = ({
     id,
     limit = 3,
@@ -27,17 +25,15 @@ function Header() {
     id: string;
     limit?: number;
   }) => {
-    UserModule.getNotification({ userId: id, limit: limit }).then(
-      (res) => {
-        console.log(res);
+    UserModule.getNotification({ userId: id, limit: limit }).then((res) => {
+      console.log(res);
 
-        setNotifications(res.data);
-        setTotal(res.pagination.total);
-      }
-    );
+      setNotifications(res.data);
+      setTotal(res.pagination.total);
+    });
   };
   React.useEffect(() => {
-    if (userId != "") fetchNotification({ id: userId });
+    if (userId != '') fetchNotification({ id: userId });
   }, []);
 
   // React.useEffect(() => {
@@ -62,7 +58,7 @@ function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 text-black bg-white border menu-top border-1 border-slate-300">
       <div className="flex flex-row items-center justify-between px-8 ">
         <div className="flex flex-row items-center gap-5 main">
-          <div className="logo w-52" onClick={() => navigation("/")}>
+          <div className="logo w-52" onClick={() => navigation('/')}>
             <img src="../../../images/topcv-logo.png" alt="" />
           </div>
           <nav className="nav-menu">
@@ -99,7 +95,7 @@ function Header() {
                     </li>
                     <li
                       onClick={() => {
-                        navigation("/your-application");
+                        navigation('/your-application');
                       }}
                       className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
@@ -118,7 +114,7 @@ function Header() {
                     </li>
                     <li
                       onClick={() => {
-                        navigation("/saved-jobs");
+                        navigation('/saved-jobs');
                       }}
                       className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
@@ -338,30 +334,10 @@ function Header() {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 512 512"
                       >
-                        <rect
-                          width="109.2"
-                          x="82.3"
-                          y="96.9"
-                          height="20.8"
-                        />
-                        <rect
-                          width="109.2"
-                          x="82.3"
-                          y="158.2"
-                          height="20.8"
-                        />
-                        <rect
-                          width="256.9"
-                          x="82.3"
-                          y="218.6"
-                          height="20.8"
-                        />
-                        <rect
-                          width="256.9"
-                          x="82.3"
-                          y="278.9"
-                          height="20.8"
-                        />
+                        <rect width="109.2" x="82.3" y="96.9" height="20.8" />
+                        <rect width="109.2" x="82.3" y="158.2" height="20.8" />
+                        <rect width="256.9" x="82.3" y="218.6" height="20.8" />
+                        <rect width="256.9" x="82.3" y="278.9" height="20.8" />
                         <path d="m487.9,249.7c-16.3-16.3-42.7-16.3-59,0l-22.1,22.1v-112.5c0-3.1-1-5.2-3.1-7.3l-137.3-137.3c-2.1-2.1-4.2-3.1-7.3-3.1h-237.2c-6.2,0-10.4,4.2-10.4,10.4v468.1c0,6.2 4.2,10.4 10.4,10.4h374.5c6.2,0 10.4-4.2 10.4-11.4v-99.3l81.1-81.1c16.3-16.3 16.3-42.7 0-59zm-218.4-202.8l101.9,101.9h-101.9v-101.9zm116.5,432.8h-353.7v-447.3h216.4v126.9c0,6.2 4.2,10.4 10.4,10.4h126.9v122.9l-99.2,99.2-8.8,67.8 67.8-8.8 40.3-40.3v69.2zm87.2-186.1l-136.8,136.8-35,5.7 5.7-35 136.8-136.8c8.1-8.1 21.2-8.1 29.3,0 8.1,8.1 8.1,21.2 0,29.3z" />
                       </svg>
                       Hướng dẫn viết CV theo ngành nghề
@@ -440,7 +416,7 @@ function Header() {
                 {isCompaniesHovered ? (
                   <ul className="absolute left-0 z-50 flex flex-col gap-3 p-3 text-base font-semibold bg-white border rounded-lg shadow-lg sub-menu top-full border-slate-100">
                     <li
-                      onClick={() => navigation("/companies")}
+                      onClick={() => navigation('/companies')}
                       className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
                       <svg
@@ -932,39 +908,31 @@ function Header() {
                       <p className="px-3">Không có thông báo</p>
                     ) : (
                       <>
-                        {notifications.map(
-                          (item: any, index: number) => (
-                            <a
-                              onClick={(e) => {
-                                e.preventDefault();
-                                UserModule.updateStatusNotification({
-                                  userId: userId,
-                                  notificationId: item.id,
-                                });
-                                fetchNotification({ id: userId });
-                                window.open(
-                                  item.link,
-                                  "_blank",
-                                  "noopener"
-                                );
-                              }}
-                              key={index}
-                              className="px-4 py-2 border border-b-gray-200 hover:text-green-500"
-                            >
-                              <span className="font-semibold cursor-pointer hover:text-green-500">
-                                {item.content}
-                              </span>
-                              <p className="mt-2 text-sm text-right text-slate-500">
-                                {item.createdAt.split("T")[0] + "  "}
-                                {item.status && (
-                                  <span className="text-green-500">
-                                    ✓
-                                  </span>
-                                )}
-                              </p>
-                            </a>
-                          )
-                        )}
+                        {notifications.map((item: any, index: number) => (
+                          <a
+                            onClick={(e) => {
+                              e.preventDefault();
+                              UserModule.updateStatusNotification({
+                                userId: userId,
+                                notificationId: item.id,
+                              });
+                              fetchNotification({ id: userId });
+                              window.open(item.link, '_blank', 'noopener');
+                            }}
+                            key={index}
+                            className="px-4 py-2 border border-b-gray-200 hover:text-green-500"
+                          >
+                            <span className="font-semibold cursor-pointer hover:text-green-500">
+                              {item.content}
+                            </span>
+                            <p className="mt-2 text-sm text-right text-slate-500">
+                              {item.createdAt.split('T')[0] + '  '}
+                              {item.status && (
+                                <span className="text-green-500">✓</span>
+                              )}
+                            </p>
+                          </a>
+                        ))}
                       </>
                     )}
                     {total > notifications.length ? (
@@ -982,9 +950,7 @@ function Header() {
                     ) : notifications.length > 3 ? (
                       <button
                         className="w-full mt-2 font-semibold text-green-500 hover:underline"
-                        onClick={() =>
-                          fetchNotification({ id: userId })
-                        }
+                        onClick={() => fetchNotification({ id: userId })}
                       >
                         Ẩn bớt
                       </button>
@@ -1050,7 +1016,7 @@ function Header() {
                     </li>
                     <li
                       onClick={() => {
-                        navigation("/user-information");
+                        navigation('/user-information');
                       }}
                       className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
@@ -1186,7 +1152,7 @@ function Header() {
                       onClick={() => {
                         // logoutWithRedirect();
                         setIsAuthenticated(false);
-                        localStorage.removeItem("user");
+                        localStorage.removeItem('user');
                       }}
                       className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
@@ -1212,7 +1178,7 @@ function Header() {
                 <button
                   onClick={() => {
                     // loginWithRedirect();
-                    navigation("/user-login");
+                    navigation('/user-login');
                   }}
                   className="py-2 px-4 rounded-md mx-2 border border-[#00A74B] hover:border-green-800 bg-white"
                 >
@@ -1222,7 +1188,7 @@ function Header() {
               <li>
                 <button
                   onClick={() => {
-                    navigation("/user-signup");
+                    navigation('/user-signup');
                   }}
                   className="py-2 px-4 rounded-md mx-2 bg-[#00A74B] hover:bg-green-800 text-white"
                 >
@@ -1232,7 +1198,7 @@ function Header() {
               <li>
                 <button
                   onClick={() => {
-                    navigation("/hr-login");
+                    navigation('/hr-login');
                   }}
                   className="px-4 py-2 mx-2 text-white bg-black rounded-md hover:bg-gray-800"
                 >
