@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateJobDto } from './dto/Req/create-job.dto';
 import { MoreThanOrEqual, LessThanOrEqual, ILike } from 'typeorm';
 import { JobDetailService } from './services/job-detail.service';
@@ -6,7 +6,6 @@ import { MajorService } from './services/major.service';
 import { LevelService } from './services/level.service';
 import { CurrencyService } from './services/currency.service';
 import { FieldService } from './services/field.service';
-import { UpdateJobDto } from './dto/Req/update-job.dto';
 import { CreateBaseDto } from './dto/Req/createBase.dto';
 import { LocationService } from './services/location.service';
 import { ExperienceService } from './services/experience.service';
@@ -16,6 +15,8 @@ import { QueryDTO } from './dto/Req/query.dto';
 import { JobAggregate } from './aggregate/job.aggregate';
 import { JobRepository } from './repository';
 import { FindJobByCampaignIdDto } from './dto/Resp/find-job-by-campaignId.dto';
+import { UpdateJobStatusDto } from './dto/Req/update-job-status.dto';
+import { RpcException } from '@nestjs/microservices';
 @Injectable()
 export class JobService {
   constructor(
@@ -29,6 +30,16 @@ export class JobService {
     private experienceService: ExperienceService,
     private typeService: TypeService,
   ) {}
+
+  async deleteJob(id: number) {
+    const job = await this.jobRepository.findJobById(id);
+    if (!job)
+      throw new RpcException(new BadRequestException(`Job doesn't exist!`));
+    return await this.jobRepository.deleteJob(id);
+  }
+  async updateJob(data: JobAggregate) {
+    return await this.jobRepository.saveJob(data);
+  }
 
   async findJobByCampaignId(
     campaignId: number,
@@ -190,11 +201,11 @@ export class JobService {
     };
   }
 
-  async findJobById(id: number) {
+  async findJobById(id: number): Promise<JobAggregate> {
     return await this.jobRepository.findJobById(id);
   }
 
-  async updateJobStatus(data: UpdateJobDto) {
+  async updateJobStatus(data: UpdateJobStatusDto) {
     return await this.jobRepository.updateJobStatus(data);
   }
 
