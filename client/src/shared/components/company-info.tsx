@@ -4,13 +4,13 @@ import VNRS from '../../shared/assets/images/VNRS.png';
 import { useState } from 'react';
 import UpdateCompanyInfo from './UpdateCompanyInfo';
 function CompanyInfo() {
-  const [component, setComponent] = useState(true) 
-  const [name, setName] = useState('')
-  const handleComponent=()=>{
-     setComponent(!component)
-     console.log(component)
+  const [component, setComponent] = useState(true);
+  const [name, setName] = useState('');
+  const handleComponent = () => {
+    setComponent(!component);
+    console.log(component);
     // console.log("Hello world")
-  }
+  };
   const companies = [
     {
       id: 1,
@@ -67,7 +67,7 @@ function CompanyInfo() {
       field: 'Khác',
     },
   ];
-  return ( component === true ?
+  return component === true ? (
     <div className="w-full m-10 flex flex-col">
       <div
         className={'btn text-sm p-3 flex items-center justify-between w-11/12'}
@@ -190,7 +190,12 @@ function CompanyInfo() {
                       <span className="truncate w-[29%]">{item.time}</span>
                     </p>
                     <div className="job-actions flex items-center space-x-2">
-                      <button onClick={()=>{handleComponent(), setName(item.name)}} className="bg-green-100 text-sm hover:bg-green-300 text-green-700 py-1 px-2 rounded-full inline-flex items-center">
+                      <button
+                        onClick={() => {
+                          handleComponent(), setName(item.name);
+                        }}
+                        className="bg-green-100 text-sm hover:bg-green-300 text-green-700 py-1 px-2 rounded-full inline-flex items-center"
+                      >
                         Chọn
                       </button>
                     </div>
@@ -206,7 +211,12 @@ function CompanyInfo() {
           )}
         </div>
       </div>
-    </div>:<UpdateCompanyInfo handleComponent={handleComponent} companyName={name} ></UpdateCompanyInfo>
+    </div>
+  ) : (
+    <UpdateCompanyInfo
+      handleComponent={handleComponent}
+      companyName={name}
+    ></UpdateCompanyInfo>
   );
 }
 export default CompanyInfo;
