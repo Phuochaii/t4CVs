@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { Observable, catchError, from, switchMap, throwError } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
@@ -57,20 +57,52 @@ export class EmployerService {
       );
   }
 
-  updateEmployerLicense(file: any, employerId: string): Observable<any> {
-    const uploadLink$ = from(this.uploadService.upload(file));
+  updateEmployerLicense(files: any[], employerId: string): Observable<any> {
+    if (files.length <= 0) {
+      throw new BadRequestException('You do not upload any file');
+    } else if (files.length === 1) {
+      const uploadLink$ = from(this.uploadService.uploadFiles(files));
 
-    return uploadLink$.pipe(
-      switchMap((license: string) =>
-        this.employerClient
-          .send({ cmd: 'update_employer_license' }, { employerId, license })
-          .pipe(
-            catchError((error) => {
-              return throwError(() => error.response);
-            }),
-          ),
-      ),
-    );
+      return uploadLink$.pipe(
+        switchMap((licenses: string[]) => {
+          const license = licenses[0];
+          const supplement = null;
+
+          return this.employerClient
+            .send(
+              { cmd: 'update_employer_license' },
+              { employerId, license, supplement },
+            )
+            .pipe(
+              catchError((error) => {
+                return throwError(() => error.response);
+              }),
+            );
+        }),
+      );
+    } else if (files.length === 2) {
+      const uploadLink$ = from(this.uploadService.uploadFiles(files));
+
+      return uploadLink$.pipe(
+        switchMap((licenses: string[]) => {
+          const license = licenses[0];
+          const supplement = licenses[1];
+
+          return this.employerClient
+            .send(
+              { cmd: 'update_employer_license' },
+              { employerId, license, supplement },
+            )
+            .pipe(
+              catchError((error) => {
+                return throwError(() => error.response);
+              }),
+            );
+        }),
+      );
+    } else {
+      throw new BadRequestException('You upload more 2 files');
+    }
   }
 
   updateEmployerLicenseStatus(

@@ -8,12 +8,13 @@ import {
   UploadedFile,
   UseInterceptors,
   Put,
+  UploadedFiles,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { EmployerService } from './employer.service';
 import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
 import { UpdateEmployerCompanyDTO } from './dto/Req/updateEmployerCompany.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { UpdateEmployerDTO } from './dto/Req/updateEmployer.dto';
 
@@ -53,17 +54,17 @@ export class EmployerController {
 
   @Put('update/license')
   @UseInterceptors(
-    FileInterceptor('file', {
+    FilesInterceptor('files', 99, {
       storage: diskStorage({
         destination: './uploads',
       }),
     }),
   )
   updateEmployerLicense(
-    @UploadedFile() file: any,
+    @UploadedFiles() files: any[],
     @Body('employerId') employerId: string,
   ): Observable<any> {
-    return this.employerService.updateEmployerLicense(file, employerId);
+    return this.employerService.updateEmployerLicense(files, employerId);
   }
 
   @Put('update/licenseStatus/:id')

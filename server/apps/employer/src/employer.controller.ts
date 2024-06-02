@@ -84,10 +84,12 @@ export class EmployerController {
   async updateEmployerLicense(@Payload() data: any) {
     const employerId = String(data.employerId);
     const license = String(data.license);
+    const supplement = String(data.supplement);
 
     const result = await this.employerApplication.updateEmployerLicense(
       employerId,
       license,
+      supplement,
     );
 
     if (result) {

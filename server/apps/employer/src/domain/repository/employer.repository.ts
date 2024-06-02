@@ -19,6 +19,7 @@ export abstract class EmployerRepository {
   abstract updateEmployerLincense(
     employerId: string,
     license: string,
+    supplement: string,
   ): Promise<Employer>;
 
   abstract updateEmployerCompany(

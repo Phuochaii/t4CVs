@@ -64,9 +64,11 @@ export class TypeOrmEmployerRepository extends EmployerRepository {
   async updateEmployerLincense(
     employerId: string,
     license: string,
+    supplement: string,
   ): Promise<Employer> {
     await this.employerRepository.update(employerId, {
       license: license,
+      supplement: supplement,
     });
 
     const result = await this.getEmployerById(employerId);

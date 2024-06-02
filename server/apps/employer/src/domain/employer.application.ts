@@ -64,8 +64,13 @@ export class EmployerApplication {
   async updateEmployerLicense(
     employerId: string,
     license: string,
+    supplement: string,
   ): Promise<Employer> {
-    return await this.updateEmployerLicenseService.execute(employerId, license);
+    return await this.updateEmployerLicenseService.execute(
+      employerId,
+      license,
+      supplement,
+    );
   }
 
   async updateEmployerLicenseStatus(
