@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { EmployerRepository } from '../../domain/repository';
 import { EmployerSchema } from '../schema';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -119,5 +119,38 @@ export class TypeOrmEmployerRepository extends EmployerRepository {
     });
 
     return await this.getEmployerById(data.id);
+  }
+
+  async getEmployerByName(
+    name: string,
+    page: number,
+    limit: number,
+  ): Promise<Employer[]> {
+    const skip = (page - 1) * limit;
+
+    const iName = ILike(`%${name}%`);
+
+    const result = await this.employerRepository.find({
+      where: {
+        fullname: iName,
+      },
+      skip: skip,
+      take: limit,
+      order: {
+        fullname: 'ASC',
+      },
+    });
+
+    return result;
+  }
+
+  async getTotalEmployerByName(name: string): Promise<number> {
+    const iName = ILike(`%${name}%`);
+
+    const total = await this.employerRepository.count({
+      where: { fullname: iName },
+    });
+
+    return total;
   }
 }

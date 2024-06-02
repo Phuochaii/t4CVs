@@ -131,6 +131,16 @@ export class EmployerService {
     }
   }
 
+  getEmployerByName(name: string, page: number, limit: number) {
+    return this.employerClient
+      .send({ cmd: 'get_employer_by_name' }, { name, page, limit })
+      .pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
+  }
+
   getAllPositions(): Observable<string> {
     return this.employerClient.send({ cmd: 'get_all_positions' }, {});
   }

@@ -100,6 +100,15 @@ export class EmployerController {
     return this.employerService.updateEmployer(file, data);
   }
 
+  @Get('name/:name')
+  findCompanyByName(
+    @Param('name') name: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.employerService.getEmployerByName(name, page, limit);
+  }
+
   @Get('position/all')
   getAllPositions(): Observable<string> {
     return this.employerService.getAllPositions();

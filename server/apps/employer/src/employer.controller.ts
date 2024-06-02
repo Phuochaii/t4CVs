@@ -142,6 +142,36 @@ export class EmployerController {
     }
   }
 
+  @MessagePattern({ cmd: 'get_employer_by_name' })
+  async getEmployerByName(@Payload() data: any) {
+    const name = String(data.name);
+    const page = Number(data.page);
+    const limit = Number(data.limit);
+
+    const employers = await this.employerApplication.getEmployerByName(
+      name,
+      page,
+      limit,
+    );
+
+    if (employers.length <= 0) {
+      throw new RpcException(new BadRequestException('Cannot found employer'));
+    } else {
+      const total = await this.employerApplication.getTotalEmployerByName(name);
+      const total_page = Math.ceil(total / limit);
+
+      const result = {
+        page: page,
+        limit: limit,
+        total: total,
+        total_page: total_page,
+        data: employers,
+      };
+
+      return result;
+    }
+  }
+
   @MessagePattern({ cmd: 'get_all_positions' })
   findAllPosition() {
     return this.positionApplication.getAllPosition();

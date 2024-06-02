@@ -36,4 +36,12 @@ export abstract class EmployerRepository {
   ): Promise<Employer>;
 
   abstract updateEmployer(data: UpdateEmployerDTO): Promise<Employer>;
+
+  abstract getEmployerByName(
+    name: string,
+    page: number,
+    limit: number,
+  ): Promise<Employer[]>;
+
+  abstract getTotalEmployerByName(name: string): Promise<number>;
 }

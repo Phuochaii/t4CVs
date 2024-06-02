@@ -8,7 +8,9 @@ import {
   CreateEmployerService,
   GetAllEmployerByCompanyIdService,
   GetEmployerByIdService,
+  GetEmployerByNameService,
   GetEmployerService,
+  GetTotalEmployerByNameService,
   GetTotalEmployerService,
   UpdateEmployerCompanyIdService,
   UpdateEmployerLicenseService,
@@ -29,6 +31,8 @@ export class EmployerApplication {
     private readonly updateEmployerLicenseStatusService: UpdateEmployerLicenseStatusService,
     private readonly updateEmployerPhoneStatusService: UpdateEmployerPhoneStatusService,
     private readonly updateEmployerService: UpdateEmployerService,
+    private readonly getEmployerByNameService: GetEmployerByNameService,
+    private readonly getTotalEmployerByNameService: GetTotalEmployerByNameService,
   ) {}
 
   async createEmployer(request: CreateEmployerDTO): Promise<Employer> {
@@ -86,5 +90,17 @@ export class EmployerApplication {
 
   async updateEmployer(data: UpdateEmployerDTO): Promise<Employer> {
     return await this.updateEmployerService.execute(data);
+  }
+
+  async getEmployerByName(
+    name: string,
+    page: number,
+    limit: number,
+  ): Promise<Employer[]> {
+    return await this.getEmployerByNameService.execute(name, page, limit);
+  }
+
+  async getTotalEmployerByName(name: string): Promise<number> {
+    return await this.getTotalEmployerByNameService.execute(name);
   }
 }
