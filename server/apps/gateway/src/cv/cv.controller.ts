@@ -9,18 +9,23 @@ import {
   UploadedFile,
   UseInterceptors,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CVService } from './cv.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Response } from 'express';
+import { AuthGuard } from '@nestjs/passport';
+import { PermissionsGuard } from '../authorization/permission/permissions.guard';
 
 @Controller('cv')
 export class CVController {
   uploadService: any;
   constructor(private readonly cvService: CVService) {}
 
+  //find all
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
   @Get()
   getAllCVs(): Observable<any> {
     return this.cvService.getAllCVs();
@@ -31,11 +36,14 @@ export class CVController {
     return this.cvService.getHello();
   }
 
+  //find one by id
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
   @Get(':id')
   getCVById(@Param('id') id: number): Observable<any> {
     return this.cvService.getCVById(id);
   }
-
+  //create cv
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
   @Post()
   @UseInterceptors(
     FileInterceptor('file', {
@@ -49,11 +57,11 @@ export class CVController {
     @Body('userId') userId: string,
     @Body('templateId') templateId: string,
   ): Observable<any> {
-    const numericUserId = parseInt(userId, 10);
     const numericTemplateId = parseInt(templateId, 10);
-    return this.cvService.createCV(file, numericUserId, numericTemplateId);
+    return this.cvService.createCV(file, userId, numericTemplateId);
   }
-
+  //update status cv
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
   @Put(':id')
   updateCV(
     @Param('id') id: number,
@@ -61,12 +69,14 @@ export class CVController {
   ): Observable<any> {
     return this.cvService.updateCV(id, isPublic);
   }
-
+  //delete cv
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
   @Delete(':id')
   deleteCV(@Param('id') id: number): Observable<any> {
     return this.cvService.deleteCV(id);
   }
-
+  //dowmload cv
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
   @Get('download/:id')
   downloadCV(@Param('id') id: number, @Res() res: Response): Observable<any> {
     return this.cvService.downloadCV(id, res);

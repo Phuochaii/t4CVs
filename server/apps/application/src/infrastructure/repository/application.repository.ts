@@ -58,10 +58,14 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
   async updateApplication(
     application: UpdateApplicationDto,
   ): Promise<Application | null> {
-    const result = await this.applicationRepository.findOneBy(application);
+    const result = await this.applicationRepository.find({
+      where: {
+        id: application.id,
+      },
+    });
 
     if (!result) {
-      return;
+      return null;
     }
     await this.applicationRepository.update(application.id, {
       status: application.status,
