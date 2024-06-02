@@ -2,11 +2,13 @@ import { CompanyFromServer } from "../types/Company.type";
 import { CampaignFromServer } from "../types/Campaign.type";
 import { RecruitmentFromServer } from "../types/Recruitment.type";
 import clsx from "clsx";
+import { EmployerFromServer } from "../types/Employer.type";
 
 export type ObjectFromServer =
   | CompanyFromServer
   | CampaignFromServer
-  | RecruitmentFromServer;
+  | RecruitmentFromServer
+  | EmployerFromServer;
 
 export interface BasicColumnProps {
   field: string;
