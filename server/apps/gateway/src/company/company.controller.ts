@@ -7,6 +7,8 @@ import {
   Delete,
   Query,
   Put,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CompanyService } from './company.service';
@@ -15,14 +17,26 @@ import { UpdateCompanyDto } from './dto/Req/updateCompany.dto';
 import { CreateCampaignDto } from './dto/Req/createCampaign.dto';
 import { UpdateCampaignDto } from './dto/Req/updateCampaign.dto';
 import { UpdateCompanyStatusDto } from './dto/Req/updateCompanyStatus.dto';
+import { diskStorage } from 'multer';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @Post('create')
-  createCompany(@Body() data: CreateCompanyDto): Observable<string> {
-    return this.companyService.createCompany(data);
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+      }),
+    }),
+  )
+  createCompany(
+    @UploadedFile() file: any,
+    @Body() data: CreateCompanyDto,
+  ): Observable<string> {
+    return this.companyService.createCompany(file, data);
   }
 
   @Get('all')
@@ -39,8 +53,18 @@ export class CompanyController {
   }
 
   @Put('update')
-  updateCompany(@Body() data: UpdateCompanyDto): Observable<string> {
-    return this.companyService.updateCompany(data);
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+      }),
+    }),
+  )
+  updateCompany(
+    @UploadedFile() file: any,
+    @Body() data: UpdateCompanyDto,
+  ): Observable<string> {
+    return this.companyService.updateCompany(file, data);
   }
 
   @Put('updateStatus')
