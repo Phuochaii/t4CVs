@@ -103,12 +103,31 @@ export class CompanyServiceController {
   }
 
   @MessagePattern({ cmd: 'find_company_by_name' })
-  async findCompanyByNameId(name: string) {
-    const result = await this.companyApplication.findCompanyByName(name);
+  async findCompanyByNameId(@Payload() data: any) {
+    const name = String(data.name);
+    const page = Number(data.page);
+    const limit = Number(data.limit);
 
-    if (result.length <= 0) {
+    const companies = await this.companyApplication.findCompanyByName(
+      name,
+      page,
+      limit,
+    );
+
+    if (companies.length <= 0) {
       throw new RpcException(new BadRequestException('Cannot found company'));
     } else {
+      const total = await this.companyApplication.getTotalCompanyByName(name);
+      const total_page = Math.ceil(total / limit);
+
+      const result = {
+        page: page,
+        limit: limit,
+        total: total,
+        total_page: total_page,
+        data: companies,
+      };
+
       return result;
     }
   }

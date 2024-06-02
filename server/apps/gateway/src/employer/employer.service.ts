@@ -1,10 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { Observable, catchError, from, switchMap, throwError } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
 import { FindEmployerDTOResponse } from './dto/Res/find_employer.dto';
 import { UpdateEmployerCompanyDTO } from './dto/Req/updateEmployerCompany.dto';
 import { UploadService } from '../upload/upload.service';
+import { UpdateEmployerDTO } from './dto/Req/updateEmployer.dto';
 
 @Injectable()
 export class EmployerService {
@@ -56,20 +57,52 @@ export class EmployerService {
       );
   }
 
-  updateEmployerLicense(file: any, employerId: string): Observable<any> {
-    const uploadLink$ = from(this.uploadService.upload(file));
+  updateEmployerLicense(files: any[], employerId: string): Observable<any> {
+    if (files.length <= 0) {
+      throw new BadRequestException('You do not upload any file');
+    } else if (files.length === 1) {
+      const uploadLink$ = from(this.uploadService.uploadFiles(files));
 
-    return uploadLink$.pipe(
-      switchMap((license: string) =>
-        this.employerClient
-          .send({ cmd: 'update_employer_license' }, { employerId, license })
-          .pipe(
-            catchError((error) => {
-              return throwError(() => error.response);
-            }),
-          ),
-      ),
-    );
+      return uploadLink$.pipe(
+        switchMap((licenses: string[]) => {
+          const license = licenses[0];
+          const supplement = null;
+
+          return this.employerClient
+            .send(
+              { cmd: 'update_employer_license' },
+              { employerId, license, supplement },
+            )
+            .pipe(
+              catchError((error) => {
+                return throwError(() => error.response);
+              }),
+            );
+        }),
+      );
+    } else if (files.length === 2) {
+      const uploadLink$ = from(this.uploadService.uploadFiles(files));
+
+      return uploadLink$.pipe(
+        switchMap((licenses: string[]) => {
+          const license = licenses[0];
+          const supplement = licenses[1];
+
+          return this.employerClient
+            .send(
+              { cmd: 'update_employer_license' },
+              { employerId, license, supplement },
+            )
+            .pipe(
+              catchError((error) => {
+                return throwError(() => error.response);
+              }),
+            );
+        }),
+      );
+    } else {
+      throw new BadRequestException('You upload more 2 files');
+    }
   }
 
   updateEmployerLicenseStatus(
@@ -97,6 +130,42 @@ export class EmployerService {
         { cmd: 'update_employer_phone_status' },
         { employerId, phoneNumberStatus },
       )
+      .pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
+  }
+
+  updateEmployer(file: any, data: UpdateEmployerDTO): Observable<string> {
+    if (file) {
+      const uploadLink$ = from(this.uploadService.upload(file));
+
+      return uploadLink$.pipe(
+        switchMap((img: string) => {
+          data.image = img;
+
+          return this.employerClient
+            .send({ cmd: 'update_employer' }, data)
+            .pipe(
+              catchError((error) => {
+                return throwError(() => error.response);
+              }),
+            );
+        }),
+      );
+    } else {
+      return this.employerClient.send({ cmd: 'update_employer' }, data).pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
+    }
+  }
+
+  getEmployerByName(name: string, page: number, limit: number) {
+    return this.employerClient
+      .send({ cmd: 'get_employer_by_name' }, { name, page, limit })
       .pipe(
         catchError((error) => {
           return throwError(() => error.response);
