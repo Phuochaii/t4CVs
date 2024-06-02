@@ -7,3 +7,4 @@ export * from './updateCompanyStatus.service';
 export * from './removeCompany.service';
 export * from './findCompanyByArrayId.service';
 export * from './findCompanyByName.service';
+export * from './getTotalCompanyByName.service';

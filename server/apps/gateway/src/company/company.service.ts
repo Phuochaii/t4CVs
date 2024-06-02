@@ -81,12 +81,14 @@ export class CompanyService {
     return this.companyClient.send({ cmd: 'remove_company' }, id);
   }
 
-  findCompanyByName(name: string) {
-    return this.companyClient.send({ cmd: 'find_company_by_name' }, name).pipe(
-      catchError((error) => {
-        return throwError(() => error.response);
-      }),
-    );
+  findCompanyByName(name: string, page: number, limit: number) {
+    return this.companyClient
+      .send({ cmd: 'find_company_by_name' }, { name, page, limit })
+      .pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
   }
 
   createCampaign(createCampaignDTO: CreateCampaignDto): Observable<string> {

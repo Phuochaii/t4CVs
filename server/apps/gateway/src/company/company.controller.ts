@@ -56,8 +56,12 @@ export class CompanyController {
   }
 
   @Get('name/:name')
-  findCompanyByName(@Param('name') name: string) {
-    return this.companyService.findCompanyByName(name);
+  findCompanyByName(
+    @Param('name') name: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.companyService.findCompanyByName(name, page, limit);
   }
 
   @Post('campaign/create')
