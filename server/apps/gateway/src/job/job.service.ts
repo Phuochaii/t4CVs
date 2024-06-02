@@ -1,11 +1,11 @@
-import { jobs } from './../../../job/src/database/data-job';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateJobDto } from './dto/Req/createJob.dto';
 import { Observable, lastValueFrom } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateBaseDto } from './dto/Req/createBase.dto';
-import { UpdateJobDto } from './dto/Req/update-job.dto';
+import { UpdateStatusJobDto } from './dto/Req/update-status-job.dto';
 import { CompanyService } from '../company/company.service';
+import { UpdateJobDTO } from './dto/Req/update-job.dto';
 
 @Injectable()
 export class JobService {
@@ -14,6 +14,13 @@ export class JobService {
     private readonly companyService: CompanyService,
   ) {}
 
+  deleteJob(id: number) {
+    return this.jobClient.send({ cmd: 'delete_job' }, id);
+  }
+
+  updateJob(data: UpdateJobDTO) {
+    return this.jobClient.send({ cmd: 'update_job' }, data);
+  }
   async findJobsByCampaignIds(campaignIds: number[]) {
     const jobs = await lastValueFrom(
       this.jobClient.send({ cmd: 'find_jobs_by_campaignIds' }, campaignIds),
@@ -109,7 +116,7 @@ export class JobService {
     return result;
   }
 
-  updateJobStatus(data: UpdateJobDto) {
+  updateJobStatus(data: UpdateStatusJobDto) {
     const status = this.jobClient.send({ cmd: 'update_job_status' }, data);
     const lastStatus = lastValueFrom(status);
     if (lastStatus) {

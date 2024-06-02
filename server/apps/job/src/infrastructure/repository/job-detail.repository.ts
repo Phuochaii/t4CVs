@@ -3,25 +3,26 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JobDetail } from '../schemas';
 import { CreateJobDto } from '../../domain/dto/Req/create-job.dto';
+import { JobDetailRepository } from '../../domain/repository';
 
 @Injectable()
-export class TypeOrmJobDetailRepository {
+export class TypeOrmJobDetailRepository extends JobDetailRepository {
   constructor(
     @InjectRepository(JobDetail)
     private readonly jobDetailRepository: Repository<JobDetail>,
-  ) {}
+  ) {
+    super();
+  }
 
-  // async findAll() {
-  //   return this.currencyRepository.find();
-  // }
-  // async findById(id: number): Promise<Currency> {
-  //   return this.currencyRepository.findOneBy({ id });
-  // }
-
-  // async findOneByName(name: string): Promise<Currency> {
-  //   return this.currencyRepository.findOneBy({ name });
-  // }
   async createJobDetail(createJobDto: CreateJobDto): Promise<JobDetail> {
     return await this.jobDetailRepository.save(createJobDto);
+  }
+
+  async deleteJobDetail(id: number): Promise<boolean> {
+    const result = await this.jobDetailRepository.delete(id);
+    if (result.affected === 0) {
+      return false;
+    }
+    return true;
   }
 }
