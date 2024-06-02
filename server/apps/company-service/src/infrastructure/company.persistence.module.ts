@@ -2,11 +2,16 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConfiger, DatabaseOptions } from './database/init';
-import { CampaignSchema, CompanySchema } from './schema';
-import { CampaignRepository, CompanyRepository } from '../domain/repository';
+import { CampaignSchema, CompanySchema, FieldSchema } from './schema';
+import {
+  CampaignRepository,
+  CompanyRepository,
+  FieldRepository,
+} from '../domain/repository';
 import {
   TypeOrmCampaignRepository,
   TypeOrmCompanyRepository,
+  TypeOrmFieldRepository,
 } from './repository';
 
 @Module({
@@ -31,7 +36,7 @@ import {
         return databaseConfiger.config();
       },
     }),
-    TypeOrmModule.forFeature([CompanySchema, CampaignSchema]),
+    TypeOrmModule.forFeature([CompanySchema, CampaignSchema, FieldSchema]),
   ],
   providers: [
     {
@@ -42,7 +47,11 @@ import {
       provide: CampaignRepository,
       useClass: TypeOrmCampaignRepository,
     },
+    {
+      provide: FieldRepository,
+      useClass: TypeOrmFieldRepository,
+    },
   ],
-  exports: [CompanyRepository, CampaignRepository],
+  exports: [CompanyRepository, CampaignRepository, FieldRepository],
 })
 export class CompanyPersistenceModule {}

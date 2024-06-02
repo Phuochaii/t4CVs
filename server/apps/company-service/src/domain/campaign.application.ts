@@ -10,6 +10,7 @@ import {
   GetTotalCampaignsService,
   UpdateCampaignService,
 } from './service';
+import { DeleteCampaignService } from './service/campaign/deleteCampaign.service';
 
 export class CampaignApplication {
   constructor(
@@ -21,6 +22,7 @@ export class CampaignApplication {
     private readonly getAllCampaignByEmployerIdService: GetAllCampaignByEmployerIdService,
     private readonly getAllCampaignByEmplyerIdPaginationService: GetAllCampaignByEmployerIdPaginationService,
     private readonly getTotalCampaignByEmployerIdService: GetTotalCampaignByEmployerIdService,
+    private readonly deleteCampaignService: DeleteCampaignService,
   ) {}
 
   async createCampaign(request: CreateCampaignDTO): Promise<Campaign> {
@@ -64,5 +66,9 @@ export class CampaignApplication {
 
   async getTotalCampaignByEmployerId(employerId: string): Promise<number> {
     return await this.getTotalCampaignByEmployerIdService.execute(employerId);
+  }
+
+  async deleteCampaign(id: number): Promise<string> {
+    return await this.deleteCampaignService.execute(id);
   }
 }

@@ -10,6 +10,8 @@ export abstract class EmployerRepository {
 
   abstract getTotalEmployer(): Promise<number>;
 
+  abstract getEmployerByCompanyId(companyId: number): Promise<Employer[]>;
+
   abstract updateEmployerLincense(
     employerId: string,
     license: string,
@@ -19,7 +21,13 @@ export abstract class EmployerRepository {
     employerCompany: UpdateEmployerCompanyDTO,
   ): Promise<Employer>;
 
-  abstract updateEmployerPhoneStatus(id: string): Promise<Employer>;
+  abstract updateEmployerPhoneStatus(
+    id: string,
+    phoneNumberStatus: boolean,
+  ): Promise<Employer>;
 
-  abstract updateEmployerLicenseStatus(id: string): Promise<Employer>;
+  abstract updateEmployerLicenseStatus(
+    id: string,
+    licenseStatus: boolean,
+  ): Promise<Employer>;
 }

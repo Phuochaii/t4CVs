@@ -7,7 +7,7 @@ export class GetAllByCampaignIdApplicationService
 {
   constructor(private readonly applicationRepository: ApplicationRepository) {}
 
-  async execute(ApplicationDto): Promise<Application[]> {
+  async execute(ApplicationDto): Promise<Application[] | null> {
     const getApplication =
       await this.applicationRepository.getAllByCampaignIdApplication(
         ApplicationDto,

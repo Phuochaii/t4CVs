@@ -1,4 +1,8 @@
-import { CreateCompanyDTO, UpdateCompanyDTO } from '../dto';
+import {
+  CreateCompanyDTO,
+  UpdateCompanyDTO,
+  UpdateCompanyStatusDTO,
+} from '../dto';
 import { Company } from '../entity';
 
 export abstract class CompanyRepository {
@@ -15,7 +19,13 @@ export abstract class CompanyRepository {
 
   abstract updateCompany(company: UpdateCompanyDTO): Promise<Company>;
 
+  abstract updateCompanyStatus(
+    company: UpdateCompanyStatusDTO,
+  ): Promise<Company>;
+
   abstract removeCompany(id: number): Promise<string>;
 
   abstract findCompanyByArrayId(id: number[]): Promise<Company[]>;
+
+  abstract findCompanyByName(name: string): Promise<Company[]>;
 }
