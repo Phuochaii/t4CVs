@@ -3,13 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Experience } from '../schemas';
 import { Repository } from 'typeorm';
 import { CreateConstTableDTO } from '../../domain/dto/Type/const-table';
+import { ExperienceRepository } from '../../domain/repository';
 
 @Injectable()
-export class TypeOrmExperienceRepository {
+export class TypeOrmExperienceRepository extends ExperienceRepository {
   constructor(
     @InjectRepository(Experience)
     private readonly experienceRepository: Repository<Experience>,
-  ) {}
+  ) {
+    super();
+  }
 
   async findAll() {
     return this.experienceRepository.find();

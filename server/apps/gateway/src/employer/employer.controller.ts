@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UseInterceptors,
   Put,
+  UploadedFiles,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { EmployerService } from './employer.service';
@@ -17,8 +18,9 @@ import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
 import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
 import { CreateEmployerAccountDto } from './dto/Req/create-hr.dto';
 import { UpdateEmployerCompanyDTO } from './dto/Req/updateEmployerCompany.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { UpdateEmployerDTO } from './dto/Req/updateEmployer.dto';
 
 @Controller('employer')
 export class EmployerController {
@@ -81,17 +83,17 @@ export class EmployerController {
 
   @Put('update/license')
   @UseInterceptors(
-    FileInterceptor('file', {
+    FilesInterceptor('files', 99, {
       storage: diskStorage({
         destination: './uploads',
       }),
     }),
   )
   updateEmployerLicense(
-    @UploadedFile() file: any,
+    @UploadedFiles() files: any[],
     @Body('employerId') employerId: string,
   ): Observable<any> {
-    return this.employerService.updateEmployerLicense(file, employerId);
+    return this.employerService.updateEmployerLicense(files, employerId);
   }
 
   @Put('update/licenseStatus/:id')
@@ -111,6 +113,30 @@ export class EmployerController {
       id,
       phoneNumberStatus,
     );
+  }
+
+  @Put('update')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+      }),
+    }),
+  )
+  updateCompany(
+    @UploadedFile() file: any,
+    @Body() data: UpdateEmployerDTO,
+  ): Observable<string> {
+    return this.employerService.updateEmployer(file, data);
+  }
+
+  @Get('name/:name')
+  findCompanyByName(
+    @Param('name') name: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.employerService.getEmployerByName(name, page, limit);
   }
 
   @Get('position/all')

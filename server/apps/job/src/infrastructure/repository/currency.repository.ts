@@ -3,13 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Currency } from '../../infrastructure/schemas';
 import { Repository } from 'typeorm';
 import { CreateConstTableDTO } from '../../domain/dto/Type/const-table';
+import { CurrencyRepository } from '../../domain/repository';
 
 @Injectable()
-export class TypeOrmCurrencyRepository {
+export class TypeOrmCurrencyRepository extends CurrencyRepository {
   constructor(
     @InjectRepository(Currency)
     private readonly currencyRepository: Repository<Currency>,
-  ) {}
+  ) {
+    super();
+  }
 
   async findAll() {
     return this.currencyRepository.find();
