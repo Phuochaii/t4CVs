@@ -1,3 +1,5 @@
+import { EmployerFromServer } from './Employer.type';
+
 export interface CompanyFromServer {
   id: number;
   field: number;
@@ -10,4 +12,5 @@ export interface CompanyFromServer {
   companySize: number;
   description: string;
   status: boolean;
+  employers?: EmployerFromServer[];
 }
