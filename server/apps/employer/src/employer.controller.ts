@@ -1,7 +1,11 @@
 import { BadRequestException, Controller } from '@nestjs/common';
 import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 import { EmployerApplication, PositionApplication } from './domain';
-import { CreateEmployerDTO, UpdateEmployerCompanyDTO } from './domain/dto';
+import {
+  CreateEmployerDTO,
+  UpdateEmployerCompanyDTO,
+  UpdateEmployerDTO,
+} from './domain/dto';
 
 @Controller()
 export class EmployerController {
@@ -119,6 +123,17 @@ export class EmployerController {
       employerId,
       phoneNumberStatus,
     );
+
+    if (result) {
+      return result;
+    } else {
+      throw new RpcException(new BadRequestException('EmployerId not exsist'));
+    }
+  }
+
+  @MessagePattern({ cmd: 'update_employer' })
+  async updateEmployer(employer: UpdateEmployerDTO) {
+    const result = await this.employerApplication.updateEmployer(employer);
 
     if (result) {
       return result;

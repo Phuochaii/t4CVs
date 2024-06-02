@@ -1,4 +1,8 @@
-import { CreateEmployerDTO, UpdateEmployerCompanyDTO } from './dto';
+import {
+  CreateEmployerDTO,
+  UpdateEmployerCompanyDTO,
+  UpdateEmployerDTO,
+} from './dto';
 import { Employer } from './entity';
 import {
   CreateEmployerService,
@@ -10,6 +14,7 @@ import {
   UpdateEmployerLicenseService,
   UpdateEmployerLicenseStatusService,
   UpdateEmployerPhoneStatusService,
+  UpdateEmployerService,
 } from './service';
 
 export class EmployerApplication {
@@ -23,6 +28,7 @@ export class EmployerApplication {
     private readonly updateEmployerLicenseService: UpdateEmployerLicenseService,
     private readonly updateEmployerLicenseStatusService: UpdateEmployerLicenseStatusService,
     private readonly updateEmployerPhoneStatusService: UpdateEmployerPhoneStatusService,
+    private readonly updateEmployerService: UpdateEmployerService,
   ) {}
 
   async createEmployer(request: CreateEmployerDTO): Promise<Employer> {
@@ -76,5 +82,9 @@ export class EmployerApplication {
       id,
       phoneNumberStatus,
     );
+  }
+
+  async updateEmployer(data: UpdateEmployerDTO): Promise<Employer> {
+    return await this.updateEmployerService.execute(data);
   }
 }

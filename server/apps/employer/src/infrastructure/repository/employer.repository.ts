@@ -2,7 +2,11 @@ import { Repository } from 'typeorm';
 import { EmployerRepository } from '../../domain/repository';
 import { EmployerSchema } from '../schema';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateEmployerDTO, UpdateEmployerCompanyDTO } from '../../domain/dto';
+import {
+  CreateEmployerDTO,
+  UpdateEmployerCompanyDTO,
+  UpdateEmployerDTO,
+} from '../../domain/dto';
 import { Employer } from '../../domain/entity';
 
 export class TypeOrmEmployerRepository extends EmployerRepository {
@@ -102,5 +106,18 @@ export class TypeOrmEmployerRepository extends EmployerRepository {
     });
 
     return await this.getEmployerById(id);
+  }
+
+  async updateEmployer(data: UpdateEmployerDTO): Promise<Employer> {
+    await this.employerRepository.update(data.id, {
+      fullname: data.fullname,
+      gender: data.gender,
+      positionId: data.positionId,
+      skype: data.skype,
+      phoneNumber: data.phoneNumber,
+      image: data.image,
+    });
+
+    return await this.getEmployerById(data.id);
   }
 }

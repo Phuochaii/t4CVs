@@ -5,6 +5,7 @@ import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
 import { FindEmployerDTOResponse } from './dto/Res/find_employer.dto';
 import { UpdateEmployerCompanyDTO } from './dto/Req/updateEmployerCompany.dto';
 import { UploadService } from '../upload/upload.service';
+import { UpdateEmployerDTO } from './dto/Req/updateEmployer.dto';
 
 @Injectable()
 export class EmployerService {
@@ -102,6 +103,32 @@ export class EmployerService {
           return throwError(() => error.response);
         }),
       );
+  }
+
+  updateEmployer(file: any, data: UpdateEmployerDTO): Observable<string> {
+    if (file) {
+      const uploadLink$ = from(this.uploadService.upload(file));
+
+      return uploadLink$.pipe(
+        switchMap((img: string) => {
+          data.image = img;
+
+          return this.employerClient
+            .send({ cmd: 'update_employer' }, data)
+            .pipe(
+              catchError((error) => {
+                return throwError(() => error.response);
+              }),
+            );
+        }),
+      );
+    } else {
+      return this.employerClient.send({ cmd: 'update_employer' }, data).pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
+    }
   }
 
   getAllPositions(): Observable<string> {

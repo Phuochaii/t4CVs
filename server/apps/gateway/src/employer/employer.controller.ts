@@ -15,6 +15,7 @@ import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
 import { UpdateEmployerCompanyDTO } from './dto/Req/updateEmployerCompany.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { UpdateEmployerDTO } from './dto/Req/updateEmployer.dto';
 
 @Controller('employer')
 export class EmployerController {
@@ -82,6 +83,21 @@ export class EmployerController {
       id,
       phoneNumberStatus,
     );
+  }
+
+  @Put('update')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+      }),
+    }),
+  )
+  updateCompany(
+    @UploadedFile() file: any,
+    @Body() data: UpdateEmployerDTO,
+  ): Observable<string> {
+    return this.employerService.updateEmployer(file, data);
   }
 
   @Get('position/all')

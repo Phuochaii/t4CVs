@@ -12,6 +12,7 @@ import {
   UpdateEmployerLicenseService,
   UpdateEmployerLicenseStatusService,
   UpdateEmployerPhoneStatusService,
+  UpdateEmployerService,
 } from './domain/service';
 
 @Module({
@@ -87,6 +88,13 @@ import {
       inject: [EmployerRepository],
     },
     {
+      provide: UpdateEmployerService,
+      useFactory: (employerRepository: EmployerRepository) => {
+        return new UpdateEmployerService(employerRepository);
+      },
+      inject: [EmployerRepository],
+    },
+    {
       provide: EmployerApplication,
       useFactory: (
         createEmployerService: CreateEmployerService,
@@ -98,6 +106,7 @@ import {
         updateEmployerLicenseService: UpdateEmployerLicenseService,
         updateEmployerLicenseStatusService: UpdateEmployerLicenseStatusService,
         updateEmployerPhoneStatusService: UpdateEmployerPhoneStatusService,
+        updateEmployerService: UpdateEmployerService,
       ) => {
         return new EmployerApplication(
           createEmployerService,
@@ -109,6 +118,7 @@ import {
           updateEmployerLicenseService,
           updateEmployerLicenseStatusService,
           updateEmployerPhoneStatusService,
+          updateEmployerService,
         );
       },
       inject: [
@@ -121,6 +131,7 @@ import {
         UpdateEmployerLicenseService,
         UpdateEmployerLicenseStatusService,
         UpdateEmployerPhoneStatusService,
+        UpdateEmployerService,
       ],
     },
   ],
