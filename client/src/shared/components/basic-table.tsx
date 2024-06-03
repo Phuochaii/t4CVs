@@ -1,10 +1,9 @@
-import { CompanyFromServer } from "../types/Company.type";
-import { CampaignFromServer } from "../types/Campaign.type";
-import { RecruitmentFromServer } from "../types/Recruitment.type";
-import clsx from "clsx";
-import { EmployerFromServer } from "../types/Employer.type";
-import { useNavigate } from "react-router-dom";
-import { log } from "console";
+import { CompanyFromServer } from '../types/Company.type';
+import { CampaignFromServer } from '../types/Campaign.type';
+import { RecruitmentFromServer } from '../types/Recruitment.type';
+import clsx from 'clsx';
+import { EmployerFromServer } from '../types/Employer.type';
+import { useNavigate } from 'react-router-dom';
 
 export type ObjectFromServer =
   | CompanyFromServer
@@ -26,7 +25,6 @@ interface BasicTableProps {
 
 function BasicTable({ data, columns }: BasicTableProps) {
   const navigation = useNavigate();
-  
   return (
     <table className="w-full bg-white">
       <thead>
@@ -57,7 +55,7 @@ function BasicTable({ data, columns }: BasicTableProps) {
                         navigation(`/admin/employer/${object.id}`);
                       } else if (colIndex === 5) {
                         navigation(`/admin/company/${object.companyId}`);
-                      } 
+                      }
                     }}
                   >
                     {column.cell(object)}

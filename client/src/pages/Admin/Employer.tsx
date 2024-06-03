@@ -51,9 +51,9 @@ function Employer() {
   const columns: BasicColumnProps[] = useMemo(
     () => [
       {
-        name: "ID",
-        field: "id",
-        tableCellClassname: "",
+        name: 'ID',
+        field: 'id',
+        tableCellClassname: '',
         cell: (data: ObjectFromServer) => {
           const employer = data as EmployerFromServer;
           return <div className="">{employer.id}</div>;
@@ -104,7 +104,7 @@ function Employer() {
                 onChange={async () => {
                   await updatePhoneStatus(
                     employer.id,
-                    !employer.phoneNumberStatus
+                    !employer.phoneNumberStatus,
                   );
                   setRefresh(!refresh);
                 }}
@@ -129,7 +129,7 @@ function Employer() {
       {
         name: 'Công ty',
         field: 'skype',
-        tableCellClassname: "",
+        tableCellClassname: '',
         cell: (data: ObjectFromServer) => {
           const employer = data as EmployerFromServer;
           return <div className="">{employer.company?.name}</div>;
