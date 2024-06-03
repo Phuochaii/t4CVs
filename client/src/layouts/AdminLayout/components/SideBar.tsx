@@ -1,7 +1,13 @@
-import { Link, useLocation } from 'react-router-dom';
-import { Eye, CreditCard, File, Building2 } from 'lucide-react';
-import GradientIcon from './GradientIcon';
-import clsx from 'clsx';
+import { Link, useLocation } from "react-router-dom";
+import {
+  Eye,
+  CreditCard,
+  File,
+  Building2,
+  PersonStanding,
+} from "lucide-react";
+import GradientIcon from "./GradientIcon";
+import clsx from "clsx";
 
 interface SidebarProps {
   className: string;
@@ -9,28 +15,34 @@ interface SidebarProps {
 
 const links = [
   {
-    name: 'Overview',
-    path: '/admin/overview',
+    name: "Overview",
+    path: "/admin/overview",
     icon: Eye,
     iconComponent: <Eye className="text-white" />,
   },
   {
-    name: 'Campaign',
-    path: '/admin/campaign',
+    name: "Campaign",
+    path: "/admin/campaign",
     icon: CreditCard,
     iconComponent: <CreditCard className="text-white" />,
   },
   {
-    name: 'Recruitment',
-    path: '/admin/recruitment',
+    name: "Recruitment",
+    path: "/admin/recruitment",
     icon: File,
     iconComponent: <File className="text-white" />,
   },
   {
-    name: 'Company',
-    path: '/admin/company',
+    name: "Company",
+    path: "/admin/company",
     icon: Building2,
     iconComponent: <Building2 className="text-white" />,
+  },
+  {
+    name: "Employer",
+    path: "/admin/employer",
+    icon: PersonStanding,
+    iconComponent: <PersonStanding className="text-white" />,
   },
 ];
 
@@ -41,7 +53,7 @@ function Sidebar({ className }: SidebarProps) {
     <div
       className={clsx(
         className,
-        'sticky min-h-[90vh] w-[16vw] flex flex-col pt-4 gap-8 mr-4',
+        "sticky min-h-[90vh] w-[16vw] flex flex-col pt-4 gap-8 mr-4"
       )}
     >
       {links.map((item, index) => {
@@ -50,20 +62,22 @@ function Sidebar({ className }: SidebarProps) {
             to={item.path}
             key={index}
             className={clsx(
-              'flex w-full gap-2 px-2 py-3',
+              "flex w-full gap-2 px-2 py-3",
               pathname == item.path
-                ? 'bg-gradient-to-b from-green-500 to-blue-500 rounded-r-[4rem]'
-                : '',
+                ? "bg-gradient-to-b from-green-500 to-blue-500 rounded-r-[4rem]"
+                : ""
             )}
           >
             {pathname == item.path ? (
               item.iconComponent
             ) : (
               <GradientIcon icon={item.icon} />
-            )}{' '}
+            )}{" "}
             <span
               className={
-                pathname == item.path ? 'text-white' : 'text-slate-500'
+                pathname == item.path
+                  ? "text-white"
+                  : "text-slate-500"
               }
             >
               {item.name}
