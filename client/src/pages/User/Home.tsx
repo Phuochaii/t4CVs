@@ -415,7 +415,7 @@ function Home() {
           </div>
         </div>
         {/* Việc làm tốt nhất */}
-        <div className="flex flex-col ml-20 mt-5  ">
+        <div className="flex flex-col ml-20 mt-5 items-center ">
           <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg">
             <div className="flex flex-row items-center">
               <h1 className="title">Việc làm tốt nhất</h1>
@@ -608,7 +608,7 @@ function Home() {
             </div>
           </div>
         </div>
-        <div className="section-sub-body bg-slate-100 pt-8 pb-3">
+        <div className="section-sub-bodypt-8 pb-3">
           <div className="section-detail-interested-jobs flex justify-center">
             <div className="max-w-screen-lg relative grid grid-cols-3 gap-4">
               <div className="left-detail col-span-2 flex flex-col gap-3">
