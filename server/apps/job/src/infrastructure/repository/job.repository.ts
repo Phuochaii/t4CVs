@@ -36,6 +36,7 @@ export class TypeOrmJobRepository extends JobRepository {
         salaryMax: true,
         salaryMin: true,
         campaignId: true,
+        status: true,
       },
     });
     if (!job) return null;
@@ -45,6 +46,7 @@ export class TypeOrmJobRepository extends JobRepository {
       salaryMax: job.salaryMax,
       salaryMin: job.salaryMin,
       campaignId: job.campaignId,
+      status: job.status,
     };
     return result;
   }
@@ -63,6 +65,7 @@ export class TypeOrmJobRepository extends JobRepository {
         salaryMax: job.salaryMax,
         salaryMin: job.salaryMin,
         campaignId: job.campaignId,
+        status: job.status,
       };
       return result;
     });
