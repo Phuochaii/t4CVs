@@ -58,7 +58,7 @@ function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 text-black bg-white border menu-top border-1 border-slate-300">
       <div className="flex flex-row items-center justify-between px-8 ">
         <div className="flex flex-row items-center gap-5 main">
-          <div className="logo w-52" onClick={() => navigation('/')}>
+          <div className="logo w-52" onClick={() => navigation("/")}>
             <img src="../../../images/topcv-logo.png" alt="" />
           </div>
           <nav className="nav-menu">
@@ -95,7 +95,7 @@ function Header() {
                     </li>
                     <li
                       onClick={() => {
-                        navigation('/your-application');
+                        navigation("/your-application");
                       }}
                       className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
@@ -114,7 +114,7 @@ function Header() {
                     </li>
                     <li
                       onClick={() => {
-                        navigation('/saved-jobs');
+                        navigation("/saved-jobs");
                       }}
                       className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
@@ -170,7 +170,7 @@ function Header() {
                           color-rendering="auto"
                           image-rendering="auto"
                           shape-rendering="auto"
-                          color-interpolation="sRGB"
+                          colorInterpolation="sRGB"
                           d="M49.997,0.001
                         c-2.761-0.035-5.029,2.175-5.064,4.936c-0.013,0.992,0.27,1.965,0.812,2.796l43.953,96.701
                         c-26.83,16.803-44.701,46.624-44.701,80.568c0,52.408,42.592,95,95,95c52.408,0,95-42.592,95-95
@@ -416,7 +416,7 @@ function Header() {
                 {isCompaniesHovered ? (
                   <ul className="absolute left-0 z-50 flex flex-col gap-3 p-3 text-base font-semibold bg-white border rounded-lg shadow-lg sub-menu top-full border-slate-100">
                     <li
-                      onClick={() => navigation('/companies')}
+                      onClick={() => navigation("/companies")}
                       className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
                       <svg
@@ -917,7 +917,7 @@ function Header() {
                                 notificationId: item.id,
                               });
                               fetchNotification({ id: userId });
-                              window.open(item.link, '_blank', 'noopener');
+                              window.open(item.link, "_blank", "noopener");
                             }}
                             key={index}
                             className="px-4 py-2 border border-b-gray-200 hover:text-green-500"
@@ -926,7 +926,7 @@ function Header() {
                               {item.content}
                             </span>
                             <p className="mt-2 text-sm text-right text-slate-500">
-                              {item.createdAt.split('T')[0] + '  '}
+                              {item.createdAt.split("T")[0] + "  "}
                               {item.status && (
                                 <span className="text-green-500">✓</span>
                               )}
@@ -1016,7 +1016,7 @@ function Header() {
                     </li>
                     <li
                       onClick={() => {
-                        navigation('/user-information');
+                        navigation("/user-information");
                       }}
                       className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
@@ -1099,7 +1099,7 @@ function Header() {
                           color-rendering="auto"
                           image-rendering="auto"
                           shape-rendering="auto"
-                          color-interpolation="sRGB"
+                          colorInterpolation="sRGB"
                           d="M49.997,0.001
                           c-2.761-0.035-5.029,2.175-5.064,4.936c-0.013,0.992,0.27,1.965,0.812,2.796l43.953,96.701
                           c-26.83,16.803-44.701,46.624-44.701,80.568c0,52.408,42.592,95,95,95c52.408,0,95-42.592,95-95
@@ -1152,7 +1152,7 @@ function Header() {
                       onClick={() => {
                         // logoutWithRedirect();
                         setIsAuthenticated(false);
-                        localStorage.removeItem('user');
+                        localStorage.removeItem("user");
                       }}
                       className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
@@ -1178,7 +1178,7 @@ function Header() {
                 <button
                   onClick={() => {
                     // loginWithRedirect();
-                    navigation('/user-login');
+                    navigation("/user-login");
                   }}
                   className="py-2 px-4 rounded-md mx-2 border border-[#00A74B] hover:border-green-800 bg-white"
                 >
@@ -1188,7 +1188,7 @@ function Header() {
               <li>
                 <button
                   onClick={() => {
-                    navigation('/user-signup');
+                    navigation("/user-signup");
                   }}
                   className="py-2 px-4 rounded-md mx-2 bg-[#00A74B] hover:bg-green-800 text-white"
                 >
@@ -1198,7 +1198,7 @@ function Header() {
               <li>
                 <button
                   onClick={() => {
-                    navigation('/hr-login');
+                    navigation("/hr-login");
                   }}
                   className="px-4 py-2 mx-2 text-white bg-black rounded-md hover:bg-gray-800"
                 >
