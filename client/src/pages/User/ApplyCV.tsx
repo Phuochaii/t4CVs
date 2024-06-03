@@ -31,8 +31,9 @@ interface filterSearch {
 }
 
 function ApplyCV() {
-  const { id: jobId } = useParams();
-  // const jobId = state.id;
+  const [jobId, setJobId] = useState('');
+  const { id } = useParams();
+
   const userId =
     localStorage.getItem('user') == null
       ? ''
@@ -41,6 +42,7 @@ function ApplyCV() {
   // const userId = '2';
 
   const [showModal, setShowModal] = useState(false);
+  const [refresh, setreRresh] = useState(false);
   const handleBeforeApply = () => {
     if (localStorage.getItem('user') === null) {
       navigation('/user-login');
@@ -112,26 +114,30 @@ function ApplyCV() {
       console.error('Error fetching data:', error);
     }
   };
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    const fetchJobData = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/job/${jobId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-        console.log(data);
-        setJobData(data);
-      } catch (error) {
-        console.log('Error fetching data. Please try again.');
+  const fetchJobData = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/job/${jobId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
       }
-    };
-
+      const data = await response.json();
+      console.log(data);
+      setJobData(data);
+    } catch (error) {
+      console.log('Error fetching data. Please try again.');
+    }
+  };
+  useEffect(() => {
+    setJobId(id);
+    window.scrollTo(0, 0);
     fetchJobData();
     fetchDataFilter();
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    fetchJobData();
+  }, [jobId]);
 
   // Handle Modal
   const handleOpenModal = () => {
@@ -431,7 +437,6 @@ function ApplyCV() {
                       </div>
                     </div>
                     <div className="job-detail__info--sub-details flex flex-rows gap-x-4">
-                     
                       <div className="job-detail__info--deadline max-h-8 col-span-2 flex flex-rows items-center text-sm text-slate-500 p-2 bg-slate-100 rounded-lg">
                         <div className="quantity-applied-user__icon mr-2">
                           <svg
@@ -525,8 +530,8 @@ function ApplyCV() {
                               {jobData?.jobDetail
                                 ? jobData?.jobDetail?.description
                                   ? jobData?.jobDetail?.description
-                                  : ''
-                                : ''}
+                                  : ""
+                                : ""}
                             </p>
                           </div>
                         </div>
@@ -539,8 +544,8 @@ function ApplyCV() {
                               {jobData?.jobDetail
                                 ? jobData?.jobDetail?.djobSchedule
                                   ? jobData?.jobDetail?.description
-                                  : ''
-                                : ''}
+                                  : ""
+                                : ""}
                             </p>
                           </div>
                         </div>
@@ -644,7 +649,7 @@ function ApplyCV() {
                       </span>
                     </div>
 
-                    <RelatedJobComponent />
+                    <RelatedJobComponent setJobId={setJobId} />
                   </div>
                 </div>
                 <div className="job-detail__body-right col-span-1 text-black flex flex-col gap-4 my-4">

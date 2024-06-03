@@ -141,6 +141,8 @@ const searchJob = async ({
         .join('&');
 
       const url = `${API_URL}/valid-jobs?${queryString}`;
+      console.log(`${API_URL}/valid-jobs?${queryString}`);
+      
 
       const response = await axios.get(url);
 
