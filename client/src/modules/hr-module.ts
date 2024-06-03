@@ -128,6 +128,17 @@ const getPosition = async () => {
   return response.data;
 };
 
+// UPDATE EMPLOYER LICENSE
+const updateEmployerLicense = async (formData) => {
+  const response = await axios
+    .put(`${serverURL}/employer/update/license`, formData)
+    .then((res) => {
+      console.log(res);
+      return res;
+    });
+  return response.data;
+};
+
 export {
   getApplicationByCampaignIdHRId,
   getCampaignById,
@@ -138,4 +149,5 @@ export {
   updateStatusNotification,
   createCompaign,
   getPosition,
+  updateEmployerLicense,
 };
