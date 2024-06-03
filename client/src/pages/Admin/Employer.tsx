@@ -3,26 +3,24 @@ import {
   ChevronLeftCircle,
   ChevronRightCircle,
   Search,
-} from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+} from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   getAllEmployer,
   getCompanyById,
   updateLicenseStatus,
   updatePhoneStatus,
-} from "../../shared/utils/helper";
+} from '../../shared/utils/helper';
 import BasicTable, {
   BasicColumnProps,
   ObjectFromServer,
-} from "../../shared/components/basic-table";
-import { EmployerFromServer } from "../../shared/types/Employer.type";
-import Switch from "../../shared/components/CustomSwitch";
-import clsx from "clsx";
+} from '../../shared/components/basic-table';
+import { EmployerFromServer } from '../../shared/types/Employer.type';
+import Switch from '../../shared/components/CustomSwitch';
+import clsx from 'clsx';
 
 function Employer() {
-  const [employers, setEmployers] = useState<EmployerFromServer[]>(
-    []
-  );
+  const [employers, setEmployers] = useState<EmployerFromServer[]>([]);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -40,12 +38,10 @@ function Employer() {
         totalPages: number;
       } = await getAllEmployer(page);
 
-      let allEmployersWithCompany = allEmployers.map(
-        async (employer) => {
-          const company = await getCompanyById(employer.companyId);
-          return { ...employer, company: company };
-        }
-      );
+      const allEmployersWithCompany = allEmployers.map(async (employer) => {
+        const company = await getCompanyById(employer.companyId);
+        return { ...employer, company: company };
+      });
       setEmployers(await Promise.all(allEmployersWithCompany));
       setTotalPages(totalPages);
     }
@@ -64,38 +60,32 @@ function Employer() {
         },
       },
       {
-        name: "Họ và tên",
-        field: "fullname",
-        tableCellClassname: "",
+        name: 'Họ và tên',
+        field: 'fullname',
+        tableCellClassname: '',
         cell: (data: ObjectFromServer) => {
           const employer = data as EmployerFromServer;
           return (
             <div className="flex flex-col">
-              <img
-                src={employer.image}
-                alt="Avatar"
-                className="w-24 h-24"
-              />
+              <img src={employer.image} alt="Avatar" className="w-24 h-24" />
               <span>{employer.fullname}</span>
             </div>
           );
         },
       },
       {
-        name: "Giới tính",
-        field: "fullname",
-        tableCellClassname: "",
+        name: 'Giới tính',
+        field: 'fullname',
+        tableCellClassname: '',
         cell: (data: ObjectFromServer) => {
           const employer = data as EmployerFromServer;
-          return (
-            <div>{employer.gender === "Male" ? "Nam" : "Nữ"}</div>
-          );
+          return <div>{employer.gender === 'Male' ? 'Nam' : 'Nữ'}</div>;
         },
       },
       {
-        name: "Số điện thoại",
-        field: "phoneNumber",
-        tableCellClassname: "",
+        name: 'Số điện thoại',
+        field: 'phoneNumber',
+        tableCellClassname: '',
         cell: (data: ObjectFromServer) => {
           const employer = data as EmployerFromServer;
           return (
@@ -103,8 +93,8 @@ function Employer() {
               <span
                 className={clsx(
                   employer.phoneNumberStatus
-                    ? "text-green-600"
-                    : "text-gray-400"
+                    ? 'text-green-600'
+                    : 'text-gray-400',
                 )}
               >
                 {employer.phoneNumber}
@@ -124,9 +114,9 @@ function Employer() {
         },
       },
       {
-        name: "Skype",
-        field: "skype",
-        tableCellClassname: "",
+        name: 'Skype',
+        field: 'skype',
+        tableCellClassname: '',
         cell: (data: ObjectFromServer) => {
           const employer = data as EmployerFromServer;
           return (
@@ -137,8 +127,8 @@ function Employer() {
         },
       },
       {
-        name: "Công ty",
-        field: "skype",
+        name: 'Công ty',
+        field: 'skype',
         tableCellClassname: "",
         cell: (data: ObjectFromServer) => {
           const employer = data as EmployerFromServer;
@@ -146,9 +136,9 @@ function Employer() {
         },
       },
       {
-        name: "Giấy phép",
-        field: "skype",
-        tableCellClassname: "",
+        name: 'Giấy phép',
+        field: 'skype',
+        tableCellClassname: '',
         cell: (data: ObjectFromServer) => {
           const employer = data as EmployerFromServer;
           return (
@@ -161,7 +151,7 @@ function Employer() {
                 onChange={async () => {
                   await updateLicenseStatus(
                     employer.id,
-                    !employer.licenseStatus
+                    !employer.licenseStatus,
                   );
                   setRefresh(!refresh);
                 }}
@@ -171,7 +161,7 @@ function Employer() {
         },
       },
     ],
-    []
+    [],
   );
 
   return (
@@ -211,9 +201,7 @@ function Employer() {
             stroke="green"
             className="cursor-pointer"
             strokeWidth={1}
-            onClick={() =>
-              setPage(page + 1 <= totalPages ? page + 1 : page)
-            }
+            onClick={() => setPage(page + 1 <= totalPages ? page + 1 : page)}
           />
         </div>
       </div>

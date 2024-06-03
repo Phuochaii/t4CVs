@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Switch from '../../shared/components/CustomSwitch';
 import { updateCompanyStatus, getCompanyById } from '../../shared/utils/helper';
 import { CompanyFromServer } from '../../shared/types/Company.type';
 import { CheckCheck } from 'lucide-react';
 
 function CompanyDetail() {
+  const navigation = useNavigate();
   const { id } = useParams();
   const [companyInfo, setCompanyInfo] = useState<CompanyFromServer | null>();
   const [refresh, setRefresh] = useState(false);
@@ -252,7 +253,9 @@ function CompanyDetail() {
                         </p>
                         <button
                           className="btn hover:underline hover:text-[#02A84E]"
-                          onClick={() => {}}
+                          onClick={() => {
+                            navigation('/admin/employer/' + employer.id);
+                          }}
                         >
                           View
                         </button>
