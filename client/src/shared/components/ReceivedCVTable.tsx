@@ -1,6 +1,7 @@
 import { ApplicationFromServer } from '../../shared/types/Application.type';
 import { Mail, Phone, Clock } from 'lucide-react';
 import * as HRModule from '../../modules/hr-module';
+import moment from 'moment';
 
 interface ApplicationProps {
   data: ApplicationFromServer[];
@@ -34,7 +35,7 @@ function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
         <tr
           key={index}
           className="font-medium py-5 mx-3"
-          style={{ fontSize: '13px' }}
+          style={{ fontSize: "13px" }}
         >
           <td>
             <p className="font-semibold">{item.fullname}</p>
@@ -47,29 +48,30 @@ function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
           )}
           <td>
             <p className="flex">
-              <Mail size={15} color="#38A34D" style={{ marginRight: '5px' }} />
+              <Mail size={15} color="#38A34D" style={{ marginRight: "5px" }} />
               {item.email}
             </p>
             <p className="flex">
-              <Phone color="#38A34D" size={18} style={{ marginRight: '5px' }} />
+              <Phone color="#38A34D" size={18} style={{ marginRight: "5px" }} />
               {item.phone}
             </p>
           </td>
           <td>
             <p className="flex">
-              <Mail size={15} color="#38A34D" style={{ marginRight: '5px' }} />
+              <Mail size={15} color="#38A34D" style={{ marginRight: "5px" }} />
               Tìm việc
             </p>
             <p className="flex">
-              <Clock size={15} color="#38A34D" style={{ marginRight: '5px' }} />
-              {item.updateAt}
+              <Clock size={15} color="#38A34D" style={{ marginRight: "5px" }} />
+              {/* {item.updateAt} */}
+              {moment(new Date(item.updateAt)).format("DD-MM-YY HH:mm")}
             </p>
           </td>
           <td>
             <div
-              className={`rounded-full ${item.status ? 'bg-orange-100 text-orange-400' : 'bg-blue-200 text-blue-500'} px-3`}
+              className={`rounded-full ${item.status ? "bg-orange-100 text-orange-400" : "bg-blue-200 text-blue-500"} px-3 min-w-[90px]`}
             >
-              {item.status ? 'Đã xem' : 'Chưa xem'}
+              {item.status ? "Đã xem" : "Chưa xem"}
             </div>
           </td>
           <td>
@@ -80,10 +82,10 @@ function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
                   applicationId: item.id,
                 }).then((res) => {
                   console.log(res);
-                  window.open(res.link, '_blank', 'noopener');
+                  window.open(res.link, "_blank", "noopener");
                 });
               }}
-              className="btn px-3 py-1 text-white rounded-md ml-5 bg-[#5EE199] hover:bg-green-500 transition ease-out duration-100"
+              className="btn min-w-[80px] px-3 py-1 text-white rounded-md ml-5 bg-[#5EE199] hover:bg-green-500 transition ease-out duration-100"
             >
               Xem CV
             </button>
