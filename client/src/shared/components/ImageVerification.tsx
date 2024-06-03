@@ -1,6 +1,13 @@
 import React, { useState, useRef, useCallback } from 'react';
 
-const ImageVerification = ({ title, chosenImage, onImageChange }) => {
+const ImageVerification = ({
+  title,
+  chosenImage,
+  chosenFile,
+  onImageChange,
+  onFileChange,
+}) => {
+  const [imageFile, setImageFile] = useState(chosenFile);
   const [image, setImage] = useState(chosenImage);
   const imageUploadRef = useRef(null);
   const handleImageUpload = useCallback(() => {
@@ -8,13 +15,15 @@ const ImageVerification = ({ title, chosenImage, onImageChange }) => {
   }, []);
   const imagePreview = (e) => {
     const selectedImage = e.target.files[0];
-    console.log('clicked');
+    setImageFile(selectedImage);
+    console.log(selectedImage);
     if (selectedImage) {
       const reader = new FileReader();
 
       reader.onload = (event) => {
         setImage(event.target.result);
         onImageChange(event.target.result);
+        onFileChange(selectedImage);
       };
       reader.readAsDataURL(selectedImage);
     }
@@ -31,6 +40,7 @@ const ImageVerification = ({ title, chosenImage, onImageChange }) => {
         )}
         <input
           type="file"
+          name="file"
           ref={imageUploadRef}
           onChange={imagePreview}
           style={{ display: 'none' }}
