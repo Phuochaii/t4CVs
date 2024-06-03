@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import {
   TextField,
   FormControl,
-  OutlinedInput,
   InputAdornment,
   MenuItem,
   Button,
@@ -43,6 +42,8 @@ function SearchBoxComponent({
   setTitleRecruitment,
   handleSearch,
 }) {
+
+
   const fetchDataFilter = async () => {
     try {
       const locationResponse = await JobService.getAllLocation();
@@ -57,32 +58,39 @@ function SearchBoxComponent({
 
   useEffect(() => {
     fetchDataFilter();
+    setLocationId(Number(params.get('locationId')) || 0);
+    setTitleRecruitment(params.get('titleRecruitment') || '');
+    setExpId(Number(params.get('expId')) || 0);
   }, []);
 
+  const params = new URLSearchParams(window.location.search);
+
+
   return (
-    <form className="search-job grid grid-cols-7 justify-center gap-x-4">
-      <div className="group-search col-span-3 grid grid-cols-2">
+    <form className="search-job grid grid-cols-7 justify-center gap-x-4 pt-2">
+      <div className="group-search col-span-3 grid grid-cols-2 bg-white">
         <div className="item item-search">
           <FormControl>
-            <OutlinedInput
-              id="outlined-adornment-amount"
-              placeholder="Vị trí công việc"
-              startAdornment={
-                <InputAdornment position="start">
-                  <MagnifyingGlassIcon className="w-6" />
-                </InputAdornment>
-              }
-              onChange={(e) => {
-                setTitleRecruitment(e.target.value);
+            <TextField
+              defaultValue={params.get("titleRecruitment")}
+              id="input-with-icon-textfield"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MagnifyingGlassIcon className="w-6" />
+                  </InputAdornment>
+                ),
+                className: 'h-[45px] rounded-lg',
               }}
+              onChange={(e) => setTitleRecruitment(e.target.value)}
             />
           </FormControl>
         </div>
-        <div className="item search-city">
+        <div className="item search-city border-l">
           <TextField
             id="outlined-select-currency"
             select
-            defaultValue={String(locationId)}
+            defaultValue={params.get("locationId") | String(locationId)}
             className="w-full"
             InputProps={{
               startAdornment: (
@@ -111,7 +119,7 @@ function SearchBoxComponent({
                     {city.name}
                   </MenuItem>
                 ))
-              : 'Error to fetch cities'}
+              : "Error to fetch cities"}
           </TextField>
         </div>
       </div>
@@ -121,7 +129,7 @@ function SearchBoxComponent({
           <TextField
             id="outlined-select-currency"
             select
-            defaultValue={String(expId)}
+            defaultValue={params.get('expId') | String(expId)}
             className="w-full"
             InputProps={{
               startAdornment: (
@@ -150,7 +158,7 @@ function SearchBoxComponent({
                     {exp.name}
                   </MenuItem>
                 ))
-              : 'Error to fetch experience'}
+              : "Error to fetch experience"}
           </TextField>
         </div>
 

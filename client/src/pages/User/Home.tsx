@@ -608,7 +608,7 @@ function Home() {
             </div>
           </div>
         </div>
-        <div className="section-sub-bodypt-8 pb-3">
+        <div className="section-sub-body pt-8 pb-3">
           <div className="section-detail-interested-jobs flex justify-center">
             <div className="max-w-screen-lg relative grid grid-cols-3 gap-4">
               <div className="left-detail col-span-2 flex flex-col gap-3">
