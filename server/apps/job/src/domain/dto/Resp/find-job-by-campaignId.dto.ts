@@ -4,4 +4,5 @@ export class FindJobByCampaignIdDto {
   salaryMax: number;
   salaryMin: number;
   campaignId: number;
+  status: boolean;
 }
