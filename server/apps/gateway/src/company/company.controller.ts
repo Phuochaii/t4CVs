@@ -9,6 +9,7 @@ import {
   Put,
   UseInterceptors,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CompanyService } from './company.service';
@@ -19,11 +20,14 @@ import { UpdateCampaignDto } from './dto/Req/updateCampaign.dto';
 import { UpdateCompanyStatusDto } from './dto/Req/updateCompanyStatus.dto';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('create')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -52,6 +56,7 @@ export class CompanyController {
     return this.companyService.findCompanyById(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Put('update')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -67,6 +72,7 @@ export class CompanyController {
     return this.companyService.updateCompany(file, data);
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
   @Put('updateStatus')
   updateCompanyStatus(
     @Body() data: UpdateCompanyStatusDto,
@@ -74,6 +80,7 @@ export class CompanyController {
     return this.companyService.updateCompanyStatus(data);
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
   @Delete(':id')
   removeCompany(@Param('id') id: number): Observable<string> {
     return this.companyService.removeCompany(id);
@@ -88,9 +95,16 @@ export class CompanyController {
     return this.companyService.findCompanyByName(name, page, limit);
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Post('campaign/create')
-  createCampaign(@Body() data: CreateCampaignDto): Observable<string> {
-    return this.companyService.createCampaign(data);
+  createCampaign(
+    @GetUser() user: UserClaims,
+    @Body() data: Omit<CreateCampaignDto, 'employerId'>,
+  ): Observable<string> {
+    return this.companyService.createCampaign({
+      employerId: user.sub,
+      ...data,
+    });
   }
 
   @Get('campaign/all')
@@ -106,9 +120,25 @@ export class CompanyController {
     return this.companyService.findCampaignById(id);
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Put('campaign/update')
   updateCampaign(@Body() data: UpdateCampaignDto): Observable<string> {
     return this.companyService.updateCampaign(data);
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
+  @Get('campaign/employer/authorize')
+  findCampaignAuthor(
+    @GetUser() user: UserClaims,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    const employerId = user.sub;
+    return this.companyService.findCampaignByEmployerId(
+      employerId,
+      page,
+      limit,
+    );
   }
 
   @Get('campaign/employer/:employerId')
@@ -129,6 +159,7 @@ export class CompanyController {
     return this.companyService.findAllCampaignByEmployerId(employerId);
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Delete('campaign/:id')
   DeleteCampaignService(@Param('id') id: number) {
     return this.companyService.deleteCampaign(id);
