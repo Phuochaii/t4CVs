@@ -2,6 +2,7 @@ import { Switch as BaseSwitch, SwitchProps } from '@mui/base/Switch';
 import React from 'react';
 import clsx from 'clsx';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const resolveSlotProps = (fn: any, args: any) =>
   typeof fn === 'function' ? fn(args) : fn;
 
