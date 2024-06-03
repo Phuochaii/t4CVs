@@ -28,12 +28,12 @@ export class Job {
   @Column()
   majorId: number;
 
-  @ManyToOne(() => Major)
+  @ManyToOne(() => Major, { onUpdate: 'CASCADE' })
   @JoinColumn()
   major: Major;
 
   //field
-  @ManyToMany(() => Field)
+  @ManyToMany(() => Field, { onUpdate: 'CASCADE' })
   @JoinTable()
   fields: Field[];
 
@@ -43,14 +43,14 @@ export class Job {
   @Column()
   typeId: number;
 
-  @ManyToOne(() => Type)
+  @ManyToOne(() => Type, { onUpdate: 'CASCADE' })
   @JoinColumn()
   type: Type;
 
   @Column()
   currencyId: number;
   //currencyId
-  @ManyToOne(() => Currency)
+  @ManyToOne(() => Currency, { onUpdate: 'CASCADE' })
   @JoinColumn()
   currency: Currency;
 
@@ -63,14 +63,16 @@ export class Job {
   @Column()
   expId: number;
 
-  @ManyToOne(() => Experience)
+  @ManyToOne(() => Experience, { onUpdate: 'CASCADE' })
   @JoinColumn()
   exp: Experience;
 
   // @Column('character varying', { array: true })
   // region: string[];
   //location
-  @ManyToMany(() => Location)
+  @ManyToMany(() => Location, {
+    onUpdate: 'CASCADE',
+  })
   @JoinTable()
   locations: Location[];
 
@@ -87,7 +89,7 @@ export class Job {
   levelId: number;
 
   //level
-  @ManyToOne(() => Level)
+  @ManyToOne(() => Level, { onUpdate: 'CASCADE' })
   @JoinColumn()
   level: Level;
 
@@ -100,7 +102,10 @@ export class Job {
   companyId: number;
 
   //jobDetailId
-  @OneToOne(() => JobDetail)
+  @OneToOne(() => JobDetail, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn()
   jobDetail: JobDetail;
 }

@@ -2,17 +2,16 @@ import { Controller } from '@nestjs/common';
 import { JobService } from './domain/job.service';
 import { CreateJobDto } from './domain/dto/Req/create-job.dto';
 import { MessagePattern } from '@nestjs/microservices';
-import { UpdateJobDto } from './domain/dto/Req/update-job.dto';
 import { CreateBaseDto } from './domain/dto/Req/createBase.dto';
 import { QueryDTO } from './domain/dto/Req/query.dto';
+import { UpdateJobStatusDto } from './domain/dto/Req/update-job-status.dto';
+import { UpdateJobDTO } from './domain/dto/Req/update-job.dto';
+import { Job } from './domain/entities';
+import { JobAggregate } from './domain/aggregate';
 
 @Controller()
 export class JobController {
   constructor(private readonly jobService: JobService) {}
-
-  hello(): string {
-    return 'Hello World!';
-  }
 
   @MessagePattern({ cmd: 'find_job_by_campaignId' })
   findJobByCampaignId(campaignId: number) {
@@ -41,8 +40,18 @@ export class JobController {
   }
 
   @MessagePattern({ cmd: 'update_job_status' })
-  updateJobStatus(data: UpdateJobDto) {
+  updateJobStatus(data: UpdateJobStatusDto) {
     return this.jobService.updateJobStatus(data);
+  }
+
+  @MessagePattern({ cmd: 'update_job' })
+  updateJob(data: JobAggregate) {
+    return this.jobService.updateJob(data);
+  }
+
+  @MessagePattern({ cmd: 'delete_job' })
+  deleteJob(id: number) {
+    return this.jobService.deleteJob(id);
   }
 
   @MessagePattern({ cmd: 'get_job_info' })
