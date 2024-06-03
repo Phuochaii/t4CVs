@@ -51,7 +51,7 @@ export async function getAllEmployer(page: number = 1) {
     return {allEmployers: rawEmployers, total: response.data.total, totalPages: response.data.total_page};
 }
 
-export async function getEmployerById(id: number) {
+export async function getEmployerById(id: number | string) {
     const response = await axios.get(`${serverURL}/employer/${id}`);
     const rawEmployer: EmployerFromServer = response.data;
     return rawEmployer;

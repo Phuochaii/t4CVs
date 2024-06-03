@@ -1,4 +1,4 @@
-import { CompanyFromServer } from "./Company.type";
+import { CompanyFromServer } from './Company.type';
 
 export interface EmployerFromServer {
   id: number;
@@ -12,4 +12,5 @@ export interface EmployerFromServer {
   phoneNumberStatus: boolean;
   image: string;
   company?: CompanyFromServer | null;
+  supplement?: string;
 }
