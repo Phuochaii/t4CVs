@@ -1,18 +1,18 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ImageVerification from '../../../shared/components/ImageVerification';
 import * as HRModule from '../../../modules/hr-module';
 import axios from 'axios';
 
 import { errorToast, successToast } from '../../../utils/toast';
-import { toast } from 'react-toastify';
 
 function VerifyAccount2() {
   const navigation = useNavigate();
-  const [firstImage, setFirstImage] = useState(null);
-  const [secondImage, setSecondImage] = useState(null);
-  const [firstFile, setFirstFile] = useState(null);
-  const [secondFile, setSecondFile] = useState(null);
+  const [user, setUser] = useState();
+  const [firstImage, setFirstImage] = useState();
+  const [secondImage, setSecondImage] = useState();
+  const [firstFile, setFirstFile] = useState();
+  const [secondFile, setSecondFile] = useState();
   const handleUploadLicense = async () => {
     if (!firstImage && !secondImage && !firstFile && !secondFile) {
       return;
@@ -46,6 +46,28 @@ function VerifyAccount2() {
     //     console.log(res);
     //   });
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/employer/1');
+        const userInfo = await response.json();
+        setUser(userInfo);
+        console.log(userInfo);
+        if (userInfo) {
+          if (userInfo.license) {
+            setFirstImage(userInfo.license);
+          }
+          if (userInfo.license) {
+            setSecondImage(userInfo.license);
+          }
+        }
+      } catch (error) {
+        return errorToast('Không tìm thấy thông tin người dùng hiện tại');
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <>
       <div className="text-black mt-12 mx-[200px] mb-20 px-8 pt-8 pb-10 bg-white rounded">
@@ -71,6 +93,7 @@ function VerifyAccount2() {
         <div className="flex">
           <ImageVerification
             title={'Mặt trước'}
+            dataImage={firstImage}
             chosenImage={firstImage}
             onImageChange={(image) => {
               setFirstImage(image);
@@ -81,6 +104,7 @@ function VerifyAccount2() {
           />
           <ImageVerification
             title={'Mặt sau'}
+            dataImage={secondImage}
             chosenImage={secondImage}
             onImageChange={(image) => {
               setSecondImage(image);
@@ -106,7 +130,7 @@ function VerifyAccount2() {
             onClick={() => {
               handleUploadLicense();
             }}
-            className={`cursor-pointer text-white bg-[#00b14f] rounded-[5px] py-4 px-16 text-base ${firstImage || secondImage ? 'opacity-100' : 'opacity-65 cursor-default'}`}
+            className={`cursor-pointer text-white bg-[#00b14f] rounded-[5px] py-4 px-16 text-base ${firstImage && secondImage ? 'opacity-100' : 'opacity-65 cursor-default'}`}
           >
             Tiếp tục
           </button>

@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 
 const ImageVerification = ({
   title,
+  dataImage,
   chosenImage,
   chosenFile,
   onImageChange,
@@ -38,6 +39,13 @@ const ImageVerification = ({
             className="absolute top-0 left-0 h-full w-full object-cover"
           />
         )}
+        {chosenImage && (
+          <img
+            src={chosenImage}
+            alt=""
+            className="absolute top-0 left-0 h-full w-full object-cover"
+          />
+        )}
         <input
           type="file"
           name="file"
@@ -47,7 +55,7 @@ const ImageVerification = ({
           accept="image/png, image/gif, image/jpeg"
         />
         <div
-          className={`absolute w-full bottom-0 py-2 flex justify-center items-center ${image && 'bg-white opacity-90'}`}
+          className={`absolute w-full bottom-0 py-2 flex justify-center items-center ${(image || chosenImage) && 'bg-white opacity-90'}`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
