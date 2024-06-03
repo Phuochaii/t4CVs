@@ -129,7 +129,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
                 {`#${campaign.recruitment.campaignId}`}
               </span>
               <span className="font-bold text-slate-400">
-                {campaign.recruitment.status}
+                {campaign.recruitment.status ? 'Đang chạy' : 'Đang dừng'}
               </span>
             </div>
             <div
