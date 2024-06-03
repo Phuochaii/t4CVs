@@ -1,15 +1,18 @@
-import { createRoot } from "react-dom/client";
-import App from "./App";
-import "./index.css";
-import "./shared/i18n/index.ts";
-import "./shared/hooks/useTheme.tsx";
-import { Auth0Provider } from "@auth0/auth0-react";
-import history from "./shared/utils/history.ts";
-import { getConfig } from "./config.ts";
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './index.css';
+import './shared/i18n/index.ts';
+import './shared/hooks/useTheme.tsx';
+import { Auth0Provider } from '@auth0/auth0-react';
+import history from './shared/utils/history.ts';
+import { getConfig } from './config.ts';
+import { ToastContainer } from 'react-toastify';
 
 const onRedirectCallback = (appState) => {
   history.push(
-    appState && appState.returnTo ? appState.returnTo : window.location.pathname
+    appState && appState.returnTo
+      ? appState.returnTo
+      : window.location.pathname,
   );
 };
 
@@ -27,10 +30,12 @@ const providerConfig = {
   },
 };
 
-createRoot(document.getElementById("root")!).render(
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
   <Auth0Provider {...providerConfig}>
     <App />
-  </Auth0Provider>
+    <ToastContainer />
+  </Auth0Provider>,
 );
 
 // createRoot(document.getElementById('root')!).render(<App />);
