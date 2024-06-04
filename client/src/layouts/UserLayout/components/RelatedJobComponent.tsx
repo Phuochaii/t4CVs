@@ -7,15 +7,15 @@ function RelatedJobComponent({ setJobId }: { setJobId: (id: number) => void }) {
   useEffect(() => {
     const fetchJobResults = async () => {
       try {
-        const response = await fetch("http://localhost:3000/job/all?limit=5");
+        const response = await fetch('http://localhost:3000/job/all?limit=5');
         if (!response.ok) {
-          throw new Error("Failed to fetch data");
+          throw new Error('Failed to fetch data');
         }
         const result = await response.json();
         setJobResults(result.data);
         console.log(jobResults);
       } catch (error) {
-        console.log("Error fetching data. Please try again.");
+        console.log('Error fetching data. Please try again.');
       }
     };
 
