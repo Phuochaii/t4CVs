@@ -128,7 +128,7 @@ function ManageCV() {
                   </TabList>
                 </Box>
                 <TabPanel sx={{ padding: '12px 0' }} value="1">
-                  {tabs.Information()}
+                  {tabs.Information({ compaignId: compaignId })}
                 </TabPanel>
                 <TabPanel sx={{ padding: '12px 0' }} value="2">
                   {tabs.Recuitment()}
