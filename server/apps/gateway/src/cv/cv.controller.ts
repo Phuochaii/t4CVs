@@ -24,8 +24,8 @@ export class CVController {
   uploadService: any;
   constructor(private readonly cvService: CVService) {}
 
-  //find all
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
+  //find all (pending)
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   getAllCVs(): Observable<any> {
     return this.cvService.getAllCVs();
@@ -36,8 +36,8 @@ export class CVController {
     return this.cvService.getHello();
   }
 
-  //find one by id
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
+  //find one by id -> hr + user
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   getCVById(@Param('id') id: number): Observable<any> {
     return this.cvService.getCVById(id);
