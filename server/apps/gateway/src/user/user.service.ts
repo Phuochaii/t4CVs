@@ -5,6 +5,7 @@ import { CreateUserDTO } from './dto/Req/createUser.dto';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { Role } from '../authentication/dto/role.dto';
 import { CreateUserAccountDto } from './dto/Req/create-user-account.dto';
+import { QueryDTO } from './dto/Req/query.dto';
 
 @Injectable()
 export class UserService {
@@ -13,8 +14,8 @@ export class UserService {
     private readonly authenticationService: AuthenticationService,
   ) {}
 
-  findAllUsers(): Observable<string> {
-    return this.userClient.send({ cmd: 'find_all_users' }, {});
+  findAllUsers(query: QueryDTO): Observable<string> {
+    return this.userClient.send({ cmd: 'find_all_users' }, query);
   }
 
   async createUser(

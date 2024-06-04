@@ -1,10 +1,19 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseGuards,
+  Query,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { Observable } from 'rxjs';
 import { CreateUserDTO } from './dto/Req/createUser.dto';
 import { CreateUserAccountDto } from './dto/Req/create-user-account.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
+import { QueryDTO } from './dto/Req/query.dto';
 
 @Controller('user')
 export class UserController {
@@ -12,8 +21,11 @@ export class UserController {
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
   @Get('all')
-  findAllUsers(): Observable<string> {
-    return this.userService.findAllUsers();
+  findAllUsers(
+    @Query()
+    queryParams: QueryDTO,
+  ): Observable<string> {
+    return this.userService.findAllUsers(queryParams);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))

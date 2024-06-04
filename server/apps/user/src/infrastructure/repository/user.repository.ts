@@ -26,4 +26,13 @@ export class TypeOrmUserRepository {
   async isUserExist(id: string) {
     return !!(await this.userRepository.findOne({ where: { id } }));
   }
+
+  async searchUser(query: any) {
+    return await this.userRepository.find({
+      where: query,
+      order: {
+        fullname: 'ASC',
+      },
+    });
+  }
 }

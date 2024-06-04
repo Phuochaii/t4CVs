@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { UserService } from './domain/user.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { CreateUserDTO } from './domain/dto/Req';
+import { CreateUserDTO, QueryDTO } from './domain/dto/Req';
 
 @Controller('user')
 export class UserController {
@@ -18,11 +18,10 @@ export class UserController {
   }
 
   @MessagePattern({ cmd: 'find_all_users' })
-  findAll() {
-    return this.userService.findAll();
+  findAll(query: QueryDTO) {
+    return this.userService.findAll(query);
   }
 
-  
   @MessagePattern({ cmd: 'check_user' })
   check(id: string) {
     return this.userService.check(id);
