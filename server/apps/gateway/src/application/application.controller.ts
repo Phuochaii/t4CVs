@@ -78,8 +78,8 @@ export class ApplicationController {
     return this.applicationService.hrGetCv(id);
   }
 
-  //get a application
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
+  //get an application
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Get(':id')
   async findOne(@Param('id') id: number) {
     return this.applicationService.findOne(id);
