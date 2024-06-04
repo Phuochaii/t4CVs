@@ -86,6 +86,33 @@ function Certificate() {
             Tải mẫu giấy ủy quyền
           </div>
         </div>
+        {user?.license && (
+          <div className="text-black ">
+            Giấy ủy quyền:{' '}
+            <span
+              className="cursor-pointer text-green-700"
+              onClick={() => {
+                window.open(`${user.license}`);
+              }}
+            >
+              Xem tại đây
+            </span>
+          </div>
+        )}
+        {user?.supplement && (
+          <div className="text-black">
+            Giấy tờ định danh:{' '}
+            <span
+              className="cursor-pointer text-green-700"
+              onClick={() => {
+                window.open(`${user.supplement}`);
+              }}
+            >
+              Xem tại đây
+            </span>
+          </div>
+        )}
+        <div></div>
         <div className="w-full flex flex-row items-center">
           <div className="w-[50%]">
             <span className="text-black text-[13px]">Giấy ủy quyền *</span>
