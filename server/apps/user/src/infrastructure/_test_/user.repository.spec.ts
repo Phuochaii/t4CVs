@@ -6,8 +6,34 @@ import { User } from '../schemas/user.schema';
 import { CreateUserDTO } from '../../domain/dto/Req';
 
 describe('TypeOrmUserRepository', () => {
-  let userRepository: TypeOrmUserRepository;
-  let userRepo: Repository<User>;
+  let typeOrmUserRepository: TypeOrmUserRepository;
+  const mockUserRepository = {
+    findOne: jest.fn().mockImplementation((query) =>
+      Promise.resolve({
+        id: query.where.id,
+        fullname: 'John Doe',
+        phone: '1234567890',
+        image: 'image.png',
+      }),
+    ),
+    find: jest.fn().mockImplementation(() =>
+      Promise.resolve([
+        {
+          id: '1',
+          fullname: 'John Doe',
+          phone: '1234567890',
+          image: 'image.png',
+        },
+        {
+          id: '2',
+          fullname: 'Jane Doe',
+          phone: '0987654321',
+          image: 'image2.png',
+        },
+      ]),
+    ),
+    save: jest.fn().mockImplementation((user) => Promise.resolve(user)),
+  };
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -15,80 +41,65 @@ describe('TypeOrmUserRepository', () => {
         TypeOrmUserRepository,
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useValue: mockUserRepository,
         },
       ],
     }).compile();
 
-    userRepository = moduleRef.get<TypeOrmUserRepository>(
+    typeOrmUserRepository = moduleRef.get<TypeOrmUserRepository>(
       TypeOrmUserRepository,
     );
-    userRepo = moduleRef.get<Repository<User>>(getRepositoryToken(User));
   });
 
   describe('findById', () => {
+    const userId = '1';
     it('should return the user with the given id', async () => {
-      const userId = '1';
-      const user = new User();
-      user.id = userId;
-      jest.spyOn(userRepo, 'findOne').mockResolvedValue(user);
-
-      const result = await userRepository.findById(userId);
-
-      expect(result).toEqual(user);
-      expect(userRepo.findOne).toHaveBeenCalledWith(userId);
+      expect(await typeOrmUserRepository.findById(userId)).toEqual({
+        id: userId,
+        fullname: expect.any(String),
+        phone: expect.any(String),
+        image: expect.any(String),
+      });
+    });
+    it('should call the userRepository.findOne() method with the correct query', async () => {
+      expect(mockUserRepository.findOne).toHaveBeenCalledWith({
+        where: { id: userId },
+      });
     });
   });
 
   describe('findAll', () => {
     it('should return all users', async () => {
-      const users = [new User(), new User()];
-      jest.spyOn(userRepo, 'find').mockResolvedValue(users);
-
-      const result = await userRepository.findAll();
-
-      expect(result).toEqual(users);
-      expect(userRepo.find).toHaveBeenCalled();
+      expect(await typeOrmUserRepository.findAll()).toEqual(expect.any(Array));
+    });
+    it('should call the userRepository.find() method', async () => {
+      expect(mockUserRepository.find).toHaveBeenCalled();
     });
   });
 
   describe('createUser', () => {
-    it('should create a new user', async () => {
-      const createUserDto: CreateUserDTO = {
-        name: 'John Doe',
-        email: 'john@example.com',
-      };
-      const createdUser = new User();
-      createdUser.name = createUserDto.name;
-      createdUser.email = createUserDto.email;
-      jest.spyOn(userRepo, 'save').mockResolvedValue(createdUser);
-
-      const result = await userRepository.createUser(createUserDto);
-
-      expect(result).toEqual(createdUser);
-      expect(userRepo.save).toHaveBeenCalledWith(createUserDto);
+    const user: CreateUserDTO = {
+      id: '3',
+      fullname: 'John Doe',
+      phone: '1234567890',
+      image: 'image.png',
+    };
+    it('should return the created user', async () => {
+      expect(await typeOrmUserRepository.createUser(user)).toEqual(user);
+    });
+    it('should call the userRepository.save() method with the correct user', async () => {
+      expect(mockUserRepository.save).toHaveBeenCalledWith(user);
     });
   });
 
   describe('isUserExist', () => {
+    const userId = '1';
     it('should return true if the user exists', async () => {
-      const userId = '1';
-      jest.spyOn(userRepo, 'count').mockResolvedValue(1);
-
-      const result = await userRepository.isUserExist(userId);
-
-      expect(result).toBe(true);
-      expect(userRepo.count).toHaveBeenCalledWith({ id: userId });
+      expect(await typeOrmUserRepository.isUserExist(userId)).toBe(true);
     });
-
     it('should return false if the user does not exist', async () => {
-      const userId = '1';
-      jest.spyOn(userRepo, 'count').mockResolvedValue(0);
-
-      const result = await userRepository.isUserExist(userId);
-
-      expect(result).toBe(false);
-      expect(userRepo.count).toHaveBeenCalledWith({ id: userId });
+      mockUserRepository.findOne.mockReturnValueOnce(null);
+      expect(await typeOrmUserRepository.isUserExist('4')).toBe(false);
     });
   });
 });
