@@ -40,11 +40,6 @@ function VerifyAccount2() {
       .catch((res) => {
         errorToast('Cập nhật thất bại, xin vui lòng thử lại sau');
       });
-    // await axios
-    //   .post('http://localhost:3000/upload/uploadfiles', formData)
-    //   .then((res) => {
-    //     console.log(res);
-    //   });
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -87,7 +82,12 @@ function VerifyAccount2() {
           </div>
         </div>
         <div className="mt-6 mb-10 flex justify-between text-xl font-semibold text-[#212f3f]">
-          <span>Xác thực ảnh CMT/CCCD</span>
+          <div>
+            <span>Xác thực ảnh CMT/CCCD: </span>
+            <span className="font-normal italic">
+              {user ? 'Đã xác thực' : 'Chưa có thông tin'}
+            </span>
+          </div>
           <span>Bước: 1/2</span>
         </div>
         <div className="flex">
