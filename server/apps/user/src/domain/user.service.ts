@@ -18,6 +18,7 @@ export class UserService {
 
   async createUser(createUserDTO: CreateUserDTO) {
     const user = await this.userRepository.findById(createUserDTO.id);
+    console.log(user);
     if (user) {
       return null;
     }
