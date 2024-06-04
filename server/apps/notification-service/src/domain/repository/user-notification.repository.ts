@@ -13,6 +13,10 @@ export abstract class UserNotificationRepository {
         users: User[],
         notification: Notification
     ): Promise<UserNotificationAggregate[]>;
+    abstract getUserNotification(
+        user: User,
+        notificationId: Notification['id']
+    ): Promise<null | UserNotificationAggregate>;
     abstract updateNotificationStatus(
         user: User,
         notificationId: Notification['id'],
