@@ -18,7 +18,7 @@ function AdminLogIn() {
   });
 
   const [error, setError] = useState("");
-  const showError:boolean = !error;
+  const showError:boolean = !!error;
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -36,6 +36,9 @@ function AdminLogIn() {
     setShowPassword(!showPassword);
   };
 
+  const onLoginError = (errMessage: string) => {
+    setError("Tên tài khoản hoặc mật khẩu không chính xác.");
+  }
   const handleLogin = (e: { preventDefault: () => void }) => {
 
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
@@ -53,9 +56,7 @@ function AdminLogIn() {
     usernamePasswordLogin({
       username: formData.username,
       password: formData.password
-    }, Roles.ADMIN, (errMessage: string) => {
-      setError(errMessage);
-    });
+    }, Roles.ADMIN, onLoginError);
   };
 
   if(isLoading || isAuthenticated) return <Spinner/>;
