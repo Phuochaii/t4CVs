@@ -42,7 +42,6 @@ function ApplyCV() {
   // const userId = '2';
 
   const [showModal, setShowModal] = useState(false);
-  const [refresh, setreRresh] = useState(false);
   const handleBeforeApply = () => {
     if (localStorage.getItem('user') === null) {
       navigation('/user-login');
