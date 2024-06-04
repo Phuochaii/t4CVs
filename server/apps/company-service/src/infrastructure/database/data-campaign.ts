@@ -5,7 +5,7 @@ export const campaigns: CampaignSchema[] = [
     id: 1,
     name: 'Chúng tôi đang tuyển: General Manager',
     createdAt: new Date('2023-11-15'),
-    employerId: '14',
+    employerId: '11',
   },
   {
     id: 2,
@@ -53,7 +53,7 @@ export const campaigns: CampaignSchema[] = [
     id: 9,
     name: 'Chúng tôi đang tuyển: Research Associate',
     createdAt: new Date('2023-06-05'),
-    employerId: '14',
+    employerId: '11',
   },
   {
     id: 10,
