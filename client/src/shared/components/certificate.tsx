@@ -30,9 +30,11 @@ function Certificate() {
     await axios
       .put('http://localhost:3000/employer/update/license', formData)
       .then((res) => {
-        successToast('Cập nhật thành công! Trở lại màn hình chính sau 2 giấy');
+        successToast(
+          'Cập nhật thành công! Xin vui lòng chờ 2 giây để hệ thống cập nhật lại',
+        );
         setTimeout(() => {
-          navigation('/');
+          location.reload();
         }, 2000);
       })
       .catch((res) => {
