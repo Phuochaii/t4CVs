@@ -3,6 +3,8 @@ import { CompanyService } from './company.service';
 import { CompanyController } from './company.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { EmployerModule } from '../employer/employer.module';
+import { UploadModule } from '../upload/upload.module';
+import { AuthenticationModule } from '../authentication/authentication.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { EmployerModule } from '../employer/employer.module';
       },
     ]),
     EmployerModule,
+    UploadModule,
+    AuthenticationModule,
   ],
   controllers: [CompanyController],
   providers: [CompanyService],

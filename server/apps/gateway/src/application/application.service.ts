@@ -101,21 +101,10 @@ export class ApplicationService implements OnModuleInit {
     status: boolean | null,
     hrId: string,
   ) {
-    const campaignRes = await firstValueFrom(
-      this.companyService.findAllCampaignByEmployerId(hrId),
-    );
+    const campaignRes =
+      await this.companyService.findAllCampaignByEmployerId(hrId);
 
-    if (!Array.isArray(campaignRes)) {
-      throw new BadRequestException(
-        'Invalid response from findAllCampaignByEmployerId, expected an array',
-      );
-    }
-
-    if (campaignRes.length === 0) {
-      throw new BadRequestException(`hrId doesn't exist`);
-    }
-
-    let campaignIds = campaignRes.map((campaign) => campaign.id);
+    let campaignIds = campaignRes.data.map((campaign) => campaign.id);
 
     if (campaignId) {
       campaignIds = [campaignId];

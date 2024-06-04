@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UseInterceptors,
   Put,
+  UploadedFiles,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { EmployerService } from './employer.service';
@@ -17,8 +18,9 @@ import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
 import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
 import { CreateEmployerAccountDto } from './dto/Req/create-hr.dto';
 import { UpdateEmployerCompanyDTO } from './dto/Req/updateEmployerCompany.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { UpdateEmployerDTO } from './dto/Req/updateEmployer.dto';
 
 @Controller('employer')
 export class EmployerController {
@@ -41,6 +43,7 @@ export class EmployerController {
     });
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get('all')
   getAllEmployers(
     @Query('page') page: number = 1,
@@ -72,14 +75,66 @@ export class EmployerController {
     return this.employerService.getEmployerByCompanyId(companyid);
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Put('update/companyid')
   updateEmployerCompanyId(
-    @Body() data: UpdateEmployerCompanyDTO,
+    @GetUser() user: UserClaims,
+    @Body() data: Omit<UpdateEmployerCompanyDTO, 'id'>,
   ): Observable<any> {
-    return this.employerService.updateEmployerCompanyId(data);
+    return this.employerService.updateEmployerCompanyId({
+      id: user.sub,
+      ...data,
+    });
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Put('update/license')
+  @UseInterceptors(
+    FilesInterceptor('files', 99, {
+      storage: diskStorage({
+        destination: './uploads',
+      }),
+    }),
+  )
+  updateEmployerLicense(
+    @UploadedFiles() files: any[],
+    @GetUser() user: UserClaims,
+    // @Body('employerId') employerId: string,
+  ): Observable<any> {
+    return this.employerService.updateEmployerLicense(files, user.sub);
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
+  @Put('update/licenseStatus')
+  updateEmployerLicenseStatus(
+    // @Param('id') id: string,
+    // @GetUser() user: UserClaims,
+    @Body('employerId') employerId: string,
+    @Body('licenseStatus') licenseStatus: boolean,
+  ): Observable<any> {
+    return this.employerService.updateEmployerLicenseStatus(
+      // user.sub,
+      employerId,
+      licenseStatus,
+    );
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
+  @Put('update/phoneNumberStatus')
+  updateEmployerPhoneStatus(
+    // @Param('id') id: string,
+    // @GetUser() user: UserClaims,
+    @Body('employerId') employerId: string,
+    @Body('phoneNumberStatus') phoneNumberStatus: boolean,
+  ): Observable<any> {
+    return this.employerService.updateEmployerPhoneStatus(
+      employerId,
+      phoneNumberStatus,
+    );
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
+  @Put('update')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -87,30 +142,21 @@ export class EmployerController {
       }),
     }),
   )
-  updateEmployerLicense(
+  updateEmployer(
     @UploadedFile() file: any,
-    @Body('employerId') employerId: string,
-  ): Observable<any> {
-    return this.employerService.updateEmployerLicense(file, employerId);
+    @GetUser() user: UserClaims,
+    @Body() data: Omit<UpdateEmployerDTO, 'id'>,
+  ): Observable<string> {
+    return this.employerService.updateEmployer(file, { id: user.sub, ...data });
   }
 
-  @Put('update/licenseStatus/:id')
-  updateEmployerLicenseStatus(
-    @Param('id') id: string,
-    @Body() licenseStatus: boolean,
-  ): Observable<any> {
-    return this.employerService.updateEmployerLicenseStatus(id, licenseStatus);
-  }
-
-  @Put('update/phoneNumberStatus/:id')
-  updateEmployerPhoneStatus(
-    @Param('id') id: string,
-    @Body() phoneNumberStatus: boolean,
-  ): Observable<any> {
-    return this.employerService.updateEmployerPhoneStatus(
-      id,
-      phoneNumberStatus,
-    );
+  @Get('name/:name')
+  findEmployerByName(
+    @Param('name') name: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.employerService.getEmployerByName(name, page, limit);
   }
 
   @Get('position/all')
