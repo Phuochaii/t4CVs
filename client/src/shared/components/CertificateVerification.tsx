@@ -1,14 +1,16 @@
 import React, { useState, useRef, useCallback } from 'react';
+import { Upload } from 'lucide-react';
 
-const ImageVerification = ({
+const CertificateVerification = ({
   title,
-  dataImage,
+  data,
   chosenImage,
   chosenFile,
   onImageChange,
   onFileChange,
 }) => {
   const [imageFile, setImageFile] = useState(chosenFile);
+  const [fileName, setFileName] = useState('');
   const [image, setImage] = useState(chosenImage);
   const imageUploadRef = useRef(null);
   const handleImageUpload = useCallback(() => {
@@ -20,7 +22,7 @@ const ImageVerification = ({
     console.log(selectedImage);
     if (selectedImage) {
       const reader = new FileReader();
-
+      setFileName(e.target.files[0].name);
       reader.onload = (event) => {
         setImage(event.target.result);
         onImageChange(event.target.result);
@@ -31,8 +33,8 @@ const ImageVerification = ({
   };
   return (
     <div className="item mr-8 w-[50%]">
-      <div className="relative w-full inner border border-dashed border-[#a8afb6] h-[206px] rounded-[8px] flex justify-center">
-        {image && (
+      <div className="relative w-full inner border border-dashed border-[#a8afb6] h-[100px] rounded-[8px] flex justify-center">
+        {/* {image && (
           <img
             src={image}
             alt=""
@@ -45,7 +47,7 @@ const ImageVerification = ({
             alt=""
             className="absolute top-0 left-0 h-full w-full object-cover"
           />
-        )}
+        )} */}
         <input
           type="file"
           name="file"
@@ -55,28 +57,26 @@ const ImageVerification = ({
           accept="image/png, image/gif, image/jpeg"
         />
         <div
-          className={`absolute w-full bottom-0 py-2 flex justify-center items-center ${(image || chosenImage) && 'bg-white opacity-90'}`}
+          className={` w-full bottom-0 py-1 flex justify-center items-center ${(image || chosenImage) && 'bg-white opacity-90'}`}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-            style={{
-              width: '28px',
-              height: '28px',
-              marginRight: '12px',
-              fill: '#00B14F',
-            }}
-          >
-            <path d="M149.1 64.8L138.7 96H64C28.7 96 0 124.7 0 160V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H373.3L362.9 64.8C356.4 45.2 338.1 32 317.4 32H194.6c-20.7 0-39 13.2-45.5 32.8zM256 192a96 96 0 1 1 0 192 96 96 0 1 1 0-192z" />
-          </svg>
-          <div>
-            <div>Kéo thả ảnh vào hoặc</div>
-            <a
-              className="underline italic cursor-pointer text-[#00B14F]"
-              onClick={handleImageUpload}
-            >
-              Chọn từ máy tính
-            </a>
+          <div className="text-center">
+            <div className="text-[#5e6368] mb-1 font-semibold line-clamp-1">
+              {fileName ? `File: ${fileName}` : 'Chọn hoặc kéo file vào đây'}
+            </div>
+            <div className="text-black text-xs">
+              Dung lượng tối đa 5MB, định dạng: jpeg, png, pdf
+            </div>
+            <div className="inline-block mt-2 ">
+              <div className="bg-[#f5f8fa] flex gap-1 items-center justify-center py-1 px-2 rounded-lg">
+                <Upload style={{ color: '00B14F', width: 16, height: 16 }} />
+                <a
+                  className="italic cursor-pointer text-[#00B14F]"
+                  onClick={handleImageUpload}
+                >
+                  Chọn file
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -87,4 +87,4 @@ const ImageVerification = ({
   );
 };
 
-export default ImageVerification;
+export default CertificateVerification;
