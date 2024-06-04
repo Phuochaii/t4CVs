@@ -54,7 +54,6 @@ export class EmployerController {
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Get('check')
   checkEmployer(@GetUser() user: UserClaims): Observable<boolean> {
-    console.log('check employer', user.sub);
     return this.employerService.checkEmployer(user.sub);
   }
 

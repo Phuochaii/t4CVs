@@ -17,7 +17,6 @@ export const PermissionsGuard = (permission: Permission) => {
       context: ExecutionContext,
     ): boolean | Promise<boolean> | Observable<boolean> {
       const routePermissions = [permission]
-      console.log("routePermissions: ", routePermissions)
       if (!routePermissions) {
         return true;
       }
@@ -25,7 +24,6 @@ export const PermissionsGuard = (permission: Permission) => {
       const { user } = context.switchToHttp().getRequest<AuthenticatedRequest>();
       if(!user) throw new UnauthorizedException('Not authenticated');
       const userPermissions = user.permissions;
-      console.log("userPermissions: ",userPermissions)
 
       const hasPermission =
         routePermissions.every(routePermission =>
