@@ -11,8 +11,14 @@ function Certificate() {
   const [secondImage, setSecondImage] = useState(null);
   const [firstFile, setFirstFile] = useState(null);
   const [secondFile, setSecondFile] = useState(null);
+  const [refresh, setRefresh] = useState(false);
+  const [onLoading, setOnLoading] = useState(false);
+
   const handleUploadLicense = async () => {
-    if (!firstImage && !secondImage && !firstFile && !secondFile) {
+    setOnLoading(true);
+    // if (!firstImage && !firstFile ) {
+    if (!firstFile) {
+      alert('Vui lòng chọn file giấy ủy quyền');
       return;
     }
     const data = {
@@ -33,34 +39,39 @@ function Certificate() {
         successToast(
           'Cập nhật thành công! Xin vui lòng chờ 2 giây để hệ thống cập nhật lại',
         );
-        setTimeout(() => {
-          location.reload();
-        }, 2000);
+        setRefresh(!refresh);
+        // setTimeout(() => {
+        //   location.reload();
+        // }, 2000);
       })
       .catch((res) => {
         errorToast('Cập nhật thất bại, xin vui lòng thử lại sau');
+      }).finally(() => {
+        setOnLoading(false);
       });
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/employer/1');
-        const userInfo = await response.json();
-        setUser(userInfo);
-        console.log(userInfo);
-        if (userInfo) {
-          if (userInfo.license) {
-            setFirstImage(userInfo.license);
-          }
-          if (userInfo.license) {
-            setSecondImage(userInfo.license);
-          }
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/employer/1");
+      const userInfo = await response.json();
+      setUser(userInfo);
+      console.log(userInfo);
+      if (userInfo) {
+        if (userInfo.license) {
+          setFirstImage(userInfo.license);
         }
-      } catch (error) {
-        return errorToast('Không tìm thấy thông tin người dùng hiện tại');
+        if (userInfo.license) {
+          setSecondImage(userInfo.license);
+        }
       }
-    };
-
+    } catch (error) {
+      return errorToast("Không tìm thấy thông tin người dùng hiện tại");
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, [refresh]);
+  useEffect(() => {
     fetchData();
   }, []);
   return (
@@ -70,9 +81,9 @@ function Certificate() {
       </h1>
       <div className="w-[90%] border-slate-200 border-2 px-8 py-4 space-y-4">
         <h1 className="text-black text-[13px] mb-2">
-          Trạng thái:{' '}
+          Trạng thái:{" "}
           <span className="text-green-700 font-bold">
-            {user ? 'Đã cập nhật giấy tờ' : 'Chưa cập nhật giấy tờ'}
+            {firstImage ? "Đã cập nhật giấy tờ" : "Chưa cập nhật giấy tờ"}
           </span>
         </h1>
         <div className="rounded-lg inline-block text-[#00b14f] py-2 px-3 border border-[#00b14f] cursor-pointer">
@@ -80,7 +91,7 @@ function Certificate() {
             className="flex items-center gap-1"
             onClick={() => {
               window.open(
-                'https://docs.google.com/document/d/1PkPCJWYlA2oF-jb9cAaOea9agFM35Z_P/edit',
+                "https://docs.google.com/document/d/1PkPCJWYlA2oF-jb9cAaOea9agFM35Z_P/edit"
               );
             }}
           >
@@ -90,7 +101,7 @@ function Certificate() {
         </div>
         {user?.license && (
           <div className="text-black ">
-            Giấy ủy quyền:{' '}
+            Giấy ủy quyền:{" "}
             <span
               className="cursor-pointer text-green-700"
               onClick={() => {
@@ -101,9 +112,9 @@ function Certificate() {
             </span>
           </div>
         )}
-        {user?.supplement && (
+        {user?.supplement && user?.supplement != "null" && (
           <div className="text-black">
-            Giấy tờ định danh:{' '}
+            Giấy tờ định danh:{" "}
             <span
               className="cursor-pointer text-green-700"
               onClick={() => {
@@ -151,9 +162,9 @@ function Certificate() {
             onClick={() => {
               handleUploadLicense();
             }}
-            className={`text-base btn-success py-2 px-10 rounded text-white bg-green-500 shadow-md ${firstFile && secondFile ? 'opacity-100 cursor-pointer ' : 'opacity-65 cursor-default'}`}
+            className={`text-base btn-success py-2 px-10 rounded text-white bg-green-500 shadow-md ${firstFile && secondFile ? "opacity-100 cursor-pointer " : "opacity-65 cursor-default"}`}
           >
-            Lưu
+            {onLoading ? 'On processing...' : 'Lưu'}
           </button>
         </div>
       </div>
