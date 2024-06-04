@@ -43,7 +43,6 @@ export class JobController {
     return this.jobService.getAllJobs(queryParams);
   }
 
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
   @Get('valid-jobs')
   getValidJobs(
     @Query()
@@ -82,7 +81,6 @@ export class JobController {
     return this.jobService.createMajor(data);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('major/all')
   getAllMajor(): Observable<string> {
     return this.jobService.getAllMajor();
@@ -94,7 +92,6 @@ export class JobController {
     return this.jobService.createField(data);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('field/all')
   getAllField(): Observable<string> {
     return this.jobService.getAllField();
@@ -106,7 +103,6 @@ export class JobController {
     return this.jobService.createCurrency(data);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('currency/all')
   getAllCurrency(): Observable<string> {
     return this.jobService.getAllCurrency();
@@ -118,7 +114,6 @@ export class JobController {
     return this.jobService.createLevel(data);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('level/all')
   getAllLevel(): Observable<string> {
     return this.jobService.getAllLevel();
@@ -130,7 +125,6 @@ export class JobController {
     return this.jobService.createLocation(data);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('location/all')
   getAllLocation(): Observable<string> {
     return this.jobService.getAllLocation();
@@ -142,7 +136,6 @@ export class JobController {
     return this.jobService.createExp(data);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('exp/all')
   getAllExp(): Observable<string> {
     return this.jobService.getAllExp();
@@ -154,7 +147,6 @@ export class JobController {
     return this.jobService.createJobType(data);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('type/all')
   getAllJobType(): Observable<string> {
     return this.jobService.getAllJobType();
