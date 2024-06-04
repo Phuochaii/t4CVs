@@ -4,19 +4,15 @@ interface IconProps {
   size?: string;
 }
 
-export const QuestionMarkIcon = ({
-  fill,
-  stroke,
-  size,
-}: IconProps) => {
+export const QuestionMarkIcon = ({ fill, stroke, size }: IconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={size || "16"}
-      height={size || "16"}
+      width={size || '16'}
+      height={size || '16'}
       viewBox="0 0 24 24"
-      fill={fill || "transparent"}
-      stroke={stroke || "black"}
+      fill={fill || 'transparent'}
+      stroke={stroke || 'black'}
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -32,11 +28,11 @@ export const Briefcase = ({ fill, stroke, size }: IconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={size || "16"}
-      height={size || "16"}
+      width={size || '16'}
+      height={size || '16'}
       viewBox="0 0 24 24"
-      fill={fill || "transparent"}
-      stroke={stroke || "black"}
+      fill={fill || 'transparent'}
+      stroke={stroke || 'black'}
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"

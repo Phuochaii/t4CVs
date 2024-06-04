@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Switch from '../../shared/components/CustomSwitch';
 import { updateCompanyStatus, getCompanyById } from '../../shared/utils/helper';
 import { CompanyFromServer } from '../../shared/types/Company.type';
+import { CheckCheck } from 'lucide-react';
 
 function CompanyDetail() {
+  const navigation = useNavigate();
   const { id } = useParams();
   const [companyInfo, setCompanyInfo] = useState<CompanyFromServer | null>();
   const [refresh, setRefresh] = useState(false);
@@ -20,6 +22,7 @@ function CompanyDetail() {
   const fetchCompanyInfo = async (id: string) => {
     try {
       const response = await getCompanyById(id);
+      // console.log(response);
       setCompanyInfo(response);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -116,22 +119,23 @@ function CompanyDetail() {
                     <path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z" />
                   </svg>
                   <span className="text-white font-normal overflow-hidden text-ellipsis whitespace-nowrap">
-                    {companyInfo?.field ?? "0"}
-                    người theo dõi
+                    {companyInfo?.field ?? '0'} người theo dõi
                   </span>
                 </div>
               </div>
             </div>
-            <div className="cursor-pointer box-follow flex items-center bg-white rounded-[8px] text-[#00b14f] text-lg h-[48px] py-[6px] pl-[14px] pr-[18px]">
+            <div
+              onClick={async () => {
+                await updateCompanyStatus(
+                  companyInfo?.id as number,
+                  !companyInfo?.status,
+                );
+                setRefresh(!refresh);
+              }}
+              className="cursor-pointer box-follow flex items-center bg-white rounded-[8px] text-[#00b14f] text-lg h-[48px] py-[6px] pl-[14px] pr-[18px]"
+            >
               <Switch
                 checked={companyInfo?.status ? companyInfo?.status : false}
-                onChange={async () => {
-                  await updateCompanyStatus(
-                    companyInfo?.id as number,
-                    !companyInfo?.status,
-                  );
-                  setRefresh(!refresh);
-                }}
               />
               <b>Trạng thái</b>
             </div>
@@ -149,11 +153,13 @@ function CompanyDetail() {
                 <p className="px-5 pt-5 max-w-[650px]">
                   {companyInfo?.description
                     ? companyInfo?.description
-                    : "Không có mô tả"}
+                    : 'Không có mô tả'}
                 </p>
                 <p className="px-5 pt-5 pb-7 max-w-[650px]">
-                  Lĩnh vực:{" "}
-                  {companyInfo?.field ? companyInfo?.field : "Không có mô tả"}
+                  Lĩnh vực:{' '}
+                  {companyInfo?.fieldName
+                    ? companyInfo?.fieldName
+                    : 'Không có mô tả'}
                 </p>
               </div>
             </div>
@@ -165,66 +171,14 @@ function CompanyDetail() {
                 </h2>
                 <p className="px-5 pt-5 max-w-[650px]">
                   Số điện thoại:
-                  {companyInfo?.phone ? companyInfo?.phone : "Không có mô tả"}
+                  {companyInfo?.phone ? companyInfo?.phone : 'Không có mô tả'}
                 </p>
                 <p className="px-5 pt-5 pb-7 max-w-[650px]">
                   Mã số thuế:
                   {companyInfo?.taxCode
                     ? companyInfo?.taxCode
-                    : "Không có mô tả"}
+                    : 'Không có mô tả'}
                 </p>
-              </div>
-            </div>
-            {/* THÔNG TIN NHÀ TUYỂN DỤNG */}
-            <div className=" bg-white rounded-[8px] overflow-hidden ">
-              <div className="w-full">
-                <h2 className="p-5 bg-gradient-to-r from-[#212f3f] to-[#00b14f] text-white font-semibold text-lg">
-                  Nhà tuyển dụng
-                </h2>
-                <div>
-                  <p className="px-5 pt-5 max-w-[650px]">
-                    ID:{"    "}
-                    {/* {companyInfo?.phone ? companyInfo?.phone : "Không có mô tả"} */}
-                    Họ tên:
-                  </p>
-                  <p className="px-5 pt-5 max-w-[650px]">
-                    Số điện thoại:
-                    {/* {companyInfo?.phone ? companyInfo?.phone : "Không có mô tả"} */}
-                    Giới tính:
-                  </p>
-                  <p className="px-5 pt-5 max-w-[650px]">
-                    Skype:
-                    {/* {companyInfo?.phone ? companyInfo?.phone : "Không có mô tả"} */}
-                  </p>
-                  <p className="px-5 pt-5 pb-7 max-w-[650px]">
-                    Liense:
-                    {/* {companyInfo?.taxCode
-                      ? companyInfo?.taxCode
-                      : "Không có mô tả"} */}
-                  </p>
-                </div>
-                <div>
-                  <p className="flex items-center">
-                    <Switch
-                      checked={false}
-                      onChange={async () => {
-                        // await updateCompanyStatus(company.id, !company.status);
-                        // setRefresh(!refresh);
-                      }}
-                    />
-                    Xác minh số điện thoại
-                  </p>
-                  <p className="flex items-center">
-                    <Switch
-                      checked={false}
-                      onChange={async () => {
-                        // await updateCompanyStatus(company.id, !company.status);
-                        // setRefresh(!refresh);
-                      }}
-                    />
-                    Xác minh nhà tuyển dụng
-                  </p>
-                </div>
               </div>
             </div>
           </div>
@@ -241,9 +195,9 @@ function CompanyDetail() {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 384 512"
                         style={{
-                          width: "15px",
-                          height: "20px",
-                          fill: "#00b14f",
+                          width: '15px',
+                          height: '20px',
+                          fill: '#00b14f',
                         }}
                       >
                         <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
@@ -253,7 +207,7 @@ function CompanyDetail() {
                     <div className="text-[#4d5965] font-normal">
                       {companyInfo?.address
                         ? companyInfo?.address
-                        : "Không được cung cấp địa chỉ"}
+                        : 'Không được cung cấp địa chỉ'}
                     </div>
                   </div>
                   <div className="py-5 ">
@@ -262,9 +216,9 @@ function CompanyDetail() {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 576 512"
                         style={{
-                          width: "15px",
-                          height: "20px",
-                          fill: "#00b14f",
+                          width: '15px',
+                          height: '20px',
+                          fill: '#00b14f',
                         }}
                       >
                         <path d="M384 476.1L192 421.2V35.9L384 90.8V476.1zm32-1.2V88.4L543.1 37.5c15.8-6.3 32.9 5.3 32.9 22.3V394.6c0 9.8-6 18.6-15.1 22.3L416 474.8zM15.1 95.1L160 37.2V423.6L32.9 474.5C17.1 480.8 0 469.2 0 452.2V117.4c0-9.8 6-18.6 15.1-22.3z" />
@@ -279,20 +233,34 @@ function CompanyDetail() {
             <div className="w-full rounded-[8px] overflow-hidden">
               <div className="intro mb-[32px] bg-white">
                 <h2 className="p-5 bg-gradient-to-r from-[#212f3f] to-[#00b14f] text-white font-semibold text-lg">
-                  Chia sẻ công ty tới bạn bè
+                  Nhà tuyển dụng
                 </h2>
                 <div className="px-6 pb-7 ">
                   <div className="py-5 border-b-[1px]  border-[#dee0e2]">
-                    <div className="mb-2 flex gap-3 ">
-                      <span>Sao chép đường dẫn</span>
-                    </div>
-                    <div className="text-[#4d5965] font-normal"></div>
-                  </div>
-                  <div className="py-5 ">
-                    <div className="mb-2 flex gap-3 ">
-                      <span>Chia sẻ qua mạng xã hội</span>
-                    </div>
-                    <div className="text-[#4d5965] font-normal"></div>
+                    {companyInfo?.employers?.map((employer) => (
+                      <div className="flex items-center justify-between">
+                        <p className="flex items-center">
+                          {employer.fullname}
+                          {employer?.licenseStatus ? (
+                            <CheckCheck
+                              size={15}
+                              color="#02A84E"
+                              className="ml-2"
+                            />
+                          ) : (
+                            ''
+                          )}
+                        </p>
+                        <button
+                          className="btn hover:underline hover:text-[#02A84E]"
+                          onClick={() => {
+                            navigation('/admin/employer/' + employer.id);
+                          }}
+                        >
+                          View
+                        </button>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>

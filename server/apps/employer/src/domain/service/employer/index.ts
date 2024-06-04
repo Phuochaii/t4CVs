@@ -7,3 +7,6 @@ export * from './updateEmployerCompanyId.service';
 export * from './updateEmployerLicense.service';
 export * from './updateEmployerLicenseStatus.service';
 export * from './updateEmployerPhoneStatus.service';
+export * from './updateEmployer.service';
+export * from './getEmployerByName.service';
+export * from './getTotalEmployerByName.service';

@@ -6,9 +6,9 @@ import { In, Repository } from 'typeorm';
 import { JobMapper } from '../mapper';
 import { CreateJobDto } from '../../domain/dto/Req/create-job.dto';
 import { QueryDTO } from '../../domain/dto/Req/query.dto';
-import { UpdateJobDto } from '../../domain/dto/Req/update-job.dto';
 import { FindJobByCampaignIdDto } from '../../domain/dto/Resp/find-job-by-campaignId.dto';
 import { JobRepository } from '../../domain/repository';
+import { UpdateJobStatusDto } from '../../domain/dto/Req/update-job-status.dto';
 
 @Injectable()
 export class TypeOrmJobRepository extends JobRepository {
@@ -18,6 +18,11 @@ export class TypeOrmJobRepository extends JobRepository {
   ) {
     super();
   }
+
+  async deleteJob(id: number) {
+    return await this.jobRepository.delete(id);
+  }
+
   async findJobByCampaignId(
     campaignId: number,
   ): Promise<FindJobByCampaignIdDto> {
@@ -31,6 +36,7 @@ export class TypeOrmJobRepository extends JobRepository {
         salaryMax: true,
         salaryMin: true,
         campaignId: true,
+        status: true,
       },
     });
     if (!job) return null;
@@ -40,6 +46,7 @@ export class TypeOrmJobRepository extends JobRepository {
       salaryMax: job.salaryMax,
       salaryMin: job.salaryMin,
       campaignId: job.campaignId,
+      status: job.status,
     };
     return result;
   }
@@ -58,6 +65,7 @@ export class TypeOrmJobRepository extends JobRepository {
         salaryMax: job.salaryMax,
         salaryMin: job.salaryMin,
         campaignId: job.campaignId,
+        status: job.status,
       };
       return result;
     });
@@ -109,7 +117,7 @@ export class TypeOrmJobRepository extends JobRepository {
       ],
     });
   }
-  async updateJobStatus(data: UpdateJobDto): Promise<boolean> {
+  async updateJobStatus(data: UpdateJobStatusDto): Promise<boolean> {
     const result = await this.jobRepository.update(data.id, {
       status: data.status,
     });

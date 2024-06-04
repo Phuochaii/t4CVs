@@ -2,6 +2,7 @@ import { Switch as BaseSwitch, SwitchProps } from '@mui/base/Switch';
 import React from 'react';
 import clsx from 'clsx';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const resolveSlotProps = (fn: any, args: any) =>
   typeof fn === 'function' ? fn(args) : fn;
 
@@ -51,11 +52,11 @@ const Switch = React.forwardRef<HTMLSpanElement, SwitchProps>((props, ref) => {
           return {
             ...resolvedSlotProps,
             className: clsx(
-              `absolute block w-full h-full transition rounded-full border border-solid outline-none border-slate-300 dark:border-gray-700 group-[.base--focusVisible]:shadow-outline-switch
+              `absolute block w-full h-full transition rounded-full border border-solid outline-none border-slate-400 dark:border-gray-700 group-[.base--focusVisible]:shadow-outline-switch
               ${
                 ownerState.checked
                   ? 'bg-green-500'
-                  : 'bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800'
+                  : 'bg-slate-100 dark:bg-slate-900 hover:bg-slate-500 dark:hover:bg-slate-800'
               } `,
               resolvedSlotProps?.className,
             ),
@@ -69,7 +70,7 @@ const Switch = React.forwardRef<HTMLSpanElement, SwitchProps>((props, ref) => {
           return {
             ...resolvedSlotProps,
             className: clsx(
-              `block w-4 cursor-pointer h-4 top-1 rounded-2xl border border-solid outline-none border-slate-300 dark:border-gray-700 transition shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:shadow-[0_1px_2px_rgb(0_0_0_/_0.25)] ${
+              `block w-4 cursor-pointer h-4 top-1 rounded-2xl border border-solid outline-none border-slate-400 dark:border-gray-700 transition shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:shadow-[0_1px_2px_rgb(0_0_0_/_0.25)] ${
                 ownerState.checked
                   ? 'left-[18px] bg-white shadow-[0_0_0_rgb(0_0_0_/_0.3)]'
                   : 'left-[4px] bg-white'

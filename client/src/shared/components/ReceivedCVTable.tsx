@@ -1,6 +1,7 @@
 import { ApplicationFromServer } from '../../shared/types/Application.type';
 import { Mail, Phone, Clock } from 'lucide-react';
 import * as HRModule from '../../modules/hr-module';
+import moment from 'moment';
 
 interface ApplicationProps {
   data: ApplicationFromServer[];
@@ -62,12 +63,13 @@ function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
             </p>
             <p className="flex">
               <Clock size={15} color="#38A34D" style={{ marginRight: '5px' }} />
-              {item.updateAt}
+              {/* {item.updateAt} */}
+              {moment(new Date(item.updateAt)).format('DD-MM-YY HH:mm')}
             </p>
           </td>
           <td>
             <div
-              className={`rounded-full ${item.status ? 'bg-orange-100 text-orange-400' : 'bg-blue-200 text-blue-500'} px-3`}
+              className={`rounded-full ${item.status ? 'bg-orange-100 text-orange-400' : 'bg-blue-200 text-blue-500'} px-3 min-w-[90px]`}
             >
               {item.status ? 'Đã xem' : 'Chưa xem'}
             </div>
@@ -83,7 +85,7 @@ function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
                   window.open(res.link, '_blank', 'noopener');
                 });
               }}
-              className="btn px-3 py-1 text-white rounded-md ml-5 bg-[#5EE199] hover:bg-green-500 transition ease-out duration-100"
+              className="btn min-w-[80px] px-3 py-1 text-white rounded-md ml-5 bg-[#5EE199] hover:bg-green-500 transition ease-out duration-100"
             >
               Xem CV
             </button>

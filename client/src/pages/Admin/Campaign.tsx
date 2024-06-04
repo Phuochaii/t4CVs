@@ -4,11 +4,10 @@ import {
   ChevronLeftCircle,
   ChevronRightCircle,
   Search,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { SetStateAction, useEffect, useState } from "react";
-import { Campaign as CampaignType } from "../../shared/types/Campaign.type";
-import { Link } from "react-router-dom";
+import { SetStateAction, useEffect, useState } from 'react';
+import { Campaign as CampaignType } from '../../shared/types/Campaign.type';
 // import Switch from "../../shared/components/CustomSwitch";
 import {
   getAllCampaigns,
@@ -17,8 +16,8 @@ import {
   getEmployerById,
   getJobByCampaignId,
   getUserById,
-} from "../../shared/utils/helper";
-import { UserFromServer } from "../../shared/types/User.type";
+} from '../../shared/utils/helper';
+import { UserFromServer } from '../../shared/types/User.type';
 
 interface CampaignTableProps {
   data: CampaignType[];
@@ -29,9 +28,7 @@ const CompanyCampaignTableHeader = () => {
   return (
     <thead>
       <tr>
-        <td className="px-2 py-1 font-bold border">
-          Chiến dịch tuyển dụng
-        </td>
+        <td className="px-2 py-1 font-bold border">Chiến dịch tuyển dụng</td>
         <td className="px-2 py-1 font-bold border">Người tạo</td>
         <td className="px-2 py-1 font-bold border">Ngày tạo</td>
         <td className="px-2 py-1 font-bold border">Công ty</td>
@@ -48,29 +45,25 @@ interface CompanyCampaignTableRowProps {
   data: CampaignType;
 }
 
-const CompanyCampaignTableRow = ({
-  data,
-}: CompanyCampaignTableRowProps) => {
+const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [applicants, setApplicants] = useState<
-    (UserFromServer | null)[]
-  >([]);
+  const [applicants, setApplicants] = useState<(UserFromServer | null)[]>([]);
   const campaign = data;
   console.log(data);
   useEffect(() => {
     async function getUsers() {
       const applicantPromises = campaign.applications.map(
         async (application) => {
-          console.log("Applications", application);
+          console.log('Applications', application);
           const applicant = await getUserById(application.userId);
           return applicant;
-        }
+        },
       );
       setApplicants(await Promise.all(applicantPromises));
     }
     getUsers();
   }, []);
-  console.log("Applicants", applicants);
+  console.log('Applicants', applicants);
   return (
     <tr
       className="align-top hover:bg-green-100 bg-slate-50"
@@ -92,7 +85,7 @@ const CompanyCampaignTableRow = ({
             <h3 className="font-bold">{data.campaignName}</h3>
             <span className="font-bold text-slate-400">
               {applicants.length === 0 ? (
-                "Chưa có CV nào"
+                'Chưa có CV nào'
               ) : (
                 <div className="flex items-center gap-1">
                   {applicants.slice(0, 5).map((_, item) => {
@@ -101,7 +94,7 @@ const CompanyCampaignTableRow = ({
                         key={item}
                         src={
                           // candidate?.image ||
-                          "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg"
+                          'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'
                         }
                         className="object-cover w-8 h-8 rounded-full"
                       />
@@ -121,7 +114,7 @@ const CompanyCampaignTableRow = ({
             {
               <div
                 className={`flex items-center gap-2 font-bold ${
-                  isHovered ? "visible" : "invisible"
+                  isHovered ? 'visible' : 'invisible'
                 }`}
               >
                 <a href="#">Sửa chiến dịch</a>
@@ -136,12 +129,12 @@ const CompanyCampaignTableRow = ({
       </td>
       <td className="border">
         <div className="p-2 font-bold text-blue-500">{`${data.postDate?.toLocaleDateString(
-          "vi-VN"
+          'vi-VN',
         )}`}</div>
       </td>
       <td className="border">
         <div className="p-2 font-bold text-blue-500">{`${
-          data.company ? data.company.name : ""
+          data.company ? data.company.name : ''
         }`}</div>
       </td>
       <td className="border max-w-[180px]">
@@ -152,24 +145,17 @@ const CompanyCampaignTableRow = ({
             </h3>
             <div className="flex gap-2">
               <span className="font-bold bg-slate-200 text-slate-400">
-                {`#${campaign.recruitment.id}`}
+                {`#${campaign.recruitment.campaignId}`}
               </span>
               <span className="font-bold text-slate-400">
-                {campaign.recruitment.status}
+                {campaign.recruitment.status ? 'Đang mở' : 'Đang đóng'}
               </span>
             </div>
             <div
               className={`flex items-center gap-2 ${
-                isHovered ? "visible" : "invisible"
+                isHovered ? 'visible' : 'invisible'
               }`}
             >
-              <Link
-                className="font-bold text-green-500"
-                to={`/hr/campaign-edit/${campaign.recruitment.id}`}
-                state={campaign}
-              >
-                Chỉnh sửa
-              </Link>
               <button> Yêu cầu hiển thị </button>
             </div>
           </div>
@@ -213,9 +199,7 @@ function Campaign() {
 
   useEffect(() => {
     async function getData() {
-      const { allCampaigns, totalPages } = await getAllCampaigns(
-        page
-      );
+      const { allCampaigns, totalPages } = await getAllCampaigns(page);
       const rawCampaigns = await allCampaigns.map(async (item) => {
         const employer = await getEmployerById(item.employerId);
         const company = employer.companyId
@@ -224,7 +208,7 @@ function Campaign() {
         const job = await getJobByCampaignId(item.id);
         const { applications } = await getApplicationsByCampaignId(
           item.employerId,
-          item.id
+          item.id,
         );
         const rawCampaign: CampaignType = {
           campaignName: item.name,
@@ -242,7 +226,7 @@ function Campaign() {
       setTotalPages(totalPages);
     }
     getData();
-    console.log("GO");
+    console.log('GO');
   }, [page]);
 
   return (
@@ -268,10 +252,7 @@ function Campaign() {
             </div>
           </div>
         </div>
-        <CompanyCampaignTable
-          data={campaigns}
-          setData={setCampaigns}
-        />
+        <CompanyCampaignTable data={campaigns} setData={setCampaigns} />
         <div className="flex items-center self-center justify-center gap-2">
           <ChevronLeftCircle
             className="cursor-pointer"
@@ -287,9 +268,7 @@ function Campaign() {
             stroke="green"
             className="cursor-pointer"
             strokeWidth={1}
-            onClick={() =>
-              setPage(page + 1 <= totalPages ? page + 1 : page)
-            }
+            onClick={() => setPage(page + 1 <= totalPages ? page + 1 : page)}
           />
         </div>
       </div>

@@ -21,17 +21,15 @@ function Header() {
     id: string;
     limit?: number;
   }) => {
-    UserModule.getNotification({ userId: id, limit: limit }).then(
-      (res) => {
-        console.log(res);
+    UserModule.getNotification({ userId: id, limit: limit }).then((res) => {
+      console.log(res);
 
-        setNotifications(res.data);
-        setTotal(res.pagination.total);
-      }
-    );
+      setNotifications(res.data);
+      setTotal(res.pagination.total);
+    });
   };
   React.useEffect(() => {
-    if (userId != "") fetchNotification({ id: userId });
+    if (userId != '') fetchNotification({ id: userId });
   }, []);
 
 
@@ -44,7 +42,6 @@ function Header() {
 
   const HeaderProfileSection = withRoleCheck(Roles.USER, () => {
   const {profile} = useProfileContext();
-    
     return (
     <>
       <li
@@ -472,7 +469,7 @@ function Header() {
                           color-rendering="auto"
                           image-rendering="auto"
                           shape-rendering="auto"
-                          color-interpolation="sRGB"
+                          colorInterpolation="sRGB"
                           d="M49.997,0.001
                         c-2.761-0.035-5.029,2.175-5.064,4.936c-0.013,0.992,0.27,1.965,0.812,2.796l43.953,96.701
                         c-26.83,16.803-44.701,46.624-44.701,80.568c0,52.408,42.592,95,95,95c52.408,0,95-42.592,95-95
@@ -636,30 +633,10 @@ function Header() {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 512 512"
                       >
-                        <rect
-                          width="109.2"
-                          x="82.3"
-                          y="96.9"
-                          height="20.8"
-                        />
-                        <rect
-                          width="109.2"
-                          x="82.3"
-                          y="158.2"
-                          height="20.8"
-                        />
-                        <rect
-                          width="256.9"
-                          x="82.3"
-                          y="218.6"
-                          height="20.8"
-                        />
-                        <rect
-                          width="256.9"
-                          x="82.3"
-                          y="278.9"
-                          height="20.8"
-                        />
+                        <rect width="109.2" x="82.3" y="96.9" height="20.8" />
+                        <rect width="109.2" x="82.3" y="158.2" height="20.8" />
+                        <rect width="256.9" x="82.3" y="218.6" height="20.8" />
+                        <rect width="256.9" x="82.3" y="278.9" height="20.8" />
                         <path d="m487.9,249.7c-16.3-16.3-42.7-16.3-59,0l-22.1,22.1v-112.5c0-3.1-1-5.2-3.1-7.3l-137.3-137.3c-2.1-2.1-4.2-3.1-7.3-3.1h-237.2c-6.2,0-10.4,4.2-10.4,10.4v468.1c0,6.2 4.2,10.4 10.4,10.4h374.5c6.2,0 10.4-4.2 10.4-11.4v-99.3l81.1-81.1c16.3-16.3 16.3-42.7 0-59zm-218.4-202.8l101.9,101.9h-101.9v-101.9zm116.5,432.8h-353.7v-447.3h216.4v126.9c0,6.2 4.2,10.4 10.4,10.4h126.9v122.9l-99.2,99.2-8.8,67.8 67.8-8.8 40.3-40.3v69.2zm87.2-186.1l-136.8,136.8-35,5.7 5.7-35 136.8-136.8c8.1-8.1 21.2-8.1 29.3,0 8.1,8.1 8.1,21.2 0,29.3z" />
                       </svg>
                       Hướng dẫn viết CV theo ngành nghề

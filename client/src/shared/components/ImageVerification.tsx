@@ -1,6 +1,14 @@
 import React, { useState, useRef, useCallback } from 'react';
 
-const ImageVerification = ({ title, chosenImage, onImageChange }) => {
+const ImageVerification = ({
+  title,
+  dataImage,
+  chosenImage,
+  chosenFile,
+  onImageChange,
+  onFileChange,
+}) => {
+  const [imageFile, setImageFile] = useState(chosenFile);
   const [image, setImage] = useState(chosenImage);
   const imageUploadRef = useRef(null);
   const handleImageUpload = useCallback(() => {
@@ -8,13 +16,15 @@ const ImageVerification = ({ title, chosenImage, onImageChange }) => {
   }, []);
   const imagePreview = (e) => {
     const selectedImage = e.target.files[0];
-    console.log('clicked');
+    setImageFile(selectedImage);
+    console.log(selectedImage);
     if (selectedImage) {
       const reader = new FileReader();
 
       reader.onload = (event) => {
         setImage(event.target.result);
         onImageChange(event.target.result);
+        onFileChange(selectedImage);
       };
       reader.readAsDataURL(selectedImage);
     }
@@ -29,15 +39,23 @@ const ImageVerification = ({ title, chosenImage, onImageChange }) => {
             className="absolute top-0 left-0 h-full w-full object-cover"
           />
         )}
+        {chosenImage && (
+          <img
+            src={chosenImage}
+            alt=""
+            className="absolute top-0 left-0 h-full w-full object-cover"
+          />
+        )}
         <input
           type="file"
+          name="file"
           ref={imageUploadRef}
           onChange={imagePreview}
           style={{ display: 'none' }}
           accept="image/png, image/gif, image/jpeg"
         />
         <div
-          className={`absolute w-full bottom-0 py-2 flex justify-center items-center ${image && 'bg-white opacity-90'}`}
+          className={`absolute w-full bottom-0 py-2 flex justify-center items-center ${(image || chosenImage) && 'bg-white opacity-90'}`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

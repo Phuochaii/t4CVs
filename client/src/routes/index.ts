@@ -82,6 +82,11 @@ const routes: RouteItem[] = [
     component: Admin.Recruitment,
     layout: AdminLayout,
   }, // thuc
+  {
+    path: '/admin/employer',
+    component: Admin.Employer,
+    layout: AdminLayout,
+  }, // thuc
 
   // HR
   { path: "/hr/news", component: HR.News, layout: HRLayout, role: Roles.HR }, //khoa
@@ -142,6 +147,11 @@ const routes: RouteItem[] = [
   {
     path: '/admin/company/:id',
     component: Admin.CompanyDetail,
+    layout: AdminLayout,
+  },
+  {
+    path: '/admin/employer/:id',
+    component: Admin.EmployerDetail,
     layout: AdminLayout,
   },
 ];

@@ -7,10 +7,13 @@ import history from "./shared/utils/history.ts";
 import { getConfig } from "./config.ts";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { ProfileProvider } from "./shared/services/authen/domain/context.tsx";
+import { ToastContainer } from 'react-toastify';
 
 const onRedirectCallback = (appState) => {
   history.push(
-    appState && appState.returnTo ? appState.returnTo : window.location.pathname
+    appState && appState.returnTo
+      ? appState.returnTo
+      : window.location.pathname,
   );
 };
 
@@ -28,11 +31,12 @@ const providerConfig = {
   },
 };
 
-createRoot(document.getElementById("root")!).render(
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
   <Auth0Provider {...providerConfig}>
       <ProfileProvider>
-
       <App />
+      <ToastContainer />
     </ProfileProvider>
   </Auth0Provider>
 );

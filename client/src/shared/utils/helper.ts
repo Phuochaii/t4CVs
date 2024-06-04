@@ -45,13 +45,13 @@ export async function getCompanyById(id: number | string) {
     return rawCompany;
 }
 
-export async function getAllEmployer() {
-    const response = await axios.get(`${serverURL}/employer/all`);
+export async function getAllEmployer(page: number = 1) {
+    const response = await axios.get(`${serverURL}/employer/all?page=${page}`);
     const rawEmployers: EmployerFromServer[] = response.data.data;
-    return rawEmployers;
+    return {allEmployers: rawEmployers, total: response.data.total, totalPages: response.data.total_page};
 }
 
-export async function getEmployerById(id: number) {
+export async function getEmployerById(id: number | string) {
     const response = await axios.get(`${serverURL}/employer/${id}`);
     const rawEmployer: EmployerFromServer = response.data;
     return rawEmployer;
@@ -144,9 +144,21 @@ export async function getAllFields() {
 }
 
 export async function updateCompanyStatus(id: number, status: boolean) {
-    const response = await axios.put(`${serverURL}/company/update`, {
+    const response = await axios.put(`${serverURL}/company/updateStatus`, {
         id: id,
         status: status,
+    });
+    return response;
+}
+export async function updateLicenseStatus(id: number, status: boolean) {
+    const response = await axios.put(`${serverURL}/employer/update/licenseStatus/${id}`, {
+        licenseStatus: status,
+    });
+    return response;
+}
+export async function updatePhoneStatus(id: number, status: boolean) {
+    const response = await axios.put(`${serverURL}/employer/update/phoneNumberStatus/${id}`, {
+        phoneNumberStatus: status,
     });
     return response;
 }

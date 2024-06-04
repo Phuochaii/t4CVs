@@ -3,7 +3,7 @@ import {
   Routes,
   Route,
   Navigate,
-} from "react-router-dom";
+} from 'react-router-dom';
 
 import routes from "./routes";
 import EmptyLayout from "./layouts/EmptyLayout";

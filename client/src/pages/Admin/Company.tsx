@@ -3,20 +3,20 @@ import {
   ChevronLeftCircle,
   ChevronRightCircle,
   Search,
-} from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+} from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   getAllCompanies,
   getAllFields,
   updateCompanyStatus,
-} from "../../shared/utils/helper";
-import { CompanyFromServer } from "../../shared/types/Company.type";
+} from '../../shared/utils/helper';
+import { CompanyFromServer } from '../../shared/types/Company.type';
 import BasicTable, {
   BasicColumnProps,
   ObjectFromServer,
-} from "../../shared/components/basic-table";
-import { Field } from "../../shared/types/Recruitment.type";
-import Switch from "../../shared/components/CustomSwitch";
+} from '../../shared/components/basic-table';
+import { Field } from '../../shared/types/Recruitment.type';
+import Switch from '../../shared/components/CustomSwitch';
 
 function Company() {
   const [companies, setCompanies] = useState<CompanyFromServer[]>([]);
@@ -47,18 +47,18 @@ function Company() {
   const columns: BasicColumnProps[] = useMemo(
     () => [
       {
-        name: "ID",
-        field: "id",
-        tableCellClassname: "",
+        name: 'ID',
+        field: 'id',
+        tableCellClassname: '',
         cell: (data: ObjectFromServer) => {
           const company = data as CompanyFromServer;
           return <div>{company.id}</div>;
         },
       },
       {
-        name: "Thông tin công ty",
-        field: "name",
-        tableCellClassname: "w-[40vw]",
+        name: 'Thông tin công ty',
+        field: 'name',
+        tableCellClassname: 'w-[40vw]',
         cell: (data: ObjectFromServer) => {
           const company = data as CompanyFromServer;
           return (
@@ -72,10 +72,7 @@ function Company() {
                   <div className="font-bold">{company.name}</div>
                   <div>{company.address}</div>
                   <div>{company.phone}</div>
-                  <a
-                    className="font-bold text-blue-400"
-                    href={company.website}
-                  >
+                  <a className="font-bold text-blue-400" href={company.website}>
                     Link
                   </a>
                 </div>
@@ -86,39 +83,37 @@ function Company() {
         },
       },
       {
-        name: "Số lượng nhân viên",
-        field: "description",
-        tableCellClassname: "w-[8vw]",
+        name: 'Số lượng nhân viên',
+        field: 'description',
+        tableCellClassname: 'w-[8vw]',
         cell: (data: ObjectFromServer) => {
           const company = data as CompanyFromServer;
           return <div>{company.companySize}</div>;
         },
       },
       {
-        name: "Mã số thuế",
-        field: "taxCode",
-        tableCellClassname: "",
+        name: 'Mã số thuế',
+        field: 'taxCode',
+        tableCellClassname: '',
         cell: (data: ObjectFromServer) => {
           const company = data as CompanyFromServer;
           return <div>{company.taxCode}</div>;
         },
       },
       {
-        name: "Lĩnh vực",
-        field: "field",
-        tableCellClassname: "w-[10vw]",
+        name: 'Lĩnh vực',
+        field: 'field',
+        tableCellClassname: 'w-[10vw]',
         cell: (data: ObjectFromServer) => {
           const company = data as CompanyFromServer;
-          const field = fields.find(
-            (item) => item.id === company.field
-          );
+          const field = fields.find((item) => item.id === company.field);
           return <div>{field?.name}</div>;
         },
       },
       {
-        name: "Trạng thái",
-        field: "status",
-        tableCellClassname: "",
+        name: 'Trạng thái',
+        field: 'status',
+        tableCellClassname: '',
         cell: (data: ObjectFromServer) => {
           const company = data as CompanyFromServer;
           return (
@@ -126,10 +121,7 @@ function Company() {
               <Switch
                 checked={company.status}
                 onChange={async () => {
-                  await updateCompanyStatus(
-                    company.id,
-                    !company.status
-                  );
+                  await updateCompanyStatus(company.id, !company.status);
                   setRefresh(!refresh);
                 }}
               />
@@ -138,7 +130,7 @@ function Company() {
         },
       },
     ],
-    [fields]
+    [fields],
   );
 
   return (
@@ -162,7 +154,7 @@ function Company() {
             </div>
           </div>
         </div>
-        <BasicTable data={companies} columns={columns} />
+        <BasicTable data={companies} columns={columns} tableFor="company" />
         <div className="flex items-center self-center justify-center gap-2">
           <ChevronLeftCircle
             className="cursor-pointer"
@@ -178,9 +170,7 @@ function Company() {
             stroke="green"
             className="cursor-pointer"
             strokeWidth={1}
-            onClick={() =>
-              setPage(page + 1 <= totalPages ? page + 1 : page)
-            }
+            onClick={() => setPage(page + 1 <= totalPages ? page + 1 : page)}
           />
         </div>
       </div>
