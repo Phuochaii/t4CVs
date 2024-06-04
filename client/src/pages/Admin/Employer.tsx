@@ -144,7 +144,7 @@ function Employer() {
           return (
             <div className="flex flex-col">
               <a href={employer.license}>
-                <img src={employer.license} className="w-32 h-32" />
+                <img src={employer.license} className="w-32 object-contain" />
               </a>
               <Switch
                 checked={employer.licenseStatus}
@@ -185,7 +185,7 @@ function Employer() {
             </div>
           </div>
         </div>
-        <BasicTable data={employers} columns={columns} />
+        <BasicTable data={employers} columns={columns} tableFor="employer" />
         <div className="flex items-center self-center justify-center gap-2">
           <ChevronLeftCircle
             className="cursor-pointer"

@@ -154,7 +154,7 @@ function Company() {
             </div>
           </div>
         </div>
-        <BasicTable data={companies} columns={columns} />
+        <BasicTable data={companies} columns={columns} tableFor="company" />
         <div className="flex items-center self-center justify-center gap-2">
           <ChevronLeftCircle
             className="cursor-pointer"

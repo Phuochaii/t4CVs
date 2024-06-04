@@ -21,9 +21,10 @@ export interface BasicColumnProps {
 interface BasicTableProps {
   data: any[];
   columns: BasicColumnProps[];
+  tableFor?: string;
 }
 
-function BasicTable({ data, columns }: BasicTableProps) {
+function BasicTable({ data, columns, tableFor }: BasicTableProps) {
   const navigation = useNavigate();
   return (
     <table className="w-full bg-white">
@@ -51,10 +52,8 @@ function BasicTable({ data, columns }: BasicTableProps) {
                     className={clsx('border', column.tableCellClassname)}
                     key={'column-' + colIndex.toString()}
                     onClick={() => {
-                      if (colIndex === 1) {
-                        navigation(`/admin/employer/${object.id}`);
-                      } else if (colIndex === 5) {
-                        navigation(`/admin/company/${object.companyId}`);
+                      if (colIndex === 1 && tableFor) {
+                        navigation(`/admin/${tableFor}/${object.id}`);
                       }
                     }}
                   >

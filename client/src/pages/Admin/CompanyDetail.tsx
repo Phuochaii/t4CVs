@@ -22,7 +22,7 @@ function CompanyDetail() {
   const fetchCompanyInfo = async (id: string) => {
     try {
       const response = await getCompanyById(id);
-      console.log(response);
+      // console.log(response);
       setCompanyInfo(response);
     } catch (error) {
       console.error('Error fetching data:', error);
