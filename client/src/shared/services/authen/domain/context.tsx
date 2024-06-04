@@ -132,32 +132,33 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
     const { isAuthenticated, getAccessTokenSilently } = useAuth0();
     const [profile, setProfile] = useState<Profile | undefined>(undefined);
     const [role, setRole] = useState<Role | undefined | null>(undefined);
+    const getProfile = async (role: Role | undefined | null) => {
+        if(!isAuthenticated || !role) return undefined;
+        try {
+            const token = await getAccessTokenSilently({
+                authorizationParams: {
+                    audience: AUTH0_BACKEND_AUDIENCE,
+                },
+                cacheMode: 'off',
+            });
+            const profile = await role.getProfile(token);
+            return profile;
+        } catch (error) {
+            console.error(error);
+            alert('Get user profile failed!');
+            window.location.reload();
+        }
+    }
     const value = {
         profile,
         setProfile,
         role,
-        setRole,
+        setRole: async (role: Role | null | undefined) => {
+            const profile = await getProfile(role);
+            if(profile) setProfile(profile);
+            setRole(role);
+        },
     };
-    useEffect(() => {
-        if (!isAuthenticated || !role) return;
-        const getProfile = async () => {
-            try {
-                const token = await getAccessTokenSilently({
-                    authorizationParams: {
-                        audience: AUTH0_BACKEND_AUDIENCE,
-                    },
-                    cacheMode: 'off',
-                });
-                const profile = await role.getProfile(token);
-                setProfile(profile);
-            } catch (error) {
-                console.error(error);
-                alert('Get user profile failed!');
-                window.location.reload();
-            }
-        }
-        getProfile();
-    }, [isAuthenticated, role])
 
     return (
         <ProfileContext.Provider value={value}>
