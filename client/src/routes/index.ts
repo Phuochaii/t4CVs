@@ -49,7 +49,7 @@ const routes: RouteItem[] = [
   { path: '/list-cv', component: User.ListCV, layout: UserLayout }, // nguyên
 
   // ADMIN PAGES - Thức
-  { path: '/admin/overview', component: Admin.Overview, layout: AdminLayout },
+  { path: '/admin/overview', component: Admin.Overview, layout: AdminLayout, role: Roles.ADMIN },
 
   // HR PAGES - Yến, Thịnh, Thức
   { path: '/hr/approve', component: HR.ReceiveCV, layout: HRLayout }, // yến

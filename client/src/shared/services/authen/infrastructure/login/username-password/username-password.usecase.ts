@@ -2,11 +2,13 @@ import { AUTH0_BACKEND_AUDIENCE, AUTH0_REALM } from "../../config";
 import { UsernamePasswordLoginCredentials } from "../../../domain";
 import { Auth0OperationUseCase, Auth0CallCredentials } from "../../base.usecase";
 import { Role } from "../../../domain/context";
+import { Auth0Error } from "auth0-js";
 
 export class UsernamePasswordLoginUseCase extends Auth0OperationUseCase {
     constructor(
         private credentials: UsernamePasswordLoginCredentials,
         private role: Role,
+        private errorCallback?: (errMessage: string) => void
     ) {
         super(AUTH0_REALM.UsernamePassword);
     }
@@ -25,11 +27,7 @@ export class UsernamePasswordLoginUseCase extends Auth0OperationUseCase {
             scope: transaction.scope,
             audience: auht0Config.audience,
         }, (err, authResult) => {
-            if (err) {
-                console.error(err);
-                return;
-            }
-            console.log("authResult:", authResult);
+            this.errorCallback?.(err?.description || "Tên tài khoản hoặc mật khẩu không chính xác.");
         });
     }
 }
