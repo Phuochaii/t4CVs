@@ -10,6 +10,7 @@ import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
   @Get('all')
   findAllUsers(): Observable<string> {
     return this.userService.findAllUsers();
@@ -27,11 +28,13 @@ export class UserController {
     return this.userService.findUserById(user.sub);
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
   @Get('check/:id')
   isUserExist(@Param('id') id: string) {
     return this.userService.isUserExist(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   findUserById(@Param('id') id: string) {
     return this.userService.findUserById(id);
