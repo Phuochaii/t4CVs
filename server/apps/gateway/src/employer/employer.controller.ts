@@ -108,11 +108,13 @@ export class EmployerController {
   @Put('update/licenseStatus')
   updateEmployerLicenseStatus(
     // @Param('id') id: string,
-    @GetUser() user: UserClaims,
-    @Body() licenseStatus: boolean,
+    // @GetUser() user: UserClaims,
+    @Body('employerId') employerId: string,
+    @Body('licenseStatus') licenseStatus: boolean,
   ): Observable<any> {
     return this.employerService.updateEmployerLicenseStatus(
-      user.sub,
+      // user.sub,
+      employerId,
       licenseStatus,
     );
   }
@@ -121,11 +123,12 @@ export class EmployerController {
   @Put('update/phoneNumberStatus')
   updateEmployerPhoneStatus(
     // @Param('id') id: string,
-    @GetUser() user: UserClaims,
-    @Body() phoneNumberStatus: boolean,
+    // @GetUser() user: UserClaims,
+    @Body('employerId') employerId: string,
+    @Body('phoneNumberStatus') phoneNumberStatus: boolean,
   ): Observable<any> {
     return this.employerService.updateEmployerPhoneStatus(
-      user.sub,
+      employerId,
       phoneNumberStatus,
     );
   }
