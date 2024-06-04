@@ -69,9 +69,7 @@ export class EmployerService {
     );
   }
 
-  updateEmployerCompanyId(
-    updateEmployerCompanyDTO: UpdateEmployerCompanyDTO,
-  ): Observable<string> {
+  updateEmployerCompanyId(updateEmployerCompanyDTO: UpdateEmployerCompanyDTO) {
     return this.employerClient
       .send({ cmd: 'update_employer_companyid' }, updateEmployerCompanyDTO)
       .pipe(

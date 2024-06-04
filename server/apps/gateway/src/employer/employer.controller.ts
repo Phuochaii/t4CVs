@@ -104,7 +104,7 @@ export class EmployerController {
     return this.employerService.updateEmployerLicense(files, user.sub);
   }
 
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
   @Put('update/licenseStatus')
   updateEmployerLicenseStatus(
     // @Param('id') id: string,
@@ -117,7 +117,7 @@ export class EmployerController {
     );
   }
 
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
   @Put('update/phoneNumberStatus')
   updateEmployerPhoneStatus(
     // @Param('id') id: string,
@@ -139,7 +139,7 @@ export class EmployerController {
       }),
     }),
   )
-  updateCompany(
+  updateEmployer(
     @UploadedFile() file: any,
     @GetUser() user: UserClaims,
     @Body() data: Omit<UpdateEmployerDTO, 'id'>,
@@ -148,7 +148,7 @@ export class EmployerController {
   }
 
   @Get('name/:name')
-  findCompanyByName(
+  findEmployerByName(
     @Param('name') name: string,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,

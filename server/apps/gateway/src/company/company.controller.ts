@@ -27,7 +27,7 @@ import { AuthGuard } from '@nestjs/passport';
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Post('create')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -39,8 +39,9 @@ export class CompanyController {
   createCompany(
     @UploadedFile() file: any,
     @Body() data: CreateCompanyDto,
-  ): Observable<string> {
-    return this.companyService.createCompany(file, data);
+    @GetUser() user: UserClaims,
+  ) {
+    return this.companyService.createCompany(file, data, user.sub);
   }
 
   @Get('all')
@@ -56,7 +57,7 @@ export class CompanyController {
     return this.companyService.findCompanyById(id);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Put('update')
   @UseInterceptors(
     FileInterceptor('file', {

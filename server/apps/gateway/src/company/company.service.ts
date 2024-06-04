@@ -19,6 +19,7 @@ import { FindCompanyDTOResponse } from './dto/Res/find-company.dto';
 import { UpdateCompanyStatusDto } from './dto/Req/updateCompanyStatus.dto';
 import { EmployerService } from '../employer/employer.service';
 import { UploadService } from '../upload/upload.service';
+import { UpdateEmployerCompanyDTO } from '../employer/dto/Req/updateEmployerCompany.dto';
 
 @Injectable()
 export class CompanyService {
@@ -28,28 +29,57 @@ export class CompanyService {
     private readonly uploadService: UploadService,
   ) {}
 
-  createCompany(
+  async createCompany(
     file: any,
     createCompanyDTO: CreateCompanyDto,
-  ): Observable<string> {
+    employerId: string,
+  ) {
     if (file) {
       const uploadLink$ = from(this.uploadService.upload(file));
 
       return uploadLink$.pipe(
-        switchMap((img: string) => {
+        switchMap(async (img: string) => {
           createCompanyDTO.image = img;
 
-          return this.companyClient.send(
-            { cmd: 'create_company' },
-            createCompanyDTO,
+          const company = await lastValueFrom(
+            this.companyClient.send<FindCompanyDTOResponse>(
+              { cmd: 'create_company' },
+              createCompanyDTO,
+            ),
           );
+
+          const updateEmployerCompanyDTO: UpdateEmployerCompanyDTO = {
+            id: employerId,
+            companyId: company.id,
+          };
+
+          lastValueFrom(
+            this.employerService.updateEmployerCompanyId(
+              updateEmployerCompanyDTO,
+            ),
+          );
+
+          return company;
         }),
       );
     } else {
-      return this.companyClient.send(
-        { cmd: 'create_company' },
-        createCompanyDTO,
+      const company = await lastValueFrom(
+        this.companyClient.send<FindCompanyDTOResponse>(
+          { cmd: 'create_company' },
+          createCompanyDTO,
+        ),
       );
+
+      const updateEmployerCompanyDTO: UpdateEmployerCompanyDTO = {
+        id: employerId,
+        companyId: company.id,
+      };
+
+      lastValueFrom(
+        this.employerService.updateEmployerCompanyId(updateEmployerCompanyDTO),
+      );
+
+      return company;
     }
   }
 
