@@ -13,7 +13,6 @@ import Spinner from "../Spinner";
 
 function UserLogIn() {
   const {isAuthenticated, isLoading} = useAuth0();
-  
   const navigation = useNavigate();
   const {usernamePasswordLogin, googleLogin, linkedInLogin, facebookLogin} = useAuthen();
 

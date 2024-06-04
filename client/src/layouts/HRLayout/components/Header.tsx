@@ -254,10 +254,13 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                   <li
                     className={`px-4 py-2 m-0 border-b-gray-200 border`}
                     onClick={() => {
+                      // logout({
+                      //   clientId: AUTH0_CLIENT_ID,
+                      //   logoutParams: { returnTo: `${window.location.origin}${Roles.HR.loginUrl}` },
+                      // })
                       logout({
-                        clientId: AUTH0_CLIENT_ID,
-                        logoutParams: { returnTo: `${window.location.origin}${Roles.HR.loginUrl}` },
-                      })
+                        openUrl: false
+                      });
                     }}
                   >
                     <span className="cursor-pointer text-black hover:text-green-500">

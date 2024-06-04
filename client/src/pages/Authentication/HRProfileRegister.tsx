@@ -271,9 +271,6 @@ function HRProfileRegister() {
       .then(() => console.log("Success register profile"))
       .then(() => setErrorMessage(""))
       .then(() => setShowSuccessMessage(true))
-      .then(() => getAccessTokenSilently({
-        cacheMode: 'off'
-      }))
       .then(() => setRole(Roles.HR))
       .catch(() => setErrorMessage("Failed to set up employer profile !"));
   };

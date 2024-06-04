@@ -333,7 +333,9 @@ function Header() {
             </li>
             <li
               onClick={() => {
-                logout();
+                logout({
+                  openUrl: false
+                });
               }}
               className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
             >
