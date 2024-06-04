@@ -5,7 +5,6 @@ import "../../shared/assets/styles/hr-signup.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { accountList } from "../../shared/utils/constant";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAuthen } from "../../shared/services/authen";
 import { Roles } from "../../shared/services/authen/domain/context";
@@ -37,8 +36,7 @@ function HRLogIn() {
   });
 
   const [error, setError] = useState("");
-  const [showError, setShowError] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const showError:boolean = !!error;
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -50,24 +48,12 @@ function HRLogIn() {
     setShowPassword(!showPassword);
   };
 
+  const onLoginError = () => {
+    setError("Email hoặc mật khẩu không chính xác.");
+  }
+
   const handleLogin = (e: { preventDefault: () => void }) => {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
-
-    // const storedUserString = localStorage.getItem("user");
-    // const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
-    accountList.forEach((account) => {
-      console.log(account);
-      if (
-        account.email === formData.email &&
-        account.password === formData.password &&
-        account.role === "hr"
-      ) {
-        console.log("Đăng nhập thành công với email:", formData.email);
-        // store in local storage
-        localStorage.setItem("hr", JSON.stringify(account));
-        navigate("/hr/news");
-      }
-    });
 
     if (!formData.email) {
       setEmailEmpty(true);
@@ -75,16 +61,13 @@ function HRLogIn() {
 
     if (!formData.password) {
       setPasswordEmpty(true);
-    } else {
-      // Đăng nhập không thành công
-      setError("Email hoặc mật khẩu không chính xác.");
-      setShowError(true);
-    }
+    } 
+    if(!formData.email || !formData.password) return;
     
     usernamePasswordLogin({
       username: formData.email,
       password: formData.password,
-    }, Roles.HR);
+    }, Roles.HR, onLoginError);
   };
 
   const settings = {
@@ -206,7 +189,7 @@ function HRLogIn() {
         </form>
 
         {showError && <div className="text-red-500">{error}</div>}
-        {isLoggedIn && (
+        {isAuthenticated && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mt-4">
             Đăng nhập thành công!
           </div>
@@ -228,7 +211,7 @@ function HRLogIn() {
           Track your funnel with <span className="text-green-500">Report</span>
         </div>
         <Slider {...settings}>
-          {images.map((step, index) => (
+          {images.map((step) => (
             <div key={step.label}>
               <img
                 src={step.path}

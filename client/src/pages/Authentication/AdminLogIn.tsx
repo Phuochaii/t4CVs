@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
 import img from "../../shared/assets/images/Sign-up user.png";
@@ -36,7 +36,7 @@ function AdminLogIn() {
     setShowPassword(!showPassword);
   };
 
-  const onLoginError = (errMessage: string) => {
+  const onLoginError = () => {
     setError("Tên tài khoản hoặc mật khẩu không chính xác.");
   }
   const handleLogin = (e: { preventDefault: () => void }) => {
