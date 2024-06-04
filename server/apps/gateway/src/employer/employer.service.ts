@@ -62,7 +62,9 @@ export class EmployerService {
       );
   }
 
-  getEmployerByCompanyId(companyId: number) {
+  getEmployerByCompanyId(
+    companyId: number,
+  ): Observable<FindEmployerDTOResponse[]> {
     return this.employerClient.send(
       { cmd: 'get_employer_by_companyid' },
       companyId,

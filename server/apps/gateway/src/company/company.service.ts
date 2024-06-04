@@ -116,27 +116,44 @@ export class CompanyService {
     return this.companyClient.send({ cmd: 'find_company_by_array_id' }, id);
   }
 
-  updateCompany(file: any, data: UpdateCompanyDto): Observable<string> {
-    if (file) {
-      const uploadLink$ = from(this.uploadService.upload(file));
+  async updateCompany(file: any, data: UpdateCompanyDto, employerId: string) {
+    const employerOfCompany = await lastValueFrom(
+      this.employerService.getEmployerByCompanyId(data.id),
+    );
 
-      return uploadLink$.pipe(
-        switchMap((img: string) => {
-          data.image = img;
+    let check: boolean = false;
+    employerOfCompany.forEach((employer) => {
+      if (employer.id === employerId) {
+        check = true;
+      }
+    });
 
-          return this.companyClient.send({ cmd: 'update_company' }, data).pipe(
-            catchError((error) => {
-              return throwError(() => error.response);
-            }),
-          );
-        }),
-      );
+    if (check) {
+      if (file) {
+        const uploadLink$ = from(this.uploadService.upload(file));
+
+        return uploadLink$.pipe(
+          switchMap((img: string) => {
+            data.image = img;
+
+            return this.companyClient
+              .send({ cmd: 'update_company' }, data)
+              .pipe(
+                catchError((error) => {
+                  return throwError(() => error.response);
+                }),
+              );
+          }),
+        );
+      } else {
+        return this.companyClient.send({ cmd: 'update_company' }, data).pipe(
+          catchError((error) => {
+            return throwError(() => error.response);
+          }),
+        );
+      }
     } else {
-      return this.companyClient.send({ cmd: 'update_company' }, data).pipe(
-        catchError((error) => {
-          return throwError(() => error.response);
-        }),
-      );
+      throw new BadRequestException('Employer do not belong to the company');
     }
   }
 

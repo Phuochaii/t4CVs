@@ -69,8 +69,9 @@ export class CompanyController {
   updateCompany(
     @UploadedFile() file: any,
     @Body() data: UpdateCompanyDto,
-  ): Observable<string> {
-    return this.companyService.updateCompany(file, data);
+    @GetUser() user: UserClaims,
+  ) {
+    return this.companyService.updateCompany(file, data, user.sub);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
