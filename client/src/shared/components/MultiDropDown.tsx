@@ -1,13 +1,20 @@
-import Select from 'react-select';
+import React from 'react';
+import Select, { MultiValue, ActionMeta } from 'react-select';
+import Option from '../types/Option.type';
 
-const MultiDropdown = ({
+
+interface MultiDropdownProps {
+  placeholder: string;
+  options: Option[];
+  onChange: (newValue: MultiValue<Option>, actionMeta: ActionMeta<Option>) => void;
+  defaultValue?: Option[]; // Optional defaultValue prop
+}
+
+const MultiDropdown: React.FC<MultiDropdownProps> = ({
   placeholder,
   options,
   onChange,
-}: {
-  placeholder: string;
-  options: any;
-  onChange: any;
+  defaultValue, // Optional prop
 }) => {
   return (
     <Select
@@ -36,7 +43,6 @@ const MultiDropdown = ({
           ...base,
           color: 'black',
         }),
-
         placeholder: (base) => ({
           ...base,
           overflow: 'hidden',
@@ -45,7 +51,7 @@ const MultiDropdown = ({
         }),
         menu: (base) => ({
           ...base,
-          maxHeight: '200px', // Set maximum height for the dropdown menu
+          maxHeight: '200px',
           overflowY: 'auto',
         }),
       }}
@@ -57,6 +63,7 @@ const MultiDropdown = ({
       className="basic-multi-select"
       classNamePrefix="select"
       onChange={onChange}
+      defaultValue={defaultValue ? defaultValue : undefined} // Only set defaultValue if provided
       required
     />
   );

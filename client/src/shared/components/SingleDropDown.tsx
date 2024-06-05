@@ -1,13 +1,18 @@
+import React, { useEffect } from 'react';
 import Select from 'react-select';
+import Option from '../types/Option.type';
 
-const SingleDropdown = ({
+interface SingleDropdownProps {
+  placeholder: string;
+  options: Option[];
+  onChange: (selectedOption: Option | null) => void;
+  defaultValue?: Option; // Optional defaultValue prop
+}
+const SingleDropdown: React.FC<SingleDropdownProps> = ({
   placeholder,
   options,
   onChange,
-}: {
-  placeholder: string;
-  options: any;
-  onChange: any;
+  defaultValue, // Optional prop
 }) => {
   return (
     <Select
@@ -50,6 +55,7 @@ const SingleDropdown = ({
       placeholder={placeholder}
       options={options}
       onChange={onChange}
+      defaultValue={defaultValue}
       required
     />
   );
