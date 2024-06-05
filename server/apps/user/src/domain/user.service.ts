@@ -17,6 +17,7 @@ export class UserService {
   }
 
   async createUser(createUserDTO: CreateUserDTO) {
+    console.log('createUserDTO', createUserDTO);
     const user = await this.userRepository.findById(createUserDTO.id);
     if (user) {
       return null;
@@ -39,5 +40,10 @@ export class UserService {
     // // await this.s3Client.send(putObjectCommand);
 
     // return userEntity;
+  }
+
+  async check(id: string) {
+    const user = await this.userRepository.findById(id);
+    return !!user;
   }
 }

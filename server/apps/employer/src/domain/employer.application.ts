@@ -51,6 +51,9 @@ export class EmployerApplication {
     return await this.getEmployerByIdService.execute(id);
   }
 
+  async checkEmployer(id: string): Promise<boolean> {
+    return (await this.getEmployerByIdService.execute(id)) ? true : false;
+  }
   async getAllEmployerByCompanyId(companyId: number): Promise<Employer[]> {
     return await this.getAllEmployerByCompanyIdService.execute(companyId);
   }

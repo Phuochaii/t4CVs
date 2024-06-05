@@ -122,13 +122,70 @@ const createCompaign = async ({
   return response.data;
 };
 
-// GET ALL POSITION
+interface CreateEmployerInterface {
+  id: string;
+  fullname?: string,
+  gender: string,
+  positionId: number,
+  skype: string,
+  phoneNumber: string,
+  image: string,
+  token: string
+}
+export const createEmpolyer = async ({
+  id, fullname, gender, positionId, skype, phoneNumber, image, token
+}: CreateEmployerInterface) => {
+  const response = await axios.post(`${serverURL}/employer/create`, {
+    id, fullname, gender, positionId, skype, phoneNumber, image
+  }, {
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  })
+    .then((res) => res.data);
+  return response;
+}
+
+// GET ALL POSITION 
 const getPosition = async () => {
   const response = await axios.get(`${serverURL}/employer/position/all`);
   return response.data;
 };
 
-// UPDATE EMPLOYER LICENSE
+const isHr: (token: string) => Promise<boolean> = async (token) => {
+  const result = await axios.get(`http://localhost:3000/employer/check`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    }
+  })
+    .then(res => {
+      return res.data as boolean
+    })
+  return result;
+}
+
+const getProfile:(token:string) => Promise<{
+  id: string;
+  fullname: string;
+  gender: string;
+  positionId: number;
+  skype: string;
+  companyId: number;
+  license: string;
+  phoneNumber: string;
+  licenseStatus: boolean;
+  phoneNumberStatus: boolean;
+  image: string;
+}> = async (token) => {
+  const response = await axios.get(`${serverURL}/employer/profile`, {
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  });
+  if(!response.data) throw new Error('Getting hr profile but not having hr profile data');
+  return response.data;
+}
+
 const updateEmployerLicense = async (formData) => {
   const response = await axios
     .put(`${serverURL}/employer/update/license`, formData)
@@ -150,4 +207,6 @@ export {
   createCompaign,
   getPosition,
   updateEmployerLicense,
+  isHr,
+  getProfile,
 };

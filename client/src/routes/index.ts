@@ -6,6 +6,7 @@ import * as Error from '../pages/Error';
 
 import { UserLayout, AdminLayout, HRLayout, EmptyLayout } from '../layouts';
 import { ReactElement } from 'react';
+import { Role, Roles } from "../shared/services/authen/domain/context";
 
 interface LayoutProp {
   children: React.ReactNode | React.ReactElement<any>;
@@ -14,7 +15,8 @@ interface LayoutProp {
 interface RouteItem {
   path: string;
   component: () => ReactElement;
-  layout: ({}: LayoutProp) => ReactElement;
+  layout: ({ }:LayoutProp) => ReactElement;
+  role?: Role;
 }
 
 const routes: RouteItem[] = [
@@ -25,36 +27,12 @@ const routes: RouteItem[] = [
   { path: 'admin', component: Authentication.AdminInit, layout: EmptyLayout },
 
   // AUTHENTICATION PAGES - Tiến
-  {
-    path: 'admin-login',
-    component: Authentication.AdminLogIn,
-    layout: EmptyLayout,
-  },
-  {
-    path: 'hr-login',
-    component: Authentication.HRLogIn,
-    layout: EmptyLayout,
-  },
-  {
-    path: 'hr-signup/1',
-    component: Authentication.HRSignUp1,
-    layout: EmptyLayout,
-  },
-  {
-    path: 'hr-signup/2',
-    component: Authentication.HRSignUp2,
-    layout: EmptyLayout,
-  },
-  {
-    path: 'user-login',
-    component: Authentication.UserLogIn,
-    layout: EmptyLayout,
-  },
-  {
-    path: 'user-signup',
-    component: Authentication.UserSignUp,
-    layout: EmptyLayout,
-  },
+  { path: 'admin-login', component:Authentication.AdminLogIn, layout: EmptyLayout},
+  { path: 'hr-login', component:Authentication.HRLogIn, layout: EmptyLayout},
+  { path: 'hr-signup', component:Authentication.HRSignUp, layout: EmptyLayout},
+  { path: 'hr-profile-register', component:Authentication.HRProfileRegister, layout: EmptyLayout},
+  { path: 'user-login', component:Authentication.UserLogIn, layout: EmptyLayout},
+  { path: 'user-signup', component:Authentication.UserSignUp, layout: EmptyLayout},
 
   // USER PAGES - Nguyên , Khoa, Hùng
   { path: '/', component: User.Home, layout: UserLayout }, //khoa - > tiến
@@ -71,7 +49,7 @@ const routes: RouteItem[] = [
   { path: '/list-cv', component: User.ListCV, layout: UserLayout }, // nguyên
 
   // ADMIN PAGES - Thức
-  { path: '/admin/overview', component: Admin.Overview, layout: AdminLayout },
+  { path: '/admin/overview', component: Admin.Overview, layout: AdminLayout, role: Roles.ADMIN },
 
   // HR PAGES - Yến, Thịnh, Thức
   { path: '/hr/approve', component: HR.ReceiveCV, layout: HRLayout }, // yến
@@ -111,7 +89,7 @@ const routes: RouteItem[] = [
   }, // thuc
 
   // HR
-  { path: '/hr/news', component: HR.News, layout: HRLayout }, //khoa
+  { path: "/hr/news", component: HR.News, layout: HRLayout, role: Roles.HR }, //khoa
 
   { path: '/hr/post-compaign', component: HR.PostJob, layout: HRLayout }, // thinh
   {
