@@ -16,9 +16,8 @@ import {
   getAllJobs,
   getCampaignById,
   getJobsStat,
-  updateJobStatus,
 } from "../../shared/utils/helper";
-import Switch from "../../shared/components/CustomSwitch";
+// import Switch from "../../shared/components/CustomSwitch";
 
 interface RecruitmentTableProps {
   refresh: boolean;
@@ -27,8 +26,8 @@ interface RecruitmentTableProps {
 }
 
 function RecruitmentTable({
-  refresh,
-  setRefresh,
+  // refresh,
+  // setRefresh,
   data,
 }: RecruitmentTableProps) {
   return (
@@ -51,16 +50,6 @@ function RecruitmentTable({
             <tr key={key}>
               <td className="border max-w-[240px] ">
                 <div className="flex flex-col items-start gap-1">
-                  <Switch
-                    checked={jobPost.status}
-                    onChange={async () => {
-                      await updateJobStatus(
-                        jobPost.id,
-                        !jobPost.status
-                      );
-                      setRefresh(!refresh);
-                    }}
-                  />
                   <div>
                     <span
                       className={clsx(
