@@ -40,9 +40,6 @@ function Certificate() {
           'Cập nhật thành công! Xin vui lòng chờ 2 giây để hệ thống cập nhật lại',
         );
         setRefresh(!refresh);
-        // setTimeout(() => {
-        //   location.reload();
-        // }, 2000);
       })
       .catch((res) => {
         errorToast('Cập nhật thất bại, xin vui lòng thử lại sau');
@@ -65,7 +62,7 @@ function Certificate() {
         }
       }
     } catch (error) {
-      return errorToast("Không tìm thấy thông tin người dùng hiện tại");
+      return errorToast('Không tìm thấy thông tin người dùng hiện tại');
     }
   };
   useEffect(() => {
@@ -75,11 +72,11 @@ function Certificate() {
     fetchData();
   }, []);
   return (
-    <div className="w-full m-10 flex flex-col">
-      <h1 className="text-black text-sl mb-5">
-        Thông tin giấy phép kinh doanh
-      </h1>
-      <div className="w-[90%] border-slate-200 border-2 px-8 py-4 space-y-4">
+    <div className="w-full flex flex-col items-center">
+      <div className="w-[95%] border-slate-200 border-2 px-8 py-4 space-y-4 my-9">
+        <h1 className="text-black text-sl font-bold mb-5">
+          Thông tin giấy phép kinh doanh
+        </h1>
         <h1 className="text-black text-[13px] mb-2">
           Trạng thái:{" "}
           <span className="text-green-700 font-bold">
@@ -164,19 +161,19 @@ function Certificate() {
             }}
             className={`text-base btn-success py-2 px-10 rounded text-white bg-green-500 shadow-md ${firstFile && secondFile ? "opacity-100 cursor-pointer " : "opacity-65 cursor-default"}`}
           >
-            {onLoading ? 'On processing...' : 'Lưu'}
+            {onLoading ? "On processing..." : "Lưu"}
           </button>
         </div>
-      </div>
-      <div className="mt-5">
-        <h1>Tài liệu hướng dẫn</h1>
-        <div className="flex flex-row items-center">
-          <Dot width={30} height={30}></Dot>
-          <div>Mẫu giấy ủy quyền</div>
-        </div>
-        <div className="flex flex-row items-center">
-          <Dot width={30} height={30}></Dot>
-          <div>Hướng dẫn đăng tải</div>
+        <div className="mt-5">
+          <h1>Tài liệu hướng dẫn</h1>
+          <div className="flex flex-row items-center">
+            <Dot width={30} height={30}></Dot>
+            <div>Mẫu giấy ủy quyền</div>
+          </div>
+          <div className="flex flex-row items-center">
+            <Dot width={30} height={30}></Dot>
+            <div>Hướng dẫn đăng tải</div>
+          </div>
         </div>
       </div>
     </div>
