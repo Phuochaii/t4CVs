@@ -89,11 +89,9 @@ export class CompanyService {
   updateCompany(file: any, data: UpdateCompanyDto): Observable<string> {
     if (file) {
       const uploadLink$ = from(this.uploadService.upload(file));
-
       return uploadLink$.pipe(
         switchMap((img: string) => {
           data.image = img;
-
           return this.companyClient.send({ cmd: 'update_company' }, data).pipe(
             catchError((error) => {
               return throwError(() => error.response);
