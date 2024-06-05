@@ -1,80 +1,55 @@
 import { ShieldCheck, Check, Star, Search, Plus } from 'lucide-react';
 import FPT from '../../shared/assets/images/FPT.jpg';
 import VNRS from '../../shared/assets/images/VNRS.png';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import UpdateCompanyInfo from './UpdateCompanyInfo';
+import { CompanyFromServer } from '../types/Company.type';
+import { Field } from '../types/Recruitment.type';
+import { getAllCompanies, getAllFields } from '../utils/helper';
+import { DefaultPagination } from './default-pagination';
 function CompanyInfo() {
   const [component, setComponent] = useState(true);
   const [name, setName] = useState('');
+
+  const [companies, setCompanies] = useState<CompanyFromServer[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [fields, setField] = useState<Field[]>([]);
+
+  useEffect(() => {
+    async function getData() {
+      const {
+        allCompanies,
+        // total,
+        totalPages,
+      }: {
+        allCompanies: CompanyFromServer[];
+        total: number;
+        totalPages: number;
+      } = await getAllCompanies(page);
+      const fields = await getAllFields();
+      setCompanies(allCompanies);
+      console.log(allCompanies);
+      setTotalPages(totalPages);
+      setField(fields);
+    }
+    getData();
+  }, [page]);
+
   const handleComponent = () => {
     setComponent(!component);
     console.log(component);
     // console.log("Hello world")
   };
-  const companies = [
-    {
-      id: 1,
-      name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG',
-      number: '0401530734',
-      logo: VNRS,
-      time: '06-09-2023 21:36 PM',
-      address: '316 Chánh Hưng, Phường 5, Quận 8',
-      field: 'Lập trình phần mềm',
-    },
-    {
-      id: 2,
-      name: 'FPT information system',
-      number: '0401530735',
-      logo: FPT,
-      time: '14-09-2023 15:55 PM',
-      address: '170/2 Đường Nguyễn Xí, Quận 26',
-      field: 'Khác',
-    },
-    {
-      id: 3,
-      name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG',
-      number: '0401530734',
-      logo: VNRS,
-      time: '06-09-2023 21:36 PM',
-      address: '316 Chánh Hưng, Phường 5, Quận 8',
-      field: 'Lập trình phần mềm',
-    },
-    {
-      id: 4,
-      name: 'FPT information system',
-      number: '0401530735',
-      logo: FPT,
-      time: '14-09-2023 15:55 PM',
-      address: '170/2 Đường Nguyễn Xí, Quận 26',
-      field: 'Khác',
-    },
-    {
-      id: 5,
-      name: 'CÔNG TY CỔ PHẦN TÀI NGUYÊN TRI THỨC VIỆT NĂNG',
-      number: '0401530734',
-      logo: VNRS,
-      time: '06-09-2023 21:36 PM',
-      address: '316 Chánh Hưng, Phường 5, Quận 8',
-      field: 'Lập trình phần mềm',
-    },
-    {
-      id: 6,
-      name: 'FPT information system',
-      number: '0401530735',
-      logo: FPT,
-      time: '14-09-2023 15:55 PM',
-      address: '170/2 Đường Nguyễn Xí, Quận 26',
-      field: 'Khác',
-    },
-  ];
+
   return component === true ? (
     <div className="w-full m-10 flex flex-col">
       <div
-        className={'btn text-sm p-3 flex items-center justify-between w-11/12'}
+        className={"btn text-sm p-3 flex items-center justify-between w-11/12"}
         style={{
-          backgroundColor: '#EBF3FF',
-          color: '#2D7CF1',
-          marginBottom: '15.96px',
+          backgroundColor: "#EBF3FF",
+          color: "#2D7CF1",
+          marginBottom: "15.96px",
         }}
       >
         <div className="flex flex-row items-center space-x-4">
@@ -154,7 +129,7 @@ function CompanyInfo() {
         <h1 className="text-black my-3">Công ty mới tạo</h1>
         <div
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
-          style={{ height: '250px', overflowY: 'scroll' }}
+          style={{ height: "250px", overflowY: "scroll" }}
         >
           {companies.length > 0 ? (
             companies.map((item, index) => (
@@ -167,7 +142,7 @@ function CompanyInfo() {
               >
                 <div className="job-logo-company justify-center w-32 h-24 flex items-center border rounded-lg overflow-hidden">
                   <img
-                    src={item.logo}
+                    src={item.image}
                     alt={`${item.name} logo`}
                     className="object-contain"
                   />
@@ -179,29 +154,32 @@ function CompanyInfo() {
                         {item.name}
                       </span>
                     </div>
-                    <span className="job-company-name text-slate-600 text-sm truncate w-4/5">
-                      {item.number}
-                    </span>
                   </div>
+                  <span className="text-sm text-slate-600 ">
+                    MST: {item.taxCode}
+                  </span>
                   <div className="flex justify-between items-center ">
                     <p className="text-sm flex w-2/3">
                       <span className="truncate w-[70%]">{item.address}</span>
                       <span className="mx-1">|</span>
-                      <span className="truncate w-[29%]">{item.time}</span>
+                      <span className="job-company-name text-slate-600 text-[10px] truncate w-4/5">
+                        {item.companySize} nhân sự
+                      </span>
+                      {/* <span className="truncate w-[29%]">{item.time}</span> */}
                     </p>
                     <div className="job-actions flex items-center space-x-2">
                       <button
                         onClick={() => {
                           handleComponent(), setName(item.name);
                         }}
-                        className="bg-green-100 text-sm hover:bg-green-300 text-green-700 py-1 px-2 rounded-full inline-flex items-center"
+                        className="bg-green-100 text-sm hover:bg-green-300 text-green-700 py-0.5 px-1 rounded-full inline-flex items-center"
                       >
                         Chọn
                       </button>
                     </div>
                   </div>
-                  <div className="text-sm bg-gray-200 px-2 py-1 w-fit rounded-lg">
-                    {item.field}
+                  <div className="text-sm bg-gray-100 px-2 py-1 w-fit rounded-lg">
+                    {fields.find((i) => i.id === item.field)?.name}
                   </div>
                 </div>
               </div>
@@ -209,6 +187,13 @@ function CompanyInfo() {
           ) : (
             <div>Không có dữ liệu</div>
           )}
+        </div>
+        <div className="flex justify-center mt-5">
+          <DefaultPagination
+            totalPage={totalPages}
+            active={page}
+            setActive={setPage}
+          />
         </div>
       </div>
     </div>
