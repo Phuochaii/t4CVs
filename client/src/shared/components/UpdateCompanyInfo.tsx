@@ -18,6 +18,7 @@ const UpdateCompanyInfo = ({
   handleComponent: MouseEventHandler<HTMLButtonElement> | undefined;
   companyName: string;
 }) => {
+  const [companyInfo, setCompanyInfo] = useState(company);
   const [imageFile, setImageFile] = useState();
   const [image, setImage] = useState();
   const imageUploadRef = useRef(null);
@@ -66,12 +67,7 @@ const UpdateCompanyInfo = ({
     return data.map(({ id, name }) => ({ value: id.toString(), label: name }));
   };
   const field = convertToOptions(fields?.field);
-  const Scale = [
-    { value: '100 - 200 nhân viên', label: '100 - 200 nhân viên' },
-    { value: '200 - 300 nhân viên', label: '200 - 300 nhân viên' },
-    { value: '400 - 500 nhân viên', label: '400 - 500 nhân viên' },
-    { value: 'Trên 500 nhân viên', label: 'Trên 500 nhân viên' },
-  ];
+
   const [scale, setScale] = useState<SingleValue<{
     value: string;
     label: string;
@@ -81,7 +77,22 @@ const UpdateCompanyInfo = ({
     label: string;
   }> | null>(null);
   const handleUpdateInfo = () => {
-    console.log(company);
+    console.log(companyInfo);
+  };
+  const handleChange = (
+    field:
+      | 'field'
+      | 'taxCode'
+      | 'website'
+      | 'address'
+      | 'phone'
+      | 'companySize'
+      | 'description',
+    value: string,
+  ) => {
+    const newCompanyInfo = { ...companyInfo };
+    newCompanyInfo[field] = value;
+    setCompanyInfo(newCompanyInfo);
   };
   return (
     <div className="w-full m-2 flex flex-col">
@@ -129,11 +140,15 @@ const UpdateCompanyInfo = ({
           </div>
 
           <div className="space-y-2 w-1/2">
-            <span className="text-base">Email</span>
+            <span className="text-base">Quy mô công ty</span>
             <input
               type="text"
               className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
-              placeholder="Nhập email"
+              placeholder="Nhập quy mô công ty"
+              value={company.companySize ? company.companySize : ''}
+              onChange={(event) =>
+                handleChange('companySize', event.currentTarget.value)
+              }
             />
           </div>
         </div>
@@ -145,6 +160,9 @@ const UpdateCompanyInfo = ({
               className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
               placeholder="Nhập mã số thuế"
               value={company.taxCode ? company.taxCode : ''}
+              onChange={(event) =>
+                handleChange('taxCode', event.currentTarget.value)
+              }
             />
           </div>
 
@@ -155,6 +173,9 @@ const UpdateCompanyInfo = ({
               className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
               placeholder="http://"
               value={company.website ? company.website : ''}
+              onChange={(event) =>
+                handleChange('website', event.currentTarget.value)
+              }
             />
           </div>
         </div>
@@ -206,12 +227,22 @@ const UpdateCompanyInfo = ({
               options={field}
               className="basic-multi-select"
               classNamePrefix="select"
-              onChange={setFieldOptions}
+              onChange={(
+                e: SetStateAction<MultiValue<{ value: string; label: string }>>,
+              ) => {
+                setFieldOptions(companyInfo.field);
+                const chosenFields = [];
+                e.map((item) => {
+                  chosenFields.push(item.value);
+                });
+                console.log(chosenFields);
+                handleChange('field', chosenFields);
+              }}
               required
             />
           </div>
           <div className="w-1/2 space-y-2">
-            <span className="text-base">Quy mô</span>
+            {/* <span className="text-base">Quy mô</span>
             <SingleDropdown
               placeholder="-- Chọn quy mô công ty --"
               options={Scale}
@@ -220,7 +251,7 @@ const UpdateCompanyInfo = ({
                   SingleValue<{ value: string; label: string }>
                 >,
               ) => setScale(e)}
-            />
+            /> */}
           </div>
         </div>
         <div className="flex flex-row space-x-10 items-start">
@@ -232,6 +263,9 @@ const UpdateCompanyInfo = ({
                 className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                 placeholder="Nhập địa chỉ"
                 value={company.address ? company.address : ''}
+                onChange={(event) =>
+                  handleChange('address', event.currentTarget.value)
+                }
               />
             </div>
             <div className="space-y-2  ">
@@ -241,6 +275,9 @@ const UpdateCompanyInfo = ({
                 className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                 placeholder="Nhập số điện thoại"
                 value={company.phone ? company.phone : ''}
+                onChange={(event) =>
+                  handleChange('phone', event.currentTarget.value)
+                }
               />
             </div>
           </div>
@@ -308,6 +345,9 @@ const UpdateCompanyInfo = ({
                 className="w-full bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
                 placeholder="Nhập nội dung mô tả công việc"
                 value={company.description ? company.description : ''}
+                onChange={(event) =>
+                  handleChange('description', event.currentTarget.value)
+                }
               />
             </div>
           </div>
