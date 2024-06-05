@@ -139,15 +139,8 @@ export async function getApplications(userId: string) {
     );
     const applications: ApplicationFromServer[] =
       response.data.applicationsFinal;
-    console.log(response);
-    const campaignIds = applications.map(
-      (application: ApplicationFromServer) => application.campaignId,
-    );
-    const promiseJobs = campaignIds.map((id) => getJobByCampaignId(id));
-    const jobs = (await Promise.all(promiseJobs)).filter(
-      (job) => job !== null,
-    ) as RecruitmentFromServer[];
-    return { applications: applications, jobs: jobs };
+    console.log(applications)
+    return applications;
   } catch (e) {
     return null;
   }

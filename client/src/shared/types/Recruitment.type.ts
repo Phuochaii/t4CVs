@@ -31,7 +31,16 @@ export interface Location {
   id: number;
   name: string;
 }
-
+interface JobDetail {
+  id: number;
+  quantity: number;
+  jobSchedule: string;
+  gender: string;
+  description: string;
+  benefit: string;
+  requirement: string;
+  skills: string;
+}
 export interface RecruitmentFromServer {
   id: number;
   titleRecruitment: string;
@@ -56,6 +65,7 @@ export interface RecruitmentFromServer {
   type: Type;
   company: CompanyFromServer;
   locations: Location[];
+  jobDetail: JobDetail
 }
 
 export interface RecruitmentJobPost
