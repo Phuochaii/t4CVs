@@ -7,17 +7,34 @@ import { CompanyFromServer } from '../types/Company.type';
 import { Field } from '../types/Recruitment.type';
 import { getAllCompanies, getAllFields } from '../utils/helper';
 import { DefaultPagination } from './default-pagination';
+import CreateCompany from './CreateCompany';
 function CompanyInfo() {
   const [component, setComponent] = useState(true);
-  const [name, setName] = useState('');
-
+  const [company, setCompany] = useState<CompanyFromServer>();
+  const [view, setView] = useState(true);
   const [companies, setCompanies] = useState<CompanyFromServer[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [fields, setField] = useState<Field[]>([]);
-
+  const [fieldss, setFields] = useState<any>(null);
   useEffect(() => {
     async function getData() {
+      try {
+        const response = await fetch('http://localhost:3000/job/create-info', {
+          method: 'GET',
+          headers: {
+            'Access-control-allow-origin': 'http://localhost:3000',
+            'Content-type': 'application/json',
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        setFields(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
       const {
         allCompanies,
         // total,
@@ -41,7 +58,10 @@ function CompanyInfo() {
     console.log(component);
     // console.log("Hello world")
   };
-
+  const handleView = (view:boolean) => {
+    setView(view);
+    // console.log("Hello world")
+  };
   return component === true ? (
     <div className="w-full flex flex-col items-center py-9">
       <div className="w-[95%]">
@@ -78,10 +98,10 @@ function CompanyInfo() {
           </button>
         </div>
         <div className="flex flex-row items-center space-x-5">
-          <div className="flex flex-row items-center justify-between border-slate-200 border-b-green-500 border-2 p-4 flex-grow">
+      <div onClick={()=>handleView(true)} className={`flex flex-row items-center justify-between ${view === true ? "border-slate-200 border-b-green-500 border-2":"border-0 "}   p-4 flex-grow`}>
             <div className="flex flex-row items-center space-x-2">
               <Search
-                className="text-green-600 bg-green-200 rounded-full p-2"
+               className={`flex flex-row items-center space-x-2 ${view === true ? "text-green-600 bg-green-200" : "bg-gray-200"} rounded-full p-2`}
                 size={30}
               ></Search>
               <div className="flex flex-col">
@@ -93,14 +113,14 @@ function CompanyInfo() {
                 </div>
               </div>
             </div>
-            <Check
+            {view === true && <Check
               className="text-white bg-green-500 rounded-full p-2"
               size={30}
-            ></Check>
+            ></Check>}
           </div>
-          <div className="flex flex-row items-center justify-between p-4 flex-grow">
+          <div onClick={()=>handleView(false)}  className={`flex flex-row items-center ${view === false ? "border-slate-200 border-b-green-500 border-2":"border-0 "}  justify-between p-4 flex-grow`}>
             <div className="flex flex-row items-center space-x-2">
-              <Plus className="bg-gray-200 rounded-full p-2" size={30}></Plus>
+              <Plus className={`bg-gray-200 ${view === false ? "text-green-600 bg-green-200" : "bg-gray-200"} rounded-full p-2`} size={30}></Plus>
               <div className="flex flex-col">
                 <div className="text-[14px] text-green-600">
                   Tạo công ty mới
@@ -109,10 +129,15 @@ function CompanyInfo() {
                   Dành cho Doanh nghiệp lần đầu TopCV
                 </div>
               </div>
+              {view === false && <Check
+              className="text-white bg-green-500 rounded-full p-2"
+              size={30}
+            ></Check>}
             </div>
           </div>
         </div>
-        <div className="flex flex-col w-full border-slate-200 border-2 p-5">
+        {/* */}
+        {view ? <div className="flex flex-col w-full border-slate-200 border-2 p-5">
           <div className="flex flex-row items-center space-x-2">
             <div className="relative w-5/6">
               <Search className="text-gray-500 w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2"></Search>
@@ -169,7 +194,7 @@ function CompanyInfo() {
                       <div className="job-actions flex items-center space-x-2">
                         <button
                           onClick={() => {
-                            handleComponent(), setName(item.name);
+                            handleComponent(), setCompany(item);
                           }}
                           className="bg-green-100 text-sm hover:bg-green-300 text-green-700 py-0.5 px-1 rounded-full inline-flex items-center"
                         >
@@ -194,13 +219,14 @@ function CompanyInfo() {
               setActive={setPage}
             />
           </div>
-        </div>
+        </div> : (<CreateCompany handleView={()=>handleView(true)}></CreateCompany>)}
       </div>
     </div>
   ) : (
     <UpdateCompanyInfo
       handleComponent={handleComponent}
-      companyName={name}
+      company={company ?? companies[0]}
+      fields={fieldss}
     ></UpdateCompanyInfo>
   );
 }
