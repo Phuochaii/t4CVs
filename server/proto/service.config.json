@@ -4,6 +4,10 @@
         "protoFiles": ["application", "notification"]
     },
     {
+        "serviceName": "gateway2",
+        "protoFiles": ["application", "notification"]
+    },
+    {
         "serviceName": "notification-service",
         "protoFiles": ["notification"]
     },

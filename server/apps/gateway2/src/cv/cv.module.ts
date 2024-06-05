@@ -1,25 +1,25 @@
 import { Module } from '@nestjs/common';
+import { CVService } from './cv.service';
+import { CVController } from './cv.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { EmployerController } from './employer.controller';
-import { EmployerService } from './employer.service';
 import { UploadModule } from '../upload/upload.module';
 
 @Module({
   imports: [
     ClientsModule.register([
       {
-        name: 'EMPLOYER',
+        name: 'CV',
         transport: Transport.TCP,
         options: {
-          host: 'employer',
-          port: 3005,
+          host: 'localhost',
+          port: 3006,
         },
       },
     ]),
     UploadModule,
   ],
-  controllers: [EmployerController],
-  providers: [EmployerService],
-  exports: [EmployerService],
+  controllers: [CVController],
+  providers: [CVService],
+  exports: [CVService],
 })
-export class EmployerModule {}
+export class CVModule {}

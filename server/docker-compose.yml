@@ -1,0 +1,185 @@
+version: '3.8'
+services:
+  nginx: 
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on: 
+      - gateway
+      - gateway2
+    networks:
+      - backend  
+  gateway:
+    container_name: gateway
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=gateway
+    environment:
+      - NOTIFICATION_SERVICE_URL=notification:50052
+    ports:
+      - 3000:3000
+    networks:
+      - backend
+  gateway2:
+    container_name: gateway2
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=gateway2
+    environment:
+      - NOTIFICATION_SERVICE_URL=notification:50052
+    ports:
+      - 4000:4000
+    networks:
+      - backend   
+  # notification:
+  #   container_name: notification
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     args:
+  #       - APP=notification-service
+  #   environment:
+  #     - DB_HOST=notification-db
+  #     - DB_PORT=5432
+  #     - DB_USERNAME=postgres
+  #     - DB_PASSWORD=123456
+  #     - DB_NOTIFICATION_DATABASE=notification
+  #   depends_on:
+  #     - notification-db
+  #   networks:
+  #     - backend
+  #     - notification
+  # notification-db:
+  #   container_name: notification-db
+  #   image: postgres:latest
+  #   networks:
+  #     - notification
+  #   environment:
+  #     - POSTGRES_PASSWORD=123456
+  #   volumes:
+  #     - notification-db:/var/lib/postgresql/data
+  # user:
+  #   container_name: user
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     args:
+  #       - APP=user
+  #   environment:
+  #     - DB_HOST=user-db
+  #     - DB_PORT=5432
+  #     - DB_USERNAME=postgres
+  #     - DB_PASSWORD=phuochai1901
+  #     - DB_USER_DATABASE=applicant
+  #   depends_on:
+  #     - user-db
+  #   networks:
+  #     - backend
+  #     - user
+  # user-db:
+  #   container_name: user-db
+  #   image: postgres:latest
+  #   networks:
+  #     - user
+  #   environment:
+  #     - POSTGRES_PASSWORD=phuochai1901
+  #   volumes:
+  #     - user-db:/var/lib/postgresql/data
+  # job:
+  #   container_name: job
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     args:
+  #       - APP=job
+  #   environment:
+  #     - DB_HOST=job-db
+  #     - DB_PORT=5432
+  #     - DB_USERNAME=postgres
+  #     - DB_PASSWORD=phuochai1901
+  #     - DB_JOB_DATABASE=job
+  #   depends_on:
+  #     - job-db
+  #   networks:
+  #     - backend
+  #     - job
+  # job-db:
+  #   container_name: job-db
+  #   image: postgres:latest
+  #   networks:
+  #     - job
+  #   environment:
+  #     - POSTGRES_PASSWORD=phuochai1901
+  #   volumes:
+  #     - job-db:/var/lib/postgresql/data
+  company:
+    container_name: company
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=company-service
+    environment:
+      - DB_HOST=company-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=713112411
+      - DB_COMPANY_DATABASE=company
+    depends_on:
+      - company-db
+    networks:
+      - backend
+      - company
+  company-db:
+    container_name: company-db
+    image: postgres:latest
+    networks:
+      - company
+    environment:
+      - POSTGRES_PASSWORD=713112411
+    volumes:
+      - company-db:/var/lib/postgresql/data
+  employer:
+    container_name: employer
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=employer
+    environment:
+      - DB_HOST=employer-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=713112411
+      - DB_EMPLOYER_DATABASE=employer
+    depends_on:
+      - employer-db
+    networks:
+      - backend
+      - employer
+  employer-db:
+    container_name: employer-db
+    image: postgres:latest
+    networks:
+      - employer
+    environment:
+      - POSTGRES_PASSWORD=713112411
+    volumes:
+      - employer-db:/var/lib/postgresql/data
+networks:
+  backend:
+  # notification:
+  # user:
+  # job:
+  company:
+  employer:
+volumes:
+  # notification-db:
+  # user-db:
+  # job-db:
+  company-db:
+  employer-db:
