@@ -9,7 +9,7 @@ on:
     paths:
       - 'server/**'
   pull_request:
-    branches: ['tesing']
+    branches: ['testing']
     paths:
       - 'server/**'
 
@@ -31,6 +31,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm test user.controller
-      - run: npm test user.service
-      - run: npm test user.repository
+      - run: |
+          npm test user.controller
+          npm test user.service
+          npm test user.repository
