@@ -1,9 +1,43 @@
 import { Star, Heart, ShieldCheck } from 'lucide-react';
 import SingleDropdown from './SingleDropDown';
-import { SetStateAction, useState } from 'react';
+import {
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { SingleValue } from 'react-select';
 
+import * as HRModule from '../../modules/hr-module';
+import { errorToast } from '../../utils/toast';
+
 function Profile() {
+  const [imageFile, setImageFile] = useState();
+  const [image, setImage] = useState();
+  const imageUploadRef = useRef(null);
+  const handleImageUpload = useCallback(() => {
+    imageUploadRef?.current?.click();
+  }, []);
+  const imagePreview = (e) => {
+    const selectedImage = e.target.files[0];
+    setImageFile(selectedImage);
+    console.log(selectedImage);
+    if (selectedImage) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        setImage(event.target.result);
+      };
+      reader.readAsDataURL(selectedImage);
+    }
+  };
+  const [userInfo, setUserInfo] = useState({
+    fullname: 'Hải Yến Viên',
+    phone: '0123 456 789',
+    gender: 'Nữ',
+    position: 'Nhân viên',
+  });
   const gender = [
     { value: 'Không quan trọng', label: 'Không quan trọng' },
     { value: 'Nam', label: 'Nam' },
@@ -23,6 +57,62 @@ function Profile() {
     value: string;
     label: string;
   }> | null>(null);
+
+  const handleChange = (
+    field: 'fullname' | 'gender' | 'position',
+    value: string,
+  ) => {
+    const newUserInfo = { ...userInfo };
+    newUserInfo[field] = value;
+    setUserInfo(newUserInfo);
+  };
+
+  const fetchUserInfo = async () => {
+    HRModule.getHRById({ userId: '1' })
+      .then((res) => {
+        const response = res.data;
+        console.log(response);
+        const currentInfo = {
+          fullname: response.fullname,
+          phone: response.phoneNumber,
+          gender:
+            response.gender === 'Female' || response.gender === 'Nữ'
+              ? 'Nữ'
+              : 'Nam',
+          position: response.position || 'Nhân viên',
+          avatar: response.image,
+        };
+        console.log(currentInfo);
+        setUserInfo(currentInfo);
+      })
+      .catch();
+  };
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  const handleUpdateInfo = () => {
+    if (!imageFile && !userInfo.avatar) {
+      return errorToast('Vui lòng chọn ảnh đại diện');
+    }
+    if (userInfo.fullname === '') {
+      return errorToast('Họ và tên không được để trống');
+    }
+    if (userInfo.fullname.length <= 5) {
+      return errorToast('Họ và tên phải chứa trên 5 ký tự');
+    }
+    const formData = new FormData();
+    formData.append('file', imageFile || userInfo.avatar);
+    formData.append('fullname', userInfo.fullname);
+    formData.append('phone', userInfo.phone);
+    formData.append('gender', userInfo.gender);
+    formData.append('position', userInfo.position);
+    for (const value of formData.values()) {
+      console.log(value);
+    }
+  };
+
   return (
     <div className="flex flex-col w-full my-10 space-y-10 items-center">
       <div className="w-[95%] border-slate-200 border-2 px-8 py-4">
@@ -91,13 +181,28 @@ function Profile() {
         <div className="w-full flex flex-row items-center space-x-20">
           <div className="w-5/12 flex flex-row items-center space-x-1">
             <span>Avatar</span>
+            <input
+              type="file"
+              name="file"
+              ref={imageUploadRef}
+              onChange={imagePreview}
+              style={{ display: 'none' }}
+              accept="image/png, image/gif, image/jpeg"
+            />
             <img
-              src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg"
+              src={
+                image ||
+                userInfo.image ||
+                'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'
+              }
               className="rounded-full"
-              style={{ width: '32px' }}
+              style={{ width: '32px', height: '32px' }}
               alt="Avatar"
             />
-            <button className="text-sm btn-success py-1 px-2 rounded bg-gray-100 cursor-pointer">
+            <button
+              className="text-sm btn-success py-1 px-2 rounded bg-gray-100 cursor-pointer"
+              onClick={handleImageUpload}
+            >
               Đổi avatar
             </button>
           </div>
@@ -112,6 +217,10 @@ function Profile() {
               type="text"
               className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
               placeholder="Nhập họ và tên"
+              value={userInfo.fullname}
+              onChange={(event) =>
+                handleChange('fullname', event.currentTarget.value)
+              }
             />
           </div>
           <div className="w-5/12 space-y-2">
@@ -119,13 +228,16 @@ function Profile() {
               Giới tính
             </span>
             <SingleDropdown
-              placeholder="-- Chọn giới tính --"
+              placeholder={userInfo.gender || '--- Chọn giới tính ---'}
               options={gender}
               onChange={(
                 e: SetStateAction<
                   SingleValue<{ value: string; label: string }>
                 >,
-              ) => setGenderOptions(e)}
+              ) => {
+                setGenderOptions(e);
+                handleChange('gender', e.value);
+              }}
             />
           </div>
         </div>
@@ -135,9 +247,9 @@ function Profile() {
               Số điện thoại
             </span>
             <input
+              value={userInfo.phone}
               type="text"
               className=" bg-gray-300 border border-slate-300 focus:border-green-500 outline-none text-slate-400 text-base  w-full p-2.5"
-              value={'0792905933'}
               disabled
             />
           </div>
@@ -146,13 +258,16 @@ function Profile() {
               Vị trí
             </span>
             <SingleDropdown
-              placeholder="-- Chọn vị trí --"
+              placeholder={userInfo.position || '--- Chọn vị trí ---'}
               options={Position}
               onChange={(
                 e: SetStateAction<
                   SingleValue<{ value: string; label: string }>
                 >,
-              ) => setPosition(e)}
+              ) => {
+                setPosition(e);
+                handleChange('position', e.value);
+              }}
             />
           </div>
         </div>
@@ -160,7 +275,10 @@ function Profile() {
           <button className="border-green-600 border-1 text-sm btn-success py-1 px-2 rounded text-green-600 bg-white border cursor-pointer">
             Hủy
           </button>
-          <button className="text-sm btn-success py-1 px-2 rounded text-white bg-green-500 shadow-md cursor-pointer">
+          <button
+            onClick={handleUpdateInfo}
+            className="text-sm btn-success py-1 px-2 rounded text-white bg-green-500 shadow-md cursor-pointer"
+          >
             Cập nhật
           </button>
         </div>

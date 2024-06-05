@@ -38,4 +38,13 @@ const updateStatusNotification = async ({
   return response;
 };
 
-export { getNotification, updateStatusNotification };
+const getUserById = async ({ userId }: { userId: string }) => {
+  const response = await axios
+    .get(`http://localhost:3000/user/${userId}`)
+    .then((res) => {
+      return res;
+    });
+  return response;
+};
+
+export { getNotification, updateStatusNotification, getUserById };

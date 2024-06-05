@@ -1,7 +1,9 @@
 import clsx from 'clsx';
 import { ArrowUpCircle, Camera, Check, Info } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Switch from '../../shared/components/CustomSwitch';
+import * as UserModule from '../../modules/user-module';
+import { errorToast } from '../../utils/toast';
 
 const fields: {
   label: string;
@@ -52,6 +54,39 @@ function UserInformation() {
     setUserInfo(newUserInfo);
   };
 
+  const fetchUserInfo = async () => {
+    UserModule.getUserById({ userId: '1' })
+      .then((res) => {
+        const response = res.data;
+        const currentInfo = {
+          fullname: response.fullname,
+          phone: response.phone,
+          email: 'yyen9319@gmail.com',
+        };
+        setUserInfo(currentInfo);
+      })
+      .catch();
+  };
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  const handleUpdateInfo = () => {
+    if (userInfo.fullname === '') {
+      return errorToast('Tên vừa nhập không hợp lệ');
+    }
+    if (userInfo.fullname.length <= 5) {
+      return errorToast('Tên vừa nhập phải có 5 ký tự trở lên');
+    }
+    if (isNaN(userInfo.phone)) {
+      return errorToast('Số điện thoại không hợp lệ');
+    }
+    if (userInfo.phone.length !== 10 && userInfo.phone.length !== 11) {
+      return errorToast('Số điện thoại phải từ 10 tới 11 số ');
+    }
+  };
+
   return (
     <main className="flex items-start justify-center gap-8 p-2 py-8 text-black bg-neutral-200">
       <div className="flex w-[45%] flex-col gap-4 p-4 bg-white rounded-lg">
@@ -84,7 +119,10 @@ function UserInformation() {
             </div>
           );
         })}
-        <button className="items-start self-start px-8 py-2 font-bold text-white bg-green-600 rounded-lg hover:bg-green-700 active:bg-green-800">
+        <button
+          onClick={handleUpdateInfo}
+          className="items-start self-start px-8 py-2 font-bold text-white bg-green-600 rounded-lg hover:bg-green-700 active:bg-green-800"
+        >
           Lưu
         </button>
       </div>

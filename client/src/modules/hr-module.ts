@@ -139,6 +139,15 @@ const updateEmployerLicense = async (formData) => {
   return response.data;
 };
 
+const getHRById = async ({ userId }: { userId: string }) => {
+  const response = await axios
+    .get(`http://localhost:3000/employer/${userId}`)
+    .then((res) => {
+      return res;
+    });
+  return response;
+};
+
 export {
   getApplicationByCampaignIdHRId,
   getCampaignById,
@@ -150,4 +159,5 @@ export {
   createCompaign,
   getPosition,
   updateEmployerLicense,
+  getHRById,
 };
