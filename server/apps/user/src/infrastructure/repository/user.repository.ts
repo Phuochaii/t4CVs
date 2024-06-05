@@ -24,11 +24,11 @@ export class TypeOrmUserRepository extends UserRepository {
   }
 
   async createUser(user: CreateUserDTO) {
-    await this.userRepository.save(user);
+    return await this.userRepository.save(user);
   }
 
   async updateUser(user: UpdateUserDTO) {
-    await this.userRepository.save(user);
+    return await this.userRepository.save(user);
   }
 
   async isUserExist(id: string) {

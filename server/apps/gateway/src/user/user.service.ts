@@ -19,10 +19,9 @@ export class UserService {
     private readonly uploadService: UploadService,
   ) {}
 
-  updateUser(user: UpdateUserDTO, image: any) {
+  updateUser(user: UpdateUserDTO, image: any): Observable<string> {
     if (image) {
       const uploadLink$ = from(this.uploadService.upload(image));
-
       return uploadLink$.pipe(
         switchMap((img: string) => {
           user.image = img;
