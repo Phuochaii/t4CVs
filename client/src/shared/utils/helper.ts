@@ -184,3 +184,11 @@ export async function updatePhoneStatus(id: number, status: boolean) {
   );
   return response;
 }
+
+export async function updateJobStatus(id: number, status: boolean) {
+  const response = await axios.put(`${serverURL}/job/update-status`, {
+    id: id,
+    status: status,
+  });
+  return response;
+}

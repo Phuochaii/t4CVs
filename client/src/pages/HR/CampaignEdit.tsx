@@ -10,8 +10,11 @@ import React, { SetStateAction, useEffect, useState } from "react";
 import { statusColor } from "../../shared/types/RecruitmentStatus.type";
 import clsx from "clsx";
 import { RecruitmentJobPost } from "../../shared/types/Recruitment.type";
-import axios from "axios";
-import { getJobById } from "../../shared/utils/helper";
+
+import {
+  getJobById,
+  updateJobStatus,
+} from "../../shared/utils/helper";
 
 function RecruitmentDisplayTable() {
   return (
@@ -47,7 +50,6 @@ function RecruitmentDisplaySection({
   refresh,
   setRefresh,
 }: RecruitmentDisplayProps) {
-  const [isDisplay, setIsDisplay] = useState(true);
   return (
     <div className="flex flex-col gap-4 p-4 bg-white">
       <p>
@@ -63,18 +65,11 @@ function RecruitmentDisplaySection({
         <div
           className="flex items-center gap-2 cursor-pointer"
           onClick={async () => {
-            const response = await axios.put(
-              "http://localhost:3000/job/update-status",
-              {
-                id: recruitment.id,
-                status: true,
-              }
-            );
-            if (response.status === 201) setIsDisplay(true);
+            await updateJobStatus(recruitment.id, true);
             setRefresh(!refresh);
           }}
         >
-          {isDisplay ? (
+          {recruitment.status ? (
             <div className="bg-green-500 border rounded-full">
               <Check stroke="white" size={16} />
             </div>
@@ -91,18 +86,11 @@ function RecruitmentDisplaySection({
         <div
           className="flex items-center gap-2 cursor-pointer"
           onClick={async () => {
-            const response = await axios.post(
-              "http://localhost:3000/job/update-status",
-              {
-                id: recruitment.id,
-                status: false,
-              }
-            );
-            if (response.status === 201) setIsDisplay(false);
+            await updateJobStatus(recruitment.id, false);
             setRefresh(!refresh);
           }}
         >
-          {!isDisplay ? (
+          {!recruitment.status ? (
             <div className="bg-green-500 border rounded-full">
               <Check stroke="white" size={16} />
             </div>

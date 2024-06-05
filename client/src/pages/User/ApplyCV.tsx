@@ -77,26 +77,26 @@ function ApplyCV() {
     setFilter((prevState) => ({ ...prevState, titleRecruitment: value }));
   };
 
-  const SelectSalary = (value: number) => {
-    if (value !== 0) {
-      const foundRange = salary_range.find(
-        (range) => Number(range.value) === value
-      );
-      if (foundRange) {
-        setFilter((prevFilter) => ({
-          ...prevFilter,
-          salaryMin: foundRange.minSalary,
-          salaryMax: foundRange.maxSalary,
-        }));
-      }
-    } else {
-      setFilter((prevFilter) => ({
-        ...prevFilter,
-        salaryMin: 0,
-        salaryMax: 0,
-      }));
-    }
-  };
+  // const SelectSalary = (value: number) => {
+  //   if (value !== 0) {
+  //     const foundRange = salary_range.find(
+  //       (range) => Number(range.value) === value
+  //     );
+  //     if (foundRange) {
+  //       setFilter((prevFilter) => ({
+  //         ...prevFilter,
+  //         salaryMin: foundRange.minSalary,
+  //         salaryMax: foundRange.maxSalary,
+  //       }));
+  //     }
+  //   } else {
+  //     setFilter((prevFilter) => ({
+  //       ...prevFilter,
+  //       salaryMin: 0,
+  //       salaryMax: 0,
+  //     }));
+  //   }
+  // };
 
   const fetchDataFilter = async () => {
     try {
@@ -205,7 +205,8 @@ function ApplyCV() {
     e.preventDefault();
 
     // Custom validation logic
-    let errors = {};
+    const errors = {};
+
     if (!formData.name) {
       errors.name = 'Name is required';
     }
@@ -670,7 +671,7 @@ function ApplyCV() {
                     <h1 className="job-detail__info--title text-2xl font-bold">
                       {jobData?.titleRecruitment
                         ? jobData?.titleRecruitment
-                        : ""}
+                        : ''}
                     </h1>
                     <div className="job-detail__info--sections grid grid-cols-3 gap-x-4 justify-center">
                       <div className="job-detail__info--section flex flex-row gap-x-4">
@@ -697,7 +698,7 @@ function ApplyCV() {
                           <strong className="job-detail__info--section-content-value">
                             {jobData?.salaryMin && jobData?.salaryMax
                               ? ` ${jobData?.salaryMin} - ${jobData?.salaryMax} ${jobData?.currency?.name}`
-                              : "Thỏa thuận"}
+                              : 'Thỏa thuận'}
                           </strong>
                         </div>
                       </div>
@@ -727,7 +728,7 @@ function ApplyCV() {
                                   {location.name}
                                 </strong>
                               ))
-                            : ""}
+                            : ''}
                         </div>
                       </div>
                       <div className="job-detail__info--section flex flex-row gap-x-4">
@@ -755,8 +756,8 @@ function ApplyCV() {
                             {jobData?.exp
                               ? jobData?.exp?.name
                                 ? jobData?.exp?.name
-                                : ""
-                              : ""}
+                                : ''
+                              : ''}
                           </strong>
                         </div>
                       </div>
@@ -777,10 +778,10 @@ function ApplyCV() {
                             />
                           </svg>
                         </div>
-                        Hạn nộp hồ sơ:{" "}
+                        Hạn nộp hồ sơ:{' '}
                         {moment
-                          .utc(jobData?.expiredDate ? jobData?.expiredDate : "")
-                          .format("DD/MM/YYYY")}
+                          .utc(jobData?.expiredDate ? jobData?.expiredDate : '')
+                          .format('DD/MM/YYYY')}
                       </div>
                     </div>
                     <div className="job-detail__info--actions grid grid-cols-5 gap-x-3">
@@ -825,8 +826,8 @@ function ApplyCV() {
                               {jobData?.jobDetail
                                 ? jobData?.jobDetail?.requirement
                                   ? jobData?.jobDetail?.requirement
-                                  : ""
-                                : ""}
+                                  : ''
+                                : ''}
                             </p>
                           </div>
                         </div>
@@ -838,12 +839,12 @@ function ApplyCV() {
                             {jobData?.jobDetail
                               ? jobData?.jobDetail?.skills
                                 ? jobData?.jobDetail?.skills
-                                    .split(", ")
+                                    .split(', ')
                                     .map((skill: any, index: number) => (
                                       <p key={index}>- {skill}</p>
                                     ))
-                                : ""
-                              : ""}
+                                : ''
+                              : ''}
                           </div>
                         </div>
                         <div className="job-description__item">
@@ -855,8 +856,8 @@ function ApplyCV() {
                               {jobData?.jobDetail
                                 ? jobData?.jobDetail?.description
                                   ? jobData?.jobDetail?.description
-                                  : ""
-                                : ""}
+                                  : ''
+                                : ''}
                             </p>
                           </div>
                         </div>
@@ -869,8 +870,8 @@ function ApplyCV() {
                               {jobData?.jobDetail
                                 ? jobData?.jobDetail?.djobSchedule
                                   ? jobData?.jobDetail?.description
-                                  : ""
-                                : ""}
+                                  : ''
+                                : ''}
                             </p>
                           </div>
                         </div>
@@ -883,8 +884,8 @@ function ApplyCV() {
                               {jobData?.jobDetail
                                 ? jobData?.jobDetail?.benefit
                                   ? jobData?.jobDetail?.benefit
-                                  : ""
-                                : ""}
+                                  : ''
+                                : ''}
                             </p>
                           </div>
                         </div>
@@ -896,7 +897,7 @@ function ApplyCV() {
                             <p>
                               {jobData.company?.address
                                 ? jobData.company?.address
-                                : ""}
+                                : ''}
                             </p>
                           </div>
                         </div>
@@ -926,10 +927,10 @@ function ApplyCV() {
                         </span>
                       </div>
                       <div className="job-detail__information-detail--actions-label">
-                        Hạn nộp hồ sơ:{" "}
+                        Hạn nộp hồ sơ:{' '}
                         {moment
-                          .utc(jobData?.expiredDate ? jobData?.expiredDate : "")
-                          .format("DD/MM/YYYY")}
+                          .utc(jobData?.expiredDate ? jobData?.expiredDate : '')
+                          .format('DD/MM/YYYY')}
                       </div>
                       <div className="quantity-applied-user w-fit flex flex-rows items-center text-sm text-slate-600 p-2 bg-slate-100 rounded-lg">
                         <div className="quantity-applied-user__icon mr-2">
@@ -967,7 +968,7 @@ function ApplyCV() {
                       </svg>
                       <span>
                         Báo cáo tin tuyển dụng: Nếu bạn thấy rằng tin tuyển dụng
-                        này không đúng hoặc có dấu hiệu lừa đảo,{" "}
+                        này không đúng hoặc có dấu hiệu lừa đảo,{' '}
                         <a href="#" className="text-green-600">
                           hãy phản ánh với chúng tôi.
                         </a>
@@ -986,12 +987,12 @@ function ApplyCV() {
                             src={
                               jobData.company?.image
                                 ? jobData.company?.image
-                                : ""
+                                : ''
                             }
                           />
                         </div>
                         <span className="job-detail__company--information-item__name col-span-2 text-lg font-bold">
-                          {jobData.company?.name ? jobData.company?.name : ""}
+                          {jobData.company?.name ? jobData.company?.name : ''}
                         </span>
                       </div>
                       <div className="job-detail__company--information-item company-scale grid grid-cols-3 gap-3">
@@ -1009,7 +1010,7 @@ function ApplyCV() {
                         <span className="company-scale__info col-span-2 font-semibold">
                           {jobData.company?.companySize
                             ? jobData.company?.companySize
-                            : ""}{" "}
+                            : ''}{' '}
                           nhân viên
                         </span>
                       </div>
@@ -1032,13 +1033,13 @@ function ApplyCV() {
                         <span className="company-scale__info col-span-2 font-semibold">
                           {jobData.company?.address
                             ? jobData.company?.address
-                            : ""}
+                            : ''}
                         </span>
                       </div>
                       <div
                         onClick={() =>
                           navigation(
-                            `/companies/${jobData?.companyId ? jobData?.companyId : ""}`
+                            `/companies/${jobData?.companyId ? jobData?.companyId : ''}`,
                           )
                         }
                         className="job-detail__company--action font-bold text-green-500 flex flex-row gap-2 items-center justify-center cursor-pointer hover:underline"
@@ -1117,8 +1118,8 @@ function ApplyCV() {
                             {jobData?.exp
                               ? jobData?.exp?.name
                                 ? jobData?.exp?.name
-                                : ""
-                              : ""}
+                                : ''
+                              : ''}
                           </span>
                         </div>
                       </div>
@@ -1155,9 +1156,9 @@ function ApplyCV() {
                           <span className="box-general-group-info-value font-bold">
                             {jobData?.jobDetail
                               ? jobData?.jobDetail?.quantity
-                                ? jobData?.jobDetail?.quantity + " người"
-                                : ""
-                              : ""}
+                                ? jobData?.jobDetail?.quantity + ' người'
+                                : ''
+                              : ''}
                           </span>
                         </div>
                       </div>
@@ -1185,7 +1186,7 @@ function ApplyCV() {
                           </span>
                           <span className="box-general-group-info-value font-bold">
                             {/* {jobData ? jobData?.type.name : ''} */}
-                            {jobData?.type?.name ? jobData?.type?.name : ""}
+                            {jobData?.type?.name ? jobData?.type?.name : ''}
                           </span>
                         </div>
                       </div>
@@ -1215,10 +1216,10 @@ function ApplyCV() {
                             {(jobData?.jobDetail
                               ? jobData?.jobDetail?.gender
                                 ? jobData?.jobDetail?.gender
-                                : ""
-                              : "") == "Male"
-                              ? "Nam"
-                              : "Nữ"}
+                                : ''
+                              : '') == 'Male'
+                              ? 'Nam'
+                              : 'Nữ'}
                           </span>
                         </div>
                       </div>
@@ -1240,7 +1241,7 @@ function ApplyCV() {
                                 {field.name}
                               </span>
                             ))
-                          : ""}
+                          : ''}
                       </div>
                     </div>
                     <div className="box-category">
@@ -1252,8 +1253,8 @@ function ApplyCV() {
                           {jobData?.locations
                             ? jobData?.locations[0]?.name
                               ? jobData?.locations[0]?.name
-                              : ""
-                            : ""}
+                              : ''
+                            : ''}
                         </span>
                       </div>
                     </div>
