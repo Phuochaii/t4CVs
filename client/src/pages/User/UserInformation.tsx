@@ -3,7 +3,7 @@ import { ArrowUpCircle, Camera, Check, Info } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Switch from '../../shared/components/CustomSwitch';
 import * as UserModule from '../../modules/user-module';
-import { errorToast } from '../../utils/toast';
+import { errorToast, successToast } from '../../utils/toast';
 
 const fields: {
   label: string;
@@ -85,6 +85,21 @@ function UserInformation() {
     if (userInfo.phone.length !== 10 && userInfo.phone.length !== 11) {
       return errorToast('Số điện thoại phải từ 10 tới 11 số ');
     }
+    const formData = new FormData();
+    formData.append('id', '1');
+    formData.append('fullname', userInfo.fullname);
+    formData.append('phone', userInfo.phone);
+    console.log(formData);
+    UserModule.updateUserById(formData)
+      .then((res) => {
+        successToast('Cập nhật thành công!');
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
+      })
+      .catch((res) => {
+        errorToast('Cập nhật thất bại, xin vui lòng thử lại sau');
+      });
   };
 
   return (

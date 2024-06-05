@@ -47,4 +47,18 @@ const getUserById = async ({ userId }: { userId: string }) => {
   return response;
 };
 
-export { getNotification, updateStatusNotification, getUserById };
+const updateUserById = async (formData) => {
+  const response = await axios
+    .put('http://localhost:3000/user/update', formData)
+    .then((res) => {
+      return res;
+    });
+  return response;
+};
+
+export {
+  getNotification,
+  updateStatusNotification,
+  getUserById,
+  updateUserById,
+};
