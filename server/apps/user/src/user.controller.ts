@@ -2,6 +2,7 @@ import { Controller } from '@nestjs/common';
 import { UserService } from './domain/user.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { CreateUserDTO } from './domain/dto/Req';
+import { UpdateUserDTO } from './domain/dto/Req/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -15,6 +16,11 @@ export class UserController {
   @MessagePattern({ cmd: 'create_user' })
   create(user: CreateUserDTO) {
     return this.userService.createUser(user);
+  }
+
+  @MessagePattern({ cmd: 'update_user' })
+  update(updateUserDTO: UpdateUserDTO) {
+    return this.userService.updateUser(updateUserDTO);
   }
 
   @MessagePattern({ cmd: 'find_all_users' })
