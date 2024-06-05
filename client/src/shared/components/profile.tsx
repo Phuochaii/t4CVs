@@ -10,7 +10,7 @@ import {
 import { SingleValue } from 'react-select';
 
 import * as HRModule from '../../modules/hr-module';
-import { errorToast } from '../../utils/toast';
+import { errorToast, successToast } from '../../utils/toast';
 
 function Profile() {
   const [imageFile, setImageFile] = useState();
@@ -33,22 +33,18 @@ function Profile() {
     }
   };
   const [userInfo, setUserInfo] = useState({
+    id: '1',
     fullname: 'Hải Yến Viên',
-    phone: '0123 456 789',
+    phoneNumber: '0123 456 789',
     gender: 'Nữ',
-    position: 'Nhân viên',
+    position: '1',
   });
   const gender = [
     { value: 'Không quan trọng', label: 'Không quan trọng' },
     { value: 'Nam', label: 'Nam' },
     { value: 'Nữ', label: 'Nữ' },
   ];
-  const Position = [
-    { value: 'Nhân viên', label: 'Nhân viên' },
-    { value: 'Trưởng phòng', label: 'Trưởng phòng' },
-    { value: 'Giám đốc', label: 'Giám đốc' },
-    { value: 'Nhân sự', label: 'Nhân sự' },
-  ];
+
   const [genderOptions, setGenderOptions] = useState<SingleValue<{
     value: string;
     label: string;
@@ -67,6 +63,19 @@ function Profile() {
     setUserInfo(newUserInfo);
   };
 
+  const convertToOptions = (data: { id: string; name: string }[]) => {
+    if (!data) return [];
+    return data.map(({ id, name }) => ({ value: id.toString(), label: name }));
+  };
+
+  const positions = convertToOptions(position?.data);
+
+  const fetchAllPositions = async () => {
+    HRModule.getHRPosition().then((res) => {
+      setPosition(res);
+    });
+  };
+
   const fetchUserInfo = async () => {
     HRModule.getHRById({ userId: '1' })
       .then((res) => {
@@ -74,13 +83,14 @@ function Profile() {
         console.log(response);
         const currentInfo = {
           fullname: response.fullname,
-          phone: response.phoneNumber,
+          phoneNumber: response.phoneNumber,
           gender:
             response.gender === 'Female' || response.gender === 'Nữ'
               ? 'Nữ'
               : 'Nam',
-          position: response.position || 'Nhân viên',
+          position: response.position,
           avatar: response.image,
+          skype: response.skype,
         };
         console.log(currentInfo);
         setUserInfo(currentInfo);
@@ -90,6 +100,7 @@ function Profile() {
 
   useEffect(() => {
     fetchUserInfo();
+    fetchAllPositions();
   }, []);
 
   const handleUpdateInfo = () => {
@@ -102,15 +113,32 @@ function Profile() {
     if (userInfo.fullname.length <= 5) {
       return errorToast('Họ và tên phải chứa trên 5 ký tự');
     }
+    if (!userInfo.position) {
+      return errorToast('Vui lòng chọn vị trí');
+    }
     const formData = new FormData();
-    formData.append('file', imageFile || userInfo.avatar);
+    formData.append('id', '1');
+    if (imageFile) {
+      formData.append('file', imageFile);
+    }
     formData.append('fullname', userInfo.fullname);
-    formData.append('phone', userInfo.phone);
+    formData.append('phoneNumber', userInfo.phoneNumber);
     formData.append('gender', userInfo.gender);
-    formData.append('position', userInfo.position);
+    formData.append('positionId', userInfo.position);
     for (const value of formData.values()) {
       console.log(value);
     }
+    HRModule.uploadHRProfile(formData)
+      .then((res) => {
+        successToast('Cập nhật thành công!');
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
+      })
+      .catch((res) => {
+        console.log(res);
+        return errorToast('Cập nhật thất bại, xin vui lòng thử lại sau');
+      });
   };
 
   return (
@@ -192,7 +220,7 @@ function Profile() {
             <img
               src={
                 image ||
-                userInfo.image ||
+                userInfo.avatar ||
                 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'
               }
               className="rounded-full"
@@ -206,7 +234,7 @@ function Profile() {
               Đổi avatar
             </button>
           </div>
-          <span className="w-5/12">Email: nguyenthybinh9319@gmail.com</span>
+          <span className="w-5/12">Email: {userInfo.skype}</span>
         </div>
         <div className="w-full flex flex-row items-center space-x-20">
           <div className="w-5/12 space-y-2">
@@ -247,7 +275,7 @@ function Profile() {
               Số điện thoại
             </span>
             <input
-              value={userInfo.phone}
+              value={userInfo.phoneNumber}
               type="text"
               className=" bg-gray-300 border border-slate-300 focus:border-green-500 outline-none text-slate-400 text-base  w-full p-2.5"
               disabled
@@ -259,13 +287,12 @@ function Profile() {
             </span>
             <SingleDropdown
               placeholder={userInfo.position || '--- Chọn vị trí ---'}
-              options={Position}
+              options={positions}
               onChange={(
                 e: SetStateAction<
                   SingleValue<{ value: string; label: string }>
                 >,
               ) => {
-                setPosition(e);
                 handleChange('position', e.value);
               }}
             />

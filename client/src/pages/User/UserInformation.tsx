@@ -58,10 +58,11 @@ function UserInformation() {
     UserModule.getUserById({ userId: '1' })
       .then((res) => {
         const response = res.data;
+        console.log(response);
         const currentInfo = {
           fullname: response.fullname,
           phone: response.phone,
-          email: 'yyen9319@gmail.com',
+          email: '*****@gmail.com',
         };
         setUserInfo(currentInfo);
       })
