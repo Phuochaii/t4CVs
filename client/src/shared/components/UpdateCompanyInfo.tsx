@@ -1,4 +1,11 @@
-import { MouseEventHandler, SetStateAction, useEffect, useState } from 'react';
+import {
+  MouseEventHandler,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { MultiValue, SingleValue } from 'react-select';
 import SingleDropdown from './SingleDropDown';
 import Select from 'react-select';
@@ -6,10 +13,30 @@ import { Bold, Italic, List, ListOrdered, Underline } from 'lucide-react';
 const UpdateCompanyInfo = ({
   handleComponent,
   companyName,
+  company,
 }: {
   handleComponent: MouseEventHandler<HTMLButtonElement> | undefined;
   companyName: string;
 }) => {
+  const [imageFile, setImageFile] = useState();
+  const [image, setImage] = useState();
+  const imageUploadRef = useRef(null);
+  const handleImageUpload = useCallback(() => {
+    imageUploadRef?.current?.click();
+  }, []);
+  const imagePreview = (e) => {
+    const selectedImage = e.target.files[0];
+    setImageFile(selectedImage);
+    console.log(selectedImage);
+    if (selectedImage) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        setImage(event.target.result);
+      };
+      reader.readAsDataURL(selectedImage);
+    }
+  };
   const [fields, setFields] = useState<any>(null);
   useEffect(() => {
     // Fetch data from your API
@@ -53,6 +80,9 @@ const UpdateCompanyInfo = ({
     value: string;
     label: string;
   }> | null>(null);
+  const handleUpdateInfo = () => {
+    console.log(company);
+  };
   return (
     <div className="w-full m-2 flex flex-col">
       <h1 className="text-black text-sl font-bold mb-5">
@@ -63,12 +93,27 @@ const UpdateCompanyInfo = ({
         <div className="w-5/12 flex flex-row items-center space-x-1">
           <span>Logo</span>
           <img
-            src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg"
+            src={
+              image ||
+              company.image ||
+              'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'
+            }
             className="rounded-full"
-            style={{ width: '32px' }}
+            style={{ width: '32px', height: '32px' }}
             alt="Avatar"
           />
-          <button className="text-sm btn-success py-1 px-2 rounded bg-gray-100 cursor-pointer">
+          <input
+            type="file"
+            name="file"
+            ref={imageUploadRef}
+            onChange={imagePreview}
+            style={{ display: 'none' }}
+            accept="image/png, image/gif, image/jpeg"
+          />
+          <button
+            onClick={handleImageUpload}
+            className="text-sm btn-success py-1 px-2 rounded bg-gray-100 cursor-pointer"
+          >
             Đổi Logo
           </button>
         </div>
@@ -99,6 +144,7 @@ const UpdateCompanyInfo = ({
               type="text"
               className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
               placeholder="Nhập mã số thuế"
+              value={company.taxCode ? company.taxCode : ''}
             />
           </div>
 
@@ -108,6 +154,7 @@ const UpdateCompanyInfo = ({
               type="text"
               className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
               placeholder="http://"
+              value={company.website ? company.website : ''}
             />
           </div>
         </div>
@@ -184,6 +231,7 @@ const UpdateCompanyInfo = ({
                 type="text"
                 className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                 placeholder="Nhập địa chỉ"
+                value={company.address ? company.address : ''}
               />
             </div>
             <div className="space-y-2  ">
@@ -192,6 +240,7 @@ const UpdateCompanyInfo = ({
                 type="text"
                 className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                 placeholder="Nhập số điện thoại"
+                value={company.phone ? company.phone : ''}
               />
             </div>
           </div>
@@ -258,6 +307,7 @@ const UpdateCompanyInfo = ({
               <textarea
                 className="w-full bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base h-32 p-2.5"
                 placeholder="Nhập nội dung mô tả công việc"
+                value={company.description ? company.description : ''}
               />
             </div>
           </div>
@@ -271,7 +321,7 @@ const UpdateCompanyInfo = ({
           </button>
           <button
             className="text-base btn-success py-2 px-10 rounded text-white bg-green-500 shadow-md cursor-pointer"
-            onClick={handleComponent}
+            onClick={handleUpdateInfo}
           >
             Lưu
           </button>

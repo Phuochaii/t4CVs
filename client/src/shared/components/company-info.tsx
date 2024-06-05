@@ -10,7 +10,7 @@ import { DefaultPagination } from './default-pagination';
 function CompanyInfo() {
   const [component, setComponent] = useState(true);
   const [name, setName] = useState('');
-
+  const [company, setCompany] = useState();
   const [companies, setCompanies] = useState<CompanyFromServer[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -47,7 +47,7 @@ function CompanyInfo() {
       <div className="w-[95%]">
         <div
           className={
-            "btn text-sm p-3 flex items-center justify-between w-full bg-[#EBF3FF] text-[#2D7CF1] mb-4"
+            'btn text-sm p-3 flex items-center justify-between w-full bg-[#EBF3FF] text-[#2D7CF1] mb-4'
           }
         >
           <div className="flex flex-row items-center space-x-4">
@@ -128,7 +128,7 @@ function CompanyInfo() {
           <h1 className="text-black my-3">Công ty mới tạo</h1>
           <div
             className="grid grid-cols-1 md:grid-cols-2 gap-4"
-            style={{ height: "250px", overflowY: "scroll" }}
+            style={{ height: '250px', overflowY: 'scroll' }}
           >
             {companies.length > 0 ? (
               companies.map((item, index) => (
@@ -169,7 +169,9 @@ function CompanyInfo() {
                       <div className="job-actions flex items-center space-x-2">
                         <button
                           onClick={() => {
-                            handleComponent(), setName(item.name);
+                            handleComponent(),
+                              setName(item.name),
+                              setCompany(item);
                           }}
                           className="bg-green-100 text-sm hover:bg-green-300 text-green-700 py-0.5 px-1 rounded-full inline-flex items-center"
                         >
@@ -201,6 +203,7 @@ function CompanyInfo() {
     <UpdateCompanyInfo
       handleComponent={handleComponent}
       companyName={name}
+      company={company}
     ></UpdateCompanyInfo>
   );
 }
