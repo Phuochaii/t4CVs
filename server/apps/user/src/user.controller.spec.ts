@@ -62,7 +62,7 @@ describe('UserController', () => {
     const id = '1';
     it('should return user by id', () => {
       expect(controller.findById(id)).toEqual({
-        id: 4,
+        id: id,
         name: expect.any(String),
         phone: expect.any(String),
         image: expect.any(String),
