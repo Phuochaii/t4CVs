@@ -38,4 +38,51 @@ const updateStatusNotification = async ({
   return response;
 };
 
-export { getNotification, updateStatusNotification };
+const isUser: (token: string) => Promise<boolean> = async (token: string) => {
+  const result = await axios.get(`http://localhost:3000/user/check`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    }
+  })
+    .then(res => res.data as boolean)
+  return result;
+}
+
+const getProfile: (token: string) => Promise<{
+  fullname: string;
+  phone?: string;
+  image?: string;
+}> = async (token: string) => {
+  const result = await axios.get(`http://localhost:3000/user/profile`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    }
+  })
+    .then(res => res.data)
+  return result;
+}
+
+const createUser: (input: {
+  fullname: string;
+  phone?: string;
+  image?: string;
+  token: string;
+}) => Promise<void> = async ({
+  fullname,
+  phone,
+  image,
+  token
+}) => {
+  console.log("image sent to be: ",image)
+  await axios.post(`http://localhost:3000/user/create`, {
+    fullname,
+    phone,
+    image,
+  }, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    }
+  });
+}
+
+export { getNotification, updateStatusNotification, isUser, getProfile, createUser };

@@ -34,7 +34,7 @@ export const notifications: NotificationSchema[] = [
     id: 5,
     title: 'Noti 5',
     content: 'Congratulations on Your [Insert Number] Year Work Anniversary!',
-    createdAt: new Date('2024-07-26'),
+    createdAt: new Date('2024-03-26'),
     link: 'https://www.topcv.vn/faqs/find-a-safe-job',
   },
   {
@@ -63,7 +63,7 @@ export const notifications: NotificationSchema[] = [
     id: 9,
     title: 'Noti 9',
     content: "Happy Birthday [Recipient''s Name]! 🎉🎂",
-    createdAt: new Date('2024-06-10'),
+    createdAt: new Date('2024-03-10'),
     link: 'https://www.topcv.vn/faqs/find-a-safe-job',
   },
   {
@@ -106,7 +106,7 @@ export const notifications: NotificationSchema[] = [
     id: 15,
     title: 'Noti 15',
     content: 'Updated Company Policy Handbook Attached - Please Review.',
-    createdAt: new Date('2024-07-16'),
+    createdAt: new Date('2024-03-16'),
     link: 'https://www.topcv.vn/faqs/find-a-safe-job',
   },
   {
@@ -127,7 +127,7 @@ export const notifications: NotificationSchema[] = [
     id: 18,
     title: 'Noti 18',
     content: 'RSVP Reminder for [Event Name] by [Insert RSVP Deadline].',
-    createdAt: new Date('2024-08-21'),
+    createdAt: new Date('2024-03-21'),
     link: 'https://www.topcv.vn/faqs/find-a-safe-job',
   },
   {

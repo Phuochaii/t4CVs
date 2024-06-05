@@ -1,24 +1,26 @@
-import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { FormControlLabel, Checkbox } from "@mui/material";
-import { Mail, ShieldCheck, Eye, EyeOff } from "lucide-react";
-import GoogleIcon from "@mui/icons-material/Google";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import img from "../../shared/assets/images/Sign-up user.png";
-import { accountList } from "../../shared/utils/constant";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from 'react-router-dom';
+import { FormControlLabel, Checkbox } from '@mui/material';
+import { Mail, ShieldCheck, Eye, EyeOff } from 'lucide-react';
+import GoogleIcon from '@mui/icons-material/Google';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import img from '../../shared/assets/images/Sign-up user.png';
+import { useAuthen } from '../../shared/services/authen';
+import { Roles } from "../../shared/services/authen/domain/context";
+import { useAuth0 } from "@auth0/auth0-react";
+import Spinner from "../Spinner";
 
 function UserLogIn() {
+  const {isAuthenticated, isLoading} = useAuth0();
   const navigation = useNavigate();
+  const {usernamePasswordLogin, googleLogin, linkedInLogin, facebookLogin} = useAuthen();
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [socialAgree, setSocialAgree] = useState(true);
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
 
   const [emailError, setEmailError] = useState(false);
@@ -29,12 +31,14 @@ function UserLogIn() {
     setShowPassword(!showPassword);
   };
 
-  React.useEffect(() => {
-    if (localStorage.getItem("user") !== null) {
-      navigation("/");
+  useEffect(() => {
+    if(isLoading) return; 
+    if (isAuthenticated) {
+      navigation(Roles.USER.redirectUrl);
       return;
     }
-  }, []);
+  },[isAuthenticated, isLoading]);
+  if(isLoading || isAuthenticated) return <Spinner/>;
 
   const isEmailValid = (email: string) => {
     // Biểu thức chính quy để kiểm tra định dạng email
@@ -42,23 +46,12 @@ function UserLogIn() {
     return emailRegex.test(email);
   };
 
+  const onLoginError = () => {
+    setErrorMessage("Email hoặc mật khẩu không chính xác.");
+  }
+
   const handleLogin = (e: { preventDefault: () => void }) => {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
-
-    accountList.forEach((account) => {
-      console.log(account);
-      if (
-        account.email === formData.email &&
-        account.password === formData.password &&
-        account.role === "user"
-      ) {
-        console.log("Đăng nhập thành công với email:", formData.email);
-        localStorage.setItem("user", JSON.stringify(account));
-        // navigation("/");
-        navigation(-1);
-        return;
-      }
-    });
 
     if (!formData.password) {
       setErrorMessage("Hãy cho chúng tôi biết mật khẩu của bạn");
@@ -71,13 +64,31 @@ function UserLogIn() {
 
     if (formData.password && formData.email) {
       // Đăng nhập không thành công
-      setErrorMessage("Email hoặc mật khẩu không chính xác.");
       if (formData.email && !isEmailValid(formData.email)) {
         setErrorMessage("Định dạng email không đúng");
         setEmailError(true);
       }
     }
+
+    if (!formData.email || !formData.password) return;
+    
+    usernamePasswordLogin({
+      username: formData.email,
+      password: formData.password,
+    }, Roles.USER, onLoginError);
   };
+
+  const handleGoogleLogin = () => {
+    googleLogin();
+  }
+
+  const handleLinkedInLogin = () => {
+    linkedInLogin();
+  }
+
+  const handleFacebookLogin = () => {
+    facebookLogin();
+  }
 
   return (
     <div className="grid grid-cols-3 gap-4 ">
@@ -184,7 +195,7 @@ function UserLogIn() {
           </button>
         </form>
 
-        {isLoggedIn && (
+        {isAuthenticated && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mt-4">
             Đăng nhập thành công!
           </div>
@@ -195,17 +206,20 @@ function UserLogIn() {
           <div className="flex fullwidth">
             <button
               disabled={!socialAgree}
-              className={`flex-grow rounded-md py-2 px-4 mr-2 mb-4 text-white ${!socialAgree ? "bg-red-400" : "bg-red-500 hover:bg-red-600"}`}
+              onClick={handleGoogleLogin}
+              className={`flex-grow rounded-md py-2 px-4 mr-2 mb-4 text-white ${!socialAgree ? 'bg-red-400' : 'bg-red-500 hover:bg-red-600'}`}
             >
               <GoogleIcon></GoogleIcon> Google
             </button>
             <button
+            onClick={handleFacebookLogin}
               disabled={!socialAgree}
               className={`flex-grow rounded-md py-2 px-4 mx-2 mb-4 text-white ${!socialAgree ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-500"}`}
             >
               <FacebookIcon></FacebookIcon> Facebook
             </button>
             <button
+              onClick={handleLinkedInLogin}
               disabled={!socialAgree}
               className={`flex-grow rounded-md py-2 px-4 ml-2 mb-4 text-white ${!socialAgree ? "bg-blue-500" : "bg-blue-800 hover:bg-blue-700"}`}
             >

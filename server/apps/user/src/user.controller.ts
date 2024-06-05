@@ -21,6 +21,13 @@ export class UserController {
   findAll() {
     return this.userService.findAll();
   }
+
+  
+  @MessagePattern({ cmd: 'check_user' })
+  check(id: string) {
+    return this.userService.check(id);
+  }
+
   @MessagePattern({ cmd: 'is_user_exist' })
   isUserExist(id: string) {
     return this.userService.isUserExist(id);

@@ -1,51 +1,47 @@
-import React, { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
 import img from "../../shared/assets/images/Sign-up user.png";
-import { accountList } from "../../shared/utils/constant";
+import { useAuth0 } from "@auth0/auth0-react";
+import Spinner from "../Spinner";
+import { Roles } from "../../shared/services/authen/domain/context";
+import { useAuthen } from "../../shared/services/authen";
 
 function AdminLogIn() {
-  const navigation = useNavigate();
-  React.useEffect(() => {
-    if (localStorage.getItem("admin") !== null) {
-      navigation("/admin/overview");
-      return;
-    }
-  }, []);
+  const navigate = useNavigate();
+  const {isLoading, isAuthenticated} = useAuth0();
+  const {usernamePasswordLogin} = useAuthen();
+  
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
 
   const [error, setError] = useState("");
-  const [showError, setShowError] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const showError:boolean = !!error;
 
   const [showPassword, setShowPassword] = useState(false);
 
   const [userNameEmpty, setUserNameEmpty] = useState(false);
   const [passwordEmpty, setPasswordEmpty] = useState(false);
 
+  useEffect(() => {
+    if(isLoading) return;
+    if(isAuthenticated) {
+      navigate(Roles.ADMIN.redirectUrl);
+    }
+  }, [isLoading, isAuthenticated]);
+
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
   };
 
+  const onLoginError = () => {
+    setError("Tên tài khoản hoặc mật khẩu không chính xác.");
+  }
   const handleLogin = (e: { preventDefault: () => void }) => {
-    e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
 
-    accountList.forEach((account) => {
-      console.log(account);
-      if (
-        account.email === formData.username &&
-        account.password === formData.password &&
-        account.role === "admin"
-      ) {
-        console.log("Đăng nhập thành công với email:", formData.username);
-        // store in local storage
-        localStorage.setItem("admin", JSON.stringify(account));
-        navigation("/admin/overview");
-      }
-    });
+    e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
 
     if (!formData.username) {
       setUserNameEmpty(true);
@@ -53,12 +49,17 @@ function AdminLogIn() {
 
     if (!formData.password) {
       setPasswordEmpty(true);
-    } else {
-      // Đăng nhập không thành công
-      setError("Tên tài khoản hoặc mật khẩu không chính xác.");
-      setShowError(true);
-    }
+    } 
+    
+    if(!formData.username || !formData.password) return;
+
+    usernamePasswordLogin({
+      username: formData.username,
+      password: formData.password
+    }, Roles.ADMIN, onLoginError);
   };
+
+  if(isLoading || isAuthenticated) return <Spinner/>;
 
   return (
     <div className="grid grid-cols-3 gap-4">
@@ -157,11 +158,6 @@ function AdminLogIn() {
         </form>
 
         {showError && <div className="text-red-500">{error}</div>}
-        {isLoggedIn && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mt-4">
-            Đăng nhập thành công!
-          </div>
-        )}
       </div>
 
       <div className="col-span-1">

@@ -1,7 +1,10 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Observable } from 'rxjs';
 import { CreateUserDTO } from './dto/Req/createUser.dto';
+import { CreateUserAccountDto } from './dto/Req/create-user-account.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
 
 @Controller('user')
 export class UserController {
@@ -10,6 +13,18 @@ export class UserController {
   @Get('all')
   findAllUsers(): Observable<string> {
     return this.userService.findAllUsers();
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
+  @Get('check')
+  checkUser(@GetUser() user: UserClaims): Observable<boolean> {
+    return this.userService.checkUser(user.sub);
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
+  @Get('/profile')
+  getUserProfile(@GetUser() user: UserClaims) {
+    return this.userService.findUserById(user.sub);
   }
 
   @Get('check/:id')
@@ -22,12 +37,23 @@ export class UserController {
     return this.userService.findUserById(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('create')
-  // @UseInterceptors(FileInterceptor('image'))
   createUser(
-    // @UploadedFile() image: Express.Multer.File,
-    @Body() user: CreateUserDTO,
-  ) {
-    return this.userService.createUser(user);
+    @GetUser() userClaims: UserClaims,
+    @Body() user: Omit<CreateUserDTO, 'id'>,
+  ): Promise<Observable<string>> {
+    console.log('create user', userClaims.sub);
+    return this.userService.createUser({
+      id: userClaims.sub,
+      ...user,
+    });
+  }
+
+  @Post('account')
+  registerAccount(
+    @Body() user: CreateUserAccountDto,
+  ): Promise<Observable<string>> {
+    return this.userService.createAccount(user);
   }
 }

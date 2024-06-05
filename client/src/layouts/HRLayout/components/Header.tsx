@@ -9,9 +9,12 @@ import {
   ChevronDown,
   Menu,
   LineChart,
-} from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import * as HRModule from '../../../modules/hr-module';
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import * as HRModule from "../../../modules/hr-module";
+import { useAuth0 } from "@auth0/auth0-react";
+import { Roles, useProfileContext } from "../../../shared/services/authen/domain/context";
+import { AUTH0_CLIENT_ID } from "../../../shared/services/authen/infrastructure/config";
 
 const list_btn1 = [
   {
@@ -62,23 +65,13 @@ const accountButton = {
 
 function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
   const navigation = useNavigate();
-
+  const {user, logout} = useAuth0();
+  const { profile} = useProfileContext();
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [displayAccountTab, setDisplayAccountTab] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
-  React.useEffect(() => {
-    // console.log(JSON.parse(localStorage.getItem('hr') as string).role);
-    if (localStorage.getItem('hr') === null) {
-      navigation('/hr-login');
-      return;
-    }
-    fetchNotification({ id: hrId });
-  }, []);
-  const hrId =
-    localStorage.getItem('hr') == null
-      ? ''
-      : JSON.parse(localStorage.getItem('hr') as string).id;
+  const hrId = user?.sub;
   const fetchNotification = ({
     id,
     limit = 3,
@@ -244,7 +237,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
               <RoundedButton
                 text={accountButton.name}
                 icon={accountButton.icon}
-                image={accountButton.image}
+                image={profile?.picture || accountButton.image}
                 iconSize={accountButton.iconSize}
                 onClick={() => {
                   navigation(accountButton.link);
@@ -261,8 +254,13 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                   <li
                     className={'px-4 py-2 m-0 border-b-gray-200 border'}
                     onClick={() => {
-                      navigation('/hr');
-                      localStorage.removeItem('hr');
+                      // logout({
+                      //   clientId: AUTH0_CLIENT_ID,
+                      //   logoutParams: { returnTo: `${window.location.origin}${Roles.HR.loginUrl}` },
+                      // })
+                      logout({
+                        openUrl: false
+                      });
                     }}
                   >
                     <span className="cursor-pointer text-black hover:text-green-500">
