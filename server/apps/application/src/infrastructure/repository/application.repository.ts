@@ -7,8 +7,8 @@ import {
   GetApplicationDto,
   GetAllApplicationsDto,
   UpdateApplicationDto,
-  GetByCampaignIdApplicationDto,
-  GetAllByCampaignIdApplicationDto,
+  GetByCampaignIdWithPaginationDto,
+  GetByCampaignIdDto,
   GetByUserIdApplicationDto,
   GetByUserIdPaginationApplicationDto,
 } from '../../domain/dto';
@@ -18,6 +18,7 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
   constructor(
     @InjectRepository(ApplicationSchema)
     private readonly applicationRepository: Repository<ApplicationSchema>,
+    
   ) {
     super();
   }
@@ -74,7 +75,7 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
   }
 
   async getByCampaignIdApplication(
-    application: GetByCampaignIdApplicationDto,
+    application: GetByCampaignIdWithPaginationDto,
   ): Promise<Application[] | null> {
     const skip = (application.page - 1) * application.limit;
     const data = await this.applicationRepository.find({
@@ -96,7 +97,7 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
   }
 
   async getAllByCampaignIdApplication(
-    application: GetAllByCampaignIdApplicationDto,
+    application: GetByCampaignIdDto,
   ): Promise<Application[] | null> {
     const data = await this.applicationRepository.find({
       where: {

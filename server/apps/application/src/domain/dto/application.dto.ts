@@ -1,6 +1,6 @@
-// import { Application } from '../entity';
+import { Application } from "../entity";
 
-export class ApplicationDto {
+export class ApplicationDto implements Application {
   id: number;
   status: boolean;
   fullname: string;

@@ -1,4 +1,4 @@
-import { BaseService } from './base.service';
+import { BaseService } from '@app/common/domain';
 import { ApplicationRepository } from '../repository';
 import { Application } from '../entity';
 

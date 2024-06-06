@@ -1,4 +1,4 @@
-export class GetByCampaignIdApplicationDto {
+export class GetByCampaignIdWithPaginationDto {
   page: number;
   limit: number;
   campaignIds: number[];

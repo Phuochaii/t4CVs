@@ -1,6 +1,6 @@
-import { BaseService } from './base.service';
 import { ApplicationRepository } from '../repository';
 import { Application } from '../entity';
+import { BaseService } from '@app/common/domain';
 // import { ApplicationDto } from '../dto';
 
 export class CreateApplicationService implements BaseService<Application> {

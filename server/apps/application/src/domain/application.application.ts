@@ -3,8 +3,8 @@ import {
   GetApplicationDto,
   GetAllApplicationsDto,
   UpdateApplicationDto,
-  GetByCampaignIdApplicationDto,
-  GetAllByCampaignIdApplicationDto,
+  GetByCampaignIdWithPaginationDto,
+  GetByCampaignIdDto,
   GetByUserIdApplicationDto,
   GetByUserIdPaginationApplicationDto,
 } from './dto';
@@ -56,7 +56,7 @@ export class ApplicationApplication {
   }
 
   async getByCampaignIdApplication(
-    request: GetByCampaignIdApplicationDto,
+    request: GetByCampaignIdWithPaginationDto,
   ): Promise<Applications> {
     const campaignIds = request.campaignIds;
     const total_data = this.getAllByCampaignIdApplication({
@@ -87,7 +87,7 @@ export class ApplicationApplication {
   }
 
   async getAllByCampaignIdApplication(
-    request: GetAllByCampaignIdApplicationDto,
+    request: GetByCampaignIdDto,
   ): Promise<Application[]> {
     return await this.getAllByCampaignIdApplicationService.execute(request);
   }

@@ -1,7 +1,8 @@
-// import { ApplicationDto } from './application.dto';
-// import { Application } from '../entity';
+import { Application } from '../entity';
 
-export class CreateApplicationDto {
+export class CreateApplicationDto
+  implements Omit<Application, 'id' | 'createdAt' | 'updateAt' | 'status'>
+{
   fullname: string;
   phone: string;
   email: string;
