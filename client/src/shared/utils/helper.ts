@@ -96,7 +96,7 @@ export async function getJobByCampaignId(campaignId: number) {
   }
 }
 
-export async function getJobById(id: number) {
+export async function getJobById(id: number | string) {
   const response = await axios.get(`${serverURL}/job/${id}`);
   const rawJob: RecruitmentFromServer = response.data;
   return rawJob;
@@ -191,4 +191,30 @@ export async function updateJobStatus(id: number, status: boolean) {
     status: status,
   });
   return response;
+}
+
+export async function uploadCV({ postData, token }) {
+  try {
+    const response = await axios.post(`${serverURL}/cv`, postData, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch {
+    throw new Error('Upload cv failed');
+  }
+}
+
+export async function uploadApplication({ data, token }) {
+  try {
+    const response = await axios.post(`${serverURL}/application`, data, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch {
+    throw new Error('Upload application failed');
+  }
 }
