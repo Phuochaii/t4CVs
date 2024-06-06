@@ -107,9 +107,17 @@ export class ApplicationService implements OnModuleInit {
   ) {
     const campaignRes =
       await this.companyService.findAllCampaignByEmployerId(hrId);
-
+    if (!campaignRes) {
+      return {
+        page: page,
+        limit: limit,
+        total: 0,
+        totalPage: 0,
+        applications: [],
+      };
+    }
     let campaignIds = campaignRes.data.map((campaign) => campaign.id);
-
+    console.log(campaignIds);
     if (campaignId) {
       campaignIds = [campaignId];
     }

@@ -226,10 +226,11 @@ export class CompanyService {
 
     const campaign = await lastValueFrom(result);
     if (campaign.data.length === 0) {
-      throw new BadRequestException('Cannot found campaign');
+      return null;
     } else {
       return campaign;
     }
+    // return result;
   }
 
   deleteCampaign(id: number) {
