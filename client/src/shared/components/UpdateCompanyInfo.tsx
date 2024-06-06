@@ -1,4 +1,11 @@
-import { MouseEventHandler, SetStateAction, useEffect, useState } from 'react';
+import {
+  MouseEventHandler,
+  SetStateAction,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+} from 'react';
 import { MultiValue, SingleValue } from 'react-select';
 import SingleDropdown from './SingleDropDown';
 import { Bold, Italic, List, ListOrdered, Underline } from 'lucide-react';
@@ -13,6 +20,25 @@ const UpdateCompanyInfo = ({
   company: CompanyFromServer;
   fields: any;
 }) => {
+  const [imageFile, setImageFile] = useState();
+  const [image, setImage] = useState();
+  const imageUploadRef = useRef(null);
+  const handleImageUpload = useCallback(() => {
+    imageUploadRef?.current?.click();
+  }, []);
+  const imagePreview = (e) => {
+    const selectedImage = e.target.files[0];
+    setImageFile(selectedImage);
+    console.log(selectedImage);
+    if (selectedImage) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        setImage(event.target.result);
+      };
+      reader.readAsDataURL(selectedImage);
+    }
+  };
   const {
     register,
     handleSubmit,
@@ -32,7 +58,9 @@ const UpdateCompanyInfo = ({
   });
   const onSubmit = async (data: any, event: any) => {
     const updatedItem = { ...item };
-
+    if (imageFile) {
+      updatedItem.file = imageFile;
+    }
     // Thịnh update lại phần file
     updatedItem.id = company.id;
     updatedItem.file = '';
@@ -86,12 +114,27 @@ const UpdateCompanyInfo = ({
           <div className="w-5/12 flex flex-row items-center space-x-1">
             <span>Logo</span>
             <img
-              src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg"
+              src={
+                image ||
+                company.avatar ||
+                'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'
+              }
               className="rounded-full"
-              style={{ width: '32px' }}
+              style={{ width: '32px', height: '32px' }}
               alt="Avatar"
             />
-            <button className="text-sm btn-success py-1 px-2 rounded bg-gray-100 cursor-pointer">
+            <input
+              type="file"
+              name="file"
+              ref={imageUploadRef}
+              onChange={imagePreview}
+              style={{ display: 'none' }}
+              accept="image/png, image/gif, image/jpeg"
+            />
+            <button
+              className="text-sm btn-success py-1 px-2 rounded bg-gray-100 cursor-pointer"
+              onClick={handleImageUpload}
+            >
               Đổi Logo
             </button>
           </div>

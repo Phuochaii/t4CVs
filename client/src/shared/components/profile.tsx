@@ -12,9 +12,12 @@ import { SingleValue } from 'react-select';
 import * as HRModule from '../../modules/hr-module';
 import { errorToast, successToast } from '../../utils/toast';
 
+let positionArray = [];
+
 function Profile() {
   const [imageFile, setImageFile] = useState();
   const [image, setImage] = useState();
+  const [positionValue, setPositionValue] = useState();
   const imageUploadRef = useRef(null);
   const handleImageUpload = useCallback(() => {
     imageUploadRef?.current?.click();
@@ -73,6 +76,7 @@ function Profile() {
   const fetchAllPositions = async () => {
     HRModule.getHRPosition().then((res) => {
       setPosition(res);
+      positionArray = res.data;
     });
   };
 
@@ -88,19 +92,30 @@ function Profile() {
             response.gender === 'Female' || response.gender === 'Nữ'
               ? 'Nữ'
               : 'Nam',
-          position: response.position,
+          position: response.positionId,
           avatar: response.image,
           skype: response.skype,
         };
-        console.log(currentInfo);
+        console.log(positionArray);
+        let currentPosition;
+        currentPosition = positionArray.filter((item) => {
+          if (item.id === currentInfo.position) {
+            setPositionValue(item.name);
+            return item.name;
+          }
+        });
+
         setUserInfo(currentInfo);
       })
       .catch();
   };
 
   useEffect(() => {
-    fetchUserInfo();
-    fetchAllPositions();
+    const fetchData = async () => {
+      await fetchAllPositions();
+      await fetchUserInfo();
+    };
+    fetchData();
   }, []);
 
   const handleUpdateInfo = () => {
@@ -286,7 +301,7 @@ function Profile() {
               Vị trí
             </span>
             <SingleDropdown
-              placeholder={userInfo.position || '--- Chọn vị trí ---'}
+              placeholder={positionValue || '--- Chọn vị trí ---'}
               options={positions}
               onChange={(
                 e: SetStateAction<
