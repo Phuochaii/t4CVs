@@ -98,7 +98,7 @@ export class EmployerController {
   @Put('update/licenseStatus/:id')
   updateEmployerLicenseStatus(
     @Param('id') id: string,
-    @Body() licenseStatus: boolean,
+    @Body('licenseStatus') licenseStatus: boolean,
   ): Observable<any> {
     return this.employerService.updateEmployerLicenseStatus(id, licenseStatus);
   }
@@ -106,7 +106,7 @@ export class EmployerController {
   @Put('update/phoneNumberStatus/:id')
   updateEmployerPhoneStatus(
     @Param('id') id: string,
-    @Body() phoneNumberStatus: boolean,
+    @Body('phoneNumberStatus') phoneNumberStatus: boolean,
   ): Observable<any> {
     return this.employerService.updateEmployerPhoneStatus(
       id,
@@ -122,7 +122,7 @@ export class EmployerController {
       }),
     }),
   )
-  updateCompany(
+  updateEmployer(
     @UploadedFile() file: any,
     @Body() data: UpdateEmployerDTO,
   ): Observable<string> {
@@ -130,7 +130,7 @@ export class EmployerController {
   }
 
   @Get('name/:name')
-  findCompanyByName(
+  findEmployerByName(
     @Param('name') name: string,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
