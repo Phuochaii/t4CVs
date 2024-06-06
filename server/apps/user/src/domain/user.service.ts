@@ -1,4 +1,5 @@
-import { CreateUserDTO } from './dto/Req';
+import { CreateUserDTO, QueryDTO } from './dto/Req';
+import { FindUserRespDTO } from './dto/Resp/find-users.dto';
 import { UserRepository } from './repository';
 import { UpdateUserDTO } from './dto/Req/update-user.dto';
 
@@ -13,8 +14,19 @@ export class UserService {
     return await this.userRepository.isUserExist(id);
   }
 
-  async findAll() {
-    return await this.userRepository.findAll();
+  async findAll(query: QueryDTO) {
+    const { page = 1, limit = 10, ...newQuery } = query;
+    const skip = (page - 1) * limit;
+    const users = await this.userRepository.searchUser(newQuery);
+
+    const result: FindUserRespDTO = {
+      page: parseInt(String(page)),
+      limit: parseInt(String(limit)),
+      total: users.length,
+      total_pages: Math.ceil(users.length / limit),
+      data: users.slice(skip, skip + limit),
+    };
+    return result;
   }
 
   async createUser(createUserDTO: CreateUserDTO) {

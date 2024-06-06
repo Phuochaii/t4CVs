@@ -47,11 +47,9 @@ export class ApplicationService implements OnModuleInit {
 
   async create(createApplicationRequest: CreateApplicationRequest) {
     const requiredFields: string[] = [
-      'id',
       'fullname',
       'phone',
       'email',
-      'coverLetter',
       'campaignId',
       'userId',
       'cvId',
@@ -201,6 +199,7 @@ export class ApplicationService implements OnModuleInit {
     const employer = await firstValueFrom(
       this.employerService.findEmployerById(campaign.employerId),
     );
+
     const campany = await firstValueFrom(
       this.companyService.findCompanyById(employer.companyId),
     );
