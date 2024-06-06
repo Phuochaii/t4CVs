@@ -65,12 +65,12 @@ export class CVController {
     }),
   )
   createCV(
+    @GetUser() user: UserClaims,
     @UploadedFile() file: any,
-    @Body('userId') userId: string,
     @Body('templateId') templateId: string,
   ): Observable<any> {
     const numericTemplateId = parseInt(templateId, 10);
-    return this.cvService.createCV(file, userId, numericTemplateId);
+    return this.cvService.createCV(file, user.sub, numericTemplateId);
   }
   //update status cv
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))

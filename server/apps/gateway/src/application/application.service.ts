@@ -45,14 +45,18 @@ export class ApplicationService implements OnModuleInit {
       );
   }
 
-  async create(createApplicationRequest: CreateApplicationRequest) {
+  async create(
+    createApplicationRequest: CreateApplicationRequest,
+    userId: string,
+  ) {
+    createApplicationRequest.userId = userId;
     const requiredFields: string[] = [
       'fullname',
       'phone',
       'email',
       'campaignId',
-      'userId',
       'cvId',
+      'userId',
     ];
 
     if (requiredFields.some((field) => !createApplicationRequest[field])) {
