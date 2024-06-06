@@ -1,10 +1,22 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  Put,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { Observable } from 'rxjs';
 import { CreateUserDTO } from './dto/Req/createUser.dto';
 import { CreateUserAccountDto } from './dto/Req/create-user-account.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 @Controller('user')
 export class UserController {

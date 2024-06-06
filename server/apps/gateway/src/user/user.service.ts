@@ -29,6 +29,7 @@ export class UserService {
       return uploadLink$.pipe(
         switchMap((img: string) => {
           user.image = img;
+          console.log(user);
           return this.userClient.send({ cmd: 'update_user' }, user).pipe(
             catchError((error) => {
               return throwError(() => error.response);

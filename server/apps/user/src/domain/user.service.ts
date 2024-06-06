@@ -29,9 +29,4 @@ export class UserService {
     const user = await this.userRepository.findById(id);
     return !!user;
   }
-
-  async check(id: string) {
-    const user = await this.userRepository.findById(id);
-    return !!user;
-  }
 }
