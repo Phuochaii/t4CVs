@@ -10,4 +10,5 @@ export class FindEmployerDTOResponse {
   licenseStatus: boolean;
   phoneNumberStatus: boolean;
   image: string;
+  supplement: string;
 }
