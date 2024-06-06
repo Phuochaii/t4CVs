@@ -1,3 +1,4 @@
+import { AuthGuard } from '@nestjs/passport';
 import {
   Controller,
   Get,
@@ -5,6 +6,7 @@ import {
   Post,
   Body,
   Query,
+  UseGuards,
   UploadedFile,
   UseInterceptors,
   Put,
@@ -13,6 +15,8 @@ import {
 import { Observable } from 'rxjs';
 import { EmployerService } from './employer.service';
 import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
+import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
+import { CreateEmployerAccountDto } from './dto/Req/create-hr.dto';
 import { UpdateEmployerCompanyDTO } from './dto/Req/updateEmployerCompany.dto';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -22,9 +26,21 @@ import { UpdateEmployerDTO } from './dto/Req/updateEmployer.dto';
 export class EmployerController {
   constructor(private readonly employerService: EmployerService) {}
 
+  @Post('account')
+  registerAccount(@Body() data: CreateEmployerAccountDto) {
+    return this.employerService.createEmployerAccount(data);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Post('create')
-  createEmployer(@Body() data: CreateEmployerDto): Observable<string> {
-    return this.employerService.createEmployer(data);
+  async createEmployer(
+    @GetUser() user: UserClaims,
+    @Body() data: Omit<CreateEmployerDto, 'id'>,
+  ): Promise<Observable<string>> {
+    return this.employerService.createEmployer({
+      id: user.sub,
+      ...data,
+    });
   }
 
   @Get('all')
@@ -33,6 +49,18 @@ export class EmployerController {
     @Query('limit') limit: number = 10,
   ): Observable<string> {
     return this.employerService.getAllEmployers(page, limit);
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
+  @Get('check')
+  checkEmployer(@GetUser() user: UserClaims): Observable<boolean> {
+    return this.employerService.checkEmployer(user.sub);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('profile')
+  getEmployerProfile(@GetUser() user: UserClaims) {
+    return this.employerService.findEmployerById(user.sub);
   }
 
   @Get(':id')

@@ -1,19 +1,10 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Put,
-  UseInterceptors,
-  UploadedFile,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Observable } from 'rxjs';
 import { CreateUserDTO } from './dto/Req/createUser.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { UpdateUserDTO } from './dto/Req/update-user.dto';
+import { CreateUserAccountDto } from './dto/Req/create-user-account.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
 
 @Controller('user')
 export class UserController {
@@ -22,6 +13,18 @@ export class UserController {
   @Get('all')
   findAllUsers(): Observable<string> {
     return this.userService.findAllUsers();
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
+  @Get('check')
+  checkUser(@GetUser() user: UserClaims): Observable<boolean> {
+    return this.userService.checkUser(user.sub);
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
+  @Get('/profile')
+  getUserProfile(@GetUser() user: UserClaims) {
+    return this.userService.findUserById(user.sub);
   }
 
   @Get('check/:id')
@@ -34,6 +37,7 @@ export class UserController {
     return this.userService.findUserById(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('create')
   @UseInterceptors(
     FileInterceptor('image', {
@@ -42,10 +46,21 @@ export class UserController {
       }),
     }),
   )
-  createUser(@UploadedFile() image: any, @Body() user: CreateUserDTO) {
-    return this.userService.createUser(user, image);
+  createUser(
+    @UploadedFile() image: any,
+    @GetUser() userClaims: UserClaims,
+    @Body() user: Omit<CreateUserDTO, 'id'>,
+  ) {
+    return this.userService.createUser(
+      {
+        id: userClaims.sub,
+        ...user,
+      },
+      image,
+    );
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
   @Put('update')
   @UseInterceptors(
     FileInterceptor('image', {
@@ -54,7 +69,17 @@ export class UserController {
       }),
     }),
   )
-  updateUser(@Body() user: UpdateUserDTO, @UploadedFile() image: any) {
-    return this.userService.updateUser(user, image);
+  updateUser(
+    @GetUser() userClaims: UserClaims,
+    @Body() user: Omit<CreateUserDTO, 'id'>,
+    @UploadedFile() image: any,
+  ) {
+    return this.userService.updateUser(
+      {
+        id: userClaims.sub,
+        ...user,
+      },
+      image,
+    );
   }
 }

@@ -24,4 +24,14 @@ export class UserService {
   async updateUser(updateUserDTO: UpdateUserDTO) {
     return await this.userRepository.updateUser(updateUserDTO);
   }
+
+  async check(id: string) {
+    const user = await this.userRepository.findById(id);
+    return !!user;
+  }
+
+  async check(id: string) {
+    const user = await this.userRepository.findById(id);
+    return !!user;
+  }
 }

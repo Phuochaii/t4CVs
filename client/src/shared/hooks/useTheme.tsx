@@ -1,6 +1,6 @@
 export enum Theme {
-  Light = "light",
-  Dark = "dark",
+  Light = 'light',
+  Dark = 'dark',
 }
 
 const defaultTheme = Theme.Light;
@@ -10,7 +10,7 @@ function isValidTheme(theme: string): boolean {
 }
 
 function getTheme(): Theme {
-  const theme = localStorage.getItem("theme");
+  const theme = localStorage.getItem('theme');
   if (!theme || !isValidTheme(theme)) {
     return defaultTheme as Theme;
   }
@@ -19,7 +19,7 @@ function getTheme(): Theme {
 }
 
 function setTheme(theme: Theme) {
-  localStorage.setItem("theme", theme);
+  localStorage.setItem('theme', theme);
   document.body.className = theme;
 }
 
