@@ -4,10 +4,10 @@ import { EventDispatcher } from './event-dispatcher.implement';
 import { CqrsModule, EventBus } from '@nestjs/cqrs';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EventStoreDBClient } from '@eventstore/db-client';
+import { EventPublisherOrchestrator } from '@app/common/multi-event-publisher';
+import { EventStoreService, Events } from './event-store';
 import EventStoreSubscriber from './event-store/event-store.subscriber';
 import EventStorePublisher from './event-store/event-store.publisher';
-import { Events } from './event-store/event-store.event';
-import { EventPublisherOrchestrator } from '@app/common/multi-event-publisher';
 
 @Module({
   imports: [CqrsModule, ConfigModule],
@@ -42,10 +42,11 @@ import { EventPublisherOrchestrator } from '@app/common/multi-event-publisher';
     EventPublisherOrchestrator,
     EventStoreSubscriber,
     EventStorePublisher,
+    EventStoreService,
   ],
-  exports: [IEventDispatcher],
+  exports: [IEventDispatcher, EventStoreService],
 })
-export class EventDispatcherModule implements OnModuleInit{
+export class EventDispatcherModule implements OnModuleInit {
   constructor(
     private readonly eventBus$: EventBus,
     private readonly eventStoreSubscriber: EventStoreSubscriber,

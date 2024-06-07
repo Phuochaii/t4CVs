@@ -7,7 +7,7 @@ export class ApplicationFactory {
   constructor(private readonly applicationRepository: ApplicationRepository) {}
   async createApplication(input: CreateApplicationDto): Promise<Application> {
     const application = new Application();
-    const id = await this.applicationRepository.getNextId();
+    const id = await this.applicationRepository.writeRepository.getNextId();
     const now = new Date();
     application.raiseEvent(
       new ApplicationCreatedEvent({

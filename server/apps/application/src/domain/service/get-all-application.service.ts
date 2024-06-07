@@ -8,7 +8,7 @@ export class GetAllApplicationService implements BaseService<Application[]> {
 
   async execute(request: GetAllApplicationsDto): Promise<Application[]> {
     const applications =
-      await this.applicationRepository.getAllApplication(request);
+      await this.applicationRepository.readRepository.getAllApplication(request);
     return applications;
   }
 }

@@ -9,7 +9,7 @@ export class GetByCampaignIdWithPaginationService
 
   async execute(ApplicationDto): Promise<Application[] | null> {
     const getApplication =
-      await this.applicationRepository.getByCampaignIdApplicationWithPagination(
+      await this.applicationRepository.readRepository.getByCampaignIdApplicationWithPagination(
         ApplicationDto,
       );
     return getApplication;

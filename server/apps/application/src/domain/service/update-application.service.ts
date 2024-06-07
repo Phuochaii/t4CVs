@@ -7,7 +7,7 @@ export class UpdateApplicationService implements BaseService<Application> {
 
   async execute(ApplicationDto): Promise<Application | null> {
     const updateApplication =
-      await this.applicationRepository.updateApplication(ApplicationDto);
+      await this.applicationRepository.readRepository.updateApplication(ApplicationDto);
     return updateApplication;
   }
 }

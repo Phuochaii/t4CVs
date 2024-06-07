@@ -9,7 +9,7 @@ export class GetByUserIdPaginationApplicationService
 
   async execute(ApplicationDto): Promise<Application[] | null> {
     const getApplication =
-      await this.applicationRepository.getByUserIdPaginationApplication(
+      await this.applicationRepository.readRepository.getByUserIdPaginationApplication(
         ApplicationDto,
       );
     return getApplication;

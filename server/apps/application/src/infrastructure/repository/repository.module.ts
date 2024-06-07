@@ -8,6 +8,8 @@ import { EventDispatcherModule } from '../event-dispatcher.ts/event-dispatcher.m
 import { DatabaseConfiger, DatabaseOptions } from './database/init';
 import { UserNotificationSchemaMapper } from './mapper';
 import { Projections } from './projection';
+import { TypeOrmApplicationWriteRepository } from './application.write.repository';
+import { TypeOrmApplicationReadRepository } from './application.read.repository';
 
 @Module({
   imports: [
@@ -17,13 +19,11 @@ import { Projections } from './projection';
       useFactory: async (configService: ConfigService) => {
         const defaultConfig: DatabaseOptions = {
           type: 'postgres',
-
           host: configService.get('DB_HOST'),
           port: configService.get('DB_PORT'),
           username: configService.get('DB_USERNAME'),
           password: `${configService.get('DB_PASSWORD')}`,
           database: configService.get('DB_APPLICATION_DATABASE'),
-
           autoLoadEntities: true,
           synchronize: true,
         };
@@ -35,6 +35,8 @@ import { Projections } from './projection';
     EventDispatcherModule,
   ],
   providers: [
+    TypeOrmApplicationWriteRepository,
+    TypeOrmApplicationReadRepository,
     {
       provide: ApplicationRepository,
       useClass: TypeOrmApplicationRepository,

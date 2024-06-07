@@ -10,11 +10,12 @@ import {
 } from '../dto';
 import { Application } from '../entity';
 
-export abstract class ApplicationRepository {
+export abstract class ApplicationWriteRepository {
   abstract save(application: Application): Promise<void>;
 
   abstract getNextId(): Promise<Application['id']>;
-
+}
+export abstract class ApplicationReadRepository {
   abstract getById(
     application: GetApplicationByIdDto,
   ): Promise<Application | null>;
@@ -42,4 +43,11 @@ export abstract class ApplicationRepository {
   abstract getByUserIdPaginationApplication(
     application: GetByUserIdPaginationApplicationDto,
   ): Promise<Application[] | null>;
+}
+
+export abstract class ApplicationRepository {
+  constructor(
+    public readonly writeRepository: ApplicationWriteRepository,
+    public readonly readRepository: ApplicationReadRepository,
+  ) {}
 }

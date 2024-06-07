@@ -8,7 +8,7 @@ export class GetByCampaignIdService implements BaseService<Application[]> {
 
   async execute(request: GetByCampaignIdDto): Promise<Application[] | null> {
     const getApplication =
-      await this.applicationRepository.getByCampaignIdApplication(request);
+      await this.applicationRepository.readRepository.getByCampaignIdApplication(request);
     return getApplication;
   }
 }
