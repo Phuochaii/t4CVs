@@ -42,8 +42,6 @@ function SearchBoxComponent({
   setTitleRecruitment,
   handleSearch,
 }) {
-
-
   const fetchDataFilter = async () => {
     try {
       const locationResponse = await getAllLocation();
@@ -65,14 +63,13 @@ function SearchBoxComponent({
 
   const params = new URLSearchParams(window.location.search);
 
-
   return (
     <form className="search-job grid grid-cols-7 justify-center gap-x-4 pt-2">
       <div className="group-search col-span-3 grid grid-cols-2 bg-white">
         <div className="item item-search">
           <FormControl>
             <TextField
-              defaultValue={params.get("titleRecruitment")}
+              defaultValue={params.get('titleRecruitment')}
               id="input-with-icon-textfield"
               InputProps={{
                 startAdornment: (
@@ -90,7 +87,7 @@ function SearchBoxComponent({
           <TextField
             id="outlined-select-currency"
             select
-            defaultValue={params.get("locationId") | String(locationId)}
+            defaultValue={params.get('locationId') | String(locationId)}
             className="w-full"
             InputProps={{
               startAdornment: (
@@ -119,7 +116,7 @@ function SearchBoxComponent({
                     {city.name}
                   </MenuItem>
                 ))
-              : "Error to fetch cities"}
+              : 'Error to fetch cities'}
           </TextField>
         </div>
       </div>
@@ -158,7 +155,7 @@ function SearchBoxComponent({
                     {exp.name}
                   </MenuItem>
                 ))
-              : "Error to fetch experience"}
+              : 'Error to fetch experience'}
           </TextField>
         </div>
 

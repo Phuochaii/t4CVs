@@ -202,6 +202,32 @@ const updateEmployerLicense = async (formData) => {
   return response.data;
 };
 
+const getHRById = async ({ userId }: { userId: string }) => {
+  const response = await axios
+    .get(`${serverURL}/employer/${userId}`)
+    .then((res) => {
+      return res;
+    });
+  return response;
+};
+
+const getHRPosition = async () => {
+  const response = await axios
+    .get(`${serverURL}/employer/position/all`)
+    .then((res) => {
+      return res;
+    });
+  return response;
+};
+
+const uploadHRProfile = async (formData) => {
+  const response = await axios
+    .put(`${serverURL}/employer/update`, formData)
+    .then((res) => {
+      return res;
+    });
+  return response;
+};
 
 export {
   getApplicationByCampaignIdHRId,
@@ -214,6 +240,7 @@ export {
   createCompaign,
   getPosition,
   updateEmployerLicense,
-  isHr,
-  getProfile,
+  getHRById,
+  getHRPosition,
+  uploadHRProfile,
 };

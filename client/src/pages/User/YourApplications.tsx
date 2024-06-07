@@ -13,6 +13,7 @@ import { UserCV } from '../../shared/types/CV_user.type';
 import moment from 'moment';
 import { useAuth0 } from '@auth0/auth0-react';
 import { AUTH0_BACKEND_AUDIENCE } from '../../shared/services/authen/infrastructure/config';
+import { useNavigate } from 'react-router-dom';
 const option = [
   { value: 'Đã ứng tuyển', label: 'Đã ứng tuyển' },
   { value: 'NTD đã xem hồ sơ', label: 'NTD đã xem hồ sơ' },
@@ -22,12 +23,11 @@ const option = [
 function YourApplications() {
     const { user, getAccessTokenSilently, isAuthenticated, isLoading } =
       useAuth0();
+  const navigation = useNavigate();
   const [isOn, setIsOn] = useState(false);
   const [applications, setApplication] = useState<
     ApplicationFromServer[] | undefined
   >([]);
-  const [jobs, setJobs] = useState<RecruitmentFromServer[] | null>([]);
-  const [CVs] = useState<UserCV[] | null>([]);
   useEffect(() => {
     const fetchApplications = async () => {
       try {
@@ -129,8 +129,7 @@ function YourApplications() {
                       <img
                         className="job-logo-company justify-center w-[84px] h-[84px] flex items-center border rounded-lg"
                         src={
-                          jobs!.find((e) => e.campaignId === item.campaignId)
-                            ?.company.image
+                          item.jobs.company.image
                         }
                       />
                       <div className="job-detail w-full h-full">
@@ -138,35 +137,27 @@ function YourApplications() {
                           <div className="flex flex-row justify-between">
                             <span className="job-title text-black font-semibold col-span-3 text-lg">
                               {
-                                jobs!.find(
-                                  (e) => e.campaignId === item.campaignId,
-                                )?.titleRecruitment
+                                item.jobs.titleRecruitment
                               }
                             </span>
                             <div className="job-salary col-start-4 flex items-center">
                               <CurrencyDollarIcon className="w-5 mr-2" />
                               <strong className="salary-count">
                                 {
-                                  jobs!.find(
-                                    (e) => e.campaignId === item.campaignId,
-                                  )?.salaryMin
+                                  item.jobs.salaryMin
                                 }{' '}
                                 -{' '}
                                 {
-                                  jobs!.find(
-                                    (e) => e.campaignId === item.campaignId,
-                                  )?.salaryMax
+                                   item.jobs.salaryMax
                                 }
                               </strong>
                             </div>
                           </div>
-                          <span className="job-company-name text-slate-500 col-span-3 mb-1">
+                          <div onClick={() => navigation(`/companies/${item.jobs.company.id}`)} className="job-company-name text-slate-500 col-span-3 mb-1">
                             {
-                              jobs!.find(
-                                (e) => e.campaignId === item.campaignId,
-                              )?.company.name
+                              item.jobs.company.name
                             }
-                          </span>
+                          </div>
                         </div>
                         <div className="flex flex-col space-y-1">
                           <div className="flex flex-row space-x-1">
@@ -176,8 +167,8 @@ function YourApplications() {
                         <div className="flex justify-between items-center">
                           <p className="font-light">
                             CV đã ứng tuyển:{' '}
-                            <span className="font-normal text-green-500 underline">
-                              CV tải lên
+                            <span  className="font-normal text-green-500 underline">
+                              <a href={item.cv.link} target="_blank" rel="noopener noreferrer">CV tải lên</a>
                             </span>
                           </p>
                           <div className="job-actions row-start-4 flex items-center justify-end space-x-2">
@@ -193,7 +184,7 @@ function YourApplications() {
                               </svg>
                               Nhắn tin
                             </button>
-                            <button className="bg-[#c0eed4ba] text-sm font-bold hover:bg-green-300 text-[#00b14f] py-0.5 px-2 rounded-full inline-flex items-center me-2">
+                            <button onClick={()=>{window.open(item.cv.link, '_blank', 'noopener,noreferrer');}} className="bg-[#c0eed4ba] text-sm font-bold hover:bg-green-300 text-[#00b14f] py-0.5 px-2 rounded-full inline-flex items-center me-2">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"

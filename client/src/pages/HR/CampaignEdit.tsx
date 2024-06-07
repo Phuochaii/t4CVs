@@ -9,12 +9,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import React, { SetStateAction, useEffect, useState } from "react";
 import { statusColor } from "../../shared/types/RecruitmentStatus.type";
 import clsx from "clsx";
-import { RecruitmentJobPost } from "../../shared/types/Recruitment.type";
+import { RecruitmentFromServer, RecruitmentJobPost } from "../../shared/types/Recruitment.type";
 
 import {
   getJobById,
   updateJobStatus,
+
 } from "../../modules/helper";
+
+import CampaignEditCard from "../../shared/components/CampaignEditCard";
+
 
 function RecruitmentDisplayTable() {
   return (
@@ -133,10 +137,31 @@ function CampaignEdit() {
     useState<RecruitmentJobPost>(state);
   const [openSection, setOpenSection] = useState(-1);
   const [refresh, setRefresh] = useState(false);
-
+  const [job, setJob] =
+    useState<RecruitmentFromServer>(state);
+  const [fields, setFields] = useState<any>(null);
   useEffect(() => {
     const getData = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/job/create-info', {
+          method: 'GET',
+          headers: {
+            'Access-control-allow-origin': 'http://localhost:3000',
+            'Content-type': 'application/json',
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        setFields(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
       const response = await getJobById(recruitment.id);
+      console.log(response)
+      setJob(response)
+      
       setRecruitment({
         ...response,
         createdAt: new Date(response.createAt),
@@ -150,7 +175,7 @@ function CampaignEdit() {
   const sections = [
     {
       title: "Nội dung tuyển dụng",
-      sectionComponent: <></>,
+      sectionComponent: <CampaignEditCard jobItem={job} fields={fields}></CampaignEditCard>,
       subtitle: (
         <h2 className="text-black ">{recruitment.campaign.name}</h2>
       ),

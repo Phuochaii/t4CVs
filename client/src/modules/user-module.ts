@@ -44,6 +44,24 @@ const updateStatusNotification = async ({
   return response;
 };
 
+const getUserById = async ({ userId }: { userId: string }) => {
+  const response = await axios
+    .get(`http://localhost:3000/user/${userId}`)
+    .then((res) => {
+      return res;
+    });
+  return response;
+};
+
+const updateUserById = async (formData) => {
+  const response = await axios
+    .put('http://localhost:3000/user/update', formData)
+    .then((res) => {
+      return res;
+    });
+  return response;
+};
+
 const isUser: (token: string) => Promise<boolean> = async (token: string) => {
   const result = await axios
     .get(`${serverURL}/user/check`, {
@@ -92,43 +110,12 @@ const createUser: (input: {
   );
 };
 
-//
-// const getApplications : (token: string) => Promise<{
-//   fullname: string;
-//   phone?: string;
-//   image?: string;
-// }>  = async (token: string){
-//   const response = await axios.get(
-//     `${serverURL}/application/user?page=1&limit=1`,
-//     {
-//       headers: {
-//         authorization: `Bearer ${token}`,
-//       },
-//     },
-//   );
-
-//   .get(`${serverURL}/user/profile`, {
-//       headers: {
-//         authorization: `Bearer ${token}`,
-//       },
-//     })
-//   console.log(456, response);
-//   const applications: ApplicationFromServer[] = response.data.applicationsFinal;
-//   const jobs = response.data.applicationsFinal.map(
-//     (application) => application.jobs,
-//   ) as RecruitmentFromServer[];
-//   // const campaignIds = applications.map(
-//   //   (application: ApplicationFromServer) => application.campaignId,
-//   // );
-//   // const promiseJobs = campaignIds.map((id) => getJobByCampaignId(id));
-  
-//   return { applications: applications, jobs: jobs };
-
-// }
-
-const getApplications: (token: string) => Promise<void> = async (
+const getApplications: (
   token: string,
-) => {
+) => Promise<{
+  applications: ApplicationFromServer[];
+  jobs: RecruitmentFromServer[];
+}> = async (token: string) => {
   const response = await axios.get(
     `${serverURL}/application/user/page=1&limit=10`,
     {
@@ -145,7 +132,6 @@ const getApplications: (token: string) => Promise<void> = async (
   //   (application: ApplicationFromServer) => application.campaignId,
   // );
   // const promiseJobs = campaignIds.map((id) => getJobByCampaignId(id));
-  
   return { applications: applications, jobs: jobs };
 };
 
@@ -156,4 +142,6 @@ export {
   getProfile,
   createUser,
   getApplications,
+  getUserById,
+  updateUserById,
 };
