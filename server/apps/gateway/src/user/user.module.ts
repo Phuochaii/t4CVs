@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UploadModule } from '../upload/upload.module';
+import { AuthenticationModule } from '../authentication/authentication.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UploadModule } from '../upload/upload.module';
       },
     ]),
     UploadModule,
+    AuthenticationModule,
   ],
   controllers: [UserController],
   providers: [UserService],

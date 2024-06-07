@@ -20,6 +20,13 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "tailwind.config.js", "postcss.config.js", "../../../my-app/dashBoard.tsx", "../../../my-app/newdashBoard.tsx", "../../../my-app/upLoadFile.tsx"],
+  "include": [
+    "src",
+    "tailwind.config.js",
+    "postcss.config.js",
+    "../../../my-app/dashBoard.tsx",
+    "../../../my-app/newdashBoard.tsx",
+    "../../../my-app/upLoadFile.tsx"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
