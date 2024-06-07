@@ -17,7 +17,7 @@ import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: 'jwt'}), 
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     ApplicationModule,
     NotificationModule,
     JobModule,
@@ -25,6 +25,7 @@ import { AdminModule } from './admin/admin.module';
     CompanyModule,
     UserModule,
     CVModule,
+    AuthorizationModule,
     ConfigModule.forRoot(),
     EmployerModule,
     AdminModule,
