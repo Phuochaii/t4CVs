@@ -43,6 +43,7 @@ export class EmployerController {
     });
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get('all')
   getAllEmployers(
     @Query('page') page: number = 1,
@@ -73,13 +74,19 @@ export class EmployerController {
     return this.employerService.getEmployerByCompanyId(companyid);
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Put('update/companyid')
   updateEmployerCompanyId(
-    @Body() data: UpdateEmployerCompanyDTO,
+    @GetUser() user: UserClaims,
+    @Body() data: Omit<UpdateEmployerCompanyDTO, 'id'>,
   ): Observable<any> {
-    return this.employerService.updateEmployerCompanyId(data);
+    return this.employerService.updateEmployerCompanyId({
+      id: user.sub,
+      ...data,
+    });
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Put('update/license')
   @UseInterceptors(
     FilesInterceptor('files', 99, {
@@ -90,30 +97,37 @@ export class EmployerController {
   )
   updateEmployerLicense(
     @UploadedFiles() files: any[],
-    @Body('employerId') employerId: string,
+    @GetUser() user: UserClaims,
+    // @Body('employerId') employerId: string,
   ): Observable<any> {
-    return this.employerService.updateEmployerLicense(files, employerId);
+    return this.employerService.updateEmployerLicense(files, user.sub);
   }
 
-  @Put('update/licenseStatus/:id')
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
+  @Put('update/licenseStatus')
   updateEmployerLicenseStatus(
-    @Param('id') id: string,
+    @Body('employerId') employerId: string,
     @Body('licenseStatus') licenseStatus: boolean,
   ): Observable<any> {
-    return this.employerService.updateEmployerLicenseStatus(id, licenseStatus);
+    return this.employerService.updateEmployerLicenseStatus(
+      employerId,
+      licenseStatus,
+    );
   }
 
-  @Put('update/phoneNumberStatus/:id')
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
+  @Put('update/phoneNumberStatus')
   updateEmployerPhoneStatus(
-    @Param('id') id: string,
+    @Body('employerId') employerId: string,
     @Body('phoneNumberStatus') phoneNumberStatus: boolean,
   ): Observable<any> {
     return this.employerService.updateEmployerPhoneStatus(
-      id,
+      employerId,
       phoneNumberStatus,
     );
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Put('update')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -124,9 +138,10 @@ export class EmployerController {
   )
   updateEmployer(
     @UploadedFile() file: any,
-    @Body() data: UpdateEmployerDTO,
+    @GetUser() user: UserClaims,
+    @Body() data: Omit<UpdateEmployerDTO, 'id'>,
   ): Observable<string> {
-    return this.employerService.updateEmployer(file, data);
+    return this.employerService.updateEmployer(file, { id: user.sub, ...data });
   }
 
   @Get('name/:name')

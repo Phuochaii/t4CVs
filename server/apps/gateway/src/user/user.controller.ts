@@ -8,6 +8,7 @@ import {
   UseInterceptors,
   UploadedFile,
   Put,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Observable } from 'rxjs';
@@ -17,14 +18,19 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { QueryDTO } from './dto/Req/query.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
   @Get('all')
-  findAllUsers(): Observable<string> {
-    return this.userService.findAllUsers();
+  findAllUsers(
+    @Query()
+    queryParams: QueryDTO,
+  ): Observable<string> {
+    return this.userService.findAllUsers(queryParams);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
@@ -39,11 +45,13 @@ export class UserController {
     return this.userService.findUserById(user.sub);
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
   @Get('check/:id')
   isUserExist(@Param('id') id: string) {
     return this.userService.isUserExist(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   findUserById(@Param('id') id: string) {
     return this.userService.findUserById(id);

@@ -45,16 +45,18 @@ export class ApplicationService implements OnModuleInit {
       );
   }
 
-  async create(createApplicationRequest: CreateApplicationRequest) {
+  async create(
+    createApplicationRequest: CreateApplicationRequest,
+    userId: string,
+  ) {
+    createApplicationRequest.userId = userId;
     const requiredFields: string[] = [
-      'id',
       'fullname',
       'phone',
       'email',
-      'coverLetter',
       'campaignId',
-      'userId',
       'cvId',
+      'userId',
     ];
 
     if (requiredFields.some((field) => !createApplicationRequest[field])) {
@@ -105,9 +107,17 @@ export class ApplicationService implements OnModuleInit {
   ) {
     const campaignRes =
       await this.companyService.findAllCampaignByEmployerId(hrId);
-
+    if (!campaignRes) {
+      return {
+        page: page,
+        limit: limit,
+        total: 0,
+        totalPage: 0,
+        applications: [],
+      };
+    }
     let campaignIds = campaignRes.data.map((campaign) => campaign.id);
-
+    console.log(campaignIds);
     if (campaignId) {
       campaignIds = [campaignId];
     }
@@ -201,6 +211,7 @@ export class ApplicationService implements OnModuleInit {
     const employer = await firstValueFrom(
       this.employerService.findEmployerById(campaign.employerId),
     );
+
     const campany = await firstValueFrom(
       this.companyService.findCompanyById(employer.companyId),
     );

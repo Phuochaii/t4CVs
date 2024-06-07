@@ -62,16 +62,16 @@ export class EmployerService {
       );
   }
 
-  getEmployerByCompanyId(companyId: number) {
+  getEmployerByCompanyId(
+    companyId: number,
+  ): Observable<FindEmployerDTOResponse[]> {
     return this.employerClient.send(
       { cmd: 'get_employer_by_companyid' },
       companyId,
     );
   }
 
-  updateEmployerCompanyId(
-    updateEmployerCompanyDTO: UpdateEmployerCompanyDTO,
-  ): Observable<string> {
+  updateEmployerCompanyId(updateEmployerCompanyDTO: UpdateEmployerCompanyDTO) {
     return this.employerClient
       .send({ cmd: 'update_employer_companyid' }, updateEmployerCompanyDTO)
       .pipe(
