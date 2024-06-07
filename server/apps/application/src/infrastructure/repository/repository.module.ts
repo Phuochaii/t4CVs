@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ApplicationRepository } from '../domain/repository';
 import { ApplicationSchema } from './schema';
-import { TypeOrmApplicationRepository } from './repository/application.repository';
+import { ApplicationRepository } from '../../domain/repository';
+import { TypeOrmApplicationRepository } from './application.repository';
+import { EventDispatcherModule } from '../event-dispatcher.ts/event-dispatcher.module';
 import { DatabaseConfiger, DatabaseOptions } from './database/init';
+import { UserNotificationSchemaMapper } from './mapper';
 
 @Module({
   imports: [
@@ -29,13 +31,15 @@ import { DatabaseConfiger, DatabaseOptions } from './database/init';
       },
     }),
     TypeOrmModule.forFeature([ApplicationSchema]),
+    EventDispatcherModule,
   ],
   providers: [
     {
       provide: ApplicationRepository,
       useClass: TypeOrmApplicationRepository,
     },
+    UserNotificationSchemaMapper,
   ],
   exports: [ApplicationRepository],
 })
-export class NotificationPersistenceModule {}
+export class RepositoryModule {}

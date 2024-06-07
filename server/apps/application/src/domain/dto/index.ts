@@ -1,5 +1,4 @@
 export * from './create-applications.dto';
-export * from './application.dto';
 export * from './get-by-id.dto';
 export * from './get-all-application.dto';
 export * from './update-application.dto';

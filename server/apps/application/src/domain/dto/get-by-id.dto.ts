@@ -1,5 +1,5 @@
 import { Application } from "../entity";
 
-export class GetApplicationDto implements Pick<Application, 'id'> {
+export class GetApplicationByIdDto implements Pick<Application, 'id'> {
   id: number;
 }

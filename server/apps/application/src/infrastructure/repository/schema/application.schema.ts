@@ -1,10 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Application } from '../../domain/entity';
-
-interface _ extends Application {}
+import { Application } from '../../../domain/entity';
+import { ClassProperties } from '@app/common/type';
 
 @Entity('application')
-export class ApplicationSchema implements _ {
+export class ApplicationSchema implements ClassProperties<Application> {
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -1,17 +1,14 @@
 import { BaseService } from '@app/common/domain';
 import { ApplicationRepository } from '../repository';
 import { Application } from '../entity';
+import { GetByCampaignIdDto } from '../dto';
 
-export class GetAllByCampaignIdApplicationService
-  implements BaseService<Application[]>
-{
+export class GetByCampaignIdService implements BaseService<Application[]> {
   constructor(private readonly applicationRepository: ApplicationRepository) {}
 
-  async execute(ApplicationDto): Promise<Application[] | null> {
+  async execute(request: GetByCampaignIdDto): Promise<Application[] | null> {
     const getApplication =
-      await this.applicationRepository.getAllByCampaignIdApplication(
-        ApplicationDto,
-      );
+      await this.applicationRepository.getByCampaignIdApplication(request);
     return getApplication;
   }
 }

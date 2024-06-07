@@ -1,7 +1,12 @@
 import { Application } from '../entity';
+import { ClassProperties } from '@app/common/type';
 
 export class CreateApplicationDto
-  implements Omit<Application, 'id' | 'createdAt' | 'updateAt' | 'status'>
+  implements
+    Omit<
+    ClassProperties<Application>,
+      'id' | 'createdAt' | 'updateAt' | 'status'
+    >
 {
   fullname: string;
   phone: string;

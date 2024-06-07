@@ -1,10 +1,9 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { ApplicationRepository } from '../../domain/repository';
-import { ApplicationSchema } from '../schema';
+import { ApplicationSchema } from './schema';
 import { In, Repository } from 'typeorm';
 import {
-  ApplicationDto,
-  GetApplicationDto,
+  GetApplicationByIdDto,
   GetAllApplicationsDto,
   UpdateApplicationDto,
   GetByCampaignIdWithPaginationDto,
@@ -13,30 +12,35 @@ import {
   GetByUserIdPaginationApplicationDto,
 } from '../../domain/dto';
 import { Application } from '../../domain/entity';
+import { IEventDispatcher } from '@app/common/domain';
+import { UserNotificationSchemaMapper } from './mapper';
 
 export class TypeOrmApplicationRepository extends ApplicationRepository {
   constructor(
     @InjectRepository(ApplicationSchema)
     private readonly applicationRepository: Repository<ApplicationSchema>,
-    
+    private readonly mapper: UserNotificationSchemaMapper,
+    private readonly eventDispatcher: IEventDispatcher,
   ) {
     super();
   }
 
-  async createApplication(application: ApplicationDto): Promise<Application> {
-    application.status = false;
-    const now = new Date();
-    application.createdAt = now.toISOString();
-    application.updateAt = now.toISOString();
-    return await this.applicationRepository.save(application);
+  async save(application: Application): Promise<void> {
+    application.getUnCommitedEvents().forEach((event) => {
+      this.eventDispatcher.dispatch(event);
+    });
   }
 
-  async getApplication(
-    application: GetApplicationDto,
+  async getNextId(): Promise<number> {
+    return await this.applicationRepository.count();
+  }
+
+  async getById(
+    application: GetApplicationByIdDto,
   ): Promise<Application | null> {
     const result = await this.applicationRepository.findOneBy(application);
 
-    return result;
+    return this.mapper.toDomain(result);
   }
 
   async getAllApplication(
@@ -45,7 +49,7 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
     const skip =
       (application.paginationRequest.page - 1) *
       application.paginationRequest.limit;
-    const data = await this.applicationRepository.find({
+    const applicationSchemas = await this.applicationRepository.find({
       skip: skip,
       take: application.paginationRequest.limit,
       order: {
@@ -53,7 +57,7 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
         id: 'DESC',
       },
     });
-    return data;
+    return applicationSchemas.map((schema) => this.mapper.toDomain(schema));
   }
 
   async updateApplication(
@@ -71,10 +75,12 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
     await this.applicationRepository.update(application.id, {
       status: application.status,
     });
-    return await this.applicationRepository.findOneBy(application);
+    const updatedApplication =
+      await this.applicationRepository.findOneBy(application);
+    return this.mapper.toDomain(updatedApplication);
   }
 
-  async getByCampaignIdApplication(
+  async getByCampaignIdApplicationWithPagination(
     application: GetByCampaignIdWithPaginationDto,
   ): Promise<Application[] | null> {
     const skip = (application.page - 1) * application.limit;
@@ -93,10 +99,10 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
     if (!data) {
       return;
     }
-    return data;
+    return data.map((schema) => this.mapper.toDomain(schema));
   }
 
-  async getAllByCampaignIdApplication(
+  async getByCampaignIdApplication(
     application: GetByCampaignIdDto,
   ): Promise<Application[] | null> {
     const data = await this.applicationRepository.find({
@@ -108,7 +114,7 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
       return;
     }
 
-    return data;
+    return data.map((schema) => this.mapper.toDomain(schema));
   }
 
   async getByUserIdApplication(
@@ -123,7 +129,7 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
     if (!data) {
       return;
     }
-    return data;
+    return data.map((schema) => this.mapper.toDomain(schema));
   }
 
   async getByUserIdPaginationApplication(
@@ -145,6 +151,6 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
     if (!data) {
       return;
     }
-    return data;
+    return data.map((schema) => this.mapper.toDomain(schema));
   }
 }

@@ -1,6 +1,6 @@
 import {
   CreateApplicationDto,
-  GetApplicationDto,
+  GetApplicationByIdDto,
   GetAllApplicationsDto,
   UpdateApplicationDto,
   GetByCampaignIdWithPaginationDto,
@@ -13,8 +13,8 @@ import {
   GetApplicationService,
   GetAllApplicationService,
   UpdateApplicationService,
-  GetByCampaignIdApplicationService,
-  GetAllByCampaignIdApplicationService,
+  GetByCampaignIdWithPaginationService,
+  GetByCampaignIdService,
   GetByUserIdApplicationService,
   GetByUserIdPaginationApplicationService,
 } from './service';
@@ -27,9 +27,9 @@ export class ApplicationApplication {
     private readonly createApplicationService: CreateApplicationService,
     private readonly getApplicationService: GetApplicationService,
     private readonly getAllApplicationService: GetAllApplicationService,
-    private readonly getByCampaignIdApplicationService: GetByCampaignIdApplicationService,
+    private readonly getByCampaignIdWithPaginationService: GetByCampaignIdWithPaginationService,
     private readonly updateApplicationService: UpdateApplicationService,
-    private readonly getAllByCampaignIdApplicationService: GetAllByCampaignIdApplicationService,
+    private readonly getAllByCampaignIdApplicationService: GetByCampaignIdService,
     private readonly getByUserIdApplicationService: GetByUserIdApplicationService,
     private readonly getByUserIdPagiantionApplicationService: GetByUserIdPaginationApplicationService,
     // private readonly getByUserIdPaginationApplicationService: GetByUserIdPaginationApplicationService,
@@ -40,7 +40,7 @@ export class ApplicationApplication {
   }
 
   async getApplication(
-    request: GetApplicationDto,
+    request: GetApplicationByIdDto,
   ): Promise<Application | null> {
     const data = await this.getApplicationService.execute(request);
     if (!data) {
@@ -64,7 +64,7 @@ export class ApplicationApplication {
     });
 
     const total = (await total_data).length;
-    const data = await this.getByCampaignIdApplicationService.execute(request);
+    const data = await this.getByCampaignIdWithPaginationService.execute(request);
 
     const total_pages = Math.ceil(total / request.limit);
     if (!total_data || !data) {

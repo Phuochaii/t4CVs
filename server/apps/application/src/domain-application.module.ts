@@ -5,23 +5,34 @@ import {
   GetApplicationService,
   GetAllApplicationService,
   UpdateApplicationService,
-  GetByCampaignIdApplicationService,
-  GetAllByCampaignIdApplicationService,
+  GetByCampaignIdWithPaginationService,
+  GetByCampaignIdService,
   GetByUserIdApplicationService,
   GetByUserIdPaginationApplicationService,
 } from './domain/service';
-import { NotificationPersistenceModule } from './infrastructure/application-persistence.module';
+import { InfrastructureModule } from './infrastructure/infrastucture.module';
 import { ApplicationRepository } from './domain/repository';
+import { ApplicationFactory } from './domain/factory/application.factory';
 
 @Module({
-  imports: [NotificationPersistenceModule],
+  imports: [InfrastructureModule],
   providers: [
     {
-      provide: CreateApplicationService,
-      useFactory: (applicationRepository: ApplicationRepository) => {
-        return new CreateApplicationService(applicationRepository);
+      provide: ApplicationFactory,
+      useFactory: (repository: ApplicationRepository) => {
+        return new ApplicationFactory(repository);
       },
       inject: [ApplicationRepository],
+    },
+    {
+      provide: CreateApplicationService,
+      useFactory: (
+        repository: ApplicationRepository,
+        factory: ApplicationFactory,
+      ) => {
+        return new CreateApplicationService(repository, factory);
+      },
+      inject: [ApplicationRepository, ApplicationFactory],
     },
     {
       provide: GetApplicationService,
@@ -45,16 +56,16 @@ import { ApplicationRepository } from './domain/repository';
       inject: [ApplicationRepository],
     },
     {
-      provide: GetByCampaignIdApplicationService,
+      provide: GetByCampaignIdWithPaginationService,
       useFactory: (applicationRepository: ApplicationRepository) => {
-        return new GetByCampaignIdApplicationService(applicationRepository);
+        return new GetByCampaignIdWithPaginationService(applicationRepository);
       },
       inject: [ApplicationRepository],
     },
     {
-      provide: GetAllByCampaignIdApplicationService,
+      provide: GetByCampaignIdService,
       useFactory: (applicationRepository: ApplicationRepository) => {
-        return new GetAllByCampaignIdApplicationService(applicationRepository);
+        return new GetByCampaignIdService(applicationRepository);
       },
       inject: [ApplicationRepository],
     },
@@ -80,9 +91,9 @@ import { ApplicationRepository } from './domain/repository';
         createApplicationService: CreateApplicationService,
         getApplicationService: GetApplicationService,
         getAllApplicationService: GetAllApplicationService,
-        getByCampaignIdApplication: GetByCampaignIdApplicationService,
+        getByCampaignIdApplication: GetByCampaignIdWithPaginationService,
         updateApplicationService: UpdateApplicationService,
-        getAllByCampaignIdApplication: GetAllByCampaignIdApplicationService,
+        getAllByCampaignIdApplication: GetByCampaignIdService,
         getByUserIdApplication: GetByUserIdApplicationService,
         getByUserIdPaginationApplication: GetByUserIdPaginationApplicationService,
       ) => {
@@ -101,9 +112,9 @@ import { ApplicationRepository } from './domain/repository';
         CreateApplicationService,
         GetApplicationService,
         GetAllApplicationService,
-        GetByCampaignIdApplicationService,
+        GetByCampaignIdWithPaginationService,
         UpdateApplicationService,
-        GetAllByCampaignIdApplicationService,
+        GetByCampaignIdService,
         GetByUserIdApplicationService,
         GetByUserIdPaginationApplicationService,
       ],
@@ -111,4 +122,4 @@ import { ApplicationRepository } from './domain/repository';
   ],
   exports: [ApplicationApplication],
 })
-export class ApplicationApplicationModule {}
+export class DomainApplicationModule {}
