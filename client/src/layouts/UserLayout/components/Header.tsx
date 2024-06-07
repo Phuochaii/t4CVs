@@ -25,13 +25,18 @@ function Header() {
         cacheMode: "off",
       });
       UserModule.getNotification({ token }).then((res) => {
-        // console.log(res);
+        console.log(123, res);
 
         setNotifications(res.data);
         setTotal(res.pagination.total);
+      }).catch((err) => {
+        console.log(error);
       });
     };
-    if (isAuthenticated) fetchNotification();
+    console.log(isAuthenticated);
+    if (isAuthenticated) {
+      // fetchNotification();
+    }
   }, []);
 
 

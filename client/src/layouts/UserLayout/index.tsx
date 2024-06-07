@@ -7,6 +7,8 @@ interface LayoutProp {
 }
 
 function UserLayout({ children }: LayoutProp) {
+  console.log(456456);
+  
   return (
     <>
       <Header />

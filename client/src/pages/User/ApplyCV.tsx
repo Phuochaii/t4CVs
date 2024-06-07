@@ -571,10 +571,12 @@ function ApplyCV() {
     }
   };
   const fetchJobData = async () => {
-    const data = await getJobById(jobId);
-    await setJobData(data);
+    if (jobId) {
+      const data = await getJobById(jobId);
+      await setJobData(data);
+    }
   };
-  useEffect(() => {
+  useEffect(()=> {
     setJobId(id);
     window.scrollTo(0, 0);
     fetchJobData();

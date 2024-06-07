@@ -22,7 +22,10 @@ function App() {
           <Router>
             <div>
               <Routes>
-                {routes.map((route, index) => {
+                {
+                routes.map((route, index) => {
+                  // console.log(123123);
+                  
                   const { isLoading } = useAuth0();
                   const Layout = route.layout || EmptyLayout;
                   const Page = route.component;

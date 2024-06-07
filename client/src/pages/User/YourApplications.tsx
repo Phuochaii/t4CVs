@@ -47,7 +47,7 @@ function YourApplications() {
       }
     };
 
-    fetchApplications(); // Call the fetchApplications function when the component mounts
+    // fetchApplications(); // Call the fetchApplications function when the component mounts
   }, [getAccessTokenSilently, user?.sub]);
 
   const toggleSwitch = () => {
