@@ -10,29 +10,26 @@ import { AUTH0_BACKEND_AUDIENCE } from '../../../shared/services/authen/infrastr
 
 function Header() {
   const navigation = useNavigate();
-  const { isAuthenticated, user, logout, getAccessTokenSilently } = useAuth0();
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
   const userId = user?.sub || "";
   
-  useEffect(() => {
-    const fetchNotification = async () => {
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: AUTH0_BACKEND_AUDIENCE,
-        },
-        cacheMode: "off",
-      });
-      UserModule.getNotification({ token }).then((res) => {
+  const fetchNotification = async () => {
+    
+    UserModule.getNotification({ token })
+      .then((res) => {
         console.log(123, res);
 
         setNotifications(res.data);
         setTotal(res.pagination.total);
-      }).catch((err) => {
+      })
+      .catch((err) => {
         console.log(error);
       });
-    };
+  };
+  useEffect(() => {
+
     console.log(isAuthenticated);
     if (isAuthenticated) {
       // fetchNotification();

@@ -12,20 +12,21 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { withRoleCheck } from "./shared/services/authen/domain/withRoleCheck";
 import { accountList } from "./shared/utils/constant";
 import Spinner from "./pages/Spinner";
+import { AUTH0_BACKEND_AUDIENCE } from './shared/services/authen/infrastructure/config';
+
 
 
 export const MyContext = createContext({});
 
 function App() {
+
   return (
-        <MyContext.Provider value={{ accountList: accountList }}>
+        <MyContext.Provider value={{ token: "on update" }}>
           <Router>
             <div>
               <Routes>
                 {
                 routes.map((route, index) => {
-                  // console.log(123123);
-                  
                   const { isLoading } = useAuth0();
                   const Layout = route.layout || EmptyLayout;
                   const Page = route.component;
