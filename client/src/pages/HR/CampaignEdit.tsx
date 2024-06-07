@@ -156,8 +156,9 @@ function CampaignEdit() {
         console.error('Error fetching data:', error);
       }
       const response = await getJobById(recruitment.id);
-      setJob(response)
       console.log(response)
+      setJob(response)
+      
       setRecruitment({
         ...response,
         createdAt: new Date(response.createAt),

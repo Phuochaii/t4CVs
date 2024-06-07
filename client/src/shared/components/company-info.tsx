@@ -55,7 +55,7 @@ function CompanyInfo() {
 
   const handleComponent = () => {
     setComponent(!component);
-    console.log(component);
+    // console.log(component);
     // console.log("Hello world")
   };
   const handleView = (view: boolean) => {

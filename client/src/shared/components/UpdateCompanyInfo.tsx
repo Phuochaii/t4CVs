@@ -20,25 +20,45 @@ const UpdateCompanyInfo = ({
   company: CompanyFromServer;
   fields: any;
 }) => {
-  const [imageFile, setImageFile] = useState();
-  const [image, setImage] = useState();
-  const imageUploadRef = useRef(null);
-  const handleImageUpload = useCallback(() => {
-    imageUploadRef?.current?.click();
-  }, []);
-  const imagePreview = (e) => {
-    const selectedImage = e.target.files[0];
-    setImageFile(selectedImage);
-    console.log(selectedImage);
-    if (selectedImage) {
-      const reader = new FileReader();
+  const [imageFile, setImageFile] = useState<File>();
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+  const imageUploadRef = useRef<HTMLInputElement | null>(null);
 
-      reader.onload = (event) => {
-        setImage(event.target.result);
-      };
-      reader.readAsDataURL(selectedImage);
+  const handleImageUpload = () => {
+    if (imageUploadRef.current) {
+      imageUploadRef.current.click();
     }
   };
+
+  const imagePreview = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (reader.result) {
+          setImagePreviewUrl(reader.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  // const handleImageUpload = useCallback(() => {
+  //   imageUploadRef?.current?.click();
+  // }, []);
+  // const imagePreview = (e: { target: { files: any[]; }; }) => {
+  //   const selectedImage = e.target.files[0];
+  //   setImageFile(selectedImage);
+  //   console.log(selectedImage);
+  //   if (selectedImage) {
+  //     const reader = new FileReader();
+
+  //     reader.onload = (event) => {
+  //       setImage(event.target.result);
+  //     };
+  //     reader.readAsDataURL(selectedImage);
+  //   }
+  // };
   const {
     register,
     handleSubmit,
@@ -46,7 +66,7 @@ const UpdateCompanyInfo = ({
   } = useForm();
   const [item] = useState({
     id: 0,
-    file: '',
+    file: null as File | null,
     field: 0,
     taxCode: '',
     name: '',
@@ -57,41 +77,36 @@ const UpdateCompanyInfo = ({
     description: '',
   });
   const onSubmit = async (data: any, event: any) => {
-    const updatedItem = { ...item };
+    const formData = new FormData();
+  
     if (imageFile) {
-      updatedItem.file = imageFile;
+      formData.append('file', imageFile);
     }
-    // Thịnh update lại phần file
-    updatedItem.id = company.id;
-    updatedItem.file = '';
-    updatedItem.field = Number.parseInt(
-      fieldOptions?.value !== undefined ? fieldOptions?.value : '0',
-    );
-    updatedItem.taxCode = data.MST;
-    updatedItem.website = data.website;
-    updatedItem.address = data.address;
-    updatedItem.phone = data.phoneNumber;
-    updatedItem.companySize = data.scale;
-    updatedItem.description = data.description;
-    //debug line
-    console.log(updatedItem);
+  
+    formData.append('id', company.id.toString());
+    formData.append('field', Number.parseInt(fieldOptions?.value !== undefined ? fieldOptions?.value : '1').toString());
+    formData.append('taxCode', data.MST);
+    formData.append('website', data.website);
+    formData.append('address', data.address);
+    formData.append('phone', data.phoneNumber);
+    formData.append('companySize', data.scale.toString());
+    formData.append('description', data.description);
+  
     try {
       const response = await fetch('http://localhost:3000/company/update', {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedItem),
+        body: formData,
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to post data to API');
       }
-
-      console.log('Data posted successfully');
+  
+      console.log('Data successfully updated:', formData);
     } catch (error) {
       console.error('Error posting data:', error);
     }
+  
     handleComponent(event);
   };
   const convertToOptions = (data: { id: string; name: string }[]) => {
@@ -115,8 +130,8 @@ const UpdateCompanyInfo = ({
             <span>Logo</span>
             <img
               src={
-                image ||
-                company.avatar ||
+                imagePreviewUrl ||
+                company.image ||
                 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'
               }
               className="rounded-full"
@@ -131,12 +146,12 @@ const UpdateCompanyInfo = ({
               style={{ display: 'none' }}
               accept="image/png, image/gif, image/jpeg"
             />
-            <button
+            <div
               className="text-sm btn-success py-1 px-2 rounded bg-gray-100 cursor-pointer"
               onClick={handleImageUpload}
             >
               Đổi Logo
-            </button>
+            </div>
           </div>
           <div className="flex flex-row space-x-10 items-center">
             <div className="space-y-2 w-1/2">
