@@ -65,7 +65,6 @@ export class JobController {
     return this.jobService.createJob(data);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   findJobById(@Param('id') id: number): Promise<any> {
     return this.jobService.findJobById(id);
@@ -77,11 +76,13 @@ export class JobController {
     return this.jobService.updateJobStatus(data);
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Put('update-job')
   updateJob(@Body() data: UpdateJobDTO) {
     return this.jobService.updateJob(data);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   deleteJob(@Param('id') id: number) {
     return this.jobService.deleteJob(id);
