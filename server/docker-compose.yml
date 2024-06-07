@@ -1,14 +1,14 @@
 version: '3.8'
 services:
-  nginx: 
+  nginx:
     build: ./nginx
     ports:
-      - "80:80"
-    depends_on: 
+      - '80:80'
+    depends_on:
       - gateway
       - gateway2
     networks:
-      - backend  
+      - backend
   gateway:
     container_name: gateway
     build:
@@ -18,6 +18,7 @@ services:
         - APP=gateway
     environment:
       - NOTIFICATION_SERVICE_URL=notification:50052
+      - APPLICATION_SERVICE_URL=application:50053
     ports:
       - 3000:3000
     networks:
@@ -31,10 +32,66 @@ services:
         - APP=gateway2
     environment:
       - NOTIFICATION_SERVICE_URL=notification:50052
+      - APPLICATION_SERVICE_URL=application:50053
     ports:
       - 4000:4000
     networks:
-      - backend   
+      - backend
+  application:
+    container_name: application
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=application
+    environment:
+      - DB_HOST=application-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=123456
+      - DB_APPLICATION_DATABASE=application
+    depends_on:
+      - application-db
+    networks:
+      - backend
+      - application
+  application-db:
+    container_name: application-db
+    image: postgres:latest
+    networks:
+      - application
+    environment:
+      - POSTGRES_PASSWORD=123456
+    volumes:
+      - application-db:/var/lib/postgresql/data
+
+  cv:
+    container_name: cv
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=cv
+    environment:
+      - DB_HOST=cv-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=713112411
+      - DB_CV_DATABASE=cv
+    depends_on:
+      - cv-db
+    networks:
+      - backend
+      - cv
+  cv-db:
+    container_name: cv-db
+    image: postgres:latest
+    networks:
+      - cv
+    environment:
+      - POSTGRES_PASSWORD=123456
+    volumes:
+      - cv-db:/var/lib/postgresql/data
   # notification:
   #   container_name: notification
   #   build:

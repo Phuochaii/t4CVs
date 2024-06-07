@@ -19,9 +19,10 @@ import { ApplicationApplicationModule } from './application-application.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: './configs/.env',
-    }),
+    // ConfigModule.forRoot({
+    //   envFilePath: './configs/.env',
+    // }),
+    ConfigModule.forRoot(),
     ApplicationApplicationModule,
   ],
   controllers: [ApplicationController],

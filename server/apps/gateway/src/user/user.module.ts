@@ -12,7 +12,7 @@ import { AuthenticationModule } from '../authentication/authentication.module';
         name: 'USER',
         transport: Transport.TCP,
         options: {
-          host: 'localhost',
+          host: 'user',
           port: 3002,
         },
       },
