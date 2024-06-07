@@ -17,7 +17,6 @@ export class EventDispatcher implements IEventDispatcher {
     this.eventBus.subscribe(async (event: T) => await handler.handle(event));
   }
   dispatch(event: IEvent): void {
-    console.log('Event dispatched', event);
     this.eventBus.publish(event);
   }
 }
