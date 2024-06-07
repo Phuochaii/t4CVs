@@ -35,7 +35,7 @@ export class ApplicationController {
 
   //hr get applications by campaignId + hrId
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
-  @Get('/hr/:hrId')
+  @Get('/hr/')
   async findAll(
     @GetUser() hr: UserClaims,
     @Query('page') page: number = 1,
@@ -60,7 +60,7 @@ export class ApplicationController {
 
   //user get applications
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
-  @Get('/user/:userId')
+  @Get('/user/')
   async findAllByUserId(
     @GetUser() user: UserClaims,
     @Query('page') page: number = 1,
