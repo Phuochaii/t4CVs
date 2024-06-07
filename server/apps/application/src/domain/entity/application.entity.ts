@@ -15,14 +15,13 @@ export class Application extends BaseEntity {
 
   async applyApplicationCreatedEvent(event: ApplicationCreatedEvent) {
     this.id = event.data.id;
-    this.status = false;
+    this.status = event.data.status;
     this.fullname = event.data.fullname;
     this.phone = event.data.phone;
     this.email = event.data.email;
     this.coverLetter = event.data.coverLetter;
-    const now = new Date();
-    this.createdAt = now.toISOString();
-    this.updateAt = now.toISOString();
+    this.createdAt = event.data.createdAt;
+    this.updateAt = event.data.updateAt;
     this.campaignId = event.data.campaignId;
     this.userId = event.data.userId;
     this.cvId = event.data.cvId;

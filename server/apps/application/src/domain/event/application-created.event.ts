@@ -1,9 +1,9 @@
 import { IEvent } from '@app/common/domain/event.interface';
-import { CreateApplicationDto } from '../dto';
 import { Application } from '../entity';
+import { ClassProperties } from '@app/common/type';
 
 export class ApplicationCreatedEvent implements IEvent {
   constructor(
-    public readonly data: CreateApplicationDto & { id: Application['id'] },
+    public readonly data: ClassProperties<Application>,
   ) {}
 }

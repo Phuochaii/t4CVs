@@ -4,9 +4,10 @@ import { EventDispatcher } from './event-dispatcher.implement';
 import { CqrsModule, EventBus } from '@nestjs/cqrs';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EventStoreDBClient } from '@eventstore/db-client';
-import { ApplicationCreatedEvent } from '../../domain/event';
 import EventStoreSubscriber from './event-store/event-store.subscriber';
 import EventStorePublisher from './event-store/event-store.publisher';
+import { Events } from './event-store/event-store.event';
+import { EventPublisherOrchestrator } from '@app/common/multi-event-publisher';
 
 @Module({
   imports: [CqrsModule, ConfigModule],
@@ -28,7 +29,7 @@ import EventStorePublisher from './event-store/event-store.publisher';
     },
     {
       provide: 'EVENTS',
-      useValue: [ApplicationCreatedEvent],
+      useValue: Events,
     },
     {
       provide: 'EVENT_STREAM',
@@ -38,6 +39,7 @@ import EventStorePublisher from './event-store/event-store.publisher';
       provide: IEventDispatcher,
       useClass: EventDispatcher,
     },
+    EventPublisherOrchestrator,
     EventStoreSubscriber,
     EventStorePublisher,
   ],
@@ -47,12 +49,12 @@ export class EventDispatcherModule implements OnModuleInit{
   constructor(
     private readonly eventBus$: EventBus,
     private readonly eventStoreSubscriber: EventStoreSubscriber,
-    private readonly eventStorePublisher: EventStorePublisher,
+    private readonly eventPublisherOrchestrator: EventPublisherOrchestrator,
   ) {}
 
   async onModuleInit(): Promise<any> {
     this.eventStoreSubscriber.connect();
     this.eventStoreSubscriber.bridgeEventsTo(this.eventBus$.subject$);
-    this.eventBus$.publisher = this.eventStorePublisher;
+    this.eventBus$.publisher = this.eventPublisherOrchestrator;
   }
 }

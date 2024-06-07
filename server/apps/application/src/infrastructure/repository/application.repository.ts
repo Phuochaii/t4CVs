@@ -32,7 +32,7 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
   }
 
   async getNextId(): Promise<number> {
-    return await this.applicationRepository.count();
+    return await this.applicationRepository.count() + 1;
   }
 
   async getById(

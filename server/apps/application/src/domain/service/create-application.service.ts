@@ -15,7 +15,6 @@ export class CreateApplicationService implements BaseService<Application> {
   ): Promise<Application> {
     const newApplication =
       await this.applicationFactory.createApplication(createApplicationDto);
-    console.log('newApplication', newApplication);
     await this.applicationRepository.save(newApplication);
     return newApplication;
   }

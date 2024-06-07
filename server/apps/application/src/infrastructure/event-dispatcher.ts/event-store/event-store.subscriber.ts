@@ -10,7 +10,7 @@ class EventStoreSubscriber implements IMessageSource {
   constructor(
     @Inject('EVENT_STORE')
     private readonly eventStore: EventStoreDBClient,
-    @Inject('EVENTS') private readonly events: Array<any>,
+    @Inject('EVENTS') private readonly registeredEvents: Array<any>,
   ) {}
 
   async connect(): Promise<void> {
@@ -19,11 +19,11 @@ class EventStoreSubscriber implements IMessageSource {
     });
 
     userSubscription.on('data', ({ event }) => {
-      const isRegisteredEvent = this.events.some(
+      const isRegisteredEvent = this.registeredEvents.some(
         (RegisteredEvent) => RegisteredEvent.name === event.type,
       );
       if (!isRegisteredEvent) return console.log('Event not registered', event);
-      const RegisteredEvent = this.events.find(
+      const RegisteredEvent = this.registeredEvents.find(
         (RegisteredEvent) => RegisteredEvent.name === event.type,
       );
       const receivedEvent = plainToInstance(RegisteredEvent, event.data);

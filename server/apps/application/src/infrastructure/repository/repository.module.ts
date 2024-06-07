@@ -7,6 +7,7 @@ import { TypeOrmApplicationRepository } from './application.repository';
 import { EventDispatcherModule } from '../event-dispatcher.ts/event-dispatcher.module';
 import { DatabaseConfiger, DatabaseOptions } from './database/init';
 import { UserNotificationSchemaMapper } from './mapper';
+import { Projections } from './projection';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { UserNotificationSchemaMapper } from './mapper';
       useClass: TypeOrmApplicationRepository,
     },
     UserNotificationSchemaMapper,
+    ...Projections,
   ],
   exports: [ApplicationRepository],
 })
