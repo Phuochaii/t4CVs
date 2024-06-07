@@ -5,8 +5,8 @@ import { CqrsModule, EventBus } from '@nestjs/cqrs';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EventStoreDBClient } from '@eventstore/db-client';
 import { ApplicationCreatedEvent } from '../../domain/event';
-import EventStoreSubscriber from './event-store.subscriber';
-import EventStorePublisher from './event-store.publisher';
+import EventStoreSubscriber from './event-store/event-store.subscriber';
+import EventStorePublisher from './event-store/event-store.publisher';
 
 @Module({
   imports: [CqrsModule, ConfigModule],
