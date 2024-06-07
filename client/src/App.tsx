@@ -3,7 +3,7 @@ import {
   Routes,
   Route,
   Navigate,
-} from "react-router-dom";
+} from 'react-router-dom';
 
 import routes from "./routes";
 import EmptyLayout from "./layouts/EmptyLayout";
@@ -20,37 +20,39 @@ function App() {
   return (
         <MyContext.Provider value={{ accountList: accountList }}>
           <Router>
-            <Routes>
-              {routes.map((route, index) => {
-                const { isLoading } = useAuth0();
-                const Layout = route.layout || EmptyLayout;
-                const Page = route.component;
-                const role = route.role;
-                const Element = () => (
-                  <Layout>
-                    <Page />
-                  </Layout>
-                );
-                const ElementWithRoleCheck = role
-                  ? withRoleCheck(role, Element)
-                  : Element;
-                return (
-                  <Route
-                    key={index}
-                    path={route.path}
-                    element={
-                      isLoading
-                        ? <Spinner/>
-                      : <ElementWithRoleCheck/>
-                    }
-                  />
-                );
-              })}
-              {/*  */}
-              <Route path="*" element={<Navigate to="/" />} />
-              {/* <Route path="*" element={<Navigate to="/error-path" />} /> */}
-              {/* <Route path="*" element={<Navigate to="/quan-ly-cv" />} /> */}
-            </Routes>
+            <div>
+              <Routes>
+                {routes.map((route, index) => {
+                  const { isLoading } = useAuth0();
+                  const Layout = route.layout || EmptyLayout;
+                  const Page = route.component;
+                  const role = route.role;
+                  const Element = () => (
+                    <Layout>
+                      <Page />
+                    </Layout>
+                  );
+                  const ElementWithRoleCheck = role
+                    ? withRoleCheck(role, Element)
+                    : Element;
+                  return (
+                    <Route
+                      key={index}
+                      path={route.path}
+                      element={
+                        isLoading
+                          ? <Spinner/>
+                        : <ElementWithRoleCheck/>
+                      }
+                    />
+                  );
+                })}
+                {/*  */}
+                <Route path="*" element={<Navigate to="/" />} />
+                {/* <Route path="*" element={<Navigate to="/error-path" />} /> */}
+                {/* <Route path="*" element={<Navigate to="/quan-ly-cv" />} /> */}
+              </Routes>
+            </div>
           </Router>
         </MyContext.Provider>
   );

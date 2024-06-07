@@ -13,6 +13,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApplicationService } from './application.service';
 import { CreateApplicationRequest } from '@app/common/proto/application';
 import { PermissionsGuard } from '../authorization/permission/permissions.guard';
+import { UserClaims } from '../authorization/entity/user-claims.entity';
+import { GetUser } from '../authorization/get-user.decorator';
 
 // import { firstValueFrom } from 'rxjs';
 
@@ -23,16 +25,19 @@ export class ApplicationController {
   //create application
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
   @Post()
-  async create(@Body() createApplicationRequest: CreateApplicationRequest) {
-    await this.applicationService.create(createApplicationRequest);
+  async create(
+    @GetUser() user: UserClaims,
+    @Body() createApplicationRequest: CreateApplicationRequest,
+  ) {
+    await this.applicationService.create(createApplicationRequest, user.sub);
     return 'Success';
   }
 
   //hr get applications by campaignId + hrId
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
-  @Get('/hr/:hrId')
+  @Get('/hr/')
   async findAll(
-    @Param('hrId') hrId: string,
+    @GetUser() hr: UserClaims,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
     @Query('campaignId') campaignId: number | null,
@@ -49,15 +54,15 @@ export class ApplicationController {
       limit,
       campaignId,
       status,
-      hrId,
+      hr.sub,
     );
   }
 
   //user get applications
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
-  @Get('/user/:userId')
+  @Get('/user/')
   async findAllByUserId(
-    @Param('userId') userId: string,
+    @GetUser() user: UserClaims,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
     @Query(
@@ -68,7 +73,12 @@ export class ApplicationController {
     )
     status: boolean | null,
   ) {
-    return this.applicationService.findAllByUserId(page, limit, userId, status);
+    return this.applicationService.findAllByUserId(
+      page,
+      limit,
+      user.sub,
+      status,
+    );
   }
 
   //hr get application's cv

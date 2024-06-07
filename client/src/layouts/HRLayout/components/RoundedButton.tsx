@@ -1,11 +1,11 @@
-import { LucideProps } from "lucide-react";
-import FillIcon from "../../../shared/components/fill-icon";
-import RegularIcon from "../../../shared/components/regular-icon";
+import { LucideProps } from 'lucide-react';
+import FillIcon from '../../../shared/components/fill-icon';
+import RegularIcon from '../../../shared/components/regular-icon';
 
 const RoundedButton = ({
   text,
-  textColor = "white",
-  backgroundColor = "#364C66",
+  textColor = 'white',
+  backgroundColor = '#364C66',
   icon,
   iconSize = 18,
   iconColor,
@@ -35,16 +35,16 @@ const RoundedButton = ({
     <button
       className="hover:opacity-80 transition-all duration-200"
       style={{
-        padding: image ? "3px 8px" : "5px 15px",
-        margin: "0 7px",
-        borderRadius: "20px",
+        padding: image ? '3px 8px' : '5px 15px',
+        margin: '0 7px',
+        borderRadius: '20px',
         backgroundColor: backgroundColor,
         backgroundImage: backgroundImage,
         color: textColor,
-        border: border || "none",
-        cursor: "pointer",
-        outline: "none",
-        fontWeight: "500",
+        border: border || 'none',
+        cursor: 'pointer',
+        outline: 'none',
+        fontWeight: '500',
       }}
       onClick={onClick}
     >
@@ -53,15 +53,25 @@ const RoundedButton = ({
           <img
             src={image}
             className="rounded-full"
-            style={{ width: "25px", marginRight: "10px" }}
+            style={{ width: '25px', marginRight: '10px' }}
             alt="Avatar"
           />
-        )}{" "}
+        )}{' '}
         {icon &&
           (isFillIcon ? (
-            <FillIcon icon={icon} color={iconColor} size={iconSize} strokeWidth={iconStrokeWidth} />
+            <FillIcon
+              icon={icon}
+              color={iconColor}
+              size={iconSize}
+              strokeWidth={iconStrokeWidth}
+            />
           ) : (
-            <RegularIcon icon={icon} color={iconColor} size={iconSize} strokeWidth={iconStrokeWidth} />
+            <RegularIcon
+              icon={icon}
+              color={iconColor}
+              size={iconSize}
+              strokeWidth={iconStrokeWidth}
+            />
           ))}
         {text && <span className="ml-2">{text}</span>}
         {numberNoti && (

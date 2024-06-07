@@ -7,6 +7,7 @@ export class UsernamePasswordLoginUseCase extends Auth0OperationUseCase {
     constructor(
         private credentials: UsernamePasswordLoginCredentials,
         private role: Role,
+        private errorCallback?: (errMessage: string) => void
     ) {
         super(AUTH0_REALM.UsernamePassword);
     }
@@ -25,11 +26,7 @@ export class UsernamePasswordLoginUseCase extends Auth0OperationUseCase {
             scope: transaction.scope,
             audience: auht0Config.audience,
         }, (err, authResult) => {
-            if (err) {
-                console.error(err);
-                return;
-            }
-            console.log("authResult:", authResult);
+            this.errorCallback?.(err?.description || "Tên tài khoản hoặc mật khẩu không chính xác.");
         });
     }
 }

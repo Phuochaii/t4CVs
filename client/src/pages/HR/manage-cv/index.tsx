@@ -117,9 +117,10 @@ function ManageCV() {
                     aria-label="lab API tabs example"
                     sx={tabListSx}
                   >
-                    <Tab sx={tabSx} label="Tin tuyển dụng" value="1" />
-                    <Tab sx={tabSx} label="CV ứng tuyển" value="2" />
-                    <Tab sx={tabSx} label="Ứng viên đã xem tin" value="3" />
+                    <Tab sx={tabSx} label="Thông tin tuyển dụng" value="1" />
+                    <Tab sx={tabSx} label="Tin tuyển dụng" value="2" />
+                    <Tab sx={tabSx} label="CV ứng tuyển" value="3" />
+                    <Tab sx={tabSx} label="Ứng viên đã xem tin" value="4" />
                     <Tab sx={tabSx} label="CV tìm kiếm" value="5" />
                     <Tab sx={tabSx} label="CV đang theo dõi" value="6" />
                     <Tab sx={tabSx} label="CV được hỗ trợ" value="7" />
@@ -127,12 +128,15 @@ function ManageCV() {
                   </TabList>
                 </Box>
                 <TabPanel sx={{ padding: '12px 0' }} value="1">
-                  {tabs.Recuitment()}
+                  {tabs.Information({ compaignId: compaignId })}
                 </TabPanel>
                 <TabPanel sx={{ padding: '12px 0' }} value="2">
-                  {tabs.Application({ compaignId: compaignId, hrId: hrId })}
+                  {tabs.Recuitment()}
                 </TabPanel>
                 <TabPanel sx={{ padding: '12px 0' }} value="3">
+                  {tabs.Application({ compaignId: compaignId, hrId: hrId })}
+                </TabPanel>
+                <TabPanel sx={{ padding: '12px 0' }} value="4">
                   Item Three
                 </TabPanel>
 

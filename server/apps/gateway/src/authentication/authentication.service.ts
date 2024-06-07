@@ -47,4 +47,12 @@ export class AuthenticationService {
     });
     return response;
   }
+
+  async getNameAndPicture(userId: string) {
+    const user = (await this.auth0.users.get({ id: userId })).data;
+    return {
+      name: user.name,
+      picture: user.picture,
+    };
+  }
 }

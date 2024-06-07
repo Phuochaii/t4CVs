@@ -49,7 +49,7 @@ const routes: RouteItem[] = [
   { path: '/list-cv', component: User.ListCV, layout: UserLayout }, // nguyên
 
   // ADMIN PAGES - Thức
-  { path: '/admin/overview', component: Admin.Overview, layout: AdminLayout },
+  { path: '/admin/overview', component: Admin.Overview, layout: AdminLayout, role: Roles.ADMIN },
 
   // HR PAGES - Yến, Thịnh, Thức
   { path: '/hr/approve', component: HR.ReceiveCV, layout: HRLayout }, // yến
@@ -80,6 +80,11 @@ const routes: RouteItem[] = [
   {
     path: '/admin/recruitment',
     component: Admin.Recruitment,
+    layout: AdminLayout,
+  }, // thuc
+  {
+    path: '/admin/employer',
+    component: Admin.Employer,
     layout: AdminLayout,
   }, // thuc
 
@@ -142,6 +147,11 @@ const routes: RouteItem[] = [
   {
     path: '/admin/company/:id',
     component: Admin.CompanyDetail,
+    layout: AdminLayout,
+  },
+  {
+    path: '/admin/employer/:id',
+    component: Admin.EmployerDetail,
     layout: AdminLayout,
   },
 ];

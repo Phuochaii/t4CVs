@@ -13,6 +13,7 @@ import { EmployerModule } from './employer/employer.module';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './authorization';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { JwtStrategy } from './authorization';
     // EmployerModule,
     ConfigModule.forRoot({ envFilePath: './configs/.env' }),
     EmployerModule,
+    AdminModule,
   ],
   controllers: [GatewayController],
   providers: [GatewayService, JwtStrategy],

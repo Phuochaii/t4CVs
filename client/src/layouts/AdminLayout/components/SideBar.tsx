@@ -1,5 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import { Eye, CreditCard, File, Building2 } from "lucide-react";
+import {
+  Eye,
+  CreditCard,
+  File,
+  Building2,
+  PersonStanding,
+} from "lucide-react";
 import GradientIcon from "./GradientIcon";
 import clsx from "clsx";
 
@@ -32,6 +38,12 @@ const links = [
     icon: Building2,
     iconComponent: <Building2 className="text-white" />,
   },
+  {
+    name: "Employer",
+    path: "/admin/employer",
+    icon: PersonStanding,
+    iconComponent: <PersonStanding className="text-white" />,
+  },
 ];
 
 function Sidebar({ className }: SidebarProps) {
@@ -50,7 +62,7 @@ function Sidebar({ className }: SidebarProps) {
             to={item.path}
             key={index}
             className={clsx(
-              `flex w-full gap-2 px-2 py-3`,
+              "flex w-full gap-2 px-2 py-3",
               pathname == item.path
                 ? "bg-gradient-to-b from-green-500 to-blue-500 rounded-r-[4rem]"
                 : ""

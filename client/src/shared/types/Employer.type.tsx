@@ -1,3 +1,5 @@
+import { CompanyFromServer } from './Company.type';
+
 export interface EmployerFromServer {
   id: number;
   fullname: string;
@@ -9,4 +11,6 @@ export interface EmployerFromServer {
   licenseStatus: boolean;
   phoneNumberStatus: boolean;
   image: string;
+  company?: CompanyFromServer | null;
+  supplement?: string;
 }

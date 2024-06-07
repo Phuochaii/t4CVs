@@ -7,14 +7,12 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import img from '../../shared/assets/images/Sign-up user.png';
 import { useAuthen } from '../../shared/services/authen';
-import { accountList } from "../../shared/utils/constant";
 import { Roles } from "../../shared/services/authen/domain/context";
 import { useAuth0 } from "@auth0/auth0-react";
 import Spinner from "../Spinner";
 
 function UserLogIn() {
   const {isAuthenticated, isLoading} = useAuth0();
-  
   const navigation = useNavigate();
   const {usernamePasswordLogin, googleLogin, linkedInLogin, facebookLogin} = useAuthen();
 
@@ -23,9 +21,6 @@ function UserLogIn() {
     password: "",
   });
   const [socialAgree, setSocialAgree] = useState(true);
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
 
   const [emailError, setEmailError] = useState(false);
@@ -51,23 +46,12 @@ function UserLogIn() {
     return emailRegex.test(email);
   };
 
+  const onLoginError = () => {
+    setErrorMessage("Email hoặc mật khẩu không chính xác.");
+  }
+
   const handleLogin = (e: { preventDefault: () => void }) => {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
-
-    accountList.forEach((account) => {
-      console.log(account);
-      if (
-        account.email === formData.email &&
-        account.password === formData.password &&
-        account.role === "user"
-      ) {
-        console.log("Đăng nhập thành công với email:", formData.email);
-        localStorage.setItem("user", JSON.stringify(account));
-        // navigation("/");
-        navigation(-1);
-        return;
-      }
-    });
 
     if (!formData.password) {
       setErrorMessage("Hãy cho chúng tôi biết mật khẩu của bạn");
@@ -80,17 +64,18 @@ function UserLogIn() {
 
     if (formData.password && formData.email) {
       // Đăng nhập không thành công
-      setErrorMessage("Email hoặc mật khẩu không chính xác.");
       if (formData.email && !isEmailValid(formData.email)) {
         setErrorMessage("Định dạng email không đúng");
         setEmailError(true);
       }
     }
+
+    if (!formData.email || !formData.password) return;
     
     usernamePasswordLogin({
       username: formData.email,
       password: formData.password,
-    }, Roles.USER);
+    }, Roles.USER, onLoginError);
   };
 
   const handleGoogleLogin = () => {
@@ -210,7 +195,7 @@ function UserLogIn() {
           </button>
         </form>
 
-        {isLoggedIn && (
+        {isAuthenticated && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mt-4">
             Đăng nhập thành công!
           </div>

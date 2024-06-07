@@ -55,7 +55,6 @@ export class EmployerController {
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Get('check')
   checkEmployer(@GetUser() user: UserClaims): Observable<boolean> {
-    console.log('check employer', user.sub);
     return this.employerService.checkEmployer(user.sub);
   }
 
@@ -107,13 +106,10 @@ export class EmployerController {
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
   @Put('update/licenseStatus')
   updateEmployerLicenseStatus(
-    // @Param('id') id: string,
-    // @GetUser() user: UserClaims,
     @Body('employerId') employerId: string,
     @Body('licenseStatus') licenseStatus: boolean,
   ): Observable<any> {
     return this.employerService.updateEmployerLicenseStatus(
-      // user.sub,
       employerId,
       licenseStatus,
     );
@@ -122,8 +118,6 @@ export class EmployerController {
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
   @Put('update/phoneNumberStatus')
   updateEmployerPhoneStatus(
-    // @Param('id') id: string,
-    // @GetUser() user: UserClaims,
     @Body('employerId') employerId: string,
     @Body('phoneNumberStatus') phoneNumberStatus: boolean,
   ): Observable<any> {

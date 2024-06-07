@@ -10,7 +10,7 @@ export interface RegisterCredentials extends UsernamePasswordLoginCredentials {
 }
 export type SocialLogin = () => void;
 export interface AuthenUseCase {
-  usernamePasswordLogin: (credentials: UsernamePasswordLoginCredentials, role: Role) => void;
+  usernamePasswordLogin: (credentials: UsernamePasswordLoginCredentials, role: Role, errorCallback?: (errMessage: string) => void) => void;
   googleLogin: SocialLogin;
   linkedInLogin: SocialLogin;
   facebookLogin: SocialLogin;

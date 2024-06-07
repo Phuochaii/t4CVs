@@ -1,5 +1,5 @@
-import * as React from "react";
-import RoundedButton from "./RoundedButton";
+import * as React from 'react';
+import RoundedButton from './RoundedButton';
 import {
   Bookmark,
   Pencil,
@@ -18,49 +18,49 @@ import { AUTH0_CLIENT_ID } from "../../../shared/services/authen/infrastructure/
 
 const list_btn1 = [
   {
-    name: "HR Insider",
-    link: "",
+    name: 'HR Insider',
+    link: '',
     icon: Bookmark,
   },
   {
-    name: "Đăng tin",
-    link: "/hr/post-compaign",
+    name: 'Đăng tin',
+    link: '/hr/post-compaign',
     icon: Pencil,
   },
   {
-    name: "Tìm CV",
-    link: "",
+    name: 'Tìm CV',
+    link: '',
     icon: Pencil,
   },
   {
-    name: "Connect",
-    link: "",
+    name: 'Connect',
+    link: '',
     icon: MessageCircle,
   },
 ];
 
 const list_btn2 = [
   {
-    name: "Giỏ hàng",
-    link: "",
+    name: 'Giỏ hàng',
+    link: '',
     icon: ShoppingCart,
     iconSize: 20,
     // numberNoti: 1,
   },
 ];
 const notifyButton = {
-  name: "",
-  link: "",
+  name: '',
+  link: '',
   icon: Bell,
   iconSize: 20,
 };
 const accountButton = {
-  name: "",
-  link: "",
+  name: '',
+  link: '',
   icon: ChevronDown,
   iconSize: 20,
   image:
-    "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg",
+    'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg',
 };
 
 function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
@@ -85,13 +85,13 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
     });
   };
   const notiLength = notifications.filter(
-    (item: any) => item.status === 0
+    (item: any) => item.status === 0,
   ).length;
   return (
     <div
       className="text-white "
       id="hr-header"
-      style={{ padding: "16px 20px", backgroundColor: "#212F3F" }}
+      style={{ padding: '16px 20px', backgroundColor: '#212F3F' }}
     >
       <div className="flex items-center">
         <div className="flex items-center flex-grow">
@@ -104,15 +104,15 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
 
           <div
             style={{
-              marginLeft: "23px",
-              marginRight: "20px",
-              marginTop: "4px",
+              marginLeft: '23px',
+              marginRight: '20px',
+              marginTop: '4px',
             }}
-            onClick={() => navigation("/hr/news")}
+            onClick={() => navigation('/hr/news')}
           >
             <img
               src="https://tuyendung.topcv.vn/app/_nuxt/img/logo_topcv_dark.ee0b56e.png"
-              style={{ width: "56px" }}
+              style={{ width: '56px' }}
               alt="logo"
             />
           </div>
@@ -180,13 +180,13 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                             // window.open(item.link, "_blank", "noopener");
                           }}
                           key={index}
-                          className={`px-4 py-2 m-0 border-b-gray-200 border ${!item.status ? "text-black font-medium" : "text-gray-500"} hover:text-green-500`}
+                          className={`px-4 py-2 m-0 border-b-gray-200 border ${!item.status ? 'text-black font-medium' : "text-gray-500"} hover:text-green-500`}
                         >
                           <span className="cursor-pointer  hover:text-green-500">
                             {item.content}
                           </span>
                           <p className="text-sm text-slate-500 text-right">
-                            {item.createdAt.split("T")[0]}
+                            {item.createdAt.split('T')[0]}
                           </p>
                         </li>
                       ))}
@@ -252,12 +252,15 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                   aria-labelledby="dropdownDividerButton"
                 >
                   <li
-                    className={`px-4 py-2 m-0 border-b-gray-200 border`}
+                    className={'px-4 py-2 m-0 border-b-gray-200 border'}
                     onClick={() => {
+                      // logout({
+                      //   clientId: AUTH0_CLIENT_ID,
+                      //   logoutParams: { returnTo: `${window.location.origin}${Roles.HR.loginUrl}` },
+                      // })
                       logout({
-                        clientId: AUTH0_CLIENT_ID,
-                        logoutParams: { returnTo: `${window.location.origin}${Roles.HR.loginUrl}` },
-                      })
+                        openUrl: false
+                      });
                     }}
                   >
                     <span className="cursor-pointer text-black hover:text-green-500">

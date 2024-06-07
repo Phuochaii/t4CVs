@@ -8,9 +8,10 @@ export class Auth0UseCase implements AuthenUseCase {
 
     usernamePasswordLogin(
         credentials: UsernamePasswordLoginCredentials,
-        role: Role
+        role: Role,
+        errorCallback?: (errMessage: string) => void
     ) {
-        new UsernamePasswordLoginUseCase(credentials, role).call();
+        new UsernamePasswordLoginUseCase(credentials, role, errorCallback).call();
     }
 
     googleLogin() {

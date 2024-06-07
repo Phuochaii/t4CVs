@@ -1,7 +1,16 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { Observable, lastValueFrom } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  from,
+  lastValueFrom,
+  switchMap,
+  throwError,
+} from 'rxjs';
 import { CreateUserDTO } from './dto/Req/createUser.dto';
+import { UploadService } from '../upload/upload.service';
+import { UpdateUserDTO } from './dto/Req/update-user.dto';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { Role } from '../authentication/dto/role.dto';
 import { CreateUserAccountDto } from './dto/Req/create-user-account.dto';
@@ -11,30 +20,54 @@ import { QueryDTO } from './dto/Req/query.dto';
 export class UserService {
   constructor(
     @Inject('USER') private readonly userClient: ClientProxy,
+    private readonly uploadService: UploadService,
     private readonly authenticationService: AuthenticationService,
   ) {}
+
+  updateUser(user: UpdateUserDTO, image: any): Observable<string> {
+    if (image) {
+      const uploadLink$ = from(this.uploadService.upload(image));
+      return uploadLink$.pipe(
+        switchMap((img: string) => {
+          user.image = img;
+          console.log(user);
+          return this.userClient.send({ cmd: 'update_user' }, user).pipe(
+            catchError((error) => {
+              return throwError(() => error.response);
+            }),
+          );
+        }),
+      );
+    } else {
+      return this.userClient.send({ cmd: 'update_user' }, user).pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
+    }
+  }
 
   findAllUsers(query: QueryDTO): Observable<string> {
     return this.userClient.send({ cmd: 'find_all_users' }, query);
   }
 
-  async createUser(
-    user: CreateUserDTO,
-    // image: Express.Multer.File,
-  ) {
-    //  const linkImage = 'https://s3.com/demo.jpg'; // call file service
-    //   const lastLinkImage: string = await lastValueFrom(linkImage);
-    //   user.image = lastLinkImage;
+  async createUser(user: CreateUserDTO, image: any) {
     await this.authenticationService.asignRole({
       userId: user.id,
       role: Role.USER,
     });
-    const _user = this.userClient.send({ cmd: 'create_user' }, user);
-    const lastUser = await lastValueFrom(_user);
-    if (lastUser === null) {
-      return new BadRequestException(`User exits!`);
+    if (image) {
+      const uploadLink$ = from(this.uploadService.upload(image));
+
+      return uploadLink$.pipe(
+        switchMap((img: string) => {
+          user.image = img;
+          return this.userClient.send({ cmd: 'create_user' }, user);
+        }),
+      );
+    } else {
+      return this.userClient.send({ cmd: 'create_user' }, user);
     }
-    return lastUser;
   }
 
   isUserExist(id: string): Observable<boolean> {

@@ -126,10 +126,10 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
             </h3>
             <div className="flex gap-2">
               <span className="font-bold bg-slate-200 text-slate-400">
-                {`#${campaign.recruitment.id}`}
+                {`#${campaign.recruitment.campaignId}`}
               </span>
               <span className="font-bold text-slate-400">
-                {campaign.recruitment.status}
+                {campaign.recruitment.status ? 'Đang chạy' : 'Đang dừng'}
               </span>
             </div>
             <div

@@ -33,8 +33,9 @@ interface filterSearch {
 }
 
 function ApplyCV() {
-  const { id: jobId } = useParams();
-  // const jobId = state.id;
+  const [jobId, setJobId] = useState('');
+  const { id } = useParams();
+
   const userId =
     localStorage.getItem('user') == null
       ? ''
@@ -76,26 +77,26 @@ function ApplyCV() {
     setFilter((prevState) => ({ ...prevState, titleRecruitment: value }));
   };
 
-  const SelectSalary = (value: number) => {
-    if (value !== 0) {
-      const foundRange = salary_range.find(
-        (range) => Number(range.value) === value
-      );
-      if (foundRange) {
-        setFilter((prevFilter) => ({
-          ...prevFilter,
-          salaryMin: foundRange.minSalary,
-          salaryMax: foundRange.maxSalary,
-        }));
-      }
-    } else {
-      setFilter((prevFilter) => ({
-        ...prevFilter,
-        salaryMin: 0,
-        salaryMax: 0,
-      }));
-    }
-  };
+  // const SelectSalary = (value: number) => {
+  //   if (value !== 0) {
+  //     const foundRange = salary_range.find(
+  //       (range) => Number(range.value) === value
+  //     );
+  //     if (foundRange) {
+  //       setFilter((prevFilter) => ({
+  //         ...prevFilter,
+  //         salaryMin: foundRange.minSalary,
+  //         salaryMax: foundRange.maxSalary,
+  //       }));
+  //     }
+  //   } else {
+  //     setFilter((prevFilter) => ({
+  //       ...prevFilter,
+  //       salaryMin: 0,
+  //       salaryMax: 0,
+  //     }));
+  //   }
+  // };
 
   const fetchDataFilter = async () => {
     try {
@@ -108,26 +109,30 @@ function ApplyCV() {
       console.error('Error fetching data:', error);
     }
   };
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    const fetchJobData = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/job/${jobId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-        console.log(data);
-        setJobData(data);
-      } catch (error) {
-        console.log('Error fetching data. Please try again.');
+  const fetchJobData = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/job/${jobId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
       }
-    };
-
+      const data = await response.json();
+      console.log(data);
+      setJobData(data);
+    } catch (error) {
+      console.log('Error fetching data. Please try again.');
+    }
+  };
+  useEffect(() => {
+    setJobId(id);
+    window.scrollTo(0, 0);
     fetchJobData();
     fetchDataFilter();
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    fetchJobData();
+  }, [jobId]);
 
   // Handle Modal
   const handleOpenModal = () => {
@@ -200,7 +205,8 @@ function ApplyCV() {
     e.preventDefault();
 
     // Custom validation logic
-    let errors = {};
+    const errors = {};
+
     if (!formData.name) {
       errors.name = 'Name is required';
     }
@@ -692,7 +698,7 @@ function ApplyCV() {
                           <strong className="job-detail__info--section-content-value">
                             {jobData?.salaryMin && jobData?.salaryMax
                               ? ` ${jobData?.salaryMin} - ${jobData?.salaryMax} ${jobData?.currency?.name}`
-                              : "Thỏa thuận"}
+                              : 'Thỏa thuận'}
                           </strong>
                         </div>
                       </div>
@@ -757,22 +763,6 @@ function ApplyCV() {
                       </div>
                     </div>
                     <div className="job-detail__info--sub-details flex flex-rows gap-x-4">
-                      {/* <div className="quantity-applied-user max-h-8 col-span-2 flex flex-rows items-center text-sm text-slate-500 p-2 bg-slate-100 rounded-lg">
-                        <div className="quantity-applied-user__icon mr-2">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="w-5 h-5"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </div>
-                      </div> */}
                       <div className="job-detail__info--deadline max-h-8 col-span-2 flex flex-rows items-center text-sm text-slate-500 p-2 bg-slate-100 rounded-lg">
                         <div className="quantity-applied-user__icon mr-2">
                           <svg
@@ -873,6 +863,20 @@ function ApplyCV() {
                         </div>
                         <div className="job-description__item">
                           <h3 className="text-base font-bold mb-2">
+                            Thời gian làm việc
+                          </h3>
+                          <div className="job-description__item--content flex flex-col gap-y-2">
+                            <p>
+                              {jobData?.jobDetail
+                                ? jobData?.jobDetail?.djobSchedule
+                                  ? jobData?.jobDetail?.description
+                                  : ''
+                                : ''}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="job-description__item">
+                          <h3 className="text-base font-bold mb-2">
                             Quyền lợi
                           </h3>
                           <div className="job-description__item--content flex flex-col gap-y-2">
@@ -964,14 +968,14 @@ function ApplyCV() {
                       </svg>
                       <span>
                         Báo cáo tin tuyển dụng: Nếu bạn thấy rằng tin tuyển dụng
-                        này không đúng hoặc có dấu hiệu lừa đảo,{" "}
+                        này không đúng hoặc có dấu hiệu lừa đảo,{' '}
                         <a href="#" className="text-green-600">
                           hãy phản ánh với chúng tôi.
                         </a>
                       </span>
                     </div>
 
-                    <RelatedJobComponent />
+                    <RelatedJobComponent setJobId={setJobId} />
                   </div>
                 </div>
                 <div className="job-detail__body-right col-span-1 text-black flex flex-col gap-4 my-4">
@@ -1152,7 +1156,7 @@ function ApplyCV() {
                           <span className="box-general-group-info-value font-bold">
                             {jobData?.jobDetail
                               ? jobData?.jobDetail?.quantity
-                                ? jobData?.jobDetail?.quantity
+                                ? jobData?.jobDetail?.quantity + ' người'
                                 : ''
                               : ''}
                           </span>
@@ -1181,11 +1185,8 @@ function ApplyCV() {
                             Hình thức làm việc
                           </span>
                           <span className="box-general-group-info-value font-bold">
-                            {jobData?.jobDetail
-                              ? jobData?.jobDetail?.jobSchedule
-                                ? jobData?.jobDetail?.jobSchedule
-                                : ''
-                              : ''}
+                            {/* {jobData ? jobData?.type.name : ''} */}
+                            {jobData?.type?.name ? jobData?.type?.name : ''}
                           </span>
                         </div>
                       </div>

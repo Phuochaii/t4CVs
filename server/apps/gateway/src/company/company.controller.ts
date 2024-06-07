@@ -124,8 +124,8 @@ export class CompanyController {
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Put('campaign/update')
-  updateCampaign(@Body() data: UpdateCampaignDto): Observable<string> {
-    return this.companyService.updateCampaign(data);
+  updateCampaign(@Body() data: UpdateCampaignDto, @GetUser() user: UserClaims) {
+    return this.companyService.updateCampaign(data, user.sub);
   }
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
@@ -163,7 +163,7 @@ export class CompanyController {
 
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Delete('campaign/:id')
-  DeleteCampaignService(@Param('id') id: number) {
+  DeleteCampaign(@Param('id') id: number) {
     return this.companyService.deleteCampaign(id);
   }
 

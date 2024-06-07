@@ -1,35 +1,31 @@
 import { Bell, ChevronDown } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import SearchBar from "./SearchBar";
 import { useNavigate } from "react-router-dom";
 import RoundedButton from "../../HRLayout/components/RoundedButton";
+import { useAuth0 } from "@auth0/auth0-react";
+import { AUTH0_CLIENT_ID } from "../../../shared/services/authen/infrastructure/config";
+import { Roles, useProfileContext } from "../../../shared/services/authen/domain/context";
 const accountButton = {
-  name: "",
-  link: "",
+  name: '',
+  link: '',
   icon: ChevronDown,
   iconSize: 20,
   image:
-    "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg",
+    'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg',
 };
 
 function Header() {
   const navigation = useNavigate();
-
-  useEffect(() => {
-    // console.log(JSON.parse(localStorage.getItem("admin") as string).role);
-    if (localStorage.getItem("admin") === null) {
-      navigation("/admin-login");
-    }
-  }, []);
+  const {logout} = useAuth0();
+  const {profile} = useProfileContext();
+  
   const [displayAccountTab, setDisplayAccountTab] = useState(false);
 
   return (
     <div className="flex fixed bg-white items-center justify-between h-16 gap-6 px-4 top-0 left-0 right-0 z-50">
       <div className="flex-1 h-full">
-        <img
-          src="/topcv-logo-6.webp"
-          className="object-contain h-full"
-        ></img>
+        <img src="/topcv-logo-6.webp" className="object-contain h-full"></img>
       </div>
       <SearchBar placeholder="Search " />
 
@@ -42,7 +38,7 @@ function Header() {
           <RoundedButton
             text={accountButton.name}
             icon={accountButton.icon}
-            image={accountButton.image}
+            image={profile?.picture ?? accountButton.image}
             iconSize={accountButton.iconSize}
             onClick={() => {
               navigation(accountButton.link);
@@ -57,10 +53,12 @@ function Header() {
               aria-labelledby="dropdownDividerButton"
             >
               <li
-                className={`px-4 py-2 m-0 border-b-gray-200 border`}
+                className={'px-4 py-2 m-0 border-b-gray-200 border'}
                 onClick={() => {
-                  navigation("/admin");
-                  localStorage.removeItem("admin");
+                  logout({
+                    clientId: AUTH0_CLIENT_ID,
+                    logoutParams: { returnTo: `${window.location.origin}${Roles.ADMIN.loginUrl}` },
+                  })
                 }}
               >
                 <span className="text-black cursor-pointer hover:text-green-500">
