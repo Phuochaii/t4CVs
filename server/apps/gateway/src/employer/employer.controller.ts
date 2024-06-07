@@ -106,12 +106,11 @@ export class EmployerController {
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
   @Put('update/licenseStatus')
   updateEmployerLicenseStatus(
-    @Param('id') id: string,
+    @Body('employerId') employerId: string,
     @Body('licenseStatus') licenseStatus: boolean,
   ): Observable<any> {
     return this.employerService.updateEmployerLicenseStatus(
-      // user.sub,
-      id,
+      employerId,
       licenseStatus,
     );
   }
@@ -119,12 +118,11 @@ export class EmployerController {
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
   @Put('update/phoneNumberStatus')
   updateEmployerPhoneStatus(
-    @Param('id') id: string,
-
+    @Body('employerId') employerId: string,
     @Body('phoneNumberStatus') phoneNumberStatus: boolean,
   ): Observable<any> {
     return this.employerService.updateEmployerPhoneStatus(
-      id,
+      employerId,
       phoneNumberStatus,
     );
   }

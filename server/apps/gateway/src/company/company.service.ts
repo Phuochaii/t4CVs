@@ -203,12 +203,23 @@ export class CompanyService {
       );
   }
 
-  updateCampaign(data: UpdateCampaignDto): Observable<string> {
-    return this.companyClient.send({ cmd: 'update_campaign' }, data).pipe(
-      catchError((error) => {
-        return throwError(() => error.response);
-      }),
-    );
+  async updateCampaign(data: UpdateCampaignDto, employerId: string) {
+    const campaign = await lastValueFrom(this.findCampaignById(data.id));
+
+    let check: boolean = false;
+
+    if (campaign.employerId === employerId) {
+      check = true;
+    }
+    if (check) {
+      return this.companyClient.send({ cmd: 'update_campaign' }, data).pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
+    } else {
+      throw new BadRequestException('Employer do not create this campaign');
+    }
   }
 
   findCampaignByEmployerId(employerId: string, page: number, limit: number) {
@@ -230,7 +241,6 @@ export class CompanyService {
     } else {
       return campaign;
     }
-    // return result;
   }
 
   deleteCampaign(id: number) {
