@@ -28,7 +28,7 @@ export class CVService {
     return this.cvClient.send({ cmd: 'getCVsById' }, Ids);
   }
 
-  createCV(file: any, userId: number, templateId: number): Observable<any> {
+  createCV(file: any, userId: string, templateId: number): Observable<any> {
     const uploadLink$ = from(this.uploadService.upload(file));
     return uploadLink$.pipe(
       switchMap((link: string) =>

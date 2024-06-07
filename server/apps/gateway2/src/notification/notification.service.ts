@@ -1,3 +1,4 @@
+import { plainToInstance } from 'class-transformer';
 import {
   NOTIFICATION_PACKAGE_NAME,
   NOTIFICATION_SERVICE_NAME,
@@ -5,16 +6,22 @@ import {
   SendNotificationRequest,
   status,
 } from '@app/common/proto/notification';
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  OnModuleInit,
+} from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { PaginationRequest } from '@app/common/dto/pagination';
-import { first, firstValueFrom, lastValueFrom, map } from 'rxjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { DateTimestampConverter } from '@app/common/conveters';
+import { grpcToHttpException } from '@app/common/grpc';
 
 export enum NotificationUserRole {
   USER = 'user',
   HR = 'hr',
 }
+
 export class NotificationUserId {
   constructor(
     private id: string,
@@ -68,15 +75,19 @@ export class NotificationService implements OnModuleInit {
     };
   }
 
-  updateStatus(
+  async updateStatus(
     notificationUserId: NotificationUserId,
     notificationId: number,
     status: status,
   ) {
-    return this.notificationServiceClient.updateNotificationStatus({
-      user: { id: notificationUserId.userId },
-      notificationId,
-      status,
-    });
+    return await firstValueFrom(
+      this.notificationServiceClient
+        .updateNotificationStatus({
+          user: { id: notificationUserId.userId },
+          notificationId,
+          status,
+        })
+        .pipe(grpcToHttpException),
+    );
   }
 }
