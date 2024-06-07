@@ -5,11 +5,12 @@ import { TextField, InputLabel, Modal, Box } from '@mui/material';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
-import JobService from '../../modules/job-module';
 import SearchBoxComponent from '../../layouts/UserLayout/components/SearchBoxComponent';
 import RelatedJobComponent from '../../layouts/UserLayout/components/RelatedJobComponent';
 import InterestedJobComponent from '../../layouts/UserLayout/components/InterestedJobComponent';
 import {
+  getAllExp,
+  getAllLocation,
   getJobById,
   uploadApplication,
   uploadCV,
@@ -560,10 +561,10 @@ function ApplyCV() {
 
   const fetchDataFilter = async () => {
     try {
-      const locationResponse = await JobService.getAllLocation();
+      const locationResponse = await getAllLocation();
       setCities(locationResponse);
 
-      const expResponse = await JobService.getAllExp();
+      const expResponse = await getAllExp();
       setExpYear(expResponse);
     } catch (error) {
       console.error('Error fetching data:', error);

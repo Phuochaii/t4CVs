@@ -11,7 +11,6 @@ import {
   XMarkIcon,
   HeartIcon,
 } from '@heroicons/react/24/solid';
-import JobService from '../../modules/job-module';
 import SearchBoxComponent from '../../layouts/UserLayout/components/SearchBoxComponent';
 import { salary_range } from '../../shared/utils/constant';
 import SingleDropdown from '../../shared/components/SingleDropDown';
@@ -21,6 +20,7 @@ import VNRS from '../../shared/assets/images/VNRS.png';
 import { Heart } from 'lucide-react';
 import TopCompanies from '../../shared/components/TopCompanies';
 import JobSuggestions from '../../shared/components/JobSuggestions';
+import { getAllExp, getAllLocation, searchJob } from '../../modules/helper';
 
 const vip_company_slides = [
   '../../../images/slide_1.png',
@@ -84,15 +84,15 @@ function Home() {
   const [page, setPage] = useState(1);
 
   React.useEffect(() => {
-    searchJob();
+    findJob();
   }, []);
 
   React.useEffect(() => {
-    searchJob();
+    findJob();
   }, [page]);
 
-  const searchJob = () => {
-    JobService.searchJob({
+  const findJob = () => {
+    searchJob({
       page: page,
       limit: 8,
       titleRecruitment: '',
@@ -298,10 +298,10 @@ function Home() {
     setInterval(big_interested_jobs_next, autoSlideInterval);
     const fetchData = async () => {
       try {
-        const locationResponse = await JobService.getAllLocation();
+        const locationResponse = await getAllLocation();
         setCities(locationResponse);
 
-        const expResponse = await JobService.getAllExp();
+        const expResponse = await getAllExp();
         setExpYear(expResponse);
       } catch (error) {
         console.error('Error fetching data:', error);

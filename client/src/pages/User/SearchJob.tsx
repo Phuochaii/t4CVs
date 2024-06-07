@@ -1,7 +1,6 @@
 // khoa
 import { useState } from 'react';
 import React from 'react';
-import JobService from '../../modules/job-module';
 import { TextField, InputAdornment, MenuItem } from '@mui/material';
 import {
   ChevronDownIcon,
@@ -22,6 +21,7 @@ import { DefaultPagination } from '../../shared/components/default-pagination';
 import SearchBoxComponent from '../../layouts/UserLayout/components/SearchBoxComponent';
 import InterestedJobComponent from '../../layouts/UserLayout/components/InterestedJobComponent';
 import JobListItem from '../../shared/components/JobListItem';
+import { getAllExp, getAllFields, getAllLevel, getAllLocation, getAllMajor, getAllType, searchJob } from '../../modules/helper';
 
 const news_type = [
   {
@@ -89,8 +89,6 @@ function SearchJob() {
   });
 
   const getParams = () => {
-    console.log(window.location.search);
-
     const params = new URLSearchParams(window.location.search);
 
     const newLocationId = Number(params.get('locationId')) ?? 0;
@@ -127,22 +125,22 @@ function SearchJob() {
 
   const fetchData = async () => {
     try {
-      const locationResponse = await JobService.getAllLocation();
+      const locationResponse = await getAllLocation();
       setCities(locationResponse);
 
-      const expResponse = await JobService.getAllExp();
+      const expResponse = await getAllExp();
       setExpYear(expResponse);
 
-      const majorResponse = await JobService.getAllMajor();
+      const majorResponse = await getAllMajor();
       setMajor(majorResponse);
 
-      const fieldResponse = await JobService.getAllField();
+      const fieldResponse = await getAllFields();
       setField(fieldResponse);
 
-      const typeResponse = await JobService.getAllType();
+      const typeResponse = await getAllType();
       setType(typeResponse);
 
-      const levelResponse = await JobService.getAllLevel();
+      const levelResponse = await getAllLevel();
       setLevel(levelResponse);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -151,15 +149,15 @@ function SearchJob() {
 
   React.useEffect(() => {
     fetchData();
-    searchJob();
+    findJob();
   }, []);
 
   React.useEffect(() => {
-    searchJob();
+    findJob();
   }, [page, searchParam]);
 
-  const searchJob = () => {
-    JobService.searchJob({
+  const findJob = () => {
+    searchJob({
       page: page,
       titleRecruitment: searchParam.titleRecruitment,
       locationId: searchParam.locationId,

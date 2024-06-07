@@ -27,12 +27,32 @@ const routes: RouteItem[] = [
   { path: 'admin', component: Authentication.AdminInit, layout: EmptyLayout },
 
   // AUTHENTICATION PAGES - Tiến
-  { path: 'admin-login', component:Authentication.AdminLogIn, layout: EmptyLayout},
-  { path: 'hr-login', component:Authentication.HRLogIn, layout: EmptyLayout},
-  { path: 'hr-signup', component:Authentication.HRSignUp, layout: EmptyLayout},
-  { path: 'hr-profile-register', component:Authentication.HRProfileRegister, layout: EmptyLayout},
-  { path: 'user-login', component:Authentication.UserLogIn, layout: EmptyLayout},
-  { path: 'user-signup', component:Authentication.UserSignUp, layout: EmptyLayout},
+  {
+    path: 'admin-login',
+    component: Authentication.AdminLogIn,
+    layout: EmptyLayout,
+  },
+  { path: 'hr-login', component: Authentication.HRLogIn, layout: EmptyLayout },
+  {
+    path: 'hr-signup',
+    component: Authentication.HRSignUp,
+    layout: EmptyLayout,
+  },
+  {
+    path: 'hr-profile-register',
+    component: Authentication.HRProfileRegister,
+    layout: EmptyLayout,
+  },
+  {
+    path: 'user-login',
+    component: Authentication.UserLogIn,
+    layout: EmptyLayout,
+  },
+  {
+    path: 'user-signup',
+    component: Authentication.UserSignUp,
+    layout: EmptyLayout,
+  },
 
   // USER PAGES - Nguyên , Khoa, Hùng
   { path: '/', component: User.Home, layout: UserLayout }, //khoa - > tiến
@@ -49,7 +69,12 @@ const routes: RouteItem[] = [
   { path: '/list-cv', component: User.ListCV, layout: UserLayout }, // nguyên
 
   // ADMIN PAGES - Thức
-  { path: '/admin/overview', component: Admin.Overview, layout: AdminLayout, role: Roles.ADMIN },
+  {
+    path: '/admin/overview',
+    component: Admin.Overview,
+    layout: AdminLayout,
+    role: Roles.ADMIN,
+  },
 
   // HR PAGES - Yến, Thịnh, Thức
   { path: '/hr/approve', component: HR.ReceiveCV, layout: HRLayout }, // yến
