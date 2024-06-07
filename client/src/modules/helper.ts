@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { CampaignFromServer } from '../types/Campaign.type';
-import { CompanyFromServer } from '../types/Company.type';
-import { EmployerFromServer } from '../types/Employer.type';
-import { Field, RecruitmentFromServer } from '../types/Recruitment.type';
-import { ApplicationFromServer } from '../types/Application.type';
-import { UserFromServer } from '../types/User.type';
-import { UserCV } from '../types/CV_user.type';
+import { CampaignFromServer } from '../shared/types/Campaign.type';
+import { CompanyFromServer } from '../shared/types/Company.type';
+import { EmployerFromServer } from '../shared/types/Employer.type';
+import { Field, RecruitmentFromServer } from '../shared/types/Recruitment.type';
+import { ApplicationFromServer } from '../shared/types/Application.type';
+import { UserFromServer } from '../shared/types/User.type';
+import { UserCV } from '../shared/types/CV_user.type';
 
 const serverURL = 'http://localhost:3000';
 
@@ -71,17 +71,6 @@ export async function getAllJobs(page: number = 1) {
   return { allJobs: rawJobs, totalPages: totalPages };
 }
 
-export async function getJobsStat(limit: number = 1000) {
-  let response = await axios.get(`${serverURL}/job/all?limit=${limit}`);
-  const total = response.data.total;
-  response = await axios.get(`${serverURL}/job/all?limit=${limit}&status=true`);
-  const isActive = response.data.total;
-  response = await axios.get(
-    `${serverURL}/job/all?limit=${limit}&status=false`,
-  );
-  const isNotActive = response.data.total;
-  return { total: total, isActive: isActive, isNotActive: isNotActive };
-}
 
 export async function getJobByCampaignId(campaignId: number) {
   try {
@@ -96,11 +85,7 @@ export async function getJobByCampaignId(campaignId: number) {
   }
 }
 
-export async function getJobById(id: number | string) {
-  const response = await axios.get(`${serverURL}/job/${id}`);
-  const rawJob: RecruitmentFromServer = response.data;
-  return rawJob;
-}
+
 
 export async function getApplicationsByCampaignId(
   hrId: number,
@@ -217,4 +202,24 @@ export async function uploadApplication({ data, token }) {
   } catch {
     throw new Error('Upload application failed');
   }
+}
+
+
+// --------------------------------
+export async function getJobById(id: number | string) {
+  const response = await axios.get(`${serverURL}/job/${id}`);
+  const rawJob: RecruitmentFromServer = response.data;
+  return rawJob;
+}
+
+export async function getJobsStat(limit: number = 1000) {
+  let response = await axios.get(`${serverURL}/job/all?limit=${limit}`);
+  const total = response.data.total;
+  response = await axios.get(`${serverURL}/job/all?limit=${limit}&status=true`);
+  const isActive = response.data.total;
+  response = await axios.get(
+    `${serverURL}/job/all?limit=${limit}&status=false`,
+  );
+  const isNotActive = response.data.total;
+  return { total: total, isActive: isActive, isNotActive: isNotActive };
 }

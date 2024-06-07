@@ -10,7 +10,7 @@ import {
   getCompanyById,
   updateLicenseStatus,
   updatePhoneStatus,
-} from '../../shared/utils/helper';
+} from '../../modules/helper';
 import BasicTable, {
   BasicColumnProps,
   ObjectFromServer,

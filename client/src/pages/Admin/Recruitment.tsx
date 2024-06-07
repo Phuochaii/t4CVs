@@ -15,7 +15,7 @@ import {
   getAllJobs,
   getCampaignById,
   getJobsStat,
-} from "../../shared/utils/helper";
+} from "../../modules/helper";
 import Switch from "../../shared/components/CustomSwitch";
 import axios from "axios";
 

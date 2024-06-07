@@ -180,7 +180,7 @@ const getProfile:(token:string) => Promise<{
   const response = await axios.get(`${serverURL}/employer/profile`, {
     headers: {
       authorization: `Bearer ${token}`
-    }
+    },
   });
   if(!response.data) throw new Error('Getting hr profile but not having hr profile data');
   return response.data;

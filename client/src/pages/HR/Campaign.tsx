@@ -16,7 +16,7 @@ import {
   getCompanyById,
   getEmployerById,
   getJobByCampaignId,
-} from '../../shared/utils/helper';
+} from '../../modules/helper';
 
 function Campaign() {
   const [campaigns, setCampaigns] = useState<CampaignType[]>([]);

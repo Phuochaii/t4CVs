@@ -14,7 +14,7 @@ import { RecruitmentJobPost } from "../../shared/types/Recruitment.type";
 import {
   getJobById,
   updateJobStatus,
-} from "../../shared/utils/helper";
+} from "../../modules/helper";
 
 function RecruitmentDisplayTable() {
   return (

@@ -13,7 +13,7 @@ import {
   getJobById,
   uploadApplication,
   uploadCV,
-} from '../../shared/utils/helper';
+} from '../../modules/helper';
 import { AUTH0_BACKEND_AUDIENCE } from '../../shared/services/authen/infrastructure/config';
 
 const modalApplyStyle = {

@@ -1,4 +1,6 @@
 import axios from 'axios';
+
+const serverURL = '$serverURL';
 // GET NOTIFICATION
 
 const getNotification = async ({
@@ -11,7 +13,7 @@ const getNotification = async ({
   limit?: number;
 }) => {
   const response = await axios.get(
-    `http://localhost:3000/notification/user/${userId}?limit=${limit}&page=${page}`,
+    `${serverURL}/notification/user/${userId}?limit=${limit}&page=${page}`,
   );
   return response.data;
 };
@@ -24,12 +26,9 @@ const updateStatusNotification = async ({
   notificationId: number;
 }) => {
   const response = await axios
-    .put(
-      `http://localhost:3000/notification/user/${userId}/${notificationId}`,
-      {
-        status: 1,
-      },
-    )
+    .put(`${serverURL}/notification/user/${userId}/${notificationId}`, {
+      status: 1,
+    })
     .then((res) => {
       // console.log(res);
       return res;
@@ -39,50 +38,57 @@ const updateStatusNotification = async ({
 };
 
 const isUser: (token: string) => Promise<boolean> = async (token: string) => {
-  const result = await axios.get(`http://localhost:3000/user/check`, {
-    headers: {
-      authorization: `Bearer ${token}`,
-    }
-  })
-    .then(res => res.data as boolean)
+  const result = await axios
+    .get(`${serverURL}/user/check`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => res.data as boolean);
   return result;
-}
+};
 
 const getProfile: (token: string) => Promise<{
   fullname: string;
   phone?: string;
   image?: string;
 }> = async (token: string) => {
-  const result = await axios.get(`http://localhost:3000/user/profile`, {
-    headers: {
-      authorization: `Bearer ${token}`,
-    }
-  })
-    .then(res => res.data)
+  const result = await axios
+    .get(`${serverURL}/user/profile`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => res.data);
   return result;
-}
+};
 
 const createUser: (input: {
   fullname: string;
   phone?: string;
   image?: string;
   token: string;
-}) => Promise<void> = async ({
-  fullname,
-  phone,
-  image,
-  token
-}) => {
-  console.log("image sent to be: ",image)
-  await axios.post(`http://localhost:3000/user/create`, {
-    fullname,
-    phone,
-    image,
-  }, {
-    headers: {
-      authorization: `Bearer ${token}`,
-    }
-  });
-}
+}) => Promise<void> = async ({ fullname, phone, image, token }) => {
+  console.log('image sent to be: ', image);
+  await axios.post(
+    `${serverURL}/user/create`,
+    {
+      fullname,
+      phone,
+      image,
+    },
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },
+  );
+};
 
-export { getNotification, updateStatusNotification, isUser, getProfile, createUser };
+export {
+  getNotification,
+  updateStatusNotification,
+  isUser,
+  getProfile,
+  createUser,
+};

@@ -6,7 +6,7 @@ import { Check, CircleAlert } from 'lucide-react';
 import { CurrencyDollarIcon } from '@heroicons/react/20/solid';
 import Select from 'react-select';
 import TopCVBanner from '../../shared/assets/images/Topcv-banner.jpg';
-import { getApplications } from '../../shared/utils/helper';
+import { getApplications } from '../../modules/helper';
 import { ApplicationFromServer } from '../../shared/types/Application.type';
 import { RecruitmentFromServer } from '../../shared/types/Recruitment.type';
 import { UserCV } from '../../shared/types/CV_user.type';

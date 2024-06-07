@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import UpdateCompanyInfo from './UpdateCompanyInfo';
 import { CompanyFromServer } from '../types/Company.type';
 import { Field } from '../types/Recruitment.type';
-import { getAllCompanies, getAllFields } from '../utils/helper';
+import { getAllCompanies, getAllFields } from '../../modules/helper';
 import { DefaultPagination } from './default-pagination';
 function CompanyInfo() {
   const [component, setComponent] = useState(true);

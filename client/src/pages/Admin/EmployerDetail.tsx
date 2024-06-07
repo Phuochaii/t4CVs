@@ -6,7 +6,7 @@ import {
   getEmployerById,
   updateLicenseStatus,
   updatePhoneStatus,
-} from '../../shared/utils/helper';
+} from '../../modules/helper';
 import { CheckCheck, Phone } from 'lucide-react';
 import { EmployerFromServer } from '../../shared/types/Employer.type';
 import { CompanyFromServer } from '../../shared/types/Company.type';

@@ -9,7 +9,7 @@ import {
   getAllCompanies,
   getAllFields,
   updateCompanyStatus,
-} from '../../shared/utils/helper';
+} from '../../modules/helper';
 import { CompanyFromServer } from '../../shared/types/Company.type';
 import BasicTable, {
   BasicColumnProps,

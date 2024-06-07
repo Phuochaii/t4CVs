@@ -16,7 +16,7 @@ import {
   getEmployerById,
   getJobByCampaignId,
   getUserById,
-} from '../../shared/utils/helper';
+} from '../../modules/helper';
 import { UserFromServer } from '../../shared/types/User.type';
 
 interface CampaignTableProps {
