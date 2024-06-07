@@ -67,60 +67,60 @@ function ApplyModal({ open, handleClose, handleOpen, jobData, user, getAccessTok
       errors.file = 'File is required';
     }
 
-    // try {
-    //   const token = await getAccessTokenSilently({
-    //     authorizationParams: {
-    //       audience: AUTH0_BACKEND_AUDIENCE,
-    //     },
-    //     cacheMode: "off",
-    //   });
+    try {
+      const token = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: AUTH0_BACKEND_AUDIENCE,
+        },
+        cacheMode: "off",
+      });
 
-    //   if (Object.keys(errors).length === 0) {
-    //     // Upload CV
-    //     const postData = new FormData();
-    //     postData.append("file", formData.file);
-    //     postData.append("userId", user?.sub);
+      if (Object.keys(errors).length === 0) {
+        // Upload CV
+        const postData = new FormData();
+        postData.append("file", formData.file);
+        // postData.append("userId", user?.sub);
 
-    //     const newUploadCV = await uploadCV({
-    //       postData: postData,
-    //       token: token,
-    //     });
-    //     console.log(newUploadCV);
+        const newUploadCV = await uploadCV({
+          postData: postData,
+          token: token,
+        });
+        console.log(newUploadCV);
 
-    //     // Create Application
-    //     const appData = {
-    //       fullname: formData.name,
-    //       phone: formData.phone,
-    //       email: formData.email,
-    //       coverLetter: formData.cover_letter,
-    //       campaignId: jobData.campaignId,
-    //       userId: user?.sub,
-    //       cvId: newUploadCV.id,
-    //     };
+        // Create Application
+        const appData = {
+          fullname: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          coverLetter: formData.cover_letter,
+          campaignId: jobData.campaignId,
+          userId: user?.sub,
+          cvId: newUploadCV.id,
+        };
 
-    //     const appRes = await uploadApplication({ data: appData, token: token });
+        const appRes = await uploadApplication({ data: appData, token: token });
 
-    //     console.log(appRes);
-    //     // Optionally, you can reset the form after successful submission
-    //     handleDeleteFile();
-    //     setFormData({
-    //       name: '',
-    //       email: '',
-    //       phone: '',
-    //       file: null,
-    //       cover_letter: '',
-    //     });
-    //     // handleClose();
+        console.log(appRes);
+        // Optionally, you can reset the form after successful submission
+        handleDeleteFile();
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          file: null,
+          cover_letter: '',
+        });
+        // handleClose();
 
-    //     alert("Create Application successfully");
-    //   } else {
-    //     alert("failed")
-    //     setErrors(errors);
-    //     console.log(errors);
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }
+        alert("Create Application successfully");
+      } else {
+        alert("failed")
+        setErrors(errors);
+        console.log(errors);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const chooseUploadCV = () => {

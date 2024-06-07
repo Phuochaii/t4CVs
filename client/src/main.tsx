@@ -29,11 +29,12 @@ const providerConfig = {
     redirect_uri: window.location.origin,
     ...(config.audience ? { audience: config.audience } : null),
   },
+  useRefreshTokensFallback: true,
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Auth0Provider {...providerConfig}>
+  <Auth0Provider {...providerConfig} >
       <ProfileProvider>
       <App />
       <ToastContainer />

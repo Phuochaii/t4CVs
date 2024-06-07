@@ -6,11 +6,13 @@ import { Check, CircleAlert } from 'lucide-react';
 import { CurrencyDollarIcon } from '@heroicons/react/20/solid';
 import Select from 'react-select';
 import TopCVBanner from '../../shared/assets/images/Topcv-banner.jpg';
-import { getApplications } from '../../modules/helper';
+import { getApplications } from '../../modules/user-module';
 import { ApplicationFromServer } from '../../shared/types/Application.type';
 import { RecruitmentFromServer } from '../../shared/types/Recruitment.type';
 import { UserCV } from '../../shared/types/CV_user.type';
 import moment from 'moment';
+import { useAuth0 } from '@auth0/auth0-react';
+import { AUTH0_BACKEND_AUDIENCE } from '../../shared/services/authen/infrastructure/config';
 const option = [
   { value: 'Đã ứng tuyển', label: 'Đã ứng tuyển' },
   { value: 'NTD đã xem hồ sơ', label: 'NTD đã xem hồ sơ' },
@@ -18,6 +20,8 @@ const option = [
 ];
 
 function YourApplications() {
+    const { user, getAccessTokenSilently, isAuthenticated, isLoading } =
+      useAuth0();
   const [isOn, setIsOn] = useState(false);
   const [applications, setApplication] = useState<
     ApplicationFromServer[] | undefined
@@ -27,25 +31,25 @@ function YourApplications() {
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const result = await getApplications('22');
-        // console.log(result);
-        if (result) {
+        const token = await getAccessTokenSilently({
+          authorizationParams: {
+            audience: AUTH0_BACKEND_AUDIENCE,
+          },
+          cacheMode: "off",
+        });
+        await getApplications(token).then((result) => {
           const { applications, jobs } = result;
-          console.log(applications);
-          console.log(jobs);
-          console.log(CVs);
           setApplication(applications);
           setJobs(jobs);
-        } else {
-          console.log('No applications found.');
-        }
+        });
       } catch (error) {
-        console.error('An error occurred:', error);
+        console.error("An error occurred:", error);
       }
     };
 
     fetchApplications(); // Call the fetchApplications function when the component mounts
-  }, []);
+  }, [getAccessTokenSilently, user?.sub]);
+
   const toggleSwitch = () => {
     setIsOn(!isOn);
   };

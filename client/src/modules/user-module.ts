@@ -1,19 +1,26 @@
 import axios from 'axios';
+import { ApplicationFromServer } from '../shared/types/Application.type';
+import { RecruitmentFromServer } from '../shared/types/Recruitment.type';
 
-const serverURL = '$serverURL';
+const serverURL = 'http://localhost:3000';
 // GET NOTIFICATION
 
 const getNotification = async ({
-  userId,
+  token,
   page = 1,
   limit = 3,
 }: {
-  userId: string;
+  token: string;
   page?: number;
   limit?: number;
 }) => {
   const response = await axios.get(
-    `${serverURL}/notification/user/${userId}?limit=${limit}&page=${page}`,
+    `${serverURL}/notification/user?limit=${limit}&page=${page}`,
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },
   );
   return response.data;
 };
@@ -85,10 +92,68 @@ const createUser: (input: {
   );
 };
 
+//
+// const getApplications : (token: string) => Promise<{
+//   fullname: string;
+//   phone?: string;
+//   image?: string;
+// }>  = async (token: string){
+//   const response = await axios.get(
+//     `${serverURL}/application/user?page=1&limit=1`,
+//     {
+//       headers: {
+//         authorization: `Bearer ${token}`,
+//       },
+//     },
+//   );
+
+//   .get(`${serverURL}/user/profile`, {
+//       headers: {
+//         authorization: `Bearer ${token}`,
+//       },
+//     })
+//   console.log(456, response);
+//   const applications: ApplicationFromServer[] = response.data.applicationsFinal;
+//   const jobs = response.data.applicationsFinal.map(
+//     (application) => application.jobs,
+//   ) as RecruitmentFromServer[];
+//   // const campaignIds = applications.map(
+//   //   (application: ApplicationFromServer) => application.campaignId,
+//   // );
+//   // const promiseJobs = campaignIds.map((id) => getJobByCampaignId(id));
+  
+//   return { applications: applications, jobs: jobs };
+
+// }
+
+const getApplications: (token: string) => Promise<void> = async (
+  token: string,
+) => {
+  const response = await axios.get(
+    `${serverURL}/application/user/page=1&limit=10`,
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  const applications: ApplicationFromServer[] = response.data.applicationsFinal;
+  const jobs = response.data.applicationsFinal.map(
+    (application) => application.jobs,
+  ) as RecruitmentFromServer[];
+  // const campaignIds = applications.map(
+  //   (application: ApplicationFromServer) => application.campaignId,
+  // );
+  // const promiseJobs = campaignIds.map((id) => getJobByCampaignId(id));
+  
+  return { applications: applications, jobs: jobs };
+};
+
 export {
   getNotification,
   updateStatusNotification,
   isUser,
   getProfile,
   createUser,
+  getApplications,
 };

@@ -102,25 +102,7 @@ const updateStatusNotification = async ({
   return response;
 };
 
-// CREATE COMPAIGN
-const createCompaign = async ({
-  employerId,
-  name,
-}: {
-  employerId: string;
-  name: string;
-}) => {
-  const response = await axios
-    .post(`${serverURL}/company/campaign/create`, {
-      name,
-      employerId,
-    })
-    .then((res) => {
-      console.log(res);
-      return res;
-    });
-  return response.data;
-};
+// -------------------
 
 interface CreateEmployerInterface {
   id: string;
@@ -186,6 +168,30 @@ const getProfile:(token:string) => Promise<{
   return response.data;
 }
 
+// --- authen
+
+// CREATE COMPAIGN
+const createCompaign = async ({
+  employerId,
+  name,
+}: {
+  employerId: string;
+  name: string;
+}) => {
+  const response = await axios
+    .post(`${serverURL}/company/campaign/create`, {
+      name,
+      employerId,
+    })
+    .then((res) => {
+      console.log(res);
+      return res;
+    });
+  return response.data;
+};
+
+// ---
+
 const updateEmployerLicense = async (formData) => {
   const response = await axios
     .put(`${serverURL}/employer/update/license`, formData)
@@ -195,6 +201,7 @@ const updateEmployerLicense = async (formData) => {
     });
   return response.data;
 };
+
 
 export {
   getApplicationByCampaignIdHRId,

@@ -6,30 +6,32 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { withRoleCheck } from '../../../shared/services/authen/domain/withRoleCheck';
 import { Roles, useProfileContext } from '../../../shared/services/authen/domain/context';
+import { AUTH0_BACKEND_AUDIENCE } from '../../../shared/services/authen/infrastructure/config';
 
 function Header() {
   const navigation = useNavigate();
-  const {isAuthenticated, user, logout, isLoading} = useAuth0();
+  const { isAuthenticated, user, logout, getAccessTokenSilently } = useAuth0();
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
   const userId = user?.sub || "";
-  const fetchNotification = ({
-    id,
-    limit = 3,
-  }: {
-    id: string;
-    limit?: number;
-  }) => {
-    UserModule.getNotification({ userId: id, limit: limit }).then((res) => {
-      console.log(res);
+  
+  useEffect(() => {
+    const fetchNotification = async () => {
+      const token = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: AUTH0_BACKEND_AUDIENCE,
+        },
+        cacheMode: "off",
+      });
+      UserModule.getNotification({ token }).then((res) => {
+        // console.log(res);
 
-      setNotifications(res.data);
-      setTotal(res.pagination.total);
-    });
-  };
-  React.useEffect(() => {
-    if (userId != '') fetchNotification({ id: userId });
+        setNotifications(res.data);
+        setTotal(res.pagination.total);
+      });
+    };
+    if (isAuthenticated) fetchNotification();
   }, []);
 
 
@@ -276,9 +278,9 @@ function Header() {
                 viewBox="0 0 280.003 280.003"
               >
                 <path
-                  color-rendering="auto"
-                  image-rendering="auto"
-                  shape-rendering="auto"
+                  colorRendering="auto"
+                  imageRendering="auto"
+                  shapeRendering="auto"
                   color-interpolation="sRGB"
                   d="M49.997,0.001
                   c-2.761-0.035-5.029,2.175-5.064,4.936c-0.013,0.992,0.27,1.965,0.812,2.796l43.953,96.701
@@ -466,9 +468,9 @@ function Header() {
                         viewBox="0 0 280.003 280.003"
                       >
                         <path
-                          color-rendering="auto"
-                          image-rendering="auto"
-                          shape-rendering="auto"
+                          colorRendering="auto"
+                          imageRendering="auto"
+                          shapeRendering="auto"
                           colorInterpolation="sRGB"
                           d="M49.997,0.001
                         c-2.761-0.035-5.029,2.175-5.064,4.936c-0.013,0.992,0.27,1.965,0.812,2.796l43.953,96.701

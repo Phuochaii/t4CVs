@@ -107,28 +107,6 @@ export async function getCVById(cvId: number) {
     return null;
   }
 }
-export async function getApplications(userId: string) {
-  try {
-    const response = await axios.get(
-      `${serverURL}/application/user/${userId}?page=1&limit=5/`,
-    );
-    const applications: ApplicationFromServer[] =
-      response.data.applicationsFinal;
-    console.log(response);
-    const campaignIds = applications.map(
-      (application: ApplicationFromServer) => application.campaignId,
-    );
-    const promiseJobs = campaignIds.map((id) => getJobByCampaignId(id));
-    const jobs = (await Promise.all(promiseJobs)).filter(
-      (job) => job !== null,
-    ) as RecruitmentFromServer[];
-    return { applications: applications, jobs: jobs };
-  } catch (e) {
-    return null;
-  }
-}
-
-
 
 export async function updateCompanyStatus(id: number, status: boolean) {
   const response = await axios.put(`${serverURL}/company/updateStatus`, {
