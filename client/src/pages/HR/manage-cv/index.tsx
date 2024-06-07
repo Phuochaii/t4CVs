@@ -125,6 +125,7 @@ function ManageCV() {
                     <Tab sx={tabSx} label="CV đang theo dõi" value="6" />
                     <Tab sx={tabSx} label="CV được hỗ trợ" value="7" />
                     <Tab sx={tabSx} label="Dịch vụ" value="8" />
+                    <Tab sx={tabSx} label="Quản lý chiến dịch" value="9" />
                   </TabList>
                 </Box>
                 <TabPanel sx={{ padding: '12px 0' }} value="1">
@@ -151,6 +152,9 @@ function ManageCV() {
                 </TabPanel>
                 <TabPanel sx={{ padding: '12px 0' }} value="8">
                   Item Three
+                </TabPanel>
+                <TabPanel sx={{ padding: '12px 0' }} value="9">
+                  {tabs.EditCampaign()}
                 </TabPanel>
               </TabContext>
             </Box>
