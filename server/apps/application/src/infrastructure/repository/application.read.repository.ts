@@ -28,6 +28,9 @@ export class TypeOrmApplicationReadRepository extends ApplicationReadRepository 
     application: GetApplicationByIdDto,
   ): Promise<Application | null> {
     const result = await this.applicationRepository.findOneBy(application);
+    if (!result) {
+      return null;
+    }
 
     return this.mapper.toDomain(result);
   }

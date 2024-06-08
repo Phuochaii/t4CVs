@@ -11,12 +11,16 @@ class EventStoreSubscriber implements IMessageSource {
     @Inject('EVENT_STORE')
     private readonly eventStore: EventStoreDBClient,
     @Inject('EVENTS') private readonly registeredEvents: Array<any>,
+    @Inject('EVENT_STREAM') private readonly eventStream: string,
   ) {}
 
   async connect(): Promise<void> {
-    const userSubscription = this.eventStore.subscribeToStream('topcv-user', {
-      fromRevision: 'end',
-    });
+    const userSubscription = this.eventStore.subscribeToStream(
+      this.eventStream,
+      {
+        fromRevision: 'end',
+      },
+    );
 
     userSubscription.on('data', ({ event }) => {
       const isRegisteredEvent = this.registeredEvents.some(

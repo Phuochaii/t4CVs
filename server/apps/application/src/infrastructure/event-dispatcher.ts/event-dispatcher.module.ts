@@ -33,7 +33,7 @@ import EventStorePublisher from './event-store/event-store.publisher';
     },
     {
       provide: 'EVENT_STREAM',
-      useValue: 'topcv-user',
+      useValue: 'topcv-application',
     },
     {
       provide: IEventDispatcher,
@@ -44,7 +44,7 @@ import EventStorePublisher from './event-store/event-store.publisher';
     EventStorePublisher,
     EventStoreService,
   ],
-  exports: [IEventDispatcher, EventStoreService],
+  exports: [IEventDispatcher, EventStoreService, 'EVENT_STORE', 'EVENT_STREAM', 'EVENTS'],
 })
 export class EventDispatcherModule implements OnModuleInit {
   constructor(

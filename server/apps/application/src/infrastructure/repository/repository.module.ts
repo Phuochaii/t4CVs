@@ -8,8 +8,8 @@ import { EventDispatcherModule } from '../event-dispatcher.ts/event-dispatcher.m
 import { DatabaseConfiger, DatabaseOptions } from './database/init';
 import { UserNotificationSchemaMapper } from './mapper';
 import { Projections } from './projection';
-import { TypeOrmApplicationWriteRepository } from './application.write.repository';
 import { TypeOrmApplicationReadRepository } from './application.read.repository';
+import { WriteRepositoryModule } from './write/write-repository.module';
 
 @Module({
   imports: [
@@ -33,9 +33,9 @@ import { TypeOrmApplicationReadRepository } from './application.read.repository'
     }),
     TypeOrmModule.forFeature([ApplicationSchema]),
     EventDispatcherModule,
+    WriteRepositoryModule,
   ],
   providers: [
-    TypeOrmApplicationWriteRepository,
     TypeOrmApplicationReadRepository,
     {
       provide: ApplicationRepository,

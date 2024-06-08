@@ -1,5 +1,5 @@
 import { ApplicationRepository } from '../../domain/repository';
-import { TypeOrmApplicationWriteRepository } from './application.write.repository';
+import { TypeOrmApplicationWriteRepository } from './write/application.write.repository';
 import { TypeOrmApplicationReadRepository } from './application.read.repository';
 import { Injectable } from '@nestjs/common';
 
