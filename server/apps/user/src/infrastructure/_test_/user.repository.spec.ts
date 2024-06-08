@@ -98,7 +98,7 @@ describe('TypeOrmUserRepository', () => {
     });
     it('should return false if the user does not exist', async () => {
       mockUserRepository.findOne.mockReturnValueOnce(null);
-      expect(await typeOrmUserRepository.isUserExist('4')).toBe(false);
+      expect(await typeOrmUserRepository.isUserExist(userId)).toBe(false);
     });
   });
 });
