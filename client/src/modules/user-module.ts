@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { ApplicationFromServer } from '../shared/types/Application.type';
 import { RecruitmentFromServer } from '../shared/types/Recruitment.type';
+import { UserCV } from '../shared/types/CV_user.type';
 
 const serverURL = 'http://localhost:3000';
 // GET NOTIFICATION
@@ -75,16 +76,20 @@ const createUser: (input: {
 // không đụng vào phần bên trên
 
 const updateStatusNotification = async ({
-  userId,
   notificationId,
+  token
 }: {
-  userId: string;
   notificationId: number;
+  token: string
 }) => {
   const response = await axios
-    .put(`${serverURL}/notification/user/${userId}/${notificationId}`, {
+    .put(`${serverURL}/notification/user/${notificationId}`, {
       status: 1,
-    })
+    }, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },)
     .then((res) => {
       // console.log(res);
       return res;
@@ -93,18 +98,26 @@ const updateStatusNotification = async ({
   return response;
 };
 
-const getUserById = async ({ userId }: { userId: string }) => {
+const getUserById = async ({ userId, token }: { userId: string, token:string }) => {
   const response = await axios
-    .get(`http://localhost:3000/user/${userId}`)
+    .get(`http://localhost:3000/user/${userId}`,{
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
     .then((res) => {
       return res;
     });
   return response;
 };
 
-const updateUserById = async (formData) => {
+const updateUserById = async (formData, token) => {
   const response = await axios
-    .put('http://localhost:3000/user/update', formData)
+    .put('http://localhost:3000/user/update', formData,{
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
     .then((res) => {
       return res;
     });
@@ -119,7 +132,7 @@ const getApplications: (
   jobs: RecruitmentFromServer[];
 }> = async (token: string) => {
   const response = await axios.get(
-    `${serverURL}/application/user?page=1&limit=10`,
+    `${serverURL}/application/user?page=1&limit=10&status=false`,
     {
       headers: {
         authorization: `Bearer ${token}`,
@@ -164,9 +177,13 @@ export async function uploadCV({ postData, token }) {
   }
 }
 
-export async function getCVById(cvId: number) {
+export async function getCVById(cvId: number, token:string) {
   try {
-    const response = await axios.get(`${serverURL}/cv/${cvId}`);
+    const response = await axios.get(`${serverURL}/cv/${cvId}`,{
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
     const CV: UserCV = response.data;
     return CV;
   } catch (e) {
