@@ -2,6 +2,64 @@ import axios from 'axios';
 
 const serverURL = 'http://localhost:3000';
 
+// ------------------- khong dụng vào phần này
+interface CreateEmployerInterface {
+  id: string;
+  fullname?: string,
+  gender: string,
+  positionId: number,
+  skype: string,
+  phoneNumber: string,
+  image: string,
+  token: string
+}
+export const createEmpolyer = async ({
+  id, fullname, gender, positionId, skype, phoneNumber, image, token
+}: CreateEmployerInterface) => {
+  const response = await axios.post(`${serverURL}/employer/create`, {
+    id, fullname, gender, positionId, skype, phoneNumber, image
+  }, {
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  })
+    .then((res) => res.data);
+  return response;
+}
+const isHr: (token: string) => Promise<boolean> = async (token) => {
+  const result = await axios.get(`http://localhost:3000/employer/check`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    }
+  })
+    .then(res => {
+      return res.data as boolean
+    })
+  return result;
+}
+const getProfile:(token:string) => Promise<{
+  id: string;
+  fullname: string;
+  gender: string;
+  positionId: number;
+  skype: string;
+  companyId: number;
+  license: string;
+  phoneNumber: string;
+  licenseStatus: boolean;
+  phoneNumberStatus: boolean;
+  image: string;
+}> = async (token) => {
+  const response = await axios.get(`${serverURL}/employer/profile`, {
+    headers: {
+      authorization: `Bearer ${token}`
+    },
+  });
+  if(!response.data) throw new Error('Getting hr profile but not having hr profile data');
+  return response.data;
+}
+// --------------------không đụng phần trên
+
 // GET APPLICATION BY HR ID
 const getApplicationByCampaignIdHRId = async ({
   campaignId,
@@ -102,71 +160,6 @@ const updateStatusNotification = async ({
   return response;
 };
 
-// -------------------
-
-interface CreateEmployerInterface {
-  id: string;
-  fullname?: string,
-  gender: string,
-  positionId: number,
-  skype: string,
-  phoneNumber: string,
-  image: string,
-  token: string
-}
-export const createEmpolyer = async ({
-  id, fullname, gender, positionId, skype, phoneNumber, image, token
-}: CreateEmployerInterface) => {
-  const response = await axios.post(`${serverURL}/employer/create`, {
-    id, fullname, gender, positionId, skype, phoneNumber, image
-  }, {
-    headers: {
-      authorization: `Bearer ${token}`
-    }
-  })
-    .then((res) => res.data);
-  return response;
-}
-
-// GET ALL POSITION 
-const getPosition = async () => {
-  const response = await axios.get(`${serverURL}/employer/position/all`);
-  return response.data;
-};
-
-const isHr: (token: string) => Promise<boolean> = async (token) => {
-  const result = await axios.get(`http://localhost:3000/employer/check`, {
-    headers: {
-      authorization: `Bearer ${token}`,
-    }
-  })
-    .then(res => {
-      return res.data as boolean
-    })
-  return result;
-}
-
-const getProfile:(token:string) => Promise<{
-  id: string;
-  fullname: string;
-  gender: string;
-  positionId: number;
-  skype: string;
-  companyId: number;
-  license: string;
-  phoneNumber: string;
-  licenseStatus: boolean;
-  phoneNumberStatus: boolean;
-  image: string;
-}> = async (token) => {
-  const response = await axios.get(`${serverURL}/employer/profile`, {
-    headers: {
-      authorization: `Bearer ${token}`
-    },
-  });
-  if(!response.data) throw new Error('Getting hr profile but not having hr profile data');
-  return response.data;
-}
 
 // --- authen
 
@@ -190,6 +183,11 @@ const createCompaign = async ({
   return response.data;
 };
 
+// GET ALL POSITION
+const getPosition = async () => {
+  const response = await axios.get(`${serverURL}/employer/position/all`);
+  return response.data;
+};
 // ---
 
 const updateEmployerLicense = async (formData) => {
@@ -228,7 +226,63 @@ const uploadHRProfile = async (formData) => {
     });
   return response;
 };
+export async function getAllCampaigns(page: number = 1) {
+  const response = await axios.get(
+    `${serverURL}/company/campaign/all?page=${page}`,
+  );
+  const rawCampaigns: CampaignFromServer[] = response.data.data;
+  const totalPages = response.data.total_page;
+  return { allCampaigns: rawCampaigns, totalPages: totalPages };
+}
 
+export async function getApplicationsByCampaignId(
+  hrId: number,
+  campaignId: number,
+) {
+  const response = await axios.get(
+    `${serverURL}/application/hr/${hrId}?page=1&limit=100&campaignId=${campaignId}`,
+  );
+  const rawApplications: ApplicationFromServer[] = response.data.applications;
+  const total = response.data.total;
+  return { total: total, applications: rawApplications };
+}
+
+export async function getUserById(userId: number) {
+  try {
+    const response = await axios.get(`${serverURL}/user/${userId}`);
+    const user: UserFromServer = response.data;
+    return user;
+  } catch (e) {
+    return null;
+  }
+}
+
+export async function getCVById(cvId: number) {
+  try {
+    const response = await axios.get(`${serverURL}/cv/${cvId}`);
+    const CV: UserCV = response.data;
+    return CV;
+  } catch (e) {
+    return null;
+  }
+}
+
+export async function getCampaignByHRId(id: number, page: number = 1) {
+  const response = await axios.get(
+    `${serverURL}/company/campaign/employer/${id}?page=${page}`,
+  );
+  const rawCampaigns: CampaignFromServer[] = response.data.data;
+  const totalPages = response.data.total_page;
+  return { allCampaigns: rawCampaigns, totalPages: totalPages };
+}
+
+export async function getEmployerById(id: number | string) {
+  const response = await axios.get(`${serverURL}/employer/${id}`);
+  const rawEmployer: EmployerFromServer = response.data;
+  return rawEmployer;
+}
+
+// cập nhật các function export vào đây (dưới đây chưa đủ)
 export {
   getApplicationByCampaignIdHRId,
   getCampaignById,
@@ -243,4 +297,6 @@ export {
   getHRById,
   getHRPosition,
   uploadHRProfile,
+  getProfile,
+  isHr
 };

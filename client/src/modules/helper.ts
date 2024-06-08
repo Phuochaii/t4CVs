@@ -9,14 +9,6 @@ import { UserCV } from '../shared/types/CV_user.type';
 
 const serverURL = 'http://localhost:3000';
 
-export async function getAllCampaigns(page: number = 1) {
-  const response = await axios.get(
-    `${serverURL}/company/campaign/all?page=${page}`,
-  );
-  const rawCampaigns: CampaignFromServer[] = response.data.data;
-  const totalPages = response.data.total_page;
-  return { allCampaigns: rawCampaigns, totalPages: totalPages };
-}
 
 export async function getCampaignById(id: number) {
   const response = await axios.get(`${serverURL}/company/campaign/${id}`);
@@ -24,14 +16,7 @@ export async function getCampaignById(id: number) {
   return rawCampaign;
 }
 
-export async function getCampaignByHRId(id: number, page: number = 1) {
-  const response = await axios.get(
-    `${serverURL}/company/campaign/employer/${id}?page=${page}`,
-  );
-  const rawCampaigns: CampaignFromServer[] = response.data.data;
-  const totalPages = response.data.total_page;
-  return { allCampaigns: rawCampaigns, totalPages: totalPages };
-}
+
 
 export async function getAllCompanies(page: number = 1) {
   const response = await axios.get(`${serverURL}/company/all?page=${page}`);
@@ -48,21 +33,6 @@ export async function getCompanyById(id: number | string) {
   return rawCompany;
 }
 
-export async function getAllEmployer(page: number = 1) {
-  const response = await axios.get(`${serverURL}/employer/all?page=${page}`);
-  const rawEmployers: EmployerFromServer[] = response.data.data;
-  return {
-    allEmployers: rawEmployers,
-    total: response.data.total,
-    totalPages: response.data.total_page,
-  };
-}
-
-export async function getEmployerById(id: number | string) {
-  const response = await axios.get(`${serverURL}/employer/${id}`);
-  const rawEmployer: EmployerFromServer = response.data;
-  return rawEmployer;
-}
 
 export async function getJobByCampaignId(campaignId: number) {
   try {
@@ -77,98 +47,8 @@ export async function getJobByCampaignId(campaignId: number) {
   }
 }
 
-export async function getApplicationsByCampaignId(
-  hrId: number,
-  campaignId: number,
-) {
-  const response = await axios.get(
-    `${serverURL}/application/hr/${hrId}?page=1&limit=100&campaignId=${campaignId}`,
-  );
-  const rawApplications: ApplicationFromServer[] = response.data.applications;
-  const total = response.data.total;
-  return { total: total, applications: rawApplications };
-}
 
-export async function getUserById(userId: number) {
-  try {
-    const response = await axios.get(`${serverURL}/user/${userId}`);
-    const user: UserFromServer = response.data;
-    return user;
-  } catch (e) {
-    return null;
-  }
-}
-export async function getCVById(cvId: number) {
-  try {
-    const response = await axios.get(`${serverURL}/cv/${cvId}`);
-    const CV: UserCV = response.data;
-    return CV;
-  } catch (e) {
-    return null;
-  }
-}
-
-export async function updateCompanyStatus(id: number, status: boolean) {
-  const response = await axios.put(`${serverURL}/company/updateStatus`, {
-    id: id,
-    status: status,
-  });
-  return response;
-}
-export async function updateLicenseStatus(id: number, status: boolean) {
-  const response = await axios.put(
-    `${serverURL}/employer/update/licenseStatus/${id}`,
-    {
-      licenseStatus: status,
-    },
-  );
-  return response;
-}
-export async function updatePhoneStatus(id: number, status: boolean) {
-  const response = await axios.put(
-    `${serverURL}/employer/update/phoneNumberStatus/${id}`,
-    {
-      phoneNumberStatus: status,
-    },
-  );
-  return response;
-}
-
-export async function updateJobStatus(id: number, status: boolean) {
-  const response = await axios.put(`${serverURL}/job/update-status`, {
-    id: id,
-    status: status,
-  });
-  return response;
-}
-
-export async function uploadCV({ postData, token }) {
-  try {
-    const response = await axios.post(`${serverURL}/cv`, postData, {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
-    return response;
-  } catch {
-    throw new Error('Upload cv failed');
-  }
-}
-
-export async function uploadApplication({ data, token }) {
-  try {
-    const response = await axios.post(`${serverURL}/application`, data, {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
-    return response;
-  } catch {
-    throw new Error('Upload application failed');
-  }
-}
-
-// --------------------------------
+// -------------------------------- phần bên dưới k có authen
 export async function getJobById(id: number | string) {
   const response = await axios.get(`${serverURL}/job/${id}`);
   const rawJob: RecruitmentFromServer = response.data;

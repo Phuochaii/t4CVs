@@ -10,16 +10,12 @@ import EmptyLayout from "./layouts/EmptyLayout";
 import { createContext } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { withRoleCheck } from "./shared/services/authen/domain/withRoleCheck";
-import { accountList } from "./shared/utils/constant";
 import Spinner from "./pages/Spinner";
 import { AUTH0_BACKEND_AUDIENCE } from './shared/services/authen/infrastructure/config';
-
-
 
 export const MyContext = createContext({});
 
 function App() {
-
   return (
         <MyContext.Provider value={{ token: "on update" }}>
           <Router>

@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import { AUTH0_BACKEND_AUDIENCE } from './shared/services/authen/infrastructure/config';
 
-
 // Add a request interceptor
 axios.interceptors.request.use(
   config => {

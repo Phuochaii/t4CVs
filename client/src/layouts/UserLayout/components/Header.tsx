@@ -10,6 +10,8 @@ import { AUTH0_BACKEND_AUDIENCE } from '../../../shared/services/authen/infrastr
 
 function Header() {
   const navigation = useNavigate();
+    const { isAuthenticated, user, logout, getAccessTokenSilently } = useAuth0()
+
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
