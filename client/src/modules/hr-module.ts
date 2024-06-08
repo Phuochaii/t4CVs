@@ -208,14 +208,15 @@ const createCompaign = async ({
   token: string;
 }) => {
   const response = await axios
-    .post(`${serverURL}/company/campaign/create`, {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-      name,
-    })
+    .post(`${serverURL}/company/campaign/create`,
+      {name,},
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        }
+      })
     .then((res) => {
-      console.log(res);
+      console.log(res.data);
       return res;
     });
   return response.data;

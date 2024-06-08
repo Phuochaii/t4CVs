@@ -1,9 +1,10 @@
 // Thịnh
 
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './PostJob.css';
 import * as HRModule from '../../../modules/hr-module';
+import { useProfileContext } from '../../../shared/services/authen/domain/context';
 
 const plans = [
   {
@@ -25,12 +26,12 @@ const plans = [
 ];
 
 function PostJob() {
-  const navigation = useNavigate();
-  const hrId = '1';
+  const {token} = useProfileContext();
   const [modal, setModal] = useState(false);
   const [compaignName, setcompaignName] = useState('');
   const [compaignId, setcompaignId] = useState('');
   const [chosenPlan, setChosenPlan] = useState(plans[0]);
+
   const toggleModal = () => {
     // nay xu li sau
     setModal((prev) => !prev);
@@ -99,10 +100,15 @@ function PostJob() {
                   return;
                 }
                 await HRModule.createCompaign({
-                  employerId: hrId,
                   name: compaignName,
-                }).then((res) => setcompaignId(res.id));
+                  token,
+                }).then((res) => {
+                    console.log(456,res);
+                    
+                  
+                  setcompaignId(res.id)}).catch((err) => console.log(err));
                 // navigation("/hr/compaign");
+
                 toggleModal();
               }}
               className="form_button mt-2"
