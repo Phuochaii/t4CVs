@@ -1,1 +1,0 @@
-export type Permission = 'role:hr' | 'role:admin' | 'role:user';

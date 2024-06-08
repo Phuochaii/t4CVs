@@ -23,19 +23,6 @@
         "watchAssets": true
       }
     },
-    "gateway2": {
-      "type": "application",
-      "root": "apps/gateway2",
-      "entryFile": "main",
-      "sourceRoot": "apps/gateway2/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/gateway2/tsconfig.app.json",
-        "assets": [
-          "./proto/*.proto"
-        ],
-        "watchAssets": true
-      }
-    },
     "job-application-service": {
       "type": "application",
       "root": "apps/job-application-service",
