@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { EmployerFromServer } from '../shared/types/Employer.type';
+import { UserFromServer } from '../shared/types/User.type';
+import { ApplicationFromServer } from '../shared/types/Application.type';
 
 const serverURL = 'http://localhost:3000';
 
