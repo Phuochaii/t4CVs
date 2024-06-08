@@ -19,6 +19,11 @@ services:
     environment:
       - NOTIFICATION_SERVICE_URL=notification:50052
       - APPLICATION_SERVICE_URL=application:50053
+      - AUTH0_ISSUER_URL=https://dev-0oh0fi1avbej1681.us.auth0.com/
+      - AUTH0_AUDIENCE=http://localhost:300/
+      - AUTH0_MANAGEMENT_DOMAIN = dev-0oh0fi1avbej1681.us.auth0.com
+      - AUTH0_MANAGEMENT_CLIENTID = cAkfGoFJl76eGYgg5NdoLgqjRYHjdLog
+      - AUTH0_MANAGEMENT_CLIENTSECRET = AvgWeyhvl4HckEt_OlJ9I5XmnwaYcmJJ64Mfnotd_lKOfQsN3elgT-EfQPqWId69
     ports:
       - 3000:3000
     networks:
@@ -33,65 +38,69 @@ services:
     environment:
       - NOTIFICATION_SERVICE_URL=notification:50052
       - APPLICATION_SERVICE_URL=application:50053
+      - AUTH0_ISSUER_URL=https://dev-0oh0fi1avbej1681.us.auth0.com/
+      - AUTH0_AUDIENCE=http://localhost:300/
+      - AUTH0_MANAGEMENT_DOMAIN = dev-0oh0fi1avbej1681.us.auth0.com
+      - AUTH0_MANAGEMENT_CLIENTID = cAkfGoFJl76eGYgg5NdoLgqjRYHjdLog
+      - AUTH0_MANAGEMENT_CLIENTSECRET = AvgWeyhvl4HckEt_OlJ9I5XmnwaYcmJJ64Mfnotd_lKOfQsN3elgT-EfQPqWId69
     ports:
       - 4000:4000
     networks:
       - backend
-  application:
-    container_name: application
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        - APP=application
-    environment:
-      - DB_HOST=application-db
-      - DB_PORT=5432
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=123456
-      - DB_APPLICATION_DATABASE=application
-    depends_on:
-      - application-db
-    networks:
-      - backend
-      - application
-  application-db:
-    container_name: application-db
-    image: postgres:latest
-    networks:
-      - application
-    environment:
-      - POSTGRES_PASSWORD=123456
-    volumes:
-      - application-db:/var/lib/postgresql/data
-
-  cv:
-    container_name: cv
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        - APP=cv
-    environment:
-      - DB_HOST=cv-db
-      - DB_PORT=5432
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=713112411
-      - DB_CV_DATABASE=cv
-    depends_on:
-      - cv-db
-    networks:
-      - backend
-      - cv
-  cv-db:
-    container_name: cv-db
-    image: postgres:latest
-    networks:
-      - cv
-    environment:
-      - POSTGRES_PASSWORD=123456
-    volumes:
-      - cv-db:/var/lib/postgresql/data
+  # application:
+  #   container_name: application
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     args:
+  #       - APP=application
+  #   environment:
+  #     - DB_HOST=application-db
+  #     - DB_PORT=5432
+  #     - DB_USERNAME=postgres
+  #     - DB_PASSWORD=123456
+  #     - DB_APPLICATION_DATABASE=application
+  #   depends_on:
+  #     - application-db
+  #   networks:
+  #     - backend
+  #     - application
+  # application-db:
+  #   container_name: application-db
+  #   image: postgres:latest
+  #   networks:
+  #     - application
+  #   environment:
+  #     - POSTGRES_PASSWORD=123456
+  #   volumes:
+  #     - application-db:/var/lib/postgresql/data
+  # cv:
+  #   container_name: cv
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     args:
+  #       - APP=cv
+  #   environment:
+  #     - DB_HOST=cv-db
+  #     - DB_PORT=5432
+  #     - DB_USERNAME=postgres
+  #     - DB_PASSWORD=713112411
+  #     - DB_CV_DATABASE=cv
+  #   depends_on:
+  #     - cv-db
+  #   networks:
+  #     - backend
+  #     - cv
+  # cv-db:
+  #   container_name: cv-db
+  #   image: postgres:latest
+  #   networks:
+  #     - cv
+  #   environment:
+  #     - POSTGRES_PASSWORD=123456
+  #   volumes:
+  #     - cv-db:/var/lib/postgresql/data
   # notification:
   #   container_name: notification
   #   build:
@@ -131,7 +140,7 @@ services:
   #     - DB_PORT=5432
   #     - DB_USERNAME=postgres
   #     - DB_PASSWORD=phuochai1901
-  #     - DB_USER_DATABASE=applicant
+  #     - DB_USER_DATABASE=user
   #   depends_on:
   #     - user-db
   #   networks:
@@ -173,33 +182,33 @@ services:
   #     - POSTGRES_PASSWORD=phuochai1901
   #   volumes:
   #     - job-db:/var/lib/postgresql/data
-  company:
-    container_name: company
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        - APP=company-service
-    environment:
-      - DB_HOST=company-db
-      - DB_PORT=5432
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=713112411
-      - DB_COMPANY_DATABASE=company
-    depends_on:
-      - company-db
-    networks:
-      - backend
-      - company
-  company-db:
-    container_name: company-db
-    image: postgres:latest
-    networks:
-      - company
-    environment:
-      - POSTGRES_PASSWORD=713112411
-    volumes:
-      - company-db:/var/lib/postgresql/data
+  # company:
+  #   container_name: company
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     args:
+  #       - APP=company-service
+  #   environment:
+  #     - DB_HOST=company-db
+  #     - DB_PORT=5432
+  #     - DB_USERNAME=postgres
+  #     - DB_PASSWORD=713112411
+  #     - DB_COMPANY_DATABASE=company
+  #   depends_on:
+  #     - company-db
+  #   networks:
+  #     - backend
+  #     - company
+  # company-db:
+  #   container_name: company-db
+  #   image: postgres:latest
+  #   networks:
+  #     - company
+  #   environment:
+  #     - POSTGRES_PASSWORD=713112411
+  #   volumes:
+  #     - company-db:/var/lib/postgresql/data
   employer:
     container_name: employer
     build:
@@ -229,14 +238,18 @@ services:
       - employer-db:/var/lib/postgresql/data
 networks:
   backend:
+  # application:
+  # cv:
   # notification:
   # user:
   # job:
-  company:
+  # company:
   employer:
 volumes:
+  # application-db:
+  # cv-db:
   # notification-db:
   # user-db:
   # job-db:
-  company-db:
+  # company-db:
   employer-db:
