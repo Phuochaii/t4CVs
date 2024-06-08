@@ -3,10 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Switch from '../../shared/components/CustomSwitch';
 import {
   getCompanyById,
+} from '../../modules/helper';
+import {
   getEmployerById,
   updateLicenseStatus,
   updatePhoneStatus,
-} from '../../modules/helper';
+} from "../../modules/admin-module";
 import { CheckCheck, Phone } from 'lucide-react';
 import { EmployerFromServer } from '../../shared/types/Employer.type';
 import { CompanyFromServer } from '../../shared/types/Company.type';

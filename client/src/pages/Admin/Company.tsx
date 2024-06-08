@@ -5,11 +5,6 @@ import {
   Search,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  getAllCompanies,
-  getAllFields,
-  updateCompanyStatus,
-} from '../../modules/helper';
 import { CompanyFromServer } from '../../shared/types/Company.type';
 import BasicTable, {
   BasicColumnProps,
@@ -17,6 +12,8 @@ import BasicTable, {
 } from '../../shared/components/basic-table';
 import { Field } from '../../shared/types/Recruitment.type';
 import Switch from '../../shared/components/CustomSwitch';
+import { updateCompanyStatus } from '../../modules/admin-module';
+import { getAllCompanies, getAllFields } from '../../modules/helper';
 
 function Company() {
   const [companies, setCompanies] = useState<CompanyFromServer[]>([]);

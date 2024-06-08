@@ -10,15 +10,11 @@ import React, { SetStateAction, useEffect, useState } from "react";
 import { statusColor } from "../../shared/types/RecruitmentStatus.type";
 import clsx from "clsx";
 import { RecruitmentFromServer, RecruitmentJobPost } from "../../shared/types/Recruitment.type";
-
+import CampaignEditCard from "../../shared/components/CampaignEditCard";
 import {
   getJobById,
-  updateJobStatus,
-
 } from "../../modules/helper";
-
-import CampaignEditCard from "../../shared/components/CampaignEditCard";
-
+import { updateJobStatus } from "../../modules/admin-module";
 
 function RecruitmentDisplayTable() {
   return (

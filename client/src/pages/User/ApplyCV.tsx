@@ -12,10 +12,9 @@ import {
   getAllExp,
   getAllLocation,
   getJobById,
-  uploadApplication,
-  uploadCV,
 } from '../../modules/helper';
 import { AUTH0_BACKEND_AUDIENCE } from '../../shared/services/authen/infrastructure/config';
+import { uploadApplication, uploadCV } from '../../modules/user-module';
 
 const modalApplyStyle = {
   position: 'absolute' as const,

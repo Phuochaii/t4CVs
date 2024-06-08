@@ -6,11 +6,13 @@ import {
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import {
-  getAllEmployer,
   getCompanyById,
+} from '../../modules/helper';
+import {
+  getAllEmployer,
   updateLicenseStatus,
   updatePhoneStatus,
-} from '../../modules/helper';
+} from "../../modules/admin-module";
 import BasicTable, {
   BasicColumnProps,
   ObjectFromServer,

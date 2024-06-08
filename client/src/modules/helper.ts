@@ -15,9 +15,6 @@ export async function getCampaignById(id: number) {
   const rawCampaign: CampaignFromServer = response.data;
   return rawCampaign;
 }
-
-
-
 export async function getAllCompanies(page: number = 1) {
   const response = await axios.get(`${serverURL}/company/all?page=${page}`);
   const rawCompanies: CompanyFromServer[] = response.data.data;
@@ -32,8 +29,6 @@ export async function getCompanyById(id: number | string) {
   const rawCompany: CompanyFromServer = response.data;
   return rawCompany;
 }
-
-
 export async function getJobByCampaignId(campaignId: number) {
   try {
     const response = await axios.get(
@@ -46,7 +41,6 @@ export async function getJobByCampaignId(campaignId: number) {
     return null;
   }
 }
-
 
 // -------------------------------- phần bên dưới k có authen
 export async function getJobById(id: number | string) {
@@ -222,3 +216,4 @@ export const searchJob = async ({
     }
   }
 }
+

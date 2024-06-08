@@ -2,7 +2,7 @@ import { SetStateAction, useEffect, useState } from 'react';
 // import Switch from "../../shared/components/CustomSwitch";
 import { Link, useNavigate } from 'react-router-dom';
 import { Campaign } from '../types/Campaign.type';
-import { getUserById } from '../../modules/helper';
+import { getUserById } from '../../modules/user-module';
 import { UserFromServer } from '../types/User.type';
 
 export interface CampaignTableProps {
