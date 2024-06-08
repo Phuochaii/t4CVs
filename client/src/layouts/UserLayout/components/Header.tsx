@@ -6,23 +6,21 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { withRoleCheck } from '../../../shared/services/authen/domain/withRoleCheck';
 import { Roles, useProfileContext } from '../../../shared/services/authen/domain/context';
-import { AUTH0_BACKEND_AUDIENCE } from '../../../shared/services/authen/infrastructure/config';
-
 function Header() {
   const navigation = useNavigate();
-    const { isAuthenticated, user, logout, getAccessTokenSilently } = useAuth0()
+  const { isAuthenticated, user, logout } = useAuth0();
+  const { profile, token } = useProfileContext();
 
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
   const userId = user?.sub || "";
-  
+
   const fetchNotification = async () => {
-    
+    // console.log(token);
     UserModule.getNotification({ token })
       .then((res) => {
         console.log(123, res);
-
         setNotifications(res.data);
         setTotal(res.pagination.total);
       })
@@ -34,7 +32,7 @@ function Header() {
 
     console.log(isAuthenticated);
     if (isAuthenticated) {
-      // fetchNotification();
+      fetchNotification();
     }
   }, []);
 
@@ -45,9 +43,8 @@ function Header() {
   const [isToolsHovered, setIsToolsHovered] = useState(false);
   const [isSupportsHovered, setIsSupportsHovered] = useState(false);
   const [isAccountHovered, setIsAccountHovered] = useState(false);
-
+  
   const HeaderProfileSection = withRoleCheck(Roles.USER, () => {
-  const {profile} = useProfileContext();
     return (
     <>
       <li
@@ -285,7 +282,7 @@ function Header() {
                   colorRendering="auto"
                   imageRendering="auto"
                   shapeRendering="auto"
-                  color-interpolation="sRGB"
+                  colorInterpolation="sRGB"
                   d="M49.997,0.001
                   c-2.761-0.035-5.029,2.175-5.064,4.936c-0.013,0.992,0.27,1.965,0.812,2.796l43.953,96.701
                   c-26.83,16.803-44.701,46.624-44.701,80.568c0,52.408,42.592,95,95,95c52.408,0,95-42.592,95-95

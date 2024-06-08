@@ -14,6 +14,7 @@ import moment from 'moment';
 import { useAuth0 } from '@auth0/auth0-react';
 import { AUTH0_BACKEND_AUDIENCE } from '../../shared/services/authen/infrastructure/config';
 import { useNavigate } from 'react-router-dom';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 const option = [
   { value: 'Đã ứng tuyển', label: 'Đã ứng tuyển' },
   { value: 'NTD đã xem hồ sơ', label: 'NTD đã xem hồ sơ' },
@@ -23,32 +24,33 @@ const option = [
 function YourApplications() {
     const { user, getAccessTokenSilently, isAuthenticated, isLoading } =
       useAuth0();
+  const {token} = useProfileContext();
+  // console.log(token);
+
   const navigation = useNavigate();
   const [isOn, setIsOn] = useState(false);
   const [applications, setApplication] = useState<
     ApplicationFromServer[] | undefined
   >([]);
+  const [jobs, setJobs] = useState<RecruitmentFromServer[] | undefined>([]);
+  const fetchApplications = async () => {
+    if(!token) {
+      console.log('Token is undefined');
+      return;}
+    try {
+      getApplications(token).then((result) => {
+        const { applications, jobs } = result;
+        console.log(result);
+        setApplication(applications);
+        setJobs(jobs);
+      });
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
   useEffect(() => {
-    const fetchApplications = async () => {
-      try {
-        const token = await getAccessTokenSilently({
-          authorizationParams: {
-            audience: AUTH0_BACKEND_AUDIENCE,
-          },
-          cacheMode: "off",
-        });
-        await getApplications(token).then((result) => {
-          const { applications, jobs } = result;
-          setApplication(applications);
-          setJobs(jobs);
-        });
-      } catch (error) {
-        console.error("An error occurred:", error);
-      }
-    };
-
-    // fetchApplications(); // Call the fetchApplications function when the component mounts
-  }, [getAccessTokenSilently, user?.sub]);
+      fetchApplications(); // Call the fetchApplications function when the component mounts
+  }, [user?.sub]);
 
   const toggleSwitch = () => {
     setIsOn(!isOn);

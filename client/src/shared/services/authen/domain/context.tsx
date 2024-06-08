@@ -142,6 +142,7 @@ type ProfileContextInterface = {
   setProfile: (user: Profile) => void;
   role?: Role | null;
   setRole: (role: Role | null | undefined) => void;
+  token?:string;
 };
 const ProfileContext = createContext<ProfileContextInterface>({
   setProfile: () => {},
@@ -151,6 +152,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [profile, setProfile] = useState<Profile | undefined>(undefined);
   const [role, setRole] = useState<Role | undefined | null>(undefined);
+  const [token, setToken] = useState<string | undefined | null>(undefined);
   const getProfile = async (role: Role | undefined | null) => {
     if (!isAuthenticated || !role) return undefined;
     try {
@@ -160,6 +162,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
         },
         cacheMode: "off",
       });
+      setToken(token);
       const profile = await role.getProfile(token);
       return profile;
     } catch (error) {
@@ -169,6 +172,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
     }
   };
   const value = {
+    token,
     profile,
     setProfile,
     role,

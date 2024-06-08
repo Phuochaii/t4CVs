@@ -15,6 +15,7 @@ import {
 } from '../../modules/helper';
 import { AUTH0_BACKEND_AUDIENCE } from '../../shared/services/authen/infrastructure/config';
 import { uploadApplication, uploadCV } from '../../modules/user-module';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 const modalApplyStyle = {
   position: 'absolute' as const,
@@ -37,9 +38,10 @@ interface filterSearch {
 }
 
 // Modal Apply CV 
-function ApplyModal({ open, handleClose, handleOpen, jobData, user, getAccessTokenSilently }) {
+function ApplyModal({ open, handleClose, handleOpen, jobData, user }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<any>();
+  const {token} = useProfileContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,13 +69,6 @@ function ApplyModal({ open, handleClose, handleOpen, jobData, user, getAccessTok
     }
 
     try {
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: AUTH0_BACKEND_AUDIENCE,
-        },
-        cacheMode: "off",
-      });
-
       if (Object.keys(errors).length === 0) {
         // Upload CV
         const postData = new FormData();
@@ -83,7 +78,7 @@ function ApplyModal({ open, handleClose, handleOpen, jobData, user, getAccessTok
         const newUploadCV = await uploadCV({
           postData: postData,
           token: token,
-        });
+        }).then((res) => res.data);
         console.log(newUploadCV);
 
         // Create Application
@@ -113,7 +108,6 @@ function ApplyModal({ open, handleClose, handleOpen, jobData, user, getAccessTok
 
         alert("Create Application successfully");
       } else {
-        alert("failed")
         setErrors(errors);
         console.log(errors);
       }
@@ -622,7 +616,6 @@ function ApplyCV() {
         handleOpen={handleOpenModal}
         jobData={jobData}
         user={user}
-        getAccessTokenSilently={getAccessTokenSilently}
       />
       <div className="apply-cv">
         <div className="search-job">
