@@ -3,13 +3,12 @@ import axios from 'axios';
 
 import SearchCompany from '../../shared/components/SearchCompany';
 import CompanyCard from '../../shared/components/CompanyCard';
+import { CompanyFromServer } from '../../shared/types/Company.type';
+import { findCompanyByName } from '../../modules/helper';
 
 function Companies() {
-  const [companies, setCompanies] = useState([]);
-  useEffect(() => {
-    fetchCompanies();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [companies, setCompanies] = useState<CompanyFromServer[]>([]);
+  const [searchText, setSearchText] = useState('');
 
   const fetchCompanies = async () => {
     try {
@@ -20,9 +19,30 @@ function Companies() {
       console.error('Error fetching data:', error);
     }
   };
+
+  useEffect(() => {
+    async function getData() {
+      const {
+        companies,
+      }: {
+        companies: CompanyFromServer[];
+      } = await findCompanyByName(searchText);
+      console.log(companies);
+      setCompanies(companies);
+    }
+    if (searchText == '') {
+      fetchCompanies();
+    } else {
+      getData();
+    }
+  }, [searchText]);
+
+  const handleSearch = (text) => {
+    setSearchText(text);
+  };
   return (
     <>
-      <SearchCompany />
+      <SearchCompany onSearch={handleSearch} />
       <div className="w-full bg-white text-black">
         <div className="text-center py-6 text-[#333] text-2xl font-semibold">
           DANH SÁCH CÁC CÔNG TY NỔI BẬT

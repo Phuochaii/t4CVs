@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import { MapPinIcon, StarIcon } from '@heroicons/react/24/outline';
-import JobService from '../../../modules/job-module';
+import { getAllExp, getAllLocation } from '../../../modules/helper';
 
 const salary_range = [
   {
@@ -44,10 +44,10 @@ function SearchBoxComponent({
 }) {
   const fetchDataFilter = async () => {
     try {
-      const locationResponse = await JobService.getAllLocation();
+      const locationResponse = await getAllLocation();
       setCities(locationResponse);
 
-      const expResponse = await JobService.getAllExp();
+      const expResponse = await getAllExp();
       setExpYear(expResponse);
     } catch (error) {
       console.error('Error fetching data:', error);

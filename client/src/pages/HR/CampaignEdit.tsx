@@ -10,12 +10,11 @@ import React, { SetStateAction, useEffect, useState } from "react";
 import { statusColor } from "../../shared/types/RecruitmentStatus.type";
 import clsx from "clsx";
 import { RecruitmentFromServer, RecruitmentJobPost } from "../../shared/types/Recruitment.type";
-
+import CampaignEditCard from "../../shared/components/CampaignEditCard";
 import {
   getJobById,
-  updateJobStatus,
-} from "../../shared/utils/helper";
-import CampaignEditCard from "../../shared/components/CampaignEditCard";
+} from "../../modules/helper";
+import { updateJobStatus } from "../../modules/admin-module";
 
 function RecruitmentDisplayTable() {
   return (
@@ -156,8 +155,9 @@ function CampaignEdit() {
         console.error('Error fetching data:', error);
       }
       const response = await getJobById(recruitment.id);
-      setJob(response)
       console.log(response)
+      setJob(response)
+      
       setRecruitment({
         ...response,
         createdAt: new Date(response.createAt),

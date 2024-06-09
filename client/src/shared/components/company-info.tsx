@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import UpdateCompanyInfo from './UpdateCompanyInfo';
 import { CompanyFromServer } from '../types/Company.type';
 import { Field } from '../types/Recruitment.type';
-import { getAllCompanies, getAllFields } from '../utils/helper';
+import { getAllCompanies, getAllFields } from '../../modules/helper';
 import { DefaultPagination } from './default-pagination';
 import CreateCompany from './CreateCompany';
 function CompanyInfo() {
@@ -55,7 +55,7 @@ function CompanyInfo() {
 
   const handleComponent = () => {
     setComponent(!component);
-    console.log(component);
+    // console.log(component);
     // console.log("Hello world")
   };
   const handleView = (view: boolean) => {

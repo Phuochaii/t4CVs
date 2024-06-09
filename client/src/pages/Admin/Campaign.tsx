@@ -9,15 +9,15 @@ import {
 import { SetStateAction, useEffect, useState } from 'react';
 import { Campaign as CampaignType } from '../../shared/types/Campaign.type';
 // import Switch from "../../shared/components/CustomSwitch";
+
+import { UserFromServer } from '../../shared/types/User.type';
 import {
   getAllCampaigns,
   getApplicationsByCampaignId,
-  getCompanyById,
   getEmployerById,
-  getJobByCampaignId,
   getUserById,
-} from '../../shared/utils/helper';
-import { UserFromServer } from '../../shared/types/User.type';
+} from '../../modules/hr-module';
+import { getCompanyById, getJobByCampaignId } from '../../modules/helper';
 
 interface CampaignTableProps {
   data: CampaignType[];

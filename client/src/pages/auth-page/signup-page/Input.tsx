@@ -10,6 +10,7 @@ interface InputProps {
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     errorMessage?: string;
     icon?: React.ElementType;
+    disabled?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -21,6 +22,7 @@ const Input: React.FC<InputProps> = ({
     onChange,
     errorMessage,
     icon: Icon,
+    disabled,
 }) => {
     const [isFocused, setIsFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -36,6 +38,7 @@ const Input: React.FC<InputProps> = ({
     const handlePasswordToggle = () => {
         setShowPassword(!showPassword);
     };
+    console.log(disabled)
 
     return (
         <>
@@ -54,8 +57,10 @@ const Input: React.FC<InputProps> = ({
                     onChange={onChange}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
-                    className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
+                    disabled={disabled}
+                    className={`text-black mt-1 pl-12 pr-3 py-2 border rounded-md w-full
           focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
+            ${disabled ? "bg-gray-200" : "bg-white"}
           ${isFocused ? "border-green-500" : ""}
           ${errorMessage ? "border-red-500" : ""}
           `}

@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import React from 'react';
-import JobService from '../../modules/job-module';
 
 import InterestedJobComponent from '../../layouts/UserLayout/components/InterestedJobComponent';
 import JobListItem from '../../shared/components/JobListItem';
+import { searchJob } from '../../modules/helper';
 
 function SavedJobs() {
   const [jobResult, setJobResult] = useState([]);
 
   React.useEffect(() => {
-    searchJob();
+    findJob();
   }, []);
 
-  const searchJob = () => {
-    JobService.searchJob({
+  const findJob = () => {
+    searchJob({
       page: 1,
       limit: 5,
       titleRecruitment: '',

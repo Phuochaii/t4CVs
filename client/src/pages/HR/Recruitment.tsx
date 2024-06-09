@@ -16,7 +16,7 @@ import {
   getAllJobs,
   getCampaignById,
   getJobsStat,
-} from "../../shared/utils/helper";
+} from "../../modules/helper";
 // import Switch from "../../shared/components/CustomSwitch";
 
 interface RecruitmentTableProps {

@@ -5,7 +5,10 @@ import "../../shared/assets/styles/hr-signup.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { accountList } from "../../shared/utils/constant";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useAuthen } from "../../shared/services/authen";
+import { Roles } from "../../shared/services/authen/domain/context";
+import Spinner from "../Spinner";
 
 const images = [
   {
@@ -23,13 +26,9 @@ const images = [
 ];
 
 function HRLogIn() {
-  const navigation = useNavigate();
-  React.useEffect(() => {
-    if (localStorage.getItem("hr") !== null) {
-      navigation("/hr/news");
-      return;
-    }
-  }, []);
+  const navigate = useNavigate();
+  const {isAuthenticated, isLoading} = useAuth0();
+  
 
   const [formData, setFormData] = useState({
     email: "",
@@ -37,36 +36,24 @@ function HRLogIn() {
   });
 
   const [error, setError] = useState("");
-  const [showError, setShowError] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const showError:boolean = !!error;
 
   const [showPassword, setShowPassword] = useState(false);
 
   const [emailEmpty, setEmailEmpty] = useState(false);
   const [passwordEmpty, setPasswordEmpty] = useState(false);
+  const {usernamePasswordLogin} = useAuthen();
 
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
   };
 
+  const onLoginError = () => {
+    setError("Email hoặc mật khẩu không chính xác.");
+  }
+
   const handleLogin = (e: { preventDefault: () => void }) => {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
-
-    // const storedUserString = localStorage.getItem("user");
-    // const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
-    accountList.forEach((account) => {
-      console.log(account);
-      if (
-        account.email === formData.email &&
-        account.password === formData.password &&
-        account.role === "hr"
-      ) {
-        console.log("Đăng nhập thành công với email:", formData.email);
-        // store in local storage
-        localStorage.setItem("hr", JSON.stringify(account));
-        navigation("/hr/news");
-      }
-    });
 
     if (!formData.email) {
       setEmailEmpty(true);
@@ -74,11 +61,13 @@ function HRLogIn() {
 
     if (!formData.password) {
       setPasswordEmpty(true);
-    } else {
-      // Đăng nhập không thành công
-      setError("Email hoặc mật khẩu không chính xác.");
-      setShowError(true);
-    }
+    } 
+    if(!formData.email || !formData.password) return;
+    
+    usernamePasswordLogin({
+      username: formData.email,
+      password: formData.password,
+    }, Roles.HR, onLoginError);
   };
 
   const settings = {
@@ -88,6 +77,15 @@ function HRLogIn() {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
+
+  React.useEffect(() => {
+    if(isLoading) return;
+    if (isAuthenticated) {
+      navigate(Roles.HR.redirectUrl);
+      return;
+    }
+  }, [isAuthenticated, isLoading]);
+  if(isLoading || isAuthenticated) return <Spinner/>;
 
   return (
     <div className="grid grid-cols-3 gap-4">
@@ -191,7 +189,7 @@ function HRLogIn() {
         </form>
 
         {showError && <div className="text-red-500">{error}</div>}
-        {isLoggedIn && (
+        {isAuthenticated && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mt-4">
             Đăng nhập thành công!
           </div>
@@ -200,7 +198,7 @@ function HRLogIn() {
         <p className="text-center text-gray-600">
           Chưa có tài khoản?{" "}
           <Link
-            to="/hr-signup/1"
+            to="/hr-signup"
             className="text-green-500 hover:underline hover:text-green-500"
           >
             Đăng ký ngay
@@ -213,7 +211,7 @@ function HRLogIn() {
           Track your funnel with <span className="text-green-500">Report</span>
         </div>
         <Slider {...settings}>
-          {images.map((step, index) => (
+          {images.map((step) => (
             <div key={step.label}>
               <img
                 src={step.path}

@@ -23,6 +23,7 @@ import SingleDropdown from '../components/SingleDropDown';
 import MultiDropdown from '../components/MultiDropDown';
 import Option from '../types/Option.type';
 import { RecruitmentFromServer } from '../types/Recruitment.type';
+import axios from 'axios';
 function CampaignEditCard({ jobItem, fields }: { jobItem: RecruitmentFromServer, fields: any }) {
   const { id: compaignId } = useParams();
   const convertToOptions = (data: { id: string; name: string }[]) => {
@@ -30,7 +31,7 @@ function CampaignEditCard({ jobItem, fields }: { jobItem: RecruitmentFromServer,
     return data.map(({ id, name }) => ({ value: id.toString(), label: name }));
   };
   const gender = [
-    { value: 'Không quan trọng', label: 'Không quan trọng' },
+    { value: 'Any', label: 'Any' },
     { value: 'Female', label: 'Female' },
     { value: 'Male', label: 'Male' },
   ];
@@ -149,33 +150,35 @@ function CampaignEditCard({ jobItem, fields }: { jobItem: RecruitmentFromServer,
         ? cityOption.map((option) => ({ id: Number.parseInt(option.value), name: option.label }))
         : [];
       updatedItem.expiredDate = date;
-      updatedItem.jobDetail.quantity = Number.parseInt(data.quantity);
-      updatedItem.jobDetail.jobSchedule = data.schedule;
-      updatedItem.jobDetail.gender =
-        genderOptions?.value !== undefined ? genderOptions?.value : '0';
-      updatedItem.jobDetail.description = data.description;
-      updatedItem.jobDetail.benefit = data.benefit;
-      updatedItem.jobDetail.requirement = data.requirement;
-      updatedItem.jobDetail.skills = data.skill;
+      updatedItem.jobDetail = {
+        ...updatedItem.jobDetail,
+        quantity: Number.parseInt(data.quantity),
+        jobSchedule: data.schedule,
+        gender: genderOptions?.value ? genderOptions?.value : 'Any',
+        description: data.description,
+        benefit: data.benefit,
+        requirement: data.requirement,
+        skills: data.skill,
+        id :jobItem.jobDetail.id
+      };
       //debug line
-      console.log(updatedItem);
+      console.log(JSON.stringify(updatedItem))
       try {
-        const response = await fetch('http://localhost:3000/job/update-job', {
-          method: 'PUT',
+        const response = await axios.put('http://localhost:3000/job/update-job', JSON.stringify(updatedItem), {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(updatedItem),
         });
-
-        if (!response.ok) {
+  
+        if (response.status !== 200) {
           throw new Error('Failed to post data to API');
         }
-
-        console.log('Data posted successfully');
+  
+        console.log(response);
       } catch (error) {
         console.error('Error posting data:', error);
       }
+  
 
     } else {
       //Do nothing
@@ -538,7 +541,7 @@ function CampaignEditCard({ jobItem, fields }: { jobItem: RecruitmentFromServer,
                           type="text"
                           className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                           placeholder="0 VND"
-                          value={jobItem.salaryMin}
+                          defaultValue={jobItem.salaryMin}
                           onChange={(e) => handleSalaryError(e.target.value)}
                         />
                       </div>
@@ -548,7 +551,7 @@ function CampaignEditCard({ jobItem, fields }: { jobItem: RecruitmentFromServer,
                           type="text"
                           className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                           placeholder="0 VND"
-                          value={jobItem.salaryMax}
+                          defaultValue={jobItem.salaryMax}
                           onChange={(e) => handleSalaryMaxError(e.target.value)}
                         />
                       </div>
