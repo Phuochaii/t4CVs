@@ -4,15 +4,11 @@ import SearchCompany from '../../shared/components/SearchCompany';
 import CompanyCard from '../../shared/components/CompanyCard';
 
 import { CompanyFromServer } from '../../shared/types/Company.type';
-import { findCompanyByName } from '../../modules/helper';
-import { useProfileContext } from '../../shared/services/authen/domain/context';
+import { findCompanyByName, getAllCompany } from '../../modules/helper';
 
 function Companies() {
-  import * as HelperModule from '../../modules/helper';
-  
   const [searchText, setSearchText] = useState('');
   const [companies, setCompanies] = useState([]);
-  // const { token } = useProfileContext();
   useEffect(() => {
     fetchCompanies();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -21,7 +17,7 @@ function Companies() {
   const fetchCompanies = async () => {
     try {
       // const response = await axios.get('http://localhost:3000/company/all');
-      const response = await HelperModule.getAllCompany();
+      const response = await getAllCompany();
       console.log(response);
       setCompanies(response.data.data);
     } catch (error) {
