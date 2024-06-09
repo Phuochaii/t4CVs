@@ -13,8 +13,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import * as HRModule from "../../../modules/hr-module";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Roles, useProfileContext } from "../../../shared/services/authen/domain/context";
-import { AUTH0_CLIENT_ID } from "../../../shared/services/authen/infrastructure/config";
+import { useProfileContext } from "../../../shared/services/authen/domain/context";
 
 const list_btn1 = [
   {
@@ -65,25 +64,26 @@ const accountButton = {
 
 function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
   const navigation = useNavigate();
-  const {user, logout} = useAuth0();
-  const { profile} = useProfileContext();
+  const {logout} = useAuth0();
+  const { profile, token} = useProfileContext();
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [displayAccountTab, setDisplayAccountTab] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
-  const hrId = user?.sub;
   const fetchNotification = ({
-    id,
     limit = 3,
   }: {
-    id: string;
     limit?: number;
   }) => {
-    HRModule.getNotification({ userId: id, limit: limit }).then((res) => {
+    HRModule.getNotification({ token:token!, limit: limit }).then((res) => {
+      console.log(res);
       setNotifications(res.data);
       setTotal(res.pagination.total);
     });
   };
+  React.useEffect(() => {
+    fetchNotification({});
+  },[])
   const notiLength = notifications.filter(
     (item: any) => item.status === 0,
   ).length;
@@ -173,10 +173,10 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                           onClick={(e) => {
                             e.preventDefault();
                             HRModule.updateStatusNotification({
-                              userId: hrId,
+                              token:token!,
                               notificationId: item.id,
                             });
-                            fetchNotification({ id: hrId });
+                            fetchNotification({});
                             // window.open(item.link, "_blank", "noopener");
                           }}
                           key={index}
@@ -196,7 +196,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                     <button
                       className="text-green-500 hover:underline font-semibold w-full mt-2"
                       onClick={() => {
-                        fetchNotification({ id: hrId, limit: total });
+                        fetchNotification({ limit: total });
                       }}
                     >
                       Xem tất cả thông báo
@@ -204,7 +204,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                   ) : notifications.length > 3 ? (
                     <button
                       className="text-green-500 hover:underline font-semibold w-full mt-2"
-                      onClick={() => fetchNotification({ id: hrId })}
+                      onClick={() => fetchNotification({ })}
                     >
                       Ẩn bớt
                     </button>
