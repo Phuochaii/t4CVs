@@ -3,20 +3,22 @@ import {
   Routes,
   Route,
   Navigate,
-} from 'react-router-dom';
+} from "react-router-dom";
 
-import routes from './routes';
-import EmptyLayout from './layouts/EmptyLayout';
-import React, { createContext } from 'react';
-import { accountList } from './shared/utils/constant';
+import routes from "./routes";
+import EmptyLayout from "./layouts/EmptyLayout";
+import { createContext } from "react";
+import { accountList } from "./shared/utils/constant";
+import { store } from "./utils/redux/store";
+import { Provider } from "react-redux";
 
 export const MyContext = createContext({});
 
 function App() {
   return (
-    <MyContext.Provider value={{ accountList: accountList }}>
-      <Router>
-        <div>
+    <Provider store={store}>
+      <MyContext.Provider value={{ accountList: accountList }}>
+        <Router>
           <Routes>
             {routes.map((route, index) => {
               const Layout = route.layout || EmptyLayout;
@@ -38,9 +40,9 @@ function App() {
             {/* <Route path="*" element={<Navigate to="/error-path" />} /> */}
             {/* <Route path="*" element={<Navigate to="/quan-ly-cv" />} /> */}
           </Routes>
-        </div>
-      </Router>
-    </MyContext.Provider>
+        </Router>
+      </MyContext.Provider>
+    </Provider>
   );
 }
 
