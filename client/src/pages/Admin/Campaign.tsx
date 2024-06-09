@@ -212,7 +212,7 @@ function Campaign() {
         const company = employer.companyId
           ? await getCompanyById(employer.companyId)
           : await null;
-        const job = await getJobByCampaignId(item.id);
+        const job = await getJobByCampaignId(token, item.id);
         const { applications } = await getApplicationsByCampaignId(
           token,
           page,
