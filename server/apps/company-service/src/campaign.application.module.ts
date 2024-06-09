@@ -4,6 +4,7 @@ import { CampaignRepository } from './domain/repository';
 import { CampaignApplication } from './domain';
 import {
   CreateCampaignService,
+  DeleteCampaignService,
   FindCampaignByIdService,
   GetAllCampaignByEmployerIdPaginationService,
   GetAllCampaignByEmployerIdService,
@@ -75,6 +76,13 @@ import {
       inject: [CampaignRepository],
     },
     {
+      provide: DeleteCampaignService,
+      useFactory: (campaignRepository: CampaignRepository) => {
+        return new DeleteCampaignService(campaignRepository);
+      },
+      inject: [CampaignRepository],
+    },
+    {
       provide: CampaignApplication,
       useFactory: (
         createCampaign: CreateCampaignService,
@@ -85,6 +93,7 @@ import {
         getAllCampaignByEmployerId: GetAllCampaignByEmployerIdService,
         getAllCampaignByEmployerIdPagination: GetAllCampaignByEmployerIdPaginationService,
         getTotalCampaignByEmployerId: GetTotalCampaignByEmployerIdService,
+        deleteCampaignService: DeleteCampaignService,
       ) => {
         return new CampaignApplication(
           createCampaign,
@@ -95,6 +104,7 @@ import {
           getAllCampaignByEmployerId,
           getAllCampaignByEmployerIdPagination,
           getTotalCampaignByEmployerId,
+          deleteCampaignService,
         );
       },
       inject: [
@@ -106,6 +116,7 @@ import {
         GetAllCampaignByEmployerIdService,
         GetAllCampaignByEmployerIdPaginationService,
         GetTotalCampaignByEmployerIdService,
+        DeleteCampaignService,
       ],
     },
   ],

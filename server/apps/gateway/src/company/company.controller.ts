@@ -6,6 +6,9 @@ import {
   Param,
   Delete,
   Query,
+  Put,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CompanyService } from './company.service';
@@ -13,14 +16,27 @@ import { CreateCompanyDto } from './dto/Req/createCompany.dto';
 import { UpdateCompanyDto } from './dto/Req/updateCompany.dto';
 import { CreateCampaignDto } from './dto/Req/createCampaign.dto';
 import { UpdateCampaignDto } from './dto/Req/updateCampaign.dto';
+import { UpdateCompanyStatusDto } from './dto/Req/updateCompanyStatus.dto';
+import { diskStorage } from 'multer';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @Post('create')
-  createCompany(@Body() data: CreateCompanyDto): Observable<string> {
-    return this.companyService.createCompany(data);
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+      }),
+    }),
+  )
+  createCompany(
+    @UploadedFile() file: any,
+    @Body() data: CreateCompanyDto,
+  ): Observable<string> {
+    return this.companyService.createCompany(file, data);
   }
 
   @Get('all')
@@ -36,9 +52,26 @@ export class CompanyController {
     return this.companyService.findCompanyById(id);
   }
 
-  @Post('update')
-  updateCompany(@Body() data: UpdateCompanyDto): Observable<string> {
-    return this.companyService.updateCompany(data);
+  @Put('update')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+      }),
+    }),
+  )
+  updateCompany(
+    @UploadedFile() file: any,
+    @Body() data: UpdateCompanyDto,
+  ): Observable<string> {
+    return this.companyService.updateCompany(file, data);
+  }
+
+  @Put('updateStatus')
+  updateCompanyStatus(
+    @Body() data: UpdateCompanyStatusDto,
+  ): Observable<string> {
+    return this.companyService.updateCompanyStatus(data);
   }
 
   @Delete(':id')
@@ -46,11 +79,14 @@ export class CompanyController {
     return this.companyService.removeCompany(id);
   }
 
-  //Test api cho hàm find company by array id
-  // @Get()
-  // findCompanyByArrayId(): Observable<any[]> {
-  //   return this.companyService.findCompanyByArrayId();
-  // }
+  @Get('name/:name')
+  findCompanyByName(
+    @Param('name') name: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.companyService.findCompanyByName(name, page, limit);
+  }
 
   @Post('campaign/create')
   createCampaign(@Body() data: CreateCampaignDto): Observable<string> {
@@ -70,7 +106,7 @@ export class CompanyController {
     return this.companyService.findCampaignById(id);
   }
 
-  @Post('campaign/update')
+  @Put('campaign/update')
   updateCampaign(@Body() data: UpdateCampaignDto): Observable<string> {
     return this.companyService.updateCampaign(data);
   }
@@ -91,5 +127,20 @@ export class CompanyController {
   @Get('campaign/employer/all/:employerId')
   findAllCampaignByEmployerId(@Param('employerId') employerId: string) {
     return this.companyService.findAllCampaignByEmployerId(employerId);
+  }
+
+  @Delete('campaign/:id')
+  DeleteCampaignService(@Param('id') id: number) {
+    return this.companyService.deleteCampaign(id);
+  }
+
+  @Get('field/all')
+  getAllField() {
+    return this.companyService.getAllField();
+  }
+
+  @Get('field/:id')
+  findFieldById(@Param('id') id: number) {
+    return this.companyService.findFieldById(id);
   }
 }

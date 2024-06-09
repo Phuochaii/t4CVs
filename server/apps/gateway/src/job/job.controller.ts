@@ -1,10 +1,21 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CreateJobDto } from './dto/Req/createJob.dto';
 import { JobService } from './job.service';
 import { CreateBaseDto } from './dto/Req/createBase.dto';
-import { UpdateJobDto } from './dto/Req/update-job.dto';
+import { UpdateStatusJobDto } from './dto/Req/update-status-job.dto';
 import { QueryDTO } from './dto/Req/query.dto';
+import { FindJobsWithCampaignIdsDto } from './dto/Req/find-jobs-with-campaign-ids.dto';
+import { UpdateJobDTO } from './dto/Req/update-job.dto';
 
 @Controller('job')
 export class JobController {
@@ -13,6 +24,11 @@ export class JobController {
   @Get('')
   findJobByCampaignId(@Query('campaignId') campaignId: number) {
     return this.jobService.findJobByCampaignId(campaignId);
+  }
+
+  @Post('jobs-by-campaignIds')
+  findJobsByCampaignIds(@Body() data: FindJobsWithCampaignIdsDto) {
+    return this.jobService.findJobsByCampaignIds(data.campaignIds);
   }
 
   @Get('all')
@@ -46,9 +62,19 @@ export class JobController {
     return this.jobService.findJobById(id);
   }
 
-  @Post('update-status')
-  updateJobStatus(@Body() data: UpdateJobDto) {
+  @Put('update-status')
+  updateJobStatus(@Body() data: UpdateStatusJobDto) {
     return this.jobService.updateJobStatus(data);
+  }
+
+  @Put('update-job')
+  updateJob(@Body() data: UpdateJobDTO) {
+    return this.jobService.updateJob(data);
+  }
+
+  @Delete(':id')
+  deleteJob(@Param('id') id: number) {
+    return this.jobService.deleteJob(id);
   }
 
   @Post('major/create')

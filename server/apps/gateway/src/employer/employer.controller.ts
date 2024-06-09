@@ -7,13 +7,16 @@ import {
   Query,
   UploadedFile,
   UseInterceptors,
+  Put,
+  UploadedFiles,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { EmployerService } from './employer.service';
 import { CreateEmployerDto } from './dto/Req/createEmployer.dto';
 import { UpdateEmployerCompanyDTO } from './dto/Req/updateEmployerCompany.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { UpdateEmployerDTO } from './dto/Req/updateEmployer.dto';
 
 @Controller('employer')
 export class EmployerController {
@@ -37,14 +40,53 @@ export class EmployerController {
     return this.employerService.findEmployerById(id);
   }
 
-  @Post('update/companyid')
+  @Get('company/:companyid')
+  getEmployerByCompanyId(@Param('companyid') companyid: number) {
+    return this.employerService.getEmployerByCompanyId(companyid);
+  }
+
+  @Put('update/companyid')
   updateEmployerCompanyId(
     @Body() data: UpdateEmployerCompanyDTO,
   ): Observable<any> {
     return this.employerService.updateEmployerCompanyId(data);
   }
 
-  @Post('update/license')
+  @Put('update/license')
+  @UseInterceptors(
+    FilesInterceptor('files', 99, {
+      storage: diskStorage({
+        destination: './uploads',
+      }),
+    }),
+  )
+  updateEmployerLicense(
+    @UploadedFiles() files: any[],
+    @Body('employerId') employerId: string,
+  ): Observable<any> {
+    return this.employerService.updateEmployerLicense(files, employerId);
+  }
+
+  @Put('update/licenseStatus/:id')
+  updateEmployerLicenseStatus(
+    @Param('id') id: string,
+    @Body('licenseStatus') licenseStatus: boolean,
+  ): Observable<any> {
+    return this.employerService.updateEmployerLicenseStatus(id, licenseStatus);
+  }
+
+  @Put('update/phoneNumberStatus/:id')
+  updateEmployerPhoneStatus(
+    @Param('id') id: string,
+    @Body('phoneNumberStatus') phoneNumberStatus: boolean,
+  ): Observable<any> {
+    return this.employerService.updateEmployerPhoneStatus(
+      id,
+      phoneNumberStatus,
+    );
+  }
+
+  @Put('update')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -52,21 +94,20 @@ export class EmployerController {
       }),
     }),
   )
-  updateEmployerLicense(
+  updateEmployer(
     @UploadedFile() file: any,
-    @Body('employerId') employerId: string,
-  ): Observable<any> {
-    return this.employerService.updateEmployerLicense(file, employerId);
+    @Body() data: UpdateEmployerDTO,
+  ): Observable<string> {
+    return this.employerService.updateEmployer(file, data);
   }
 
-  @Get('update/licenseStatus/:id')
-  updateEmployerLicenseStatus(@Param('id') id: string): Observable<any> {
-    return this.employerService.updateEmployerLicenseStatus(id);
-  }
-
-  @Get('update/phoneStatus/:id')
-  updateEmployerPhoneStatus(@Param('id') id: string): Observable<any> {
-    return this.employerService.updateEmployerPhoneStatus(id);
+  @Get('name/:name')
+  findEmployerByName(
+    @Param('name') name: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.employerService.getEmployerByName(name, page, limit);
   }
 
   @Get('position/all')

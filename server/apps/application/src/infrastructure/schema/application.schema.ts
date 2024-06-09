@@ -23,18 +23,18 @@ export class ApplicationSchema implements _ {
   @Column('varchar', { nullable: true })
   coverLetter: string | null;
 
-  @Column({ type: 'date', nullable: true })
-  createdAt: string | null;
+  @Column({ type: 'timestamp without time zone' })
+  createdAt: string;
 
-  @Column({ type: 'date', nullable: true })
-  updateAt: string | null;
+  @Column({ type: 'timestamp without time zone' })
+  updateAt: string;
 
-  @Column('int', { nullable: true })
-  campaignId: number | null;
+  @Column('int')
+  campaignId: number;
 
-  @Column('varchar', { nullable: true })
-  userId: string | null;
+  @Column('varchar')
+  userId: string;
 
-  @Column('int', { nullable: true })
-  cvId: number | null;
+  @Column('int')
+  cvId: number;
 }

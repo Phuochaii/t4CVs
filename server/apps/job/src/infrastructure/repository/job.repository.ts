@@ -2,20 +2,27 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JobAggregate } from '../../domain/aggregate';
 import { Job } from '../schemas';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { JobMapper } from '../mapper';
 import { CreateJobDto } from '../../domain/dto/Req/create-job.dto';
 import { QueryDTO } from '../../domain/dto/Req/query.dto';
-import { UpdateJobDto } from '../../domain/dto/Req/update-job.dto';
-import { RpcException } from '@nestjs/microservices';
 import { FindJobByCampaignIdDto } from '../../domain/dto/Resp/find-job-by-campaignId.dto';
+import { JobRepository } from '../../domain/repository';
+import { UpdateJobStatusDto } from '../../domain/dto/Req/update-job-status.dto';
 
 @Injectable()
-export class TypeOrmJobRepository {
+export class TypeOrmJobRepository extends JobRepository {
   constructor(
     @InjectRepository(Job)
     private readonly jobRepository: Repository<Job>,
-  ) {}
+  ) {
+    super();
+  }
+
+  async deleteJob(id: number) {
+    return await this.jobRepository.delete(id);
+  }
+
   async findJobByCampaignId(
     campaignId: number,
   ): Promise<FindJobByCampaignIdDto> {
@@ -29,6 +36,7 @@ export class TypeOrmJobRepository {
         salaryMax: true,
         salaryMin: true,
         campaignId: true,
+        status: true,
       },
     });
     if (!job) return null;
@@ -38,7 +46,29 @@ export class TypeOrmJobRepository {
       salaryMax: job.salaryMax,
       salaryMin: job.salaryMin,
       campaignId: job.campaignId,
+      status: job.status,
     };
+    return result;
+  }
+
+  async findJobsByCampaignIds(
+    campaignIds: number[],
+  ): Promise<FindJobByCampaignIdDto[]> {
+    const jobs = await this.jobRepository.findBy({
+      campaignId: In(campaignIds),
+    });
+    if (!jobs) return null;
+    const result = jobs.map((job) => {
+      const result: FindJobByCampaignIdDto = {
+        titleRecruitment: job.titleRecruitment,
+        companyId: job.companyId,
+        salaryMax: job.salaryMax,
+        salaryMin: job.salaryMin,
+        campaignId: job.campaignId,
+        status: job.status,
+      };
+      return result;
+    });
     return result;
   }
   async findJobById(id: number): Promise<JobAggregate> {
@@ -87,7 +117,7 @@ export class TypeOrmJobRepository {
       ],
     });
   }
-  async updateJobStatus(data: UpdateJobDto): Promise<boolean> {
+  async updateJobStatus(data: UpdateJobStatusDto): Promise<boolean> {
     const result = await this.jobRepository.update(data.id, {
       status: data.status,
     });

@@ -23,11 +23,19 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
   }
 
   async createApplication(application: ApplicationDto): Promise<Application> {
+    application.status = false;
+    const now = new Date();
+    application.createdAt = now.toISOString();
+    application.updateAt = now.toISOString();
     return await this.applicationRepository.save(application);
   }
 
-  async getApplication(application: GetApplicationDto): Promise<Application> {
-    return await this.applicationRepository.findOneBy(application);
+  async getApplication(
+    application: GetApplicationDto,
+  ): Promise<Application | null> {
+    const result = await this.applicationRepository.findOneBy(application);
+
+    return result;
   }
 
   async getAllApplication(
@@ -49,17 +57,21 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
 
   async updateApplication(
     application: UpdateApplicationDto,
-  ): Promise<Application> {
-    await this.applicationRepository.update(application.id, {
-      status: true,
-    });
+  ): Promise<Application | null> {
+    const result = await this.applicationRepository.findOneBy(application);
 
+    if (!result) {
+      return;
+    }
+    await this.applicationRepository.update(application.id, {
+      status: application.status,
+    });
     return await this.applicationRepository.findOneBy(application);
   }
 
   async getByCampaignIdApplication(
     application: GetByCampaignIdApplicationDto,
-  ): Promise<Application[]> {
+  ): Promise<Application[] | null> {
     const skip = (application.page - 1) * application.limit;
     const data = await this.applicationRepository.find({
       where: {
@@ -73,37 +85,45 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
         id: 'DESC',
       },
     });
+    if (!data) {
+      return;
+    }
     return data;
   }
 
   async getAllByCampaignIdApplication(
     application: GetAllByCampaignIdApplicationDto,
-  ): Promise<Application[]> {
+  ): Promise<Application[] | null> {
     const data = await this.applicationRepository.find({
       where: {
         campaignId: In(application.campaignIds),
       },
     });
+    if (!data) {
+      return;
+    }
 
     return data;
   }
 
   async getByUserIdApplication(
     application: GetByUserIdApplicationDto,
-  ): Promise<Application[]> {
-    console.log(application.status);
+  ): Promise<Application[] | null> {
     const data = await this.applicationRepository.find({
       where: {
         userId: application.userId,
         status: application.status,
       },
     });
+    if (!data) {
+      return;
+    }
     return data;
   }
 
   async getByUserIdPaginationApplication(
     application: GetByUserIdPaginationApplicationDto,
-  ): Promise<Application[]> {
+  ): Promise<Application[] | null> {
     const skip = (application.page - 1) * application.limit;
     const data = await this.applicationRepository.find({
       where: {
@@ -117,6 +137,9 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
         id: 'DESC',
       },
     });
+    if (!data) {
+      return;
+    }
     return data;
   }
 }

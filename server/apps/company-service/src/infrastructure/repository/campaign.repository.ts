@@ -53,8 +53,6 @@ export class TypeOrmCampaignRepository extends CampaignRepository {
   async updateCampaign(campaign: UpdateCampaignDTO): Promise<Campaign> {
     await this.campaignRepository.update(campaign.id, {
       name: campaign.name,
-      createdAt: campaign.createdAt,
-      employerId: campaign.employerId,
     });
 
     return await this.findCampaignById(campaign.id);
@@ -67,7 +65,6 @@ export class TypeOrmCampaignRepository extends CampaignRepository {
         createdAt: 'DESC',
       },
     });
-
     return campaigns;
   }
 
@@ -95,5 +92,15 @@ export class TypeOrmCampaignRepository extends CampaignRepository {
     });
 
     return total;
+  }
+
+  async deleteCampaign(id: number): Promise<string> {
+    const result = await this.campaignRepository.delete(id);
+
+    if (result.affected === 0) {
+      return 'Delete Campaign Fail';
+    } else {
+      return 'Delete Campaign Success';
+    }
   }
 }
