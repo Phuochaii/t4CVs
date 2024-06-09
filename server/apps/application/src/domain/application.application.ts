@@ -22,7 +22,7 @@ import { Application } from './entity';
 import { RpcException } from '@nestjs/microservices';
 import { Applications } from '@app/common/proto/application';
 
-export class ApplicationApplication {
+export class ApplicationDomain {
   constructor(
     private readonly createApplicationService: CreateApplicationService,
     private readonly getApplicationService: GetApplicationService,
@@ -64,7 +64,8 @@ export class ApplicationApplication {
     });
 
     const total = (await total_data).length;
-    const data = await this.getByCampaignIdWithPaginationService.execute(request);
+    const data =
+      await this.getByCampaignIdWithPaginationService.execute(request);
 
     const total_pages = Math.ceil(total / request.limit);
     if (!total_data || !data) {

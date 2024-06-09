@@ -67,7 +67,6 @@ export class ApplicationService implements OnModuleInit {
     const application = await firstValueFrom(
       this.applicationServiceClient.createApplication(createApplicationRequest),
     );
-    console.log('application', application);
     const campaign = await firstValueFrom(
       this.companyService.findCampaignById(createApplicationRequest.campaignId),
     );

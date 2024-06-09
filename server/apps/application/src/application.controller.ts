@@ -11,37 +11,35 @@ import {
   ReadAllApplicationByCampaignIdRequest,
   ReadAllApplicationByUserIdRequest,
 } from '@app/common/proto/application';
-import { ApplicationApplication } from './domain/application.application';
+import { CommandService } from './cqrs/command.service';
+import { QueryService } from './cqrs/query.service';
 
 @Controller()
 @ApplicationServiceControllerMethods()
 export class ApplicationController implements ApplicationServiceController {
   constructor(
-    private readonly applicationApplication: ApplicationApplication,
+    private readonly commandService: CommandService,
+    private readonly queryService: QueryService,
   ) {}
 
   createApplication(request: CreateApplicationRequest) {
-    const res = this.applicationApplication.createApplication(request);
+    const res = this.commandService.createApplication(request);
     return res;
   }
 
   readApplication(request: ReadApplicationRequest) {
-    const res = this.applicationApplication.getApplication(request);
+    const res = this.queryService.getApplication(request);
     return res;
   }
 
   async readAllApplicationByCampaignId(
     request: ReadAllApplicationByCampaignIdRequest,
   ) {
-    return await this.applicationApplication.getByCampaignIdApplication(
-      request,
-    );
+    return await this.queryService.getByCampaignIdApplication(request);
   }
 
   async readAllApplicationByUserId(request: ReadAllApplicationByUserIdRequest) {
-    return await this.applicationApplication.getByUserIdPaginationApplication(
-      request,
-    );
+    return await this.queryService.getByUserIdPaginationApplication(request);
   }
 
   async readAllApplication(request: Pagination): Promise<Applications> {
@@ -50,7 +48,7 @@ export class ApplicationController implements ApplicationServiceController {
   }
 
   updateApplication(request: UpdateApplicationRequest) {
-    return this.applicationApplication.updateApplication(request);
+    return this.commandService.updateApplication(request);
   }
 
   deleteApplication(request: DeleteApplicationRequest) {

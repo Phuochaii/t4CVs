@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ApplicationApplication } from './domain/application.application';
+import { ApplicationDomain } from './domain/application.application';
 import {
   CreateApplicationService,
   GetApplicationService,
@@ -12,7 +12,10 @@ import {
 } from './domain/service';
 import { InfrastructureModule } from './infrastructure/infrastucture.module';
 import { ApplicationFactory } from './domain/factory/application.factory';
-import { ApplicationReadRepository, ApplicationWriteRepository } from './domain/repository';
+import {
+  ApplicationReadRepository,
+  ApplicationWriteRepository,
+} from './domain/repository';
 
 @Module({
   imports: [InfrastructureModule],
@@ -79,14 +82,12 @@ import { ApplicationReadRepository, ApplicationWriteRepository } from './domain/
     {
       provide: GetByUserIdPaginationApplicationService,
       useFactory: (repository: ApplicationReadRepository) => {
-        return new GetByUserIdPaginationApplicationService(
-          repository,
-        );
+        return new GetByUserIdPaginationApplicationService(repository);
       },
       inject: [ApplicationReadRepository],
     },
     {
-      provide: ApplicationApplication,
+      provide: ApplicationDomain,
       useFactory: (
         createApplicationService: CreateApplicationService,
         getApplicationService: GetApplicationService,
@@ -97,7 +98,7 @@ import { ApplicationReadRepository, ApplicationWriteRepository } from './domain/
         getByUserIdApplication: GetByUserIdApplicationService,
         getByUserIdPaginationApplication: GetByUserIdPaginationApplicationService,
       ) => {
-        return new ApplicationApplication(
+        return new ApplicationDomain(
           createApplicationService,
           getApplicationService,
           getAllApplicationService,
@@ -120,6 +121,6 @@ import { ApplicationReadRepository, ApplicationWriteRepository } from './domain/
       ],
     },
   ],
-  exports: [ApplicationApplication],
+  exports: [ApplicationDomain],
 })
 export class DomainApplicationModule {}
