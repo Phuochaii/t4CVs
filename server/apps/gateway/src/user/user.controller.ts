@@ -102,4 +102,11 @@ export class UserController {
       image,
     );
   }
+
+  @Post('account')
+  registerAccount(
+    @Body() user: CreateUserAccountDto,
+  ): Promise<Observable<string>> {
+    return this.userService.createAccount(user);
+  }
 }
