@@ -6,16 +6,16 @@ import {
   EventPublisherOrchestrator,
   IOrchestratableEventPublisher,
 } from '@app/common/multi-event-publisher';
+import { EventStoreService } from './event-store.service';
 
 class EventStorePublisher implements IOrchestratableEventPublisher {
   constructor(
-    @Inject('EVENT_STORE')
-    private readonly eventStore: EventStoreDBClient,
     @Inject('EVENT_STREAM')
     private readonly eventStream: string,
     @Inject('EVENTS')
     private readonly RegisteredEvents: (new (...args: any[]) => IEvent)[],
     eventPublisherOrchestrator: EventPublisherOrchestrator,
+    private readonly eventStoreService: EventStoreService
   ) {
     eventPublisherOrchestrator.register(this);
   }
@@ -28,12 +28,7 @@ class EventStorePublisher implements IOrchestratableEventPublisher {
   }
 
   async publish<TEvent>(event: TEvent): Promise<any> {
-    const parsedEvent = jsonEvent({
-      type: event.constructor.name,
-      data: event,
-    } as EventStoreEvent);
-
-    await this.eventStore.appendToStream(this.eventStream, [parsedEvent]);
+    this.eventStoreService.appendToStream(this.eventStream, [event]);
   }
 }
 
