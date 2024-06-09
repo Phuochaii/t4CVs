@@ -24,7 +24,7 @@ import { UpdateJobDTO } from './dto/Req/update-job.dto';
 export class JobController {
   constructor(private readonly jobService: JobService) {}
 
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
+  @UseGuards(AuthGuard('jwt'))
   @Get('')
   findJobByCampaignId(@Query('campaignId') campaignId: number) {
     return this.jobService.findJobByCampaignId(campaignId);
