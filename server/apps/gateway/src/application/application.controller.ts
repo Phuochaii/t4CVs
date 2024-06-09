@@ -60,7 +60,7 @@ export class ApplicationController {
 
   //user get applications
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
-  @Get('/user/')
+  @Get('/user')
   async findAllByUserId(
     @GetUser() user: UserClaims,
     @Query('page') page: number = 1,

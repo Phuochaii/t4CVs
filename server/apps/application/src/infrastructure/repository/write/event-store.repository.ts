@@ -3,8 +3,12 @@ import { AppState } from './snapshot.event';
 import { EventStoreDBClient } from '@eventstore/db-client';
 import { SnapshotService } from './snapshot.service';
 import { EventStorePublishedEvent } from '../../event-dispatcher.ts/event-store';
-import { ApplicationCreatedEvent } from 'apps/application/src/domain/event';
+import {
+  ApplicationCreatedEvent,
+  ApplicationUpdatedEvent,
+} from 'apps/application/src/domain/event';
 import { plainToInstance } from 'class-transformer';
+import { Application } from 'apps/application/src/domain/entity';
 
 @Injectable()
 export class EventStoreRepository {
@@ -18,8 +22,10 @@ export class EventStoreRepository {
 
   async getCurrentState(): Promise<AppState> {
     const snapshot = await this.snapshotService.getLatestSnapshot();
-    const state: AppState = snapshot?.data.state ?? { applications: [] };
-
+    const applications = snapshot?.data.state.applications ?? [];
+    const state: AppState = {
+      applications: plainToInstance(Application, applications),
+    };
     await this.eventStore
       .readStream(this.eventStream, {
         direction: 'forwards',
@@ -43,8 +49,20 @@ export class EventStoreRepository {
           ApplicationCreatedEvent,
           event.data,
         );
-        state.applications.push(applicationCreatedEvent.data);
+        state.applications.push(
+          plainToInstance(Application, applicationCreatedEvent.data),
+        );
         break;
+      case ApplicationUpdatedEvent.name:
+        const applicationUpdatedEvent = plainToInstance(
+          ApplicationUpdatedEvent,
+          event.data,
+        );
+        const application = state.applications.find(
+          (application) => application.id === applicationUpdatedEvent.data.id,
+        );
+        if (!application) return;
+        application.applyEvent(applicationUpdatedEvent);
       default:
         break;
     }

@@ -1,3 +1,6 @@
-import { ApplicationCreatedEvent } from "apps/application/src/domain/event";
+import {
+  ApplicationCreatedEvent,
+  ApplicationUpdatedEvent,
+} from 'apps/application/src/domain/event';
 
-export const Events = [ApplicationCreatedEvent]
+export const Events = [ApplicationCreatedEvent, ApplicationUpdatedEvent];

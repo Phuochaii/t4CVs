@@ -3,6 +3,7 @@ import { IEventDispatcher } from '@app/common/domain';
 import { Application } from '../../../domain/entity';
 import { Injectable } from '@nestjs/common';
 import { EventStoreRepository } from './event-store.repository';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class TypeOrmApplicationWriteRepository extends ApplicationWriteRepository {
@@ -26,4 +27,14 @@ export class TypeOrmApplicationWriteRepository extends ApplicationWriteRepositor
       currentState.applications[currentState.applications.length - 1];
     return latestApplication.id + 1;
   }
+
+  async getById(id: number): Promise<Application | null> {
+    const currentState = await this.eventStoreRepository.getCurrentState();
+    const application = currentState.applications.find(
+      (application) => application.id === id,
+    );
+    if(!application) return null;
+    return plainToInstance(Application, application);
+  }
+  
 }

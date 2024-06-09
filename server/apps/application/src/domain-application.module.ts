@@ -50,10 +50,10 @@ import { ApplicationReadRepository, ApplicationWriteRepository } from './domain/
     },
     {
       provide: UpdateApplicationService,
-      useFactory: (repository: ApplicationReadRepository) => {
+      useFactory: (repository: ApplicationWriteRepository) => {
         return new UpdateApplicationService(repository);
       },
-      inject: [ApplicationReadRepository],
+      inject: [ApplicationWriteRepository],
     },
     {
       provide: GetByCampaignIdWithPaginationService,
