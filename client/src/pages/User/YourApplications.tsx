@@ -23,7 +23,6 @@ function YourApplications() {
     const { user, getAccessTokenSilently, isAuthenticated, isLoading } =
       useAuth0();
   const {token} = useProfileContext();
-  console.log(user);
 
   const navigation = useNavigate();
   const [isOn, setIsOn] = useState(false);
@@ -33,9 +32,10 @@ function YourApplications() {
   >([]);
   const [jobs, setJobs] = useState<RecruitmentFromServer[] | undefined>([]);
   const fetchApplications = async () => {
-    if(!token) {
+    if (!token) {
       console.log('Token is undefined');
-      return;}
+      return;
+    }
     try {
       getApplications(token).then((result) => {
         const { applications, jobs } = result;
@@ -44,11 +44,11 @@ function YourApplications() {
         setJobs(jobs);
       });
     } catch (error) {
-      console.error("An error occurred:", error);
+      console.error('An error occurred:', error);
     }
   };
   useEffect(() => {
-      fetchApplications(); // Call the fetchApplications function when the component mounts
+    fetchApplications(); // Call the fetchApplications function when the component mounts
   }, [user?.sub]);
 
   const toggleSwitch = () => {
@@ -132,35 +132,28 @@ function YourApplications() {
                     >
                       <img
                         className="job-logo-company justify-center w-[84px] h-[84px] flex items-center border rounded-lg"
-                        src={
-                          item.jobs.company.image
-                        }
+                        src={item.jobs.company.image}
                       />
                       <div className="job-detail w-full h-full">
                         <div className="flex flex-col">
                           <div className="flex flex-row justify-between">
                             <span className="job-title text-black font-semibold col-span-3 text-lg">
-                              {
-                                item.jobs.titleRecruitment
-                              }
+                              {item.jobs.titleRecruitment}
                             </span>
                             <div className="job-salary col-start-4 flex items-center">
                               <CurrencyDollarIcon className="w-5 mr-2" />
                               <strong className="salary-count">
-                                {
-                                  item.jobs.salaryMin
-                                }{' '}
-                                -{' '}
-                                {
-                                   item.jobs.salaryMax
-                                }
+                                {item.jobs.salaryMin} - {item.jobs.salaryMax}
                               </strong>
                             </div>
                           </div>
-                          <div onClick={() => navigation(`/companies/${item.jobs.company.id}`)} className="job-company-name text-slate-500 col-span-3 mb-1">
-                            {
-                              item.jobs.company.name
+                          <div
+                            onClick={() =>
+                              navigation(`/companies/${item.jobs.company.id}`)
                             }
+                            className="job-company-name text-slate-500 col-span-3 mb-1"
+                          >
+                            {item.jobs.company.name}
                           </div>
                         </div>
                         <div className="flex flex-col space-y-1">
@@ -171,8 +164,14 @@ function YourApplications() {
                         <div className="flex justify-between items-center">
                           <p className="font-light">
                             CV đã ứng tuyển:{' '}
-                            <span  className="font-normal text-green-500 underline">
-                              <a href={item.cv.link} target="_blank" rel="noopener noreferrer">CV tải lên</a>
+                            <span className="font-normal text-green-500 underline">
+                              <a
+                                href={item.cv.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                CV tải lên
+                              </a>
                             </span>
                           </p>
                           <div className="job-actions row-start-4 flex items-center justify-end space-x-2">
@@ -188,7 +187,16 @@ function YourApplications() {
                               </svg>
                               Nhắn tin
                             </button>
-                            <button onClick={()=>{window.open(item.cv.link, '_blank', 'noopener,noreferrer');}} className="bg-[#c0eed4ba] text-sm font-bold hover:bg-green-300 text-[#00b14f] py-0.5 px-2 rounded-full inline-flex items-center me-2">
+                            <button
+                              onClick={() => {
+                                window.open(
+                                  item.cv.link,
+                                  '_blank',
+                                  'noopener,noreferrer',
+                                );
+                              }}
+                              className="bg-[#c0eed4ba] text-sm font-bold hover:bg-green-300 text-[#00b14f] py-0.5 px-2 rounded-full inline-flex items-center me-2"
+                            >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"

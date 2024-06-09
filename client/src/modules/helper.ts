@@ -9,11 +9,19 @@ import { UserCV } from '../shared/types/CV_user.type';
 
 const serverURL = 'http://localhost:3000';
 
-
 export async function getCampaignById(id: number) {
   const response = await axios.get(`${serverURL}/company/campaign/${id}`);
   const rawCampaign: CampaignFromServer = response.data;
   return rawCampaign;
+}
+
+export async function getAllCompany() {
+  try {
+    const response = await axios.get(`${serverURL}/company/all`);
+    return response;
+  } catch {
+    throw new Error('Cannot fetch companies data');
+  }
 }
 export async function getAllCompanies(page: number = 1) {
   const response = await axios.get(`${serverURL}/company/all?page=${page}`);

@@ -1,6 +1,6 @@
 // khoa
 import { useAuth0 } from '@auth0/auth0-react';
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from 'react';
 import { TextField, InputLabel, Modal, Box } from '@mui/material';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -8,11 +8,7 @@ import moment from 'moment';
 import SearchBoxComponent from '../../layouts/UserLayout/components/SearchBoxComponent';
 import RelatedJobComponent from '../../layouts/UserLayout/components/RelatedJobComponent';
 import InterestedJobComponent from '../../layouts/UserLayout/components/InterestedJobComponent';
-import {
-  getAllExp,
-  getAllLocation,
-  getJobById,
-} from '../../modules/helper';
+import { getAllExp, getAllLocation, getJobById } from '../../modules/helper';
 import { AUTH0_BACKEND_AUDIENCE } from '../../shared/services/authen/infrastructure/config';
 import { uploadApplication, uploadCV } from '../../modules/user-module';
 import { useProfileContext } from '../../shared/services/authen/domain/context';
@@ -37,11 +33,11 @@ interface filterSearch {
   expId: number;
 }
 
-// Modal Apply CV 
+// Modal Apply CV
 function ApplyModal({ open, handleClose, handleOpen, jobData, user }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<any>();
-  const {token} = useProfileContext();
+  const { token } = useProfileContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,7 +68,7 @@ function ApplyModal({ open, handleClose, handleOpen, jobData, user }) {
       if (Object.keys(errors).length === 0) {
         // Upload CV
         const postData = new FormData();
-        postData.append("file", formData.file);
+        postData.append('file', formData.file);
         // postData.append("userId", user?.sub);
 
         const newUploadCV = await uploadCV({
@@ -106,7 +102,7 @@ function ApplyModal({ open, handleClose, handleOpen, jobData, user }) {
         });
         // handleClose();
 
-        alert("Create Application successfully");
+        alert('Create Application successfully');
         handleClose();
       } else {
         setErrors(errors);
@@ -458,9 +454,9 @@ function ApplyModal({ open, handleClose, handleOpen, jobData, user }) {
                       công ty, vị trí việc làm trước khi ứng tuyển.
                       <br />
                       Ứng viên cần có trách nhiệm với hành vi ứng tuyển của
-                      mình. Nếu bạn gặp phải tin tuyển dụng hoặc nhận được
-                      liên lạc đáng ngờ của nhà tuyển dụng, hãy báo cáo ngay
-                      cho TopCV qua email
+                      mình. Nếu bạn gặp phải tin tuyển dụng hoặc nhận được liên
+                      lạc đáng ngờ của nhà tuyển dụng, hãy báo cáo ngay cho
+                      TopCV qua email
                       <a
                         className="text-green-500"
                         target="_top"
@@ -570,7 +566,7 @@ function ApplyCV() {
       await setJobData(data);
     }
   };
-  useEffect(()=> {
+  useEffect(() => {
     setJobId(id);
     window.scrollTo(0, 0);
     fetchJobData();

@@ -1,9 +1,11 @@
 import clsx from 'clsx';
 import { ArrowUpCircle, Camera, Check, Info } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Switch from '../../shared/components/CustomSwitch';
 import * as UserModule from '../../modules/user-module';
 import { errorToast, successToast } from '../../utils/toast';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const fields: {
   label: string;
@@ -36,6 +38,28 @@ const fields: {
 ];
 
 function UserInformation() {
+  const [imageFile, setImageFile] = useState();
+  const [image, setImage] = useState();
+  const imageUploadRef = useRef(null);
+  const handleImageUpload = useCallback(() => {
+    imageUploadRef?.current?.click();
+  }, []);
+  const imagePreview = (e) => {
+    const selectedImage = e.target.files[0];
+    setImageFile(selectedImage);
+    console.log(selectedImage);
+    if (selectedImage) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        setImage(event.target.result);
+      };
+      reader.readAsDataURL(selectedImage);
+    }
+  };
+  const { token } = useProfileContext();
+  const { user, logout } = useAuth0();
+  const userId = user?.sub;
   const [userInfo, setUserInfo] = useState({
     fullname: 'Hải Yến Viên',
     phone: '0123 456 789',
@@ -55,13 +79,16 @@ function UserInformation() {
   };
 
   const fetchUserInfo = async () => {
-    UserModule.getUserById({ userId: '1' })
+    UserModule.getUserById({ userId: user?.sub || userId, token: token })
       .then((res) => {
         const response = res.data;
         console.log(response);
         const currentInfo = {
           fullname: response.fullname,
           phone: response.phone,
+          avatar:
+            response.image ||
+            'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg',
           email: '*****@gmail.com',
         };
         setUserInfo(currentInfo);
@@ -74,6 +101,9 @@ function UserInformation() {
   }, []);
 
   const handleUpdateInfo = () => {
+    if (!imageFile && !userInfo.avatar) {
+      return errorToast('Vui lòng chọn ảnh đại diện');
+    }
     if (userInfo.fullname === '') {
       return errorToast('Tên vừa nhập không hợp lệ');
     }
@@ -87,11 +117,14 @@ function UserInformation() {
       return errorToast('Số điện thoại phải từ 10 tới 11 số ');
     }
     const formData = new FormData();
-    formData.append('id', '1');
+    formData.append('id', user?.sub || userId);
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
     formData.append('fullname', userInfo.fullname);
     formData.append('phone', userInfo.phone);
     console.log(formData);
-    UserModule.updateUserById(formData)
+    UserModule.updateUserById(formData, token)
       .then((res) => {
         successToast('Cập nhật thành công!');
         setTimeout(() => {
@@ -148,14 +181,28 @@ function UserInformation() {
             <span className="absolute right-0 py-[2px] px-[4px] text-[8px] text-white uppercase bg-slate-500">
               Verified
             </span>
-            <img
-              src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80"
-              alt="User Image"
-              className="object-cover w-20 h-20 rounded-full"
-            />
-            <div className="absolute p-1 right-0 flex items-center justify-center bg-green-500 rounded-full bottom-[25%]">
-              <Camera size={16} stroke="white" />
+            <div className="cursor-pointer" onClick={handleImageUpload}>
+              <img
+                src={
+                  image ||
+                  userInfo.avatar ||
+                  'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'
+                }
+                alt="User Image"
+                className="object-cover w-20 h-20 rounded-full"
+              />
+              <div className="absolute p-1 right-0 flex items-center justify-center bg-green-500 rounded-full bottom-[25%]">
+                <Camera size={16} stroke="white" />
+              </div>
             </div>
+            <input
+              type="file"
+              name="file"
+              ref={imageUploadRef}
+              onChange={imagePreview}
+              style={{ display: 'none' }}
+              accept="image/png, image/gif, image/jpeg"
+            />
           </div>
           <div className="flex flex-col items-start gap-2">
             <div className="flex flex-col items-start gap-1">
