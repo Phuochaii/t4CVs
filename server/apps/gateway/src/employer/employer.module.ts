@@ -12,7 +12,7 @@ import { UploadModule } from '../upload/upload.module';
         name: 'EMPLOYER',
         transport: Transport.TCP,
         options: {
-          host: 'localhost',
+          host: 'employer',
           port: 3005,
         },
       },

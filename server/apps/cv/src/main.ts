@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.createMicroservice(CvModule, {
     transport: Transport.TCP,
     options: {
-      host: 'localhost',
+      host: 'cv',
       port: 3006,
     },
   });

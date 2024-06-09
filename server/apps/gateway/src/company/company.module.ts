@@ -13,7 +13,7 @@ import { AuthenticationModule } from '../authentication/authentication.module';
         name: 'COMPANY',
         transport: Transport.TCP,
         options: {
-          host: 'localhost',
+          host: 'company',
           port: 3003,
         },
       },

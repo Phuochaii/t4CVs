@@ -11,7 +11,7 @@ import { UploadModule } from '../upload/upload.module';
         name: 'CV',
         transport: Transport.TCP,
         options: {
-          host: 'localhost',
+          host: 'cv',
           port: 3006,
         },
       },

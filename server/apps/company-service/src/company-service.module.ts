@@ -7,9 +7,10 @@ import { FieldApplicationModule } from './field.application.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: './configs/.env',
-    }),
+    // ConfigModule.forRoot({
+    //   envFilePath: './configs/.env',
+    // }),
+    ConfigModule.forRoot(),
     CompanyApplicationModule,
     CampaignApplicationModule,
     FieldApplicationModule,

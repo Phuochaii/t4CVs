@@ -7,9 +7,7 @@ import { QueryService } from './cqrs/query.service';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: './configs/.env',
-    }),
+    ConfigModule.forRoot(),
     DomainApplicationModule,
   ],
   providers: [CommandService, QueryService],
