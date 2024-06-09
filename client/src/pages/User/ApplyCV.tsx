@@ -188,7 +188,7 @@ function ApplyModal({ open, handleClose, handleOpen, jobData, user }) {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box className="modal-apply-cv" sx={modalApplyStyle}>
+      <Box className="modal-apply-cv min-w-[600px]" sx={modalApplyStyle}>
         <form onSubmit={handleSubmit}>
           <div className="modal-header py-5 px-8 flex flex-row items-center justify-between border-b-4 border-slate-100">
             <div className="form-header_title text-2xl font-bold">

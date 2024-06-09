@@ -27,6 +27,7 @@ function YourApplications() {
 
   const navigation = useNavigate();
   const [isOn, setIsOn] = useState(false);
+  const [isOn2, setIsOn2] = useState(false);
   const [applications, setApplication] = useState<
     ApplicationFromServer[] | undefined
   >([]);
@@ -52,6 +53,9 @@ function YourApplications() {
 
   const toggleSwitch = () => {
     setIsOn(!isOn);
+  };
+  const toggleSwitch2 = () => {
+    setIsOn2(!isOn2);
   };
   return (
     <div className="bg-gray-100">
@@ -272,20 +276,20 @@ function YourApplications() {
                 </p>
                 <div className="flex items-center">
                   <Switch
-                    checked={isOn}
-                    onChange={toggleSwitch}
+                    checked={isOn2}
+                    onChange={toggleSwitch2}
                     inputProps={{ 'aria-label': 'controlled' }}
                     sx={{
                       '& .MuiSwitch-thumb': {
-                        bgcolor: isOn ? 'green' : 'gray',
+                        bgcolor: isOn2 ? 'green' : 'gray',
                       },
                       '& .MuiSwitch-track': {
-                        bgcolor: isOn ? 'green' : 'gray',
+                        bgcolor: isOn2 ? 'green' : 'gray',
                       },
                     }}
                   />
                   <span
-                    className={`ml-2 ${isOn ? 'text-green-500' : 'text-gray-400'} font-bold`}
+                    className={`ml-2 ${isOn2 ? 'text-green-500' : 'text-gray-400'} font-bold`}
                   >
                     {isOn
                       ? 'Đang cho phép NTD tìm kiếm hồ sơ'

@@ -416,7 +416,7 @@ function Home() {
         </div>
         {/* Việc làm tốt nhất */}
         <div className="flex flex-col ml-20 mt-5 items-center ">
-          <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg">
+          <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg w-full">
             <div className="flex flex-row items-center">
               <h1 className="title">Việc làm tốt nhất</h1>
               <p className="font-thin text-[30px] mx-5"> | </p>
@@ -451,15 +451,15 @@ function Home() {
               </button>
             </div>
           </div>
-          <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg mt-3">
-            <div className="w-3/12">
+          <div className="flex flex-row items-center ml-6 justify-between  max-w-screen-lg w-full gap-x-3 mt-3">
+            <div className="w-60">
               <SingleDropdown
                 placeholder="Chọn bộ lọc"
                 options={options}
                 onChange={(
                   e: SetStateAction<
                     SingleValue<{ value: string; label: string }>
-                  >,
+                  >
                 ) => setOptions(e)}
               />
             </div>
@@ -473,7 +473,7 @@ function Home() {
               {data.map((e) => {
                 return (
                   <button
-                    className={`px-4 py-2 rounded-full ${selectedKey === e.label ? 'bg-green-500 text-white' : 'bg-gray-200 text-black'} border hover:border-green-500`}
+                    className={`px-4 py-2 rounded-full ${selectedKey === e.label ? "bg-green-500 text-white" : "bg-gray-200 text-black"} border hover:border-green-500`}
                     onClick={() => setSelectedKey(e.value)}
                   >
                     {e.label}
@@ -487,19 +487,6 @@ function Home() {
                 <ChevronRightIcon className="mx-2 w-5 h-5" />
               </button>
             </div>
-          </div>
-          <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg mt-6 bg-blue-100 rounded-lg p-2">
-            <div className="flex flex-row items-center">
-              <p className="font-bold">
-                Gợi ý:{' '}
-                <span className="font-normal">
-                  Di chuột vào tiêu đề việc làm để xem thêm thông tin chi tiết
-                </span>
-              </p>
-            </div>
-            <button onClick={() => {}}>
-              <XMarkIcon className="bg-blue-100 w-5 h-5"></XMarkIcon>
-            </button>
           </div>
           <div className="ml-6 mt-4 max-w-screen-lg grid grid-cols-1 md:grid-cols-3 gap-4">
             {companies.length > 0 ? (
@@ -653,7 +640,7 @@ function Home() {
                               src={
                                 item.company?.image
                                   ? item.company?.image
-                                  : 'no '
+                                  : "no "
                               }
                             />
                           </div>
@@ -672,20 +659,20 @@ function Home() {
                             <span className="job-company-name text-slate-600 text-sm col-span-3 mb-2">
                               {item.company?.name
                                 ? item.company?.name
-                                : 'no name'}
+                                : "no name"}
                             </span>
                             <div className="job-action row-start-4 flex flex-row items-end justify-between">
                               <div className="job-detail flex flex-col gap-1">
                                 <div className="job-salary_range p-1 rounded bg-slate-200 text-slate-900 text-xs font-medium">
                                   {item.salaryMin == 0 && item.salaryMax == 0
-                                    ? 'Thoả thuận'
-                                    : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{' '}
+                                    ? "Thoả thuận"
+                                    : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{" "}
                                 </div>
                                 <div className="job-location p-1 rounded bg-slate-200 text-slate-900 text-xs font-medium">
                                   {item.locations[0].name}
                                   {item.locations.length > 1
                                     ? ` & ${item.locations.length - 1} nơi khác`
-                                    : ''}
+                                    : ""}
                                 </div>
                               </div>
                               <span className="btn-save p-2">
