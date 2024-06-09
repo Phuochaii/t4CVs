@@ -34,7 +34,7 @@ const ResumeControlBar = ({
         <input
           type="range"
           min={0.5}
-          max={1.5}
+          max={0.8}
           step={0.01}
           value={scale}
           onChange={(e) => {

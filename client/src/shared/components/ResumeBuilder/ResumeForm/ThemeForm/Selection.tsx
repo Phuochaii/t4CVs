@@ -128,7 +128,7 @@ export const DocumentSizeSelections = ({
           >
             <div className="flex flex-col items-center">
               <div>{type}</div>
-              <div className="text-xs">
+              <div className="text-xs text-center">
                 {type === "Letter" ? "(US, Canada)" : "(India,Other Countries)"}
               </div>
             </div>

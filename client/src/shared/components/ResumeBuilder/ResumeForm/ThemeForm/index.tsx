@@ -28,6 +28,7 @@ export const ThemeForm = () => {
 
   const handleSettingsChange = (field: GeneralSetting, value: string) => {
     dispatch(changeSettings({ field, value }));
+    console.log(value);
   };
 
   return (

@@ -86,7 +86,6 @@ export const ResumePDF = ({
     ),
   };
 
-
   return (
     <>
       <Document title={`${name} Resume`} author={name} producer={"Inhouse"}>
@@ -129,5 +128,3 @@ export const ResumePDF = ({
     </>
   );
 };
-
-

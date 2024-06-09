@@ -8,7 +8,7 @@ import {
 
 import { Resume } from "../../shared/components/ResumeBuilder/Resume";
 import { ResumeForm } from "../../shared/components/ResumeBuilder/ResumeForm";
-import {  useAppSelector } from "../../utils/redux/hooks";
+import { useAppSelector } from "../../utils/redux/hooks";
 import { selectSettings } from "../../utils/redux/settingsSlice";
 
 import {
@@ -18,7 +18,6 @@ import {
 
 function CreateCV() {
   const settings = useAppSelector(selectSettings);
-
 
   useRegisterReactPDFFont();
   useRegisterReactPDFHypenationCallback(settings.fontFamily);
@@ -58,7 +57,7 @@ function CreateCV() {
             </div>
           </div>
         </div>
-        <div className="m-4 mr-36">
+        <div className="fixed top-20 right-20">
           <Resume />
         </div>
       </div>

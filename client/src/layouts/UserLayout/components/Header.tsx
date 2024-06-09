@@ -211,7 +211,10 @@ function Header() {
                 {isCVsHovered ? (
                   <ul className="absolute left-0 z-50 flex flex-col gap-3 p-3 text-base font-semibold bg-white border rounded-lg shadow-lg sub-menu top-full border-slate-100">
                     {/* <li><hr /></li> */}
-                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li
+                      className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
+                      onClick={() => navigation("/template-cv")}
+                    >
                       <svg
                         className="w-7 h-7"
                         viewBox="0 0 24 24"
