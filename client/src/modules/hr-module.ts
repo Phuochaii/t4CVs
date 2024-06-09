@@ -42,7 +42,7 @@ const isHr: (token: string) => Promise<boolean> = async (token) => {
     })
   return result;
 }
-const getProfile:(token:string) => Promise<{
+const getProfile: (token: string) => Promise<{
   id: string;
   fullname: string;
   gender: string;
@@ -60,7 +60,7 @@ const getProfile:(token:string) => Promise<{
       authorization: `Bearer ${token}`
     },
   });
-  if(!response.data) throw new Error('Getting hr profile but not having hr profile data');
+  if (!response.data) throw new Error('Getting hr profile but not having hr profile data');
   return response.data;
 }
 // --------------------không đụng phần trên
@@ -91,6 +91,7 @@ const getApplicationByCampaignIdHRId = async ({
       },
     },
   );
+  console.log(response.data)
   return response.data;
 };
 
@@ -209,7 +210,7 @@ const createCompaign = async ({
 }) => {
   const response = await axios
     .post(`${serverURL}/company/campaign/create`,
-      {name,},
+      { name, },
       {
         headers: {
           authorization: `Bearer ${token}`,
@@ -298,11 +299,16 @@ export async function getAllCampaigns(page: number = 1) {
 }
 
 export async function getApplicationsByCampaignId(
-  hrId: number,
+  token: string,
   campaignId: number,
 ) {
   const response = await axios.get(
-    `${serverURL}/application/hr/${hrId}?page=1&limit=100&campaignId=${campaignId}`,
+    `${serverURL}/application/hr?page=1&limit=100&campaignId=${campaignId}`,
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    }
   );
   const rawApplications: ApplicationFromServer[] = response.data.applications;
   const total = response.data.total;
@@ -322,7 +328,39 @@ export async function getUserById(userId: number, token: string) {
     return null;
   }
 }
+export async function getField(token: string) {
+  try {
+    const response = await axios.get(`${serverURL}/job/create-info`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    const field = response.data;
+    return field;
+  } catch (e) {
+    return null;
+  }
+}
+export async function postJob(token: string, body: FormData) {
+  try {
+    body.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+    const response = await axios.post(`${serverURL}/job/create`, body, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
 
+    });
+    if (!response) {
+      throw new Error('Failed to post data to API');
+    }
+    console.log(response);
+    return response
+  } catch (e) {
+    return null;
+  }
+}
 export async function getCVById(cvId: number, token: string) {
   try {
     const response = await axios.get(`${serverURL}/cv/${cvId}`, {
@@ -345,7 +383,14 @@ export async function getCampaignByHRId(id: number, page: number = 1) {
   const totalPages = response.data.total_page;
   return { allCampaigns: rawCampaigns, totalPages: totalPages };
 }
-
+export async function getCampaign(id: number, page: number = 1) {
+  const response = await axios.get(
+    `${serverURL}/company/campaign/employer/${id}?page=${page}`,
+  );
+  const rawCampaigns: CampaignFromServer[] = response.data.data;
+  const totalPages = response.data.total_page;
+  return { allCampaigns: rawCampaigns, totalPages: totalPages };
+}
 export async function getEmployerById(id: number | string) {
   const response = await axios.get(`${serverURL}/employer/${id}`);
   const rawEmployer: EmployerFromServer = response.data;

@@ -21,6 +21,8 @@ import { useForm } from 'react-hook-form';
 import Select, { MultiValue, SingleValue } from 'react-select';
 import SingleDropdown from '../../../../shared/components/SingleDropDown';
 import MultiDropdown from '../../../../shared/components/MultiDropDown';
+import { useProfileContext } from '../../../../shared/services/authen/domain/context';
+import { getField, postJob } from '../../../../modules/hr-module';
 function PostCompaign1({
   next,
   previous,
@@ -110,60 +112,34 @@ function PostCompaign1({
       const updatedItem = { ...item };
 
       // Modify each property
-      updatedItem.titleRecruitment = data.title;
-      updatedItem.majorId = Number.parseInt(
-        careerOptions?.value !== undefined ? careerOptions?.value : '0',
-      );
-      updatedItem.fieldsId = fieldOptions
-        ? fieldOptions.map((option) => parseInt(option.value))
-        : [];
-      updatedItem.typeId = Number.parseInt(
-        jobTypeOptions?.value !== undefined ? jobTypeOptions?.value : '0',
-      );
-      updatedItem.currencyId = Number.parseInt(
-        currencyOptions?.value !== undefined ? currencyOptions?.value : '0',
-      );
-      updatedItem.levelId = Number.parseInt(
-        levelOptions?.value !== undefined ? levelOptions.value : '0',
-      );
-      updatedItem.campaignId = Number.parseInt(compaignId as string) as number;
-      updatedItem.companyId = 1;
-      updatedItem.salaryMin = salary !== '' ? Number.parseInt(salary) : 0;
-      updatedItem.salaryMax = salaryMax !== '' ? Number.parseInt(salaryMax) : 0;
-      updatedItem.expId = Number.parseInt(
-        expOptions?.value !== undefined ? expOptions?.value : '0',
-      );
-      updatedItem.locationsId = cityOption
-        ? cityOption.map((option) => parseInt(option.value))
-        : [];
-      updatedItem.expiredDate = date;
-      updatedItem.quantity = Number.parseInt(data.quantity);
-      updatedItem.jobSchedule = data.schedule;
-      updatedItem.gender =
-        genderOptions?.value !== undefined ? genderOptions?.value : '0';
-      updatedItem.description = data.description;
-      updatedItem.benefit = data.benefit;
-      updatedItem.requirement = data.requirement;
-      updatedItem.skills = data.skill;
+      const formData = new FormData();
+
+      formData.append('titleRecruitment', data.title);
+      formData.append('majorId', Number.parseInt(careerOptions?.value !== undefined ? careerOptions?.value : '0').toString());
+      formData.append('fieldsId', fieldOptions ? fieldOptions.map(option => parseInt(option.value)).join(',') : '');
+      formData.append('typeId', Number.parseInt(jobTypeOptions?.value !== undefined ? jobTypeOptions?.value : '0').toString());
+      formData.append('currencyId', Number.parseInt(currencyOptions?.value !== undefined ? currencyOptions?.value : '0').toString());
+      formData.append('levelId', Number.parseInt(levelOptions?.value !== undefined ? levelOptions.value : '0').toString());
+      formData.append('campaignId', Number.parseInt(compaignId as string).toString());
+      formData.append('companyId', '1');
+      formData.append('salaryMin', salary !== '' ? Number.parseInt(salary).toString() : '0');
+      formData.append('salaryMax', salaryMax !== '' ? Number.parseInt(salaryMax).toString() : '0');
+      formData.append('expId', Number.parseInt(expOptions?.value !== undefined ? expOptions?.value : '0').toString());
+      formData.append('locationsId', cityOption ? cityOption.map(option => parseInt(option.value)).join(',') : '');
+      formData.append('expiredDate', date);
+      formData.append('quantity', Number.parseInt(data.quantity).toString());
+      formData.append('jobSchedule', data.schedule);
+      formData.append('gender', genderOptions?.value !== undefined ? genderOptions?.value : '0');
+      formData.append('description', data.description);
+      formData.append('benefit', data.benefit);
+      formData.append('requirement', data.requirement);
+      formData.append('skills', data.skill);
       //debug line
-      console.log(updatedItem);
-      try {
-        const response = await fetch('http://localhost:3000/job/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(updatedItem),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to post data to API');
-        }
-
-        console.log('Data posted successfully');
-      } catch (error) {
-        console.error('Error posting data:', error);
-      }
+      formData.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
+      });
+      await postJob(token.token!, formData)
+     
       next(event);
     } else {
       //Do nothing
@@ -187,26 +163,16 @@ function PostCompaign1({
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [fields, setFields] = useState<any>(null);
-
+  const token = useProfileContext();
   useEffect(() => {
     // Fetch data from your API
     const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/job/create-info', {
-          method: 'GET',
-          headers: {
-            'Access-control-allow-origin': 'http://localhost:3000',
-            'Content-type': 'application/json',
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-        setFields(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+      const response = await getField(token.token ? token.token : '');
+      console.log(token.token)
+      const data = response;
+      console.log(response)
+      setFields(data);
+
     };
 
     fetchData();
@@ -627,10 +593,10 @@ function PostCompaign1({
             salaryError ||
             errors.schedule ||
             errors.address) && (
-            <div className="ml-14 text-red-700">
-              Vui lòng điền đầy đủ thông tin
-            </div>
-          )}
+              <div className="ml-14 text-red-700">
+                Vui lòng điền đầy đủ thông tin
+              </div>
+            )}
         </div>
         <div className="bg-white p-4 rounded-sm mb-5">
           <div className="flex flex-row space-x-5 mb-4">
