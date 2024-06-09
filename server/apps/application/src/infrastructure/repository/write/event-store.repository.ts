@@ -20,7 +20,6 @@ export class EventStoreRepository {
     const snapshot = await this.snapshotService.getLatestSnapshot();
     const state: AppState = snapshot?.data.state ?? { applications: [] };
 
-    console.log('snapshot:', snapshot);
     await this.eventStore
       .readStream(this.eventStream, {
         direction: 'forwards',

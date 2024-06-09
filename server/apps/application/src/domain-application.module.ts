@@ -11,79 +11,79 @@ import {
   GetByUserIdPaginationApplicationService,
 } from './domain/service';
 import { InfrastructureModule } from './infrastructure/infrastucture.module';
-import { ApplicationRepository } from './domain/repository';
 import { ApplicationFactory } from './domain/factory/application.factory';
+import { ApplicationReadRepository, ApplicationWriteRepository } from './domain/repository';
 
 @Module({
   imports: [InfrastructureModule],
   providers: [
     {
       provide: ApplicationFactory,
-      useFactory: (repository: ApplicationRepository) => {
+      useFactory: (repository: ApplicationWriteRepository) => {
         return new ApplicationFactory(repository);
       },
-      inject: [ApplicationRepository],
+      inject: [ApplicationWriteRepository],
     },
     {
       provide: CreateApplicationService,
       useFactory: (
-        repository: ApplicationRepository,
+        repository: ApplicationWriteRepository,
         factory: ApplicationFactory,
       ) => {
         return new CreateApplicationService(repository, factory);
       },
-      inject: [ApplicationRepository, ApplicationFactory],
+      inject: [ApplicationWriteRepository, ApplicationFactory],
     },
     {
       provide: GetApplicationService,
-      useFactory: (applicationRepository: ApplicationRepository) => {
-        return new GetApplicationService(applicationRepository);
+      useFactory: (repository: ApplicationReadRepository) => {
+        return new GetApplicationService(repository);
       },
-      inject: [ApplicationRepository],
+      inject: [ApplicationReadRepository],
     },
     {
       provide: GetAllApplicationService,
-      useFactory: (applicationRepository: ApplicationRepository) => {
-        return new GetAllApplicationService(applicationRepository);
+      useFactory: (repository: ApplicationReadRepository) => {
+        return new GetAllApplicationService(repository);
       },
-      inject: [ApplicationRepository],
+      inject: [ApplicationReadRepository],
     },
     {
       provide: UpdateApplicationService,
-      useFactory: (applicationRepository: ApplicationRepository) => {
-        return new UpdateApplicationService(applicationRepository);
+      useFactory: (repository: ApplicationReadRepository) => {
+        return new UpdateApplicationService(repository);
       },
-      inject: [ApplicationRepository],
+      inject: [ApplicationReadRepository],
     },
     {
       provide: GetByCampaignIdWithPaginationService,
-      useFactory: (applicationRepository: ApplicationRepository) => {
-        return new GetByCampaignIdWithPaginationService(applicationRepository);
+      useFactory: (repository: ApplicationReadRepository) => {
+        return new GetByCampaignIdWithPaginationService(repository);
       },
-      inject: [ApplicationRepository],
+      inject: [ApplicationReadRepository],
     },
     {
       provide: GetByCampaignIdService,
-      useFactory: (applicationRepository: ApplicationRepository) => {
-        return new GetByCampaignIdService(applicationRepository);
+      useFactory: (repository: ApplicationReadRepository) => {
+        return new GetByCampaignIdService(repository);
       },
-      inject: [ApplicationRepository],
+      inject: [ApplicationReadRepository],
     },
     {
       provide: GetByUserIdApplicationService,
-      useFactory: (applicationRepository: ApplicationRepository) => {
-        return new GetByUserIdApplicationService(applicationRepository);
+      useFactory: (repository: ApplicationReadRepository) => {
+        return new GetByUserIdApplicationService(repository);
       },
-      inject: [ApplicationRepository],
+      inject: [ApplicationReadRepository],
     },
     {
       provide: GetByUserIdPaginationApplicationService,
-      useFactory: (applicationRepository: ApplicationRepository) => {
+      useFactory: (repository: ApplicationReadRepository) => {
         return new GetByUserIdPaginationApplicationService(
-          applicationRepository,
+          repository,
         );
       },
-      inject: [ApplicationRepository],
+      inject: [ApplicationReadRepository],
     },
     {
       provide: ApplicationApplication,

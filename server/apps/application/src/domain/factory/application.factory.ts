@@ -1,13 +1,13 @@
 import { CreateApplicationDto } from '../dto';
 import { Application } from '../entity';
 import { ApplicationCreatedEvent } from '../event';
-import { ApplicationRepository } from '../repository';
+import { ApplicationWriteRepository } from '../repository';
 
 export class ApplicationFactory {
-  constructor(private readonly applicationRepository: ApplicationRepository) {}
+  constructor(private readonly applicationRepository: ApplicationWriteRepository) {}
   async createApplication(input: CreateApplicationDto): Promise<Application> {
     const application = new Application();
-    const id = await this.applicationRepository.writeRepository.getNextId();
+    const id = await this.applicationRepository.getNextId();
     const now = new Date();
     application.raiseEvent(
       new ApplicationCreatedEvent({

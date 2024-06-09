@@ -1,4 +1,4 @@
-import { ApplicationRepository } from '../repository';
+import { ApplicationWriteRepository } from '../repository';
 import { Application } from '../entity';
 import { BaseService } from '@app/common/domain';
 import { CreateApplicationDto } from '../dto';
@@ -6,7 +6,7 @@ import { ApplicationFactory } from '../factory/application.factory';
 
 export class CreateApplicationService implements BaseService<Application> {
   constructor(
-    private readonly applicationRepository: ApplicationRepository,
+    private readonly applicationRepository: ApplicationWriteRepository,
     private readonly applicationFactory: ApplicationFactory,
   ) {}
 
@@ -15,7 +15,7 @@ export class CreateApplicationService implements BaseService<Application> {
   ): Promise<Application> {
     const newApplication =
       await this.applicationFactory.createApplication(createApplicationDto);
-    await this.applicationRepository.writeRepository.save(newApplication);
+    await this.applicationRepository.save(newApplication);
     return newApplication;
   }
 }

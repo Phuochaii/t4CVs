@@ -4,6 +4,7 @@ import { TypeOrmApplicationWriteRepository } from './application.write.repositor
 import { EventDispatcherModule } from '../../event-dispatcher.ts/event-dispatcher.module';
 import { EventStoreRepository } from './event-store.repository';
 import { SnapshotProjection } from './snapshot.projection';
+import { ApplicationWriteRepository } from 'apps/application/src/domain/repository';
 
 @Module({
   imports: [EventDispatcherModule],
@@ -11,12 +12,16 @@ import { SnapshotProjection } from './snapshot.projection';
     SnapshotService,
     EventStoreRepository,
     SnapshotProjection,
-    TypeOrmApplicationWriteRepository,
+    {
+      provide: ApplicationWriteRepository,
+      useClass: TypeOrmApplicationWriteRepository,
+    },
     {
       provide: 'SNAPSHOT_STREAM',
       useValue: 'topcv-application-snapshot',
     },
+    
   ],
-  exports: [TypeOrmApplicationWriteRepository, EventStoreRepository],
+  exports: [ApplicationWriteRepository, EventStoreRepository],
 })
 export class WriteRepositoryModule {}
