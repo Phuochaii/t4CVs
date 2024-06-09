@@ -2,6 +2,8 @@ import axios from 'axios';
 import { EmployerFromServer } from '../shared/types/Employer.type';
 import { UserFromServer } from '../shared/types/User.type';
 import { ApplicationFromServer } from '../shared/types/Application.type';
+import { CampaignFromServer } from '../shared/types/Campaign.type';
+import { RecruitmentFromServer } from '../shared/types/Recruitment.type';
 
 const serverURL = 'http://localhost:3000';
 
@@ -73,8 +75,12 @@ const getAllCampaigns = async (page: number = 1) => {
 };
 
 // Ko có trong POSTMAN
-const getAllEmployer = async (page: number = 1) => {
-  const response = await axios.get(`${serverURL}/employer/all?page=${page}`);
+const getAllEmployer = async (token: string, page: number = 1) => {
+  const response = await axios.get(`${serverURL}/employer/all?page=${page}`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
   const rawEmployers: EmployerFromServer[] = response.data.data;
   return {
     allEmployers: rawEmployers,
@@ -85,11 +91,19 @@ const getAllEmployer = async (page: number = 1) => {
 
 // Ko có trong POSTMAN
 const getApplicationsByCampaignId = async (
-  hrId: number,
+  token: string,
+  page: number,
+  limit: number,
   campaignId: number,
+  status: boolean,
 ) => {
   const response = await axios.get(
-    `${serverURL}/application/hr/${hrId}?page=1&limit=100&campaignId=${campaignId}`,
+    `${serverURL}/application/hr?page=${page}&limit=${limit}&campaignId=${campaignId}&status=${status}`,
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },
   );
   const rawApplications: ApplicationFromServer[] = response.data.applications;
   const total = response.data.total;
@@ -218,6 +232,57 @@ const getEmployerById = async (id: number | string) => {
   return rawEmployer;
 };
 
+const getAllJobs = async (
+  token: string,
+  page: number = 1,
+  limit: number = 5,
+) => {
+  const response = await axios.get(
+    `${serverURL}/job/all?page=${page}&limit=${limit}`,
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  const rawJobs: RecruitmentFromServer[] = response.data.data;
+  const totalPages = response.data.total_pages;
+  return { allJobs: rawJobs, totalPages: totalPages };
+};
+
+const getJobsStat = async (token: string, limit: number = 1000) => {
+  let response = await axios.get(`${serverURL}/job/all?limit=${limit}`, {
+    headers: { authorization: `Bearer ${token}` },
+  });
+  const total = response.data.total;
+  response = await axios.get(
+    `${serverURL}/job/all?limit=${limit}&status=true`,
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  const isActive = response.data.total;
+  response = await axios.get(
+    `${serverURL}/job/all?limit=${limit}&status=false`,
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  const isNotActive = response.data.total;
+  return { total: total, isActive: isActive, isNotActive: isNotActive };
+};
+
+const getJobByCampaignId = async (campaignId: number) => {
+  try {
+    const response = await axios.get(
+      `${serverURL}/job?campaignId=${campaignId}`,
+    );
+    if (response.status != 200) return null;
+    const rawJob: RecruitmentFromServer = response.data;
+    return rawJob;
+  } catch (e) {
+    return null;
+  }
+};
+
 // cập nhật các function vào đây
 export {
   findAllCV,
@@ -235,4 +300,7 @@ export {
   getAllEmployer,
   getApplicationsByCampaignId,
   getEmployerById,
+  getAllJobs,
+  getJobsStat,
+  getJobByCampaignId,
 };

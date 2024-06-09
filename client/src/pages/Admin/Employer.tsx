@@ -27,6 +27,7 @@ function Employer() {
   const [totalPages, setTotalPages] = useState(0);
   const [refresh, setRefresh] = useState(false);
   const { token } = useProfileContext();
+  // console.log(token); //Có token
 
   useEffect(() => {
     async function getData() {
@@ -38,7 +39,7 @@ function Employer() {
         allEmployers: EmployerFromServer[];
         total: number;
         totalPages: number;
-      } = await getAllEmployer(page);
+      } = await getAllEmployer(token, page); // Cấn authen
 
       const allEmployersWithCompany = allEmployers.map(async (employer) => {
         const company = await getCompanyById(employer.companyId);
@@ -177,7 +178,7 @@ function Employer() {
         <div className="flex items-center justify-between w-full gap-2">
           <div className="flex items-center flex-grow divide-x-2">
             <div className="flex items-center justify-between h-full p-2 text-sm bg-white">
-              <span className="text-gray-400">Tất cả công ty</span>
+              <span className="text-gray-400">Tất cả nhà tuyển dụng</span>
               <ChevronDown stroke="#9ca3af" size={16} />
             </div>
             <div className="flex items-center justify-between flex-grow p-2 text-sm bg-white ">

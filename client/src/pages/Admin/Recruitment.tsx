@@ -11,10 +11,14 @@ import {
 import React, { SetStateAction, useEffect, useState } from 'react';
 import { statusColor } from '../../shared/types/RecruitmentStatus.type';
 import { RecruitmentJobPost } from '../../shared/types/Recruitment.type';
-import { getAllJobs, getCampaignById, getJobsStat } from '../../modules/helper';
+import { getCampaignById } from '../../modules/helper';
 import Switch from '../../shared/components/CustomSwitch';
 import { useProfileContext } from '../../shared/services/authen/domain/context';
-import { updateJobStatus } from '../../modules/admin-module';
+import {
+  getAllJobs,
+  updateJobStatus,
+  getJobsStat,
+} from '../../modules/admin-module';
 interface RecruitmentTableProps {
   data: RecruitmentJobPost[];
   setData: React.Dispatch<SetStateAction<RecruitmentJobPost[]>>;
@@ -133,11 +137,13 @@ function Recruitment() {
     isNotActive: 0,
   });
   const [refresh, setRefresh] = useState(false);
+  const { token } = useProfileContext();
+  // console.log(token);
 
   useEffect(() => {
     const getAllRecruitments = async () => {
-      const { allJobs, totalPages } = await getAllJobs(page);
-      const stats = await getJobsStat();
+      const { allJobs, totalPages } = await getAllJobs(token, page);
+      const stats = await getJobsStat(token);
       setJobStats(stats);
       const rawRecruitments = allJobs.map(async (item) => {
         const campaign = await getCampaignById(item.campaignId);

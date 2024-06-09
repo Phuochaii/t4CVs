@@ -1,14 +1,9 @@
 import axios from 'axios';
 import { CampaignFromServer } from '../shared/types/Campaign.type';
 import { CompanyFromServer } from '../shared/types/Company.type';
-import { EmployerFromServer } from '../shared/types/Employer.type';
 import { Field, RecruitmentFromServer } from '../shared/types/Recruitment.type';
-import { ApplicationFromServer } from '../shared/types/Application.type';
-import { UserFromServer } from '../shared/types/User.type';
-import { UserCV } from '../shared/types/CV_user.type';
 
 const serverURL = 'http://localhost:3000';
-
 
 export async function getCampaignById(id: number) {
   const response = await axios.get(`${serverURL}/company/campaign/${id}`);
@@ -215,5 +210,4 @@ export const searchJob = async ({
       throw error; // Ném lỗi để cho người dùng của hàm biết rằng có lỗi xảy ra
     }
   }
-}
-
+};

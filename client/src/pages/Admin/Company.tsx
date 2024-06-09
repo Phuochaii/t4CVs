@@ -23,6 +23,7 @@ function Company() {
   const [fields, setField] = useState<Field[]>([]);
   const [refresh, setRefresh] = useState(false);
   const { token } = useProfileContext();
+  // console.log(token);
 
   useEffect(() => {
     async function getData() {

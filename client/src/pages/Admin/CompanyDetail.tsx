@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Switch from '../../shared/components/CustomSwitch';
-import {  getCompanyById } from '../../modules/helper';
+import { getCompanyById } from '../../modules/helper';
 import { updateCompanyStatus } from '../../modules/admin-module';
 import { CompanyFromServer } from '../../shared/types/Company.type';
 import { CheckCheck } from 'lucide-react';

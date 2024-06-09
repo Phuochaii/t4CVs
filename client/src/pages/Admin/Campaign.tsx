@@ -16,8 +16,10 @@ import {
   getApplicationsByCampaignId,
   getEmployerById,
   getUserById,
-} from '../../modules/hr-module';
-import { getCompanyById, getJobByCampaignId } from '../../modules/helper';
+  getJobByCampaignId,
+} from '../../modules/admin-module';
+import { getCompanyById } from '../../modules/helper';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 interface CampaignTableProps {
   data: CampaignType[];
@@ -50,6 +52,9 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
   const [applicants, setApplicants] = useState<(UserFromServer | null)[]>([]);
   const campaign = data;
   console.log(data);
+  const { token } = useProfileContext();
+  console.log(token); //Có token
+
   useEffect(() => {
     async function getUsers() {
       const applicantPromises = campaign.applications.map(
@@ -196,6 +201,8 @@ function Campaign() {
   const [campaigns, setCampaigns] = useState<CampaignType[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const { token } = useProfileContext();
+  // console.log(token); //Có token
 
   useEffect(() => {
     async function getData() {
@@ -207,8 +214,11 @@ function Campaign() {
           : await null;
         const job = await getJobByCampaignId(item.id);
         const { applications } = await getApplicationsByCampaignId(
-          item.employerId,
+          token,
+          page,
+          5,
           item.id,
+          true,
         );
         const rawCampaign: CampaignType = {
           campaignName: item.name,
