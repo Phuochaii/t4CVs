@@ -1,5 +1,19 @@
 version: '3.8'
 services:
+  eventstore:
+    container_name: eventstore
+    image: eventstore/eventstore:latest
+    networks:
+      - application
+    environment:
+      - EVENTSTORE_CLUSTER_SIZE=1
+      - EVENTSTORE_RUN_PROJECTIONS=All
+      - EVENTSTORE_START_STANDARD_PROJECTIONS=true
+      - EVENTSTORE_HTTP_PORT=2113
+      - EVENTSTORE_INSECURE=true
+      - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
+    volumes:
+      - eventstore:/var/lib/eventstore
   nginx:
     build: ./nginx
     ports:
@@ -72,11 +86,15 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=123456
       - DB_APPLICATION_DATABASE=application
+      - EVENTSTORE_HOST=eventstore
+      - EVENTSTORE_PORT=2113
     depends_on:
       - application-db
+      - eventstore
     networks:
       - backend
       - application
+    restart: always
   application-db:
     container_name: application-db
     image: postgres:latest
@@ -84,6 +102,7 @@ services:
       - application
     environment:
       - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=application
     volumes:
       - application-db:/var/lib/postgresql/data
   cv:
@@ -265,3 +284,4 @@ volumes:
   job-db:
   company-db:
   employer-db:
+  eventstore:

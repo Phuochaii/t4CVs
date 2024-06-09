@@ -1,30 +1,16 @@
-// import { Module } from '@nestjs/common';
-// import { ApplicationController } from './application.controller';
-// import { ApplicationService } from './application.service';
-// import { TypeOrmModule } from '@nestjs/typeorm';
-// import { Application } from './entities/application.entity';
-
-// @Module({
-//   imports: [TypeOrmModule.forFeature([Application])],
-//   controllers: [ApplicationController],
-//   providers: [ApplicationService],
-//   exports: [ApplicationService],
-// })
-// export class ApplicationModule {}
-
 import { Module } from '@nestjs/common';
 import { ApplicationController } from './application.controller';
 import { ConfigModule } from '@nestjs/config';
-import { ApplicationApplicationModule } from './application-application.module';
+import { DomainApplicationModule } from './domain-application.module';
+import { CommandService } from './cqrs/command.service';
+import { QueryService } from './cqrs/query.service';
 
 @Module({
   imports: [
-    // ConfigModule.forRoot({
-    //   envFilePath: './configs/.env',
-    // }),
     ConfigModule.forRoot(),
-    ApplicationApplicationModule,
+    DomainApplicationModule,
   ],
+  providers: [CommandService, QueryService],
   controllers: [ApplicationController],
 })
 export class ApplicationModule {}
