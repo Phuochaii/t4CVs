@@ -1,5 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { ApplicationCreatedEvent } from '../../../domain/event';
+import { ApplicationCreatedEvent } from '../../../../domain/event';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ApplicationSchema } from '../schema';
 import { Repository } from 'typeorm';

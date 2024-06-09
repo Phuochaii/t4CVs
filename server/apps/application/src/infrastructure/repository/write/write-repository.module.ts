@@ -17,6 +17,6 @@ import { SnapshotProjection } from './snapshot.projection';
       useValue: 'topcv-application-snapshot',
     },
   ],
-  exports: [TypeOrmApplicationWriteRepository],
+  exports: [TypeOrmApplicationWriteRepository, EventStoreRepository],
 })
 export class WriteRepositoryModule {}

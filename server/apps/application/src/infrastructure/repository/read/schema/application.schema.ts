@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Application } from '../../../domain/entity';
+import { Application } from '../../../../domain/entity';
 import { ClassProperties } from '@app/common/type';
 
 @Entity('application')

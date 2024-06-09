@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { ApplicationReadRepository } from '../../domain/repository';
+import { ApplicationReadRepository } from '../../../domain/repository';
 import { ApplicationSchema } from './schema';
 import { In, Repository } from 'typeorm';
 import { UserNotificationSchemaMapper } from './mapper';
@@ -11,8 +11,8 @@ import {
   GetByUserIdApplicationDto,
   GetByUserIdPaginationApplicationDto,
   UpdateApplicationDto,
-} from '../../domain/dto';
-import { Application } from '../../domain/entity';
+} from '../../../domain/dto';
+import { Application } from '../../../domain/entity';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

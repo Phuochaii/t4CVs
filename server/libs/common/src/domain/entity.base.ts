@@ -1,5 +1,6 @@
 import { IEvent } from './event.interface';
 
+
 export abstract class BaseEntity {
   id: number;
   private unCommitedEvents: IEvent[] = [];
