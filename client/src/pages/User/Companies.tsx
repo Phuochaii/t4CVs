@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 
 import SearchCompany from '../../shared/components/SearchCompany';
 import CompanyCard from '../../shared/components/CompanyCard';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
+
+import * as HelperModule from '../../modules/helper';
 
 function Companies() {
   const [companies, setCompanies] = useState([]);
+  const { token } = useProfileContext();
   useEffect(() => {
     fetchCompanies();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -13,8 +16,9 @@ function Companies() {
 
   const fetchCompanies = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/company/all');
-      console.log(response.data.data);
+      // const response = await axios.get('http://localhost:3000/company/all');
+      const response = await HelperModule.getAllCompany();
+      console.log(response);
       setCompanies(response.data.data);
     } catch (error) {
       console.error('Error fetching data:', error);

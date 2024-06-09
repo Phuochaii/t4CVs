@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Switch from '../../shared/components/CustomSwitch';
 import * as UserModule from '../../modules/user-module';
 import { errorToast, successToast } from '../../utils/toast';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 const fields: {
   label: string;
@@ -36,6 +37,7 @@ const fields: {
 ];
 
 function UserInformation() {
+  const { token } = useProfileContext();
   const [userInfo, setUserInfo] = useState({
     fullname: 'Hải Yến Viên',
     phone: '0123 456 789',
@@ -55,7 +57,7 @@ function UserInformation() {
   };
 
   const fetchUserInfo = async () => {
-    UserModule.getUserById({ userId: '1' })
+    UserModule.getUserById({ userId: '1', token: token })
       .then((res) => {
         const response = res.data;
         console.log(response);
@@ -91,7 +93,7 @@ function UserInformation() {
     formData.append('fullname', userInfo.fullname);
     formData.append('phone', userInfo.phone);
     console.log(formData);
-    UserModule.updateUserById(formData)
+    UserModule.updateUserById(formData, token)
       .then((res) => {
         successToast('Cập nhật thành công!');
         setTimeout(() => {

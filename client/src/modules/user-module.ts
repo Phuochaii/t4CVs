@@ -77,19 +77,23 @@ const createUser: (input: {
 
 const updateStatusNotification = async ({
   notificationId,
-  token
+  token,
 }: {
   notificationId: number;
-  token: string
+  token: string;
 }) => {
   const response = await axios
-    .put(`${serverURL}/notification/user/${notificationId}`, {
-      status: 1,
-    }, {
-      headers: {
-        authorization: `Bearer ${token}`,
+    .put(
+      `${serverURL}/notification/user/${notificationId}`,
+      {
+        status: 1,
       },
-    },)
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      },
+    )
     .then((res) => {
       // console.log(res);
       return res;
@@ -98,9 +102,15 @@ const updateStatusNotification = async ({
   return response;
 };
 
-const getUserById = async ({ userId, token }: { userId: string, token:string }) => {
+const getUserById = async ({
+  userId,
+  token,
+}: {
+  userId: string;
+  token: string;
+}) => {
   const response = await axios
-    .get(`http://localhost:3000/user/${userId}`,{
+    .get(`${serverURL}/user/${userId}`, {
       headers: {
         authorization: `Bearer ${token}`,
       },
@@ -111,9 +121,9 @@ const getUserById = async ({ userId, token }: { userId: string, token:string }) 
   return response;
 };
 
-const updateUserById = async (formData, token) => {
+const updateUserById = async (formData, token: string) => {
   const response = await axios
-    .put('http://localhost:3000/user/update', formData,{
+    .put(`${serverURL}/user/update`, formData, {
       headers: {
         authorization: `Bearer ${token}`,
       },
@@ -124,10 +134,7 @@ const updateUserById = async (formData, token) => {
   return response;
 };
 
-
-const getApplications: (
-  token: string,
-) => Promise<{
+const getApplications: (token: string) => Promise<{
   applications: ApplicationFromServer[];
   jobs: RecruitmentFromServer[];
 }> = async (token: string) => {
@@ -163,7 +170,6 @@ export async function uploadApplication({ data, token }) {
   }
 }
 
-
 export async function uploadCV({ postData, token }) {
   try {
     const response = await axios.post(`${serverURL}/cv`, postData, {
@@ -177,9 +183,9 @@ export async function uploadCV({ postData, token }) {
   }
 }
 
-export async function getCVById(cvId: number, token:string) {
+export async function getCVById(cvId: number, token: string) {
   try {
-    const response = await axios.get(`${serverURL}/cv/${cvId}`,{
+    const response = await axios.get(`${serverURL}/cv/${cvId}`, {
       headers: {
         authorization: `Bearer ${token}`,
       },
@@ -201,4 +207,5 @@ export {
   getApplications,
   getUserById,
   updateUserById,
+  // Extra
 };

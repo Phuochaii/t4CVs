@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Eye,
   Download,
@@ -10,21 +10,21 @@ import {
   BookOpen,
   HelpCircle,
   Briefcase,
-} from "lucide-react";
-import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+} from 'lucide-react';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
-import CV from "../../shared/components/CV";
+import CV from '../../shared/components/CV';
 
 function CreateCV() {
   const [hovered, setHovered] = useState<boolean>(false);
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("");
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('');
   const [lineSpacing, setLineSpacing] = useState<number>(1);
 
   const handleLanguageChange = (language: string) => {
     setSelectedLanguage(language);
   };
 
-  const [font, setFont] = useState("");
+  const [font, setFont] = useState('');
 
   const handleChange = (event: any) => {
     setFont(event.target.value);
@@ -54,18 +54,22 @@ function CreateCV() {
           </div>
           <div className="flex flex-row justify-around m-4">
             <button
-              className={`text-sm px-4 py-2 rounded-md focus:outline-none mx-2 ${hovered ? "bg-green-200 text-green-700" : "bg-green-100 text-green-800"} hover:bg-green-600 hover:text-white`}
+              className={`text-sm px-4 py-2 rounded-md focus:outline-none mx-2 ${hovered ? 'bg-green-200 text-green-700' : 'bg-green-100 text-green-800'} hover:bg-green-600 hover:text-white`}
             >
               <Eye size={24} className="inline-block mr-2" /> Xem trước
             </button>
             <button
-              className={`text-sm px-4 py-2 rounded-md focus:outline-none mx-2 bg-green-100 text-green-800 hover:bg-green-600 hover:text-white`}
+              className={
+                'text-sm px-4 py-2 rounded-md focus:outline-none mx-2 bg-green-100 text-green-800 hover:bg-green-600 hover:text-white'
+              }
             >
               <Download size={24} className="inline-block mr-2" /> Lưu và tải
               xuống
             </button>
             <button
-              className={`text-sm px-4 py-2 rounded-md focus:outline-none mx-2 bg-green-700 text-white`}
+              className={
+                'text-sm px-4 py-2 rounded-md focus:outline-none mx-2 bg-green-700 text-white'
+              }
             >
               <Save size={24} className="inline-block mr-2" /> Lưu lại
             </button>
@@ -79,8 +83,8 @@ function CreateCV() {
                 type="radio"
                 name="language"
                 value="vietnam"
-                checked={selectedLanguage === "vietnam"}
-                onChange={() => handleLanguageChange("vietnam")}
+                checked={selectedLanguage === 'vietnam'}
+                onChange={() => handleLanguageChange('vietnam')}
                 className="hidden"
               />
               <img
@@ -94,8 +98,8 @@ function CreateCV() {
                 type="radio"
                 name="language"
                 value="usa"
-                checked={selectedLanguage === "usa"}
-                onChange={() => handleLanguageChange("usa")}
+                checked={selectedLanguage === 'usa'}
+                onChange={() => handleLanguageChange('usa')}
                 className="hidden"
               />
               <img
@@ -109,8 +113,8 @@ function CreateCV() {
                 type="radio"
                 name="language"
                 value="japan"
-                checked={selectedLanguage === "japan"}
-                onChange={() => handleLanguageChange("japan")}
+                checked={selectedLanguage === 'japan'}
+                onChange={() => handleLanguageChange('japan')}
                 className="hidden"
               />
               <img
@@ -144,11 +148,11 @@ function CreateCV() {
             <div className="text-sm">Màu chủ đề</div>
             <div
               style={{
-                width: "16px",
-                height: "16px",
-                borderRadius: "50%",
-                backgroundColor: "blue",
-                marginLeft: "8px",
+                width: '16px',
+                height: '16px',
+                borderRadius: '50%',
+                backgroundColor: 'blue',
+                marginLeft: '8px',
               }}
             ></div>
           </div>
@@ -242,11 +246,11 @@ function CreateCV() {
               <div className="flex flex-col rounded-lg bg-white w-80 p-1 mt-2">
                 <p className="m-4">Mọi chi tiết vui lòng liên hệ:</p>
                 <p className="m-4">
-                  Email:{" "}
+                  Email:{' '}
                   <a href="mailto:hotro@topcv.vn" className="text-green-500">
                     hotro@topcv.vn
-                  </a>{" "}
-                  hoặc đăng ký tư vấn CV cùng chuyên gia tại:{" "}
+                  </a>{' '}
+                  hoặc đăng ký tư vấn CV cùng chuyên gia tại:{' '}
                   <a
                     href="https://reviewcv.topcv.vn"
                     className="text-green-500"

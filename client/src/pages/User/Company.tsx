@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import * as HelperModule from '../../modules/helper';
 
 import RelatedCompany from '../../shared/components/RelatedCompany';
 import RecruitmentItem from '../../shared/components/RecruitmentItem';
@@ -37,9 +37,9 @@ function Company() {
   }, []);
   const fetchCompanyInfo = async (id: string) => {
     try {
-      const response = await axios.get(`http://localhost:3000/company/${id}`);
-      console.log(response.data);
-      setCompanyInfo(response.data);
+      // const response = await axios.get(`http://localhost:3000/company/${id}`);
+      const response = await HelperModule.getCompanyById(id);
+      setCompanyInfo(response);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
