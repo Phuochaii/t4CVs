@@ -12,6 +12,7 @@ import { getAllExp, getAllLocation, getJobById } from '../../modules/helper';
 import { AUTH0_BACKEND_AUDIENCE } from '../../shared/services/authen/infrastructure/config';
 import { uploadApplication, uploadCV } from '../../modules/user-module';
 import { useProfileContext } from '../../shared/services/authen/domain/context';
+import Loading from '../../shared/components/Loading/Loading';
 
 const modalApplyStyle = {
   position: 'absolute' as const,
@@ -35,33 +36,41 @@ interface filterSearch {
 
 // Modal Apply CV
 function ApplyModal({ open, handleClose, handleOpen, jobData, user }) {
+  const [applyLoading, setApplyLoading] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<any>();
   const { token } = useProfileContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setApplyLoading(true);
     // Custom validation logic
     const errors = {};
 
     if (!formData.name) {
       errors.name = 'Name is required';
+      setApplyLoading(false);
     }
     if (!formData.email) {
       errors.email = 'Email is required';
+      setApplyLoading(false);
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(formData.email)
     ) {
       errors.email = 'Invalid email address';
+      setApplyLoading(false);
     }
     if (!formData.phone) {
       errors.phone = 'Phone number is required';
+      setApplyLoading(false);
     } else if (!/^\d{10}$/i.test(formData.phone)) {
       errors.phone = 'Invalid phone number';
+      setApplyLoading(false);
     }
     if (!formData.file) {
       errors.file = 'File is required';
+      setApplyLoading(false);
     }
 
     try {
@@ -107,10 +116,13 @@ function ApplyModal({ open, handleClose, handleOpen, jobData, user }) {
       } else {
         setErrors(errors);
         console.log(errors);
+        setApplyLoading(false);
       }
     } catch (error) {
       console.error(error);
+      setApplyLoading(false);
     }
+    setApplyLoading(false);
   };
 
   const chooseUploadCV = () => {
@@ -387,6 +399,7 @@ function ApplyModal({ open, handleClose, handleOpen, jobData, user }) {
                                       ${errors.phone ? 'border-red-500' : ''}
                                     `}
                           size="small"
+                          type="number"
                           name="phone"
                           value={formData.phone}
                           onChange={handleChange}
@@ -493,11 +506,13 @@ function ApplyModal({ open, handleClose, handleOpen, jobData, user }) {
             >
               Hủy
             </span>
+
             <button
               type="submit"
-              className="btn-apply font-bold w-full text-center py-2 px-5 rounded-lg bg-green-500 text-white hover:bg-green-600 cursor-pointer"
+              className="flex gap-3 items-center justify-center btn-apply font-bold w-full py-2 px-5 rounded-lg bg-green-500 text-white hover:bg-green-600 cursor-pointer"
             >
               Ứng tuyển ngay
+              {applyLoading && <Loading />}
             </button>
           </div>
         </form>

@@ -5,7 +5,10 @@ import * as UserModule from '../../../modules/user-module';
 import { useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { withRoleCheck } from '../../../shared/services/authen/domain/withRoleCheck';
-import { Roles, useProfileContext } from '../../../shared/services/authen/domain/context';
+import {
+  Roles,
+  useProfileContext,
+} from '../../../shared/services/authen/domain/context';
 function Header() {
   const navigation = useNavigate();
   const { isAuthenticated, user, logout } = useAuth0();
@@ -14,7 +17,7 @@ function Header() {
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
-  const userId = user?.sub || "";
+  const userId = user?.sub || '';
 
   const fetchNotification = async () => {
     // console.log(token);
@@ -29,13 +32,11 @@ function Header() {
       });
   };
   useEffect(() => {
-
     console.log(isAuthenticated);
     if (isAuthenticated) {
       fetchNotification();
     }
   }, []);
-
 
   const [isJobsHovered, setIsJobsHovered] = useState(false);
   const [isCVsHovered, setIsCVsHovered] = useState(false);
@@ -43,247 +44,253 @@ function Header() {
   const [isToolsHovered, setIsToolsHovered] = useState(false);
   const [isSupportsHovered, setIsSupportsHovered] = useState(false);
   const [isAccountHovered, setIsAccountHovered] = useState(false);
-  
+
   const HeaderProfileSection = withRoleCheck(Roles.USER, () => {
     return (
-    <>
-      <li
-        className="relative flex flex-col justify-center list-none"
-        onMouseEnter={() => setDisplayNoti(true)}
-        onMouseLeave={() => setDisplayNoti(false)}
-      >
-        <a className="inline-flex items-center text-center bg-transparent">
-          <span className="p-3 bg-green-100 rounded-full btn-notice">
-            <svg
-              fill="rgb(22 163 74)"
-              className="w-6 h-6"
-              viewBox="0 0 36 36"
-              version="1.1"
-              preserveAspectRatio="xMidYMid meet"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                className="clr-i-solid clr-i-solid-path-1"
-                d="M32.85,28.13l-.34-.3A14.37,14.37,0,0,1,30,24.9a12.63,12.63,0,0,1-1.35-4.81V15.15A10.81,10.81,0,0,0,19.21,4.4V3.11a1.33,1.33,0,1,0-2.67,0V4.42A10.81,10.81,0,0,0,7.21,15.15v4.94A12.63,12.63,0,0,1,5.86,24.9a14.4,14.4,0,0,1-2.47,2.93l-.34.3v2.82H32.85Z"
-              ></path>
-              <path
-                className="clr-i-solid clr-i-solid-path-2"
-                d="M15.32,32a2.65,2.65,0,0,0,5.25,0Z"
-              ></path>
-            </svg>
-          </span>
-        </a>
-        {/* <!-- Dropdown menu --> */}
-        {displayNoti ? (
-          <ul
-            className="max-h-[320px] overflow-y-scroll dropdown absolute w-96 z-50 top-full right-0 font-semibold text-base bg-white border border-slate-100 rounded-lg py-3 flex flex-col gap-3 shadow-lg"
-            aria-labelledby="dropdownDividerButton"
-          >
-            <div
-              className="py-2 border-b-2 border-l-stone-900"
-              onClick={() => setDisplayNoti(true)}
-            >
-              <span className="block px-4 text-lg font-bold text-gray-700">
-                Thông báo
-              </span>
-            </div>
-            {notifications && notifications.length == 0 ? (
-              <p className="px-3">Không có thông báo</p>
-            ) : (
-              <>
-                {notifications.map((item: any, index: number) => (
-                  <a
-                    onClick={(e) => {
-                      e.preventDefault();
-                      UserModule.updateStatusNotification({
-                        userId: userId,
-                        notificationId: item.id,
-                      });
-                      fetchNotification({ id: userId });
-                      window.open(item.link, "_blank", "noopener");
-                    }}
-                    key={index}
-                    className="px-4 py-2 border border-b-gray-200 hover:text-green-500"
-                  >
-                    <span className="font-semibold cursor-pointer hover:text-green-500">
-                      {item.content}
-                    </span>
-                    <p className="mt-2 text-sm text-right text-slate-500">
-                      {item.createdAt.split("T")[0] + "  "}
-                      {item.status && (
-                        <span className="text-green-500">✓</span>
-                      )}
-                    </p>
-                  </a>
-                ))}
-              </>
-            )}
-            {total > notifications.length ? (
-              <button
-                className="w-full mt-2 font-semibold text-green-500 hover:underline"
-                onClick={() =>
-                  fetchNotification({
-                    id: userId,
-                    limit: total,
-                  })
-                }
-              >
-                Xem tất cả thông báo
-              </button>
-            ) : notifications.length > 3 ? (
-              <button
-                className="w-full mt-2 font-semibold text-green-500 hover:underline"
-                onClick={() => fetchNotification({ id: userId })}
-              >
-                Ẩn bớt
-              </button>
-            ) : (
-              <></>
-            )}
-          </ul>
-        ) : (
-          <></>
-        )}
-      </li>
-
-      <span className="p-2 my-6 bg-green-100 rounded-full btn-message">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="rgb(22 163 74)"
-          className="w-8 h-8"
+      <>
+        <li
+          className="relative flex flex-col justify-center list-none"
+          onMouseEnter={() => setDisplayNoti(true)}
+          onMouseLeave={() => setDisplayNoti(false)}
         >
-          <path d="M4.913 2.658c2.075-.27 4.19-.408 6.337-.408 2.147 0 4.262.139 6.337.408 1.922.25 3.291 1.861 3.405 3.727a4.403 4.403 0 0 0-1.032-.211 50.89 50.89 0 0 0-8.42 0c-2.358.196-4.04 2.19-4.04 4.434v4.286a4.47 4.47 0 0 0 2.433 3.984L7.28 21.53A.75.75 0 0 1 6 21v-4.03a48.527 48.527 0 0 1-1.087-.128C2.905 16.58 1.5 14.833 1.5 12.862V6.638c0-1.97 1.405-3.718 3.413-3.979Z" />
-          <path d="M15.75 7.5c-1.376 0-2.739.057-4.086.169C10.124 7.797 9 9.103 9 10.609v4.285c0 1.507 1.128 2.814 2.67 2.94 1.243.102 2.5.157 3.768.165l2.782 2.781a.75.75 0 0 0 1.28-.53v-2.39l.33-.026c1.542-.125 2.67-1.433 2.67-2.94v-4.286c0-1.505-1.125-2.811-2.664-2.94A49.392 49.392 0 0 0 15.75 7.5Z" />
-        </svg>
-      </span>
-
-      <li
-        className="relative list-none"
-        onMouseEnter={() => setIsAccountHovered(true)}
-        onMouseLeave={() => setIsAccountHovered(false)}
-      >
-        <a
-          href="#"
-          className="px-6 py-8 text-base font-semibold hover:text-green-500"
-        >
-          <span className="flex flex-row items-center gap-2 p-2 rounded-full cursor-pointer btn-user-info bg-slate-100 group/user">
-          <img 
-            className="w-8 h-8 rounded-full" 
-            src={profile?.picture || '../../../images/user-logo.png'}
-            alt="avatar" 
-          />
-            <span className="font-bold user-name">
-              {profile?.name}
-            </span>
-            <span className="transition ease-in-out user-action group-hover/user:rotate-180">
+          <a className="inline-flex items-center text-center bg-transparent">
+            <span className="p-3 bg-green-100 rounded-full btn-notice">
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
                 fill="rgb(22 163 74)"
-                className="w-4 h-4"
+                className="w-6 h-6"
+                viewBox="0 0 36 36"
+                version="1.1"
+                preserveAspectRatio="xMidYMid meet"
+                xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fillRule="evenodd"
-                  d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
-                  clipRule="evenodd"
-                />
+                  className="clr-i-solid clr-i-solid-path-1"
+                  d="M32.85,28.13l-.34-.3A14.37,14.37,0,0,1,30,24.9a12.63,12.63,0,0,1-1.35-4.81V15.15A10.81,10.81,0,0,0,19.21,4.4V3.11a1.33,1.33,0,1,0-2.67,0V4.42A10.81,10.81,0,0,0,7.21,15.15v4.94A12.63,12.63,0,0,1,5.86,24.9a14.4,14.4,0,0,1-2.47,2.93l-.34.3v2.82H32.85Z"
+                ></path>
+                <path
+                  className="clr-i-solid clr-i-solid-path-2"
+                  d="M15.32,32a2.65,2.65,0,0,0,5.25,0Z"
+                ></path>
               </svg>
             </span>
-          </span>
-        </a>
-        {isAccountHovered ? (
-          <ul className="absolute right-0 z-50 flex flex-col gap-3 p-3 overflow-y-scroll text-base font-semibold bg-white border rounded-lg shadow-lg sub-menu h-80 top-full border-slate-100">
-            <li>
-              <hr />
-            </li>
-            <li
-              onClick={() => {
-                navigation("/user-information");
-              }}
-              className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
+          </a>
+          {/* <!-- Dropdown menu --> */}
+          {displayNoti ? (
+            <ul
+              className="max-h-[320px] overflow-y-scroll dropdown absolute w-96 z-50 top-full right-0 font-semibold text-base bg-white border border-slate-100 rounded-lg py-3 flex flex-col gap-3 shadow-lg"
+              aria-labelledby="dropdownDividerButton"
             >
-              <svg
-                className="w-6 h-6"
-                viewBox="0 0 15 15"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+              <div
+                className="py-2 border-b-2 border-l-stone-900"
+                onClick={() => setDisplayNoti(true)}
               >
-                <path
-                  d="M14.5 14.5L10.5 10.5M6.5 12.5C3.18629 12.5 0.5 9.81371 0.5 6.5C0.5 3.18629 3.18629 0.5 6.5 0.5C9.81371 0.5 12.5 3.18629 12.5 6.5C12.5 9.81371 9.81371 12.5 6.5 12.5Z"
-                  stroke="rgb(34 197 94)"
-                />
-              </svg>
-              Cài đặt thông tin cá nhân
-            </li>
+                <span className="block px-4 text-lg font-bold text-gray-700">
+                  Thông báo
+                </span>
+              </div>
+              {notifications && notifications.length == 0 ? (
+                <p className="px-3">Không có thông báo</p>
+              ) : (
+                <>
+                  {notifications.map((item: any, index: number) => (
+                    <a
+                      onClick={(e) => {
+                        e.preventDefault();
+                        UserModule.updateStatusNotification({
+                          userId: userId,
+                          notificationId: item.id,
+                        });
+                        fetchNotification({ id: userId });
+                        window.open(item.link, '_blank', 'noopener');
+                      }}
+                      key={index}
+                      className="px-4 py-2 border border-b-gray-200 hover:text-green-500"
+                    >
+                      <span className="font-semibold cursor-pointer hover:text-green-500">
+                        {item.content}
+                      </span>
+                      <p className="mt-2 text-sm text-right text-slate-500">
+                        {item.createdAt.split('T')[0] + '  '}
+                        {item.status && (
+                          <span className="text-green-500">✓</span>
+                        )}
+                      </p>
+                    </a>
+                  ))}
+                </>
+              )}
+              {total > notifications.length ? (
+                <button
+                  className="w-full mt-2 font-semibold text-green-500 hover:underline"
+                  onClick={() =>
+                    fetchNotification({
+                      id: userId,
+                      limit: total,
+                    })
+                  }
+                >
+                  Xem tất cả thông báo
+                </button>
+              ) : notifications.length > 3 ? (
+                <button
+                  className="w-full mt-2 font-semibold text-green-500 hover:underline"
+                  onClick={() => fetchNotification({ id: userId })}
+                >
+                  Ẩn bớt
+                </button>
+              ) : (
+                <></>
+              )}
+            </ul>
+          ) : (
+            <></>
+          )}
+        </li>
 
-            <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
-              <svg
-                className="w-6 h-6"
-                fill="rgb(34 197 94)"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8,8 L4,8 L4,13 L11,13 L13,13 L20,13 L20,8 L16,8 L8,8 Z M8,6 L8,5 C8,3.8954305 8.8954305,3 10,3 L14,3 C15.1045695,3 16,3.8954305 16,5 L16,6 L20,6 C21.1045695,6 22,6.8954305 22,8 L22,19 C22,20.1045695 21.1045695,21 20,21 L4,21 C2.8954305,21 2,20.1045695 2,19 L2,8 C2,6.8954305 2.8954305,6 4,6 L8,6 Z M11,15 L4,15 L4,19 L20,19 L20,15 L13,15 L13,16 L11,16 L11,15 Z M14,6 L14,5 L10,5 L10,6 L14,6 Z"
-                />
-              </svg>
-              Nâng cấp tài khoản VIP
-            </li>
-            <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
-              <svg
-                className="w-7 h-7"
-                fill="rgb(34 197 94)"
-                viewBox="-2 -4 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M3.636 7.208L10 13.572l6.364-6.364a3 3 0 1 0-4.243-4.243L10 5.086l-2.121-2.12a3 3 0 0 0-4.243 4.242zM9.293 1.55l.707.707.707-.707a5 5 0 1 1 7.071 7.071l-7.07 7.071a1 1 0 0 1-1.415 0l-7.071-7.07a5 5 0 1 1 7.07-7.071z" />
-              </svg>
-              Kích hoạt quà tặng
-            </li>
+        <span className="p-2 my-6 bg-green-100 rounded-full btn-message">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="rgb(22 163 74)"
+            className="w-8 h-8"
+          >
+            <path d="M4.913 2.658c2.075-.27 4.19-.408 6.337-.408 2.147 0 4.262.139 6.337.408 1.922.25 3.291 1.861 3.405 3.727a4.403 4.403 0 0 0-1.032-.211 50.89 50.89 0 0 0-8.42 0c-2.358.196-4.04 2.19-4.04 4.434v4.286a4.47 4.47 0 0 0 2.433 3.984L7.28 21.53A.75.75 0 0 1 6 21v-4.03a48.527 48.527 0 0 1-1.087-.128C2.905 16.58 1.5 14.833 1.5 12.862V6.638c0-1.97 1.405-3.718 3.413-3.979Z" />
+            <path d="M15.75 7.5c-1.376 0-2.739.057-4.086.169C10.124 7.797 9 9.103 9 10.609v4.285c0 1.507 1.128 2.814 2.67 2.94 1.243.102 2.5.157 3.768.165l2.782 2.781a.75.75 0 0 0 1.28-.53v-2.39l.33-.026c1.542-.125 2.67-1.433 2.67-2.94v-4.286c0-1.505-1.125-2.811-2.664-2.94A49.392 49.392 0 0 0 15.75 7.5Z" />
+          </svg>
+        </span>
 
-            <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
-              <svg
-                className="w-5 h-5"
-                fill="rgb(34 197 94)"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 1200 1200"
+        <li
+          className="relative list-none"
+          onMouseEnter={() => setIsAccountHovered(true)}
+          onMouseLeave={() => setIsAccountHovered(false)}
+        >
+          <a
+            href="#"
+            className="px-6 py-8 text-base font-semibold hover:text-green-500"
+          >
+            <span className="flex flex-row items-center gap-2 p-2 rounded-full cursor-pointer btn-user-info bg-slate-100 group/user">
+              <img
+                className="w-8 h-8 rounded-full"
+                src={profile?.picture || '../../../images/user-logo.png'}
+                alt="avatar"
+              />
+              <span className="font-bold user-name">{profile?.name}</span>
+              <span className="transition ease-in-out user-action group-hover/user:rotate-180">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="rgb(22 163 74)"
+                  className="w-4 h-4"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </span>
+            </span>
+          </a>
+          {isAccountHovered ? (
+            <ul className="absolute right-0 z-50 flex flex-col gap-3 p-3 overflow-y-scroll text-base font-semibold bg-white border rounded-lg shadow-lg sub-menu h-80 top-full border-slate-100">
+              <li>
+                <hr />
+              </li>
+              <li
+                onClick={() => {
+                  navigation('/user-information');
+                }}
+                className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
               >
-                <path
-                  id="path3015"
-                  inkscape:connector-curvature="0"
-                  d="M0,0v775.711V1200h424.289
+                {/* <svg
+                  className="w-6 h-6"
+                  viewBox="0 0 15 15"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M14.5 14.5L10.5 10.5M6.5 12.5C3.18629 12.5 0.5 9.81371 0.5 6.5C0.5 3.18629 3.18629 0.5 6.5 0.5C9.81371 0.5 12.5 3.18629 12.5 6.5C12.5 9.81371 9.81371 12.5 6.5 12.5Z"
+                    stroke="rgb(34 197 94)"
+                  />
+                </svg> */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512"
+                  style={{ width: '20px', height: '20px' }}
+                  fill="rgb(34 197 94)"
+                >
+                  <path d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z" />
+                </svg>
+                Cài đặt thông tin cá nhân
+              </li>
+
+              <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                <svg
+                  className="w-6 h-6"
+                  fill="rgb(34 197 94)"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8,8 L4,8 L4,13 L11,13 L13,13 L20,13 L20,8 L16,8 L8,8 Z M8,6 L8,5 C8,3.8954305 8.8954305,3 10,3 L14,3 C15.1045695,3 16,3.8954305 16,5 L16,6 L20,6 C21.1045695,6 22,6.8954305 22,8 L22,19 C22,20.1045695 21.1045695,21 20,21 L4,21 C2.8954305,21 2,20.1045695 2,19 L2,8 C2,6.8954305 2.8954305,6 4,6 L8,6 Z M11,15 L4,15 L4,19 L20,19 L20,15 L13,15 L13,16 L11,16 L11,15 Z M14,6 L14,5 L10,5 L10,6 L14,6 Z"
+                  />
+                </svg>
+                Nâng cấp tài khoản VIP
+              </li>
+              <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                <svg
+                  className="w-7 h-7"
+                  fill="rgb(34 197 94)"
+                  viewBox="-2 -4 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M3.636 7.208L10 13.572l6.364-6.364a3 3 0 1 0-4.243-4.243L10 5.086l-2.121-2.12a3 3 0 0 0-4.243 4.242zM9.293 1.55l.707.707.707-.707a5 5 0 1 1 7.071 7.071l-7.07 7.071a1 1 0 0 1-1.415 0l-7.071-7.07a5 5 0 1 1 7.07-7.071z" />
+                </svg>
+                Kích hoạt quà tặng
+              </li>
+
+              <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                <svg
+                  className="w-5 h-5"
+                  fill="rgb(34 197 94)"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 1200 1200"
+                >
+                  <path
+                    id="path3015"
+                    inkscape:connector-curvature="0"
+                    d="M0,0v775.711V1200h424.289
                 H1200V752.556V424.289l-196.875,196.875v381.961H621.164H196.875V578.836V196.875h381.961L775.711,0H0z M1030.008,15.161
                 l-434.18,434.25L440.7,294.283L281.618,453.438L595.821,767.57l159.082-159.082l434.18-434.25L1030.001,15.157L1030.008,15.161z"
-                />
-              </svg>
-              Nhà tuyển dụng xem hồ sơ
-            </li>
-            <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
-              <svg
-                className="w-6 h-6"
-                fill="rgb(34 197 94)"
-                viewBox="0 -64 640 640"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M255.03 261.65c6.25 6.25 16.38 6.25 22.63 0l11.31-11.31c6.25-6.25 6.25-16.38 0-22.63L253.25 192l35.71-35.72c6.25-6.25 6.25-16.38 0-22.63l-11.31-11.31c-6.25-6.25-16.38-6.25-22.63 0l-58.34 58.34c-6.25 6.25-6.25 16.38 0 22.63l58.35 58.34zm96.01-11.3l11.31 11.31c6.25 6.25 16.38 6.25 22.63 0l58.34-58.34c6.25-6.25 6.25-16.38 0-22.63l-58.34-58.34c-6.25-6.25-16.38-6.25-22.63 0l-11.31 11.31c-6.25 6.25-6.25 16.38 0 22.63L386.75 192l-35.71 35.72c-6.25 6.25-6.25 16.38 0 22.63zM624 416H381.54c-.74 19.81-14.71 32-32.74 32H288c-18.69 0-33.02-17.47-32.77-32H16c-8.8 0-16 7.2-16 16v16c0 35.2 28.8 64 64 64h512c35.2 0 64-28.8 64-64v-16c0-8.8-7.2-16-16-16zM576 48c0-26.4-21.6-48-48-48H112C85.6 0 64 21.6 64 48v336h512V48zm-64 272H128V64h384v256z" />
-              </svg>
-              Cài đặt gợi ý việc làm
-            </li>
-            <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
-              <svg
-                className="w-6 h-6"
-                fill="rgb(34 197 94)"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 280.003 280.003"
-              >
-                <path
-                  colorRendering="auto"
-                  imageRendering="auto"
-                  shapeRendering="auto"
-                  colorInterpolation="sRGB"
-                  d="M49.997,0.001
+                  />
+                </svg>
+                Nhà tuyển dụng xem hồ sơ
+              </li>
+              <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                <svg
+                  className="w-6 h-6"
+                  fill="rgb(34 197 94)"
+                  viewBox="0 -64 640 640"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M255.03 261.65c6.25 6.25 16.38 6.25 22.63 0l11.31-11.31c6.25-6.25 6.25-16.38 0-22.63L253.25 192l35.71-35.72c6.25-6.25 6.25-16.38 0-22.63l-11.31-11.31c-6.25-6.25-16.38-6.25-22.63 0l-58.34 58.34c-6.25 6.25-6.25 16.38 0 22.63l58.35 58.34zm96.01-11.3l11.31 11.31c6.25 6.25 16.38 6.25 22.63 0l58.34-58.34c6.25-6.25 6.25-16.38 0-22.63l-58.34-58.34c-6.25-6.25-16.38-6.25-22.63 0l-11.31 11.31c-6.25 6.25-6.25 16.38 0 22.63L386.75 192l-35.71 35.72c-6.25 6.25-6.25 16.38 0 22.63zM624 416H381.54c-.74 19.81-14.71 32-32.74 32H288c-18.69 0-33.02-17.47-32.77-32H16c-8.8 0-16 7.2-16 16v16c0 35.2 28.8 64 64 64h512c35.2 0 64-28.8 64-64v-16c0-8.8-7.2-16-16-16zM576 48c0-26.4-21.6-48-48-48H112C85.6 0 64 21.6 64 48v336h512V48zm-64 272H128V64h384v256z" />
+                </svg>
+                Cài đặt gợi ý việc làm
+              </li>
+              <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                <svg
+                  className="w-6 h-6"
+                  fill="rgb(34 197 94)"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 280.003 280.003"
+                >
+                  <path
+                    colorRendering="auto"
+                    imageRendering="auto"
+                    shapeRendering="auto"
+                    colorInterpolation="sRGB"
+                    d="M49.997,0.001
                   c-2.761-0.035-5.029,2.175-5.064,4.936c-0.013,0.992,0.27,1.965,0.812,2.796l43.953,96.701
                   c-26.83,16.803-44.701,46.624-44.701,80.568c0,52.408,42.592,95,95,95c52.408,0,95-42.592,95-95
                   c0-33.945-17.871-63.765-44.701-80.568l43.938-96.666c1.529-2.3,0.903-5.404-1.397-6.932c-0.84-0.558-1.83-0.85-2.839-0.835h-60
@@ -305,62 +312,63 @@ function Header() {
                   c0.726,1.253,1.959,2.13,3.381,2.404l11.777,2.271l-8.646,9.629c-0.967,1.077-1.42,2.52-1.242,3.957l1.48,11.904l-11.832-5.248
                   c-1.323-0.586-2.836-0.571-4.146,0.043l-10.863,5.086l1.334-12.875c0.149-1.439-0.332-2.872-1.32-3.93l-8.193-8.762l12.654-2.709
                   c1.415-0.303,2.63-1.204,3.33-2.471L140.103,165.413z"
-                />
-              </svg>
-              Cài đặt nhận email
-            </li>
-            <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
-              <svg
-                className="w-6 h-6"
-                fill="rgb(34 197 94)"
-                viewBox="0 -64 640 640"
-                xmlns="http://www.w3.org/2000/svg"
+                  />
+                </svg>
+                Cài đặt nhận email
+              </li>
+              <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                <svg
+                  className="w-6 h-6"
+                  fill="rgb(34 197 94)"
+                  viewBox="0 -64 640 640"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M255.03 261.65c6.25 6.25 16.38 6.25 22.63 0l11.31-11.31c6.25-6.25 6.25-16.38 0-22.63L253.25 192l35.71-35.72c6.25-6.25 6.25-16.38 0-22.63l-11.31-11.31c-6.25-6.25-16.38-6.25-22.63 0l-58.34 58.34c-6.25 6.25-6.25 16.38 0 22.63l58.35 58.34zm96.01-11.3l11.31 11.31c6.25 6.25 16.38 6.25 22.63 0l58.34-58.34c6.25-6.25 6.25-16.38 0-22.63l-58.34-58.34c-6.25-6.25-16.38-6.25-22.63 0l-11.31 11.31c-6.25 6.25-6.25 16.38 0 22.63L386.75 192l-35.71 35.72c-6.25 6.25-6.25 16.38 0 22.63zM624 416H381.54c-.74 19.81-14.71 32-32.74 32H288c-18.69 0-33.02-17.47-32.77-32H16c-8.8 0-16 7.2-16 16v16c0 35.2 28.8 64 64 64h512c35.2 0 64-28.8 64-64v-16c0-8.8-7.2-16-16-16zM576 48c0-26.4-21.6-48-48-48H112C85.6 0 64 21.6 64 48v336h512V48zm-64 272H128V64h384v256z" />
+                </svg>
+                Cài đặt bảo mật
+              </li>
+              <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                <svg
+                  className="w-6 h-6"
+                  fill="rgb(34 197 94)"
+                  viewBox="0 -64 640 640"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M255.03 261.65c6.25 6.25 16.38 6.25 22.63 0l11.31-11.31c6.25-6.25 6.25-16.38 0-22.63L253.25 192l35.71-35.72c6.25-6.25 6.25-16.38 0-22.63l-11.31-11.31c-6.25-6.25-16.38-6.25-22.63 0l-58.34 58.34c-6.25 6.25-6.25 16.38 0 22.63l58.35 58.34zm96.01-11.3l11.31 11.31c6.25 6.25 16.38 6.25 22.63 0l58.34-58.34c6.25-6.25 6.25-16.38 0-22.63l-58.34-58.34c-6.25-6.25-16.38-6.25-22.63 0l-11.31 11.31c-6.25 6.25-6.25 16.38 0 22.63L386.75 192l-35.71 35.72c-6.25 6.25-6.25 16.38 0 22.63zM624 416H381.54c-.74 19.81-14.71 32-32.74 32H288c-18.69 0-33.02-17.47-32.77-32H16c-8.8 0-16 7.2-16 16v16c0 35.2 28.8 64 64 64h512c35.2 0 64-28.8 64-64v-16c0-8.8-7.2-16-16-16zM576 48c0-26.4-21.6-48-48-48H112C85.6 0 64 21.6 64 48v336h512V48zm-64 272H128V64h384v256z" />
+                </svg>
+                Đổi mật khẩu
+              </li>
+              <li
+                onClick={() => {
+                  logout({
+                    openUrl: false,
+                  });
+                }}
+                className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
               >
-                <path d="M255.03 261.65c6.25 6.25 16.38 6.25 22.63 0l11.31-11.31c6.25-6.25 6.25-16.38 0-22.63L253.25 192l35.71-35.72c6.25-6.25 6.25-16.38 0-22.63l-11.31-11.31c-6.25-6.25-16.38-6.25-22.63 0l-58.34 58.34c-6.25 6.25-6.25 16.38 0 22.63l58.35 58.34zm96.01-11.3l11.31 11.31c6.25 6.25 16.38 6.25 22.63 0l58.34-58.34c6.25-6.25 6.25-16.38 0-22.63l-58.34-58.34c-6.25-6.25-16.38-6.25-22.63 0l-11.31 11.31c-6.25 6.25-6.25 16.38 0 22.63L386.75 192l-35.71 35.72c-6.25 6.25-6.25 16.38 0 22.63zM624 416H381.54c-.74 19.81-14.71 32-32.74 32H288c-18.69 0-33.02-17.47-32.77-32H16c-8.8 0-16 7.2-16 16v16c0 35.2 28.8 64 64 64h512c35.2 0 64-28.8 64-64v-16c0-8.8-7.2-16-16-16zM576 48c0-26.4-21.6-48-48-48H112C85.6 0 64 21.6 64 48v336h512V48zm-64 272H128V64h384v256z" />
-              </svg>
-              Cài đặt bảo mật
-            </li>
-            <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
-              <svg
-                className="w-6 h-6"
-                fill="rgb(34 197 94)"
-                viewBox="0 -64 640 640"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M255.03 261.65c6.25 6.25 16.38 6.25 22.63 0l11.31-11.31c6.25-6.25 6.25-16.38 0-22.63L253.25 192l35.71-35.72c6.25-6.25 6.25-16.38 0-22.63l-11.31-11.31c-6.25-6.25-16.38-6.25-22.63 0l-58.34 58.34c-6.25 6.25-6.25 16.38 0 22.63l58.35 58.34zm96.01-11.3l11.31 11.31c6.25 6.25 16.38 6.25 22.63 0l58.34-58.34c6.25-6.25 6.25-16.38 0-22.63l-58.34-58.34c-6.25-6.25-16.38-6.25-22.63 0l-11.31 11.31c-6.25 6.25-6.25 16.38 0 22.63L386.75 192l-35.71 35.72c-6.25 6.25-6.25 16.38 0 22.63zM624 416H381.54c-.74 19.81-14.71 32-32.74 32H288c-18.69 0-33.02-17.47-32.77-32H16c-8.8 0-16 7.2-16 16v16c0 35.2 28.8 64 64 64h512c35.2 0 64-28.8 64-64v-16c0-8.8-7.2-16-16-16zM576 48c0-26.4-21.6-48-48-48H112C85.6 0 64 21.6 64 48v336h512V48zm-64 272H128V64h384v256z" />
-              </svg>
-              Đổi mật khẩu
-            </li>
-            <li
-              onClick={() => {
-                logout({
-                  openUrl: false
-                });
-              }}
-              className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="rgb(34 197 94)"
-                viewBox="0 -64 640 640"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M255.03 261.65c6.25 6.25 16.38 6.25 22.63 0l11.31-11.31c6.25-6.25 6.25-16.38 0-22.63L253.25 192l35.71-35.72c6.25-6.25 6.25-16.38 0-22.63l-11.31-11.31c-6.25-6.25-16.38-6.25-22.63 0l-58.34 58.34c-6.25 6.25-6.25 16.38 0 22.63l58.35 58.34zm96.01-11.3l11.31 11.31c6.25 6.25 16.38 6.25 22.63 0l58.34-58.34c6.25-6.25 6.25-16.38 0-22.63l-58.34-58.34c-6.25-6.25-16.38-6.25-22.63 0l-11.31 11.31c-6.25 6.25-6.25 16.38 0 22.63L386.75 192l-35.71 35.72c-6.25 6.25-6.25 16.38 0 22.63zM624 416H381.54c-.74 19.81-14.71 32-32.74 32H288c-18.69 0-33.02-17.47-32.77-32H16c-8.8 0-16 7.2-16 16v16c0 35.2 28.8 64 64 64h512c35.2 0 64-28.8 64-64v-16c0-8.8-7.2-16-16-16zM576 48c0-26.4-21.6-48-48-48H112C85.6 0 64 21.6 64 48v336h512V48zm-64 272H128V64h384v256z" />
-              </svg>
-              <span className="text-red-600">Đăng xuất</span>
-            </li>
-          </ul>
-        ) : (
-          <></>
-        )}
-      </li>
-    </>
-  )});
+                <svg
+                  className="w-6 h-6"
+                  fill="rgb(34 197 94)"
+                  viewBox="0 -64 640 640"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M255.03 261.65c6.25 6.25 16.38 6.25 22.63 0l11.31-11.31c6.25-6.25 6.25-16.38 0-22.63L253.25 192l35.71-35.72c6.25-6.25 6.25-16.38 0-22.63l-11.31-11.31c-6.25-6.25-16.38-6.25-22.63 0l-58.34 58.34c-6.25 6.25-6.25 16.38 0 22.63l58.35 58.34zm96.01-11.3l11.31 11.31c6.25 6.25 16.38 6.25 22.63 0l58.34-58.34c6.25-6.25 6.25-16.38 0-22.63l-58.34-58.34c-6.25-6.25-16.38-6.25-22.63 0l-11.31 11.31c-6.25 6.25-6.25 16.38 0 22.63L386.75 192l-35.71 35.72c-6.25 6.25-6.25 16.38 0 22.63zM624 416H381.54c-.74 19.81-14.71 32-32.74 32H288c-18.69 0-33.02-17.47-32.77-32H16c-8.8 0-16 7.2-16 16v16c0 35.2 28.8 64 64 64h512c35.2 0 64-28.8 64-64v-16c0-8.8-7.2-16-16-16zM576 48c0-26.4-21.6-48-48-48H112C85.6 0 64 21.6 64 48v336h512V48zm-64 272H128V64h384v256z" />
+                </svg>
+                <span className="text-red-600">Đăng xuất</span>
+              </li>
+            </ul>
+          ) : (
+            <></>
+          )}
+        </li>
+      </>
+    );
+  });
   return (
     <header className="fixed top-0 left-0 right-0 z-50 text-black bg-white border menu-top border-1 border-slate-300">
       <div className="flex flex-row items-center justify-between px-8 ">
         <div className="flex flex-row items-center gap-5 main">
-          <div className="logo w-52" onClick={() => navigation("/")}>
+          <div className="logo w-52" onClick={() => navigation('/')}>
             <img src="../../../images/topcv-logo.png" alt="" />
           </div>
           <nav className="nav-menu">
@@ -397,7 +405,7 @@ function Header() {
                     </li>
                     <li
                       onClick={() => {
-                        navigation("/your-application");
+                        navigation('/your-application');
                       }}
                       className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
@@ -416,7 +424,7 @@ function Header() {
                     </li>
                     <li
                       onClick={() => {
-                        navigation("/saved-jobs");
+                        navigation('/saved-jobs');
                       }}
                       className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
@@ -718,7 +726,7 @@ function Header() {
                 {isCompaniesHovered ? (
                   <ul className="absolute left-0 z-50 flex flex-col gap-3 p-3 text-base font-semibold bg-white border rounded-lg shadow-lg sub-menu top-full border-slate-100">
                     <li
-                      onClick={() => navigation("/companies")}
+                      onClick={() => navigation('/companies')}
                       className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
                     >
                       <svg
@@ -1164,16 +1172,15 @@ function Header() {
         <div className="flex flex-row justify-end gap-3 user-actions">
           {/* NOTIFY BUTTON */}
 
-          {
-          isAuthenticated 
-          ? <HeaderProfileSection/>
-          : (
+          {isAuthenticated ? (
+            <HeaderProfileSection />
+          ) : (
             <div className="flex items-center list-none">
               <li>
                 <button
                   onClick={() => {
                     // loginWithRedirect();
-                    navigation("/user-login");
+                    navigation('/user-login');
                   }}
                   className="py-2 px-4 rounded-md mx-2 border border-[#00A74B] hover:border-green-800 bg-white"
                 >
@@ -1183,7 +1190,7 @@ function Header() {
               <li>
                 <button
                   onClick={() => {
-                    navigation("/user-signup");
+                    navigation('/user-signup');
                   }}
                   className="py-2 px-4 rounded-md mx-2 bg-[#00A74B] hover:bg-green-800 text-white"
                 >
@@ -1193,7 +1200,7 @@ function Header() {
               <li>
                 <button
                   onClick={() => {
-                    navigation("/hr-login");
+                    navigation('/hr-login');
                   }}
                   className="px-4 py-2 mx-2 text-white bg-black rounded-md hover:bg-gray-800"
                 >

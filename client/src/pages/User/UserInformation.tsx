@@ -153,7 +153,7 @@ function UserInformation() {
               </label>
               <input
                 name="full-name"
-                type="text"
+                type={item.accessor === 'phone' ? 'number' : 'text'}
                 className={clsx(
                   'px-4 py-2 border rounded-lg bg-white',
                   item.disabled ? 'text-gray-500 cursor-not-allowed' : '',
