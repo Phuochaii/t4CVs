@@ -107,6 +107,7 @@ function ApplyModal({ open, handleClose, handleOpen, jobData, user }) {
         // handleClose();
 
         alert("Create Application successfully");
+        handleClose();
       } else {
         setErrors(errors);
         console.log(errors);
