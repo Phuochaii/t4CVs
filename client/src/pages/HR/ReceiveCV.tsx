@@ -6,25 +6,29 @@ import { DefaultPagination } from '../../shared/components/default-pagination';
 import { ApplicationFromServer } from '../../shared/types/Application.type';
 import { cvState, cvLabel } from '../../shared/utils/constant';
 import ReceivedCVTable from '../../shared/components/ReceivedCVTable';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 function ReceiveCV() {
-  const hrId = JSON.parse(localStorage.getItem('hr') as string).id;
-
+  // const hrId = JSON.parse(localStorage.getItem('hr') as string).id;
+  const token = useProfileContext();
+  if(!token.token)
+  {
+    return;
+  }
   const [campaign, setCampaign] = React.useState<any>();
   const [receivedCvState, setReceivedCvState] = React.useState<
     NameValue | undefined
   >(undefined);
   const [cvLabelState, setCvLabelState] = React.useState();
-
   const [listCV, setListCV] = React.useState<ApplicationFromServer[]>([]);
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
   const [compaignList, setCompaignList] = React.useState<NameValue[]>([]);
 
-  const fetchApplication = (hrId: string, compaignId: string) => {
+  const fetchApplication = ( compaignId: string) => {
     HRModule.getApplicationByCampaignIdHRId({
       campaignId: compaignId,
-      hrId: hrId,
+      token: token.token!,
       status:
         receivedCvState != undefined
           ? (receivedCvState.value as boolean)
@@ -37,7 +41,7 @@ function ReceiveCV() {
     });
   };
   const fetchAllCompaign = async () => {
-    HRModule.getAllCompaignByHrId({ hrId: hrId }).then((res) => {
+    HRModule.getAllCompaignByHrId({ token:token.token! }).then((res) => {
       setCompaignList([
         { value: '', name: 'Tất cả' },
         ...res.data
@@ -51,11 +55,11 @@ function ReceiveCV() {
 
   React.useEffect(() => {
     fetchAllCompaign();
-    fetchApplication(hrId, '');
+    fetchApplication('');
   }, []);
 
   React.useEffect(() => {
-    fetchApplication(hrId, !campaign ? '' : campaign.value);
+    fetchApplication( !campaign ? '' : campaign.value);
   }, [campaign, receivedCvState, page]);
 
   return (

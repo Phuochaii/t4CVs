@@ -15,6 +15,8 @@ import {
   getJobById,
 } from "../../modules/helper";
 import { updateJobStatus } from "../../modules/admin-module";
+import { getField } from "../../modules/hr-module";
+import { useProfileContext } from "../../shared/services/authen/domain/context";
 
 function RecruitmentDisplayTable() {
   return (
@@ -43,12 +45,14 @@ interface RecruitmentDisplayProps {
   recruitment: RecruitmentJobPost;
   refresh: boolean;
   setRefresh: React.Dispatch<SetStateAction<boolean>>;
+  token:string
 }
 
 function RecruitmentDisplaySection({
   recruitment,
   refresh,
   setRefresh,
+  token
 }: RecruitmentDisplayProps) {
   return (
     <div className="flex flex-col gap-4 p-4 bg-white">
@@ -65,7 +69,7 @@ function RecruitmentDisplaySection({
         <div
           className="flex items-center gap-2 cursor-pointer"
           onClick={async () => {
-            await updateJobStatus(recruitment.id, true);
+            await updateJobStatus(token,recruitment.id, true);
             setRefresh(!refresh);
           }}
         >
@@ -86,7 +90,7 @@ function RecruitmentDisplaySection({
         <div
           className="flex items-center gap-2 cursor-pointer"
           onClick={async () => {
-            await updateJobStatus(recruitment.id, false);
+            await updateJobStatus(token,recruitment.id, false);
             setRefresh(!refresh);
           }}
         >
@@ -128,6 +132,7 @@ function RecruitmentDisplaySection({
 }
 
 function CampaignEdit() {
+  const { token } = useProfileContext();
   const { state } = useLocation();
   const [recruitment, setRecruitment] =
     useState<RecruitmentJobPost>(state);
@@ -138,25 +143,15 @@ function CampaignEdit() {
   const [fields, setFields] = useState<any>(null);
   useEffect(() => {
     const getData = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/job/create-info', {
-          method: 'GET',
-          headers: {
-            'Access-control-allow-origin': 'http://localhost:3000',
-            'Content-type': 'application/json',
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-        setFields(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-      const response = await getJobById(recruitment.id);
+      const response = await getField(token!);
+      console.log(token!)
+      const data = response;
       console.log(response)
-      setJob(response)
+      setFields(data);
+
+      const res = await getJobById(recruitment.id);
+      console.log(res)
+      setJob(res)
       
       setRecruitment({
         ...response,
@@ -183,6 +178,7 @@ function CampaignEdit() {
           recruitment={recruitment}
           refresh={refresh}
           setRefresh={setRefresh}
+          token={token!}
         />
       ),
       subtitle: (

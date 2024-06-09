@@ -29,10 +29,14 @@ export async function getCompanyById(id: number | string) {
   const rawCompany: CompanyFromServer = response.data;
   return rawCompany;
 }
-export async function getJobByCampaignId(campaignId: number) {
+export async function getJobByCampaignId(token:string,campaignId: number) {
   try {
     const response = await axios.get(
-      `${serverURL}/job?campaignId=${campaignId}`,
+      `${serverURL}/job?campaignId=${campaignId}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
     );
     if (response.status != 200) return null;
     const rawJob: RecruitmentFromServer = response.data;
