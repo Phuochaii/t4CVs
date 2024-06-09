@@ -1,14 +1,14 @@
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { TypeOrmApplicationReadRepository } from './application.read.repository';
 import { UserNotificationSchemaMapper } from './mapper';
-import { Projections } from './projection';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { Projections, StartAppProjection } from './projection';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { DatabaseOptions } from './database/init';
 import { ApplicationSchema } from './schema';
 import { WriteRepositoryModule } from '../write/write-repository.module';
 import { ApplicationReadRepository } from 'apps/application/src/domain/repository';
 
+type DatabaseOptions = TypeOrmModuleOptions & { database: string };
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -42,4 +42,9 @@ import { ApplicationReadRepository } from 'apps/application/src/domain/repositor
   ],
   exports: [ApplicationReadRepository],
 })
-export class ReadRepositoryModule {}
+export class ReadRepositoryModule implements OnModuleInit {
+  constructor(private readonly startAppProjection: StartAppProjection) {}
+  async onModuleInit() {
+    await this.startAppProjection.reconstruct();
+  }
+}

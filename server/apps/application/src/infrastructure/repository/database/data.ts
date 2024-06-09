@@ -1,8 +1,23 @@
 // import { Application } from '../entities/application.entity';
 // import { NotificationStatus } from '../../domain/aggregate';
-import { ApplicationSchema } from '../schema';
+
+import { ApplicationSchema } from '../read/schema';
 
 export const applications: ApplicationSchema[] = [
+  {
+    id: 20,
+    status: false,
+    fullname: 'Waylin MacVaugh',
+    phone: '584-577-2404',
+    email: 'wmacvaugh3c@yellowpages.com',
+    coverLetter:
+      'Kính gửi,\nTôi viết thư này để nộp đơn ứng tuyển vào vị trí General Manager. Kinh nghiệm và kỹ năng lãnh đạo của tôi sẽ là một nguồn lực quý giá cho sự phát triển của công ty.\n\nTrân trọng,\nWaylin MacVaugh',
+    createdAt: '2024-06-12',
+    updateAt: '2023-07-16',
+    campaignId: 1,
+    userId: '34',
+    cvId: 20,
+  },
   {
     id: 1,
     status: true,
@@ -268,19 +283,5 @@ export const applications: ApplicationSchema[] = [
     campaignId: 3,
     userId: '33',
     cvId: 19,
-  },
-  {
-    id: 20,
-    status: false,
-    fullname: 'Waylin MacVaugh',
-    phone: '584-577-2404',
-    email: 'wmacvaugh3c@yellowpages.com',
-    coverLetter:
-      'Kính gửi,\nTôi viết thư này để nộp đơn ứng tuyển vào vị trí General Manager. Kinh nghiệm và kỹ năng lãnh đạo của tôi sẽ là một nguồn lực quý giá cho sự phát triển của công ty.\n\nTrân trọng,\nWaylin MacVaugh',
-    createdAt: '2024-06-12',
-    updateAt: '2023-07-16',
-    campaignId: 1,
-    userId: '34',
-    cvId: 20,
   },
 ];

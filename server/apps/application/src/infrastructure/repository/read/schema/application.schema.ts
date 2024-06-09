@@ -1,10 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { Application } from '../../../../domain/entity';
 import { ClassProperties } from '@app/common/type';
 
 @Entity('application')
 export class ApplicationSchema implements ClassProperties<Application> {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number;
 
   @Column({ default: false })

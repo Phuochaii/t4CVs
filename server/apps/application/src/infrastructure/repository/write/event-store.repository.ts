@@ -20,8 +20,14 @@ export class EventStoreRepository {
     private readonly snapshotService: SnapshotService,
   ) {}
 
-  async getCurrentState(): Promise<AppState> {
+  async getCurrentState(): Promise<
+    AppState & {
+      revision: number;
+    }
+  > {
+    let latestRevision: number | null = null;
     const snapshot = await this.snapshotService.getLatestSnapshot();
+    latestRevision = snapshot?.data.revision ?? null;
     const applications = snapshot?.data.state.applications ?? [];
     const state: AppState = {
       applications: plainToInstance(Application, applications),
@@ -33,10 +39,14 @@ export class EventStoreRepository {
       })
       .forEach(({ event }: { event: EventStorePublishedEvent }) => {
         this.applyEvent(state, event);
+        latestRevision = Number(event.revision);
       })
       .catch((error) => {});
 
-    return state;
+    return {
+      ...state,
+      revision: latestRevision ?? -1,
+    };
   }
 
   async applyEvent(

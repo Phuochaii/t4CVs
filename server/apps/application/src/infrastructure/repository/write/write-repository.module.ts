@@ -20,7 +20,6 @@ import { ApplicationWriteRepository } from 'apps/application/src/domain/reposito
       provide: 'SNAPSHOT_STREAM',
       useValue: 'topcv-application-snapshot',
     },
-    
   ],
   exports: [ApplicationWriteRepository, EventStoreRepository],
 })

@@ -25,17 +25,35 @@ export class SnapshotProjection {
       if (!isRegistered) return;
 
       if (Number(event.revision) % 10 !== 0) return;
-      await this.updateSnapshot(Number(event.revision));
+      await this.updateSnapshot();
     });
   }
 
-  async updateSnapshot(
-    revision: SnapShotEvent['data']['revision'],
-  ): Promise<void> {
-    const state = await this.eventStoreRepository.getCurrentState();
+  async updateSnapshot(): Promise<void> {
+    const { applications, revision } =
+      await this.eventStoreRepository.getCurrentState();
+    const applicationsData = applications.map(
+      (application) => {
+        return {
+          status: application.status,
+          fullname: application.fullname,
+          phone: application.phone,
+          email: application.email,
+          coverLetter: application.coverLetter,
+          createdAt: application.createdAt,
+          updateAt: application.updateAt,
+          campaignId: application.campaignId,
+          userId: application.userId,
+          cvId: application.cvId,
+          id: application.id,
+        };
+      },
+    );
     const snapshot = new SnapShotEvent({
       revision,
-      state,
+      state: {
+        applications: applicationsData,
+      },
     });
     await this.snapshotService.saveSnapshot(snapshot);
   }
