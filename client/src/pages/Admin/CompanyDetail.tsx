@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Switch from '../../shared/components/CustomSwitch';
-import {  getCompanyById } from "../../modules/helper";
-import { updateCompanyStatus } from "../../modules/admin-module";
+import {  getCompanyById } from '../../modules/helper';
+import { updateCompanyStatus } from '../../modules/admin-module';
 import { CompanyFromServer } from '../../shared/types/Company.type';
 import { CheckCheck } from 'lucide-react';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 function CompanyDetail() {
   const navigation = useNavigate();
   const { id } = useParams();
   const [companyInfo, setCompanyInfo] = useState<CompanyFromServer | null>();
   const [refresh, setRefresh] = useState(false);
+  const { token } = useProfileContext();
 
   useEffect(() => {
     if (!id) return;
@@ -128,6 +130,7 @@ function CompanyDetail() {
             <div
               onClick={async () => {
                 await updateCompanyStatus(
+                  token,
                   companyInfo?.id as number,
                   !companyInfo?.status,
                 );

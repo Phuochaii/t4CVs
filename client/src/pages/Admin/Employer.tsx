@@ -5,14 +5,12 @@ import {
   Search,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  getCompanyById,
-} from '../../modules/helper';
+import { getCompanyById } from '../../modules/helper';
 import {
   getAllEmployer,
   updateLicenseStatus,
   updatePhoneStatus,
-} from "../../modules/admin-module";
+} from '../../modules/admin-module';
 import BasicTable, {
   BasicColumnProps,
   ObjectFromServer,
@@ -20,6 +18,7 @@ import BasicTable, {
 import { EmployerFromServer } from '../../shared/types/Employer.type';
 import Switch from '../../shared/components/CustomSwitch';
 import clsx from 'clsx';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 function Employer() {
   const [employers, setEmployers] = useState<EmployerFromServer[]>([]);
@@ -27,6 +26,7 @@ function Employer() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [refresh, setRefresh] = useState(false);
+  const { token } = useProfileContext();
 
   useEffect(() => {
     async function getData() {
@@ -105,6 +105,7 @@ function Employer() {
                 checked={employer.phoneNumberStatus}
                 onChange={async () => {
                   await updatePhoneStatus(
+                    token,
                     employer.id,
                     !employer.phoneNumberStatus,
                   );
@@ -152,6 +153,7 @@ function Employer() {
                 checked={employer.licenseStatus}
                 onChange={async () => {
                   await updateLicenseStatus(
+                    token,
                     employer.id,
                     !employer.licenseStatus,
                   );

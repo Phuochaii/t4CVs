@@ -1,71 +1,71 @@
-import { CalendarCheck } from "lucide-react";
-import GradientIcon from "../../layouts/AdminLayout/components/GradientIcon";
-import OverviewCard from "../../layouts/AdminLayout/components/OverviewCard";
-import { MoreHorizontal } from "lucide-react";
-import { useState } from "react";
+import { CalendarCheck } from 'lucide-react';
+import GradientIcon from '../../layouts/AdminLayout/components/GradientIcon';
+import OverviewCard from '../../layouts/AdminLayout/components/OverviewCard';
+import { MoreHorizontal } from 'lucide-react';
+import { useState } from 'react';
 
 function Overview() {
   const [data] = useState([
     {
-      title: "HR",
+      title: 'HR',
       rows: [
         {
-          title: "Evil Incorporated",
-          number: "400",
+          title: 'Evil Incorporated',
+          number: '400',
         },
         {
-          title: "Rockstar",
-          number: "400",
+          title: 'Rockstar',
+          number: '400',
         },
         {
-          title: "Rito",
-          number: "400",
+          title: 'Rito',
+          number: '400',
         },
         {
-          title: "Volvo",
-          number: "400",
+          title: 'Volvo',
+          number: '400',
         },
       ],
     },
     {
-      title: "User",
+      title: 'User',
       rows: [
         {
-          title: "Mac Zucc",
-          number: "25",
+          title: 'Mac Zucc',
+          number: '25',
         },
         {
-          title: "Jeff Bezos",
-          number: "500",
+          title: 'Jeff Bezos',
+          number: '500',
         },
         {
-          title: "Zilong Ma",
-          number: "1000",
+          title: 'Zilong Ma',
+          number: '1000',
         },
         {
-          title: "Cho Bite'm",
-          number: "500",
+          title: 'Cho Bite',
+          number: '500',
         },
       ],
     },
     {
-      title: "Campaign",
+      title: 'Campaign',
       rows: [
         {
-          title: "Ukraine - India",
-          number: "2040",
+          title: 'Ukraine - India',
+          number: '2040',
         },
         {
-          title: "Israel",
-          number: "500",
+          title: 'Israel',
+          number: '500',
         },
         {
-          title: "Palestine",
-          number: "500",
+          title: 'Palestine',
+          number: '500',
         },
         {
-          title: "Sua Kun Cho Em",
-          number: "500",
+          title: 'Sua Kun Cho Em',
+          number: '500',
         },
       ],
     },
@@ -118,7 +118,7 @@ function Overview() {
                 {item.rows.map((row, index) => {
                   return (
                     <div
-                      key={"row-" + index}
+                      key={'row-' + index}
                       className="flex items-center justify-between gap-12 text-slate-400"
                     >
                       <div>{row.title}</div>

@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import clsx from 'clsx';
 import {
   ArrowUp,
   ChevronLeftCircle,
@@ -7,18 +7,14 @@ import {
   Pencil,
   Search,
   Settings,
-} from "lucide-react";
-import React, { SetStateAction, useEffect, useState } from "react";
-import { statusColor } from "../../shared/types/RecruitmentStatus.type";
-import { RecruitmentJobPost } from "../../shared/types/Recruitment.type";
-import {
-  getAllJobs,
-  getCampaignById,
-  getJobsStat,
-} from "../../modules/helper";
-import Switch from "../../shared/components/CustomSwitch";
-import axios from "axios";
-
+} from 'lucide-react';
+import React, { SetStateAction, useEffect, useState } from 'react';
+import { statusColor } from '../../shared/types/RecruitmentStatus.type';
+import { RecruitmentJobPost } from '../../shared/types/Recruitment.type';
+import { getAllJobs, getCampaignById, getJobsStat } from '../../modules/helper';
+import Switch from '../../shared/components/CustomSwitch';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
+import { updateJobStatus } from '../../modules/admin-module';
 interface RecruitmentTableProps {
   data: RecruitmentJobPost[];
   setData: React.Dispatch<SetStateAction<RecruitmentJobPost[]>>;
@@ -26,13 +22,14 @@ interface RecruitmentTableProps {
   setRefresh: React.Dispatch<SetStateAction<boolean>>;
 }
 
-const serverURL = "http://localhost:3000";
 function RecruitmentTable({
   data,
   setData,
   refresh,
   setRefresh,
 }: RecruitmentTableProps) {
+  const { token } = useProfileContext();
+
   return (
     <table className="w-full bg-white">
       <thead>
@@ -63,12 +60,10 @@ function RecruitmentTable({
                         };
                         data[key] = newJobPost;
                         setData([...data]);
-                        await axios.put(
-                          `${serverURL}/job/update-status`,
-                          {
-                            id: newJobPost.id,
-                            status: !jobPost.status,
-                          }
+                        await updateJobStatus(
+                          token,
+                          newJobPost.id,
+                          !jobPost.status,
                         );
                         setRefresh(!refresh);
                       }}
@@ -76,34 +71,26 @@ function RecruitmentTable({
                     <div className="mt-1">
                       <div className="font-bold capitalize">
                         {jobPost.titleRecruitment}
-                        {"    "}
+                        {'    '}
                         <span
                           className={clsx(
-                            "p-1 font-semibold",
+                            'p-1 font-semibold',
                             statusColor[
-                              jobPost.status
-                                ? "Đang hiển thị"
-                                : "Dừng hiển thị"
+                              jobPost.status ? 'Đang hiển thị' : 'Dừng hiển thị'
                             ].bg,
                             statusColor[
-                              jobPost.status
-                                ? "Đang hiển thị"
-                                : "Dừng hiển thị"
-                            ].text
+                              jobPost.status ? 'Đang hiển thị' : 'Dừng hiển thị'
+                            ].text,
                           )}
                         >
-                          {jobPost.status
-                            ? "Đang hiển thị"
-                            : "Dừng hiển thị"}
+                          {jobPost.status ? 'Đang hiển thị' : 'Dừng hiển thị'}
                         </span>
                       </div>
                       <span className="text-slate-500">{`#${jobPost.id}`}</span>
                     </div>
                   </div>
                   <div></div>
-                  <span>
-                    Chiến dịch tuyển dụng: {jobPost.campaign.name}
-                  </span>
+                  <span> Chiến dịch tuyển dụng: {jobPost.campaign.name} </span>
                   <button className="p-2 font-bold text-green-500 bg-green-50">
                     Xem CV ứng tuyển
                   </button>
@@ -111,11 +98,7 @@ function RecruitmentTable({
               </td>
               <td className="p-2 border w-[64px]">
                 <div className="flex flex-col items-center justify-center gap-4">
-                  <Pencil
-                    fill="gray"
-                    stroke="white"
-                    strokeWidth={1}
-                  />
+                  <Pencil fill="gray" stroke="white" strokeWidth={1} />
                   <button className="p-2 rounded-full">
                     <Pause fill="gray" stroke="transparent" />
                   </button>
@@ -124,11 +107,9 @@ function RecruitmentTable({
                   </button>
                 </div>
               </td>
-              <td className="border w-[360px]">
-                {jobPost.company?.name}
-              </td>
+              <td className="border w-[360px]"> {jobPost.company?.name} </td>
               <td className="border">
-                {jobPost.createdAt.toLocaleDateString("vi-VN")}
+                {jobPost.createdAt.toLocaleDateString('vi-VN')}
               </td>
             </tr>
           );
@@ -138,12 +119,12 @@ function RecruitmentTable({
   );
 }
 
-const filteredStatuses = ["Tất cả", "Đang hiển thị", "Dừng hiển thị"];
+const filteredStatuses = ['Tất cả', 'Đang hiển thị', 'Dừng hiển thị'];
 
 function Recruitment() {
   const [data, setData] = useState<RecruitmentJobPost[]>([]);
   const [selectedStatus, setSelectedStatus] = useState(0);
-  const [filterKeyword, setFilterKeyword] = useState("");
+  const [filterKeyword, setFilterKeyword] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [jobStats, setJobStats] = useState({
@@ -186,21 +167,21 @@ function Recruitment() {
             return (
               <div
                 className={clsx(
-                  "px-2 py-1 rounded-full items-center text-[12px] cursor-pointer flex gap-[6px]",
+                  'px-2 py-1 rounded-full items-center text-[12px] cursor-pointer flex gap-[6px]',
                   selectedStatus === key
-                    ? "bg-green-500 text-white"
-                    : "bg-slate-300"
+                    ? 'bg-green-500 text-white'
+                    : 'bg-slate-300',
                 )}
                 key={key}
                 onClick={() => setSelectedStatus(key)}
               >
                 {status}
                 <span className="flex items-center justify-center w-6 h-6 text-white bg-red-500 rounded-full">
-                  {status === "Tất cả"
+                  {status === 'Tất cả'
                     ? jobStats.total
-                    : status === "Đang hiển thị"
-                    ? jobStats.isActive
-                    : jobStats.isNotActive}
+                    : status === 'Đang hiển thị'
+                      ? jobStats.isActive
+                      : jobStats.isNotActive}
                 </span>
               </div>
             );
@@ -224,17 +205,14 @@ function Recruitment() {
           data={data
             .filter(
               (jobPost) =>
-                (jobPost.status
-                  ? "Đang hiển thị"
-                  : "Dừng hiển thị") ===
+                (jobPost.status ? 'Đang hiển thị' : 'Dừng hiển thị') ===
                   filteredStatuses[selectedStatus] ||
-                (filteredStatuses[selectedStatus] === "Tất cả" &&
-                  jobPost)
+                (filteredStatuses[selectedStatus] === 'Tất cả' && jobPost),
             )
             .filter(
               (jobPost) =>
                 jobPost.titleRecruitment.includes(filterKeyword) ||
-                jobPost.campaign.name.includes(filterKeyword)
+                jobPost.campaign.name.includes(filterKeyword),
             )}
         />
         <div className="flex items-center self-center justify-center gap-2">
@@ -252,9 +230,7 @@ function Recruitment() {
             stroke="green"
             className="cursor-pointer"
             strokeWidth={1}
-            onClick={() =>
-              setPage(page + 1 <= totalPages ? page + 1 : page)
-            }
+            onClick={() => setPage(page + 1 <= totalPages ? page + 1 : page)}
           />
         </div>
       </div>

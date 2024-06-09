@@ -14,6 +14,7 @@ import { Field } from '../../shared/types/Recruitment.type';
 import Switch from '../../shared/components/CustomSwitch';
 import { updateCompanyStatus } from '../../modules/admin-module';
 import { getAllCompanies, getAllFields } from '../../modules/helper';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 function Company() {
   const [companies, setCompanies] = useState<CompanyFromServer[]>([]);
@@ -21,6 +22,7 @@ function Company() {
   const [totalPages, setTotalPages] = useState(0);
   const [fields, setField] = useState<Field[]>([]);
   const [refresh, setRefresh] = useState(false);
+  const { token } = useProfileContext();
 
   useEffect(() => {
     async function getData() {
@@ -118,7 +120,7 @@ function Company() {
               <Switch
                 checked={company.status}
                 onChange={async () => {
-                  await updateCompanyStatus(company.id, !company.status);
+                  await updateCompanyStatus(token, company.id, !company.status);
                   setRefresh(!refresh);
                 }}
               />
