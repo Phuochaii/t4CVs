@@ -261,6 +261,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                       logout({
                         openUrl: false
                       });
+                      navigation('/hr');
                     }}
                   >
                     <span className="cursor-pointer text-black hover:text-green-500">
