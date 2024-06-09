@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import {
+  findEmployerByName,
   getCompanyById,
 } from '../../modules/helper';
 import {
@@ -20,7 +21,6 @@ import BasicTable, {
 import { EmployerFromServer } from '../../shared/types/Employer.type';
 import Switch from '../../shared/components/CustomSwitch';
 import clsx from 'clsx';
-import { findEmployerByName } from '../../shared/utils/helper';
 
 function Employer() {
   const [employers, setEmployers] = useState<EmployerFromServer[]>([]);

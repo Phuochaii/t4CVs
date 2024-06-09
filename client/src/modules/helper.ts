@@ -217,3 +217,24 @@ export const searchJob = async ({
   }
 }
 
+export async function findEmployerByName(
+  name: string,
+  page: number = 1,
+  limit: number = 10,
+) {
+  const response = await axios.get(`
+    ${serverURL}/employer/name/${name}?page=${page}&limit=${limit}`);
+  const rawEmployers: EmployerFromServer[] = response.data.data;
+  return { employers: rawEmployers };
+}
+
+export async function findCompanyByName(
+  name: string,
+  page: number = 1,
+  limit: number = 5,
+) {
+  const response = await axios.get(`
+    ${serverURL}/company/name/${name}?page=${page}&limit=${limit}`);
+  const rawCompanies: CompanyFromServer[] = response.data.data;
+  return { companies: rawCompanies };
+}

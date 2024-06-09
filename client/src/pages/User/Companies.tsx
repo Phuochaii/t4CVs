@@ -3,8 +3,8 @@ import axios from 'axios';
 
 import SearchCompany from '../../shared/components/SearchCompany';
 import CompanyCard from '../../shared/components/CompanyCard';
-import { findCompanyByName } from '../../shared/utils/helper';
 import { CompanyFromServer } from '../../shared/types/Company.type';
+import { findCompanyByName } from '../../modules/helper';
 
 function Companies() {
   const [companies, setCompanies] = useState<CompanyFromServer[]>([]);
