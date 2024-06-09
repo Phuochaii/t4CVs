@@ -20,6 +20,7 @@ import BasicTable, {
 import { EmployerFromServer } from '../../shared/types/Employer.type';
 import Switch from '../../shared/components/CustomSwitch';
 import clsx from 'clsx';
+import { findEmployerByName } from '../../shared/utils/helper';
 
 function Employer() {
   const [employers, setEmployers] = useState<EmployerFromServer[]>([]);
@@ -27,6 +28,7 @@ function Employer() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [refresh, setRefresh] = useState(false);
+  const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
     async function getData() {
@@ -47,8 +49,21 @@ function Employer() {
       setEmployers(await Promise.all(allEmployersWithCompany));
       setTotalPages(totalPages);
     }
-    getData();
-  }, [page, refresh]);
+    async function getDataSearch() {
+      const {
+        employers,
+      }: {
+        employers: EmployerFromServer[];
+      } = await findEmployerByName(searchText, page);
+      console.log(employers);
+      setEmployers(employers);
+    }
+    if (searchText == '') {
+      getData();
+    } else {
+      getDataSearch();
+    }
+  }, [page, refresh, searchText]);
 
   const columns: BasicColumnProps[] = useMemo(
     () => [
@@ -166,6 +181,10 @@ function Employer() {
     [],
   );
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="flex flex-col items-center flex-grow bg-slate-200">
       <div className="w-full p-2 bg-white">
@@ -175,16 +194,21 @@ function Employer() {
         <div className="flex items-center justify-between w-full gap-2">
           <div className="flex items-center flex-grow divide-x-2">
             <div className="flex items-center justify-between h-full p-2 text-sm bg-white">
-              <span className="text-gray-400">Tất cả công ty</span>
+              <span className="text-gray-400">Tất cả nhà tuyển dụng</span>
               <ChevronDown stroke="#9ca3af" size={16} />
             </div>
-            <div className="flex items-center justify-between flex-grow p-2 text-sm bg-white ">
+            <form
+              onSubmit={handleSearch}
+              className="flex items-center justify-between flex-grow p-2 text-sm bg-white "
+            >
               <input
                 className="w-full text-gray-400"
-                placeholder="Tìm công ty (nhấn Enter để tìm kiếm)"
+                placeholder="Tìm nhà tuyển dụng (Nhập để tìm kiếm)"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
               ></input>
               <Search stroke="#9ca3af" size={16} />
-            </div>
+            </form>
           </div>
         </div>
         <BasicTable data={employers} columns={columns} tableFor="employer" />
