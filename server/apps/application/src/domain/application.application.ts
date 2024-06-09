@@ -65,13 +65,14 @@ export class ApplicationApplication {
 
     const total = (await total_data).length;
     const data = await this.getByCampaignIdApplicationService.execute(request);
-
+    const total1 = (await data).length;
+    console.log(total1);
     const total_pages = Math.ceil(total / request.limit);
     if (!total_data || !data) {
       return {
         page: request.page,
         limit: request.limit,
-        total: total,
+        total: total1,
         totalPage: total_pages,
         applications: [],
       };
@@ -79,7 +80,7 @@ export class ApplicationApplication {
     return {
       page: request.page,
       limit: request.limit,
-      total: total,
+      total: total1,
       totalPage: total_pages,
       applications: data,
     };
