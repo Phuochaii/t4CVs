@@ -119,13 +119,13 @@ function Information({ compaignId }: { compaignId: string }) {
             <div className="job-description__item">
               <h3 className="text-base font-bold mb-2">Địa điểm làm việc</h3>
               <div className="job-description__item--content">
-                <p>
-                  {jobData?.company
-                    ? jobData?.company?.address
-                      ? jobData?.company?.address
-                      : ''
-                    : ''}
-                </p>
+                {jobData?.locations
+                  ? jobData?.locations.map((location: any) => (
+                      <p className="" key={location.id}>
+                        {location.name}
+                      </p>
+                    ))
+                  : ''}
               </div>
             </div>
           </div>
