@@ -15,7 +15,7 @@ import {
   getJobById,
 } from "../../modules/helper";
 import { updateJobStatus } from "../../modules/admin-module";
-import { getField } from "../../modules/hr-module";
+import { getField, getProfile } from "../../modules/hr-module";
 import { useProfileContext } from "../../shared/services/authen/domain/context";
 
 function RecruitmentDisplayTable() {
@@ -140,6 +140,7 @@ function CampaignEdit() {
   const [refresh, setRefresh] = useState(false);
   const [job, setJob] =
     useState<RecruitmentFromServer>(state);
+  const [employer, setEmployer] = useState<any>(null);
   const [fields, setFields] = useState<any>(null);
   useEffect(() => {
     const getData = async () => {
@@ -148,11 +149,12 @@ function CampaignEdit() {
       const data = response;
       console.log(response)
       setFields(data);
-
+      const res1 = await getProfile(token!);
+      console.log(res1.companyId)
+      setEmployer(res1);
       const res = await getJobById(recruitment.id);
       console.log(res)
       setJob(res)
-      
       setRecruitment({
         ...response,
         createdAt: new Date(response.createAt),
@@ -166,7 +168,7 @@ function CampaignEdit() {
   const sections = [
     {
       title: "Nội dung tuyển dụng",
-      sectionComponent: <CampaignEditCard jobItem={job} fields={fields}></CampaignEditCard>,
+      sectionComponent: <CampaignEditCard employer={employer} jobItem={job} fields={fields}></CampaignEditCard>,
       subtitle: (
         <h2 className="text-black ">{recruitment.campaign.name}</h2>
       ),

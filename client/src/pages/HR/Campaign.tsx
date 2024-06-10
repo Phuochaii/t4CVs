@@ -26,10 +26,7 @@ function Campaign() {
   useEffect(() => {
     const getAllCompaigns = async () => {
       const response = await getAllCompaignByHrId({ token: token! })
-      console.log(response.data)
-      console.log(response.total_page)
-      const allCampaigns = response.data
-      const totalPages = response.total_page
+      const {allCampaigns, totalPages} = response
       setTotalPages(totalPages);
       const rawCampaigns = await allCampaigns.map(async (item: any) => {
         const employer = await getProfile(token!);

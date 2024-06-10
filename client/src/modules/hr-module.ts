@@ -110,8 +110,11 @@ const getAllCompaignByHrId = async ({ token }: { token: string }) => {
         authorization: `Bearer ${token}`,
       },
     },
-  );
-  return response.data;
+  ); 
+  const responseData = response.data
+  const { data, total_page } = responseData;
+  console.log(data, total_page)
+  return { allCampaigns: data, totalPages: total_page };
 };
 
 // UPDATE APPLICATION STATUS
@@ -277,11 +280,10 @@ const uploadHRProfile = async ({
   token: string;
 }) => {
   const response = await axios
-    .put(`${serverURL}/employer/update`, {
+    .put(`${serverURL}/employer/update`, formData, {
       headers: {
         authorization: `Bearer ${token}`,
       },
-      formData,
     })
     .then((res) => {
       return res;

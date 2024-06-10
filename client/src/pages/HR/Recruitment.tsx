@@ -15,14 +15,18 @@ import { RecruitmentJobPost } from "../../shared/types/Recruitment.type";
 import {
   getAllJobs,
   getCampaignById,
+  getJobByCampaignId,
   getJobsStat,
 } from "../../modules/helper";
+import { useProfileContext } from "../../shared/services/authen/domain/context";
+import { getAllCompaignByHrId } from "../../modules/hr-module";
+import moment from "moment";
 // import Switch from "../../shared/components/CustomSwitch";
 
 interface RecruitmentTableProps {
   refresh: boolean;
   setRefresh: Dispatch<SetStateAction<boolean>>;
-  data: RecruitmentJobPost[];
+  data: any[];
 }
 
 function RecruitmentTable({
@@ -45,7 +49,8 @@ function RecruitmentTable({
         </tr>
       </thead>
       <tbody>
-        {data.map((jobPost, key) => {
+        {data.map((jobPost: any, key: number) => {
+          console.log(jobPost)
           return (
             <tr key={key}>
               <td className="border max-w-[240px] ">
@@ -55,25 +60,25 @@ function RecruitmentTable({
                       className={clsx(
                         "p-1 font-semibold",
                         statusColor[
-                          jobPost.status
+                          jobPost.job.status
                             ? "Đang hiển thị"
                             : "Dừng hiển thị"
                         ].bg,
                         statusColor[
-                          jobPost.status
+                          jobPost.job.status
                             ? "Đang hiển thị"
                             : "Dừng hiển thị"
                         ].text
                       )}
                     >
-                      {jobPost.status
+                      {jobPost.job.status
                         ? "Đang hiển thị"
                         : "Dừng hiển thị"}
                     </span>{" "}
                     <span className="font-bold capitalize">
-                      {jobPost.titleRecruitment}
+                      {jobPost.job.titleRecruitment}
                     </span>{" "}
-                    <span className="text-slate-500">{`#${jobPost.id}`}</span>
+                    <span className="text-slate-500">{`#${jobPost.campaign.id}`}</span>
                   </div>
                   <span>
                     Chiến dịch tuyển dụng: {jobPost.campaign.name}
@@ -87,7 +92,7 @@ function RecruitmentTable({
                 <div className="flex flex-col items-center justify-center gap-4">
                   <Link
                     className="p-2 rounded-full"
-                    to={`/hr/compaign-edit/${jobPost.id}`}
+                    to={`/hr/compaign-edit/${jobPost.campaign.id}`}
                     state={jobPost}
                   >
                     <Pencil
@@ -105,10 +110,12 @@ function RecruitmentTable({
                 </div>
               </td>
               <td className="border w-[360px]">
-                {jobPost.company?.name}
+                {jobPost.job.company?.name}
               </td>
               <td className="border">
-                {jobPost.createdAt.toLocaleDateString("vi-VN")}
+                {moment(new Date(jobPost.createdAt)).format(
+                    'DD-MM-YYYY HH:mm A',
+                  )}
               </td>
             </tr>
           );
@@ -121,7 +128,7 @@ function RecruitmentTable({
 const filteredStatuses = ["Tất cả", "Đang hiển thị", "Dừng hiển thị"];
 
 function Recruitment() {
-  const [data, setData] = useState<RecruitmentJobPost[]>([]);
+  const [data, setData] = useState<any[]>([]);
   const [selectedStatus, setSelectedStatus] = useState(0);
   const [filterKeyword, setFilterKeyword] = useState("");
   const [page, setPage] = useState(1);
@@ -132,23 +139,25 @@ function Recruitment() {
     isNotActive: 0,
   });
   const [refresh, setRefresh] = useState(false);
-
+  const {token} = useProfileContext();
   useEffect(() => {
     const getAllRecruitments = async () => {
-      const { allJobs, totalPages } = await getAllJobs(page);
-      const stats = await getJobsStat();
-      setJobStats(stats);
-      const rawRecruitments = allJobs.map(async (item) => {
-        const campaign = await getCampaignById(item.campaignId);
+      const { allCampaigns, totalPages } = await getAllCompaignByHrId({token: token!});
+      console.log(allCampaigns)
+      // const stats = await getJobsStat();
+      // setJobStats(stats);
+      const rawRecruitments = allCampaigns.map(async (item:any) => {
+        console.log(item)
+        const job = await getJobByCampaignId(token!, item.id);
+        console.log(job)
         const rawRecruitment = {
           ...item,
-          createdAt: new Date(item.createAt),
-          updatedAt: new Date(item.updateAt),
-          expiredDate: new Date(item.expiredDate),
-          campaign: campaign,
+          job: job,
+          campaign: item,
         };
         return rawRecruitment;
       });
+      console.log(await Promise.all(rawRecruitments))
       setData(await Promise.all(rawRecruitments));
       setTotalPages(totalPages);
     };
@@ -203,7 +212,7 @@ function Recruitment() {
           data={data
             .filter(
               (jobPost) =>
-                (jobPost.status
+                (jobPost.job.status
                   ? "Đang hiển thị"
                   : "Dừng hiển thị") ===
                   filteredStatuses[selectedStatus] ||
@@ -212,9 +221,8 @@ function Recruitment() {
             )
             .filter(
               (jobPost) =>
-                jobPost.titleRecruitment.includes(filterKeyword) ||
-                jobPost.campaign.name.includes(filterKeyword)
-            )}
+                jobPost.job.titleRecruitment.includes(filterKeyword))
+             }
         />
         <div className="flex items-center self-center justify-center gap-2">
           <ChevronLeftCircle

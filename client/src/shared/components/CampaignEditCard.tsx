@@ -16,7 +16,7 @@ import {
   Video,
 } from 'lucide-react';
 import { SetStateAction, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Select, { MultiValue, SingleValue } from 'react-select';
 import SingleDropdown from '../components/SingleDropDown';
@@ -24,16 +24,19 @@ import MultiDropdown from '../components/MultiDropDown';
 import Option from '../types/Option.type';
 import { RecruitmentFromServer } from '../types/Recruitment.type';
 import axios from 'axios';
-function CampaignEditCard({ jobItem, fields }: { jobItem: RecruitmentFromServer, fields: any }) {
+import { useProfileContext } from '../services/authen/domain/context';
+import { getProfile } from '../../modules/hr-module';
+function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentFromServer, fields: any, employer:any }) {
   const { id: compaignId } = useParams();
+  const navigate = useNavigate();
   const convertToOptions = (data: { id: string; name: string }[]) => {
     if (!data) return [];
     return data.map(({ id, name }) => ({ value: id.toString(), label: name }));
   };
   const gender = [
-    { value: 'Any', label: 'Any' },
-    { value: 'Female', label: 'Female' },
-    { value: 'Male', label: 'Male' },
+    { value: 'Any', label: 'Không quan trọng' },
+    { value: 'Female', label: 'Nữ' },
+    { value: 'Male', label: 'Nam' },
   ];
   const major = convertToOptions(fields?.major);
   const city = convertToOptions(fields?.location);
@@ -48,6 +51,19 @@ function CampaignEditCard({ jobItem, fields }: { jobItem: RecruitmentFromServer,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  
+  const { token } = useProfileContext();
+  useEffect(() => {
+    // Fetch data from your API
+    const fetchData = async () => {
+      
+      const res = await getProfile(token!);
+      console.log(res.companyId)
+      
+    };
+
+    fetchData();
+  }, []);
   const [, setUserChoice] = useState<SingleValue<{
     value: string;
     label: string;
@@ -166,6 +182,7 @@ function CampaignEditCard({ jobItem, fields }: { jobItem: RecruitmentFromServer,
       try {
         const response = await axios.put('http://localhost:3000/job/update-job', JSON.stringify(updatedItem), {
           headers: {
+            authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         });
@@ -178,11 +195,12 @@ function CampaignEditCard({ jobItem, fields }: { jobItem: RecruitmentFromServer,
       } catch (error) {
         console.error('Error posting data:', error);
       }
-  
+      
 
     } else {
       //Do nothing
     }
+    navigate(-1)
   };
   const handleSalaryError = (value: SetStateAction<string>) => {
     setSalary(value);
@@ -1062,7 +1080,7 @@ function CampaignEditCard({ jobItem, fields }: { jobItem: RecruitmentFromServer,
                     {...register('name', {
                       required: true,
                     })}
-                    defaultValue={jobItem.company.employers ? jobItem.company.employers[0].fullname : 'Không có dữ liệu'}
+                    defaultValue={employer!.fullname}
                   />
                 </div>
                 <div className="space-y-2 w-3/12">
@@ -1074,7 +1092,7 @@ function CampaignEditCard({ jobItem, fields }: { jobItem: RecruitmentFromServer,
                     {...register('phone', {
                       required: true,
                     })}
-                    defaultValue={jobItem.company.employers ? jobItem.company.employers[0].phoneNumber : 'Không có dữ liệu'}
+                    defaultValue={employer!.phoneNumber}
                   />
                 </div>
                 <div className="space-y-2 w-3/12">
@@ -1086,7 +1104,7 @@ function CampaignEditCard({ jobItem, fields }: { jobItem: RecruitmentFromServer,
                     {...register('email', {
                       required: true,
                     })}
-                    defaultValue={jobItem.company.employers ? jobItem.company.employers[0].skype : 'Không có dữ liệu'}
+                    defaultValue={employer!.skype}
                   />
                 </div>
               </div>
@@ -1155,7 +1173,7 @@ function CampaignEditCard({ jobItem, fields }: { jobItem: RecruitmentFromServer,
           <div className="post-compaign-2_content-item--actions flex flex-row justify-end font-bold mt-5">
             <div className="post-compaign-2_content-item--actions-group flex flex-row gap-4">
               <button
-                //   onClick={previous}
+                onClick={()=>{navigate(-1)}}
                 className="post-compaign-2_content-item--action btn-cancel py-2 px-7 rounded bg-slate-300 shadow-md cursor-pointer"
               >
                 Hủy

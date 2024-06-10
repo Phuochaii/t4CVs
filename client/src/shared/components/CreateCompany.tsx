@@ -1,15 +1,39 @@
-import { MouseEventHandler, SetStateAction, useEffect, useState } from 'react';
+import { MouseEventHandler, SetStateAction, useEffect, useRef, useState } from 'react';
 import { SingleValue } from 'react-select';
 import SingleDropdown from './SingleDropDown';
 import { Bold, Italic, List, ListOrdered, Underline } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { useProfileContext } from '../services/authen/domain/context';
+import { getField } from '../../modules/hr-module';
 
 const CreateCompany = ({
     handleView,
-  }: {
+}: {
     handleView: MouseEventHandler<HTMLButtonElement>;
-  }) => {
+}) => {
     const [fields, setFields] = useState<any>(null);
+    const [imageFile, setImageFile] = useState<File>();
+    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+    const imageUploadRef = useRef<HTMLInputElement | null>(null);
+    const { token } = useProfileContext()
+    const handleImageUpload = () => {
+        if (imageUploadRef.current) {
+            imageUploadRef.current.click();
+        }
+    };
+    const imagePreview = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            setImageFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                if (reader.result) {
+                    setImagePreviewUrl(reader.result as string);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    };
     const {
         register,
         handleSubmit,
@@ -17,36 +41,32 @@ const CreateCompany = ({
     } = useForm();
     const onSubmit = async (data: any, event: any) => {
 
-        const updatedItem = { ...item };
+        const formData = new FormData();
 
-        // Thịnh update lại phần file
-        updatedItem.file = "";
-        updatedItem.field = Number.parseInt(
-            fieldOptions?.value !== undefined ? fieldOptions?.value : '0',
-        );
-        updatedItem.taxCode = data.MST;
-        updatedItem.name = data.name;
-        updatedItem.website = data.website;
-        updatedItem.address = data.address;
-        updatedItem.phone = data.phoneNumber;
-        updatedItem.companySize = data.scale;
-        updatedItem.description = data.description;
-        //debug line
-        console.log(updatedItem);
+        if (imageFile) {
+            formData.append('file', imageFile);
+        }
+        formData.append('field', Number.parseInt(fieldOptions?.value !== undefined ? fieldOptions?.value : '1').toString());
+        formData.append('taxCode', data.MST);
+        formData.append('website', data.website);
+        formData.append('address', data.address);
+        formData.append('phone', data.phoneNumber);
+        formData.append('companySize', data.scale.toString());
+        formData.append('description', data.description);
+        formData.append('name', data.name)
         try {
             const response = await fetch('http://localhost:3000/company/create', {
                 method: 'POST',
+                body: formData,
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify(updatedItem),
             });
 
             if (!response.ok) {
                 throw new Error('Failed to post data to API');
             }
-
-            console.log('Data posted successfully');
+            console.log('Data successfully updated:', formData);
         } catch (error) {
             console.error('Error posting data:', error);
         }
@@ -56,24 +76,12 @@ const CreateCompany = ({
     useEffect(() => {
         // Fetch data from your API
         const fetchData = async () => {
-            try {
-                const response = await fetch('http://localhost:3000/job/create-info', {
-                    method: 'GET',
-                    headers: {
-                        'Access-control-allow-origin': 'http://localhost:3000',
-                        'Content-type': 'application/json',
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error('Failed to fetch data');
-                }
-                const data = await response.json();
-                setFields(data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+            const response = await getField(token!);
+            console.log(token)
+            const data = response;
+            console.log(response)
+            setFields(data);
         };
-
         fetchData();
     }, []);
     const convertToOptions = (data: { id: string; name: string }[]) => {
@@ -107,14 +115,27 @@ const CreateCompany = ({
                     <div className="w-5/12 flex flex-row items-center space-x-1">
                         <span>Logo</span>
                         <img
-                            src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg"
+                            src={
+                                imagePreviewUrl || 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'
+                            }
                             className="rounded-full"
-                            style={{ width: '32px' }}
+                            style={{ width: '32px', height: '32px' }}
                             alt="Avatar"
                         />
-                        <button className="text-sm btn-success py-1 px-2 rounded bg-gray-100 cursor-pointer">
+                        <input
+                            type="file"
+                            name="file"
+                            ref={imageUploadRef}
+                            onChange={imagePreview}
+                            style={{ display: 'none' }}
+                            accept="image/png, image/gif, image/jpeg"
+                        />
+                        <div
+                            className="text-sm btn-success py-1 px-2 rounded bg-gray-100 cursor-pointer"
+                            onClick={handleImageUpload}
+                        >
                             Đổi Logo
-                        </button>
+                        </div>
                     </div>
                     <div className="flex flex-row space-x-10 items-center">
                         <div className="space-y-2 w-1/2">
@@ -296,7 +317,7 @@ const CreateCompany = ({
                     <div className="w-10/12 justify-start flex flex-row space-x-3">
                         <button
                             className="text-base btn-success py-2 px-10 rounded bg-gray-200 border cursor-pointer"
-                        onClick={handleView}
+                            onClick={handleView}
                         >
                             Hủy
                         </button>

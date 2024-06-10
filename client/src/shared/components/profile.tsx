@@ -11,6 +11,7 @@ import { SingleValue } from 'react-select';
 
 import * as HRModule from '../../modules/hr-module';
 import { errorToast, successToast } from '../../utils/toast';
+import { useProfileContext } from '../services/authen/domain/context';
 
 let positionArray = [];
 
@@ -56,7 +57,7 @@ function Profile() {
     value: string;
     label: string;
   }> | null>(null);
-
+  const {token} = useProfileContext()
   const handleChange = (
     field: 'fullname' | 'gender' | 'position',
     value: string,
@@ -70,7 +71,7 @@ function Profile() {
     if (!data) return [];
     return data.map(({ id, name }) => ({ value: id.toString(), label: name }));
   };
-
+ 
   const positions = convertToOptions(position?.data);
 
   const fetchAllPositions = async () => {
@@ -81,9 +82,9 @@ function Profile() {
   };
 
   const fetchUserInfo = async () => {
-    HRModule.getHRById({ userId: '1' })
+    HRModule.getProfile(token!)
       .then((res) => {
-        const response = res.data;
+        const response = res;
         console.log(response);
         const currentInfo = {
           fullname: response.fullname,
@@ -143,7 +144,7 @@ function Profile() {
     for (const value of formData.values()) {
       console.log(value);
     }
-    HRModule.uploadHRProfile(formData)
+    HRModule.uploadHRProfile({formData: formData, token:token!})
       .then((res) => {
         successToast('Cập nhật thành công!');
         setTimeout(() => {

@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import UpdateCompanyInfo from './UpdateCompanyInfo';
 import { CompanyFromServer } from '../types/Company.type';
 import { Field } from '../types/Recruitment.type';
-import { getAllCompanies, getAllFields } from '../../modules/helper';
+import { getAllCompanies, getAllFields, getCompanyById } from '../../modules/helper';
 import { DefaultPagination } from './default-pagination';
 import CreateCompany from './CreateCompany';
 import { getField, getProfile } from '../../modules/hr-module';
@@ -20,7 +20,19 @@ function CompanyInfo() {
   const [totalPages, setTotalPages] = useState(0);
   const [fields, setField] = useState<Field[]>([]);
   const [fieldss, setFields] = useState<any>(null);
-  const [employer, setEmployer] = useState<any>(null);
+  const [employer, setEmployer] = useState<{
+    id: string;
+    fullname: string;
+    gender: string;
+    positionId: number;
+    skype: string;
+    companyId: number;
+    license: string;
+    phoneNumber: string;
+    licenseStatus: boolean;
+    phoneNumberStatus: boolean;
+    image: string;
+}>();
   useEffect(() => {
     async function getData() {
       const response = await getField(token!);
@@ -28,6 +40,12 @@ function CompanyInfo() {
       console.log(response)
       setFields(data);
       const res = await getProfile(token!);
+      console.log(res.companyId)
+      if (res.companyId !== null && res.companyId !== undefined)
+      {
+        const company = await getCompanyById(res.companyId);
+        setCompany(company!)
+      }
       console.log(res)
       setEmployer(res);
       const {
@@ -58,6 +76,13 @@ function CompanyInfo() {
     // console.log("Hello world")
   };
   return component === true ? (
+    employer?.companyId !== null && employer?.companyId !== undefined ? (
+      <UpdateCompanyInfo
+        handleComponent={handleComponent}
+        company={company!}
+        fields={fieldss}
+      ></UpdateCompanyInfo>
+    ):
     <div className="w-full flex flex-col items-center py-9">
       <div className="w-[95%]">
         <div

@@ -4,6 +4,7 @@ import CertificateVerification from './CertificateVerification';
 import { Dot, HardDriveDownload } from 'lucide-react';
 import axios from 'axios';
 import { successToast, errorToast } from '../../utils/toast';
+import { useProfileContext } from '../services/authen/domain/context';
 function Certificate() {
   const navigation = useNavigate();
   const [user, setUser] = useState();
@@ -13,7 +14,7 @@ function Certificate() {
   const [secondFile, setSecondFile] = useState(null);
   const [refresh, setRefresh] = useState(false);
   const [onLoading, setOnLoading] = useState(false);
-
+  const {token} = useProfileContext()
   const handleUploadLicense = async () => {
     setOnLoading(true);
     // if (!firstImage && !firstFile ) {
@@ -34,7 +35,13 @@ function Certificate() {
     //   console.log(res);
     // });
     await axios
-      .put('http://localhost:3000/employer/update/license', formData)
+      .put('http://localhost:3000/employer/update/license', formData,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        },
+      )
       .then((res) => {
         successToast(
           'Cập nhật thành công! Xin vui lòng chờ 2 giây để hệ thống cập nhật lại',
