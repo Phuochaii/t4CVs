@@ -4,13 +4,12 @@ import * as HRModule from "../../../../modules/hr-module";
 import ReceivedCVTable from "../../../../shared/components/ReceivedCVTable";
 import { CampaignFromServer } from "../../../../shared/types/Campaign.type";
 import { ApplicationFromServer } from "../../../../shared/types/Application.type";
+import { useProfileContext } from "../../../../shared/services/authen/domain/context";
 
 function Application({
   compaignId,
-  hrId,
 }: {
   compaignId: string;
-  hrId: string;
 }) {
   // const compaignId = "1";
 
@@ -20,16 +19,17 @@ function Application({
   const [campaign, setCampaign] = React.useState<CampaignFromServer | null>(
     null
   );
-
+  const {token} = useProfileContext();
   const fetchCompaign = async () => {
     HRModule.getCampaignById({ id: compaignId }).then((res) => {
       setCampaign(res);
     });
   };
   const fetchApplication = async () => {
+
     HRModule.getApplicationByCampaignIdHRId({
       campaignId: compaignId,
-      hrId: hrId,
+      token: token!,
       page: page,
     }).then((res) => {
       setListCV(res.applications || []);

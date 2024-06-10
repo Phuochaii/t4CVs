@@ -3,25 +3,26 @@ import { DefaultPagination } from "../../../../shared/components/default-paginat
 import * as HRModule from "../../../../modules/hr-module";
 import FollowingCVTable from "../../../../shared/components/FollowingCVTable";
 import { ApplicationFromServer } from "../../../../shared/types/Application.type";
+import { useProfileContext } from "../../../../shared/services/authen/domain/context";
 
 function FollowingCV({
   compaignId,
-  hrId,
+  
 }: {
   compaignId: string;
-  hrId: string;
+  
 }) {
   // const hrId = "1";
 
   const [listCV, setListCV] = React.useState<ApplicationFromServer[]>([]);
-
+  const {token} = useProfileContext();
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
 
-  const fetchApplication = async (hrId: string) => {
+  const fetchApplication = async () => {
     HRModule.getApplicationByCampaignIdHRId({
       campaignId: compaignId,
-      hrId: hrId,
+      token: token!,
       page: page,
     }).then((res) => {
       // console.log(res);
@@ -31,11 +32,11 @@ function FollowingCV({
   };
 
   React.useEffect(() => {
-    fetchApplication(hrId);
+    fetchApplication();
   }, []);
 
   React.useEffect(() => {
-    fetchApplication(hrId);
+    fetchApplication();
   }, [page]);
 
   return (

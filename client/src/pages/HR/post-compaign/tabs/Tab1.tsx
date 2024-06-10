@@ -22,7 +22,9 @@ import Select, { MultiValue, SingleValue } from 'react-select';
 import SingleDropdown from '../../../../shared/components/SingleDropDown';
 import MultiDropdown from '../../../../shared/components/MultiDropDown';
 import { useProfileContext } from '../../../../shared/services/authen/domain/context';
-import { getField, postJob } from '../../../../modules/hr-module';
+import { getField, getProfile, postJob } from '../../../../modules/hr-module';
+import { Alert } from '@mui/material';
+
 function PostCompaign1({
   next,
   previous,
@@ -106,43 +108,57 @@ function PostCompaign1({
   });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any, event: any) => {
-    console.log(fieldOptions);
-
-    if (!salaryError && !salaryMaxError) {
+    console.log(789);
+    console.log(employer.companyId)
+    if (!salaryError && !salaryMaxError && employer.companyId !== null) {
       const updatedItem = { ...item };
 
       // Modify each property
-      const formData = new FormData();
-
-      formData.append('titleRecruitment', data.title);
-      formData.append('majorId', Number.parseInt(careerOptions?.value !== undefined ? careerOptions?.value : '0').toString());
-      formData.append('fieldsId', fieldOptions ? fieldOptions.map(option => parseInt(option.value)).join(',') : '');
-      formData.append('typeId', Number.parseInt(jobTypeOptions?.value !== undefined ? jobTypeOptions?.value : '0').toString());
-      formData.append('currencyId', Number.parseInt(currencyOptions?.value !== undefined ? currencyOptions?.value : '0').toString());
-      formData.append('levelId', Number.parseInt(levelOptions?.value !== undefined ? levelOptions.value : '0').toString());
-      formData.append('campaignId', Number.parseInt(compaignId as string).toString());
-      formData.append('companyId', '1');
-      formData.append('salaryMin', salary !== '' ? Number.parseInt(salary).toString() : '0');
-      formData.append('salaryMax', salaryMax !== '' ? Number.parseInt(salaryMax).toString() : '0');
-      formData.append('expId', Number.parseInt(expOptions?.value !== undefined ? expOptions?.value : '0').toString());
-      formData.append('locationsId', cityOption ? cityOption.map(option => parseInt(option.value)).join(',') : '');
-      formData.append('expiredDate', date);
-      formData.append('quantity', Number.parseInt(data.quantity).toString());
-      formData.append('jobSchedule', data.schedule);
-      formData.append('gender', genderOptions?.value !== undefined ? genderOptions?.value : '0');
-      formData.append('description', data.description);
-      formData.append('benefit', data.benefit);
-      formData.append('requirement', data.requirement);
-      formData.append('skills', data.skill);
-      //debug line
-      formData.forEach((value, key) => {
-        console.log(`${key}: ${value}`);
-      });
-      await postJob(token.token!, formData)
-     
+      updatedItem.titleRecruitment = data.title;
+      updatedItem.majorId = Number.parseInt(
+        careerOptions?.value !== undefined ? careerOptions?.value : '0',
+      );
+      updatedItem.fieldsId = fieldOptions
+        ? fieldOptions.map((option) => parseInt(option.value))
+        : [];
+      updatedItem.typeId = Number.parseInt(
+        jobTypeOptions?.value !== undefined ? jobTypeOptions?.value : '0',
+      );
+      updatedItem.currencyId = Number.parseInt(
+        currencyOptions?.value !== undefined ? currencyOptions?.value : '0',
+      );
+      updatedItem.levelId = Number.parseInt(
+        levelOptions?.value !== undefined ? levelOptions.value : '0',
+      );
+      updatedItem.campaignId = Number.parseInt(compaignId as string) as number;
+      updatedItem.companyId = 1;
+      updatedItem.salaryMin = salary !== '' ? Number.parseInt(salary) : 0;
+      updatedItem.salaryMax = salaryMax !== '' ? Number.parseInt(salaryMax) : 0;
+      updatedItem.expId = Number.parseInt(
+        expOptions?.value !== undefined ? expOptions?.value : '0',
+      );
+      updatedItem.locationsId = cityOption
+        ? cityOption.map((option) => parseInt(option.value))
+        : [];
+      updatedItem.expiredDate = date;
+      updatedItem.quantity = Number.parseInt(data.quantity);
+      updatedItem.jobSchedule = data.schedule;
+      updatedItem.gender =
+        genderOptions?.value !== undefined ? genderOptions?.value : '0';
+      updatedItem.description = data.description;
+      updatedItem.benefit = data.benefit;
+      updatedItem.requirement = data.requirement;
+      updatedItem.skills = data.skill;
+      const res = await postJob(token!, JSON.stringify(updatedItem))
+      console.log(res)
       next(event);
     } else {
-      //Do nothing
+      if (employer.companyId === null) {
+        <Alert severity="error">Bạn chưa có công ty</Alert>
+      }
+      else{
+        <Alert severity="error">Bạn chưa nhập mức lương cho công việc</Alert>
+      }
     }
   };
   const handleSalaryError = (value: SetStateAction<string>) => {
@@ -163,16 +179,19 @@ function PostCompaign1({
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [fields, setFields] = useState<any>(null);
-  const token = useProfileContext();
+  const [employer, setEmployer] = useState<any>(null);
+  const { token } = useProfileContext();
   useEffect(() => {
     // Fetch data from your API
     const fetchData = async () => {
-      const response = await getField(token.token ? token.token : '');
-      console.log(token.token)
+      const response = await getField(token!);
+      console.log(token)
       const data = response;
       console.log(response)
       setFields(data);
-
+      const res = await getProfile(token!);
+      console.log(res.companyId)
+      setEmployer(res);
     };
 
     fetchData();

@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import React from "react";
 
 import * as tabs from "./tabs";
-function Support({ compaignId, hrId }: { compaignId: string; hrId: string }) {
+function Support({ compaignId }: { compaignId: string}) {
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -61,7 +61,7 @@ function Support({ compaignId, hrId }: { compaignId: string; hrId: string }) {
             </TabList>
           </Box>
           <TabPanel sx={{ padding: "12px 0" }} value="1">
-            {tabs.Tab1({ compaignId: compaignId, hrId: hrId })}
+            {tabs.Tab1({ compaignId: compaignId})}
           </TabPanel>
           <TabPanel sx={{ padding: "12px 0" }} value="2">
             {tabs.Tab2()}

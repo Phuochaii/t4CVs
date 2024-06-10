@@ -31,7 +31,7 @@ function NumberLabelWidget(item: NumberLabelWidgetProps) {
 }
 function ManageCV() {
   const navigation = useNavigate();
-  const hrId = JSON.parse(localStorage.getItem('hr') as string).id;
+  // const hrId = JSON.parse(localStorage.getItem('hr') as string).id;
   const { id } = useParams();
   const [campaign, setCampaign] = React.useState({} as any);
 
@@ -139,7 +139,7 @@ function ManageCV() {
                   {tabs.Recuitment()}
                 </TabPanel>
                 <TabPanel sx={{ padding: "12px 0" }} value="3">
-                  {tabs.Application({ compaignId: compaignId, hrId: hrId })}
+                  {tabs.Application({ compaignId: compaignId })}
                 </TabPanel>
                 <TabPanel sx={{ padding: "12px 0" }} value="4">
                   Item Three
@@ -149,10 +149,10 @@ function ManageCV() {
                   Item Three
                 </TabPanel>
                 <TabPanel sx={{ padding: "12px 0" }} value="6">
-                  {tabs.CV({ compaignId: compaignId, hrId: hrId })}
+                  {tabs.CV({ compaignId: compaignId })}
                 </TabPanel>
                 <TabPanel sx={{ padding: "12px 0" }} value="7">
-                  {tabs.Support({ compaignId: compaignId, hrId: hrId })}
+                  {tabs.Support({ compaignId: compaignId})}
                 </TabPanel>
                 <TabPanel sx={{ padding: "12px 0" }} value="8">
                   Item Three

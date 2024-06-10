@@ -341,23 +341,46 @@ export async function getField(token: string) {
     return null;
   }
 }
-export async function postJob(token: string, body: FormData) {
+export async function postJob(token: string, body: any) {
   try {
-    body.forEach((value, key) => {
-      console.log(`${key}: ${value}`);
-    });
+    console.log(body)
     const response = await axios.post(`${serverURL}/job/create`, body, {
       headers: {
         authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
       },
-
     });
-    if (!response) {
-      throw new Error('Failed to post data to API');
-    }
-    console.log(response);
     return response
   } catch (e) {
+    return null;
+  }
+}
+export async function updateCompanyId(token:string, companyId:number) {
+  try {
+   
+    const body = {
+      companyId: companyId
+    };
+
+   
+    const response = await axios.put(`${serverURL}/employer/update/companyid`, body, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json' 
+      }
+    });
+
+    // Check if the response is OK
+    if (!response) {
+      throw new Error('Failed to update companyId');
+    }
+
+    // Log and return the response data
+    console.log('Data successfully updated:', response.data);
+    return response.data;
+
+  } catch (error) {
+    console.error('Error updating companyId:', error);
     return null;
   }
 }

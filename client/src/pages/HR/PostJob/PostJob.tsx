@@ -1,10 +1,11 @@
 // Thịnh
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './PostJob.css';
 import * as HRModule from '../../../modules/hr-module';
 import { useProfileContext } from '../../../shared/services/authen/domain/context';
+import { getProfile } from '../../../modules/hr-module';
 
 const plans = [
   {
@@ -31,7 +32,17 @@ function PostJob() {
   const [compaignName, setcompaignName] = useState('');
   const [compaignId, setcompaignId] = useState('');
   const [chosenPlan, setChosenPlan] = useState(plans[0]);
+  const [employer, setEmployer] = useState<any>(null);
+  useEffect(() => {
+    // Fetch data from your API
+    const fetchData = async () => {
+      const res = await getProfile(token!);
+      console.log(res)
+      setEmployer(res);
+    };
 
+    fetchData();
+  }, []);
   const toggleModal = () => {
     // nay xu li sau
     setModal((prev) => !prev);
@@ -95,18 +106,24 @@ function PostJob() {
             </div>
             <div
               onClick={async () => {
+                console.log(employer)
                 if (compaignName.length <= 5) {
                   alert('Tên chiến dịch tuyển dụng length > 5');
                   return;
                 }
-                await HRModule.createCompaign({
-                  name: compaignName,
-                  token,
-                }).then((res) => {
-                    console.log(456,res);
-                    
-                  
-                  setcompaignId(res.id)}).catch((err) => console.log(err));
+                else if(employer.companyId === null)
+                {
+                  alert('Bạn chưa có công ty');
+                  return;
+                }
+                else{
+                  await HRModule.createCompaign({
+                    name: compaignName,
+                    token: token!,
+                  }).then((res) => {
+                      console.log(456,res);
+                    setcompaignId(res.id)}).catch((err) => console.log(err));
+                }
                 // navigation("/hr/compaign");
 
                 toggleModal();

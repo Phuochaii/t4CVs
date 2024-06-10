@@ -8,8 +8,11 @@ import { Field } from '../types/Recruitment.type';
 import { getAllCompanies, getAllFields } from '../../modules/helper';
 import { DefaultPagination } from './default-pagination';
 import CreateCompany from './CreateCompany';
+import { getField, getProfile } from '../../modules/hr-module';
+import { useProfileContext } from '../services/authen/domain/context';
 function CompanyInfo() {
   const [component, setComponent] = useState(true);
+  const {token} = useProfileContext()
   const [company, setCompany] = useState<CompanyFromServer>();
   const [view, setView] = useState(true);
   const [companies, setCompanies] = useState<CompanyFromServer[]>([]);
@@ -17,24 +20,16 @@ function CompanyInfo() {
   const [totalPages, setTotalPages] = useState(0);
   const [fields, setField] = useState<Field[]>([]);
   const [fieldss, setFields] = useState<any>(null);
+  const [employer, setEmployer] = useState<any>(null);
   useEffect(() => {
     async function getData() {
-      try {
-        const response = await fetch('http://localhost:3000/job/create-info', {
-          method: 'GET',
-          headers: {
-            'Access-control-allow-origin': 'http://localhost:3000',
-            'Content-type': 'application/json',
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-        setFields(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+      const response = await getField(token!);
+      const data = response;
+      console.log(response)
+      setFields(data);
+      const res = await getProfile(token!);
+      console.log(res)
+      setEmployer(res);
       const {
         allCompanies,
         // total,

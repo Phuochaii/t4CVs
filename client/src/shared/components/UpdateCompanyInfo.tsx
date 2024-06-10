@@ -11,6 +11,8 @@ import SingleDropdown from './SingleDropDown';
 import { Bold, Italic, List, ListOrdered, Underline } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { CompanyFromServer } from '../types/Company.type';
+import { useProfileContext } from '../services/authen/domain/context';
+import { getProfile, updateCompanyId } from '../../modules/hr-module';
 const UpdateCompanyInfo = ({
   handleComponent,
   company,
@@ -23,13 +25,13 @@ const UpdateCompanyInfo = ({
   const [imageFile, setImageFile] = useState<File>();
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const imageUploadRef = useRef<HTMLInputElement | null>(null);
-
+  const {token} = useProfileContext()
   const handleImageUpload = () => {
     if (imageUploadRef.current) {
       imageUploadRef.current.click();
     }
   };
-
+  
   const imagePreview = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -77,8 +79,12 @@ const UpdateCompanyInfo = ({
     description: '',
   });
   const onSubmit = async (data: any, event: any) => {
+    const result = await updateCompanyId(token!, company.id)
+    // console.log(result);
+    // const res = await getProfile(token!);
+    // console.log(res.companyId)
     const formData = new FormData();
-  
+    
     if (imageFile) {
       formData.append('file', imageFile);
     }
@@ -96,6 +102,9 @@ const UpdateCompanyInfo = ({
       const response = await fetch('http://localhost:3000/company/update', {
         method: 'PUT',
         body: formData,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
       });
   
       if (!response.ok) {

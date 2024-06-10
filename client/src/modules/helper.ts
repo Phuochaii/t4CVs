@@ -2,6 +2,7 @@ import axios from 'axios';
 import { CampaignFromServer } from '../shared/types/Campaign.type';
 import { CompanyFromServer } from '../shared/types/Company.type';
 import { Field, RecruitmentFromServer } from '../shared/types/Recruitment.type';
+import { EmployerFromServer } from '../shared/types/Employer.type';
 
 const serverURL = 'http://localhost:3000';
 

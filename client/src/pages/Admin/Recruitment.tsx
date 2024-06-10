@@ -145,7 +145,10 @@ function Recruitment() {
       const { allJobs, totalPages } = await getAllJobs(token, page);
       const stats = await getJobsStat(token);
       setJobStats(stats);
-      const rawRecruitments = allJobs.map(async (item) => {
+      const validJobs = allJobs.filter((item) => {return !!item.campaignId;})
+      console.log(validJobs);
+
+      const rawRecruitments = validJobs.map(async (item) => {
         const campaign = await getCampaignById(item.campaignId);
         const rawRecruitment = {
           ...item,
