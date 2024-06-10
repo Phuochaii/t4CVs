@@ -26,7 +26,7 @@ const plans = [
 ];
 
 function PostJob() {
-  const {token} = useProfileContext();
+  const { token } = useProfileContext();
   const [modal, setModal] = useState(false);
   const [compaignName, setcompaignName] = useState('');
   const [compaignId, setcompaignId] = useState('');
@@ -102,11 +102,12 @@ function PostJob() {
                 await HRModule.createCompaign({
                   name: compaignName,
                   token,
-                }).then((res) => {
-                    console.log(456,res);
-                    
-                  
-                  setcompaignId(res.id)}).catch((err) => console.log(err));
+                })
+                  .then((res) => {
+                    console.log(456, res);
+                    setcompaignId(res.id);
+                  })
+                  .catch((err) => console.log(err));
                 // navigation("/hr/compaign");
 
                 toggleModal();

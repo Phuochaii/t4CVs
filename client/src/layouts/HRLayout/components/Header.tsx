@@ -9,11 +9,11 @@ import {
   ChevronDown,
   Menu,
   LineChart,
-} from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import * as HRModule from "../../../modules/hr-module";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useProfileContext } from "../../../shared/services/authen/domain/context";
+} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import * as HRModule from '../../../modules/hr-module';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useProfileContext } from '../../../shared/services/authen/domain/context';
 
 const list_btn1 = [
   {
@@ -64,18 +64,14 @@ const accountButton = {
 
 function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
   const navigation = useNavigate();
-  const {logout} = useAuth0();
+  const { logout } = useAuth0();
   const { profile, token} = useProfileContext();
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [displayAccountTab, setDisplayAccountTab] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
-  const fetchNotification = ({
-    limit = 3,
-  }: {
-    limit?: number;
-  }) => {
-    HRModule.getNotification({ token:token!, limit: limit }).then((res) => {
+  const fetchNotification = ({ limit = 3 }: { limit?: number }) => {
+    HRModule.getNotification({ token: token!, limit: limit }).then((res) => {
       console.log(res);
       setNotifications(res.data);
       setTotal(res.pagination.total);
@@ -204,7 +200,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                   ) : notifications.length > 3 ? (
                     <button
                       className="text-green-500 hover:underline font-semibold w-full mt-2"
-                      onClick={() => fetchNotification({ })}
+                      onClick={() => fetchNotification({})}
                     >
                       Ẩn bớt
                     </button>
@@ -259,7 +255,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                       //   logoutParams: { returnTo: `${window.location.origin}${Roles.HR.loginUrl}` },
                       // })
                       logout({
-                        openUrl: false
+                        openUrl: false,
                       });
                       navigation('/hr');
                     }}

@@ -11,8 +11,7 @@ import { useProfileContext } from '../../shared/services/authen/domain/context';
 function ReceiveCV() {
   // const hrId = JSON.parse(localStorage.getItem('hr') as string).id;
   const token = useProfileContext();
-  if(!token.token)
-  {
+  if (!token.token) {
     return;
   }
   const [campaign, setCampaign] = React.useState<any>();
@@ -25,7 +24,7 @@ function ReceiveCV() {
   const [totalPage, setTotalPage] = React.useState<number>(1);
   const [compaignList, setCompaignList] = React.useState<NameValue[]>([]);
 
-  const fetchApplication = ( compaignId: string) => {
+  const fetchApplication = (compaignId: string) => {
     HRModule.getApplicationByCampaignIdHRId({
       campaignId: compaignId,
       token: token.token!,
@@ -41,7 +40,7 @@ function ReceiveCV() {
     });
   };
   const fetchAllCompaign = async () => {
-    HRModule.getAllCompaignByHrId({ token:token.token! }).then((res) => {
+    HRModule.getAllCompaignByHrId({ token: token.token! }).then((res) => {
       setCompaignList([
         { value: '', name: 'Tất cả' },
         ...res.data
@@ -59,7 +58,7 @@ function ReceiveCV() {
   }, []);
 
   React.useEffect(() => {
-    fetchApplication( !campaign ? '' : campaign.value);
+    fetchApplication(!campaign ? '' : campaign.value);
   }, [campaign, receivedCvState, page]);
 
   return (

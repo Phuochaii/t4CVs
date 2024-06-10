@@ -17,7 +17,7 @@ import {
   getAllCompanies,
   getAllFields,
   findCompanyByName,
-} from "../../modules/helper";
+} from '../../modules/helper';
 import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 function Company() {

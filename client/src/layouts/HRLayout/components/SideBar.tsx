@@ -2,27 +2,27 @@ import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Icon from '../../../shared/components/regular-icon';
 import {
-    CircleHelp,
-    ShieldCheck,
-    ChevronsRight,
-    LucideProps,
-    LayoutGrid,
-    Gem,
-    Gift,
-    Bot,
-    BriefcaseBusiness,
-    File,
-    User,
-    LineChart,
-    ShoppingCart,
-    WandSparkles,
-    BadgePercent,
-    History,
-    Settings,
-    Bell,
-    Mail,
-} from "lucide-react";
-import { useProfileContext } from "../../../shared/services/authen/domain/context";
+  CircleHelp,
+  ShieldCheck,
+  ChevronsRight,
+  LucideProps,
+  LayoutGrid,
+  Gem,
+  Gift,
+  Bot,
+  BriefcaseBusiness,
+  File,
+  User,
+  LineChart,
+  ShoppingCart,
+  WandSparkles,
+  BadgePercent,
+  History,
+  Settings,
+  Bell,
+  Mail,
+} from 'lucide-react';
+import { useProfileContext } from '../../../shared/services/authen/domain/context';
 const Item = ({
   _icon,
   iconSize = 16,
@@ -72,7 +72,7 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
   const location = useLocation();
   const pathname = location.pathname;
   const navigation = useNavigate();
-  const {profile} = useProfileContext();
+  const { profile } = useProfileContext();
 
   React.useEffect(() => {}, [isCollapsed]);
   //
@@ -181,40 +181,39 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
     ],
   ];
 
-    return (
-        <div
-            className="flex-shrink-0 overflow-x-hidden overflow-y-scroll bg-white"
-            style={{
-                fontWeight: "500",
-                color: "#212F3FE4",
-                // height: "100vh",
-                width: isCollapsed ? "88px" : "300px ",
-                transition: "width .2s ease",
-            }}
-        >
-            <div className="flex" style={{ padding: " 10px 14px", margin: 0 }}>
-                <div className="flex items-center space-x-2">
-                    <img
-                        src={ profile?.picture ||
-                            "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg"
-                        }
-                        className="rounded-full"
-                        style={{ width: "32px", marginRight: "10px" }}
-                        alt="Avatar"
-                    />
-                    {!isCollapsed && (
-                        <div>
-                            <p>{profile?.name}</p>
-                            <p style={{ fontSize: "12px" }}>Employer</p>
-                            <p style={{ fontSize: "12px" }} className="flex">
-                                Tài khoản xác thực:{" "}
-                                <span className="mr-2 text-green-600">
-                                    Cấp 1/5
-                                </span>
-                                <CircleHelp color="#757575B9" size={14} />
-                            </p>
-                        </div>
-                    )}
+  return (
+    <div
+      className="flex-shrink-0 overflow-x-hidden overflow-y-scroll bg-white"
+      style={{
+        fontWeight: '500',
+        color: '#212F3FE4',
+        // height: '100vh',
+        width: isCollapsed ? '88px' : '300px ',
+        transition: 'width .2s ease',
+      }}
+    >
+      <div className="flex" style={{ padding: ' 10px 14px', margin: 0 }}>
+        <div className="flex items-center space-x-2">
+          <img
+            src={
+              profile?.picture ||
+              'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'
+            }
+            className="rounded-full"
+            style={{ width: '32px', marginRight: '10px' }}
+            alt="Avatar"
+          />
+          {!isCollapsed && (
+            <div>
+              <p>{profile?.name}</p>
+              <p style={{ fontSize: '12px' }}>Employer</p>
+              <p style={{ fontSize: '12px' }} className="flex">
+                Tài khoản xác thực:{' '}
+                <span className="mr-2 text-green-600"> Cấp 1/5 </span>
+                <CircleHelp color="#757575B9" size={14} />
+              </p>
+            </div>
+          )}
         </div>
       </div>
       <button

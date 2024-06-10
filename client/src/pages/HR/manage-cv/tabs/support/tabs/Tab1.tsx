@@ -1,12 +1,12 @@
-import * as React from "react";
-import * as HRModule from "../../../../../../modules/hr-module";
-import { DefaultPagination } from "../../../../../../shared/components/default-pagination";
-import ReceivedCVTable from "../../../../../../shared/components/ReceivedCVTable";
+import * as React from 'react';
+import * as HRModule from '../../../../../../modules/hr-module';
+import { DefaultPagination } from '../../../../../../shared/components/default-pagination';
+import ReceivedCVTable from '../../../../../../shared/components/ReceivedCVTable';
 
 function Tab1({ compaignId, hrId }: { compaignId: string; hrId: string }) {
   const [listCV, setListCV] = React.useState([]);
   const [statusMode, setStatusMode] = React.useState<boolean | undefined>(
-    undefined
+    undefined,
   );
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
@@ -39,7 +39,7 @@ function Tab1({ compaignId, hrId }: { compaignId: string; hrId: string }) {
             type="radio"
             defaultChecked
             name="read-mode"
-            style={{ transform: "translateY(2px)" }}
+            style={{ transform: 'translateY(2px)' }}
             onClick={() => setStatusMode(undefined)}
           />
           Hiển thị tất cả CV
@@ -49,7 +49,7 @@ function Tab1({ compaignId, hrId }: { compaignId: string; hrId: string }) {
             className="mr-2"
             type="radio"
             name="read-mode"
-            style={{ transform: "translateY(2px)" }}
+            style={{ transform: 'translateY(2px)' }}
             onClick={() => setStatusMode(false)}
           />
           Chỉ hiện thị CV chưa xem

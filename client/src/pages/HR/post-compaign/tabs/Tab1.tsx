@@ -115,21 +115,68 @@ function PostCompaign1({
       const formData = new FormData();
 
       formData.append('titleRecruitment', data.title);
-      formData.append('majorId', Number.parseInt(careerOptions?.value !== undefined ? careerOptions?.value : '0').toString());
-      formData.append('fieldsId', fieldOptions ? fieldOptions.map(option => parseInt(option.value)).join(',') : '');
-      formData.append('typeId', Number.parseInt(jobTypeOptions?.value !== undefined ? jobTypeOptions?.value : '0').toString());
-      formData.append('currencyId', Number.parseInt(currencyOptions?.value !== undefined ? currencyOptions?.value : '0').toString());
-      formData.append('levelId', Number.parseInt(levelOptions?.value !== undefined ? levelOptions.value : '0').toString());
-      formData.append('campaignId', Number.parseInt(compaignId as string).toString());
+      formData.append(
+        'majorId',
+        Number.parseInt(
+          careerOptions?.value !== undefined ? careerOptions?.value : '0',
+        ).toString(),
+      );
+      formData.append(
+        'fieldsId',
+        fieldOptions
+          ? fieldOptions.map((option) => parseInt(option.value)).join(',')
+          : '',
+      );
+      formData.append(
+        'typeId',
+        Number.parseInt(
+          jobTypeOptions?.value !== undefined ? jobTypeOptions?.value : '0',
+        ).toString(),
+      );
+      formData.append(
+        'currencyId',
+        Number.parseInt(
+          currencyOptions?.value !== undefined ? currencyOptions?.value : '0',
+        ).toString(),
+      );
+      formData.append(
+        'levelId',
+        Number.parseInt(
+          levelOptions?.value !== undefined ? levelOptions.value : '0',
+        ).toString(),
+      );
+      formData.append(
+        'campaignId',
+        Number.parseInt(compaignId as string).toString(),
+      );
       formData.append('companyId', '1');
-      formData.append('salaryMin', salary !== '' ? Number.parseInt(salary).toString() : '0');
-      formData.append('salaryMax', salaryMax !== '' ? Number.parseInt(salaryMax).toString() : '0');
-      formData.append('expId', Number.parseInt(expOptions?.value !== undefined ? expOptions?.value : '0').toString());
-      formData.append('locationsId', cityOption ? cityOption.map(option => parseInt(option.value)).join(',') : '');
+      formData.append(
+        'salaryMin',
+        salary !== '' ? Number.parseInt(salary).toString() : '0',
+      );
+      formData.append(
+        'salaryMax',
+        salaryMax !== '' ? Number.parseInt(salaryMax).toString() : '0',
+      );
+      formData.append(
+        'expId',
+        Number.parseInt(
+          expOptions?.value !== undefined ? expOptions?.value : '0',
+        ).toString(),
+      );
+      formData.append(
+        'locationsId',
+        cityOption
+          ? cityOption.map((option) => parseInt(option.value)).join(',')
+          : '',
+      );
       formData.append('expiredDate', date);
       formData.append('quantity', Number.parseInt(data.quantity).toString());
       formData.append('jobSchedule', data.schedule);
-      formData.append('gender', genderOptions?.value !== undefined ? genderOptions?.value : '0');
+      formData.append(
+        'gender',
+        genderOptions?.value !== undefined ? genderOptions?.value : '0',
+      );
       formData.append('description', data.description);
       formData.append('benefit', data.benefit);
       formData.append('requirement', data.requirement);
@@ -138,8 +185,7 @@ function PostCompaign1({
       formData.forEach((value, key) => {
         console.log(`${key}: ${value}`);
       });
-      await postJob(token.token!, formData)
-     
+      await postJob(token.token!, formData);
       next(event);
     } else {
       //Do nothing
@@ -168,11 +214,10 @@ function PostCompaign1({
     // Fetch data from your API
     const fetchData = async () => {
       const response = await getField(token.token ? token.token : '');
-      console.log(token.token)
+      console.log(token.token);
       const data = response;
-      console.log(response)
+      console.log(response);
       setFields(data);
-
     };
 
     fetchData();
@@ -593,10 +638,10 @@ function PostCompaign1({
             salaryError ||
             errors.schedule ||
             errors.address) && (
-              <div className="ml-14 text-red-700">
-                Vui lòng điền đầy đủ thông tin
-              </div>
-            )}
+            <div className="ml-14 text-red-700">
+              Vui lòng điền đầy đủ thông tin
+            </div>
+          )}
         </div>
         <div className="bg-white p-4 rounded-sm mb-5">
           <div className="flex flex-row space-x-5 mb-4">

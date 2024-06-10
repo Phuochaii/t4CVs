@@ -8,7 +8,7 @@ function EditCampaign() {
         />
       </div>
       <div className="text font-semibold text-xl">
-        Bạn muốn xóa chiến dịch?
+        {} Bạn muốn xóa chiến dịch?
       </div>
       <div className="action py-2 px-4 text-white font-bold text-xl bg-red-400 rounded-lg cursor-pointer hover:bg-red-500">
         Xóa chiến dịch

@@ -1,11 +1,13 @@
-import { Bell, ChevronDown } from "lucide-react";
-import { useState } from "react";
-import SearchBar from "./SearchBar";
-import { useNavigate } from "react-router-dom";
-import RoundedButton from "../../HRLayout/components/RoundedButton";
-import { useAuth0 } from "@auth0/auth0-react";
-import { AUTH0_CLIENT_ID } from "../../../shared/services/authen/infrastructure/config";
-import { Roles, useProfileContext } from "../../../shared/services/authen/domain/context";
+import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import RoundedButton from '../../HRLayout/components/RoundedButton';
+import { useAuth0 } from '@auth0/auth0-react';
+import { AUTH0_CLIENT_ID } from '../../../shared/services/authen/infrastructure/config';
+import {
+  Roles,
+  useProfileContext,
+} from '../../../shared/services/authen/domain/context';
 const accountButton = {
   name: '',
   link: '',
@@ -17,9 +19,9 @@ const accountButton = {
 
 function Header() {
   const navigation = useNavigate();
-  const {logout} = useAuth0();
-  const {profile} = useProfileContext();
-  
+  const { logout } = useAuth0();
+  const { profile } = useProfileContext();
+
   const [displayAccountTab, setDisplayAccountTab] = useState(false);
 
   return (
@@ -56,8 +58,10 @@ function Header() {
                 onClick={() => {
                   logout({
                     clientId: AUTH0_CLIENT_ID,
-                    logoutParams: { returnTo: `${window.location.origin}${Roles.ADMIN.loginUrl}` },
-                  })
+                    logoutParams: {
+                      returnTo: `${window.location.origin}${Roles.ADMIN.loginUrl}`,
+                    },
+                  });
                 }}
               >
                 <span className="text-black cursor-pointer hover:text-green-500">

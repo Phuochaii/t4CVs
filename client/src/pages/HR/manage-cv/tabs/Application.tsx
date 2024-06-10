@@ -1,9 +1,9 @@
-import * as React from "react";
-import { DefaultPagination } from "../../../../shared/components/default-pagination";
-import * as HRModule from "../../../../modules/hr-module";
-import ReceivedCVTable from "../../../../shared/components/ReceivedCVTable";
-import { CampaignFromServer } from "../../../../shared/types/Campaign.type";
-import { ApplicationFromServer } from "../../../../shared/types/Application.type";
+import * as React from 'react';
+import { DefaultPagination } from '../../../../shared/components/default-pagination';
+import * as HRModule from '../../../../modules/hr-module';
+import ReceivedCVTable from '../../../../shared/components/ReceivedCVTable';
+import { CampaignFromServer } from '../../../../shared/types/Campaign.type';
+import { ApplicationFromServer } from '../../../../shared/types/Application.type';
 
 function Application({
   compaignId,
@@ -18,7 +18,7 @@ function Application({
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
   const [campaign, setCampaign] = React.useState<CampaignFromServer | null>(
-    null
+    null,
   );
 
   const fetchCompaign = async () => {

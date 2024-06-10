@@ -1,8 +1,8 @@
-import * as React from "react";
-import { DefaultPagination } from "../../../../shared/components/default-pagination";
-import * as HRModule from "../../../../modules/hr-module";
-import FollowingCVTable from "../../../../shared/components/FollowingCVTable";
-import { ApplicationFromServer } from "../../../../shared/types/Application.type";
+import * as React from 'react';
+import { DefaultPagination } from '../../../../shared/components/default-pagination';
+import * as HRModule from '../../../../modules/hr-module';
+import FollowingCVTable from '../../../../shared/components/FollowingCVTable';
+import { ApplicationFromServer } from '../../../../shared/types/Application.type';
 
 function FollowingCV({
   compaignId,

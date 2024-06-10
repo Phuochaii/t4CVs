@@ -123,10 +123,7 @@ function Header() {
                 <button
                   className="w-full mt-2 font-semibold text-green-500 hover:underline"
                   onClick={() =>
-                    fetchNotification({
-                      id: userId,
-                      limit: total,
-                    })
+                    fetchNotification({ id: userId, limit: total })
                   }
                 >
                   Xem tất cả thông báo

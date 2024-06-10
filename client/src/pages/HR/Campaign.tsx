@@ -5,17 +5,17 @@ import {
   ChevronRightCircle,
   Search,
 } from 'lucide-react';
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CampaignTable } from '../../shared/components/compaign-table';
 import { Campaign as CampaignType } from '../../shared/types/Campaign.type';
-import { getAllCompaignByHrId, getApplicationsByCampaignId, getCampaignByHRId, getEmployerById, getProfile } from '../../modules/hr-module';
+import {
+  getAllCompaignByHrId,
+  getApplicationsByCampaignId,
+  getProfile,
+} from '../../modules/hr-module';
 import { getCompanyById, getJobByCampaignId } from '../../modules/helper';
 import { useProfileContext } from '../../shared/services/authen/domain/context';
-import { useAuth0 } from '@auth0/auth0-react';
-
-
 
 function Campaign() {
   const [campaigns, setCampaigns] = useState<CampaignType[]>([]);
@@ -25,11 +25,11 @@ function Campaign() {
   const { token } = useProfileContext();
   useEffect(() => {
     const getAllCompaigns = async () => {
-      const response = await getAllCompaignByHrId({ token: token! })
-      console.log(response.data)
-      console.log(response.total_page)
-      const allCampaigns = response.data
-      const totalPages = response.total_page
+      const response = await getAllCompaignByHrId({ token: token! });
+      console.log(response.data);
+      console.log(response.total_page);
+      const allCampaigns = response.data;
+      const totalPages = response.total_page;
       setTotalPages(totalPages);
       const rawCampaigns = await allCampaigns.map(async (item: any) => {
         const employer = await getProfile(token!);
