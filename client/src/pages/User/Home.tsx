@@ -334,7 +334,7 @@ function Home() {
   return (
     <>
       <div className="section-header">
-        <div className="container flex flex-col gap-4">
+        <div className="flex flex-col gap-4 items-center">
           <div className="hearder-box text-center">
             <h1 className="title">
               Tìm việc làm nhanh 24h, việc làm mới nhất trên toàn quốc.
