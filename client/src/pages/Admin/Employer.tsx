@@ -70,15 +70,8 @@ function Employer() {
 
   const columns: BasicColumnProps[] = useMemo(
     () => [
-      // {
-      //   name: 'ID',
-      //   field: 'id',
-      //   tableCellClassname: '',
-      //   cell: (data: ObjectFromServer) => {
-      //     const employer = data as EmployerFromServer;
-      //     return <div className="">{employer.id}</div>;
-      //   },
-      // },
+      
+      
       {
         name: 'Họ và tên',
         field: 'fullname',

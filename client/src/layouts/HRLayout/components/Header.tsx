@@ -13,7 +13,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import * as HRModule from "../../../modules/hr-module";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useProfileContext } from "../../../shared/services/authen/domain/context";
+import { Roles, useProfileContext } from "../../../shared/services/authen/domain/context";
+import { withRoleCheck } from '../../../shared/services/authen/domain/withRoleCheck';
 
 const list_btn1 = [
   {
@@ -70,6 +71,59 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
   const [displayAccountTab, setDisplayAccountTab] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
+
+    const HeaderProfileSection = withRoleCheck(Roles.HR, () => {
+      return (
+        <>
+          <li className="relative list-none">
+            <a
+              className="text-center inline-flex items-center bg-transparent"
+              onClick={() => setDisplayAccountTab(!displayAccountTab)}
+            >
+              <RoundedButton
+                text={accountButton.name}
+                icon={accountButton.icon}
+                image={profile?.picture || accountButton.image}
+                iconSize={accountButton.iconSize}
+                onClick={() => {
+                  navigation(accountButton.link);
+                }}
+              />
+            </a>
+            {/* <!-- Dropdown menu --> */}
+            {displayAccountTab ? (
+              <div className="pt-3 absolute top-8 right-0 z-50">
+                <ul
+                  className="max-h-[320px] overflow-y-scroll dropdown  hover:text-green-500 w-56 z-50font-semibold text-base bg-white border border-slate-100 rounded-lg py-2 flex flex-col gap-3 shadow-lg"
+                  aria-labelledby="dropdownDividerButton"
+                >
+                  <li
+                    className={"px-4 py-2 m-0 border-b-gray-200 border"}
+                    onClick={() => {
+                      // logout({
+                      //   clientId: AUTH0_CLIENT_ID,
+                      //   logoutParams: { returnTo: `${window.location.origin}${Roles.HR.loginUrl}` },
+                      // })
+                      logout({
+                        openUrl: false,
+                      });
+                      navigation("/hr");
+                    }}
+                  >
+                    <span className="cursor-pointer text-black hover:text-green-500">
+                      Đăng xuất
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              <></>
+            )}
+          </li>
+        </>
+      );
+    });
+
   const fetchNotification = ({
     limit = 3,
   }: {
@@ -229,51 +283,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
               }}
             />
           ))}
-          <li className="relative list-none">
-            <a
-              className="text-center inline-flex items-center bg-transparent"
-              onClick={() => setDisplayAccountTab(!displayAccountTab)}
-            >
-              <RoundedButton
-                text={accountButton.name}
-                icon={accountButton.icon}
-                image={profile?.picture || accountButton.image}
-                iconSize={accountButton.iconSize}
-                onClick={() => {
-                  navigation(accountButton.link);
-                }}
-              />
-            </a>
-            {/* <!-- Dropdown menu --> */}
-            {displayAccountTab ? (
-              <div className="pt-3 absolute top-8 right-0 z-50">
-                <ul
-                  className="max-h-[320px] overflow-y-scroll dropdown  hover:text-green-500 w-56 z-50font-semibold text-base bg-white border border-slate-100 rounded-lg py-2 flex flex-col gap-3 shadow-lg"
-                  aria-labelledby="dropdownDividerButton"
-                >
-                  <li
-                    className={'px-4 py-2 m-0 border-b-gray-200 border'}
-                    onClick={() => {
-                      // logout({
-                      //   clientId: AUTH0_CLIENT_ID,
-                      //   logoutParams: { returnTo: `${window.location.origin}${Roles.HR.loginUrl}` },
-                      // })
-                      logout({
-                        openUrl: false
-                      });
-                      navigation('/hr');
-                    }}
-                  >
-                    <span className="cursor-pointer text-black hover:text-green-500">
-                      Đăng xuất
-                    </span>
-                  </li>
-                </ul>
-              </div>
-            ) : (
-              <></>
-            )}
-          </li>
+          <HeaderProfileSection />
         </div>
       </div>
     </div>

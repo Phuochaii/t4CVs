@@ -157,30 +157,18 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
                 {campaign.recruitment.status ? 'Đang mở' : 'Đang đóng'}
               </span>
             </div>
-            <div
+            {/* <div
               className={`flex items-center gap-2 ${
                 isHovered ? 'visible' : 'invisible'
               }`}
             >
               <button> Yêu cầu hiển thị </button>
-            </div>
+            </div> */}
           </div>
         ) : (
           <>Không có tin tuyển dụng</>
         )}
       </td>
-
-      {/* <td className="border">
-        <div className="p-2">
-          {campaign.isCampaignActive ? (
-            <span className="px-2 py-1 font-bold text-green-500 rounded-sm bg-slate-100">
-              Thêm
-            </span>
-          ) : (
-            <>Chiến dịch đang tắt</>
-          )}
-        </div>
-      </td> */}
     </tr>
   );
 };
