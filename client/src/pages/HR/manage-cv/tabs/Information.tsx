@@ -139,67 +139,6 @@ function Information({ compaignId }: { compaignId: string }) {
           </div>
         </div>
 
-        <div className="company-info flex flex-col gap-3">
-          <h1 className="main-label text-2xl font-bold">Thông tin công ty</h1>
-          <div className="company-name flex flex-col gap-1">
-            <span className="label text-base font-bold">Tên công ty:</span>
-            <a
-              className="value text-lg font-medium underline text-green-500 max-w-fit"
-              href={jobData?.company.website}
-            >
-              {jobData?.company
-                ? jobData?.company?.name
-                  ? jobData?.company?.name
-                  : ''
-                : ''}
-            </a>
-          </div>
-          <div className="company-address flex flex-col gap-1">
-            <span className="label text-base font-bold">Địa chỉ:</span>
-            <span className="value">
-              {jobData?.company
-                ? jobData?.company?.address
-                  ? jobData?.company?.address
-                  : ''
-                : ''}
-            </span>
-          </div>
-          <div className="company-phone flex flex-col gap-1">
-            <span className="label text-base font-bold">Số điện thoại:</span>
-            <span className="value">
-              {jobData?.company
-                ? jobData?.company?.phone
-                  ? jobData?.company?.phone
-                  : ''
-                : ''}
-            </span>
-          </div>
-          <div className="company-size flex flex-col gap-1">
-            <span className="label text-base font-bold">
-              Đội ngũ nhân viên:
-            </span>
-            <span className="value">
-              {jobData?.company
-                ? jobData?.company?.companySize
-                  ? jobData?.company?.companySize
-                  : ''
-                : ''}{' '}
-              nhân viên
-            </span>
-          </div>
-          <div className="company-field flex flex-col gap-1">
-            <span className="label text-base font-bold">
-              Loại hình công ty:
-            </span>
-            <span className="value">
-              {jobData?.company
-                ? jobData?.company?.fieldName
-                  ? jobData?.company?.fieldName
-                  : ''
-                : ''}
-            </span>
-          </div>
-        </div>
       </div>
     </>
   );
