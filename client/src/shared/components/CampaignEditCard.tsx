@@ -558,7 +558,7 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
                         <input
                           type="text"
                           className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
-                          placeholder="0 VND"
+                          placeholder="0"
                           defaultValue={jobItem.salaryMin}
                           onChange={(e) => handleSalaryError(e.target.value)}
                         />
@@ -568,7 +568,7 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
                         <input
                           type="text"
                           className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
-                          placeholder="0 VND"
+                          placeholder="0"
                           defaultValue={jobItem.salaryMax}
                           onChange={(e) => handleSalaryMaxError(e.target.value)}
                         />

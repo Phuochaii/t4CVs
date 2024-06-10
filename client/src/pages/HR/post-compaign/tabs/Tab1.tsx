@@ -530,7 +530,7 @@ function PostCompaign1({
                         <input
                           type="text"
                           className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
-                          placeholder="0 VND"
+                          placeholder="0"
                           value={salary}
                           onChange={(e) => handleSalaryError(e.target.value)}
                         />
@@ -540,7 +540,7 @@ function PostCompaign1({
                         <input
                           type="text"
                           className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
-                          placeholder="0 VND"
+                          placeholder="0"
                           value={salaryMax}
                           onChange={(e) => handleSalaryMaxError(e.target.value)}
                         />
