@@ -4,9 +4,9 @@ import {
   Controller,
   Get,
   Param,
-  Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   NotificationService,
@@ -15,40 +15,67 @@ import {
 } from './notification.service';
 import { status } from '@app/common/proto/notification';
 import { PaginationRequest } from '@app/common/dto/pagination';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser, PermissionsGuard, UserClaims } from '../authorization';
 
 @Controller('notification')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
-  @Get('/:role/:userId')
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
+  @Get('/user')
   getAllOfUser(
-    @Param('userId') userId: string,
-    @Param('role') role: NotificationUserRole,
+    @GetUser() user: UserClaims,
     @Query() paginationRequest: PaginationRequest = new PaginationRequest(),
   ) {
-    if (!Object.values(NotificationUserRole).includes(role)) {
-      throw new BadRequestException('Invalid role');
-    }
-
+    const role = NotificationUserRole.USER;
     return this.notificationService.getAllOf(
-      new NotificationUserId(userId, role),
+      new NotificationUserId(user.sub, role),
       paginationRequest,
     );
   }
 
-  @Put('/:role/:userId/:notificationId')
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
+  @Get('/hr')
+  getAllOfEmployer(
+    @GetUser() user: UserClaims,
+    @Query() paginationRequest: PaginationRequest = new PaginationRequest(),
+  ) {
+    const role = NotificationUserRole.HR;
+
+    return this.notificationService.getAllOf(
+      new NotificationUserId(user.sub, role),
+      paginationRequest,
+    );
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
+  @Put('user/:notificationId')
   updateStatusOfUser(
-    @Param('userId') userId: string,
-    @Param('role') role: NotificationUserRole,
+    @GetUser() user: UserClaims,
     @Param('notificationId') notificationId: number,
     @Body('status') status: status,
   ) {
-    if (!Object.values(NotificationUserRole).includes(role)) {
-      throw new BadRequestException('Invalid role');
-    }
+    const role = NotificationUserRole.USER;
 
     return this.notificationService.updateStatus(
-      new NotificationUserId(userId, role),
+      new NotificationUserId(user.sub, role),
+      notificationId,
+      status,
+    );
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
+  @Put('hr/:notificationId')
+  updateStatusOfHr(
+    @GetUser() user: UserClaims,
+    @Param('notificationId') notificationId: number,
+    @Body('status') status: status,
+  ) {
+    const role = NotificationUserRole.HR;
+
+    return this.notificationService.updateStatus(
+      new NotificationUserId(user.sub, role),
       notificationId,
       status,
     );

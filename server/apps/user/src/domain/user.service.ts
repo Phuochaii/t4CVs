@@ -1,5 +1,7 @@
-import { CreateUserDTO } from './dto/Req';
+import { CreateUserDTO, QueryDTO } from './dto/Req';
+import { FindUserRespDTO } from './dto/Resp/find-users.dto';
 import { UserRepository } from './repository';
+import { UpdateUserDTO } from './dto/Req/update-user.dto';
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
@@ -12,33 +14,31 @@ export class UserService {
     return await this.userRepository.isUserExist(id);
   }
 
-  async findAll() {
-    return await this.userRepository.findAll();
+  async findAll(query: QueryDTO) {
+    const { page = 1, limit = 10, ...newQuery } = query;
+    const skip = (page - 1) * limit;
+    const users = await this.userRepository.searchUser(newQuery);
+
+    const result: FindUserRespDTO = {
+      page: parseInt(String(page)),
+      limit: parseInt(String(limit)),
+      total: users.length,
+      total_pages: Math.ceil(users.length / limit),
+      data: users.slice(skip, skip + limit),
+    };
+    return result;
   }
 
   async createUser(createUserDTO: CreateUserDTO) {
-    const user = await this.userRepository.findById(createUserDTO.id);
-    console.log(user);
-    if (user) {
-      return null;
-    }
     return await this.userRepository.createUser(createUserDTO);
+  }
 
-    // const userEntity = await this.userRepository.save({
-    //   ...user,
-    //   image: `${filename}`,
-    //   // image: `http://${BUCKET_NAME}.s3-website-${AWS_S3_REGION}.amazonaws.com/${filename}`,
-    // });
-    // // const putObjectCommand = new PutObjectCommand({
-    // //   Bucket: BUCKET_NAME,
-    // //   Key: filename,
-    // //   Body: image.buffer,
-    // //   ContentDisposition: 'inline',
-    // //   ContentType: image.mimetype,
-    // // });
+  async updateUser(updateUserDTO: UpdateUserDTO) {
+    return await this.userRepository.updateUser(updateUserDTO);
+  }
 
-    // // await this.s3Client.send(putObjectCommand);
-
-    // return userEntity;
+  async check(id: string) {
+    const user = await this.userRepository.findById(id);
+    return !!user;
   }
 }

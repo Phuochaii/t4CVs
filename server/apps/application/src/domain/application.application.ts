@@ -1,10 +1,10 @@
 import {
   CreateApplicationDto,
-  GetApplicationDto,
+  GetApplicationByIdDto,
   GetAllApplicationsDto,
   UpdateApplicationDto,
-  GetByCampaignIdApplicationDto,
-  GetAllByCampaignIdApplicationDto,
+  GetByCampaignIdWithPaginationDto,
+  GetByCampaignIdDto,
   GetByUserIdApplicationDto,
   GetByUserIdPaginationApplicationDto,
 } from './dto';
@@ -13,8 +13,8 @@ import {
   GetApplicationService,
   GetAllApplicationService,
   UpdateApplicationService,
-  GetByCampaignIdApplicationService,
-  GetAllByCampaignIdApplicationService,
+  GetByCampaignIdWithPaginationService,
+  GetByCampaignIdService,
   GetByUserIdApplicationService,
   GetByUserIdPaginationApplicationService,
 } from './service';
@@ -22,14 +22,14 @@ import { Application } from './entity';
 import { RpcException } from '@nestjs/microservices';
 import { Applications } from '@app/common/proto/application';
 
-export class ApplicationApplication {
+export class ApplicationDomain {
   constructor(
     private readonly createApplicationService: CreateApplicationService,
     private readonly getApplicationService: GetApplicationService,
     private readonly getAllApplicationService: GetAllApplicationService,
-    private readonly getByCampaignIdApplicationService: GetByCampaignIdApplicationService,
+    private readonly getByCampaignIdWithPaginationService: GetByCampaignIdWithPaginationService,
     private readonly updateApplicationService: UpdateApplicationService,
-    private readonly getAllByCampaignIdApplicationService: GetAllByCampaignIdApplicationService,
+    private readonly getAllByCampaignIdApplicationService: GetByCampaignIdService,
     private readonly getByUserIdApplicationService: GetByUserIdApplicationService,
     private readonly getByUserIdPagiantionApplicationService: GetByUserIdPaginationApplicationService,
     // private readonly getByUserIdPaginationApplicationService: GetByUserIdPaginationApplicationService,
@@ -40,7 +40,7 @@ export class ApplicationApplication {
   }
 
   async getApplication(
-    request: GetApplicationDto,
+    request: GetApplicationByIdDto,
   ): Promise<Application | null> {
     const data = await this.getApplicationService.execute(request);
     if (!data) {
@@ -56,7 +56,7 @@ export class ApplicationApplication {
   }
 
   async getByCampaignIdApplication(
-    request: GetByCampaignIdApplicationDto,
+    request: GetByCampaignIdWithPaginationDto,
   ): Promise<Applications> {
     const campaignIds = request.campaignIds;
     const total_data = this.getAllByCampaignIdApplication({
@@ -64,7 +64,8 @@ export class ApplicationApplication {
     });
 
     const total = (await total_data).length;
-    const data = await this.getByCampaignIdApplicationService.execute(request);
+    const data =
+      await this.getByCampaignIdWithPaginationService.execute(request);
 
     const total_pages = Math.ceil(total / request.limit);
     if (!total_data || !data) {
@@ -87,7 +88,7 @@ export class ApplicationApplication {
   }
 
   async getAllByCampaignIdApplication(
-    request: GetAllByCampaignIdApplicationDto,
+    request: GetByCampaignIdDto,
   ): Promise<Application[]> {
     return await this.getAllByCampaignIdApplicationService.execute(request);
   }

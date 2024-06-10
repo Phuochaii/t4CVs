@@ -4,6 +4,7 @@ import { CompanyController } from './company.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { EmployerModule } from '../employer/employer.module';
 import { UploadModule } from '../upload/upload.module';
+import { AuthenticationModule } from '../authentication/authentication.module';
 
 @Module({
   imports: [
@@ -12,13 +13,14 @@ import { UploadModule } from '../upload/upload.module';
         name: 'COMPANY',
         transport: Transport.TCP,
         options: {
-          host: 'localhost',
+          host: 'company',
           port: 3003,
         },
       },
     ]),
     EmployerModule,
     UploadModule,
+    AuthenticationModule,
   ],
   controllers: [CompanyController],
   providers: [CompanyService],

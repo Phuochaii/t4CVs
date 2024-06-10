@@ -1,17 +1,17 @@
-import LanguageOption from "./language-option";
-import { useTranslation } from "react-i18next";
+import LanguageOption from './language-option';
+import { useTranslation } from 'react-i18next';
 
 const useLanguages = () => {
   const languages = [
     {
-      code: "en",
-      language: "English",
-      countryIconUrl: "http://localhost:5173/united-kingdom-flag-icon.png",
+      code: 'en',
+      language: 'English',
+      countryIconUrl: 'http://localhost:5173/united-kingdom-flag-icon.png',
     },
     {
-      code: "vi",
-      language: "Vietnamese",
-      countryIconUrl: "http://localhost:5173/vietnam-flag-icon.png",
+      code: 'vi',
+      language: 'Vietnamese',
+      countryIconUrl: 'http://localhost:5173/vietnam-flag-icon.png',
     },
   ];
   return { languages };

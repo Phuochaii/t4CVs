@@ -1,13 +1,13 @@
-import { BaseService } from './base.service';
-import { ApplicationRepository } from '../repository';
 import { Application } from '../entity';
+import { BaseService } from '@app/common/domain';
+import { GetApplicationByIdDto } from '../dto';
+import { ApplicationReadRepository } from '../repository';
 
 export class GetApplicationService implements BaseService<Application> {
-  constructor(private readonly applicationRepository: ApplicationRepository) {}
+  constructor(private readonly applicationRepository: ApplicationReadRepository) {}
 
-  async execute(ApplicationDto): Promise<Application | null> {
-    const getApplication =
-      await this.applicationRepository.getApplication(ApplicationDto);
+  async execute(request: GetApplicationByIdDto): Promise<Application | null> {
+    const getApplication = await this.applicationRepository.getById(request);
     return getApplication;
   }
 }

@@ -3,13 +3,17 @@ import { Repository } from 'typeorm';
 import { User } from '../schemas/user.schema';
 import { CreateUserDTO } from '../../domain/dto/Req';
 import { Injectable } from '@nestjs/common';
+import { UserRepository } from '../../domain/repository';
+import { UpdateUserDTO } from '../../domain/dto/Req/update-user.dto';
 
 @Injectable()
-export class TypeOrmUserRepository {
+export class TypeOrmUserRepository extends UserRepository {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {}
+  ) {
+    super();
+  }
 
   async findById(id: string) {
     return await this.userRepository.findOne({ where: { id } });
@@ -23,7 +27,20 @@ export class TypeOrmUserRepository {
     return await this.userRepository.save(user);
   }
 
+  async updateUser(user: UpdateUserDTO) {
+    return await this.userRepository.save(user);
+  }
+
   async isUserExist(id: string) {
     return !!(await this.userRepository.findOne({ where: { id } }));
+  }
+
+  async searchUser(query: any) {
+    return await this.userRepository.find({
+      where: query,
+      order: {
+        fullname: 'ASC',
+      },
+    });
   }
 }

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { EmployerController } from './employer.controller';
 import { EmployerService } from './employer.service';
+import { AuthenticationModule } from '../authentication/authentication.module';
 import { UploadModule } from '../upload/upload.module';
 
 @Module({
@@ -11,11 +12,12 @@ import { UploadModule } from '../upload/upload.module';
         name: 'EMPLOYER',
         transport: Transport.TCP,
         options: {
-          host: 'localhost',
+          host: 'employer',
           port: 3005,
         },
       },
     ]),
+    AuthenticationModule,
     UploadModule,
   ],
   controllers: [EmployerController],

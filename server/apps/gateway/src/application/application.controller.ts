@@ -7,9 +7,14 @@ import {
   Param,
   Query,
   ParseBoolPipe,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApplicationService } from './application.service';
 import { CreateApplicationRequest } from '@app/common/proto/application';
+import { PermissionsGuard } from '../authorization/permission/permissions.guard';
+import { UserClaims } from '../authorization/entity/user-claims.entity';
+import { GetUser } from '../authorization/get-user.decorator';
 
 // import { firstValueFrom } from 'rxjs';
 
@@ -17,15 +22,22 @@ import { CreateApplicationRequest } from '@app/common/proto/application';
 export class ApplicationController {
   constructor(private readonly applicationService: ApplicationService) {}
 
+  //create application
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
   @Post()
-  async create(@Body() createApplicationRequest: CreateApplicationRequest) {
-    await this.applicationService.create(createApplicationRequest);
+  async create(
+    @GetUser() user: UserClaims,
+    @Body() createApplicationRequest: CreateApplicationRequest,
+  ) {
+    await this.applicationService.create(createApplicationRequest, user.sub);
     return 'Success';
   }
 
-  @Get('/hr/:hrId')
+  //hr get applications by campaignId + hrId
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
+  @Get('/hr/')
   async findAll(
-    @Param('hrId') hrId: string,
+    @GetUser() hr: UserClaims,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
     @Query('campaignId') campaignId: number | null,
@@ -42,13 +54,15 @@ export class ApplicationController {
       limit,
       campaignId,
       status,
-      hrId,
+      hr.sub,
     );
   }
 
-  @Get('/user/:userId')
+  //user get applications
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
+  @Get('/user')
   async findAllByUserId(
-    @Param('userId') userId: string,
+    @GetUser() user: UserClaims,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
     @Query(
@@ -59,19 +73,30 @@ export class ApplicationController {
     )
     status: boolean | null,
   ) {
-    return this.applicationService.findAllByUserId(page, limit, userId, status);
+    return this.applicationService.findAllByUserId(
+      page,
+      limit,
+      user.sub,
+      status,
+    );
   }
 
+  //hr get application's cv
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Get(':id/cv')
   hrGetCv(@Param('id') id: number) {
     return this.applicationService.hrGetCv(id);
   }
 
+  //get an application
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Get(':id')
   async findOne(@Param('id') id: number) {
     return this.applicationService.findOne(id);
   }
 
+  //hr update status
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Patch(':id')
   update(@Param('id') id: number, @Body('status') status: boolean) {
     return this.applicationService.update(id, status);

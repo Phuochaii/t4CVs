@@ -102,7 +102,7 @@ export class EmployerController {
   @MessagePattern({ cmd: 'update_employer_license_status' })
   async updateEmployerLicenseStatus(@Payload() data: any) {
     const employerId = String(data.employerId);
-    const licenseStatus = Boolean(data.licenseStatus.licenseStatus);
+    const licenseStatus = Boolean(data.licenseStatus);
 
     const result = await this.employerApplication.updateEmployerLicenseStatus(
       employerId,
@@ -119,7 +119,7 @@ export class EmployerController {
   @MessagePattern({ cmd: 'update_employer_phone_status' })
   async updateEmployerPhoneStatus(@Payload() data: any) {
     const employerId = String(data.employerId);
-    const phoneNumberStatus = Boolean(data.phoneNumberStatus.phoneNumberStatus);
+    const phoneNumberStatus = Boolean(data.phoneNumberStatus);
 
     const result = await this.employerApplication.updateEmployerPhoneStatus(
       employerId,
@@ -182,5 +182,10 @@ export class EmployerController {
   @MessagePattern({ cmd: 'find_position_by_id' })
   findPositionById(id: number) {
     return this.positionApplication.getPositionById(id);
+  }
+
+  @MessagePattern({ cmd: 'check_employer' })
+  checkEmployer(id: string) {
+    return this.employerApplication.checkEmployer(id);
   }
 }

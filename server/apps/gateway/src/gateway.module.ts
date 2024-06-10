@@ -10,9 +10,14 @@ import { NotificationModule } from './notification/notification.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { EmployerModule } from './employer/employer.module';
+import { AuthorizationModule } from './authorization/authorization.module';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './authorization';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     ApplicationModule,
     NotificationModule,
     JobModule,
@@ -20,10 +25,12 @@ import { EmployerModule } from './employer/employer.module';
     CompanyModule,
     UserModule,
     CVModule,
-    ConfigModule.forRoot({ envFilePath: '.env.example' }),
+    AuthorizationModule,
+    ConfigModule.forRoot(),
     EmployerModule,
+    AdminModule,
   ],
   controllers: [GatewayController],
-  providers: [GatewayService],
+  providers: [GatewayService, JwtStrategy],
 })
 export class GatewayModule {}

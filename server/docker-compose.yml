@@ -1,0 +1,287 @@
+version: '3.8'
+services:
+  eventstore:
+    container_name: eventstore
+    image: eventstore/eventstore:latest
+    networks:
+      - application
+    environment:
+      - EVENTSTORE_CLUSTER_SIZE=1
+      - EVENTSTORE_RUN_PROJECTIONS=All
+      - EVENTSTORE_START_STANDARD_PROJECTIONS=true
+      - EVENTSTORE_HTTP_PORT=2113
+      - EVENTSTORE_INSECURE=true
+      - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
+    volumes:
+      - eventstore:/var/lib/eventstore
+  nginx:
+    build: ./nginx
+    ports:
+      - '80:80'
+    depends_on:
+      - gateway
+      - gateway2
+    networks:
+      - backend
+  gateway:
+    container_name: gateway
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=gateway
+    environment:
+      - PORT=3000
+      - NOTIFICATION_SERVICE_URL=notification:50052
+      - APPLICATION_SERVICE_URL=application:50053
+      - AUTH0_ISSUER_URL=https://dev-0oh0fi1avbej1681.us.auth0.com/
+      - AUTH0_AUDIENCE=http://localhost:300/
+      - AUTH0_MANAGEMENT_DOMAIN=dev-0oh0fi1avbej1681.us.auth0.com
+      - AUTH0_MANAGEMENT_CLIENTID=cAkfGoFJl76eGYgg5NdoLgqjRYHjdLog
+      - AUTH0_MANAGEMENT_CLIENTSECRET=AvgWeyhvl4HckEt_OlJ9I5XmnwaYcmJJ64Mfnotd_lKOfQsN3elgT-EfQPqWId69
+      - AWS_ACCESS_KEY=AKIAQKSEVUV3HYYNEI7P
+      - AWS_SECRET_ACCESS_KEY=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
+      - AWS_S3_REGION=us-east-1
+      - DB_USER_DATABASE=user
+      - BUCKET_NAME=nestjsdacnpm
+    ports:
+      - 3000:3000
+    networks:
+      - backend
+  gateway2:
+    container_name: gateway2
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=gateway
+    environment:
+      - PORT=4000
+      - NOTIFICATION_SERVICE_URL=notification:50052
+      - APPLICATION_SERVICE_URL=application:50053
+      - AUTH0_ISSUER_URL=https://dev-0oh0fi1avbej1681.us.auth0.com/
+      - AUTH0_AUDIENCE=http://localhost:300/
+      - AUTH0_MANAGEMENT_DOMAIN=dev-0oh0fi1avbej1681.us.auth0.com
+      - AUTH0_MANAGEMENT_CLIENTID=cAkfGoFJl76eGYgg5NdoLgqjRYHjdLog
+      - AUTH0_MANAGEMENT_CLIENTSECRET=AvgWeyhvl4HckEt_OlJ9I5XmnwaYcmJJ64Mfnotd_lKOfQsN3elgT-EfQPqWId69
+      - AWS_ACCESS_KEY=AKIAQKSEVUV3HYYNEI7P
+      - AWS_SECRET_ACCESS_KEY=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
+      - AWS_S3_REGION=us-east-1
+      - DB_USER_DATABASE=user
+      - BUCKET_NAME=nestjsdacnpm
+    ports:
+      - 4000:4000
+    networks:
+      - backend
+  application:
+    container_name: application
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=application
+    environment:
+      - DB_HOST=application-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=123456
+      - DB_APPLICATION_DATABASE=application
+      - EVENTSTORE_HOST=eventstore
+      - EVENTSTORE_PORT=2113
+    depends_on:
+      - application-db
+      - eventstore
+    networks:
+      - backend
+      - application
+    restart: always
+  application-db:
+    container_name: application-db
+    image: postgres:latest
+    networks:
+      - application
+    environment:
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=application
+    volumes:
+      - application-db:/var/lib/postgresql/data
+  cv:
+    container_name: cv
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=cv
+    environment:
+      - DB_HOST=cv-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=123456
+      - DB_CV_DATABASE=cv
+    depends_on:
+      - cv-db
+    networks:
+      - backend
+      - cv
+  cv-db:
+    container_name: cv-db
+    image: postgres:latest
+    networks:
+      - cv
+    environment:
+      - POSTGRES_PASSWORD=123456
+    volumes:
+      - cv-db:/var/lib/postgresql/data
+  notification:
+    container_name: notification
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=notification-service
+    environment:
+      - DB_HOST=notification-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=123456
+      - DB_NOTIFICATION_DATABASE=notification
+    depends_on:
+      - notification-db
+    networks:
+      - backend
+      - notification
+  notification-db:
+    container_name: notification-db
+    image: postgres:latest
+    networks:
+      - notification
+    environment:
+      - POSTGRES_PASSWORD=123456
+    volumes:
+      - notification-db:/var/lib/postgresql/data
+  user:
+    container_name: user
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=user
+    environment:
+      - DB_HOST=user-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=phuochai1901
+      - DB_USER_DATABASE=user
+    depends_on:
+      - user-db
+    networks:
+      - backend
+      - user
+  user-db:
+    container_name: user-db
+    image: postgres:latest
+    networks:
+      - user
+    environment:
+      - POSTGRES_PASSWORD=phuochai1901
+    volumes:
+      - user-db:/var/lib/postgresql/data
+  job:
+    container_name: job
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=job
+    environment:
+      - DB_HOST=job-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=phuochai1901
+      - DB_JOB_DATABASE=job
+    depends_on:
+      - job-db
+    networks:
+      - backend
+      - job
+  job-db:
+    container_name: job-db
+    image: postgres:latest
+    networks:
+      - job
+    environment:
+      - POSTGRES_PASSWORD=phuochai1901
+    volumes:
+      - job-db:/var/lib/postgresql/data
+  company:
+    container_name: company
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=company-service
+    environment:
+      - DB_HOST=company-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=713112411
+      - DB_COMPANY_DATABASE=company
+    depends_on:
+      - company-db
+    networks:
+      - backend
+      - company
+  company-db:
+    container_name: company-db
+    image: postgres:latest
+    networks:
+      - company
+    environment:
+      - POSTGRES_PASSWORD=713112411
+    volumes:
+      - company-db:/var/lib/postgresql/data
+  employer:
+    container_name: employer
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=employer
+    environment:
+      - DB_HOST=employer-db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=713112411
+      - DB_EMPLOYER_DATABASE=employer
+    depends_on:
+      - employer-db
+    networks:
+      - backend
+      - employer
+  employer-db:
+    container_name: employer-db
+    image: postgres:latest
+    networks:
+      - employer
+    environment:
+      - POSTGRES_PASSWORD=713112411
+    volumes:
+      - employer-db:/var/lib/postgresql/data
+networks:
+  backend:
+  application:
+  cv:
+  notification:
+  user:
+  job:
+  company:
+  employer:
+volumes:
+  application-db:
+  cv-db:
+  notification-db:
+  user-db:
+  job-db:
+  company-db:
+  employer-db:
+  eventstore:
