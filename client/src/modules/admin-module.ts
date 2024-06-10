@@ -92,13 +92,14 @@ const getAllEmployer = async (token: string, page: number = 1) => {
 // Ko có trong POSTMAN
 const getApplicationsByCampaignId = async (
   token: string,
+  hrId: number,
   page: number,
   limit: number,
   campaignId: number,
   status: boolean,
 ) => {
   const response = await axios.get(
-    `${serverURL}/application/hr?page=${page}&limit=${limit}&campaignId=${campaignId}&status=${status}`,
+    `${serverURL}/application/admin/${hrId}?page=${page}&limit=${limit}&campaignId=${campaignId}&status=${status}`,
     {
       headers: {
         authorization: `Bearer ${token}`,
