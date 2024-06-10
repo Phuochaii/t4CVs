@@ -7,3 +7,5 @@ export * from './getCampaignByEmployerIdPagination.service';
 export * from './getTotalCampaignByEmployerId.service';
 export * from './updateCampaign.service';
 export * from './deleteCampaign.service';
+export * from './findCampaignByName.service';
+export * from './getTotalCampaignByName.service';

@@ -3,10 +3,12 @@ import { Campaign } from './entity';
 import {
   CreateCampaignService,
   FindCampaignByIdService,
+  FindCampaignByNameService,
   GetAllCampaignByEmployerIdPaginationService,
   GetAllCampaignByEmployerIdService,
   GetAllCampaignPaginationService,
   GetTotalCampaignByEmployerIdService,
+  GetTotalCampaignByNameService,
   GetTotalCampaignsService,
   UpdateCampaignService,
 } from './service';
@@ -23,6 +25,8 @@ export class CampaignApplication {
     private readonly getAllCampaignByEmplyerIdPaginationService: GetAllCampaignByEmployerIdPaginationService,
     private readonly getTotalCampaignByEmployerIdService: GetTotalCampaignByEmployerIdService,
     private readonly deleteCampaignService: DeleteCampaignService,
+    private readonly findCampaignByNameService: FindCampaignByNameService,
+    private readonly getTotalCampaignByNameService: GetTotalCampaignByNameService,
   ) {}
 
   async createCampaign(request: CreateCampaignDTO): Promise<Campaign> {
@@ -70,5 +74,17 @@ export class CampaignApplication {
 
   async deleteCampaign(id: number): Promise<string> {
     return await this.deleteCampaignService.execute(id);
+  }
+
+  async findCampaignByName(
+    name: string,
+    page: number,
+    limit: number,
+  ): Promise<Campaign[]> {
+    return await this.findCampaignByNameService.execute(name, page, limit);
+  }
+
+  async getTotalCampaignByName(name: string): Promise<number> {
+    return await this.getTotalCampaignByNameService.execute(name);
   }
 }
