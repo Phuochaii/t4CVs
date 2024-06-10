@@ -633,7 +633,7 @@ function Home() {
                           onClick={() => {
                             navigation(`/detail-job/${item.id}`);
                           }}
-                          className="job-item-search-result max-h-60 bg-white p-2 border border-transparent rounded-lg shadow-md flex gap-3"
+                          className="job-item-search-result max-h-60 bg-white p-2 border border-transparent rounded-lg shadow-md flex gap-3 hover:border-green-500"
                         >
                           <div className="job-logo-company w-24 h-24 min-w-24 flex items-center border rounded-lg">
                             <img

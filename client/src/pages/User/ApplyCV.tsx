@@ -1238,13 +1238,18 @@ function ApplyCV() {
                         Khu vực
                       </div>
                       <div className="box-category-tags flex flex-row flex-wrap gap-3">
-                        <span className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500">
                           {jobData?.locations
-                            ? jobData?.locations[0]?.name
-                              ? jobData?.locations[0]?.name
-                              : ''
+                            ? jobData?.locations.map((location: any) => (
+                                <strong
+                                  className="job-detail__info--section-content-value"
+                                  key={location.id}
+                                >
+                                  <span className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500">
+                                    {location.name}
+                                  </span>
+                                </strong>
+                              ))
                             : ''}
-                        </span>
                       </div>
                     </div>
                   </div>

@@ -7,7 +7,9 @@ function RelatedJobComponent({ setJobId }: { setJobId: (id: number) => void }) {
   useEffect(() => {
     const fetchJobResults = async () => {
       try {
-        const response = await fetch('http://localhost:3000/job/all?limit=5');
+        const response = await fetch(
+          "http://localhost:3000/job/valid-jobs?limit=5"
+        );
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }

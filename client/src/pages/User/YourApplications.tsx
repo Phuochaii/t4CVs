@@ -22,7 +22,7 @@ const option = [
 function YourApplications() {
     const { user, getAccessTokenSilently, isAuthenticated, isLoading } =
       useAuth0();
-  const {token} = useProfileContext();
+  const {token, profile} = useProfileContext();
 
   const navigation = useNavigate();
   const [isOn, setIsOn] = useState(false);
@@ -151,7 +151,7 @@ function YourApplications() {
                             onClick={() =>
                               navigation(`/companies/${item.jobs.company.id}`)
                             }
-                            className="job-company-name text-slate-500 col-span-3 mb-1"
+                            className="job-company-name text-slate-500 col-span-3 mb-1 cursor-pointer"
                           >
                             {item.jobs.company.name}
                           </div>
@@ -239,7 +239,7 @@ function YourApplications() {
               <div className="flex items-center">
                 <div className="w-16 h-16 bg-gray-300 rounded-full mr-4 overflow-hidden">
                   <img
-                    src={user?.picture}
+                    src={profile?.picture}
                     alt="avatar"
                     className="w-full h-full object-cover"
                   />
@@ -247,7 +247,7 @@ function YourApplications() {
 
                 <div className="ml-4">
                   <p>Chào bạn trở lại,</p>
-                  <p className="font-medium">{user?.name}</p>
+                  <p className="font-medium">{profile?.name}</p>
                   <div className=" bg-gray-200 rounded inline-block">
                     <p>Tài khoản đã xác thực</p>
                   </div>

@@ -252,7 +252,7 @@ function Company() {
             </div>
           </div>
           <div className="mb-5 font-semibold text-xl text-[#00b14f]">
-            Top công ty cùng lĩnh vực
+            Top công ty
           </div>
           {relatedCompanies.map((company) => (
             <RelatedCompany key={company} company={company} />
