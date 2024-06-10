@@ -251,6 +251,16 @@ export class CompanyService {
     );
   }
 
+  findCampaignByName(name: string, page: number, limit: number) {
+    return this.companyClient
+      .send({ cmd: 'find_campaign_by_name' }, { name, page, limit })
+      .pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
+  }
+
   getAllField() {
     return this.companyClient.send({ cmd: 'get_all_field' }, {});
   }

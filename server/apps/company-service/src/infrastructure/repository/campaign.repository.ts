@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { CampaignRepository } from '../../domain/repository';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { CampaignSchema } from '../schema';
 import { Campaign } from '../../domain/entity';
 import { CreateCampaignDTO, UpdateCampaignDTO } from '../../domain/dto';
@@ -102,5 +102,38 @@ export class TypeOrmCampaignRepository extends CampaignRepository {
     } else {
       return 'Delete Campaign Success';
     }
+  }
+
+  async findCampaignByName(
+    name: string,
+    page: number,
+    limit: number,
+  ): Promise<Campaign[]> {
+    const skip = (page - 1) * limit;
+
+    const iName = ILike(`%${name}%`);
+
+    const result = await this.campaignRepository.find({
+      where: {
+        name: iName,
+      },
+      skip: skip,
+      take: limit,
+      order: {
+        id: 'ASC',
+      },
+    });
+
+    return result;
+  }
+
+  async getTotalCampaignByName(name: string): Promise<number> {
+    const iName = ILike(`%${name}%`);
+
+    const total = await this.campaignRepository.count({
+      where: { name: iName },
+    });
+
+    return total;
   }
 }
