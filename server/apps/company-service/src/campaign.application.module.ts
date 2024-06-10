@@ -6,10 +6,12 @@ import {
   CreateCampaignService,
   DeleteCampaignService,
   FindCampaignByIdService,
+  FindCampaignByNameService,
   GetAllCampaignByEmployerIdPaginationService,
   GetAllCampaignByEmployerIdService,
   GetAllCampaignPaginationService,
   GetTotalCampaignByEmployerIdService,
+  GetTotalCampaignByNameService,
   GetTotalCampaignsService,
   UpdateCampaignService,
 } from './domain/service';
@@ -83,6 +85,20 @@ import {
       inject: [CampaignRepository],
     },
     {
+      provide: FindCampaignByNameService,
+      useFactory: (campaignRepository: CampaignRepository) => {
+        return new FindCampaignByNameService(campaignRepository);
+      },
+      inject: [CampaignRepository],
+    },
+    {
+      provide: GetTotalCampaignByNameService,
+      useFactory: (campaignRepository: CampaignRepository) => {
+        return new GetTotalCampaignByNameService(campaignRepository);
+      },
+      inject: [CampaignRepository],
+    },
+    {
       provide: CampaignApplication,
       useFactory: (
         createCampaign: CreateCampaignService,
@@ -94,6 +110,8 @@ import {
         getAllCampaignByEmployerIdPagination: GetAllCampaignByEmployerIdPaginationService,
         getTotalCampaignByEmployerId: GetTotalCampaignByEmployerIdService,
         deleteCampaignService: DeleteCampaignService,
+        findCampaignByNameService: FindCampaignByNameService,
+        getTotalCampaignByNameService: GetTotalCampaignByNameService,
       ) => {
         return new CampaignApplication(
           createCampaign,
@@ -105,6 +123,8 @@ import {
           getAllCampaignByEmployerIdPagination,
           getTotalCampaignByEmployerId,
           deleteCampaignService,
+          findCampaignByNameService,
+          getTotalCampaignByNameService,
         );
       },
       inject: [
@@ -117,6 +137,8 @@ import {
         GetAllCampaignByEmployerIdPaginationService,
         GetTotalCampaignByEmployerIdService,
         DeleteCampaignService,
+        FindCampaignByNameService,
+        GetTotalCampaignByNameService,
       ],
     },
   ],

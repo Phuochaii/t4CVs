@@ -234,6 +234,36 @@ export class CompanyServiceController {
     }
   }
 
+  @MessagePattern({ cmd: 'find_campaign_by_name' })
+  async findCampaignByNameId(@Payload() data: any) {
+    const name = String(data.name);
+    const page = Number(data.page);
+    const limit = Number(data.limit);
+
+    const campaigns = await this.campaignApplication.findCampaignByName(
+      name,
+      page,
+      limit,
+    );
+
+    if (campaigns.length <= 0) {
+      throw new RpcException(new BadRequestException('Cannot found campaign'));
+    } else {
+      const total = await this.campaignApplication.getTotalCampaignByName(name);
+      const total_page = Math.ceil(total / limit);
+
+      const result = {
+        page: page,
+        limit: limit,
+        total: total,
+        total_page: total_page,
+        data: campaigns,
+      };
+
+      return result;
+    }
+  }
+
   @MessagePattern({ cmd: 'get_all_field' })
   getAllField() {
     return this.fieldApplication.getAllField();
