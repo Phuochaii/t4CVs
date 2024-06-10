@@ -26,18 +26,20 @@ export class TypeOrmJobRepository extends JobRepository {
   async findJobByCampaignId(
     campaignId: number,
   ): Promise<FindJobByCampaignIdDto> {
+    console.log(campaignId);
     const job = await this.jobRepository.findOne({
       where: {
         campaignId,
       },
-      select: {
-        titleRecruitment: true,
-        companyId: true,
-        salaryMax: true,
-        salaryMin: true,
-        campaignId: true,
-        status: true,
-      },
+      relations: ['jobDetail'],
+      // select: {
+      //   titleRecruitment: true,
+      //   companyId: true,
+      //   salaryMax: true,
+      //   salaryMin: true,
+      //   campaignId: true,
+      //   status: true,
+      // },
     });
     if (!job) return null;
     const result: FindJobByCampaignIdDto = {
@@ -47,6 +49,7 @@ export class TypeOrmJobRepository extends JobRepository {
       salaryMin: job.salaryMin,
       campaignId: job.campaignId,
       status: job.status,
+      jobDetail: job.jobDetail,
     };
     return result;
   }
