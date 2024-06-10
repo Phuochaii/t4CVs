@@ -46,7 +46,7 @@ function Employer() {
       } = await getAllEmployer(token, page); // Cấn authen
 
       const allEmployersWithCompany = allEmployers.map(async (employer) => {
-        const company = await getCompanyById(employer.companyId);
+        const company = employer.companyId? await getCompanyById(employer.companyId) : null;
         return { ...employer, company: company };
       });
       setEmployers(await Promise.all(allEmployersWithCompany));
@@ -70,15 +70,15 @@ function Employer() {
 
   const columns: BasicColumnProps[] = useMemo(
     () => [
-      {
-        name: 'ID',
-        field: 'id',
-        tableCellClassname: '',
-        cell: (data: ObjectFromServer) => {
-          const employer = data as EmployerFromServer;
-          return <div className="">{employer.id}</div>;
-        },
-      },
+      // {
+      //   name: 'ID',
+      //   field: 'id',
+      //   tableCellClassname: '',
+      //   cell: (data: ObjectFromServer) => {
+      //     const employer = data as EmployerFromServer;
+      //     return <div className="">{employer.id}</div>;
+      //   },
+      // },
       {
         name: 'Họ và tên',
         field: 'fullname',
@@ -86,7 +86,7 @@ function Employer() {
         cell: (data: ObjectFromServer) => {
           const employer = data as EmployerFromServer;
           return (
-            <div className="flex flex-col">
+            <div className="flex flex-col items-center">
               <img src={employer.image} alt="Avatar" className="w-24 h-24" />
               <span>{employer.fullname}</span>
             </div>
