@@ -52,7 +52,10 @@ function BasicTable({ data, columns, tableFor }: BasicTableProps) {
                     className={clsx('border', column.tableCellClassname)}
                     key={'column-' + colIndex.toString()}
                     onClick={() => {
-                      if (colIndex === 1 && tableFor) {
+                      if (colIndex === 1 && tableFor === 'company') {
+                        navigation(`/admin/${tableFor}/${object.id}`);
+                      }
+                      else if (colIndex === 0 && tableFor === 'employer') {
                         navigation(`/admin/${tableFor}/${object.id}`);
                       }
                     }}
