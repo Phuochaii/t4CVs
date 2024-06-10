@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.createMicroservice(EmployerServiceModule, {
     transport: Transport.TCP,
     options: {
-      host: '0.0.0.0',
+      host: 'localhost',
       port: 3005,
     },
   });
