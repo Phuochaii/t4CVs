@@ -16,8 +16,10 @@ import {
   getApplicationsByCampaignId,
   getEmployerById,
   getUserById,
-} from '../../modules/hr-module';
-import { getCompanyById, getJobByCampaignId } from '../../modules/helper';
+  getJobByCampaignId,
+} from '../../modules/admin-module';
+import { getCompanyById } from '../../modules/helper';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 interface CampaignTableProps {
   data: CampaignType[];
@@ -49,13 +51,17 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [applicants, setApplicants] = useState<(UserFromServer | null)[]>([]);
   const campaign = data;
-  console.log(data);
+  // console.log(data);
+  const { token } = useProfileContext();
+  // console.log(token); //Có token
+
   useEffect(() => {
     async function getUsers() {
       const applicantPromises = campaign.applications.map(
         async (application) => {
-          console.log('Applications', application);
-          const applicant = await getUserById(application.userId);
+          // console.log('Applications', application);
+          const applicant = await getUserById(token, application.userId);
+          console.log(applicant);
           return applicant;
         },
       );
@@ -63,7 +69,7 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
     }
     getUsers();
   }, []);
-  console.log('Applicants', applicants);
+  // console.log('Applicants', applicants);
   return (
     <tr
       className="align-top hover:bg-green-100 bg-slate-50"
@@ -196,6 +202,8 @@ function Campaign() {
   const [campaigns, setCampaigns] = useState<CampaignType[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const { token } = useProfileContext();
+  // console.log(token); //Có token
 
   useEffect(() => {
     async function getData() {
@@ -205,10 +213,14 @@ function Campaign() {
         const company = employer.companyId
           ? await getCompanyById(employer.companyId)
           : await null;
-        const job = await getJobByCampaignId(item.id);
+        const job = await getJobByCampaignId(token, item.id);
         const { applications } = await getApplicationsByCampaignId(
-          item.employerId,
+          token,
+          employer.id,
+          page,
+          5,
           item.id,
+          true,
         );
         const rawCampaign: CampaignType = {
           campaignName: item.name,

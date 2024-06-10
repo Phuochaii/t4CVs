@@ -6,7 +6,7 @@ import * as Error from '../pages/Error';
 
 import { UserLayout, AdminLayout, HRLayout, EmptyLayout } from '../layouts';
 import { ReactElement } from 'react';
-import { Role, Roles } from "../shared/services/authen/domain/context";
+import { Role, Roles } from '../shared/services/authen/domain/context';
 
 interface LayoutProp {
   children: React.ReactNode | React.ReactElement<any>;
@@ -96,25 +96,33 @@ const routes: RouteItem[] = [
   { path: '/companies/', component: User.Companies, layout: UserLayout }, // thinh
 
   // ADMIN
-  { path: '/admin/company', component: Admin.Company, layout: AdminLayout }, // thuc
+  {
+    path: '/admin/company',
+    component: Admin.Company,
+    layout: AdminLayout,
+    role: Roles.ADMIN,
+  }, // thuc
   {
     path: '/admin/campaign',
     component: Admin.Campaign,
     layout: AdminLayout,
+    role: Roles.ADMIN,
   }, // thuc
   {
     path: '/admin/recruitment',
     component: Admin.Recruitment,
     layout: AdminLayout,
+    role: Roles.ADMIN,
   }, // thuc
   {
     path: '/admin/employer',
     component: Admin.Employer,
     layout: AdminLayout,
+    role: Roles.ADMIN,
   }, // thuc
 
   // HR
-  { path: "/hr/news", component: HR.News, layout: HRLayout, role: Roles.HR }, //khoa
+  { path: '/hr/news', component: HR.News, layout: HRLayout, role: Roles.HR }, //khoa
 
   { path: '/hr/post-compaign', component: HR.PostJob, layout: HRLayout }, // thinh
   {
@@ -173,11 +181,13 @@ const routes: RouteItem[] = [
     path: '/admin/company/:id',
     component: Admin.CompanyDetail,
     layout: AdminLayout,
+    role: Roles.ADMIN,
   },
   {
     path: '/admin/employer/:id',
     component: Admin.EmployerDetail,
     layout: AdminLayout,
+    role: Roles.ADMIN,
   },
 ];
 

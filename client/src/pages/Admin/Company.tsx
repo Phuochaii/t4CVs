@@ -18,6 +18,7 @@ import {
   getAllFields,
   findCompanyByName,
 } from "../../modules/helper";
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 function Company() {
   const [companies, setCompanies] = useState<CompanyFromServer[]>([]);
@@ -26,6 +27,8 @@ function Company() {
   const [fields, setField] = useState<Field[]>([]);
   const [refresh, setRefresh] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const { token } = useProfileContext();
+  // console.log(token);
 
   useEffect(() => {
     async function getData() {
@@ -136,7 +139,7 @@ function Company() {
               <Switch
                 checked={company.status}
                 onChange={async () => {
-                  await updateCompanyStatus(company.id, !company.status);
+                  await updateCompanyStatus(token, company.id, !company.status);
                   setRefresh(!refresh);
                 }}
               />

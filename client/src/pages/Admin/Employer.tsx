@@ -13,7 +13,7 @@ import {
   getAllEmployer,
   updateLicenseStatus,
   updatePhoneStatus,
-} from "../../modules/admin-module";
+} from '../../modules/admin-module';
 import BasicTable, {
   BasicColumnProps,
   ObjectFromServer,
@@ -21,6 +21,7 @@ import BasicTable, {
 import { EmployerFromServer } from '../../shared/types/Employer.type';
 import Switch from '../../shared/components/CustomSwitch';
 import clsx from 'clsx';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 function Employer() {
   const [employers, setEmployers] = useState<EmployerFromServer[]>([]);
@@ -29,6 +30,8 @@ function Employer() {
   const [totalPages, setTotalPages] = useState(0);
   const [refresh, setRefresh] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const { token } = useProfileContext();
+  // console.log(token); //Có token
 
   useEffect(() => {
     async function getData() {
@@ -40,7 +43,7 @@ function Employer() {
         allEmployers: EmployerFromServer[];
         total: number;
         totalPages: number;
-      } = await getAllEmployer(page);
+      } = await getAllEmployer(token, page); // Cấn authen
 
       const allEmployersWithCompany = allEmployers.map(async (employer) => {
         const company = await getCompanyById(employer.companyId);
@@ -120,6 +123,7 @@ function Employer() {
                 checked={employer.phoneNumberStatus}
                 onChange={async () => {
                   await updatePhoneStatus(
+                    token,
                     employer.id,
                     !employer.phoneNumberStatus,
                   );
@@ -167,6 +171,7 @@ function Employer() {
                 checked={employer.licenseStatus}
                 onChange={async () => {
                   await updateLicenseStatus(
+                    token,
                     employer.id,
                     !employer.licenseStatus,
                   );

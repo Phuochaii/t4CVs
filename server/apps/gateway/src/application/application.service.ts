@@ -117,7 +117,6 @@ export class ApplicationService implements OnModuleInit {
       };
     }
     let campaignIds = campaignRes.data.map((campaign) => campaign.id);
-    console.log(campaignIds);
     if (campaignId) {
       campaignIds = [campaignId];
     }
