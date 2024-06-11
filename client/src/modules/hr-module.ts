@@ -148,6 +148,9 @@ const updateApplicationStatus = async ({
   const response = await axios.patch(
     `${serverURL}/application/${applicationId}`,
     {
+     "status": true
+    },
+    {
       headers: {
         authorization: `Bearer ${token}`,
       },
