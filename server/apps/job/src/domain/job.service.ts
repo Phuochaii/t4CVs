@@ -125,13 +125,12 @@ export class JobService {
       });
       jobs = jobLocation;
     }
-
     const result: FindJobRespDTO = {
       page: parseInt(String(page)),
       limit: parseInt(String(limit)),
       total: jobs.length,
       total_pages: Math.ceil(jobs.length / limit),
-      data: jobs.slice(skip, skip + limit),
+      data: jobs.slice(skip, skip + parseInt(String(limit))),
     };
     return result;
   }
@@ -177,7 +176,7 @@ export class JobService {
       limit: parseInt(String(limit)),
       total: jobs.length,
       total_pages: Math.ceil(jobs.length / limit),
-      data: jobs.slice(skip, skip + limit),
+      data: jobs.slice(skip, skip + parseInt(String(limit))),
     };
     return result;
   }
