@@ -166,10 +166,10 @@ function EmployerDetail() {
                 <p className="px-5 pt-5 pb-7 max-w-[650px]"></p>
               </div>
               <h2 className="text-lg font-bold p-5">Giấy phép hoạt động:</h2>
-              <div className="flex gap-3 mx-5 items-start">
+              <div className="flex flex-row flex-wrap gap-2 mx-5 items-start">
                 {employerInfo?.license ? (
                   <img
-                    className="w-1/2 object-contain"
+                    className="max-w-1/3 object-contain"
                     src={employerInfo?.license}
                   />
                 ) : (
@@ -178,7 +178,7 @@ function EmployerDetail() {
                 {employerInfo?.supplement &&
                 employerInfo?.supplement != 'null' ? (
                   <img
-                    className="w-1/2 object-contain"
+                    className="max-w-1/3 object-contain"
                     src={employerInfo?.supplement}
                   />
                 ) : (

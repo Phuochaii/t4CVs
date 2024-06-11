@@ -5,10 +5,7 @@ import {
   Search,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  findEmployerByName,
-  getCompanyById,
-} from '../../modules/helper';
+import { findEmployerByName, getCompanyById } from '../../modules/helper';
 import {
   getAllEmployer,
   updateLicenseStatus,
@@ -44,9 +41,11 @@ function Employer() {
         total: number;
         totalPages: number;
       } = await getAllEmployer(token, page); // Cấn authen
-
+      console.log(allEmployers);
       const allEmployersWithCompany = allEmployers.map(async (employer) => {
-        const company = employer.companyId? await getCompanyById(employer.companyId) : null;
+        const company = employer.companyId
+          ? await getCompanyById(employer.companyId)
+          : null;
         return { ...employer, company: company };
       });
       setEmployers(await Promise.all(allEmployersWithCompany));
@@ -70,8 +69,6 @@ function Employer() {
 
   const columns: BasicColumnProps[] = useMemo(
     () => [
-      
-      
       {
         name: 'Họ và tên',
         field: 'fullname',

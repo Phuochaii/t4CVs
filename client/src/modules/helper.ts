@@ -224,7 +224,7 @@ export const searchJob = async ({
       throw error; // Ném lỗi để cho người dùng của hàm biết rằng có lỗi xảy ra
     }
   }
-}
+};
 
 export async function findEmployerByName(
   name: string,

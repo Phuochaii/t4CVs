@@ -75,12 +75,19 @@ const getAllCampaigns = async (page: number = 1) => {
 };
 
 // Ko có trong POSTMAN
-const getAllEmployer = async (token: string, page: number = 1) => {
-  const response = await axios.get(`${serverURL}/employer/all?page=${page}`, {
-    headers: {
-      authorization: `Bearer ${token}`,
+const getAllEmployer = async (
+  token: string,
+  page: number = 1,
+  limit: number = 10,
+) => {
+  const response = await axios.get(
+    `${serverURL}/employer/all?page=${page}&limit=${limit}`,
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
   const rawEmployers: EmployerFromServer[] = response.data.data;
   return {
     allEmployers: rawEmployers,
@@ -287,6 +294,41 @@ const getJobByCampaignId = async (token: string, campaignId: number) => {
   }
 };
 
+const findJobRecruitmentByName = async (
+  token: string,
+  page: number = 1,
+  limit: number = 5,
+  name: string,
+) => {
+  const response = await axios.get(
+    `${serverURL}/job/all?page=${page}&limit=${limit}&titleRecruitment=${name}`,
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  const rawJobs: RecruitmentFromServer[] = response.data.data;
+  const totalPages = response.data.total_pages;
+  return { allJobs: rawJobs, totalPages: totalPages };
+};
+
+const findCampaignByName = async (
+  token: string,
+  name: string,
+  page: number = 1,
+  limit: number = 5,
+) => {
+  const response = await axios.get(
+    `${serverURL}/company/campaign/name/${name}?page=${page}&limit=${limit}`,
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  if (response.status === 400) return { allCampaigns: null, totalPages: 0 };
+  const rawCampaigns: CampaignFromServer[] = response.data.data;
+  const totalPages = response.data.total_page;
+  return { allCampaigns: rawCampaigns, totalPages: totalPages };
+};
+
 // cập nhật các function vào đây
 export {
   findAllCV,
@@ -307,4 +349,6 @@ export {
   getAllJobs,
   getJobsStat,
   getJobByCampaignId,
+  findJobRecruitmentByName,
+  findCampaignByName,
 };

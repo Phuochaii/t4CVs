@@ -5,11 +5,9 @@ import {
   ChevronRightCircle,
   Search,
 } from 'lucide-react';
-
 import { SetStateAction, useEffect, useState } from 'react';
 import { Campaign as CampaignType } from '../../shared/types/Campaign.type';
 // import Switch from "../../shared/components/CustomSwitch";
-
 import { UserFromServer } from '../../shared/types/User.type';
 import {
   getAllCampaigns,
@@ -17,9 +15,11 @@ import {
   getEmployerById,
   getUserById,
   getJobByCampaignId,
+  findCampaignByName,
 } from '../../modules/admin-module';
 import { getCompanyById } from '../../modules/helper';
 import { useProfileContext } from '../../shared/services/authen/domain/context';
+import { useNavigate } from 'react-router-dom';
 
 interface CampaignTableProps {
   data: CampaignType[];
@@ -53,6 +53,7 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
   const campaign = data;
   // console.log(data);
   const { token } = useProfileContext();
+  const navigation = useNavigate();
   // console.log(token); //Có token
 
   useEffect(() => {
@@ -61,7 +62,7 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
         async (application) => {
           // console.log('Applications', application);
           const applicant = await getUserById(token, application.userId);
-          console.log(applicant);
+          // console.log(applicant);
           return applicant;
         },
       );
@@ -94,12 +95,12 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
                 'Chưa có CV nào'
               ) : (
                 <div className="flex items-center gap-1">
-                  {applicants.slice(0, 5).map((_, item) => {
+                  {applicants.slice(0, 5).map((candidate, item) => {
                     return (
                       <img
                         key={item}
                         src={
-                          // candidate?.image ||
+                          candidate?.image ||
                           'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'
                         }
                         className="object-cover w-8 h-8 rounded-full"
@@ -131,7 +132,14 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
         </div>
       </td>
       <td className="border">
-        <div className="p-2 font-bold text-blue-500">{`${data.employer.fullname}`}</div>
+        <div
+          onClick={() => {
+            navigation(`/admin/employer/${data.employer.id}`);
+          }}
+          className="p-2 font-bold text-blue-500 cursor-pointer hover:underline"
+        >
+          {`${data.employer.fullname}`}
+        </div>
       </td>
       <td className="border">
         <div className="p-2 font-bold text-blue-500">{`${data.postDate?.toLocaleDateString(
@@ -178,9 +186,11 @@ const CompanyCampaignTable = ({ data }: CampaignTableProps) => {
     <table className="w-full text-sm bg-white">
       <CompanyCampaignTableHeader />
       <tbody>
-        {data.map((item, index) => (
-          <CompanyCampaignTableRow data={item} key={index} />
-        ))}
+        {data.length != 0
+          ? data.map((item, index) => (
+              <CompanyCampaignTableRow data={item} key={index} />
+            ))
+          : 'Không có chiến dịch phù hợp'}
       </tbody>
     </table>
   );
@@ -191,43 +201,56 @@ function Campaign() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const { token } = useProfileContext();
+  const [searchText, setSearchText] = useState('');
   // console.log(token); //Có token
 
   useEffect(() => {
     async function getData() {
-      const { allCampaigns, totalPages } = await getAllCampaigns(page);
-      const rawCampaigns = await allCampaigns.map(async (item) => {
-        const employer = await getEmployerById(item.employerId);
-        const company = employer.companyId
-          ? await getCompanyById(employer.companyId)
-          : await null;
-        const job = await getJobByCampaignId(token, item.id);
-        const { applications } = await getApplicationsByCampaignId(
-          token,
-          employer.id,
-          page,
-          5,
-          item.id,
-          true,
-        );
-        const rawCampaign: CampaignType = {
-          campaignName: item.name,
-          campaignId: item.id,
-          employer: employer,
-          company: company,
-          postDate: new Date(item.createdAt),
-          recruitment: job,
-          applications: applications,
-          applicants: [],
-        };
-        return rawCampaign;
-      });
-      setCampaigns(await Promise.all(rawCampaigns));
-      setTotalPages(totalPages);
+      const { allCampaigns, totalPages } =
+        searchText == ''
+          ? await getAllCampaigns(page)
+          : await findCampaignByName(token, searchText, page);
+      console.log(allCampaigns);
+      if (allCampaigns) {
+        const rawCampaigns = await allCampaigns.map(async (item) => {
+          const employer = await getEmployerById(item.employerId);
+          const company = employer.companyId
+            ? await getCompanyById(employer.companyId)
+            : await null;
+          const job = await getJobByCampaignId(token, item.id);
+          const { applications } = await getApplicationsByCampaignId(
+            token,
+            employer.id,
+            page,
+            5,
+            item.id,
+            true,
+          );
+          const rawCampaign: CampaignType = {
+            campaignName: item.name,
+            campaignId: item.id,
+            employer: employer,
+            company: company,
+            postDate: new Date(item.createdAt),
+            recruitment: job,
+            applications: applications,
+            applicants: [],
+          };
+          return rawCampaign;
+        });
+        setCampaigns(await Promise.all(rawCampaigns));
+        setTotalPages(totalPages);
+      } else {
+        setCampaigns([]);
+      }
     }
     getData();
     console.log('GO');
-  }, [page]);
+  }, [page, searchText]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div className="flex flex-col items-center flex-grow bg-slate-200">
@@ -244,12 +267,18 @@ function Campaign() {
               <span className="text-gray-400">Tất cả chiến dịch</span>
               <ChevronDown stroke="#9ca3af" size={16} />
             </div>
-            <div className="flex items-center justify-between flex-grow p-2 text-sm bg-white ">
-              <span className="text-gray-400">
-                Tìm chiến dịch (Nhấn enter để tìm kiếm)
-              </span>
+            <form
+              onSubmit={handleSearch}
+              className="flex items-center justify-between flex-grow p-2 text-sm bg-white "
+            >
+              <input
+                className="w-full text-gray-400"
+                placeholder="Tìm chiến dịch (Nhập để tìm kiếm)"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              ></input>
               <Search stroke="#9ca3af" size={16} />
-            </div>
+            </form>
           </div>
         </div>
         <CompanyCampaignTable data={campaigns} setData={setCampaigns} />

@@ -1,13 +1,5 @@
 import clsx from 'clsx';
-import {
-  ArrowUp,
-  ChevronLeftCircle,
-  ChevronRightCircle,
-  Pause,
-  Pencil,
-  Search,
-  Settings,
-} from 'lucide-react';
+import { ChevronLeftCircle, ChevronRightCircle, Search } from 'lucide-react';
 import React, { SetStateAction, useEffect, useState } from 'react';
 import { statusColor } from '../../shared/types/RecruitmentStatus.type';
 import { RecruitmentJobPost } from '../../shared/types/Recruitment.type';
@@ -18,6 +10,9 @@ import {
   getAllJobs,
   updateJobStatus,
   getJobsStat,
+  getApplicationsByCampaignId,
+  getEmployerById,
+  findJobRecruitmentByName,
 } from '../../modules/admin-module';
 interface RecruitmentTableProps {
   data: RecruitmentJobPost[];
@@ -39,11 +34,11 @@ function RecruitmentTable({
       <thead>
         <tr>
           <td className="font-bold border">Tin tuyển dụng</td>
-          <td className="p-2 font-bold text-center align-middle border ">
+          {/* <td className="p-2 font-bold text-center align-middle border ">
             <div className="flex items-center justify-center w-full h-full">
               <Settings size={16} />
             </div>
-          </td>
+          </td> */}
           <td className="font-bold border">Công ty</td>
           <td className="font-bold border">Ngày tạo</td>
         </tr>
@@ -95,12 +90,12 @@ function RecruitmentTable({
                   </div>
                   <div></div>
                   <span> Chiến dịch tuyển dụng: {jobPost.campaign.name} </span>
-                  <button className="p-2 font-bold text-green-500 bg-green-50">
-                    Xem CV ứng tuyển
-                  </button>
+                  <div className="p-2 font-bold text-green-500 bg-green-50">
+                    Đã có {jobPost.applications.length} người ứng tuyển
+                  </div>
                 </div>
               </td>
-              <td className="p-2 border w-[64px]">
+              {/* <td className="p-2 border w-[64px]">
                 <div className="flex flex-col items-center justify-center gap-4">
                   <Pencil fill="gray" stroke="white" strokeWidth={1} />
                   <button className="p-2 rounded-full">
@@ -110,7 +105,7 @@ function RecruitmentTable({
                     <ArrowUp stroke="gray" />
                   </button>
                 </div>
-              </td>
+              </td> */}
               <td className="border w-[360px]"> {jobPost.company?.name} </td>
               <td className="border">
                 {jobPost.createdAt.toLocaleDateString('vi-VN')}
@@ -128,7 +123,7 @@ const filteredStatuses = ['Tất cả', 'Đang hiển thị', 'Dừng hiển
 function Recruitment() {
   const [data, setData] = useState<RecruitmentJobPost[]>([]);
   const [selectedStatus, setSelectedStatus] = useState(0);
-  const [filterKeyword, setFilterKeyword] = useState('');
+  // const [filterKeyword, setFilterKeyword] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [jobStats, setJobStats] = useState({
@@ -138,32 +133,54 @@ function Recruitment() {
   });
   const [refresh, setRefresh] = useState(false);
   const { token } = useProfileContext();
+  const [searchText, setSearchText] = useState('');
   // console.log(token);
 
   useEffect(() => {
     const getAllRecruitments = async () => {
-      const { allJobs, totalPages } = await getAllJobs(token, page);
+      const { allJobs, totalPages } =
+        searchText == ''
+          ? await getAllJobs(token, page)
+          : await findJobRecruitmentByName(token, page, undefined, searchText);
+      console.log(allJobs);
+
       const stats = await getJobsStat(token);
       setJobStats(stats);
-      const validJobs = allJobs.filter((item) => {return !!item.campaignId;})
-      console.log(validJobs);
+      const validJobs = allJobs.filter((item) => {
+        return !!item.campaignId;
+      });
 
       const rawRecruitments = validJobs.map(async (item) => {
         const campaign = await getCampaignById(item.campaignId);
+        const employer = await getEmployerById(campaign.employerId);
+        const { applications } = await getApplicationsByCampaignId(
+          token,
+          employer.id,
+          page,
+          5,
+          item.campaignId,
+          true,
+        );
         const rawRecruitment = {
           ...item,
           createdAt: new Date(item.createAt),
           updatedAt: new Date(item.updateAt),
           expiredDate: new Date(item.expiredDate),
           campaign: campaign,
+          applications: applications,
         };
+        // console.log(rawRecruitment);
         return rawRecruitment;
       });
       setData(await Promise.all(rawRecruitments));
       setTotalPages(totalPages);
     };
     getAllRecruitments();
-  }, [page, refresh]);
+  }, [page, refresh, searchText]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div className="flex-grow bg-slate-200">
@@ -197,32 +214,33 @@ function Recruitment() {
           })}
         </div>
 
-        <div className="relative flex items-center w-2/5 bg-white">
+        <form
+          onSubmit={handleSearch}
+          className="relative flex items-center w-2/5 bg-white"
+        >
           <input
             className="flex-grow p-4"
-            placeholder="Tìm kiếm tin tuyển dụng theo tiêu đề hoặc mã tin"
-            onChange={(e) => {
-              setFilterKeyword(e.currentTarget.value);
-            }}
+            placeholder="Nhập để tìm kiếm tin tuyển dụng theo tiêu đề"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
           ></input>
           <Search className="px-2" size={32} />
-        </div>
+        </form>
         <RecruitmentTable
           refresh={refresh}
           setRefresh={setRefresh}
           setData={setData}
-          data={data
-            .filter(
-              (jobPost) =>
-                (jobPost.status ? 'Đang hiển thị' : 'Dừng hiển thị') ===
-                  filteredStatuses[selectedStatus] ||
-                (filteredStatuses[selectedStatus] === 'Tất cả' && jobPost),
-            )
-            .filter(
-              (jobPost) =>
-                jobPost.titleRecruitment.includes(filterKeyword) ||
-                jobPost.campaign.name.includes(filterKeyword),
-            )}
+          data={data.filter(
+            (jobPost) =>
+              (jobPost.status ? 'Đang hiển thị' : 'Dừng hiển thị') ===
+                filteredStatuses[selectedStatus] ||
+              (filteredStatuses[selectedStatus] === 'Tất cả' && jobPost),
+          )}
+          // )
+          // .filter(
+          //   (jobPost) =>
+          //     jobPost.titleRecruitment.includes(filterKeyword) ||
+          //     jobPost.campaign.name.includes(filterKeyword),
         />
         <div className="flex items-center self-center justify-center gap-2">
           <ChevronLeftCircle

@@ -1,5 +1,6 @@
 import { CampaignFromServer } from './Campaign.type';
 import { CompanyFromServer } from './Company.type';
+import { ApplicationFromServer } from './Application.type';
 
 export interface Major {
   id: number;
@@ -65,7 +66,7 @@ export interface RecruitmentFromServer {
   type: Type;
   company: CompanyFromServer;
   locations: Location[];
-  jobDetail: JobDetail
+  jobDetail: JobDetail;
 }
 
 export interface RecruitmentJobPost
@@ -74,4 +75,5 @@ export interface RecruitmentJobPost
   updatedAt: Date;
   expiredDate: Date;
   campaign: CampaignFromServer;
+  applications: ApplicationFromServer[];
 }

@@ -128,6 +128,16 @@ function Information({ compaignId }: { compaignId: string }) {
                   : ''}
               </div>
             </div>
+            <div className="job-description__item">
+              <span className="text-base font-bold mb-2"> Kinh nghiệm </span>
+              <strong className="job-description__item--content">
+                {jobData?.exp
+                  ? jobData?.exp?.name
+                    ? jobData?.exp?.name
+                    : ''
+                  : ''}
+              </strong>
+            </div>
           </div>
         </div>
         <div className="job-detail__information-detail--actions flex flex-col gap-y-4">
@@ -138,7 +148,6 @@ function Information({ compaignId }: { compaignId: string }) {
               .format('DD/MM/YYYY')}
           </div>
         </div>
-
       </div>
     </>
   );

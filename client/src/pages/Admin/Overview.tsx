@@ -2,9 +2,55 @@ import { CalendarCheck } from 'lucide-react';
 import GradientIcon from '../../layouts/AdminLayout/components/GradientIcon';
 import OverviewCard from '../../layouts/AdminLayout/components/OverviewCard';
 import { MoreHorizontal } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getAllEmployer, getJobsStat } from '../../modules/admin-module';
+import { EmployerFromServer } from '../../shared/types/Employer.type';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 function Overview() {
+  const [totalEmployer, setTotalEmployer] = useState(0);
+  const [jobStats, setJobStats] = useState({
+    isActive: 0,
+    total: 0,
+    isNotActive: 0,
+  });
+  const [percentOfRecruitment, setPercentOfRecruitment] = useState(0);
+  const { token } = useProfileContext();
+
+  useEffect(() => {
+    async function getData() {
+      const {
+        allEmployers,
+        total,
+        // totalPages,
+      }: {
+        allEmployers: EmployerFromServer[];
+        total: number;
+        totalPages: number;
+      } = await getAllEmployer(token, 1, 0);
+      setTotalEmployer(total);
+      console.log(allEmployers);
+    }
+
+    const getJobStats = async () => {
+      const stats = await getJobsStat(token);
+      setJobStats(stats);
+    };
+
+    const getRoundedPercentage = (isActiveNum: number, totalNum: number) => {
+      if (totalNum === 0) {
+        return 0;
+      }
+      const percentage = (isActiveNum / totalNum) * 100;
+      return percentage;
+    };
+    setPercentOfRecruitment(
+      getRoundedPercentage(jobStats.isActive, jobStats.total),
+    );
+    getJobStats();
+    getData();
+  }, [jobStats.isActive, jobStats.total]);
+
   const [data] = useState([
     {
       title: 'HR',
@@ -85,19 +131,19 @@ function Overview() {
 
       <div className="flex items-center justify-between w-full gap-4">
         <OverviewCard
-          title="Total Number of Users"
-          number={10000}
-          percent={22.8}
+          title="Total Number of Employers"
+          number={totalEmployer}
+          percent={100}
         />
         <OverviewCard
-          title="Total Number of Company"
-          number={424}
-          percent={11.8}
+          title="Total Number of Approved Recruitment"
+          number={jobStats.isActive}
+          percent={Math.round(percentOfRecruitment)}
         />
         <OverviewCard
-          title="Total Number of Campaign"
-          number={40000}
-          percent={11.8}
+          title="Total Number of Unappproved Recruitment"
+          number={jobStats.isNotActive}
+          percent={100 - Math.round(percentOfRecruitment)}
         />
       </div>
 
