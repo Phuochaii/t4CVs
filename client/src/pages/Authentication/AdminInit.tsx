@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import img from "../../shared/assets/images/Sign-up user.png";
+import { useNavigate } from 'react-router-dom';
+import img from '../../shared/assets/images/Sign-up user.png';
 
 function AdminInit() {
   const navigation = useNavigate();
@@ -18,11 +18,11 @@ function AdminInit() {
           className="w-52 h-auto pb-20"
         ></img>
         <h3 className="text-2xl font-bold  mt-1 text-green-600 mb-4">
-          Hệ thống quản lý TopCV
+          Hệ thống quản lý t4CVs
         </h3>
         <button
           onClick={() => {
-            navigation("/admin-login");
+            navigation('/admin-login');
           }}
           className="py-2 px-4 focus:outline-none text-white rounded-md bg-green-600 hover:bg-green-500 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
         >
@@ -30,7 +30,7 @@ function AdminInit() {
         </button>
 
         <div className="absolute bottom-0 w-full text-center text-green-500">
-          <span>©2014-2024 TopCV Vietnam JSC. All rights reserved.</span>
+          <span>©2014-2024 t4CVs Vietnam. All rights reserved.</span>
         </div>
       </div>
 

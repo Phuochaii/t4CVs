@@ -190,11 +190,19 @@ export async function getCVById(cvId: number, token: string) {
         authorization: `Bearer ${token}`,
       },
     });
-    const CV: UserCV = response.data;
-    return CV;
+    return response;
   } catch (e) {
     return null;
   }
+}
+
+export async function getValidJobs(limit: number) {
+  const response = await axios
+    .get(`${serverURL}/job/valid-jobs?limit=${limit}`)
+    .then((res) => {
+      return res;
+    });
+  return response;
 }
 
 // làm xong thêm mấy cái export dùm tui nha, dưới này chưa đúng đâu

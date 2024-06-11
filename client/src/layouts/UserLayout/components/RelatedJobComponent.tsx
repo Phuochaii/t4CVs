@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import JobListItem from '../../../shared/components/JobListItem';
+import { getValidJobs } from '../../../modules/user-module';
 
 function RelatedJobComponent({ setJobId }: { setJobId: (id: number) => void }) {
   const [jobResults, setJobResults] = useState<any>([]);
@@ -7,15 +8,9 @@ function RelatedJobComponent({ setJobId }: { setJobId: (id: number) => void }) {
   useEffect(() => {
     const fetchJobResults = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/job/valid-jobs?limit=5"
-        );
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const result = await response.json();
-        setJobResults(result.data);
-        console.log(jobResults);
+        const response = getValidJobs(5);
+        console.log(response);
+        setJobResults(response);
       } catch (error) {
         console.log('Error fetching data. Please try again.');
       }

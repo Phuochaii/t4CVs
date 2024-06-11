@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   FormControlLabel,
   Card,
@@ -8,7 +8,7 @@ import {
   Collapse,
   Typography,
   Snackbar,
-} from "@mui/material";
+} from '@mui/material';
 import {
   Checkbox,
   FormControl,
@@ -17,22 +17,22 @@ import {
   Select,
   MenuItem,
   Dialog,
-} from "@mui/material";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { User, Mail, Lock, Phone, Building } from "lucide-react";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import IconButton, { IconButtonProps } from "@mui/material/IconButton";
-import { styled } from "@mui/material/styles";
-import "../../shared/assets/styles/hr-signup.css";
-import { data_provinces } from "../auth-page/signup-page/provinces-data";
-import { data_districts } from "../auth-page/signup-page/districts-data";
-import Input from "../auth-page/signup-page/Input";
-import { useAuth0 } from "@auth0/auth0-react";
-import { Roles } from "../../shared/services/authen/domain/context";
-import Spinner from "../Spinner";
-import { useAuthen } from "../../shared/services/authen";
+} from '@mui/material';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { User, Mail, Lock, Phone, Building } from 'lucide-react';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import { styled } from '@mui/material/styles';
+import '../../shared/assets/styles/hr-signup.css';
+import { data_provinces } from '../auth-page/signup-page/provinces-data';
+import { data_districts } from '../auth-page/signup-page/districts-data';
+import Input from '../auth-page/signup-page/Input';
+import { useAuth0 } from '@auth0/auth0-react';
+import { Roles } from '../../shared/services/authen/domain/context';
+import Spinner from '../Spinner';
+import { useAuthen } from '../../shared/services/authen';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -42,25 +42,25 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-  marginLeft: "auto",
-  transition: theme.transitions.create("transform", {
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
     duration: theme.transitions.duration.shortest,
   }),
 }));
 
 const images = [
   {
-    label: "banner_01",
-    path: "https://tuyendung.topcv.vn/app/_nuxt/img/banner-01.d2c28c7.png",
+    label: 'banner_01',
+    path: 'https://tuyendung.topcv.vn/app/_nuxt/img/banner-01.d2c28c7.png',
   },
   {
-    label: "banner_02",
-    path: "https://tuyendung.topcv.vn/app/_nuxt/img/banner-02.3506b83.png",
+    label: 'banner_02',
+    path: 'https://tuyendung.topcv.vn/app/_nuxt/img/banner-02.3506b83.png',
   },
   {
-    label: "banner_03",
-    path: "https://tuyendung.topcv.vn/app/_nuxt/img/banner-03.6c4018d.png",
+    label: 'banner_03',
+    path: 'https://tuyendung.topcv.vn/app/_nuxt/img/banner-03.6c4018d.png',
   },
 ];
 
@@ -79,27 +79,27 @@ interface ValidateMessages {
 
 function HRSignUp() {
   const navigate = useNavigate();
-  const {isAuthenticated, isLoading} = useAuth0();
-  const {register} = useAuthen();
+  const { isAuthenticated, isLoading } = useAuth0();
+  const { register } = useAuthen();
 
   const [formData, setFormData] = useState<FormData>({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    role: "",
+    email: '',
+    password: '',
+    confirmPassword: '',
+    role: '',
   });
 
   const [validateMessages, setValidateMessages] = useState<ValidateMessages>({
-    email: "",
-    password: "",
-    confirmPassword: "",
+    email: '',
+    password: '',
+    confirmPassword: '',
   });
 
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [expanded, setExpanded] = useState(true);
 
   const [openDialog, setOpenDialog] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
 
   const settings = {
     dots: true,
@@ -113,19 +113,19 @@ function HRSignUp() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     setValidateMessages((prevState) => ({
       ...prevState,
-      email: "",
+      email: '',
     }));
 
     if (!email) {
       setValidateMessages((prevState) => ({
         ...prevState,
-        email: "Email đăng nhập không được để trống",
+        email: 'Email đăng nhập không được để trống',
       }));
       return false;
     } else if (!emailRegex.test(email)) {
       setValidateMessages((prevState) => ({
         ...prevState,
-        email: "Định dạng email không phù hợp",
+        email: 'Định dạng email không phù hợp',
       }));
       return false;
     } else {
@@ -136,7 +136,7 @@ function HRSignUp() {
   const isPasswordValid = (password: string) => {
     setValidateMessages((prevState) => ({
       ...prevState,
-      password: "",
+      password: '',
     }));
 
     const passwordRegexOnlyNumber = /^(?=.*\d)[0-9]{6,25}$/;
@@ -150,49 +150,49 @@ function HRSignUp() {
     if (!password) {
       setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu không được để trống",
+        password: 'Mật khẩu không được để trống',
       }));
       return false;
     } else if (passwordLength < 6 || passwordLength > 25) {
       setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu từ 6 đến 25 ký tự",
+        password: 'Mật khẩu từ 6 đến 25 ký tự',
       }));
       return false;
     } else if (passwordRegexOnlyNumber.test(password)) {
       setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ hoa và một chữ thường",
+        password: 'Mật khẩu phải chứa ít nhất một chữ hoa và một chữ thường',
       }));
       return false;
     } else if (passwordRegexOnlyLowcase.test(password)) {
       setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ số và một chữ hoa",
+        password: 'Mật khẩu phải chứa ít nhất một chữ số và một chữ hoa',
       }));
       return false;
     } else if (passwordRegexOnlyUppcase.test(password)) {
       setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ số và một chữ thường",
+        password: 'Mật khẩu phải chứa ít nhất một chữ số và một chữ thường',
       }));
       return false;
     } else if (passwordRegexNumberandLowcase.test(password)) {
       setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ hoa",
+        password: 'Mật khẩu phải chứa ít nhất một chữ hoa',
       }));
       return false;
     } else if (passwordRegexNumberandUpcase.test(password)) {
       setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ thường",
+        password: 'Mật khẩu phải chứa ít nhất một chữ thường',
       }));
       return false;
     } else if (passwordRegexNoNumber.test(password)) {
       setValidateMessages((prevState) => ({
         ...prevState,
-        password: "Mật khẩu phải chứa ít nhất một chữ số",
+        password: 'Mật khẩu phải chứa ít nhất một chữ số',
       }));
       return false;
     } else {
@@ -202,23 +202,23 @@ function HRSignUp() {
 
   const isConfirmPasswordValid = (
     confirmpassword: string,
-    password: string
+    password: string,
   ) => {
     setValidateMessages((prevState) => ({
       ...prevState,
-      confirmPassword: "",
+      confirmPassword: '',
     }));
 
     if (!confirmpassword) {
       setValidateMessages((prevState) => ({
         ...prevState,
-        confirmPassword: "Nhập lại mật khẩu không được để trống",
+        confirmPassword: 'Nhập lại mật khẩu không được để trống',
       }));
       return false;
     } else if (confirmpassword !== password) {
       setValidateMessages((prevState) => ({
         ...prevState,
-        confirmPassword: "Nhập lại mật khẩu không đúng",
+        confirmPassword: 'Nhập lại mật khẩu không đúng',
       }));
       return false;
     } else {
@@ -244,7 +244,7 @@ function HRSignUp() {
       {
         check: !isConfirmPasswordValid(
           formData.confirmPassword,
-          formData.password
+          formData.password,
         ),
         action: () => setErrorMessage(validateMessages.confirmPassword),
       },
@@ -268,27 +268,30 @@ function HRSignUp() {
     });
 
     setTimeout(() => {
-      setErrorMessage("");
+      setErrorMessage('');
     }, 3000);
 
     if (!error) {
       setShowSuccessMessage(true);
-      register({
-        username: formData.email,
-        password: formData.password,
-        fullname: "",
-      },Roles.HR);
+      register(
+        {
+          username: formData.email,
+          password: formData.password,
+          fullname: '',
+        },
+        Roles.HR,
+      );
     }
   };
 
   useEffect(() => {
-    if(isLoading) return;
+    if (isLoading) return;
     if (isAuthenticated) {
       navigate(Roles.HR.redirectUrl);
       return;
     }
   }, [isAuthenticated, isLoading]);
-  if(isLoading|| isAuthenticated) return <Spinner/>;
+  if (isLoading || isAuthenticated) return <Spinner />;
 
   return (
     <>
@@ -322,17 +325,17 @@ function HRSignUp() {
             <Collapse in={expanded} timeout="auto" unmountOnExit>
               <CardContent>
                 <Typography paragraph>
-                  Để đảm bảo chất lượng dịch vụ, TopCV{" "}
+                  Để đảm bảo chất lượng dịch vụ, t4CVs{' '}
                   <span className="text-red-600">
                     không cho phép một người dùng tạo nhiều tài khoản khác nhau
                   </span>
                   .
                 </Typography>
                 <Typography paragraph>
-                  Nếu phát hiện vi phạm, TopCV sẽ ngừng cung cấp dịch vụ tới tất
+                  Nếu phát hiện vi phạm, t4CVs sẽ ngừng cung cấp dịch vụ tới tất
                   cả các tài khoản trùng lặp hoặc chặn toàn bộ truy cập tới hệ
-                  thống website của TopCV. Đối với trường hợp khách hàng đã sử
-                  dụng hết 3 tin tuyển dụng miễn phí, TopCV hỗ trợ kích hoạt
+                  thống website của t4CVs. Đối với trường hợp khách hàng đã sử
+                  dụng hết 3 tin tuyển dụng miễn phí, t4CVs hỗ trợ kích hoạt
                   đăng tin tuyển dụng không giới hạn sau khi quý doanh nghiệp
                   cung cấp thông tin giấy phép kinh doanh.
                 </Typography>
@@ -372,10 +375,10 @@ function HRSignUp() {
                 setFormData((prevFormData) => ({
                   ...prevFormData,
                   email: e.target.value,
-                }))
+                }));
                 setValidateMessages((prevState) => ({
                   ...prevState,
-                  email: "",
+                  email: '',
                 }));
               }}
               errorMessage={validateMessages.email}
@@ -391,15 +394,15 @@ function HRSignUp() {
               type="password"
               placeholder="Nhập mật khẩu"
               value={formData.password}
-              onChange={(e) =>{
-                  setFormData((prevFormData) => ({
-                    ...prevFormData,
-                    password: e.target.value,
-                  }))
-                  setValidateMessages((prevState) => ({
-                    ...prevState,
-                    password: ""
-                  }));
+              onChange={(e) => {
+                setFormData((prevFormData) => ({
+                  ...prevFormData,
+                  password: e.target.value,
+                }));
+                setValidateMessages((prevState) => ({
+                  ...prevState,
+                  password: '',
+                }));
               }}
               errorMessage={validateMessages.password}
               icon={Lock}
@@ -414,14 +417,14 @@ function HRSignUp() {
               type="password"
               placeholder="Nhập lại mật khẩu"
               value={formData.confirmPassword}
-              onChange={(e) =>{
+              onChange={(e) => {
                 setFormData((prevFormData) => ({
                   ...prevFormData,
                   confirmPassword: e.target.value,
-                }))
+                }));
                 setValidateMessages((prevState) => ({
                   ...prevState,
-                  confirmPassword: "",
+                  confirmPassword: '',
                 }));
               }}
               errorMessage={validateMessages.confirmPassword}
@@ -430,8 +433,8 @@ function HRSignUp() {
 
             <button
               type="submit"
-              className={`py-2 px-4 w-full focus:outline-none text-white rounded-md ${formData.role === "employee" ? "bg-gray-500" : "bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"}`}
-              disabled={formData.role === "employee" ? true : false}
+              className={`py-2 px-4 w-full focus:outline-none text-white rounded-md ${formData.role === 'employee' ? 'bg-gray-500' : 'bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50'}`}
+              disabled={formData.role === 'employee' ? true : false}
             >
               Hoàn tất
             </button>
@@ -443,7 +446,7 @@ function HRSignUp() {
           </form>
 
           <p className="text-center text-gray-600">
-            Bạn đã có tài khoản?{" "}
+            Bạn đã có tài khoản?{' '}
             <Link
               to="/hr-login"
               className="text-green-500 hover:underline hover:text-green-500"
@@ -455,7 +458,7 @@ function HRSignUp() {
 
         <div className="col-span-1 fixed top-0 right-0 left-2/3 bottom-0">
           <div className="absolute top-0 left-0 right-0 text-center text-3xl text-white font-bold pt-48 z-10">
-            Track your funnel with{" "}
+            Track your funnel with{' '}
             <span className="text-green-500">Report</span>
           </div>
           <Slider {...settings}>
@@ -494,7 +497,7 @@ function HRSignUp() {
         fullWidth
         PaperProps={{
           style: {
-            borderRadius: "20px",
+            borderRadius: '20px',
           },
         }}
       >
@@ -506,13 +509,13 @@ function HRSignUp() {
               <img
                 src="https://tuyendung.topcv.vn/app/_nuxt/img/ring.8fa28ce.png"
                 alt="bell"
-                style={{ width: "40px" }}
+                style={{ width: '40px' }}
               />
             </div>
           </div>
           <div className="col-span-2 border border-gray-100 pb-3"></div>
           <div className="col-span-2 text-center font-medium text-lg">
-            <div>Để tối ưu tốt nhất cho trải nghiệm của bạn với TopCV,</div>
+            <div>Để tối ưu tốt nhất cho trải nghiệm của bạn với t4CVs,</div>
             <div>vui lòng lựa chọn nhóm phù hợp nhất với bạn.</div>
           </div>
         </div>
@@ -521,20 +524,20 @@ function HRSignUp() {
             className="basis-1/2 justify-self-center"
             src="https://tuyendung.topcv.vn/app/_nuxt/img/bussiness.efbec2d.png"
             alt="HR"
-            style={{ width: "384px" }}
+            style={{ width: '384px' }}
           />
           <img
             className="basis-1/2 justify-self-center"
             src="https://tuyendung.topcv.vn/app/_nuxt/img/student.c1c39ee.png"
             alt="employ"
-            style={{ width: "384px" }}
+            style={{ width: '384px' }}
           />
         </div>
         <div className="col-span-2 flex flex-row pb-16">
           <div className="basis-1/2 justify-self-center  text-center">
             <button
               className="rounded-full px-4 py-4 bg-green-600 text-white hover:bg-green-700"
-              onClick={(_e) => handleCloseDialog("HR")}
+              onClick={(_e) => handleCloseDialog('HR')}
             >
               Tôi là nhà tuyển dụng
             </button>
@@ -553,7 +556,7 @@ function HRSignUp() {
       <Snackbar
         open={!!errorMessage}
         autoHideDuration={3000}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <div className="bg-red-50 text-red-600 p-4 rounded-md">
           {errorMessage}

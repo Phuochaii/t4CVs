@@ -38,7 +38,7 @@ function PostCompaign() {
             cách hoạt động khác nhau của một đợt
           </p>
           <p className="text-xs text-black">
-            tuyển dụng được thực hiện trên nền tảng TopCV.
+            tuyển dụng được thực hiện trên nền tảng t4CVs.
           </p>
         </div>
         <div className="flex flex-row m-2 space-x-4">
@@ -112,7 +112,7 @@ function PostCompaign() {
         <div className="m-2">
           <p className="text-xs text-black">
             Hiểu về cách chiến dịch tuyển dụng hoạt động sẽ giúp bạn tối ưu tốt
-            hơn hoạt động tuyển dụng của doanh nghiệp trên TopCV. Hãy chắc chắn
+            hơn hoạt động tuyển dụng của doanh nghiệp trên t4CVs. Hãy chắc chắn
             bạn đã tìm hiểu thông tin về chiến dịch tuyển dụng từ
           </p>
           <p className="text-xs text-black">các nội dung phía trên.</p>
@@ -250,7 +250,7 @@ function PostCompaign() {
                       </button>
                       <button className="flex items-center justify-between w-full px-4 py-6 bg-white border">
                         <span className="text-base font-semibold">
-                          Lọc CV ứng viên TopCV
+                          Lọc CV ứng viên t4CVs
                         </span>
                       </button>
                     </div>
@@ -264,7 +264,7 @@ function PostCompaign() {
                           }}
                         ></Pencil>
                       </div>
-                      <p className="mb-5 font-bold">Tuyển dụng tại TopCV</p>
+                      <p className="mb-5 font-bold">Tuyển dụng tại t4CVs</p>
                       <p>
                         Đăng tin tuyển dụng tiếp cận 3 triệu ứng viên tiềm năng
                         &
