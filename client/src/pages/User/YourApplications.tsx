@@ -13,16 +13,19 @@ import moment from 'moment';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import { useProfileContext } from '../../shared/services/authen/domain/context';
+import { DefaultPagination } from '../../shared/components/default-pagination';
+import useCustomPagination from '../../utils/useCustomPagination';
 const option = [
   { value: 'Đã ứng tuyển', label: 'Đã ứng tuyển' },
   { value: 'NTD đã xem hồ sơ', label: 'NTD đã xem hồ sơ' },
-  { value: 'Hồ sơ phù hợp', label: 'Hồ sơ phù hợp' },
 ];
 
 function YourApplications() {
-    const { user, getAccessTokenSilently, isAuthenticated, isLoading } =
-      useAuth0();
-  const {token, profile} = useProfileContext();
+  const { user, getAccessTokenSilently, isAuthenticated, isLoading } =
+    useAuth0();
+  const { token, profile } = useProfileContext();
+
+  const itemsPerPage = 5;
 
   const navigation = useNavigate();
   const [isOn, setIsOn] = useState(false);
@@ -30,6 +33,22 @@ function YourApplications() {
   const [applications, setApplication] = useState<
     ApplicationFromServer[] | undefined
   >([]);
+  const [selectedApplications, setSelectedApplications] = useState<
+    ApplicationFromServer[] | undefined
+  >([]);
+  const handleChangeOptions = (value: string) => {
+    setSelectedApplications(applications);
+    setSelectedApplications((prev) =>
+      prev?.filter((item) => {
+        if (value === 'Đã ứng tuyển') {
+          return item.status === false;
+        } else {
+          return item.status === true;
+        }
+      }),
+    );
+    console.log(selectedApplications);
+  };
   const [jobs, setJobs] = useState<RecruitmentFromServer[] | undefined>([]);
   const fetchApplications = async () => {
     if (!token) {
@@ -41,6 +60,7 @@ function YourApplications() {
         const { applications, jobs } = result;
         console.log(result);
         setApplication(applications);
+        setSelectedApplications(applications);
         setJobs(jobs);
       });
     } catch (error) {
@@ -57,6 +77,8 @@ function YourApplications() {
   const toggleSwitch2 = () => {
     setIsOn2(!isOn2);
   };
+  const { currentPage, totalPages, currentItems, paginate } =
+    useCustomPagination(selectedApplications, itemsPerPage);
   return (
     <div className="bg-gray-100">
       <div className="flex justify-center flex-row items-start  w-screen space-x-5 max-w-screen-lg mx-auto py-3">
@@ -104,9 +126,12 @@ function YourApplications() {
                       overflowY: 'auto',
                     }),
                   }}
-                  isClearable
-                  placeholder="Trạng thái"
+                  // isClearable
+                  placeholder="Đã ứng tuyển"
                   options={option}
+                  onChange={(e) => {
+                    handleChangeOptions(e.value);
+                  }}
                   className="basic-multi-select"
                   classNamePrefix="select"
                 />
@@ -114,8 +139,8 @@ function YourApplications() {
             </div>
 
             <div className="company-list m-5">
-              {applications!.length! > 0 ? (
-                applications!.map((item) => {
+              {currentItems!.length! > 0 ? (
+                currentItems!.map((item) => {
                   const createdAt = moment(new Date(item.createdAt)).format(
                     'DD-MM-YYYY HH:mm A',
                   );
@@ -128,7 +153,7 @@ function YourApplications() {
                       onClick={() => {
                         // navigation(`/detail-job/${item.id}`);
                       }}
-                      className="job-item-search-result max-h-60 bg-white px-3 py-3.5 mb-3 border border-transparent rounded-sm shadow-sm flex gap-6 hover:border-green-500"
+                      className="job-item-search-result max-h-60 bg-white px-3 py-4 mb-3 border border-transparent rounded-sm shadow-sm flex gap-6 hover:border-green-500 hover:cursor-pointer hover:rounded-md duration-300"
                     >
                       <img
                         className="job-logo-company justify-center w-[84px] h-[84px] flex items-center border rounded-lg"
@@ -142,9 +167,16 @@ function YourApplications() {
                             </span>
                             <div className="job-salary col-start-4 flex items-center">
                               <CurrencyDollarIcon className="w-5 mr-2" />
-                              <strong className="salary-count">
-                                {item.jobs.salaryMin} - {item.jobs.salaryMax}
-                              </strong>
+                              {item.jobs.salaryMin === 0 &&
+                              item.jobs.salaryMax === 0 ? (
+                                <strong className="salary-count">
+                                  Thỏa thuận
+                                </strong>
+                              ) : (
+                                <strong className="salary-count">
+                                  {item.jobs.salaryMin} - {item.jobs.salaryMax}
+                                </strong>
+                              )}
                             </div>
                           </div>
                           <div
@@ -228,103 +260,116 @@ function YourApplications() {
                   );
                 })
               ) : (
-                <div>Không có dữ liệu</div>
+                <div className="font-bold pb-3">Không có dữ liệu</div>
               )}
             </div>
+            {currentItems!.length! > 0 && (
+              <div className="flex justify-center py-5">
+                <DefaultPagination
+                  totalPage={totalPages}
+                  active={currentPage}
+                  setActive={paginate}
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="w-4/12 mx-8 my-5 flex flex-col">
           <div className="bg-white rounded-lg p-5 md:p-6 mb-5">
-            {user &&  <div className="container mx-auto">
-              <div className="flex items-center">
-                <div className="w-16 h-16 bg-gray-300 rounded-full mr-4 overflow-hidden">
-                  <img
-                    src={profile?.picture}
-                    alt="avatar"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                <div className="ml-4">
-                  <p>Chào bạn trở lại,</p>
-                  <p className="font-medium">{profile?.name}</p>
-                  <div className=" bg-gray-200 rounded inline-block">
-                    <p>Tài khoản đã xác thực</p>
+            {user && (
+              <div className="container mx-auto">
+                <div className="flex items-center">
+                  <div className="w-16 h-16 bg-gray-300 rounded-full mr-4 overflow-hidden">
+                    <img
+                      src={profile?.picture}
+                      alt="avatar"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <p>Nâng cấp tài khoản</p>
+
+                  <div className="ml-4">
+                    <p>Chào bạn trở lại,</p>
+                    <p className="font-medium">{profile?.name}</p>
+                    <div className=" bg-gray-200 rounded inline-block">
+                      <p>Tài khoản đã xác thực</p>
+                    </div>
+                    <p>Nâng cấp tài khoản</p>
+                  </div>
                 </div>
               </div>
-            </div>}
+            )}
             <div className="flex flex-col border-t-2 border-gray mt-4">
-              {user &&(
-              <>
-                <div className="flex items-center">
-                  <Switch
-                    checked={isOn}
-                    onChange={toggleSwitch}
-                    inputProps={{ 'aria-label': 'controlled' }}
-                    sx={{
-                      '& .MuiSwitch-thumb': {
-                        bgcolor: isOn ? 'green' : 'gray',
-                      },
-                      '& .MuiSwitch-track': {
-                        bgcolor: isOn ? 'green' : 'gray',
-                      },
-                    }}
-                  />
-                  <span
-                    className={`ml-2 ${isOn ? 'text-green-500' : 'text-gray-400'} font-bold`}
-                  >
-                    {isOn ? 'Đang Bật Tìm Việc' : 'Đang Tắt Tìm Việc'}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500 mt-5 mb-5">
-                  Bật tìm việc giúp hồ sơ của bạn nổi bật hơn và được chú ý nhiều
-                  hơn trong danh sách tìm kiếm của NTD.
-                </p>
-                <div className="flex items-center">
-                  <Switch
-                    checked={isOn2}
-                    onChange={toggleSwitch2}
-                    inputProps={{ 'aria-label': 'controlled' }}
-                    sx={{
-                      '& .MuiSwitch-thumb': {
-                        bgcolor: isOn2 ? 'green' : 'gray',
-                      },
-                      '& .MuiSwitch-track': {
-                        bgcolor: isOn2 ? 'green' : 'gray',
-                      },
-                    }}
-                  />
-                  <span
-                    className={`ml-2 ${isOn2 ? 'text-green-500' : 'text-gray-400'} font-bold`}
-                  >
-                    {isOn
-                      ? 'Đang cho phép NTD tìm kiếm hồ sơ'
-                      : 'Chưa cho phép NTD tìm kiếm hồ sơ'}
-                  </span>
-                </div>
-                <p className="text-sm">
-                  Khi có cơ hội việc làm phù hợp, NTD sẽ liên hệ và trao đổi với
-                  bạn qua:
-                </p>
-                <div className="flex flex-row items-center space-x-2 mb-2 mt-2">
-                  <div className="p-1 bg-green-100 rounded-full w-fit h-fit">
-                    <Check
-                      style={{ color: 'green', width: 15, height: 15 }}
-                    ></Check>
+              {user && (
+                <>
+                  <div className="flex items-center">
+                    <Switch
+                      checked={isOn}
+                      onChange={toggleSwitch}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                      sx={{
+                        '& .MuiSwitch-thumb': {
+                          bgcolor: isOn ? 'green' : 'gray',
+                        },
+                        '& .MuiSwitch-track': {
+                          bgcolor: isOn ? 'green' : 'gray',
+                        },
+                      }}
+                    />
+                    <span
+                      className={`ml-2 ${isOn ? 'text-green-500' : 'text-gray-400'} font-bold`}
+                    >
+                      {isOn ? 'Đang Bật Tìm Việc' : 'Đang Tắt Tìm Việc'}
+                    </span>
                   </div>
-                  <p className="text-sm">Nhắn tin qua Top Connect trên TopCV</p>
-                </div>
-                <div className="flex flex-row items-center space-x-2">
-                  <div className="p-1 bg-green-100 rounded-full w-fit h-fit">
-                    <Check
-                      style={{ color: 'green', width: 15, height: 15 }}
-                    ></Check>
+                  <p className="text-xs text-slate-500 mt-5 mb-5">
+                    Bật tìm việc giúp hồ sơ của bạn nổi bật hơn và được chú ý
+                    nhiều hơn trong danh sách tìm kiếm của NTD.
+                  </p>
+                  <div className="flex items-center">
+                    <Switch
+                      checked={isOn2}
+                      onChange={toggleSwitch2}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                      sx={{
+                        '& .MuiSwitch-thumb': {
+                          bgcolor: isOn2 ? 'green' : 'gray',
+                        },
+                        '& .MuiSwitch-track': {
+                          bgcolor: isOn2 ? 'green' : 'gray',
+                        },
+                      }}
+                    />
+                    <span
+                      className={`ml-2 ${isOn2 ? 'text-green-500' : 'text-gray-400'} font-bold`}
+                    >
+                      {isOn
+                        ? 'Đang cho phép NTD tìm kiếm hồ sơ'
+                        : 'Chưa cho phép NTD tìm kiếm hồ sơ'}
+                    </span>
                   </div>
-                  <p className="text-sm">Email và Số điện thoại của bạn</p>
-                </div>
-              </>
+                  <p className="text-sm">
+                    Khi có cơ hội việc làm phù hợp, NTD sẽ liên hệ và trao đổi
+                    với bạn qua:
+                  </p>
+                  <div className="flex flex-row items-center space-x-2 mb-2 mt-2">
+                    <div className="p-1 bg-green-100 rounded-full w-fit h-fit">
+                      <Check
+                        style={{ color: 'green', width: 15, height: 15 }}
+                      ></Check>
+                    </div>
+                    <p className="text-sm">
+                      Nhắn tin qua Top Connect trên t4CVs
+                    </p>
+                  </div>
+                  <div className="flex flex-row items-center space-x-2">
+                    <div className="p-1 bg-green-100 rounded-full w-fit h-fit">
+                      <Check
+                        style={{ color: 'green', width: 15, height: 15 }}
+                      ></Check>
+                    </div>
+                    <p className="text-sm">Email và Số điện thoại của bạn</p>
+                  </div>
+                </>
               )}
               <img
                 src={TopCVBanner}
@@ -344,14 +389,14 @@ function YourApplications() {
                   }}
                 ></CircleAlert>
                 <p className="text-[11px]">
-                  Khởi tạo TopCV Profile để gia tăng 300% cơ hội việc làm tốt
+                  Khởi tạo t4CVs Profile để gia tăng 300% cơ hội việc làm tốt
                 </p>
               </div>
               <button
                 className="mt-4 px-4 py-2 text-xs font-bold w-40 h-8 border border-green-500 rounded text-green-500 hover:bg-green-500 hover:text-white transition duration-300"
                 onClick={() => {}}
               >
-                Tạo TopCV Profile
+                Tạo t4CVs Profile
               </button>
             </div>
           </div>

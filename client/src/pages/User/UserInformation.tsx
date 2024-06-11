@@ -259,7 +259,7 @@ function UserInformation() {
               <div className="p-1 bg-green-200 rounded-full">
                 <Check className="text-green-500" size={16} />
               </div>
-              Nhắn tin qua Top Connect trên TopCV
+              Nhắn tin qua Top Connect trên t4CVs
             </li>
             <li className="flex items-center gap-2">
               <div className="p-1 bg-green-200 rounded-full">
@@ -273,10 +273,10 @@ function UserInformation() {
         <div className="flex flex-col items-start gap-4 py-2">
           <div className="flex items-start gap-2">
             <Info size={16} className="text-gray-400" />
-            Khởi tạo TopCV Profile để gia tăng 300% cơ hội việc làm tốt
+            Khởi tạo t4CVs Profile để gia tăng 300% cơ hội việc làm tốt
           </div>
           <button className="px-4 py-2 font-bold text-green-500 border border-green-600 rounded">
-            Tạo TopCV Profile
+            Tạo t4CVs Profile
           </button>
         </div>
       </div>

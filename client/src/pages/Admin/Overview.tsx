@@ -147,7 +147,7 @@ function Overview() {
         />
       </div>
 
-      <div className="flex flex-col gap-4 p-12 bg-white rounded-lg">
+      {/* <div className="flex flex-col gap-4 p-12 bg-white rounded-lg">
         <div className="relative flex items-center justify-between my-8 font-bold text-slate-500">
           <h2>Statistics</h2>
           <MoreHorizontal
@@ -176,7 +176,7 @@ function Overview() {
             );
           })}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

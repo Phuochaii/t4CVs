@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Campaign } from '../types/Campaign.type';
 import { getUserById } from '../../modules/user-module';
 import { UserFromServer } from '../types/User.type';
+import { useProfileContext } from '../services/authen/domain/context';
 
 export interface CampaignTableProps {
   data: Campaign[];
@@ -30,7 +31,7 @@ interface CampaignTableRowProps {
 
 export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
   const navigation = useNavigate();
-
+  const {token} = useProfileContext()
   const [isHovered, setIsHovered] = useState(false);
   const [applicants, setApplicants] = useState<(UserFromServer | null)[]>([]);
   const campaign = data;
@@ -40,7 +41,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
     async function getUsers() {
       const applicantPromises = campaign.applications.map(
         async (application) => {
-          const applicant = await getUserById(application.userId);
+          const applicant = await getUserById({userId :application.userId.toString(), token: token! });
           return applicant;
         },
       );

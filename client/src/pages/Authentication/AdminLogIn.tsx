@@ -1,24 +1,24 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { User, Lock, Eye, EyeOff } from "lucide-react";
-import img from "../../shared/assets/images/Sign-up user.png";
-import { useAuth0 } from "@auth0/auth0-react";
-import Spinner from "../Spinner";
-import { Roles } from "../../shared/services/authen/domain/context";
-import { useAuthen } from "../../shared/services/authen";
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { User, Lock, Eye, EyeOff } from 'lucide-react';
+import img from '../../shared/assets/images/Sign-up user.png';
+import { useAuth0 } from '@auth0/auth0-react';
+import Spinner from '../Spinner';
+import { Roles } from '../../shared/services/authen/domain/context';
+import { useAuthen } from '../../shared/services/authen';
 
 function AdminLogIn() {
   const navigate = useNavigate();
-  const {isLoading, isAuthenticated} = useAuth0();
-  const {usernamePasswordLogin} = useAuthen();
-  
+  const { isLoading, isAuthenticated } = useAuth0();
+  const { usernamePasswordLogin } = useAuthen();
+
   const [formData, setFormData] = useState({
-    username: "",
-    password: "",
+    username: '',
+    password: '',
   });
 
-  const [error, setError] = useState("");
-  const showError:boolean = !!error;
+  const [error, setError] = useState('');
+  const showError: boolean = !!error;
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -26,8 +26,8 @@ function AdminLogIn() {
   const [passwordEmpty, setPasswordEmpty] = useState(false);
 
   useEffect(() => {
-    if(isLoading) return;
-    if(isAuthenticated) {
+    if (isLoading) return;
+    if (isAuthenticated) {
       navigate(Roles.ADMIN.redirectUrl);
     }
   }, [isLoading, isAuthenticated]);
@@ -37,10 +37,9 @@ function AdminLogIn() {
   };
 
   const onLoginError = () => {
-    setError("Tên tài khoản hoặc mật khẩu không chính xác.");
-  }
+    setError('Tên tài khoản hoặc mật khẩu không chính xác.');
+  };
   const handleLogin = (e: { preventDefault: () => void }) => {
-
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
 
     if (!formData.username) {
@@ -49,28 +48,32 @@ function AdminLogIn() {
 
     if (!formData.password) {
       setPasswordEmpty(true);
-    } 
-    
-    if(!formData.username || !formData.password) return;
+    }
 
-    usernamePasswordLogin({
-      username: formData.username,
-      password: formData.password
-    }, Roles.ADMIN, onLoginError);
+    if (!formData.username || !formData.password) return;
+
+    usernamePasswordLogin(
+      {
+        username: formData.username,
+        password: formData.password,
+      },
+      Roles.ADMIN,
+      onLoginError,
+    );
   };
 
-  if(isLoading || isAuthenticated) return <Spinner/>;
+  if (isLoading || isAuthenticated) return <Spinner />;
 
   return (
     <div className="grid grid-cols-3 gap-4">
       <div className="col-span-2 px-40 py-20">
         <img
-          src="https://tuyendung.topcv.vn/app/_nuxt/img/topcv-logo.c9a1ca1.webp"
+          src="../../../images/t4cvs-logo.png"
           alt="logo-signup"
           className="w-52 h-auto pb-20"
         ></img>
         <h3 className="text-2xl font-bold mb-1 mt-1 text-green-600 mb-4">
-          Hệ thống quản lý TopCV
+          Hệ thống quản lý t4CVs
         </h3>
 
         <form onSubmit={handleLogin} className="space-y-4 mb-4">
@@ -89,7 +92,7 @@ function AdminLogIn() {
               className={`
                   text-black mt-1 bg-white pl-12 pr-3 py-3 border rounded-md w-full
                   focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
-                  ${userNameEmpty ? "border-red-500" : ""}
+                  ${userNameEmpty ? 'border-red-500' : ''}
                 `}
             />
           </div>
@@ -98,7 +101,7 @@ function AdminLogIn() {
               Không được để trống tên tài khoản
             </div>
           ) : (
-            ""
+            ''
           )}
 
           <h4 className="text-gray-700 font-bold">Mật khẩu</h4>
@@ -110,7 +113,7 @@ function AdminLogIn() {
               <input
                 id="password"
                 name="password"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 placeholder="Mật khẩu"
                 value={formData.password}
                 onChange={(e) =>
@@ -119,7 +122,7 @@ function AdminLogIn() {
                 className={`
                   text-black mt-1 bg-white pl-12 pr-3 py-3 border rounded-md w-full
                   focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
-                  ${passwordEmpty ? "border-red-500" : ""}
+                  ${passwordEmpty ? 'border-red-500' : ''}
                 `}
               />
               <div className="absolute right-3 top-8 transform -translate-y-1/2">
@@ -140,7 +143,7 @@ function AdminLogIn() {
           {passwordEmpty && !formData.password ? (
             <div className="text-red-500">Không được để trống mất khẩu</div>
           ) : (
-            ""
+            ''
           )}
 
           <div className="flex justify-end">
@@ -175,7 +178,7 @@ function AdminLogIn() {
           className="w-full"
         ></img>
         <div className="absolute bottom-0 left-0 w-full text-center text-green-500">
-          <span>©2014-2024 TopCV Vietnam JSC. All rights reserved.</span>
+          <span>©2014-2024 t4CVs Vietnam JSC. All rights reserved.</span>
         </div>
       </div>
     </div>

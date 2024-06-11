@@ -4,21 +4,24 @@ import { useProfileContext } from '../../../../shared/services/authen/domain/con
 
 function Information({ compaignId }: { compaignId: string }) {
   const [jobData, setJobData] = React.useState<any>();
-  const {token} = useProfileContext()
+  const { token } = useProfileContext();
   const fetchJobData = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/job?campaignId=${compaignId}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json' // Optional, based on server requirements
-        }
-      });
+      const response = await fetch(
+        `http://localhost:3000/job?campaignId=${compaignId}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json', // Optional, based on server requirements
+          },
+        },
+      );
       console.log(response);
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
-  
+
       const data = await response.json();
       console.log(data);
       setJobData(data);

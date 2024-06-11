@@ -4,19 +4,20 @@ import {
   ChevronDown,
   ChevronLeft,
   CircleAlert,
-} from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
-import React, { SetStateAction, useEffect, useState } from "react";
-import { statusColor } from "../../shared/types/RecruitmentStatus.type";
-import clsx from "clsx";
-import { RecruitmentFromServer, RecruitmentJobPost } from "../../shared/types/Recruitment.type";
-import CampaignEditCard from "../../shared/components/CampaignEditCard";
+} from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import React, { SetStateAction, useEffect, useState } from 'react';
+import { statusColor } from '../../shared/types/RecruitmentStatus.type';
+import clsx from 'clsx';
 import {
-  getJobById,
-} from "../../modules/helper";
-import { updateJobStatus } from "../../modules/admin-module";
-import { getField, getProfile } from "../../modules/hr-module";
-import { useProfileContext } from "../../shared/services/authen/domain/context";
+  RecruitmentFromServer,
+  RecruitmentJobPost,
+} from '../../shared/types/Recruitment.type';
+import CampaignEditCard from '../../shared/components/CampaignEditCard';
+import { getJobById } from '../../modules/helper';
+import { updateJobStatus } from '../../modules/admin-module';
+import { getField, getProfile } from '../../modules/hr-module';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 function RecruitmentDisplayTable() {
   return (
@@ -45,31 +46,30 @@ interface RecruitmentDisplayProps {
   recruitment: RecruitmentJobPost;
   refresh: boolean;
   setRefresh: React.Dispatch<SetStateAction<boolean>>;
-  token:string
+  token: string;
 }
 
 function RecruitmentDisplaySection({
   recruitment,
   refresh,
   setRefresh,
-  token
+  token,
 }: RecruitmentDisplayProps) {
   return (
     <div className="flex flex-col gap-4 p-4 bg-white">
       <p>
-        Đăng tin tuyển dụng miễn phí và không giới hạn số lượng tin
-        đăng là quyền lợi dành cho các Khách hàng Doanh nghiệp chỉ có
-        ở TopCV. Đây là cách đơn giản nhất để bắt đầu một chiến dịch
-        tuyển dụng. Tin tuyển dụng của bạn sẽ được hiển thị trên Kênh
-        việc làm và Kết quả tìm kiếm, tần suất và lượng hiển thị nội
-        dung chịu tác động bởi chất lượng nội dung, uy tín thương hiệu
-        và khả năng cạnh tranh của nội dung đăng tuyển.
+        Đăng tin tuyển dụng miễn phí và không giới hạn số lượng tin đăng là
+        quyền lợi dành cho các Khách hàng Doanh nghiệp chỉ có ở t4CVs. Đây là
+        cách đơn giản nhất để bắt đầu một chiến dịch tuyển dụng. Tin tuyển dụng
+        của bạn sẽ được hiển thị trên Kênh việc làm và Kết quả tìm kiếm, tần
+        suất và lượng hiển thị nội dung chịu tác động bởi chất lượng nội dung,
+        uy tín thương hiệu và khả năng cạnh tranh của nội dung đăng tuyển.
       </p>
       <div className="flex flex-col gap-2">
         <div
           className="flex items-center gap-2 cursor-pointer"
           onClick={async () => {
-            await updateJobStatus(token,recruitment.id, true);
+            await updateJobStatus(token, recruitment.id, true);
             setRefresh(!refresh);
           }}
         >
@@ -83,14 +83,14 @@ function RecruitmentDisplaySection({
             </div>
           )}
           <span>
-            Yêu cầu hiển thị tin tuyển dụng tại Kênh việc làm và Kết
-            quả tìm kiếm liên quan
+            Yêu cầu hiển thị tin tuyển dụng tại Kênh việc làm và Kết quả tìm
+            kiếm liên quan
           </span>
         </div>
         <div
           className="flex items-center gap-2 cursor-pointer"
           onClick={async () => {
-            await updateJobStatus(token,recruitment.id, false);
+            await updateJobStatus(token, recruitment.id, false);
             setRefresh(!refresh);
           }}
         >
@@ -109,20 +109,17 @@ function RecruitmentDisplaySection({
           <div className="flex items-center gap-2 text-sm">
             <CircleAlert size={16} stroke="red" />
             <span>
-              Hiện tại Quý khách đang có{" "}
-              <span className="font-bold text-red-400">{">= 3"}</span>{" "}
-              dụng miễn phí hiển thị đồng thời, để được TopCV duyệt
-              hiển thị tin tuyển dụng này, vui lòng sử dụng một trong
-              các gói tin đăng cao cấp
+              Hiện tại Quý khách đang có{' '}
+              <span className="font-bold text-red-400">{'>= 3'}</span> phí hiển
+              thị đồng thời, để được t4CVs duyệt hiển thị tin tuyển dụng này,
+              vui lòng sử dụng một trong các gói tin đăng cao cấp
             </span>
           </div>
           <RecruitmentDisplayTable />
         </div>
       </div>
       <div className="flex items-center justify-end w-full gap-4 ">
-        <button className="px-8 py-3 font-bold bg-slate-200">
-          Hủy
-        </button>
+        <button className="px-8 py-3 font-bold bg-slate-200">Hủy</button>
         <button className="px-8 py-3 font-bold text-white bg-green-500">
           Lưu
         </button>
@@ -134,27 +131,25 @@ function RecruitmentDisplaySection({
 function CampaignEdit() {
   const { token } = useProfileContext();
   const { state } = useLocation();
-  const [recruitment, setRecruitment] =
-    useState<RecruitmentJobPost>(state);
+  const [recruitment, setRecruitment] = useState<RecruitmentJobPost>(state);
   const [openSection, setOpenSection] = useState(-1);
   const [refresh, setRefresh] = useState(false);
-  const [job, setJob] =
-    useState<RecruitmentFromServer>(state);
+  const [job, setJob] = useState<RecruitmentFromServer>(state);
   const [employer, setEmployer] = useState<any>(null);
   const [fields, setFields] = useState<any>(null);
   useEffect(() => {
     const getData = async () => {
       const response = await getField(token!);
-      console.log(token!)
+      console.log(token!);
       const data = response;
-      console.log(response)
+      console.log(response);
       setFields(data);
       const res1 = await getProfile(token!);
-      console.log(res1.companyId)
+      console.log(res1.companyId);
       setEmployer(res1);
       const res = await getJobById(recruitment.id);
-      console.log(res)
-      setJob(res)
+      console.log(res);
+      setJob(res);
       setRecruitment({
         ...response,
         createdAt: new Date(response.createAt),
@@ -167,14 +162,18 @@ function CampaignEdit() {
   }, [refresh]);
   const sections = [
     {
-      title: "Nội dung tuyển dụng",
-      sectionComponent: <CampaignEditCard employer={employer} jobItem={job} fields={fields}></CampaignEditCard>,
-      subtitle: (
-        <h2 className="text-black ">{recruitment.campaign.name}</h2>
+      title: 'Nội dung tuyển dụng',
+      sectionComponent: (
+        <CampaignEditCard
+          employer={employer}
+          jobItem={job}
+          fields={fields}
+        ></CampaignEditCard>
       ),
+      subtitle: <h2 className="text-black ">{recruitment.campaign.name}</h2>,
     },
     {
-      title: "Hiển thị tin tuyển dụng",
+      title: 'Hiển thị tin tuyển dụng',
       sectionComponent: (
         <RecruitmentDisplaySection
           recruitment={recruitment}
@@ -186,21 +185,19 @@ function CampaignEdit() {
       subtitle: (
         <span
           className={clsx(
-            "p-1 font-semibold",
-            statusColor[
-              recruitment.status ? "Đang hiển thị" : "Dừng hiển thị"
-            ].bg,
-            statusColor[
-              recruitment.status ? "Đang hiển thị" : "Dừng hiển thị"
-            ].text
+            'p-1 font-semibold',
+            statusColor[recruitment.status ? 'Đang hiển thị' : 'Dừng hiển thị']
+              .bg,
+            statusColor[recruitment.status ? 'Đang hiển thị' : 'Dừng hiển thị']
+              .text,
           )}
         >
-          {recruitment.status ? "Đang hiển thị" : "Dừng hiển thị"}
+          {recruitment.status ? 'Đang hiển thị' : 'Dừng hiển thị'}
         </span>
       ),
     },
     {
-      title: "Bài Test Tuyển dụng",
+      title: 'Bài Test Tuyển dụng',
       sectionComponent: <></>,
       subtitle: <></>,
     },
@@ -215,14 +212,10 @@ function CampaignEdit() {
         >
           <ArrowLeft size={16} /> Quay lại
         </button>
-        <h2 className="font-bold capitalize">
-          {recruitment.titleRecruitment}
-        </h2>
+        <h2 className="font-bold capitalize">{recruitment.titleRecruitment}</h2>
       </div>
       <div className="w-[90%] flex flex-col gap-8 p-4 justify-center">
-        <h1 className="text-2xl font-bold">
-          Chỉnh sửa tin tuyển dụng
-        </h1>
+        <h1 className="text-2xl font-bold">Chỉnh sửa tin tuyển dụng</h1>
         {sections.map((section, key) => {
           return (
             <div className="w-full" key={key}>

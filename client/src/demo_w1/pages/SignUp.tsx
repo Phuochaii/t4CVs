@@ -26,7 +26,13 @@ function SignUpPage() {
     return emailRegex.test(email);
   };
 
-  const isSignUpDisabled = !agreeToTerms || !name || !email || !password || !confirmPassword || (password !== confirmPassword);
+  const isSignUpDisabled =
+    !agreeToTerms ||
+    !name ||
+    !email ||
+    !password ||
+    !confirmPassword ||
+    password !== confirmPassword;
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -40,8 +46,17 @@ function SignUpPage() {
             fullWidth
             value={name}
             onChange={(e) => setName(e.target.value)}
-            error={name.length > 15 || (name.trim() !== "" && !/^[\p{L}\s]+$/u.test(name))}
-            helperText={(name.length > 15 && "Tên không được quá 15 ký tự.") || ((name.trim() !== "" && !/^[\p{L}\s]+$/u.test(name)) && "Tên chỉ được chứa các ký tự chữ cái và khoảng trắng.") || ""}
+            error={
+              name.length > 15 ||
+              (name.trim() !== '' && !/^[\p{L}\s]+$/u.test(name))
+            }
+            helperText={
+              (name.length > 15 && 'Tên không được quá 15 ký tự.') ||
+              (name.trim() !== '' &&
+                !/^[\p{L}\s]+$/u.test(name) &&
+                'Tên chỉ được chứa các ký tự chữ cái và khoảng trắng.') ||
+              ''
+            }
           />
 
           <TextField
@@ -52,7 +67,9 @@ function SignUpPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             error={!!email && !isEmailValid(email)}
-            helperText={(!!email && !isEmailValid(email)) ? "Email không hợp lệ." : ""}
+            helperText={
+              !!email && !isEmailValid(email) ? 'Email không hợp lệ.' : ''
+            }
           />
 
           <TextField
@@ -63,8 +80,16 @@ function SignUpPage() {
             fullWidth
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            error={password.length > 0 && (password.length < 6 || password.length > 15)}
-            helperText={(password.length > 0 && password.length < 6 && "Mật khẩu phải có ít nhất 6 ký tự.") || (password.length > 15 && "Mật khẩu không được quá 15 ký tự.")}
+            error={
+              password.length > 0 &&
+              (password.length < 6 || password.length > 15)
+            }
+            helperText={
+              (password.length > 0 &&
+                password.length < 6 &&
+                'Mật khẩu phải có ít nhất 6 ký tự.') ||
+              (password.length > 15 && 'Mật khẩu không được quá 15 ký tự.')
+            }
           />
 
           <TextField
@@ -76,15 +101,30 @@ function SignUpPage() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             error={confirmPassword !== password}
-            helperText={confirmPassword !== password ? 'Mật khẩu và xác nhận mật khẩu không khớp.' : ''}
+            helperText={
+              confirmPassword !== password
+                ? 'Mật khẩu và xác nhận mật khẩu không khớp.'
+                : ''
+            }
           />
 
           <FormControlLabel
-            control={<Checkbox checked={agreeToTerms} onChange={(e) => setAgreeToTerms(e.target.checked)} color="primary" />}
-            label="Tôi đã đọc và đồng ý với Điều khoản dịch vụ và Chính sách bảo mật của TopCV"
+            control={
+              <Checkbox
+                checked={agreeToTerms}
+                onChange={(e) => setAgreeToTerms(e.target.checked)}
+                color="primary"
+              />
+            }
+            label="Tôi đã đọc và đồng ý với Điều khoản dịch vụ và Chính sách bảo mật của t4CVs"
           />
-          
-          <Button variant="contained" onClick={handleSignUp} fullWidth disabled={isSignUpDisabled}>
+
+          <Button
+            variant="contained"
+            onClick={handleSignUp}
+            fullWidth
+            disabled={isSignUpDisabled}
+          >
             Đăng ký
           </Button>
           {showSuccessMessage && (
@@ -94,7 +134,9 @@ function SignUpPage() {
           )}
           <p className="text-center mt-2">
             Bạn đã có tài khoản?{' '}
-            <Link to="/login" className="text-blue-500 hover:underline">Đăng nhập ngay</Link>
+            <Link to="/login" className="text-blue-500 hover:underline">
+              Đăng nhập ngay
+            </Link>
           </p>
         </div>
       </div>

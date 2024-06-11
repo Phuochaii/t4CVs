@@ -55,7 +55,10 @@ const SearchCompany = ({ onSearch }) => {
                 placeholder="Nhập tên công ty"
                 className="bg-white focus:outline-none w-full"
                 value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
+                onChange={(e) => {
+                  setInputText(e.target.value);
+                  onSearch(e.target.value);
+                }}
               />
             </div>
             <button

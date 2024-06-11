@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FormControlLabel, Checkbox } from '@mui/material';
 import { Mail, ShieldCheck, Eye, EyeOff } from 'lucide-react';
@@ -7,38 +7,39 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import img from '../../shared/assets/images/Sign-up user.png';
 import { useAuthen } from '../../shared/services/authen';
-import { Roles } from "../../shared/services/authen/domain/context";
-import { useAuth0 } from "@auth0/auth0-react";
-import Spinner from "../Spinner";
+import { Roles } from '../../shared/services/authen/domain/context';
+import { useAuth0 } from '@auth0/auth0-react';
+import Spinner from '../Spinner';
 
 function UserLogIn() {
-  const {isAuthenticated, isLoading} = useAuth0();
+  const { isAuthenticated, isLoading } = useAuth0();
   const navigation = useNavigate();
-  const {usernamePasswordLogin, googleLogin, linkedInLogin, facebookLogin} = useAuthen();
+  const { usernamePasswordLogin, googleLogin, linkedInLogin, facebookLogin } =
+    useAuthen();
 
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
   const [socialAgree, setSocialAgree] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
 
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
   };
 
   useEffect(() => {
-    if(isLoading) return; 
+    if (isLoading) return;
     if (isAuthenticated) {
       navigation(Roles.USER.redirectUrl);
       return;
     }
-  },[isAuthenticated, isLoading]);
-  if(isLoading || isAuthenticated) return <Spinner/>;
+  }, [isAuthenticated, isLoading]);
+  if (isLoading || isAuthenticated) return <Spinner />;
 
   const isEmailValid = (email: string) => {
     // Biểu thức chính quy để kiểm tra định dạng email
@@ -47,52 +48,61 @@ function UserLogIn() {
   };
 
   const onLoginError = () => {
-    setErrorMessage("Email hoặc mật khẩu không chính xác.");
-  }
+    setErrorMessage('Email hoặc mật khẩu không chính xác.');
+  };
 
   const handleLogin = (e: { preventDefault: () => void }) => {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
 
     if (!formData.password) {
-      setErrorMessage("Hãy cho chúng tôi biết mật khẩu của bạn");
+      setErrorMessage('Hãy cho chúng tôi biết mật khẩu của bạn');
       setPasswordError(true);
     }
     if (!formData.email) {
-      setErrorMessage("Hãy cho chúng tôi biết địa chỉ email của bạn");
+      setErrorMessage('Hãy cho chúng tôi biết địa chỉ email của bạn');
       setEmailError(true);
     }
 
     if (formData.password && formData.email) {
       // Đăng nhập không thành công
       if (formData.email && !isEmailValid(formData.email)) {
-        setErrorMessage("Định dạng email không đúng");
+        setErrorMessage('Định dạng email không đúng');
         setEmailError(true);
       }
     }
 
     if (!formData.email || !formData.password) return;
-    
-    usernamePasswordLogin({
-      username: formData.email,
-      password: formData.password,
-    }, Roles.USER, onLoginError);
+
+    usernamePasswordLogin(
+      {
+        username: formData.email,
+        password: formData.password,
+      },
+      Roles.USER,
+      onLoginError,
+    );
   };
 
   const handleGoogleLogin = () => {
     googleLogin();
-  }
+  };
 
   const handleLinkedInLogin = () => {
     linkedInLogin();
-  }
+  };
 
   const handleFacebookLogin = () => {
     facebookLogin();
-  }
+  };
 
   return (
     <div className="grid grid-cols-3 gap-4 ">
       <div className="col-span-2 px-40 py-20">
+        <img
+          src="../../../images/t4cvs-logo.png"
+          alt="logo-signup"
+          className="w-52 h-auto pb-20"
+        ></img>
         <h3 className="text-2xl font-semibold mb-1 mt-1 text-green-600">
           Chào mừng bạn đã quay trở lại
         </h3>
@@ -104,19 +114,19 @@ function UserLogIn() {
           {errorMessage ? (
             <div
               className="text-red-500 py-2"
-              style={{ backgroundColor: "rgba(255, 69, 58, 0.05)" }}
+              style={{ backgroundColor: 'rgba(255, 69, 58, 0.05)' }}
             >
               <span className="px-4 py-4">{errorMessage}</span>
             </div>
           ) : (
-            ""
+            ''
           )}
           <h4 className="text-gray-700">Email</h4>
           <div className="relative">
             <Mail
               className={`
                   w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2
-                  ${emailError ? "text-red-500" : "text-green-500"}
+                  ${emailError ? 'text-red-500' : 'text-green-500'}
                   `}
             />
             <input
@@ -131,7 +141,7 @@ function UserLogIn() {
               className={`
                 text-black mt-1 bg-white pl-12 pr-3 py-3 border-gray-200 border rounded-md w-full
                 focus:border-gray-400 focus:outline-none focus:border-gray-400
-                ${emailError ? "border-red-500" : ""}
+                ${emailError ? 'border-red-500' : ''}
                 `}
             />
           </div>
@@ -143,14 +153,14 @@ function UserLogIn() {
                 <ShieldCheck
                   className={`
                   w-5 h-5
-                  ${passwordError ? "text-red-500" : "text-green-500"}
+                  ${passwordError ? 'text-red-500' : 'text-green-500'}
                   `}
                 />
               </div>
               <input
                 id="password"
                 name="password"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 placeholder="Mật khẩu"
                 value={formData.password}
                 onChange={(e) =>
@@ -159,7 +169,7 @@ function UserLogIn() {
                 className={`
                   text-black mt-1 bg-white pl-12 pr-3 py-3 border-gray-200 border rounded-md w-full
                   focus:border-gray-400 focus:outline-none focus:border-gray-400
-                  ${passwordError ? "border-red-500" : ""}
+                  ${passwordError ? 'border-red-500' : ''}
                 `}
               />
               <div className="absolute right-3 top-8 transform -translate-y-1/2">
@@ -212,16 +222,16 @@ function UserLogIn() {
               <GoogleIcon></GoogleIcon> Google
             </button>
             <button
-            onClick={handleFacebookLogin}
+              onClick={handleFacebookLogin}
               disabled={!socialAgree}
-              className={`flex-grow rounded-md py-2 px-4 mx-2 mb-4 text-white ${!socialAgree ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-500"}`}
+              className={`flex-grow rounded-md py-2 px-4 mx-2 mb-4 text-white ${!socialAgree ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-500'}`}
             >
               <FacebookIcon></FacebookIcon> Facebook
             </button>
             <button
               onClick={handleLinkedInLogin}
               disabled={!socialAgree}
-              className={`flex-grow rounded-md py-2 px-4 ml-2 mb-4 text-white ${!socialAgree ? "bg-blue-500" : "bg-blue-800 hover:bg-blue-700"}`}
+              className={`flex-grow rounded-md py-2 px-4 ml-2 mb-4 text-white ${!socialAgree ? 'bg-blue-500' : 'bg-blue-800 hover:bg-blue-700'}`}
             >
               <LinkedInIcon></LinkedInIcon> Linkedin
             </button>
@@ -238,28 +248,28 @@ function UserLogIn() {
             label={
               <span className="text-gray-700">
                 Bằng việc đăng nhập bằng tài khoản mạng xã hội, tôi đã đọc và
-                đồng ý với{" "}
+                đồng ý với{' '}
                 <Link
                   to="/"
                   className="text-green-500 hover:underline hover:text-green-500"
                 >
                   Điều khoản dịch vụ
                 </Link>
-                {" và "}
+                {' và '}
                 <Link
                   to="/"
                   className="text-green-500 hover:underline hover:text-green-500"
                 >
                   Chính sách bảo mật
                 </Link>
-                {" của TopCV."}
+                {' của t4CVs.'}
               </span>
             }
             className="mb-4"
           />
 
           <p className="text-center text-gray-600">
-            Bạn chưa có tài khoản?{" "}
+            Bạn chưa có tài khoản?{' '}
             <Link
               to="/user-signup"
               className="text-green-500 hover:underline hover:text-green-500"
@@ -271,15 +281,15 @@ function UserLogIn() {
           <div className="flex flex-col items-center">
             <b className="text-gray-700">Bạn gặp khó khăn khi tạo tài khoản?</b>
             <div className="text-gray-700">
-              Vui lòng gọi tới số{" "}
-              <span className="text-green-500 font-bold">(024) 6680 5588</span>{" "}
+              Vui lòng gọi tới số{' '}
+              <span className="text-green-500 font-bold">(024) 6680 5588</span>{' '}
               (giờ hành chính).
             </div>
           </div>
         </div>
 
         <div className="text-green-500 text-center mt-16">
-          © 2016. All Rights Reserved. TopCV Vietnam JSC.
+          © 2016. All Rights Reserved. t4CVs Vietnam.
         </div>
       </div>
       <div className="col-span-1">

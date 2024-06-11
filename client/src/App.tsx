@@ -3,19 +3,25 @@ import {
   Routes,
   Route,
   Navigate,
-} from 'react-router-dom';
+} from "react-router-dom";
 
 import routes from "./routes";
 import EmptyLayout from "./layouts/EmptyLayout";
 import { createContext } from "react";
+import { accountList } from "./shared/utils/constant";
+import { store } from "./utils/redux/store";
+import { Provider } from "react-redux";
 import { useAuth0 } from "@auth0/auth0-react";
 import { withRoleCheck } from "./shared/services/authen/domain/withRoleCheck";
 import Spinner from "./pages/Spinner";
+
 
 export const MyContext = createContext({});
 
 function App() {
   return (
+    <Provider store={store}>
+     
         <MyContext.Provider value={{ token: "on update" }}>
           <Router>
             <div>
@@ -54,6 +60,8 @@ function App() {
             </div>
           </Router>
         </MyContext.Provider>
+          </Provider>
+
   );
 }
 

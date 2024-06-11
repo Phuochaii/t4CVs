@@ -26,9 +26,47 @@ import { RecruitmentFromServer } from '../types/Recruitment.type';
 import axios from 'axios';
 import { useProfileContext } from '../services/authen/domain/context';
 import { getProfile } from '../../modules/hr-module';
-function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentFromServer, fields: any, employer:any }) {
+import { districts } from '../types/Districts';
+function CampaignEditCard({
+  jobItem,
+  fields,
+  employer,
+}: {
+  jobItem: RecruitmentFromServer;
+  fields: any;
+  employer: any;
+}) {
   const { id: compaignId } = useParams();
   const navigate = useNavigate();
+
+  const [setDistrictOption] = useState<{ value: string; label: string }[]>([]);
+  function getAllDistrictsOfProvinces(
+    provinceNames: string[],
+  ): { value: string; label: string }[] {
+    const allDistricts: { value: string; label: string }[] = [];
+    provinceNames.forEach((provinceName) => {
+      const province = districts.data.find(
+        (p: { name: string }) => p.name === provinceName,
+      );
+      if (province) {
+        allDistricts.push(...province.districts);
+      }
+    });
+    return allDistricts;
+  }
+  const handleProvinceChange = (
+    selectedProvinces: MultiValue<{ value: string; label: string }> | null,
+  ) => {
+    setCityOptions(selectedProvinces); // Update the cityOptions state with the selected provinces
+
+    const selectedProvinceNames = selectedProvinces
+      ? selectedProvinces.map((province) => province.label)
+      : [];
+
+    const allDistricts = getAllDistrictsOfProvinces(selectedProvinceNames);
+
+    setDistrictOption(allDistricts);
+  };
   const convertToOptions = (data: { id: string; name: string }[]) => {
     if (!data) return [];
     return data.map(({ id, name }) => ({ value: id.toString(), label: name }));
@@ -42,24 +80,33 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
   const city = convertToOptions(fields?.location);
   const level = convertToOptions(fields?.level);
   const currency = convertToOptions(fields?.currency);
-  const defaultCurrency = currency.find(item => { return item.value === jobItem.currency.id.toString() }) as Option
+  const defaultCurrency = currency.find((item) => {
+    return item.value === jobItem.currency.id.toString();
+  }) as Option;
   const field = convertToOptions(fields?.field);
   const exp = convertToOptions(fields?.exp);
   const typeOptions = convertToOptions(fields?.type);
+  const my_city = city.filter((item) =>
+    jobItem.locations
+      .map((item1) => item1.id)
+      .includes(Number.parseInt(item.value)),
+  );
+  const districtOptions = getAllDistrictsOfProvinces(
+    my_city.map((item) => item.label),
+  );
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  
+
   const { token } = useProfileContext();
   useEffect(() => {
     // Fetch data from your API
     const fetchData = async () => {
-      
       const res = await getProfile(token!);
-      console.log(res.companyId)
-      
+      console.log(res.companyId);
     };
 
     fetchData();
@@ -72,12 +119,18 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
     value: string;
     label: string;
   }> | null>(
-    major.find(item => item.value === jobItem.major.id.toString()) || null
+    major.find((item) => item.value === jobItem.major.id.toString()) || null,
   );
   const [cityOption, setCityOptions] = useState<MultiValue<{
     value: string;
     label: string;
-  }> | null>(city.filter(item => jobItem.locations.map(item1 => item1.id).includes(Number.parseInt(item.value)))||null);
+  }> | null>(
+    city.filter((item) =>
+      jobItem.locations
+        .map((item1) => item1.id)
+        .includes(Number.parseInt(item.value)),
+    ) || null,
+  );
   const [, setDistrictOptions] = useState<SingleValue<{
     value: string;
     label: string;
@@ -85,36 +138,64 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
   const [jobTypeOptions, setjobTypeOptions] = useState<SingleValue<{
     value: string;
     label: string;
-  }> | null>(typeOptions.find(item => { return item.value === jobItem.type.id.toString() })||null);
+  }> | null>(
+    typeOptions.find((item) => {
+      return item.value === jobItem.type.id.toString();
+    }) || null,
+  );
   const [genderOptions, setGenderOptions] = useState<SingleValue<{
     value: string;
     label: string;
-  }> | null>(gender.find(item => { return item.label === jobItem.jobDetail.gender })||null);
+  }> | null>(
+    gender.find((item) => {
+      return item.label === jobItem.jobDetail.gender;
+    }) || null,
+  );
   const [levelOptions, setLevelOptions] = useState<SingleValue<{
     value: string;
     label: string;
-  }> | null>(level.find(item => { return item.value === jobItem.level.id.toString() }) || null);
+  }> | null>(
+    level.find((item) => {
+      return item.value === jobItem.level.id.toString();
+    }) || null,
+  );
   const [expOptions, setExpOptions] = useState<SingleValue<{
     value: string;
     label: string;
-  }> | null>(exp.find(item => { return item.value === jobItem.exp.id.toString() })||null);
+  }> | null>(
+    exp.find((item) => {
+      return item.value === jobItem.exp.id.toString();
+    }) || null,
+  );
   const [currencyOptions, setCurrencyOptions] = useState<SingleValue<{
     value: string;
     label: string;
-  }> | null>(currency.find(item => { return item.value === jobItem.currency.id.toString() })||null);
+  }> | null>(
+    currency.find((item) => {
+      return item.value === jobItem.currency.id.toString();
+    }) || null,
+  );
   const [fieldOptions, setFieldOptions] = useState<MultiValue<{
     value: string;
     label: string;
-  }> | null>(field.filter(item => jobItem.fields.map(item1 => item1.id).includes(Number.parseInt(item.value)))||null);
+  }> | null>(
+    field.filter((item) =>
+      jobItem.fields
+        .map((item1) => item1.id)
+        .includes(Number.parseInt(item.value)),
+    ) || null,
+  );
   const [salaryError, setSalaryError] = useState(false);
   const [salaryMaxError, setSalaryMaxError] = useState(false);
-  const [showPopup, setShowPopup] = useState(jobItem.salaryMax !== null && jobItem.salaryMin !== null);
+  const [showPopup, setShowPopup] = useState(
+    jobItem.salaryMax !== null && jobItem.salaryMin !== null,
+  );
   const [salary, setSalary] = useState(jobItem.salaryMin.toString());
   const [salaryMax, setSalaryMax] = useState(jobItem.salaryMax.toString());
   const [date, setDate] = useState(jobItem.expiredDate);
   const today = new Date(jobItem.expiredDate);
   const day = today.setDate(today.getDate());
-  const defaultValue = new Date(day).toISOString().split('T')[0]
+  const defaultValue = new Date(day).toISOString().split('T')[0];
   const [item] = useState({
     id: jobItem.id,
     titleRecruitment: jobItem.titleRecruitment,
@@ -145,7 +226,10 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
         careerOptions?.value !== undefined ? careerOptions?.value : '0',
       );
       updatedItem.fields = fieldOptions
-        ? fieldOptions.map((option) => ({ id: Number.parseInt(option.value), name: option.label }))
+        ? fieldOptions.map((option) => ({
+            id: Number.parseInt(option.value),
+            name: option.label,
+          }))
         : [];
       updatedItem.typeId = Number.parseInt(
         jobTypeOptions?.value !== undefined ? jobTypeOptions?.value : '0',
@@ -163,7 +247,10 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
         expOptions?.value !== undefined ? expOptions?.value : '0',
       );
       updatedItem.locations = cityOption
-        ? cityOption.map((option) => ({ id: Number.parseInt(option.value), name: option.label }))
+        ? cityOption.map((option) => ({
+            id: Number.parseInt(option.value),
+            name: option.label,
+          }))
         : [];
       updatedItem.expiredDate = date;
       updatedItem.jobDetail = {
@@ -175,32 +262,34 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
         benefit: data.benefit,
         requirement: data.requirement,
         skills: data.skill,
-        id :jobItem.jobDetail.id
+        id: jobItem.jobDetail.id,
       };
       //debug line
-      console.log(JSON.stringify(updatedItem))
+      console.log(JSON.stringify(updatedItem));
       try {
-        const response = await axios.put('http://localhost:3000/job/update-job', JSON.stringify(updatedItem), {
-          headers: {
-            authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
+        const response = await axios.put(
+          'http://localhost:3000/job/update-job',
+          JSON.stringify(updatedItem),
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
           },
-        });
-  
+        );
+
         if (response.status !== 200) {
           throw new Error('Failed to post data to API');
         }
-  
+
         console.log(response);
       } catch (error) {
         console.error('Error posting data:', error);
       }
-      
-
     } else {
       //Do nothing
     }
-    navigate(-1)
+    navigate(-1);
   };
   const handleSalaryError = (value: SetStateAction<string>) => {
     setSalary(value);
@@ -223,15 +312,13 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
   const togglePopup = (
     choice: SetStateAction<SingleValue<{ value: string; label: string }>>,
   ) => {
-
     if (choice !== null) {
       if (typeof choice !== 'function' && choice.value === 'Trong khoảng') {
         if (jobItem.salaryMax !== null && !jobItem.salaryMin !== null) {
           setShowPopup(true);
           setSalaryError(false);
           setSalaryMaxError(false);
-        }
-        else {
+        } else {
           setShowPopup(true);
           setSalaryError(true);
           setSalaryMaxError(true);
@@ -247,9 +334,8 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
       setSalaryMaxError(true);
     }
     setUserChoice(choice);
-
   };
-  
+
   const cityOptions = [
     { value: 'Hồ Chí Minh', label: 'Hồ Chí Minh' },
     { value: 'Bình Dương', label: 'Bình Dương' },
@@ -266,7 +352,7 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col overflow-x-hidden">
-        <h1 className="text-black text-xl font-bold mb-5">
+        <h1 className="text-black text-xl font-bold mb-5 pt-4">
           Thông tin đăng tuyển chi tiết
         </h1>
         <div className="bg-white p-4 rounded-sm mb-5 border-l-2 border-green-700">
@@ -274,7 +360,7 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
             Tin tuyển dụng của bạn sẽ được kiểm duyệt trước khi chính thức hiển
             thị với các ứng viên tiềm năng.{' '}
             <button className="text-green-500 bg-white">
-              Tìm hiểu về Quy định đăng tin tại TopCV.
+              Tìm hiểu về Quy định đăng tin tại t4CVs.
             </button>
           </span>
         </div>
@@ -332,12 +418,12 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
                     <SingleDropdown
                       placeholder="Lựa chọn tối đa một ngành nghề chính cho tin tuyển dụng"
                       options={major}
-                      onChange={(
-                        e: SetStateAction<
-                          SingleValue<Option>
-                        >,
-                      ) => setCareerOptions(e)}
-                      defaultValue={major.find(item => { return item.value === jobItem.major.id.toString() })}
+                      onChange={(e: SetStateAction<SingleValue<Option>>) =>
+                        setCareerOptions(e)
+                      }
+                      defaultValue={major.find((item) => {
+                        return item.value === jobItem.major.id.toString();
+                      })}
                     />
                   </div>
                 </div>
@@ -396,7 +482,11 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
                       isOptionDisabled={() =>
                         fieldOptions !== null ? fieldOptions.length >= 2 : false
                       }
-                      defaultValue={field.filter(item => jobItem.fields.map(item1 => item1.id).includes(Number.parseInt(item.value)))}
+                      defaultValue={field.filter((item) =>
+                        jobItem.fields
+                          .map((item1) => item1.id)
+                          .includes(Number.parseInt(item.value)),
+                      )}
                       required
                     />
                   </div>
@@ -423,7 +513,7 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
                       Số lượng tuyển
                     </span>
                     <input
-                      type="text"
+                      type="number"
                       className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                       placeholder="Nhập số lượng"
                       {...register('quantity', {
@@ -451,7 +541,9 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
                             SingleValue<{ value: string; label: string }>
                           >,
                         ) => setjobTypeOptions(e)}
-                        defaultValue={typeOptions.find(item => { return item.value === jobItem.type.id.toString() })}
+                        defaultValue={typeOptions.find((item) => {
+                          return item.value === jobItem.type.id.toString();
+                        })}
                       />
                     </div>
                   </div>
@@ -482,7 +574,9 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
                             SingleValue<{ value: string; label: string }>
                           >,
                         ) => setGenderOptions(e)}
-                        defaultValue={gender.find(item => { return item.label === jobItem.jobDetail.gender })}
+                        defaultValue={gender.find((item) => {
+                          return item.label === jobItem.jobDetail.gender;
+                        })}
                       />
                     </div>
                   </div>
@@ -497,7 +591,9 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
                             SingleValue<{ value: string; label: string }>
                           >,
                         ) => setLevelOptions(e)}
-                        defaultValue={level.find(item => { return item.value === jobItem.level.id.toString() })}
+                        defaultValue={level.find((item) => {
+                          return item.value === jobItem.level.id.toString();
+                        })}
                       />
                     </div>
                   </div>
@@ -512,7 +608,9 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
                             SingleValue<{ value: string; label: string }>
                           >,
                         ) => setExpOptions(e)}
-                        defaultValue={exp.find(item => { return item.value === jobItem.exp.id.toString() })}
+                        defaultValue={exp.find((item) => {
+                          return item.value === jobItem.exp.id.toString();
+                        })}
                       />
                     </div>
                   </div>
@@ -547,7 +645,12 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
                         placeholder="-- Kiểu lương --"
                         options={salaryOptions}
                         onChange={togglePopup}
-                        defaultValue={jobItem.salaryMin !== null && jobItem.salaryMax !== null ? salaryOptions[0] : salaryOptions[1]}
+                        defaultValue={
+                          jobItem.salaryMin !== null &&
+                          jobItem.salaryMax !== null
+                            ? salaryOptions[0]
+                            : salaryOptions[1]
+                        }
                       />
                     </div>
                   </div>
@@ -592,14 +695,13 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
                     <div className="w-5/12">
                       <MultiDropdown
                         placeholder="Chọn Tỉnh/ Thành phố"
-                        onChange={(
-                          e: SetStateAction<MultiValue<{
-                            value: string;
-                            label: string;
-                          }> | null>,
-                        ) => setCityOptions(e)}
+                        onChange={handleProvinceChange}
                         options={city}
-                        defaultValue={city.filter(item => jobItem.locations.map(item1 => item1.id).includes(Number.parseInt(item.value)))}
+                        defaultValue={city.filter((item) =>
+                          jobItem.locations
+                            .map((item1) => item1.id)
+                            .includes(Number.parseInt(item.value)),
+                        )}
                       />
                     </div>
                   </div>
@@ -607,13 +709,30 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
                     <div className="w-3/12">
                       <SingleDropdown
                         placeholder="Chọn Quận/ Huyện"
-                        options={cityOptions}
+                        options={districtOptions}
                         onChange={(
                           e: SetStateAction<
                             SingleValue<{ value: string; label: string }>
                           >,
                         ) => setDistrictOptions(e)}
-                        defaultValue={cityOptions[0]}
+                        defaultValue={districts.data
+                          .map((province) =>
+                            province.districts.map((district) => ({
+                              value: district.value,
+                              label: district.label,
+                            })),
+                          )
+                          .flat()
+                          .filter((district) =>
+                            city
+                              .filter((item) =>
+                                jobItem.locations
+                                  .map((item1) => item1.id)
+                                  .includes(Number.parseInt(item.value)),
+                              )
+                              .map((item) => item.value)
+                              .includes(district.label.split(' ')[1]),
+                          )}
                       />
                     </div>
                     <div className="w-8/12">
@@ -643,10 +762,10 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
             salaryError ||
             errors.schedule ||
             errors.address) && (
-              <div className="ml-14 text-red-700">
-                Vui lòng điền đầy đủ thông tin
-              </div>
-            )}
+            <div className="ml-14 text-red-700">
+              Vui lòng điền đầy đủ thông tin
+            </div>
+          )}
         </div>
         <div className="bg-white p-4 rounded-sm mb-5">
           <div className="flex flex-row space-x-5 mb-4">
@@ -1086,7 +1205,7 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
                 <div className="space-y-2 w-3/12">
                   <span className="text-base font-semibold">Số điện thoại</span>
                   <input
-                    type="text"
+                    type="number"
                     className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                     placeholder="Số điện thoại"
                     {...register('phone', {
@@ -1140,7 +1259,7 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
                 chuyên nghiệp hơn, ứng viên cảm nhận rõ ràng hơn về môi trường
                 làm việc chuyên nghiệp, bản sắc tinh thần, giúp tăng đáng kể tỷ
                 lệ ứng tuyển khi ứng viên xem tin tuyển dụng của bạn. Vui lòng
-                tham khảo hướng dẫn chuẩn bị hình ảnh/video chất lượng của TopCV{' '}
+                tham khảo hướng dẫn chuẩn bị hình ảnh/video chất lượng của t4CVs{' '}
                 <button className="bg-white text-green-600">Tại đây</button>
               </div>
               <div className="flex flex-row items-center space-x-5">
@@ -1173,7 +1292,9 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
           <div className="post-compaign-2_content-item--actions flex flex-row justify-end font-bold mt-5">
             <div className="post-compaign-2_content-item--actions-group flex flex-row gap-4">
               <button
-                onClick={()=>{navigate(-1)}}
+                onClick={() => {
+                  navigate(-1);
+                }}
                 className="post-compaign-2_content-item--action btn-cancel py-2 px-7 rounded bg-slate-300 shadow-md cursor-pointer"
               >
                 Hủy
