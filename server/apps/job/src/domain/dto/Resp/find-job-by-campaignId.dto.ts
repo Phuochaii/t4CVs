@@ -1,4 +1,4 @@
-import { JobDetail } from '../../entities';
+import { JobDetail, Location } from '../../entities';
 
 export class FindJobByCampaignIdDto {
   titleRecruitment: string;
@@ -7,5 +7,7 @@ export class FindJobByCampaignIdDto {
   salaryMin: number;
   campaignId: number;
   status: boolean;
+  expiredDate: Date;
   jobDetail: JobDetail;
+  locations: Location[];
 }
