@@ -133,6 +133,11 @@ function UserSignUp() {
   return (
     <div className="grid grid-cols-3 gap-4 ">
       <div className="col-span-2 px-52 py-20">
+        <img
+          src="../../../images/t4cvs-logo.png"
+          alt="logo-signup"
+          className="w-52 h-auto pb-20"
+        ></img>
         <h3 className="text-2xl font-semibold mb-1 mt-1 text-green-600">
           Chào mừng bạn đến với t4CVs
         </h3>

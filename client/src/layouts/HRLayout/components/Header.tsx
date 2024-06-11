@@ -9,11 +9,14 @@ import {
   ChevronDown,
   Menu,
   LineChart,
-} from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import * as HRModule from "../../../modules/hr-module";
-import { useAuth0 } from "@auth0/auth0-react";
-import { Roles, useProfileContext } from "../../../shared/services/authen/domain/context";
+} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import * as HRModule from '../../../modules/hr-module';
+import { useAuth0 } from '@auth0/auth0-react';
+import {
+  Roles,
+  useProfileContext,
+} from '../../../shared/services/authen/domain/context';
 import { withRoleCheck } from '../../../shared/services/authen/domain/withRoleCheck';
 
 const list_btn1 = [
@@ -65,71 +68,67 @@ const accountButton = {
 
 function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
   const navigation = useNavigate();
-  const {logout} = useAuth0();
-  const { profile, token} = useProfileContext();
+  const { logout } = useAuth0();
+  const { profile, token } = useProfileContext();
   const [displayNoti, setDisplayNoti] = React.useState(false);
   const [displayAccountTab, setDisplayAccountTab] = React.useState(false);
   const [notifications, setNotifications] = React.useState([]);
   const [total, setTotal] = React.useState(0);
 
-    const HeaderProfileSection = withRoleCheck(Roles.HR, () => {
-      return (
-        <>
-          <li className="relative list-none">
-            <a
-              className="text-center inline-flex items-center bg-transparent"
-              onClick={() => setDisplayAccountTab(!displayAccountTab)}
-            >
-              <RoundedButton
-                text={accountButton.name}
-                icon={accountButton.icon}
-                image={profile?.picture || accountButton.image}
-                iconSize={accountButton.iconSize}
-                onClick={() => {
-                  navigation(accountButton.link);
-                }}
-              />
-            </a>
-            {/* <!-- Dropdown menu --> */}
-            {displayAccountTab ? (
-              <div className="pt-3 absolute top-8 right-0 z-50">
-                <ul
-                  className="max-h-[320px] overflow-y-scroll dropdown  hover:text-green-500 w-56 z-50font-semibold text-base bg-white border border-slate-100 rounded-lg py-2 flex flex-col gap-3 shadow-lg"
-                  aria-labelledby="dropdownDividerButton"
+  const HeaderProfileSection = withRoleCheck(Roles.HR, () => {
+    return (
+      <>
+        <li className="relative list-none">
+          <a
+            className="text-center inline-flex items-center bg-transparent"
+            onClick={() => setDisplayAccountTab(!displayAccountTab)}
+          >
+            <RoundedButton
+              text={accountButton.name}
+              icon={accountButton.icon}
+              image={profile?.picture || accountButton.image}
+              iconSize={accountButton.iconSize}
+              onClick={() => {
+                navigation(accountButton.link);
+              }}
+            />
+          </a>
+          {/* <!-- Dropdown menu --> */}
+          {displayAccountTab ? (
+            <div className="pt-3 absolute top-8 right-0 z-50">
+              <ul
+                className="max-h-[320px] overflow-y-scroll dropdown  hover:text-green-500 w-56 z-50font-semibold text-base bg-white border border-slate-100 rounded-lg py-2 flex flex-col gap-3 shadow-lg"
+                aria-labelledby="dropdownDividerButton"
+              >
+                <li
+                  className={'px-4 py-2 m-0 border-b-gray-200 border'}
+                  onClick={() => {
+                    // logout({
+                    //   clientId: AUTH0_CLIENT_ID,
+                    //   logoutParams: { returnTo: `${window.location.origin}${Roles.HR.loginUrl}` },
+                    // })
+                    logout({
+                      openUrl: false,
+                    });
+                    navigation('/hr');
+                  }}
                 >
-                  <li
-                    className={"px-4 py-2 m-0 border-b-gray-200 border"}
-                    onClick={() => {
-                      // logout({
-                      //   clientId: AUTH0_CLIENT_ID,
-                      //   logoutParams: { returnTo: `${window.location.origin}${Roles.HR.loginUrl}` },
-                      // })
-                      logout({
-                        openUrl: false,
-                      });
-                      navigation("/hr");
-                    }}
-                  >
-                    <span className="cursor-pointer text-black hover:text-green-500">
-                      Đăng xuất
-                    </span>
-                  </li>
-                </ul>
-              </div>
-            ) : (
-              <></>
-            )}
-          </li>
-        </>
-      );
-    });
+                  <span className="cursor-pointer text-black hover:text-green-500">
+                    Đăng xuất
+                  </span>
+                </li>
+              </ul>
+            </div>
+          ) : (
+            <></>
+          )}
+        </li>
+      </>
+    );
+  });
 
-  const fetchNotification = ({
-    limit = 3,
-  }: {
-    limit?: number;
-  }) => {
-    HRModule.getNotification({ token:token!, limit: limit }).then((res) => {
+  const fetchNotification = ({ limit = 3 }: { limit?: number }) => {
+    HRModule.getNotification({ token: token!, limit: limit }).then((res) => {
       console.log(res);
       setNotifications(res.data);
       setTotal(res.pagination.total);
@@ -137,7 +136,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
   };
   React.useEffect(() => {
     fetchNotification({});
-  },[])
+  }, []);
   const notiLength = notifications.filter(
     (item: any) => item.status === 0,
   ).length;
@@ -165,7 +164,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
             onClick={() => navigation('/hr/news')}
           >
             <img
-              src="https://tuyendung.topcv.vn/app/_nuxt/img/logo_topcv_dark.ee0b56e.png"
+              src="../../../images/t4cvs-logo.png"
               style={{ width: '56px' }}
               alt="logo"
             />
@@ -227,14 +226,14 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                           onClick={(e) => {
                             e.preventDefault();
                             HRModule.updateStatusNotification({
-                              token:token!,
+                              token: token!,
                               notificationId: item.id,
                             });
                             fetchNotification({});
                             // window.open(item.link, "_blank", "noopener");
                           }}
                           key={index}
-                          className={`px-4 py-2 m-0 border-b-gray-200 border ${!item.status ? 'text-black font-medium' : "text-gray-500"} hover:text-green-500`}
+                          className={`px-4 py-2 m-0 border-b-gray-200 border ${!item.status ? 'text-black font-medium' : 'text-gray-500'} hover:text-green-500`}
                         >
                           <span className="cursor-pointer  hover:text-green-500">
                             {item.content}
@@ -258,7 +257,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                   ) : notifications.length > 3 ? (
                     <button
                       className="text-green-500 hover:underline font-semibold w-full mt-2"
-                      onClick={() => fetchNotification({ })}
+                      onClick={() => fetchNotification({})}
                     >
                       Ẩn bớt
                     </button>

@@ -298,9 +298,9 @@ function HRSignUp() {
       <div className="grid grid-cols-3 gap-4 ">
         <div className="col-span-2 px-20 py-20">
           <img
-            src="https://tuyendung.topcv.vn/app/_nuxt/img/topcv-logo.c9a1ca1.webp"
+            src="../../../images/t4cvs-logo.png"
             alt="logo-signup"
-            className="w-52 h-auto pb-4"
+            className="w-60 h-auto pb-4"
           ></img>
           <h3 className="text-2xl font-bold mb-1 mt-1 text-green-600">
             Đăng ký tài khoản Nhà tuyển dụng
@@ -485,7 +485,7 @@ function HRSignUp() {
             className="w-full"
           ></img>
           <div className="absolute bottom-0 left-0 w-full text-center text-green-500">
-            <span>©2014-2024 TopCV Vietnam JSC. All rights reserved.</span>
+            <span>©2014-2024 t4CVs Vietnam . All rights reserved.</span>
           </div>
         </div>
       </div>

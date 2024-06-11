@@ -1,56 +1,55 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-import "../../shared/assets/styles/hr-signup.css";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useAuthen } from "../../shared/services/authen";
-import { Roles } from "../../shared/services/authen/domain/context";
-import Spinner from "../Spinner";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import '../../shared/assets/styles/hr-signup.css';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useAuthen } from '../../shared/services/authen';
+import { Roles } from '../../shared/services/authen/domain/context';
+import Spinner from '../Spinner';
 
 const images = [
   {
-    label: "banner_01",
-    path: "https://tuyendung.topcv.vn/app/_nuxt/img/banner-01.d2c28c7.png",
+    label: 'banner_01',
+    path: 'https://tuyendung.topcv.vn/app/_nuxt/img/banner-01.d2c28c7.png',
   },
   {
-    label: "banner_02",
-    path: "https://tuyendung.topcv.vn/app/_nuxt/img/banner-02.3506b83.png",
+    label: 'banner_02',
+    path: 'https://tuyendung.topcv.vn/app/_nuxt/img/banner-02.3506b83.png',
   },
   {
-    label: "banner_03",
-    path: "https://tuyendung.topcv.vn/app/_nuxt/img/banner-03.6c4018d.png",
+    label: 'banner_03',
+    path: 'https://tuyendung.topcv.vn/app/_nuxt/img/banner-03.6c4018d.png',
   },
 ];
 
 function HRLogIn() {
   const navigate = useNavigate();
-  const {isAuthenticated, isLoading} = useAuth0();
-  
+  const { isAuthenticated, isLoading } = useAuth0();
 
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
-  const [error, setError] = useState("");
-  const showError:boolean = !!error;
+  const [error, setError] = useState('');
+  const showError: boolean = !!error;
 
   const [showPassword, setShowPassword] = useState(false);
 
   const [emailEmpty, setEmailEmpty] = useState(false);
   const [passwordEmpty, setPasswordEmpty] = useState(false);
-  const {usernamePasswordLogin} = useAuthen();
+  const { usernamePasswordLogin } = useAuthen();
 
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
   };
 
   const onLoginError = () => {
-    setError("Email hoặc mật khẩu không chính xác.");
-  }
+    setError('Email hoặc mật khẩu không chính xác.');
+  };
 
   const handleLogin = (e: { preventDefault: () => void }) => {
     e.preventDefault(); // Ngăn chặn việc tải lại trang khi nhấn nút submit
@@ -61,13 +60,17 @@ function HRLogIn() {
 
     if (!formData.password) {
       setPasswordEmpty(true);
-    } 
-    if(!formData.email || !formData.password) return;
-    
-    usernamePasswordLogin({
-      username: formData.email,
-      password: formData.password,
-    }, Roles.HR, onLoginError);
+    }
+    if (!formData.email || !formData.password) return;
+
+    usernamePasswordLogin(
+      {
+        username: formData.email,
+        password: formData.password,
+      },
+      Roles.HR,
+      onLoginError,
+    );
   };
 
   const settings = {
@@ -79,19 +82,19 @@ function HRLogIn() {
   };
 
   React.useEffect(() => {
-    if(isLoading) return;
+    if (isLoading) return;
     if (isAuthenticated) {
       navigate(Roles.HR.redirectUrl);
       return;
     }
   }, [isAuthenticated, isLoading]);
-  if(isLoading || isAuthenticated) return <Spinner/>;
+  if (isLoading || isAuthenticated) return <Spinner />;
 
   return (
     <div className="grid grid-cols-3 gap-4">
       <div className="col-span-2 px-48 py-24">
         <img
-          src="https://tuyendung.topcv.vn/app/_nuxt/img/topcv-logo.c9a1ca1.webp"
+          src="../../../images/t4cvs-logo.png"
           alt="logo-signup"
           className="w-52 h-auto pb-20"
         ></img>
@@ -119,14 +122,14 @@ function HRLogIn() {
               className={`
                   text-black mt-1 bg-white pl-12 pr-3 py-3 border rounded-md w-full
                   focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
-                  ${emailEmpty ? "border-red-500" : ""}
+                  ${emailEmpty ? 'border-red-500' : ''}
                 `}
             />
           </div>
           {emailEmpty && !formData.email ? (
             <div className="text-red-500">Không được để trống email</div>
           ) : (
-            ""
+            ''
           )}
 
           <h4 className="text-gray-700 font-bold">Mật khẩu</h4>
@@ -138,7 +141,7 @@ function HRLogIn() {
               <input
                 id="password"
                 name="password"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 placeholder="Mật khẩu"
                 value={formData.password}
                 onChange={(e) =>
@@ -147,7 +150,7 @@ function HRLogIn() {
                 className={`
                   text-black mt-1 bg-white pl-12 pr-3 py-3 border rounded-md w-full
                   focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
-                  ${passwordEmpty ? "border-red-500" : ""}
+                  ${passwordEmpty ? 'border-red-500' : ''}
                 `}
               />
               <div className="absolute right-3 top-8 transform -translate-y-1/2">
@@ -168,7 +171,7 @@ function HRLogIn() {
           {passwordEmpty && !formData.password ? (
             <div className="text-red-500">Không được để trống mất khẩu</div>
           ) : (
-            ""
+            ''
           )}
 
           <div className="flex justify-end">
@@ -196,7 +199,7 @@ function HRLogIn() {
         )}
 
         <p className="text-center text-gray-600">
-          Chưa có tài khoản?{" "}
+          Chưa có tài khoản?{' '}
           <Link
             to="/hr-signup"
             className="text-green-500 hover:underline hover:text-green-500"
