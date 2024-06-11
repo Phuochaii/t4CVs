@@ -196,12 +196,11 @@ export async function getCVById(cvId: number, token: string) {
   }
 }
 
-export async function getValidJobs(limit: number) {
-  const response = await axios
-    .get(`${serverURL}/job/valid-jobs?limit=${limit}`)
-    .then((res) => {
-      return res;
-    });
+export async function getValidJobs(page: number, limit: number) {
+  const response = await axios.get(
+    `${serverURL}/job/valid-jobs?page=${page}&limit=${limit}`,
+  );
+
   return response;
 }
 

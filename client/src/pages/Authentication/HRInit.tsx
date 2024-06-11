@@ -11,7 +11,7 @@ function HRInit() {
             <div className="flex flex-col justify-center">
               <img
                 className="logo w-[90px] translate-y-2"
-                src="https://tuyendung.topcv.vn/images/topcv-logo.png"
+                src="../../../images/t4cvs-logo.png"
                 alt=""
               />
             </div>

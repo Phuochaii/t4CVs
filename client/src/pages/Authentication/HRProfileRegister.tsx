@@ -324,7 +324,7 @@ function HRProfileRegister() {
       <div className="grid grid-cols-3 gap-4 ">
         <div className="col-span-2 px-20 py-20">
           <img
-            src="https://tuyendung.topcv.vn/app/_nuxt/img/topcv-logo.c9a1ca1.webp"
+            src="../../../images/t4cvs-logo.png"
             alt="logo-signup"
             className="w-52 h-auto pb-4"
           ></img>

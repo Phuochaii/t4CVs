@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import JobListItem from '../../../shared/components/JobListItem';
 import { getValidJobs } from '../../../modules/user-module';
+import { useAuth0 } from '@auth0/auth0-react';
 
 function RelatedJobComponent({ setJobId }: { setJobId: (id: number) => void }) {
   const [jobResults, setJobResults] = useState<any>([]);
-
   useEffect(() => {
     const fetchJobResults = async () => {
       try {
-        const response = getValidJobs(5);
-        console.log(response);
-        setJobResults(response);
+        const response = await getValidJobs(1, 5);
+        console.log(response.data.data);
+        setJobResults(response.data.data);
       } catch (error) {
         console.log('Error fetching data. Please try again.');
       }
@@ -29,7 +29,7 @@ function RelatedJobComponent({ setJobId }: { setJobId: (id: number) => void }) {
           <div className="wrapper-content col-span-2">
             <div className="job-list-search-result">
               {/* job content */}
-              {jobResults.length > 0 ? (
+              {jobResults?.length > 0 ? (
                 jobResults.map((item: any) => {
                   return (
                     <div onClick={() => setJobId(item.id)}>

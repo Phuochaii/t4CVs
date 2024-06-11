@@ -8,8 +8,7 @@ function AdminInit() {
       <div
         className="col-span-2 px-40 py-20 relative bg-no-repeat bg-contain bg-center h-screen"
         style={{
-          backgroundImage:
-            "url('https://tuyendung.topcv.vn/app/_nuxt/img/background.89c9cc5.svg')",
+          backgroundImage: 'url("../../../images/t4cvs-logo.png")',
         }}
       >
         <img

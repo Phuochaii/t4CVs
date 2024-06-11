@@ -161,7 +161,7 @@ function PostCompaign1({
         levelOptions?.value !== undefined ? levelOptions.value : '0',
       );
       updatedItem.campaignId = Number.parseInt(compaignId as string) as number;
-      updatedItem.companyId = 1;
+      updatedItem.companyId = employer?.companyId;
       updatedItem.salaryMin = salary !== '' ? Number.parseInt(salary) : 0;
       updatedItem.salaryMax = salaryMax !== '' ? Number.parseInt(salaryMax) : 0;
       updatedItem.expId = Number.parseInt(
