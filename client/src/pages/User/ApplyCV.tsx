@@ -462,21 +462,21 @@ function ApplyModal({ open, handleClose, handleOpen, jobData, user }) {
                 <div className="note-content">
                   <p className="note-content__list mt-3">
                     <span>
-                      1. TopCV khuyên tất cả các bạn hãy luôn cẩn trọng trong
+                      1. t4CVs khuyên tất cả các bạn hãy luôn cẩn trọng trong
                       quá trình tìm việc và chủ động nghiên cứu về thông tin
                       công ty, vị trí việc làm trước khi ứng tuyển.
                       <br />
                       Ứng viên cần có trách nhiệm với hành vi ứng tuyển của
                       mình. Nếu bạn gặp phải tin tuyển dụng hoặc nhận được liên
                       lạc đáng ngờ của nhà tuyển dụng, hãy báo cáo ngay cho
-                      TopCV qua email
+                      t4CVs qua email
                       <a
                         className="text-green-500"
                         target="_top"
                         href="mailto:hotro@topcv.vn"
                       >
                         {' '}
-                        hotro@topcv.vn
+                        hotro@t4CVs.vn
                       </a>{' '}
                       để được hỗ trợ kịp thời.
                     </span>
@@ -937,7 +937,7 @@ function ApplyCV() {
                           </svg>
                         </div>
                         <div className="quantity-applied-user__text">
-                          TopCV chưa hỗ trợ xem số lượt ứng tuyển cho việc làm
+                          t4CVs chưa hỗ trợ xem số lượt ứng tuyển cho việc làm
                           này
                         </div>
                       </div>
@@ -1238,18 +1238,18 @@ function ApplyCV() {
                         Khu vực
                       </div>
                       <div className="box-category-tags flex flex-row flex-wrap gap-3">
-                          {jobData?.locations
-                            ? jobData?.locations.map((location: any) => (
-                                <strong
-                                  className="job-detail__info--section-content-value"
-                                  key={location.id}
-                                >
-                                  <span className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500">
-                                    {location.name}
-                                  </span>
-                                </strong>
-                              ))
-                            : ''}
+                        {jobData?.locations
+                          ? jobData?.locations.map((location: any) => (
+                              <strong
+                                className="job-detail__info--section-content-value"
+                                key={location.id}
+                              >
+                                <span className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500">
+                                  {location.name}
+                                </span>
+                              </strong>
+                            ))
+                          : ''}
                       </div>
                     </div>
                   </div>

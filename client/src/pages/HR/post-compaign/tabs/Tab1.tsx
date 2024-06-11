@@ -84,7 +84,9 @@ function PostCompaign1({
   const [salary, setSalary] = useState('');
   const [salaryMax, setSalaryMax] = useState('');
   const [date, setDate] = useState('');
-  const [districtOptions, setDistrictOption] = useState<{ value: string; label: string; }[]>([]);
+  const [districtOptions, setDistrictOption] = useState<
+    { value: string; label: string }[]
+  >([]);
   const [item] = useState({
     titleRecruitment: '',
     majorId: 0,
@@ -107,21 +109,28 @@ function PostCompaign1({
     requirement: '',
     skills: '',
   });
-  function getAllDistrictsOfProvinces(provinceNames: string[]): { value: string; label: string; }[] {
-    const allDistricts: { value: string; label: string; }[] = [];
+  function getAllDistrictsOfProvinces(
+    provinceNames: string[],
+  ): { value: string; label: string }[] {
+    const allDistricts: { value: string; label: string }[] = [];
     provinceNames.forEach((provinceName) => {
-      const province = districts.data.find((p: { name: string; }) => p.name === provinceName);
+      const province = districts.data.find(
+        (p: { name: string }) => p.name === provinceName,
+      );
       if (province) {
         allDistricts.push(...province.districts);
       }
     });
     return allDistricts;
   }
-  const handleProvinceChange = (selectedProvinces: MultiValue<{ value: string; label: string; }> | null) => {
+  const handleProvinceChange = (
+    selectedProvinces: MultiValue<{ value: string; label: string }> | null,
+  ) => {
     setCityOptions(selectedProvinces); // Update the cityOptions state with the selected provinces
 
-    
-    const selectedProvinceNames = selectedProvinces ? selectedProvinces.map((province) => province.label) : [];
+    const selectedProvinceNames = selectedProvinces
+      ? selectedProvinces.map((province) => province.label)
+      : [];
 
     const allDistricts = getAllDistrictsOfProvinces(selectedProvinceNames);
 
@@ -130,7 +139,7 @@ function PostCompaign1({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any, event: any) => {
     console.log(789);
-    console.log(employer.companyId)
+    console.log(employer.companyId);
     if (!salaryError && !salaryMaxError && employer.companyId !== null) {
       const updatedItem = { ...item };
 
@@ -170,15 +179,14 @@ function PostCompaign1({
       updatedItem.benefit = data.benefit;
       updatedItem.requirement = data.requirement;
       updatedItem.skills = data.skill;
-      const res = await postJob(token!, JSON.stringify(updatedItem))
-      console.log(res)
+      const res = await postJob(token!, JSON.stringify(updatedItem));
+      console.log(res);
       next(event);
     } else {
       if (employer.companyId === null) {
-        <Alert severity="error">Bạn chưa có công ty</Alert>
-      }
-      else {
-        <Alert severity="error">Bạn chưa nhập mức lương cho công việc</Alert>
+        <Alert severity="error">Bạn chưa có công ty</Alert>;
+      } else {
+        <Alert severity="error">Bạn chưa nhập mức lương cho công việc</Alert>;
       }
     }
   };
@@ -206,12 +214,12 @@ function PostCompaign1({
     // Fetch data from your API
     const fetchData = async () => {
       const response = await getField(token!);
-      console.log(token)
+      console.log(token);
       const data = response;
-      console.log(response)
+      console.log(response);
       setFields(data);
       const res = await getProfile(token!);
-      console.log(res.companyId)
+      console.log(res.companyId);
       setEmployer(res);
     };
 
@@ -278,7 +286,7 @@ function PostCompaign1({
             Tin tuyển dụng của bạn sẽ được kiểm duyệt trước khi chính thức hiển
             thị với các ứng viên tiềm năng.{' '}
             <button className="text-green-500 bg-white">
-              Tìm hiểu về Quy định đăng tin tại TopCV.
+              Tìm hiểu về Quy định đăng tin tại t4CVs.
             </button>
           </span>
         </div>
@@ -585,9 +593,7 @@ function PostCompaign1({
                     <div className="w-5/12">
                       <MultiDropdown
                         placeholder="Chọn Tỉnh/ Thành phố"
-                        onChange={
-                          handleProvinceChange
-                        }
+                        onChange={handleProvinceChange}
                         options={city}
                       />
                     </div>
@@ -630,10 +636,10 @@ function PostCompaign1({
             salaryError ||
             errors.schedule ||
             errors.address) && (
-              <div className="ml-14 text-red-700">
-                Vui lòng điền đầy đủ thông tin
-              </div>
-            )}
+            <div className="ml-14 text-red-700">
+              Vui lòng điền đầy đủ thông tin
+            </div>
+          )}
         </div>
         <div className="bg-white p-4 rounded-sm mb-5">
           <div className="flex flex-row space-x-5 mb-4">
@@ -1121,7 +1127,7 @@ function PostCompaign1({
                 chuyên nghiệp hơn, ứng viên cảm nhận rõ ràng hơn về môi trường
                 làm việc chuyên nghiệp, bản sắc tinh thần, giúp tăng đáng kể tỷ
                 lệ ứng tuyển khi ứng viên xem tin tuyển dụng của bạn. Vui lòng
-                tham khảo hướng dẫn chuẩn bị hình ảnh/video chất lượng của TopCV{' '}
+                tham khảo hướng dẫn chuẩn bị hình ảnh/video chất lượng của t4CVs{' '}
                 <button className="bg-white text-green-600">Tại đây</button>
               </div>
               <div className="flex flex-row items-center space-x-5">

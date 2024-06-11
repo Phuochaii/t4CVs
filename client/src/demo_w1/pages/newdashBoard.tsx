@@ -7,9 +7,9 @@ import {
   CircularProgress,
   Backdrop,
   Alert,
-} from "@mui/material";
-import "tailwindcss/tailwind.css";
-import { useState } from "react";
+} from '@mui/material';
+import 'tailwindcss/tailwind.css';
+import { useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -19,15 +19,15 @@ import {
   Legend,
   CartesianGrid,
   Cell,
-} from "recharts";
+} from 'recharts';
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const data = [
-  { name: "Kinh doanh / Bán hàng", uv: 15395 },
-  { name: "Marketing / Truyền thông", uv: 7763 },
-  { name: "Bất động sản", uv: 7763 },
-  { name: "IT", uv: 5123 },
+  { name: 'Kinh doanh / Bán hàng', uv: 15395 },
+  { name: 'Marketing / Truyền thông', uv: 7763 },
+  { name: 'Bất động sản', uv: 7763 },
+  { name: 'IT', uv: 5123 },
 ];
 
 function newDashBoard() {
@@ -52,21 +52,21 @@ function newDashBoard() {
 
   return (
     <div>
-      <Backdrop open={loading} style={{ color: "#fff", zIndex: 1500 }}>
+      <Backdrop open={loading} style={{ color: '#fff', zIndex: 1500 }}>
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Box sx={{ flexGrow: 1, width: "100%" }}>
+      <Box sx={{ flexGrow: 1, width: '100%' }}>
         <AppBar
           position="static"
           style={{
-            height: "50px",
-            backgroundColor: "#ffffff",
-            color: "#111111",
+            height: '50px',
+            backgroundColor: '#ffffff',
+            color: '#111111',
           }}
         >
           <Toolbar variant="dense">
             <Typography variant="h6" component="div">
-              topCV
+              t4CVs
             </Typography>
             <Button color="inherit">Việc làm</Button>
             <Button color="inherit">Hồ sơ & CV</Button>
@@ -90,7 +90,7 @@ function newDashBoard() {
               disabled={searching}
               className="ml-4 bg-green-500 rounded-lg w-20 h-10"
             >
-              {searching ? <CircularProgress size={24} /> : "Tìm kiếm"}
+              {searching ? <CircularProgress size={24} /> : 'Tìm kiếm'}
             </button>
           </div>
           <div className="flex flex-row justify-between w-full mt-3 ml-6">

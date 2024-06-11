@@ -7,7 +7,7 @@ function Footer() {
           <div className="flex justify-between main">
             <div className="info">
               <div className="mb-6 text-3xl font-semibold title">
-                Công ty cổ phần TopCV Việt Nam
+                Công ty cổ phần t4CVs Việt Nam
               </div>
               <div className="flex items-center">
                 <div className="flex items-center mb-2 mr-8 info-item">
@@ -54,10 +54,9 @@ function Footer() {
                 >
                   <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
                 </svg>
-                <span className="mr-2 subject">Trụ sở HN:</span>
+                <span className="mr-2 subject">Cơ sở 1:</span>
                 <strong className="value">
-                  Tòa FS - GoldSeason số 47 Nguyễn Tuân, P.Thanh Xuân Trung,
-                  Q.Thanh Xuân, Hà Nội
+                  227 Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh
                 </strong>
               </div>
               <div className="flex items-center mb-2 mr-8 info-item">
@@ -71,9 +70,10 @@ function Footer() {
                 >
                   <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
                 </svg>
-                <span className="mr-2 subject">Chi nhánh HCM:</span>
+                <span className="mr-2 subject">Cơ sở 2:</span>
                 <strong className="value">
-                  Tòa nhà Dali, 24C Phan Đăng Lưu, P.6, Q.Bình Thạnh, TP HCM
+                  Khu phố 6, Phường Linh Trung, Thành phố Thủ Đức, Thành phố Hồ
+                  Chí Minh
                 </strong>
               </div>
             </div>
@@ -85,13 +85,13 @@ function Footer() {
                 alt=""
               />
               <div className="link text-[#00b14f] text-sm font-medium mt-3">
-                topcv.com.vn
+                t4CVs.com.vn
               </div>
             </div>
           </div>
           <div className="list-ecosystem">
             <div className="title text-[#212f3f] text-md font-semibold mb-5">
-              Hệ sinh thái HR Tech của TopCV
+              Hệ sinh thái HR Tech của t4CVs
             </div>
             <div className="grid justify-between grid-cols-4 gap-6">
               <a
@@ -99,13 +99,13 @@ function Footer() {
                 className=" flex no-underline items-center p-6 bg-gradient-to-r from-[#213142] to-[#0a9c4b] gap-3 min-h-['72px'] rounded-lg"
               >
                 <img
-                  src="https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/v4/image/footer/topcv-logo.png"
+                  src="../../../images/t4CVs.png"
                   alt="logo"
                   width={60}
                   className="object-contain "
                 />
                 <span className="text-sm font-medium leading-tight text-white ">
-                  Nền tảng công nghệ tuyển dụng thông minh TopCV.vn
+                  Nền tảng công nghệ tuyển dụng thông minh t4CVs
                 </span>
               </a>
 
@@ -135,8 +135,7 @@ function Footer() {
                   style={{ maxHeight: '40px' }}
                 />
                 <span className="text-sm font-medium leading-tight text-white ">
-                  Nền tảng thiết lập và đánh giá năng lực nhân viên
-                  TestCenter.vn
+                  Nền tảng thiết lập và đánh giá năng lực nhân viên t4CVs
                 </span>
               </a>
 

@@ -248,7 +248,7 @@ function CreateCV() {
                 <p className="m-4">
                   Email:{' '}
                   <a href="mailto:hotro@topcv.vn" className="text-green-500">
-                    hotro@topcv.vn
+                    hotro@t4CVs.vn
                   </a>{' '}
                   hoặc đăng ký tư vấn CV cùng chuyên gia tại:{' '}
                   <a

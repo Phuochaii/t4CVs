@@ -12,10 +12,12 @@ import { SingleValue } from 'react-select';
 import * as HRModule from '../../modules/hr-module';
 import { errorToast, successToast } from '../../utils/toast';
 import { useProfileContext } from '../services/authen/domain/context';
+import { useAuth0 } from '@auth0/auth0-react';
 
 let positionArray = [];
 
 function Profile() {
+  const { user, logout } = useAuth0();
   const [imageFile, setImageFile] = useState();
   const [image, setImage] = useState();
   const [positionValue, setPositionValue] = useState();
@@ -57,7 +59,7 @@ function Profile() {
     value: string;
     label: string;
   }> | null>(null);
-  const {token} = useProfileContext()
+  const { token } = useProfileContext();
   const handleChange = (
     field: 'fullname' | 'gender' | 'position',
     value: string,
@@ -71,7 +73,7 @@ function Profile() {
     if (!data) return [];
     return data.map(({ id, name }) => ({ value: id.toString(), label: name }));
   };
- 
+
   const positions = convertToOptions(position?.data);
 
   const fetchAllPositions = async () => {
@@ -133,7 +135,7 @@ function Profile() {
       return errorToast('Vui lòng chọn vị trí');
     }
     const formData = new FormData();
-    formData.append('id', '1');
+    formData.append('id', user?.sub);
     if (imageFile) {
       formData.append('file', imageFile);
     }
@@ -144,7 +146,7 @@ function Profile() {
     for (const value of formData.values()) {
       console.log(value);
     }
-    HRModule.uploadHRProfile({formData: formData, token:token!})
+    HRModule.uploadHRProfile({ formData: formData, token: token })
       .then((res) => {
         successToast('Cập nhật thành công!');
         setTimeout(() => {

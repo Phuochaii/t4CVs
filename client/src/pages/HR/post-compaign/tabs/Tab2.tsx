@@ -1,4 +1,4 @@
-import { RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import { RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
 function PostCompaign2({
   next,
@@ -38,7 +38,7 @@ function PostCompaign2({
               <div className="post-compaign-2_content-item--option text-left font-medium">
                 Đăng tin tuyển dụng miễn phí và không giới hạn số lượng tin đăng
                 là quyền lợi dành cho các Khách hàng Doanh nghiệp chỉ có ở
-                TopCV. Đây là cách đơn giản nhất để bắt đầu một chiến dịch tuyển
+                t4CVs. Đây là cách đơn giản nhất để bắt đầu một chiến dịch tuyển
                 dụng. Tin tuyển dụng của bạn sẽ được hiển thi trên Kênh làm việc
                 và Kết quả tìm kiếm, tần xuất và lượng hiển thị nội dung chịu
                 tác động bởi chất lượng nội dung, uy tính thương hiệu và khả
