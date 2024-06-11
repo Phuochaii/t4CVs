@@ -10,38 +10,57 @@ const serverURL = 'http://localhost:3000';
 // ------------------- khong dụng vào phần này
 interface CreateEmployerInterface {
   id: string;
-  fullname?: string,
-  gender: string,
-  positionId: number,
-  skype: string,
-  phoneNumber: string,
-  image: string,
-  token: string
+  fullname?: string;
+  gender: string;
+  positionId: number;
+  skype: string;
+  phoneNumber: string;
+  image: string;
+  token: string;
 }
 export const createEmpolyer = async ({
-  id, fullname, gender, positionId, skype, phoneNumber, image, token
+  id,
+  fullname,
+  gender,
+  positionId,
+  skype,
+  phoneNumber,
+  image,
+  token,
 }: CreateEmployerInterface) => {
-  const response = await axios.post(`${serverURL}/employer/create`, {
-    id, fullname, gender, positionId, skype, phoneNumber, image
-  }, {
-    headers: {
-      authorization: `Bearer ${token}`
-    }
-  })
+  const response = await axios
+    .post(
+      `${serverURL}/employer/create`,
+      {
+        id,
+        fullname,
+        gender,
+        positionId,
+        skype,
+        phoneNumber,
+        image,
+      },
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      },
+    )
     .then((res) => res.data);
   return response;
-}
+};
 const isHr: (token: string) => Promise<boolean> = async (token) => {
-  const result = await axios.get(`http://localhost:3000/employer/check`, {
-    headers: {
-      authorization: `Bearer ${token}`,
-    }
-  })
-    .then(res => {
-      return res.data as boolean
+  const result = await axios
+    .get('http://localhost:3000/employer/check', {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
     })
+    .then((res) => {
+      return res.data as boolean;
+    });
   return result;
-}
+};
 const getProfile: (token: string) => Promise<{
   id: string;
   fullname: string;
@@ -57,12 +76,13 @@ const getProfile: (token: string) => Promise<{
 }> = async (token) => {
   const response = await axios.get(`${serverURL}/employer/profile`, {
     headers: {
-      authorization: `Bearer ${token}`
+      authorization: `Bearer ${token}`,
     },
   });
-  if (!response.data) throw new Error('Getting hr profile but not having hr profile data');
+  if (!response.data)
+    throw new Error('Getting hr profile but not having hr profile data');
   return response.data;
-}
+};
 // --------------------không đụng phần trên
 
 // GET APPLICATION BY HR ID
@@ -91,7 +111,7 @@ const getApplicationByCampaignIdHRId = async ({
       },
     },
   );
-  console.log(response.data)
+  console.log(response.data);
   return response.data;
 };
 
@@ -110,10 +130,10 @@ const getAllCompaignByHrId = async ({ token }: { token: string }) => {
         authorization: `Bearer ${token}`,
       },
     },
-  ); 
-  const responseData = response.data
+  );
+  const responseData = response.data;
   const { data, total_page } = responseData;
-  console.log(data, total_page)
+  console.log(data, total_page);
   return { allCampaigns: data, totalPages: total_page };
 };
 
@@ -212,13 +232,15 @@ const createCompaign = async ({
   token: string;
 }) => {
   const response = await axios
-    .post(`${serverURL}/company/campaign/create`,
-      { name, },
+    .post(
+      `${serverURL}/company/campaign/create`,
+      { name },
       {
         headers: {
           authorization: `Bearer ${token}`,
-        }
-      })
+        },
+      },
+    )
     .then((res) => {
       console.log(res.data);
       return res;
@@ -310,7 +332,7 @@ export async function getApplicationsByCampaignId(
       headers: {
         authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   const rawApplications: ApplicationFromServer[] = response.data.applications;
   const total = response.data.total;
@@ -345,32 +367,34 @@ export async function getField(token: string) {
 }
 export async function postJob(token: string, body: any) {
   try {
-    console.log(body)
+    console.log(body);
     const response = await axios.post(`${serverURL}/job/create`, body, {
       headers: {
         authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
     });
-    return response
+    return response;
   } catch (e) {
     return null;
   }
 }
-export async function updateCompanyId(token:string, companyId:number) {
+export async function updateCompanyId(token: string, companyId: number) {
   try {
-   
     const body = {
-      companyId: companyId
+      companyId: companyId,
     };
 
-   
-    const response = await axios.put(`${serverURL}/employer/update/companyid`, body, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json' 
-      }
-    });
+    const response = await axios.put(
+      `${serverURL}/employer/update/companyid`,
+      body,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
 
     // Check if the response is OK
     if (!response) {
@@ -380,7 +404,6 @@ export async function updateCompanyId(token:string, companyId:number) {
     // Log and return the response data
     console.log('Data successfully updated:', response.data);
     return response.data;
-
   } catch (error) {
     console.error('Error updating companyId:', error);
     return null;
