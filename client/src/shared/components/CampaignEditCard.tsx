@@ -27,27 +27,41 @@ import axios from 'axios';
 import { useProfileContext } from '../services/authen/domain/context';
 import { getProfile } from '../../modules/hr-module';
 import { districts } from '../types/Districts';
-function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentFromServer, fields: any, employer: any }) {
+function CampaignEditCard({
+  jobItem,
+  fields,
+  employer,
+}: {
+  jobItem: RecruitmentFromServer;
+  fields: any;
+  employer: any;
+}) {
   const { id: compaignId } = useParams();
   const navigate = useNavigate();
 
-  
-  const [setDistrictOption] = useState<{ value: string; label: string; }[]>([]);
-  function getAllDistrictsOfProvinces(provinceNames: string[]): { value: string; label: string; }[] {
-    const allDistricts: { value: string; label: string; }[] = [];
+  const [setDistrictOption] = useState<{ value: string; label: string }[]>([]);
+  function getAllDistrictsOfProvinces(
+    provinceNames: string[],
+  ): { value: string; label: string }[] {
+    const allDistricts: { value: string; label: string }[] = [];
     provinceNames.forEach((provinceName) => {
-      const province = districts.data.find((p: { name: string; }) => p.name === provinceName);
+      const province = districts.data.find(
+        (p: { name: string }) => p.name === provinceName,
+      );
       if (province) {
         allDistricts.push(...province.districts);
       }
     });
     return allDistricts;
   }
-  const handleProvinceChange = (selectedProvinces: MultiValue<{ value: string; label: string; }> | null) => {
+  const handleProvinceChange = (
+    selectedProvinces: MultiValue<{ value: string; label: string }> | null,
+  ) => {
     setCityOptions(selectedProvinces); // Update the cityOptions state with the selected provinces
 
-
-    const selectedProvinceNames = selectedProvinces ? selectedProvinces.map((province) => province.label) : [];
+    const selectedProvinceNames = selectedProvinces
+      ? selectedProvinces.map((province) => province.label)
+      : [];
 
     const allDistricts = getAllDistrictsOfProvinces(selectedProvinceNames);
 
@@ -72,8 +86,14 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
   const field = convertToOptions(fields?.field);
   const exp = convertToOptions(fields?.exp);
   const typeOptions = convertToOptions(fields?.type);
-  const my_city = city.filter(item => jobItem.locations.map(item1 => item1.id).includes(Number.parseInt(item.value)))
-  const districtOptions = getAllDistrictsOfProvinces(my_city.map(item => item.label));
+  const my_city = city.filter((item) =>
+    jobItem.locations
+      .map((item1) => item1.id)
+      .includes(Number.parseInt(item.value)),
+  );
+  const districtOptions = getAllDistrictsOfProvinces(
+    my_city.map((item) => item.label),
+  );
 
   const {
     register,
@@ -118,11 +138,19 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
   const [jobTypeOptions, setjobTypeOptions] = useState<SingleValue<{
     value: string;
     label: string;
-  }> | null>(typeOptions.find(item => { return item.value === jobItem.type.id.toString() }) || null);
+  }> | null>(
+    typeOptions.find((item) => {
+      return item.value === jobItem.type.id.toString();
+    }) || null,
+  );
   const [genderOptions, setGenderOptions] = useState<SingleValue<{
     value: string;
     label: string;
-  }> | null>(gender.find(item => { return item.label === jobItem.jobDetail.gender }) || null);
+  }> | null>(
+    gender.find((item) => {
+      return item.label === jobItem.jobDetail.gender;
+    }) || null,
+  );
   const [levelOptions, setLevelOptions] = useState<SingleValue<{
     value: string;
     label: string;
@@ -234,7 +262,7 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
         benefit: data.benefit,
         requirement: data.requirement,
         skills: data.skill,
-        id: jobItem.jobDetail.id
+        id: jobItem.jobDetail.id,
       };
       //debug line
       console.log(JSON.stringify(updatedItem));
@@ -324,7 +352,7 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col overflow-x-hidden">
-        <h1 className="text-black text-xl font-bold mb-5">
+        <h1 className="text-black text-xl font-bold mb-5 pt-4">
           Thông tin đăng tuyển chi tiết
         </h1>
         <div className="bg-white p-4 rounded-sm mb-5 border-l-2 border-green-700">
@@ -687,8 +715,24 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
                             SingleValue<{ value: string; label: string }>
                           >,
                         ) => setDistrictOptions(e)}
-                        defaultValue={districts.data.map(province => province.districts.map(district => ({ value: district.value, label: district.label }))).flat().filter(district => city.filter(item => jobItem.locations.map(item1 => item1.id).includes(Number.parseInt(item.value))).map(item => item.value).includes(district.label.split(' ')[1]))
-                        }
+                        defaultValue={districts.data
+                          .map((province) =>
+                            province.districts.map((district) => ({
+                              value: district.value,
+                              label: district.label,
+                            })),
+                          )
+                          .flat()
+                          .filter((district) =>
+                            city
+                              .filter((item) =>
+                                jobItem.locations
+                                  .map((item1) => item1.id)
+                                  .includes(Number.parseInt(item.value)),
+                              )
+                              .map((item) => item.value)
+                              .includes(district.label.split(' ')[1]),
+                          )}
                       />
                     </div>
                     <div className="w-8/12">
@@ -1248,7 +1292,9 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
           <div className="post-compaign-2_content-item--actions flex flex-row justify-end font-bold mt-5">
             <div className="post-compaign-2_content-item--actions-group flex flex-row gap-4">
               <button
-                onClick={() => { navigate(-1) }}
+                onClick={() => {
+                  navigate(-1);
+                }}
                 className="post-compaign-2_content-item--action btn-cancel py-2 px-7 rounded bg-slate-300 shadow-md cursor-pointer"
               >
                 Hủy
