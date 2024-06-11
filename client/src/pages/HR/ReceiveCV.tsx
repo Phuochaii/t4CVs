@@ -44,7 +44,7 @@ function ReceiveCV() {
     HRModule.getAllCompaignByHrId({ token:token.token! }).then((res) => {
       setCompaignList([
         { value: '', name: 'Tất cả' },
-        ...res.data
+        ...res.allCampaigns
           .filter((item: any) => item.name != '')
           .map((item: any) => {
             return { value: item.id, name: item.name } as NameValue;

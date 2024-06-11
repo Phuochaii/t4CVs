@@ -5,6 +5,7 @@ import { Bold, Italic, List, ListOrdered, Underline } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useProfileContext } from '../services/authen/domain/context';
 import { getField } from '../../modules/hr-module';
+import { successToast } from '../../utils/toast';
 
 const CreateCompany = ({
     handleView,
@@ -54,6 +55,7 @@ const CreateCompany = ({
         formData.append('companySize', data.scale.toString());
         formData.append('description', data.description);
         formData.append('name', data.name)
+        successToast('Tạo công ty thành công thành công!');
         try {
             const response = await fetch('http://localhost:3000/company/create', {
                 method: 'POST',
@@ -70,6 +72,9 @@ const CreateCompany = ({
         } catch (error) {
             console.error('Error posting data:', error);
         }
+        setTimeout(() => {
+            location.reload();
+          }, 2000);
         handleView(event)
 
     };
