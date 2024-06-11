@@ -143,7 +143,7 @@ function Recruitment() {
   useEffect(() => {
     const getAllRecruitments = async () => {
       const { allCampaigns, totalPages } = await getAllCompaignByHrId({token: token!});
-      console.log(allCampaigns)
+      // console.log(allCampaigns)
       // const stats = await getJobsStat();
       // setJobStats(stats);
       const rawRecruitments = allCampaigns.map(async (item:any) => {
@@ -210,6 +210,7 @@ function Recruitment() {
           refresh={refresh}
           setRefresh={setRefresh}
           data={data
+            .filter((jobPost) => jobPost.job!=null)
             .filter(
               (jobPost) =>
                 (jobPost.job.status
