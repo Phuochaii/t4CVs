@@ -135,8 +135,7 @@ function Footer() {
                   style={{ maxHeight: '40px' }}
                 />
                 <span className="text-sm font-medium leading-tight text-white ">
-                  Nền tảng thiết lập và đánh giá năng lực nhân viên
-                  TestCenter.vn
+                  Nền tảng thiết lập và đánh giá năng lực nhân viên t4CVs
                 </span>
               </a>
 

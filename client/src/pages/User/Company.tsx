@@ -6,39 +6,30 @@ import RelatedCompany from '../../shared/components/RelatedCompany';
 import RecruitmentItem from '../../shared/components/RecruitmentItem';
 
 import { Search, MapPin, ChevronDown } from 'lucide-react';
-
-const relatedCompanies = [
-  {
-    name: 'NGÂN HÀNG TMCP HÀNG HẢI VIỆT NAM (MSB)',
-    num: 31,
-    avatar:
-      'https://static.topcv.vn/company_logos/ngan-hang-tmcp-hang-hai-5ca1e09fb0cf2.jpg',
-  },
-  {
-    name: 'NGÂN HÀNG BẢO VIỆT',
-    num: 18,
-    avatar:
-      'https://static.topcv.vn/company_logos/ngan-hang-bao-viet-5937b34d972ad_rs.jpg',
-  },
-  {
-    name: 'NGÂN HÀNG TMCP QUÂN ĐỘI',
-    num: 3,
-    avatar:
-      'https://static.topcv.vn/company_logos/ngan-hang-tmcp-quan-doi-5f16a4ddc5124.jpg',
-  },
-];
+import getNFirstItemInArray from '../../utils/getNFirstItemInArray';
 
 function Company() {
+  const [relatedCompanies, setRelatedCompanies] = useState<any>([]);
   const { id } = useParams();
   const navigate = useNavigate();
   const [companyInfo, setCompanyInfo] = useState<any>();
   useEffect(() => {
-    if (!id) return;
+    if (!id) {
+      return;
+    }
+    fetchRelatedCompanies();
     fetchCompanyInfo(id);
   }, []);
+  const fetchRelatedCompanies = async () => {
+    try {
+      const response = await HelperModule.getAllCompanies();
+      setRelatedCompanies(getNFirstItemInArray(response.allCompanies, 3));
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
   const fetchCompanyInfo = async (id: string) => {
     try {
-      // const response = await axios.get(`http://localhost:3000/company/${id}`);
       const response = await HelperModule.getCompanyById(id);
       setCompanyInfo(response);
     } catch (error) {
