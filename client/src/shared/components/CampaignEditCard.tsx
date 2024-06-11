@@ -513,7 +513,7 @@ function CampaignEditCard({
                       Số lượng tuyển
                     </span>
                     <input
-                      type="text"
+                      type="number"
                       className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                       placeholder="Nhập số lượng"
                       {...register('quantity', {
@@ -1205,7 +1205,7 @@ function CampaignEditCard({
                 <div className="space-y-2 w-3/12">
                   <span className="text-base font-semibold">Số điện thoại</span>
                   <input
-                    type="text"
+                    type="number"
                     className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                     placeholder="Số điện thoại"
                     {...register('phone', {

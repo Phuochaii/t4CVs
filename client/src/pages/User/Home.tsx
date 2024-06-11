@@ -669,7 +669,7 @@ function Home() {
                                     : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{" "}
                                 </div>
                                 <div className="job-location p-1 rounded bg-slate-200 text-slate-900 text-xs font-medium">
-                                  {item.locations[0].name}
+                                  {item.locations[0]?.name}
                                   {item.locations.length > 1
                                     ? ` & ${item.locations.length - 1} nơi khác`
                                     : ""}
