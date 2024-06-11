@@ -13,10 +13,11 @@ import moment from 'moment';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import { useProfileContext } from '../../shared/services/authen/domain/context';
+import { DefaultPagination } from '../../shared/components/default-pagination';
+import useCustomPagination from '../../utils/useCustomPagination';
 const option = [
   { value: 'Đã ứng tuyển', label: 'Đã ứng tuyển' },
   { value: 'NTD đã xem hồ sơ', label: 'NTD đã xem hồ sơ' },
-  { value: 'Hồ sơ phù hợp', label: 'Hồ sơ phù hợp' },
 ];
 
 function YourApplications() {
@@ -24,12 +25,30 @@ function YourApplications() {
     useAuth0();
   const { token, profile } = useProfileContext();
 
+  const itemsPerPage = 5;
+
   const navigation = useNavigate();
   const [isOn, setIsOn] = useState(false);
   const [isOn2, setIsOn2] = useState(false);
   const [applications, setApplication] = useState<
     ApplicationFromServer[] | undefined
   >([]);
+  const [selectedApplications, setSelectedApplications] = useState<
+    ApplicationFromServer[] | undefined
+  >([]);
+  const handleChangeOptions = (value: string) => {
+    setSelectedApplications(applications);
+    setSelectedApplications((prev) =>
+      prev?.filter((item) => {
+        if (value === 'Đã ứng tuyển') {
+          return item.status === false;
+        } else {
+          return item.status === true;
+        }
+      }),
+    );
+    console.log(selectedApplications);
+  };
   const [jobs, setJobs] = useState<RecruitmentFromServer[] | undefined>([]);
   const fetchApplications = async () => {
     if (!token) {
@@ -41,6 +60,7 @@ function YourApplications() {
         const { applications, jobs } = result;
         console.log(result);
         setApplication(applications);
+        setSelectedApplications(applications);
         setJobs(jobs);
       });
     } catch (error) {
@@ -57,6 +77,8 @@ function YourApplications() {
   const toggleSwitch2 = () => {
     setIsOn2(!isOn2);
   };
+  const { currentPage, totalPages, currentItems, paginate } =
+    useCustomPagination(selectedApplications, itemsPerPage);
   return (
     <div className="bg-gray-100">
       <div className="flex justify-center flex-row items-start  w-screen space-x-5 max-w-screen-lg mx-auto py-3">
@@ -104,9 +126,12 @@ function YourApplications() {
                       overflowY: 'auto',
                     }),
                   }}
-                  isClearable
-                  placeholder="Trạng thái"
+                  // isClearable
+                  placeholder="Đã ứng tuyển"
                   options={option}
+                  onChange={(e) => {
+                    handleChangeOptions(e.value);
+                  }}
                   className="basic-multi-select"
                   classNamePrefix="select"
                 />
@@ -114,8 +139,8 @@ function YourApplications() {
             </div>
 
             <div className="company-list m-5">
-              {applications!.length! > 0 ? (
-                applications!.map((item) => {
+              {currentItems!.length! > 0 ? (
+                currentItems!.map((item) => {
                   const createdAt = moment(new Date(item.createdAt)).format(
                     'DD-MM-YYYY HH:mm A',
                   );
@@ -128,7 +153,7 @@ function YourApplications() {
                       onClick={() => {
                         // navigation(`/detail-job/${item.id}`);
                       }}
-                      className="job-item-search-result max-h-60 bg-white px-3 py-3.5 mb-3 border border-transparent rounded-sm shadow-sm flex gap-6 hover:border-green-500"
+                      className="job-item-search-result max-h-60 bg-white px-3 py-4 mb-3 border border-transparent rounded-sm shadow-sm flex gap-6 hover:border-green-500 hover:cursor-pointer hover:rounded-md duration-300"
                     >
                       <img
                         className="job-logo-company justify-center w-[84px] h-[84px] flex items-center border rounded-lg"
@@ -142,9 +167,16 @@ function YourApplications() {
                             </span>
                             <div className="job-salary col-start-4 flex items-center">
                               <CurrencyDollarIcon className="w-5 mr-2" />
-                              <strong className="salary-count">
-                                {item.jobs.salaryMin} - {item.jobs.salaryMax}
-                              </strong>
+                              {item.jobs.salaryMin === 0 &&
+                              item.jobs.salaryMax === 0 ? (
+                                <strong className="salary-count">
+                                  Thỏa thuận
+                                </strong>
+                              ) : (
+                                <strong className="salary-count">
+                                  {item.jobs.salaryMin} - {item.jobs.salaryMax}
+                                </strong>
+                              )}
                             </div>
                           </div>
                           <div
@@ -228,9 +260,18 @@ function YourApplications() {
                   );
                 })
               ) : (
-                <div>Không có dữ liệu</div>
+                <div className="font-bold pb-3">Không có dữ liệu</div>
               )}
             </div>
+            {currentItems!.length! > 0 && (
+              <div className="flex justify-center py-5">
+                <DefaultPagination
+                  totalPage={totalPages}
+                  active={currentPage}
+                  setActive={paginate}
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="w-4/12 mx-8 my-5 flex flex-col">

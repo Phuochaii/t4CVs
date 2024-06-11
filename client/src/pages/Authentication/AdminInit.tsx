@@ -5,14 +5,9 @@ function AdminInit() {
   const navigation = useNavigate();
   return (
     <div className="grid grid-cols-3 gap-4">
-      <div
-        className="col-span-2 px-40 py-20 relative bg-no-repeat bg-contain bg-center h-screen"
-        style={{
-          backgroundImage: 'url("../../../images/t4cvs-logo.png")',
-        }}
-      >
+      <div className="col-span-2 px-40 py-20 relative bg-no-repeat bg-contain bg-center h-screen">
         <img
-          src="https://tuyendung.topcv.vn/app/_nuxt/img/topcv-logo.c9a1ca1.webp"
+          src="../../../images/t4cvs-logo.png"
           alt="logo-signup"
           className="w-52 h-auto pb-20"
         ></img>

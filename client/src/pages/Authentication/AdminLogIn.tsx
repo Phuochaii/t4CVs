@@ -178,7 +178,7 @@ function AdminLogIn() {
           className="w-full"
         ></img>
         <div className="absolute bottom-0 left-0 w-full text-center text-green-500">
-          <span>©2014-2024 TopCV Vietnam JSC. All rights reserved.</span>
+          <span>©2014-2024 t4CVs Vietnam JSC. All rights reserved.</span>
         </div>
       </div>
     </div>

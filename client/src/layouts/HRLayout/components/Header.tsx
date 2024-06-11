@@ -164,7 +164,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
             onClick={() => navigation('/hr/news')}
           >
             <img
-              src="../../../images/t4cvs-logo.png"
+              src="../../../images/t4CVs-light.png"
               style={{ width: '56px' }}
               alt="logo"
             />
