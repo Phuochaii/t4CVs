@@ -156,7 +156,7 @@ function Footer() {
             </div>
           </div>
           <div className="copyright text-[#4d5965] text-md mt-7 text-center font-light	">
-            © 2014-2024 TopCV Vietnam JSC. All rights reserved.
+            © 2014-2024 t4CVs Vietnam JSC. All rights reserved.
           </div>
         </div>
       </div>
