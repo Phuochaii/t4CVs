@@ -27,8 +27,6 @@ function TableHeader({ hasCampaignColumn }: { hasCampaignColumn: boolean }) {
 
 function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
   function getCompaignName(id: string | number) {
-    console.log(id);
-    console.log(compaigns)
     return compaigns?.filter((item) => item.value == id)[0].name;
   }
   const {token} = useProfileContext();
@@ -85,7 +83,10 @@ function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
                   applicationId: item.id,
                   token: token!,
                 }).then((res) => {
-                  console.log(res);
+                  HRModule.updateApplicationStatus({
+                    applicationId: item.id,
+                    token: token!,
+                  });
                   window.open(res.link, '_blank', 'noopener');
                 });
               }}
@@ -95,7 +96,9 @@ function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
             </button>
           </td>
         </tr>
-      ))}
+      )
+      
+      )}
     </tbody>
   );
 }

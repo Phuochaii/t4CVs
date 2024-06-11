@@ -432,7 +432,7 @@ function PostCompaign1({
                       Số lượng tuyển
                     </span>
                     <input
-                      type="text"
+                      type="number"
                       className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                       placeholder="Nhập số lượng"
                       {...register('quantity', {
