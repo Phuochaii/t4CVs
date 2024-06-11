@@ -59,7 +59,7 @@ function CampaignEditCard({ jobItem, fields, employer }: { jobItem: RecruitmentF
       
       const res = await getProfile(token!);
       console.log(res.companyId)
-      
+      console.log(jobItem.currency.id.toString())
     };
 
     fetchData();

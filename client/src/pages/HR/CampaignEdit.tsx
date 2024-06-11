@@ -135,7 +135,7 @@ function CampaignEdit() {
   const { token } = useProfileContext();
   const { state } = useLocation();
   const [recruitment, setRecruitment] =
-    useState<RecruitmentJobPost>(state);
+    useState<any>(state);
   const [openSection, setOpenSection] = useState(-1);
   const [refresh, setRefresh] = useState(false);
   const [job, setJob] =
@@ -152,7 +152,8 @@ function CampaignEdit() {
       const res1 = await getProfile(token!);
       console.log(res1.companyId)
       setEmployer(res1);
-      const res = await getJobById(recruitment.id);
+      console.log(recruitment)
+      const res = await getJobById(recruitment.job.jobDetail.id);
       console.log(res)
       setJob(res)
       setRecruitment({

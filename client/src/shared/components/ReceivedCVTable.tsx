@@ -2,6 +2,7 @@ import { ApplicationFromServer } from '../../shared/types/Application.type';
 import { Mail, Phone, Clock } from 'lucide-react';
 import * as HRModule from '../../modules/hr-module';
 import moment from 'moment';
+import { useProfileContext } from '../services/authen/domain/context';
 
 interface ApplicationProps {
   data: ApplicationFromServer[];
@@ -26,9 +27,11 @@ function TableHeader({ hasCampaignColumn }: { hasCampaignColumn: boolean }) {
 
 function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
   function getCompaignName(id: string | number) {
-    // console.log(id);
+    console.log(id);
+    console.log(compaigns)
     return compaigns?.filter((item) => item.value == id)[0].name;
   }
+  const {token} = useProfileContext();
   return (
     <tbody className="bg-[#F8F8F8C9]">
       {data.map((item: ApplicationFromServer, index: number) => (
@@ -80,6 +83,7 @@ function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
                 // fetchApplication(hrId);
                 HRModule.getCVByApplicationID({
                   applicationId: item.id,
+                  token: token!,
                 }).then((res) => {
                   console.log(res);
                   window.open(res.link, '_blank', 'noopener');

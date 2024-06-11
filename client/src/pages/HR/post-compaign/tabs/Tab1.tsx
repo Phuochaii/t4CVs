@@ -24,7 +24,7 @@ import MultiDropdown from '../../../../shared/components/MultiDropDown';
 import { useProfileContext } from '../../../../shared/services/authen/domain/context';
 import { getField, getProfile, postJob } from '../../../../modules/hr-module';
 import { Alert } from '@mui/material';
-
+import { districts } from '../../../../shared/types/Districts';
 function PostCompaign1({
   next,
   previous,
@@ -84,6 +84,7 @@ function PostCompaign1({
   const [salary, setSalary] = useState('');
   const [salaryMax, setSalaryMax] = useState('');
   const [date, setDate] = useState('');
+  const [districtOptions, setDistrictOption] = useState<{ value: string; label: string; }[]>([]);
   const [item] = useState({
     titleRecruitment: '',
     majorId: 0,
@@ -106,6 +107,26 @@ function PostCompaign1({
     requirement: '',
     skills: '',
   });
+  function getAllDistrictsOfProvinces(provinceNames: string[]): { value: string; label: string; }[] {
+    const allDistricts: { value: string; label: string; }[] = [];
+    provinceNames.forEach((provinceName) => {
+      const province = districts.data.find((p: { name: string; }) => p.name === provinceName);
+      if (province) {
+        allDistricts.push(...province.districts);
+      }
+    });
+    return allDistricts;
+  }
+  const handleProvinceChange = (selectedProvinces: MultiValue<{ value: string; label: string; }> | null) => {
+    setCityOptions(selectedProvinces); // Update the cityOptions state with the selected provinces
+
+    
+    const selectedProvinceNames = selectedProvinces ? selectedProvinces.map((province) => province.label) : [];
+
+    const allDistricts = getAllDistrictsOfProvinces(selectedProvinceNames);
+
+    setDistrictOption(allDistricts);
+  };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any, event: any) => {
     console.log(789);
@@ -156,7 +177,7 @@ function PostCompaign1({
       if (employer.companyId === null) {
         <Alert severity="error">Bạn chưa có công ty</Alert>
       }
-      else{
+      else {
         <Alert severity="error">Bạn chưa nhập mức lương cho công việc</Alert>
       }
     }
@@ -564,12 +585,9 @@ function PostCompaign1({
                     <div className="w-5/12">
                       <MultiDropdown
                         placeholder="Chọn Tỉnh/ Thành phố"
-                        onChange={(
-                          e: SetStateAction<MultiValue<{
-                            value: string;
-                            label: string;
-                          }> | null>,
-                        ) => setCityOptions(e)}
+                        onChange={
+                          handleProvinceChange
+                        }
                         options={city}
                       />
                     </div>
@@ -578,7 +596,7 @@ function PostCompaign1({
                     <div className="w-3/12">
                       <SingleDropdown
                         placeholder="Chọn Quận/ Huyện"
-                        options={cityOptions}
+                        options={districtOptions}
                         onChange={(
                           e: SetStateAction<
                             SingleValue<{ value: string; label: string }>
