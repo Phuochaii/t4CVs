@@ -15,7 +15,7 @@ interface LayoutProp {
 interface RouteItem {
   path: string;
   component: () => ReactElement;
-  layout: ({ }:LayoutProp) => ReactElement;
+  layout: ({}: LayoutProp) => ReactElement;
   role?: Role;
 }
 
@@ -150,8 +150,6 @@ const routes: RouteItem[] = [
     component: HR.CompaignEdit,
     layout: HRLayout,
   }, // thuc
-
-  { path: '/hr/recruitment', component: HR.Recruitment, layout: HRLayout },
 
   { path: '/hr/manage-cv/:id', component: HR.ManageCV, layout: HRLayout }, // yen
 
