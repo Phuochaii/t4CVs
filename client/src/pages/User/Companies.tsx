@@ -4,28 +4,29 @@ import SearchCompany from '../../shared/components/SearchCompany';
 import CompanyCard from '../../shared/components/CompanyCard';
 
 import { CompanyFromServer } from '../../shared/types/Company.type';
-import { findCompanyByName, getAllCompanies } from '../../modules/helper';
+import { findCompanyByName, getAllCompany } from '../../modules/helper';
 
 import { DefaultPagination } from '../../shared/components/default-pagination';
+import useCustomPagination from '../../utils/useCustomPagination';
 
 function Companies() {
   const [searchText, setSearchText] = useState('');
   const [companies, setCompanies] = useState([]);
-  const [totalPages, setTotalPages] = useState(0);
-  const [page, setPage] = useState(1);
+  // const [totalPages, setTotalPages] = useState(0);
+  // const [page, setPage] = useState(1);
 
   useEffect(() => {
     fetchCompanies();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, []);
 
   const fetchCompanies = async () => {
     try {
       // const response = await axios.get('http://localhost:3000/company/all');
-      const response = await getAllCompanies(page);
+      const response = await getAllCompany();
       console.log(response);
-      setTotalPages(response.totalPages);
-      setCompanies(response.allCompanies);
+      // setTotalPages(response.totalPages);
+      setCompanies(response.data.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -48,9 +49,12 @@ function Companies() {
     }
   }, [searchText]);
 
+  const itemsPerPage = 6;
   const handleSearch = (text) => {
     setSearchText(text);
   };
+  const { currentPage, totalPages, currentItems, paginate } =
+    useCustomPagination(companies, itemsPerPage);
   return (
     <>
       <SearchCompany onSearch={handleSearch} />
@@ -59,16 +63,18 @@ function Companies() {
           DANH SÁCH CÁC CÔNG TY NỔI BẬT
         </div>
         <div className="px-20 grid grid-cols-3 gap-4">
-          {companies.map((company) => (
+          {currentItems.map((company) => (
             <CompanyCard key={company.id} company={company} />
           ))}
         </div>
         <div className="flex justify-center py-5">
-          <DefaultPagination
-            totalPage={totalPages}
-            active={page}
-            setActive={setPage}
-          />
+          {currentItems?.length > 0 && (
+            <DefaultPagination
+              totalPage={totalPages}
+              active={currentPage}
+              setActive={paginate}
+            />
+          )}
         </div>
       </div>
     </>
