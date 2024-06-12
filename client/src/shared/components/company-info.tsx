@@ -151,7 +151,7 @@ function CompanyInfo() {
             </div>
             <div
               onClick={() => handleView(false)}
-              className={`flex flex-row items-center ${view === false ? 'border-slate-200 border-b-green-500 border-2' : 'border-0 '}  justify-between p-4 flex-grow`}
+              className={`cursor-pointer flex flex-row items-center ${view === false ? 'border-slate-200 border-b-green-500 border-2' : 'border-0 '}  justify-between p-4 flex-grow`}
             >
               <div className="flex flex-row items-center space-x-2">
                 <Plus

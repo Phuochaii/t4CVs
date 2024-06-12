@@ -278,7 +278,7 @@ const getJobsStat = async (token: string, limit: number = 1000) => {
   return { total: total, isActive: isActive, isNotActive: isNotActive };
 };
 
-const getJobByCampaignId = async (token: string, campaignId: number) => {
+const getJobByCampaignId = async (token: string, campaignId: number|string) => {
   try {
     const response = await axios.get(
       `${serverURL}/job?campaignId=${campaignId}`,

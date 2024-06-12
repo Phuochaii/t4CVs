@@ -1,30 +1,16 @@
 import * as React from 'react';
 import moment from 'moment';
 import { useProfileContext } from '../../../../shared/services/authen/domain/context';
+import { getJobByCampaignId } from '../../../../modules/admin-module';
 
 function Information({ compaignId }: { compaignId: string }) {
   const [jobData, setJobData] = React.useState<any>();
   const { token } = useProfileContext();
   const fetchJobData = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/job?campaignId=${compaignId}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json', // Optional, based on server requirements
-          },
-        },
-      );
-      console.log(response);
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
-      }
-
-      const data = await response.json();
-      console.log(data);
-      setJobData(data);
+      const res = await getJobByCampaignId(token!, compaignId);
+      console.log(res);
+      setJobData(res);
     } catch (error) {
       console.log('Error fetching data. Please try again.');
     }
@@ -36,7 +22,9 @@ function Information({ compaignId }: { compaignId: string }) {
   }, []);
 
   return (
-    <>
+      jobData ==null ? 
+      <p>Chưa có thông tin vị trí tuyển dụng</p> : 
+      (<>
       <div className="information text-black flex flex-col gap-2 px-5 py-3">
         <div className="title-recruitment">
           <div className="label text-2xl font-bold">Vị trí tuyển dụng</div>
@@ -152,8 +140,7 @@ function Information({ compaignId }: { compaignId: string }) {
           </div>
         </div>
       </div>
-    </>
-  );
+    </>));
 }
 
 export default Information;

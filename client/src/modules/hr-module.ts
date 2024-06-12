@@ -442,6 +442,16 @@ export async function getCampaign(id: number, page: number = 1) {
   const totalPages = response.data.total_page;
   return { allCampaigns: rawCampaigns, totalPages: totalPages };
 }
+export async function deleteCampaign({id, token}:{id: string, token:string}) {
+  const response = await axios.delete(
+    `${serverURL}/company/campaign/${id}`,{
+      headers: {
+        authorization: `Bearer ${token}`,
+      },}
+  );
+  console.log(response);
+  return response;
+}
 export async function getEmployerById(id: number | string) {
   const response = await axios.get(`${serverURL}/employer/${id}`);
   const rawEmployer: EmployerFromServer = response.data;
