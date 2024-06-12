@@ -7,6 +7,7 @@ import {
   GetAllByCampaignIdApplicationDto,
   GetByUserIdApplicationDto,
   GetByUserIdPaginationApplicationDto,
+  DelApplicationByCampaignIdDto,
 } from './dto';
 import {
   CreateApplicationService,
@@ -17,6 +18,7 @@ import {
   GetAllByCampaignIdApplicationService,
   GetByUserIdApplicationService,
   GetByUserIdPaginationApplicationService,
+  DelApplicationService,
 } from './service';
 import { Application } from './entity';
 import { RpcException } from '@nestjs/microservices';
@@ -32,7 +34,7 @@ export class ApplicationApplication {
     private readonly getAllByCampaignIdApplicationService: GetAllByCampaignIdApplicationService,
     private readonly getByUserIdApplicationService: GetByUserIdApplicationService,
     private readonly getByUserIdPagiantionApplicationService: GetByUserIdPaginationApplicationService,
-    // private readonly getByUserIdPaginationApplicationService: GetByUserIdPaginationApplicationService,
+    private readonly delApplicationService: DelApplicationService,
   ) {}
 
   async createApplication(request: CreateApplicationDto): Promise<Application> {
@@ -136,5 +138,9 @@ export class ApplicationApplication {
       applications: data,
     };
     // return await this.getByUserIdPagiantionApplicationService.execute(request);
+  }
+
+  async delApplicationbyCampaign(request: DelApplicationByCampaignIdDto) {
+    return await this.delApplicationService.execute(request);
   }
 }

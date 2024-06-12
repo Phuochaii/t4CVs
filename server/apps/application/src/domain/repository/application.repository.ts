@@ -7,6 +7,7 @@ import {
   GetAllByCampaignIdApplicationDto,
   GetByUserIdApplicationDto,
   GetByUserIdPaginationApplicationDto,
+  DelApplicationByCampaignIdDto,
 } from '../dto';
 import { Application } from '../entity';
 
@@ -40,4 +41,8 @@ export abstract class ApplicationRepository {
   abstract getByUserIdPaginationApplication(
     application: GetByUserIdPaginationApplicationDto,
   ): Promise<Application[] | null>;
+
+  abstract delApplicationbyCampaignId(
+    application: DelApplicationByCampaignIdDto,
+  );
 }

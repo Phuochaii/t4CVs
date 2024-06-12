@@ -8,6 +8,7 @@ import {
   Query,
   ParseBoolPipe,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApplicationService } from './application.service';
@@ -127,8 +128,9 @@ export class ApplicationController {
     return this.applicationService.update(id, status);
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.applicationService.remove(+id);
-  // }
+  //
+  @Delete('/adminnnnn/:campaignId')
+  remove(@Param('campaignId') campaignId: number) {
+    return this.applicationService.delApplicationbyCampaignId(campaignId);
+  }
 }

@@ -11,6 +11,7 @@ import {
   GetAllByCampaignIdApplicationDto,
   GetByUserIdApplicationDto,
   GetByUserIdPaginationApplicationDto,
+  DelApplicationByCampaignIdDto,
 } from '../../domain/dto';
 import { Application } from '../../domain/entity';
 
@@ -145,5 +146,14 @@ export class TypeOrmApplicationRepository extends ApplicationRepository {
       return;
     }
     return data;
+  }
+
+  async delApplicationbyCampaignId(application: DelApplicationByCampaignIdDto) {
+    console.log(application.campaignId);
+    const result = await this.applicationRepository.delete({
+      campaignId: application.campaignId,
+    });
+
+    return 'success';
   }
 }

@@ -229,4 +229,13 @@ export class ApplicationService implements OnModuleInit {
 
     return cv;
   }
+
+  async delApplicationbyCampaignId(campaignId: number) {
+    const data =
+      await this.applicationServiceClient.deleteApplicationByCampaignId({
+        campaignId,
+      });
+
+    return data;
+  }
 }
