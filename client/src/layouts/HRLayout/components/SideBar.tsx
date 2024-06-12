@@ -23,6 +23,7 @@ import {
   Mail,
 } from 'lucide-react';
 import { useProfileContext } from '../../../shared/services/authen/domain/context';
+import { getProfile } from '../../../modules/hr-module';
 const Item = ({
   _icon,
   iconSize = 16,
@@ -72,9 +73,17 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
   const location = useLocation();
   const pathname = location.pathname;
   const navigation = useNavigate();
-  const { profile } = useProfileContext();
+  const { token } = useProfileContext();
+  const [profile, setProfile] = React.useState<any>(null);
+  
 
   React.useEffect(() => {}, [isCollapsed]);
+  React.useEffect(()=>{
+    getProfile(token!).then(res=>{
+      console.log(res)
+      setProfile(res);
+    });
+  },[])
   //
   const sidebar_items = [
     [
@@ -185,45 +194,55 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
     <div
       className="flex-shrink-0 overflow-x-hidden overflow-y-scroll bg-white"
       style={{
-        fontWeight: '500',
-        color: '#212F3FE4',
+        fontWeight: "500",
+        color: "#212F3FE4",
         // height: "100vh",
-        width: isCollapsed ? '88px' : '300px ',
-        transition: 'width .2s ease',
+        width: isCollapsed ? "88px" : "300px ",
+        transition: "width .2s ease",
       }}
     >
-      <div className="flex" style={{ padding: ' 10px 14px', margin: 0 }}>
+      <div className="flex" style={{ padding: " 10px 14px", margin: 0 }}>
         <div className="flex items-center space-x-2">
-          <img
-            src={
-              profile?.picture ||
-              'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'
-            }
-            className="rounded-full"
-            style={{ width: '32px', marginRight: '10px' }}
-            alt="Avatar"
-          />
+          <div className="w-10 h-10 overflow-hidden rounded-full ">
+            <img
+              src={
+                profile?.image ||
+                "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg"
+              }
+              className="w-full"
+              alt="Avatar"
+            />
+          </div>
           {!isCollapsed && (
             <div>
-              <p>{profile?.name}</p>
-              <p style={{ fontSize: '12px' }}>Employer</p>
-              <p style={{ fontSize: '12px' }} className="flex">
-                Tài khoản xác thực:{' '}
-                <span className="mr-2 text-green-600">Cấp 1/5</span>
+              <p>{profile?.fullname}</p>
+              <p style={{ fontSize: "12px" }}>Employer</p>
+              <p style={{ fontSize: "12px" }} className="flex">
+                Giấy phép công ty:{" "}
+                <span className="mr-2 text-green-600">
+                  {profile?.licenseStatus ? "Đã xác thực" : "Chưa xác thực"}
+                </span>
                 <CircleHelp color="#757575B9" size={14} />
               </p>
+              {/* <p style={{ fontSize: "12px" }} className="flex">
+                Số điện thoại:{" "}
+                <span className="mr-2 text-green-600">
+                  {profile?.phoneNumberStatus ? "Đã xác thực" : "Chưa xác thực"}
+                </span>
+                <CircleHelp color="#757575B9" size={14} />
+              </p> */}
             </div>
           )}
         </div>
       </div>
       <button
         className={`btn ${
-          !isCollapsed && 'mx-4'
+          !isCollapsed && "mx-4"
         } text-sm py-1 flex items-center justify-center rounded-full w-11/12`}
         style={{
-          backgroundColor: '#EBF3FF',
-          color: '#2D7CF1',
-          marginBottom: '15.96px',
+          backgroundColor: "#EBF3FF",
+          color: "#2D7CF1",
+          marginBottom: "15.96px",
         }}
       >
         <ShieldCheck size={15} />
@@ -232,7 +251,7 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
             <button
               className="bg-transparent"
               onClick={() => {
-                navigation('/hr/verify-account/1');
+                navigation("/hr/verify-account/1");
               }}
             >
               <span className="ml-1 mr-1">Xác nhận tài khoản điện tử</span>
@@ -246,13 +265,13 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
           <ul
             className="space-y-2"
             key={index}
-            style={{ borderBottom: '1px solid #75757556' }}
+            style={{ borderBottom: "1px solid #75757556" }}
           >
             {items.map((item, index_1) => {
               return (
                 <Item
                   _icon={item._icon}
-                  title={isCollapsed ? '' : item.title}
+                  title={isCollapsed ? "" : item.title}
                   key={index_1}
                   isChosen={pathname == item.to}
                   onClick={() => {
