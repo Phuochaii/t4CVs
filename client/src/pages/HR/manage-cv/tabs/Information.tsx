@@ -9,8 +9,8 @@ function Information({ compaignId }: { compaignId: string }) {
   const fetchJobData = async () => {
     try {
       const res = await getJobByCampaignId(token!, compaignId);
-      console.log(res);
       setJobData(res);
+      // await console.log(res);
     } catch (error) {
       console.log('Error fetching data. Please try again.');
     }
@@ -107,7 +107,7 @@ function Information({ compaignId }: { compaignId: string }) {
                 </p>
               </div>
             </div>
-            <div className="job-description__item">
+            {/* <div className="job-description__item">
               <h3 className="text-base font-bold mb-2">Địa điểm làm việc</h3>
               <div className="job-description__item--content">
                 {jobData?.locations
@@ -118,7 +118,7 @@ function Information({ compaignId }: { compaignId: string }) {
                     ))
                   : ''}
               </div>
-            </div>
+            </div> */}
             <div className="job-description__item">
               <span className="text-base font-bold mb-2"> Kinh nghiệm </span>
               <strong className="job-description__item--content">

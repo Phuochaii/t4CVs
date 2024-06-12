@@ -1190,7 +1190,7 @@ function CampaignEditCard({
                 </div>
               </div>
               <div className="flex flex-row space-x-10 items-center">
-                <div className="space-y-2 w-3/12">
+                {/* <div className="space-y-2 w-3/12">
                   <span className="text-base font-semibold">Họ tên</span>
                   <input
                     type="text"
@@ -1201,8 +1201,8 @@ function CampaignEditCard({
                     })}
                     defaultValue={employer!.fullname}
                   />
-                </div>
-                <div className="space-y-2 w-3/12">
+                </div> */}
+                {/* <div className="space-y-2 w-3/12">
                   <span className="text-base font-semibold">Số điện thoại</span>
                   <input
                     type="number"
@@ -1213,8 +1213,8 @@ function CampaignEditCard({
                     })}
                     defaultValue={employer!.phoneNumber}
                   />
-                </div>
-                <div className="space-y-2 w-3/12">
+                </div> */}
+                {/* <div className="space-y-2 w-3/12">
                   <span className="text-base font-semibold">Email</span>
                   <input
                     type="text"
@@ -1225,7 +1225,7 @@ function CampaignEditCard({
                     })}
                     defaultValue={employer!.skype}
                   />
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
