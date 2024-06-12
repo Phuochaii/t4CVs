@@ -2,6 +2,7 @@ import { CreateJobDto } from '../dto/Req/create-job.dto';
 import { JobDetail } from '../entities';
 
 export abstract class JobDetailRepository {
+  abstract updateJobDetail(data: JobDetail): Promise<JobDetail>;
   abstract deleteJobDetail(id: number): Promise<boolean>;
   abstract createJobDetail(createJobDto: CreateJobDto): Promise<JobDetail>;
   // abstract find(): Promise<JobDetail[]>;

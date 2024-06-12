@@ -93,7 +93,6 @@ export class Job {
   @JoinColumn()
   level: Level;
 
-  // Demo , ve sau sua ai default là false
   @Column({ default: false })
   status: boolean;
 
