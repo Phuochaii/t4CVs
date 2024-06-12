@@ -123,7 +123,6 @@ const filteredStatuses = ['Tất cả', 'Đang hiển thị', 'Dừng hiển
 function Recruitment() {
   const [data, setData] = useState<RecruitmentJobPost[]>([]);
   const [selectedStatus, setSelectedStatus] = useState(0);
-  // const [filterKeyword, setFilterKeyword] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [jobStats, setJobStats] = useState({
@@ -159,7 +158,6 @@ function Recruitment() {
           page,
           5,
           item.campaignId,
-          true,
         );
         const rawRecruitment = {
           ...item,

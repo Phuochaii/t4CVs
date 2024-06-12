@@ -103,10 +103,9 @@ const getApplicationsByCampaignId = async (
   page: number,
   limit: number,
   campaignId: number,
-  status: boolean,
 ) => {
   const response = await axios.get(
-    `${serverURL}/application/admin/${hrId}?page=${page}&limit=${limit}&campaignId=${campaignId}&status=${status}`,
+    `${serverURL}/application/admin/${hrId}?page=${page}&limit=${limit}&campaignId=${campaignId}`,
     {
       headers: {
         authorization: `Bearer ${token}`,

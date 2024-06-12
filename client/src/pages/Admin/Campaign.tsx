@@ -62,7 +62,7 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
         async (application) => {
           // console.log('Applications', application);
           const applicant = await getUserById(token, application.userId);
-          // console.log(applicant);
+          console.log(applicant);
           return applicant;
         },
       );
@@ -210,7 +210,7 @@ function Campaign() {
         searchText == ''
           ? await getAllCampaigns(page)
           : await findCampaignByName(token, searchText, page);
-      console.log(allCampaigns);
+      // console.log(allCampaigns);
       if (allCampaigns) {
         const rawCampaigns = await allCampaigns.map(async (item) => {
           const employer = await getEmployerById(item.employerId);

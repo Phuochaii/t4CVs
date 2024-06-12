@@ -42,7 +42,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
       const applicantPromises = campaign.applications.map(
         async (application) => {
           const applicant = await getUserById({userId :application.userId.toString(), token: token! });
-          return applicant;
+          return applicant.data;
         },
       );
       setApplicants(await Promise.all(applicantPromises));
