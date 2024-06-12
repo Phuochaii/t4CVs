@@ -22,7 +22,7 @@ function Certificate() {
   const handleUploadLicense = async () => {
     // if (!firstImage && !firstFile ) {
 
-    if (!firstFile) {
+    if (!firstFile && !secondFile) {
       return errorToast('Vui lòng chọn file giấy ủy quyền');
     }
     setOnLoading(true);
