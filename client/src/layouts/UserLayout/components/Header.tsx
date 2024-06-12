@@ -340,6 +340,7 @@ function Header() {
               </li>
               <li
                 onClick={() => {
+                  navigation('/');
                   logout({
                     openUrl: false,
                   });
