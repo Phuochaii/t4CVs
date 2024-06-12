@@ -53,7 +53,7 @@ const RoundedButton = ({
           <img
             src={image}
             className="rounded-full"
-            style={{ width: '25px', marginRight: '10px' }}
+            style={{ width: '25px', height: '25px', marginRight: '10px' }}
             alt="Avatar"
           />
         )}{' '}

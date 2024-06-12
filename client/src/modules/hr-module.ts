@@ -210,11 +210,12 @@ const updateStatusNotification = async ({
   token: string;
 }) => {
   const response = await axios
-    .put(`${serverURL}/notification/hr/${notificationId}`, {
+    .put(`${serverURL}/notification/hr/${notificationId}`,{
+      status: 1,
+    }, {
       headers: {
         authorization: `Bearer ${token}`,
       },
-      status: 1,
     })
     .then((res) => {
       // console.log(`${serverURL}/notification/hr/${userId}/${notificationId}`);
