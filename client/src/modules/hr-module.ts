@@ -148,7 +148,7 @@ const updateApplicationStatus = async ({
   const response = await axios.patch(
     `${serverURL}/application/${applicationId}`,
     {
-     "status": true
+      status: true,
     },
     {
       headers: {
@@ -210,13 +210,17 @@ const updateStatusNotification = async ({
   token: string;
 }) => {
   const response = await axios
-    .put(`${serverURL}/notification/hr/${notificationId}`,{
-      status: 1,
-    }, {
-      headers: {
-        authorization: `Bearer ${token}`,
+    .put(
+      `${serverURL}/notification/hr/${notificationId}`,
+      {
+        status: 1,
       },
-    })
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      },
+    )
     .then((res) => {
       // console.log(`${serverURL}/notification/hr/${userId}/${notificationId}`);
       console.log(res);
@@ -259,19 +263,12 @@ const getPosition = async () => {
 };
 // ---
 
-const updateEmployerLicense = async ({
-  formData,
-  token,
-}: {
-  formData: FormData;
-  token: string;
-}) => {
+const updateEmployerLicense = async (formData: FormData, token: string) => {
   const response = await axios
-    .put(`${serverURL}/employer/update/license`, {
+    .put(`${serverURL}/employer/update/license`, formData, {
       headers: {
         authorization: `Bearer ${token}`,
       },
-      formData,
     })
     .then((res) => {
       console.log(res);
@@ -280,9 +277,9 @@ const updateEmployerLicense = async ({
   return response.data;
 };
 
-const getHRById = async ({ userId }: { userId: string }) => {
+const getHRById = async (hrId: string | number) => {
   const response = await axios
-    .get(`${serverURL}/employer/${userId}`)
+    .get(`${serverURL}/employer/${hrId}`)
     .then((res) => {
       return res;
     });
@@ -443,13 +440,18 @@ export async function getCampaign(id: number, page: number = 1) {
   const totalPages = response.data.total_page;
   return { allCampaigns: rawCampaigns, totalPages: totalPages };
 }
-export async function deleteCampaign({id, token}:{id: string, token:string}) {
-  const response = await axios.delete(
-    `${serverURL}/company/campaign/${id}`,{
-      headers: {
-        authorization: `Bearer ${token}`,
-      },}
-  );
+export async function deleteCampaign({
+  id,
+  token,
+}: {
+  id: string;
+  token: string;
+}) {
+  const response = await axios.delete(`${serverURL}/company/campaign/${id}`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
   console.log(response);
   return response;
 }
