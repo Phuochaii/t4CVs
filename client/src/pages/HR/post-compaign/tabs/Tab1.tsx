@@ -138,8 +138,9 @@ function PostCompaign1({
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any, event: any) => {
-    console.log(789);
-    console.log(employer.companyId);
+    console.log(cityOption
+      ? cityOption.map((option) => parseInt(option.value))
+      : [])
     if (!salaryError && !salaryMaxError && employer.companyId !== null) {
       const updatedItem = { ...item };
 
