@@ -387,7 +387,12 @@ function Header() {
                 </a>
                 {isJobsHovered ? (
                   <ul className="absolute left-0 z-50 flex flex-col gap-3 p-3 text-base font-semibold bg-white border rounded-lg shadow-lg sub-menu top-full border-slate-100">
-                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li
+                      onClick={() => {
+                        navigation('/');
+                      }}
+                      className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
+                    >
                       <svg
                         className="w-6 h-6"
                         viewBox="0 0 15 15"
@@ -442,7 +447,7 @@ function Header() {
                     <li>
                       <hr />
                     </li>
-                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 opacity-50 pointer-events-none">
                       <svg
                         className="w-5 h-5"
                         fill="rgb(34 197 94)"
@@ -459,7 +464,7 @@ function Header() {
                       </svg>
                       Việc làm phù hợp
                     </li>
-                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 opacity-50 pointer-events-none">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -470,7 +475,7 @@ function Header() {
                       </svg>
                       Việc làm IT
                     </li>
-                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 opacity-50 pointer-events-none">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -527,7 +532,10 @@ function Header() {
                 {isCVsHovered ? (
                   <ul className="absolute left-0 z-50 flex flex-col gap-3 p-3 text-base font-semibold bg-white border rounded-lg shadow-lg sub-menu top-full border-slate-100">
                     {/* <li><hr /></li> */}
-                    <li  onClick={() => navigation("/template-cv")} className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li
+                      onClick={() => navigation('/template-cv')}
+                      className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
+                    >
                       <svg
                         className="w-7 h-7"
                         viewBox="0 0 24 24"
@@ -551,7 +559,7 @@ function Header() {
                       </svg>
                       Quản lý CV
                     </li>
-                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 opacity-50 pointer-events-none">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -562,7 +570,7 @@ function Header() {
                       </svg>
                       Tải CV lên
                     </li>
-                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 opacity-50 pointer-events-none">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -576,7 +584,7 @@ function Header() {
                     <li>
                       <hr />
                     </li>
-                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 opacity-50 pointer-events-none">
                       <svg
                         className="w-7 h-7"
                         viewBox="0 0 24 24"
@@ -600,7 +608,7 @@ function Header() {
                       </svg>
                       Mẫu CV
                     </li>
-                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 opacity-50 pointer-events-none">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -614,7 +622,7 @@ function Header() {
                     <li>
                       <hr />
                     </li>
-                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 opacity-50 pointer-events-none">
                       <svg
                         className="w-7 h-7"
                         viewBox="0 0 24 24"
@@ -638,7 +646,7 @@ function Header() {
                       </svg>
                       Dịch vụ tư vấn CV
                     </li>
-                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 opacity-50 pointer-events-none">
                       <svg
                         className="w-6 h-6 pl-1"
                         fill="rgb(34 197 94)"
@@ -653,7 +661,7 @@ function Header() {
                       </svg>
                       Hướng dẫn viết CV theo ngành nghề
                     </li>
-                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 opacity-50 pointer-events-none">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -670,7 +678,7 @@ function Header() {
                     <li>
                       <hr />
                     </li>
-                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 opacity-50 pointer-events-none">
                       <svg
                         className="w-6 h-6"
                         fill="rgb(34 197 94)"
@@ -740,7 +748,7 @@ function Header() {
                       </svg>
                       Danh sách công ty
                     </li>
-                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
+                    <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 opacity-50 pointer-events-none">
                       <svg
                         className="w-6 h-6"
                         viewBox="0 0 512 512"
@@ -781,7 +789,7 @@ function Header() {
                 >
                   Công cụ
                 </a>
-                {isToolsHovered ? (
+                {/* {isToolsHovered ? (
                   <div className="grid grid-cols-2 absolute z-50 top-full left-0 w-[720px] font-semibold text-base bg-white border border-slate-100 rounded-lg shadow-lg">
                     <ul className="flex flex-col gap-3 p-3 sub-menu">
                       <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
@@ -1049,7 +1057,7 @@ function Header() {
                   </div>
                 ) : (
                   <></>
-                )}
+                )} */}
               </li>
               <li
                 className="relative py-6 "
@@ -1062,7 +1070,7 @@ function Header() {
                 >
                   Cẩm nang nghề nghiệp
                 </a>
-                {isSupportsHovered ? (
+                {/* {isSupportsHovered ? (
                   <ul className="absolute left-0 z-50 flex flex-col gap-3 p-3 text-base font-semibold bg-white border rounded-lg shadow-lg sub-menu top-full border-slate-100">
                     <li className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200">
                       <svg
@@ -1165,7 +1173,7 @@ function Header() {
                   </ul>
                 ) : (
                   <></>
-                )}
+                )} */}
               </li>
             </ul>
           </nav>
