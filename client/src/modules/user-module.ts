@@ -139,7 +139,7 @@ const getApplications: (token: string) => Promise<{
   jobs: RecruitmentFromServer[];
 }> = async (token: string) => {
   const response = await axios.get(
-    `${serverURL}/application/user?page=1&limit=10&status=false`,
+    `${serverURL}/application/user?page=1&limit=10`,
     {
       headers: {
         authorization: `Bearer ${token}`,

@@ -23,7 +23,7 @@ function Header() {
     // console.log(token);
     UserModule.getNotification({ token })
       .then((res) => {
-        console.log(123, res);
+        // console.log(123, res);
         setNotifications(res.data);
         setTotal(res.pagination.total);
       })
@@ -97,10 +97,10 @@ function Header() {
                       onClick={(e) => {
                         e.preventDefault();
                         UserModule.updateStatusNotification({
-                          userId: userId,
                           notificationId: item.id,
+                          token: token!
                         });
-                        fetchNotification({ id: userId });
+                        fetchNotification();
                         window.open(item.link, '_blank', 'noopener');
                       }}
                       key={index}

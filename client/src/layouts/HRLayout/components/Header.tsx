@@ -230,7 +230,7 @@ function Header({ collapedSidebar }: { collapedSidebar: () => void }) {
                               notificationId: item.id,
                             });
                             fetchNotification({});
-                            // window.open(item.link, "_blank", "noopener");
+                            window.open(item.link, "_blank", "noopener");
                           }}
                           key={index}
                           className={`px-4 py-2 m-0 border-b-gray-200 border ${!item.status ? 'text-black font-medium' : 'text-gray-500'} hover:text-green-500`}
