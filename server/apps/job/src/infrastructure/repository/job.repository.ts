@@ -20,9 +20,7 @@ export class TypeOrmJobRepository extends JobRepository {
   }
 
   async deleteJob(id: number) {
-    const rs = await this.jobRepository.delete(id);
-    console.log(rs);
-    return rs;
+    return await this.jobRepository.delete(id);
   }
 
   async findJobByCampaignId(
@@ -36,6 +34,7 @@ export class TypeOrmJobRepository extends JobRepository {
     });
     if (!job) return null;
     const result: FindJobByCampaignIdDto = {
+      id: job.id,
       titleRecruitment: job.titleRecruitment,
       companyId: job.companyId,
       salaryMax: job.salaryMax,
@@ -58,6 +57,7 @@ export class TypeOrmJobRepository extends JobRepository {
     if (!jobs) return null;
     const result = jobs.map((job) => {
       const result: FindJobByCampaignIdDto = {
+        id: job.id,
         titleRecruitment: job.titleRecruitment,
         companyId: job.companyId,
         salaryMax: job.salaryMax,

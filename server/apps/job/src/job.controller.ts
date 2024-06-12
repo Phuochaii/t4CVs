@@ -5,13 +5,16 @@ import { MessagePattern } from '@nestjs/microservices';
 import { CreateBaseDto } from './domain/dto/Req/createBase.dto';
 import { QueryDTO } from './domain/dto/Req/query.dto';
 import { UpdateJobStatusDto } from './domain/dto/Req/update-job-status.dto';
-import { UpdateJobDTO } from './domain/dto/Req/update-job.dto';
-import { Job } from './domain/entities';
 import { JobAggregate } from './domain/aggregate';
 
 @Controller()
 export class JobController {
   constructor(private readonly jobService: JobService) {}
+
+  @MessagePattern({ cmd: 'delete_job_by_campaignId' })
+  deleteJobByCampaignId(campaignId: number) {
+    return this.jobService.deleteJobByCampaignId(campaignId);
+  }
 
   @MessagePattern({ cmd: 'find_job_by_campaignId' })
   findJobByCampaignId(campaignId: number) {

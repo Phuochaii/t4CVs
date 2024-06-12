@@ -14,6 +14,16 @@ export class JobService {
     private readonly companyService: CompanyService,
   ) {}
 
+  deleteJobByCampaignId(campaignId: number) {
+    return this.jobClient
+      .send({ cmd: 'delete_job_by_campaignId' }, campaignId)
+      .pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
+  }
+
   deleteJob(id: number) {
     return this.jobClient.send({ cmd: 'delete_job' }, id).pipe(
       catchError((error) => {
