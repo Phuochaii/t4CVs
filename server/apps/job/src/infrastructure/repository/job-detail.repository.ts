@@ -25,4 +25,8 @@ export class TypeOrmJobDetailRepository extends JobDetailRepository {
     }
     return true;
   }
+
+  async updateJobDetail(data: JobDetail): Promise<JobDetail> {
+    return await this.jobDetailRepository.save(data);
+  }
 }

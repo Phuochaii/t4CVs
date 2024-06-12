@@ -20,7 +20,9 @@ export class TypeOrmJobRepository extends JobRepository {
   }
 
   async deleteJob(id: number) {
-    return await this.jobRepository.delete(id);
+    const rs = await this.jobRepository.delete(id);
+    console.log(rs);
+    return rs;
   }
 
   async findJobByCampaignId(

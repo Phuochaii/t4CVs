@@ -35,9 +35,11 @@ export class JobService {
     const job = await this.jobRepository.findJobById(id);
     if (!job)
       throw new RpcException(new BadRequestException(`Job doesn't exist!`));
+    await this.jobDetailService.deleteJobDetail(job.jobDetail.id);
     return await this.jobRepository.deleteJob(id);
   }
   async updateJob(data: JobAggregate) {
+    await this.jobDetailService.updateJobDetail(data.jobDetail);
     return await this.jobRepository.saveJob(data);
   }
 
