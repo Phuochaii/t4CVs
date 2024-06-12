@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { ApplicationService } from './application.service';
 import { CompanyModule } from '../company/company.module';
 import { NotificationModule } from '../notification/notification.module';
@@ -24,14 +24,15 @@ import { JobModule } from '../job/job.module';
         },
       },
     ]),
-    CompanyModule,
     NotificationModule,
     UserModule,
     CVModule,
     EmployerModule,
-    JobModule,
+    forwardRef(() => JobModule),
+    forwardRef(() => CompanyModule),
   ],
   controllers: [ApplicationController],
   providers: [ApplicationService],
+  exports: [ApplicationService],
 })
 export class ApplicationModule {}

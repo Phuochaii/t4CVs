@@ -9,6 +9,7 @@ import {
   Inject,
   Injectable,
   OnModuleInit,
+  forwardRef,
 } from '@nestjs/common';
 
 import { ClientGrpc } from '@nestjs/microservices';
@@ -34,7 +35,9 @@ export class ApplicationService implements OnModuleInit {
     private readonly cvService: CVService,
     private readonly notificationService: NotificationService,
     private readonly employerService: EmployerService,
+    @Inject(forwardRef(() => CompanyService))
     private readonly companyService: CompanyService,
+    @Inject(forwardRef(() => JobService))
     private readonly jobService: JobService,
   ) {}
 

@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { CreateJobDto } from './dto/Req/createJob.dto';
 import { Observable, catchError, lastValueFrom, throwError } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
@@ -11,6 +16,7 @@ import { UpdateJobDTO } from './dto/Req/update-job.dto';
 export class JobService {
   constructor(
     @Inject('JOB') private readonly jobClient: ClientProxy,
+    @Inject(forwardRef(() => CompanyService))
     private readonly companyService: CompanyService,
   ) {}
 
