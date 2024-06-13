@@ -11,10 +11,15 @@ service ApplicationService {
   rpc ReadAllApplicationByUserId (ReadAllApplicationByUserIdRequest) returns (Applications) {}
   rpc UpdateApplication (UpdateApplicationRequest) returns (Application) {}
   rpc DeleteApplication (DeleteApplicationRequest) returns (Empty) {}
+  rpc DeleteApplicationByCampaignId (DeleteApplicationbyCampaignIdRequest) returns (Empty) {}
 }
 
 message DeleteApplicationRequest {
     int32 id = 1;
+}
+
+message DeleteApplicationbyCampaignIdRequest {
+  int32 campaignId = 1;
 }
 
 message ReadApplicationRequest {

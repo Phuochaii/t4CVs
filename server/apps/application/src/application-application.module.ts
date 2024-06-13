@@ -9,6 +9,7 @@ import {
   GetAllByCampaignIdApplicationService,
   GetByUserIdApplicationService,
   GetByUserIdPaginationApplicationService,
+  DelApplicationService,
 } from './domain/service';
 import { NotificationPersistenceModule } from './infrastructure/application-persistence.module';
 import { ApplicationRepository } from './domain/repository';
@@ -75,6 +76,13 @@ import { ApplicationRepository } from './domain/repository';
       inject: [ApplicationRepository],
     },
     {
+      provide: DelApplicationService,
+      useFactory: (applicationRepository: ApplicationRepository) => {
+        return new DelApplicationService(applicationRepository);
+      },
+      inject: [ApplicationRepository],
+    },
+    {
       provide: ApplicationApplication,
       useFactory: (
         createApplicationService: CreateApplicationService,
@@ -85,6 +93,7 @@ import { ApplicationRepository } from './domain/repository';
         getAllByCampaignIdApplication: GetAllByCampaignIdApplicationService,
         getByUserIdApplication: GetByUserIdApplicationService,
         getByUserIdPaginationApplication: GetByUserIdPaginationApplicationService,
+        delApplicationService: DelApplicationService,
       ) => {
         return new ApplicationApplication(
           createApplicationService,
@@ -95,6 +104,7 @@ import { ApplicationRepository } from './domain/repository';
           getAllByCampaignIdApplication,
           getByUserIdApplication,
           getByUserIdPaginationApplication,
+          delApplicationService,
         );
       },
       inject: [
@@ -106,6 +116,7 @@ import { ApplicationRepository } from './domain/repository';
         GetAllByCampaignIdApplicationService,
         GetByUserIdApplicationService,
         GetByUserIdPaginationApplicationService,
+        DelApplicationService,
       ],
     },
   ],
