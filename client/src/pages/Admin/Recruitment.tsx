@@ -133,7 +133,6 @@ function Recruitment() {
   const [refresh, setRefresh] = useState(false);
   const { token } = useProfileContext();
   const [searchText, setSearchText] = useState('');
-  // console.log(token);
 
   useEffect(() => {
     const getAllRecruitments = async () => {
@@ -141,7 +140,6 @@ function Recruitment() {
         searchText == ''
           ? await getAllJobs(token, page)
           : await findJobRecruitmentByName(token, page, undefined, searchText);
-      console.log(allJobs);
 
       const stats = await getJobsStat(token);
       setJobStats(stats);
@@ -167,7 +165,6 @@ function Recruitment() {
           campaign: campaign,
           applications: applications,
         };
-        // console.log(rawRecruitment);
         return rawRecruitment;
       });
       setData(await Promise.all(rawRecruitments));

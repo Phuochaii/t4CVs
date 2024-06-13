@@ -51,18 +51,14 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [applicants, setApplicants] = useState<(UserFromServer | null)[]>([]);
   const campaign = data;
-  // console.log(data);
   const { token } = useProfileContext();
   const navigation = useNavigate();
-  // console.log(token); //Có token
 
   useEffect(() => {
     async function getUsers() {
       const applicantPromises = campaign.applications.map(
         async (application) => {
-          // console.log('Applications', application);
           const applicant = await getUserById(token, application.userId);
-          console.log(applicant);
           return applicant;
         },
       );
@@ -70,7 +66,6 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
     }
     getUsers();
   }, []);
-  // console.log('Applicants', applicants);
   return (
     <tr
       className="align-top hover:bg-green-100 bg-slate-50"
@@ -202,7 +197,6 @@ function Campaign() {
   const [totalPages, setTotalPages] = useState(0);
   const { token } = useProfileContext();
   const [searchText, setSearchText] = useState('');
-  // console.log(token); //Có token
 
   useEffect(() => {
     async function getData() {
@@ -210,7 +204,6 @@ function Campaign() {
         searchText == ''
           ? await getAllCampaigns(page)
           : await findCampaignByName(token, searchText, page);
-      // console.log(allCampaigns);
       if (allCampaigns) {
         const rawCampaigns = await allCampaigns.map(async (item) => {
           const employer = await getEmployerById(item.employerId);
@@ -245,7 +238,6 @@ function Campaign() {
       }
     }
     getData();
-    console.log('GO');
   }, [page, searchText]);
 
   const handleSearch = (e) => {

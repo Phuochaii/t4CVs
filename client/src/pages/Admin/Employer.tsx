@@ -28,7 +28,6 @@ function Employer() {
   const [refresh, setRefresh] = useState(false);
   const [searchText, setSearchText] = useState('');
   const { token } = useProfileContext();
-  // console.log(token); //Có token
 
   useEffect(() => {
     async function getData() {
@@ -41,7 +40,6 @@ function Employer() {
         total: number;
         totalPages: number;
       } = await getAllEmployer(token, page); // Cấn authen
-      console.log(allEmployers);
       const allEmployersWithCompany = allEmployers.map(async (employer) => {
         const company = employer.companyId
           ? await getCompanyById(employer.companyId)
@@ -57,7 +55,6 @@ function Employer() {
       }: {
         employers: EmployerFromServer[];
       } = await findEmployerByName(searchText, page);
-      console.log(employers);
       setEmployers(employers);
     }
     if (searchText == '') {

@@ -39,6 +39,7 @@ import {
   AUTH0_BACKEND_AUDIENCE,
   AUTH0_CLIENT_ID,
 } from '../../shared/services/authen/infrastructure/config';
+import { successToast } from '../../utils/toast';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -275,7 +276,7 @@ function HRProfileRegister() {
         cacheMode: 'off',
       }),
     })
-      .then(() => console.log('Success register profile'))
+      .then(() => successToast('Success register profile'))
       .then(() => setErrorMessage(''))
       .then(() => setShowSuccessMessage(true))
       .then(() => setRole(Roles.HR))

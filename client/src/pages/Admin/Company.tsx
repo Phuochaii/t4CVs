@@ -28,7 +28,6 @@ function Company() {
   const [refresh, setRefresh] = useState(false);
   const [searchText, setSearchText] = useState('');
   const { token } = useProfileContext();
-  // console.log(token);
 
   useEffect(() => {
     async function getData() {
@@ -52,7 +51,6 @@ function Company() {
       }: {
         companies: CompanyFromServer[];
       } = await findCompanyByName(searchText, page);
-      console.log(companies);
       setCompanies(companies);
     }
     if (searchText == '') {

@@ -29,7 +29,6 @@ function Overview() {
         totalPages: number;
       } = await getAllEmployer(token, 1, 0);
       setTotalEmployer(total);
-      console.log(allEmployers);
     }
 
     const getJobStats = async () => {

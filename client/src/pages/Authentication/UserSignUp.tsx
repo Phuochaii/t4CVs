@@ -108,7 +108,6 @@ function UserSignUp() {
 
     if (errorCount === 0) {
       // Lưu thông tin tài khoản vào Local Storage hoặc gửi đến server
-      console.log('Đăng ký thành công.');
       setShowSuccessMessage(true); // Hiển thị thông báo khi đăng ký thành công
       register(
         {

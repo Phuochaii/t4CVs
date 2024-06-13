@@ -6,6 +6,7 @@ import { updateCompanyStatus } from '../../modules/admin-module';
 import { CompanyFromServer } from '../../shared/types/Company.type';
 import { CheckCheck } from 'lucide-react';
 import { useProfileContext } from '../../shared/services/authen/domain/context';
+import { errorToast } from '../../utils/toast';
 
 function CompanyDetail() {
   const navigation = useNavigate();
@@ -25,10 +26,9 @@ function CompanyDetail() {
   const fetchCompanyInfo = async (id: string) => {
     try {
       const response = await getCompanyById(id);
-      // console.log(response);
       setCompanyInfo(response);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      return errorToast(`Error fetching data: ${error}`);
     }
   };
   return (
