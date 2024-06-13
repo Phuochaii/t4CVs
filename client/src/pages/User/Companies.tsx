@@ -11,7 +11,7 @@ import useCustomPagination from '../../utils/useCustomPagination';
 
 function Companies() {
   const [searchText, setSearchText] = useState('');
-  const [companies, setCompanies] = useState([]);
+  const [companies, setCompanies] = useState<CompanyFromServer[]>([]);
   // const [totalPages, setTotalPages] = useState(0);
   // const [page, setPage] = useState(1);
 

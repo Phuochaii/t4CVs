@@ -1,7 +1,6 @@
 // Hùng
 import { useEffect, useState } from 'react';
 import { Switch } from '@mui/material';
-import Avatar from '../../shared/assets/images/vietnam-flag-icon.png';
 import { Check, CircleAlert } from 'lucide-react';
 import { CurrencyDollarIcon } from '@heroicons/react/20/solid';
 import Select from 'react-select';

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   FormControl,
   FormControlLabel,
@@ -7,15 +7,15 @@ import {
   Radio,
   RadioGroup,
   Select,
-} from "@mui/material";
+} from '@mui/material';
 
-import CVPageImage from "../../shared/assets/images/list-cv-page.png";
-import CVCard from "../../shared/components/CVCard";
+import CVPageImage from '../../shared/assets/images/list-cv-page.png';
+import CVCard from '../../shared/components/CVCard';
 
 const ListCV = () => {
   const [selected, setSelected] = useState<number | null>(null);
-  const [language, setLanguage] = useState("");
-  const [designStyle, setDesignStyle] = useState("");
+  const [language, setLanguage] = useState('');
+  const [designStyle, setDesignStyle] = useState('');
 
   const handleLanguageChange = (event: any) => {
     setLanguage(event.target.value);
@@ -34,9 +34,9 @@ const ListCV = () => {
   }
   const fakeData = [
     {
-      cv: "https://picsum.photos/200",
-      tag: ["Thanh Lịch", "Cổ Điển"],
-      name: "John Doe",
+      cv: 'https://picsum.photos/200',
+      tag: ['Thanh Lịch', 'Cổ Điển'],
+      name: 'John Doe',
     },
   ];
 
@@ -48,22 +48,22 @@ const ListCV = () => {
       <div
         className="w-4/5 items-center"
         style={{
-          maxWidth: "1130px",
-          paddingLeft: "15px",
-          paddingRight: "15px",
+          maxWidth: '1130px',
+          paddingLeft: '15px',
+          paddingRight: '15px',
         }}
       >
         {/*Chọn loại CV*/}
         <div className="border-b border-gray-300 flex flex-row">
           <div
             className={`border-b w-1/6 text-lg px-2 py-4 cursor-pointer ${
-              selected === 1 ? "border-green-600" : "border-gray-100"
+              selected === 1 ? 'border-green-600' : 'border-gray-100'
             }`}
             onClick={() => handleSelect(1)}
           >
             <h1
               className={`text-center font-bold ${
-                selected === 1 ? "text-green-500" : "text-gray-500"
+                selected === 1 ? 'text-green-500' : 'text-gray-500'
               }`}
             >
               Mẫu CV theo style
@@ -71,13 +71,13 @@ const ListCV = () => {
           </div>
           <div
             className={`border-b w-1/4 text-lg px-2 py-4 cursor-pointer ${
-              selected === 2 ? "border-green-600" : "border-gray-100"
+              selected === 2 ? 'border-green-600' : 'border-gray-100'
             }`}
             onClick={() => handleSelect(2)}
           >
             <h1
               className={`text-center font-bold ${
-                selected === 2 ? "text-green-500" : "text-gray-500"
+                selected === 2 ? 'text-green-500' : 'text-gray-500'
               }`}
             >
               Mẫu CV theo vị trí ứng tuyển
@@ -98,9 +98,9 @@ const ListCV = () => {
                   label="Ngôn ngữ"
                   onChange={handleLanguageChange}
                 >
-                  <MenuItem value={"tiengviet"}>Tiếng Việt</MenuItem>
-                  <MenuItem value={"english"}>Tiếng Anh</MenuItem>
-                  <MenuItem value={"japanese"}>Tiếng Nhật</MenuItem>
+                  <MenuItem value={'tiengviet'}>Tiếng Việt</MenuItem>
+                  <MenuItem value={'english'}>Tiếng Anh</MenuItem>
+                  <MenuItem value={'japanese'}>Tiếng Nhật</MenuItem>
                 </Select>
               </FormControl>
             </div>

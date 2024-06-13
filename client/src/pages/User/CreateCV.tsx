@@ -4,17 +4,17 @@ import {
   BookOpen,
   HelpCircle,
   Briefcase,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { Resume } from "../../shared/components/ResumeBuilder/Resume";
-import { ResumeForm } from "../../shared/components/ResumeBuilder/ResumeForm";
-import { useAppSelector } from "../../utils/redux/hooks";
-import { selectSettings } from "../../utils/redux/settingsSlice";
+import { Resume } from '../../shared/components/ResumeBuilder/Resume';
+import { ResumeForm } from '../../shared/components/ResumeBuilder/ResumeForm';
+import { useAppSelector } from '../../utils/redux/hooks';
+import { selectSettings } from '../../utils/redux/settingsSlice';
 
 import {
   useRegisterReactPDFFont,
   useRegisterReactPDFHypenationCallback,
-} from "../../shared/components/ResumeBuilder/fonts/hooks";
+} from '../../shared/components/ResumeBuilder/fonts/hooks';
 
 function CreateCV() {
   const settings = useAppSelector(selectSettings);

@@ -8,11 +8,10 @@ import { DefaultPagination } from '../../shared/components/default-pagination';
 import {
   ChevronRightIcon,
   ChevronLeftIcon,
-  XMarkIcon,
   HeartIcon,
 } from '@heroicons/react/24/solid';
 import SearchBoxComponent from '../../layouts/UserLayout/components/SearchBoxComponent';
-import { salary_range } from '../../shared/utils/constant';
+// import { salary_range } from '../../shared/utils/constant';
 import SingleDropdown from '../../shared/components/SingleDropDown';
 import { SingleValue } from 'react-select';
 import FPT from '../../shared/assets/images/FPT.jpg';
@@ -271,26 +270,26 @@ function Home() {
     value: string;
     label: string;
   }> | null>(null);
-  const SelectSalary = (value: number) => {
-    if (value !== 0) {
-      const foundRange = salary_range.find(
-        (range) => Number(range.value) === value,
-      );
-      if (foundRange) {
-        setFilter((prevFilter) => ({
-          ...prevFilter,
-          salaryMin: foundRange.minSalary,
-          salaryMax: foundRange.maxSalary,
-        }));
-      }
-    } else {
-      setFilter((prevFilter) => ({
-        ...prevFilter,
-        salaryMin: 0,
-        salaryMax: 0,
-      }));
-    }
-  };
+  // const SelectSalary = (value: number) => {
+  //   if (value !== 0) {
+  //     const foundRange = salary_range.find(
+  //       (range) => Number(range.value) === value,
+  //     );
+  //     if (foundRange) {
+  //       setFilter((prevFilter) => ({
+  //         ...prevFilter,
+  //         salaryMin: foundRange.minSalary,
+  //         salaryMax: foundRange.maxSalary,
+  //       }));
+  //     }
+  //   } else {
+  //     setFilter((prevFilter) => ({
+  //       ...prevFilter,
+  //       salaryMin: 0,
+  //       salaryMax: 0,
+  //     }));
+  //   }
+  // };
 
   useEffect(() => {
     setInterval(vip_company_next, autoSlideInterval);
@@ -459,7 +458,7 @@ function Home() {
                 onChange={(
                   e: SetStateAction<
                     SingleValue<{ value: string; label: string }>
-                  >
+                  >,
                 ) => setOptions(e)}
               />
             </div>
@@ -473,7 +472,7 @@ function Home() {
               {data.map((e) => {
                 return (
                   <button
-                    className={`px-4 py-2 rounded-full ${selectedKey === e.label ? "bg-green-500 text-white" : "bg-gray-200 text-black"} border hover:border-green-500`}
+                    className={`px-4 py-2 rounded-full ${selectedKey === e.label ? 'bg-green-500 text-white' : 'bg-gray-200 text-black'} border hover:border-green-500`}
                     onClick={() => setSelectedKey(e.value)}
                   >
                     {e.label}
@@ -640,7 +639,7 @@ function Home() {
                               src={
                                 item.company?.image
                                   ? item.company?.image
-                                  : "no "
+                                  : 'no '
                               }
                             />
                           </div>
@@ -659,20 +658,20 @@ function Home() {
                             <span className="job-company-name text-slate-600 text-sm col-span-3 mb-2">
                               {item.company?.name
                                 ? item.company?.name
-                                : "no name"}
+                                : 'no name'}
                             </span>
                             <div className="job-action row-start-4 flex flex-row items-end justify-between">
                               <div className="job-detail flex flex-col gap-1">
                                 <div className="job-salary_range p-1 rounded bg-slate-200 text-slate-900 text-xs font-medium">
                                   {item.salaryMin == 0 && item.salaryMax == 0
-                                    ? "Thoả thuận"
-                                    : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{" "}
+                                    ? 'Thoả thuận'
+                                    : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{' '}
                                 </div>
                                 <div className="job-location p-1 rounded bg-slate-200 text-slate-900 text-xs font-medium">
                                   {item.locations[0]?.name}
                                   {item.locations.length > 1
                                     ? ` & ${item.locations.length - 1} nơi khác`
-                                    : ""}
+                                    : ''}
                                 </div>
                               </div>
                               <span className="btn-save p-2">

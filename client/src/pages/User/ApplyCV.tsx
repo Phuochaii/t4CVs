@@ -9,7 +9,6 @@ import SearchBoxComponent from '../../layouts/UserLayout/components/SearchBoxCom
 import RelatedJobComponent from '../../layouts/UserLayout/components/RelatedJobComponent';
 import InterestedJobComponent from '../../layouts/UserLayout/components/InterestedJobComponent';
 import { getAllExp, getAllLocation, getJobById } from '../../modules/helper';
-import { AUTH0_BACKEND_AUDIENCE } from '../../shared/services/authen/infrastructure/config';
 import { uploadApplication, uploadCV } from '../../modules/user-module';
 import { useProfileContext } from '../../shared/services/authen/domain/context';
 import Loading from '../../shared/components/Loading/Loading';

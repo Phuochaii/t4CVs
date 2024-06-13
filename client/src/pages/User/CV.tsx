@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Switch, colors } from '@mui/material';
+import { Switch } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Search, Check, CircleAlert } from 'lucide-react';
 
