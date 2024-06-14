@@ -15,6 +15,10 @@ function Application({ compaignId }: { compaignId: string }) {
   const [campaign, setCampaign] = React.useState<CampaignFromServer | null>(
     null,
   );
+  const [refresh, setRefresh] = React.useState<boolean>(false);
+  const setRefreshData = () => {
+    setRefresh(!refresh);
+  };
   const { token } = useProfileContext();
   const fetchCompaign = async () => {
     HRModule.getCampaignById({ id: compaignId }).then((res) => {
@@ -38,7 +42,7 @@ function Application({ compaignId }: { compaignId: string }) {
   }, []);
   React.useEffect(() => {
     fetchApplication();
-  }, [page]);
+  }, [page, refresh]);
 
   return listCV.length == 0 ? (
     <div className="flex justify-center items-center flex-col p-5">
@@ -53,6 +57,7 @@ function Application({ compaignId }: { compaignId: string }) {
         <ReceivedCVTable
           data={listCV}
           hasCampaignColumn={false}
+          setRefreshData={setRefreshData}
           // compaigns={[{ name: campaign.name, value: campaign.id }]}
         />
       )}

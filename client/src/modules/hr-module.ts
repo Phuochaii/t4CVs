@@ -141,14 +141,16 @@ const getAllCompaignByHrId = async ({ token }: { token: string }) => {
 const updateApplicationStatus = async ({
   applicationId,
   token,
+  status,
 }: {
   applicationId: number;
   token: string;
+  status: boolean;
 }) => {
   const response = await axios.patch(
     `${serverURL}/application/${applicationId}`,
     {
-      status: true,
+      status: status,
     },
     {
       headers: {

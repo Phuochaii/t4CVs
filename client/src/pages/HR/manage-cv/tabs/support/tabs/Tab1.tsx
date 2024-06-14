@@ -10,8 +10,12 @@ function Tab1({ compaignId }: { compaignId: string }) {
     undefined,
   );
   const [page, setPage] = React.useState<number>(1);
+  const [refresh, setRefresh] = React.useState<boolean>(false);
   const [totalPage, setTotalPage] = React.useState<number>(1);
   const { token } = useProfileContext();
+  const setRefreshData = () => {
+    setRefresh(!refresh);
+  };
   const fetchApplication = async () => {
     HRModule.getApplicationByCampaignIdHRId({
       campaignId: compaignId,
@@ -30,7 +34,7 @@ function Tab1({ compaignId }: { compaignId: string }) {
   }, []);
   React.useEffect(() => {
     fetchApplication();
-  }, [statusMode, page]);
+  }, [statusMode, page, refresh, compaignId]);
   return (
     <div>
       <div className="flex justify-end px-4">
@@ -63,7 +67,11 @@ function Tab1({ compaignId }: { compaignId: string }) {
         </div>
       ) : (
         <div className="p-5">
-          <ReceivedCVTable data={listCV} hasCampaignColumn={false} />
+          <ReceivedCVTable
+            data={listCV}
+            hasCampaignColumn={false}
+            setRefreshData={setRefreshData}
+          />
           <div className="flex justify-center mt-5">
             <DefaultPagination
               totalPage={totalPage}

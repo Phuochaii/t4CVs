@@ -24,7 +24,11 @@ function ReceiveCV() {
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
   const [compaignList, setCompaignList] = React.useState<NameValue[]>([]);
+  const [refresh, setRefresh] = React.useState<boolean>(false);
 
+  const setRefreshData = () => {
+    setRefresh(!refresh);
+  };
   const fetchApplication = ( compaignId: string) => {
     HRModule.getApplicationByCampaignIdHRId({
       campaignId: compaignId,
@@ -59,8 +63,8 @@ function ReceiveCV() {
   }, []);
 
   React.useEffect(() => {
-    fetchApplication( !campaign ? '' : campaign.value);
-  }, [campaign, receivedCvState, page]);
+    fetchApplication(!campaign ? '' : campaign.value);
+  }, [campaign, receivedCvState, page, refresh]);
 
   return (
     <div className="flex flex-col items-center overflow-x-hidden">
@@ -187,7 +191,11 @@ function ReceiveCV() {
             </div>
           ) : (
             <div className="p-5">
-              <ReceivedCVTable data={listCV} compaigns={compaignList} />
+              <ReceivedCVTable
+                data={listCV}
+                compaigns={compaignList}
+                setRefreshData={setRefreshData}
+              />
               <div className="flex justify-center mt-5">
                 <DefaultPagination
                   totalPage={totalPage}
