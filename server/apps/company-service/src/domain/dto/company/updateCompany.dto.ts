@@ -1,7 +1,7 @@
 export class UpdateCompanyDTO {
   id: number;
-  //   field: number;
-  //   taxCode: string;
+  field: number;
+  taxCode: string;
   //   name: string;
   website: string;
   image: string;
@@ -9,5 +9,4 @@ export class UpdateCompanyDTO {
   phone: string;
   companySize: number;
   description: string;
-  status: boolean;
 }

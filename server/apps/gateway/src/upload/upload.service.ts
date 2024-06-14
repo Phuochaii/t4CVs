@@ -70,6 +70,11 @@ export class UploadService {
     }
   }
 
+  async uploadFiles(files: any[]): Promise<string[]> {
+    const uploadPromises = files.map((file) => this.upload(file));
+    return await Promise.all(uploadPromises);
+  }
+
   async download(s3Link: string, res: Response): Promise<void> {
     try {
       const linkParts = s3Link.split('/');

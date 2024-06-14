@@ -1,8 +1,9 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { CompanySchema, CampaignSchema } from '../schema';
+import { CompanySchema, CampaignSchema, FieldSchema } from '../schema';
 import { campaigns } from './data-campaign';
 import { companies } from './data-company';
+import { fields } from './data-field';
 
 const DB_NOT_EXIST_ERROR_CODE = '3D000';
 export type DatabaseOptions = TypeOrmModuleOptions & { database: string };
@@ -54,11 +55,12 @@ export class DatabaseConfiger {
   private async insertData() {
     const option = {
       ...this.defaultConfig,
-      entities: [CompanySchema, CampaignSchema],
+      entities: [CompanySchema, CampaignSchema, FieldSchema],
     } as DataSourceOptions;
     await doCallbackWithAutoCloseConnection(option, async (dataSource) => {
       await dataSource.getRepository(CampaignSchema).insert(campaigns);
       await dataSource.getRepository(CompanySchema).insert(companies);
+      await dataSource.getRepository(FieldSchema).insert(fields);
     });
   }
 

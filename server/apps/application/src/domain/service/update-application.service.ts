@@ -1,13 +1,20 @@
-import { BaseService } from './base.service';
-import { ApplicationRepository } from '../repository';
+import { BaseService } from '@app/common/domain';
 import { Application } from '../entity';
+import { ApplicationWriteRepository } from '../repository';
+import { UpdateApplicationDto } from '../dto';
 
 export class UpdateApplicationService implements BaseService<Application> {
-  constructor(private readonly applicationRepository: ApplicationRepository) {}
+  constructor(private readonly writeRepository: ApplicationWriteRepository) {}
 
-  async execute(ApplicationDto): Promise<Application> {
-    const updateApplication =
-      await this.applicationRepository.updateApplication(ApplicationDto);
-    return updateApplication;
+  async execute(
+    request: UpdateApplicationDto,
+  ): Promise<Application | null> {
+    const applicaion = await this.writeRepository.getById(request.id);
+    if (!applicaion) {
+      return null;
+    }
+    applicaion.updateStatus(request.status);
+    await this.writeRepository.save(applicaion);
+    return applicaion;
   }
 }

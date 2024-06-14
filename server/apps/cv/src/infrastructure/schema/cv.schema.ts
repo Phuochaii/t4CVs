@@ -8,8 +8,8 @@ export class CvSchema implements _ {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar', { nullable: true })
-  userId: string | null;
+  @Column('varchar')
+  userId: string;
 
   @Column('int', { nullable: true })
   templateId: number | null;
@@ -17,12 +17,12 @@ export class CvSchema implements _ {
   @Column('varchar')
   link: string;
 
-  @Column({ type: 'date', nullable: true })
-  createdAt: string | null;
+  @Column({ type: 'timestamp without time zone' })
+  createdAt: string;
 
   @Column({ default: false })
   isPublic: boolean;
 
-  @Column({ type: 'date', nullable: true })
-  lastModified: string | null;
+  @Column({ type: 'timestamp without time zone' })
+  lastModified: string;
 }

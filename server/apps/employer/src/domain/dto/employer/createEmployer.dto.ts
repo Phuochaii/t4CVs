@@ -4,7 +4,11 @@ export class CreateEmployerDTO
   implements
     Omit<
       Employer,
-      'companyId' | 'license' | 'licenseStatus' | 'phoneNumberStatus'
+      | 'companyId'
+      | 'license'
+      | 'licenseStatus'
+      | 'phoneNumberStatus'
+      | 'supplement'
     >
 {
   id: string;

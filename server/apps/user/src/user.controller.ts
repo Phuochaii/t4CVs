@@ -1,7 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { UserService } from './domain/user.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { CreateUserDTO } from './domain/dto/Req';
+import { CreateUserDTO, QueryDTO } from './domain/dto/Req';
+import { UpdateUserDTO } from './domain/dto/Req/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -11,16 +12,27 @@ export class UserController {
   findById(id: string) {
     return this.userService.findById(id);
   }
-
+  // a
   @MessagePattern({ cmd: 'create_user' })
-  create(user: CreateUserDTO) {
-    return this.userService.createUser(user);
+  async create(user: CreateUserDTO) {
+    return await this.userService.createUser(user);
+  }
+
+  @MessagePattern({ cmd: 'update_user' })
+  async update(updateUserDTO: UpdateUserDTO) {
+    return await this.userService.updateUser(updateUserDTO);
   }
 
   @MessagePattern({ cmd: 'find_all_users' })
-  findAll() {
-    return this.userService.findAll();
+  findAll(query: QueryDTO) {
+    return this.userService.findAll(query);
   }
+
+  @MessagePattern({ cmd: 'check_user' })
+  check(id: string) {
+    return this.userService.check(id);
+  }
+
   @MessagePattern({ cmd: 'is_user_exist' })
   isUserExist(id: string) {
     return this.userService.isUserExist(id);

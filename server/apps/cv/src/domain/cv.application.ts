@@ -23,12 +23,20 @@ export class CvApplication {
     return await this.createCvService.execute(request);
   }
 
-  async updateCv(request: UpdateCvDto): Promise<Cv> {
-    return await this.updateCvService.execute(request);
+  async updateCv(request: UpdateCvDto): Promise<any> {
+    const result = await this.updateCvService.execute(request);
+    if (!result) {
+      return 'Id does not exist';
+    }
+    return result;
   }
 
-  async getCv(request: GetCvDto): Promise<Cv> {
-    return await this.getCvService.execute(request);
+  async getCv(request: GetCvDto): Promise<any> {
+    const result = await this.getCvService.execute(request);
+    if (!result) {
+      return 'Id does not exist';
+    }
+    return result;
   }
 
   async getAllCv(): Promise<Cv[]> {
@@ -39,7 +47,11 @@ export class CvApplication {
     return await this.getArrayCvService.execute(request);
   }
 
-  async deleteCv(request: GetCvDto): Promise<Cv> {
-    return await this.deleteCvService.execute(request);
+  async deleteCv(request: GetCvDto): Promise<any> {
+    const result = await this.deleteCvService.execute(request);
+    if (!result) {
+      return 'Id does not exist';
+    }
+    return result;
   }
 }

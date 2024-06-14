@@ -3,7 +3,7 @@ export class CreateCompanyDto {
   taxCode: string;
   name: string;
   website: string;
-  image: string;
+  image?: string;
   address: string;
   phone: string;
   companySize: number;

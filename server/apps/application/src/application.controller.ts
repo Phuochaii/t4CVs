@@ -11,86 +11,48 @@ import {
   ReadAllApplicationByCampaignIdRequest,
   ReadAllApplicationByUserIdRequest,
 } from '@app/common/proto/application';
-import { ApplicationApplication } from './domain/application.application';
+import { CommandService } from './cqrs/command.service';
+import { QueryService } from './cqrs/query.service';
 
 @Controller()
 @ApplicationServiceControllerMethods()
 export class ApplicationController implements ApplicationServiceController {
   constructor(
-    private readonly applicationApplication: ApplicationApplication,
+    private readonly commandService: CommandService,
+    private readonly queryService: QueryService,
   ) {}
 
   createApplication(request: CreateApplicationRequest) {
-    const res = this.applicationApplication.createApplication(request);
+    const res = this.commandService.createApplication(request);
     return res;
   }
 
   readApplication(request: ReadApplicationRequest) {
-    const res = this.applicationApplication.getApplication(request);
-    // console.log(cre);
+    const res = this.queryService.getApplication(request);
     return res;
   }
 
   async readAllApplicationByCampaignId(
     request: ReadAllApplicationByCampaignIdRequest,
-  ): Promise<Applications> {
-    const campaignIds = request.campaignIds;
-    const total_data =
-      this.applicationApplication.getAllByCampaignIdApplication({
-        campaignIds,
-      });
-    // console.log(total_data);
-    const total = (await total_data).length;
-    const data =
-      await this.applicationApplication.getByCampaignIdApplication(request);
-    // console.log(total);
-
-    const total_pages = Math.ceil(total / request.limit);
-    return {
-      page: request.page,
-      limit: request.limit,
-      total: total,
-      totalPage: total_pages,
-      applications: data,
-    };
+  ) {
+    return await this.queryService.getByCampaignIdApplication(request);
   }
 
-  async readAllApplicationByUserId(
-    request: ReadAllApplicationByUserIdRequest,
-  ): Promise<Applications> {
-    const userId = request.userId;
-    const status = request.status;
-    const total_data = await this.applicationApplication.getByUserIdApplication(
-      {
-        userId,
-        status,
-      },
-    );
-    const total = total_data.length;
-    const data =
-      await this.applicationApplication.getByUserIdPaginationApplication(
-        request,
-      );
-
-    const total_pages = Math.ceil(total / request.limit);
-    return {
-      page: request.page,
-      limit: request.limit,
-      total: total,
-      totalPage: total_pages,
-      applications: data,
-    };
+  async readAllApplicationByUserId(request: ReadAllApplicationByUserIdRequest) {
+    return await this.queryService.getByUserIdPaginationApplication(request);
   }
 
   async readAllApplication(request: Pagination): Promise<Applications> {
+    request;
     return null;
   }
 
   updateApplication(request: UpdateApplicationRequest) {
-    return this.applicationApplication.updateApplication(request);
+    return this.commandService.updateApplication(request);
   }
 
   deleteApplication(request: DeleteApplicationRequest) {
+    request;
     return null;
   }
 }

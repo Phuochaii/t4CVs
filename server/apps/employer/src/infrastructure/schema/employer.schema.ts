@@ -1,6 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { Employer } from '../../domain/entity';
-import { PositionSchema } from './position.schema';
 
 interface _ extends Employer {}
 
@@ -14,8 +13,7 @@ export class EmployerSchema implements _ {
   @Column()
   gender: string;
 
-  @ManyToOne(() => PositionSchema)
-  @JoinColumn()
+  @Column()
   positionId: number;
 
   @Column({ nullable: true })
@@ -34,4 +32,6 @@ export class EmployerSchema implements _ {
   phoneNumberStatus: boolean;
   @Column({ nullable: true })
   image: string;
+  @Column({ nullable: true })
+  supplement: string;
 }

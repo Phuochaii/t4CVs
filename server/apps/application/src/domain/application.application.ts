@@ -1,10 +1,10 @@
 import {
   CreateApplicationDto,
-  GetApplicationDto,
+  GetApplicationByIdDto,
   GetAllApplicationsDto,
   UpdateApplicationDto,
-  GetByCampaignIdApplicationDto,
-  GetAllByCampaignIdApplicationDto,
+  GetByCampaignIdWithPaginationDto,
+  GetByCampaignIdDto,
   GetByUserIdApplicationDto,
   GetByUserIdPaginationApplicationDto,
 } from './dto';
@@ -13,21 +13,23 @@ import {
   GetApplicationService,
   GetAllApplicationService,
   UpdateApplicationService,
-  GetByCampaignIdApplicationService,
-  GetAllByCampaignIdApplicationService,
+  GetByCampaignIdWithPaginationService,
+  GetByCampaignIdService,
   GetByUserIdApplicationService,
   GetByUserIdPaginationApplicationService,
 } from './service';
 import { Application } from './entity';
+import { RpcException } from '@nestjs/microservices';
+import { Applications } from '@app/common/proto/application';
 
-export class ApplicationApplication {
+export class ApplicationDomain {
   constructor(
     private readonly createApplicationService: CreateApplicationService,
     private readonly getApplicationService: GetApplicationService,
     private readonly getAllApplicationService: GetAllApplicationService,
-    private readonly getByCampaignIdApplicationService: GetByCampaignIdApplicationService,
+    private readonly getByCampaignIdWithPaginationService: GetByCampaignIdWithPaginationService,
     private readonly updateApplicationService: UpdateApplicationService,
-    private readonly getAllByCampaignIdApplicationService: GetAllByCampaignIdApplicationService,
+    private readonly getAllByCampaignIdApplicationService: GetByCampaignIdService,
     private readonly getByUserIdApplicationService: GetByUserIdApplicationService,
     private readonly getByUserIdPagiantionApplicationService: GetByUserIdPaginationApplicationService,
     // private readonly getByUserIdPaginationApplicationService: GetByUserIdPaginationApplicationService,
@@ -37,8 +39,14 @@ export class ApplicationApplication {
     return await this.createApplicationService.execute(request);
   }
 
-  async getApplication(request: GetApplicationDto): Promise<Application> {
-    return await this.getApplicationService.execute(request);
+  async getApplication(
+    request: GetApplicationByIdDto,
+  ): Promise<Application | null> {
+    const data = await this.getApplicationService.execute(request);
+    if (!data) {
+      throw new RpcException(`Id doesn't exist!`);
+    }
+    return data;
   }
 
   async getAllApplication(
@@ -48,19 +56,49 @@ export class ApplicationApplication {
   }
 
   async getByCampaignIdApplication(
-    request: GetByCampaignIdApplicationDto,
-  ): Promise<Application[]> {
-    return await this.getByCampaignIdApplicationService.execute(request);
+    request: GetByCampaignIdWithPaginationDto,
+  ): Promise<Applications> {
+    const campaignIds = request.campaignIds;
+    const total_data = this.getAllByCampaignIdApplication({
+      campaignIds,
+    });
+
+    const total = (await total_data).length;
+    const data =
+      await this.getByCampaignIdWithPaginationService.execute(request);
+
+    const total_pages = Math.ceil(total / request.limit);
+    if (!total_data || !data) {
+      return {
+        page: request.page,
+        limit: request.limit,
+        total: total,
+        totalPage: total_pages,
+        applications: [],
+      };
+    }
+    return {
+      page: request.page,
+      limit: request.limit,
+      total: total,
+      totalPage: total_pages,
+      applications: data,
+    };
+    // return await this.getByCampaignIdApplicationService.execute(request);
   }
 
   async getAllByCampaignIdApplication(
-    request: GetAllByCampaignIdApplicationDto,
+    request: GetByCampaignIdDto,
   ): Promise<Application[]> {
     return await this.getAllByCampaignIdApplicationService.execute(request);
   }
 
-  async updateApplication(request: UpdateApplicationDto): Promise<Application> {
-    return await this.updateApplicationService.execute(request);
+  async updateApplication(request: UpdateApplicationDto) {
+    const result = await this.updateApplicationService.execute(request);
+    if (!result) {
+      throw new RpcException(`Id doesn't exist!`);
+    }
+    return result;
   }
 
   async getByUserIdApplication(
@@ -71,7 +109,32 @@ export class ApplicationApplication {
 
   async getByUserIdPaginationApplication(
     request: GetByUserIdPaginationApplicationDto,
-  ): Promise<Application[]> {
-    return await this.getByUserIdPagiantionApplicationService.execute(request);
+  ): Promise<Applications> {
+    const userId = request.userId;
+    const status = request.status;
+    const total_data = await this.getByUserIdApplication({
+      userId,
+      status,
+    });
+
+    if (!total_data) {
+      throw new RpcException(`Id doesn't exist!`);
+    }
+    const total = total_data.length;
+    const data =
+      await this.getByUserIdPagiantionApplicationService.execute(request);
+
+    if (!data) {
+      throw new RpcException(`Id doesn't exist!`);
+    }
+    const total_pages = Math.ceil(total / request.limit);
+    return {
+      page: request.page,
+      limit: request.limit,
+      total: total,
+      totalPage: total_pages,
+      applications: data,
+    };
+    // return await this.getByUserIdPagiantionApplicationService.execute(request);
   }
 }

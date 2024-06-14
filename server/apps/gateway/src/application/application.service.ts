@@ -4,7 +4,12 @@ import {
   ApplicationServiceClient,
   CreateApplicationRequest,
 } from '@app/common/proto/application';
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  OnModuleInit,
+} from '@nestjs/common';
 
 import { ClientGrpc } from '@nestjs/microservices';
 import { CVService } from '../cv/cv.service';
@@ -40,7 +45,25 @@ export class ApplicationService implements OnModuleInit {
       );
   }
 
-  async create(createApplicationRequest: CreateApplicationRequest) {
+  async create(
+    createApplicationRequest: CreateApplicationRequest,
+    userId: string,
+  ) {
+    createApplicationRequest.userId = userId;
+    const requiredFields: string[] = [
+      'fullname',
+      'phone',
+      'email',
+      'campaignId',
+      'cvId',
+      'userId',
+    ];
+
+    if (requiredFields.some((field) => !createApplicationRequest[field])) {
+      throw new BadRequestException(
+        'Missing required fields in CreateApplicationRequest: All fields are mandatory.',
+      );
+    }
     const application = await firstValueFrom(
       this.applicationServiceClient.createApplication(createApplicationRequest),
     );
@@ -63,9 +86,16 @@ export class ApplicationService implements OnModuleInit {
   }
 
   async findOne(id: number) {
-    return await firstValueFrom(
-      this.applicationServiceClient.readApplication({ id }),
-    );
+    try {
+      const application = await firstValueFrom(
+        this.applicationServiceClient.readApplication({
+          id,
+        }),
+      );
+      return application;
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
   }
 
   async findAll(
@@ -75,14 +105,23 @@ export class ApplicationService implements OnModuleInit {
     status: boolean | null,
     hrId: string,
   ) {
-    const campaignRes = await firstValueFrom(
-      this.companyService.findCampaignByEmployerId(hrId, 1, 100),
-    );
-
+    const campaignRes =
+      await this.companyService.findAllCampaignByEmployerId(hrId);
+    if (!campaignRes) {
+      return {
+        page: page,
+        limit: limit,
+        total: 0,
+        totalPage: 0,
+        applications: [],
+      };
+    }
     let campaignIds = campaignRes.data.map((campaign) => campaign.id);
+    console.log(campaignIds);
     if (campaignId) {
       campaignIds = [campaignId];
     }
+
     const { applications = [], ...data } = await firstValueFrom(
       this.applicationServiceClient.readAllApplicationByCampaignId({
         page,
@@ -96,14 +135,6 @@ export class ApplicationService implements OnModuleInit {
       ...data,
       applications,
     };
-    // const applications$ =
-    //   this.applicationServiceClient.readAllApplicationByCampaignId({
-    //     page,
-    //     limit,
-    //     campaignIds,
-    //     status,
-    //   });
-    // return applications$;
   }
 
   async findAllByUserId(
@@ -112,41 +143,65 @@ export class ApplicationService implements OnModuleInit {
     userId: string,
     status: boolean | null,
   ) {
-    const { applications = [], ...data } = await firstValueFrom(
-      this.applicationServiceClient.readAllApplicationByUserId({
-        page,
-        limit,
-        userId,
-        status,
-      }),
-    );
-    const cvIds = applications.map((application) => application.cvId);
-    const cvs = await firstValueFrom(this.cvService.getCVsById(cvIds));
-    const arrayCV = cvs.map((cv) => cv.link);
+    try {
+      const { applications = [], ...data } = await firstValueFrom(
+        this.applicationServiceClient.readAllApplicationByUserId({
+          page,
+          limit,
+          userId,
+          status,
+        }),
+      );
+      //array obj cvId
+      const cvIds = applications.map((application) => application.cvId);
+      //array obj campaginId
+      const campaginIds = applications.map(
+        (application) => application.campaignId,
+      );
+      //array obj Job attach company
+      const arrayJob = await this.jobService.findJobsByCampaignIds(campaginIds);
+      //array obj CV
+      const cvs = await firstValueFrom(this.cvService.getCVsById(cvIds));
+      //array obj both link + id
+      const arrayCV = cvs.map((cv) => ({ id: cv.id, link: cv.link }));
+      //map Cv(id+link) and Job attach company into application
+      const applicationsFinal = applications.map((application) => {
+        const cvLink = arrayCV.find((cvItem) => cvItem.id === application.cvId);
+        const job = arrayJob.find(
+          (cvItem) => cvItem.campaignId === application.campaignId,
+        );
+        return {
+          ...application,
+          cv: cvLink,
+          jobs: job,
+          campaignId: application.campaignId,
+        };
+      });
 
-    //map link into application
-    const ApplicationsWithLinkCV = applications.map((application, index) => {
-      const cvLink = arrayCV[index];
-      return { ...application, link: cvLink };
-    });
-
-    //map job into application (pending)
-    return {
-      ...data,
-      ApplicationsWithLinkCV,
-    };
+      return {
+        ...data,
+        applicationsFinal,
+      };
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
   }
 
-  async update(id: number) {
-    const data = await firstValueFrom(
-      this.applicationServiceClient.updateApplication({ id }),
-    );
-
-    return data;
+  async update(id: number, status: boolean) {
+    try {
+      const data = await firstValueFrom(
+        this.applicationServiceClient.updateApplication({ id, status }),
+      );
+      return data;
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
   }
 
   async hrGetCv(id: number) {
-    const application = await this.update(id);
+    const status = true;
+    const application = await this.update(id, status);
+
     const cv = (await firstValueFrom(
       this.cvService.getCVById(application.cvId),
     )) as CVDto;
@@ -156,6 +211,7 @@ export class ApplicationService implements OnModuleInit {
     const employer = await firstValueFrom(
       this.employerService.findEmployerById(campaign.employerId),
     );
+
     const campany = await firstValueFrom(
       this.companyService.findCompanyById(employer.companyId),
     );
@@ -171,6 +227,7 @@ export class ApplicationService implements OnModuleInit {
         },
       ),
     );
+
     return cv;
   }
 }
