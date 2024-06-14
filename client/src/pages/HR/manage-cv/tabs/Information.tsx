@@ -36,7 +36,7 @@ function Information({ compaignId }: { compaignId: string }) {
         <div className="salary-range">
           <div className="label text-2xl font-bold">Mức lương</div>
           <div className="value">
-            {jobData?.salaryMin && jobData?.salaryMax
+            {jobData?.salaryMin || jobData?.salaryMax
               ? ` ${numberWithCommas(jobData?.salaryMin)} - ${numberWithCommas(jobData?.salaryMax)} ${jobData?.currency?.name || ''}`
               : 'Thỏa thuận'}
           </div>
