@@ -30,9 +30,8 @@ jobs:
       - name: Unit Test For User Service
         working-directory: ./server
         run: |
-          npm install -g pnpm
-          pnpm ci
-          pnpm run build --if-present
-          pnpm test user.controller
-          pnpm test user.service
-          pnpm test user.repository
+          npm i
+          npm run build --if-present
+          npm test user.controller
+          npm test user.service
+          npm test user.repository
