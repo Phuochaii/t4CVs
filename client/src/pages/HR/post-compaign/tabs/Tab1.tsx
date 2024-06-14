@@ -148,9 +148,9 @@ function PostCompaign1({
     if (Number.parseInt(salary) > Number.parseInt(salaryMax)) {
       return errorToast('Mức lương tối thiểu phải bé hơn mức lương tối đa');
     }
-    if (!salaryError && !salaryMaxError && employer.companyId !== null) {
-      const updatedItem = { ...item };
 
+    if (employer.companyId !== null) {
+      const updatedItem = { ...item };
       // Modify each property
       updatedItem.titleRecruitment = data.title;
       updatedItem.majorId = Number.parseInt(
@@ -187,7 +187,7 @@ function PostCompaign1({
       updatedItem.benefit = data.benefit;
       updatedItem.requirement = data.requirement;
       updatedItem.skills = data.skill;
-      console.log(updatedItem);
+
       const res = await postJob(token!, JSON.stringify(updatedItem));
       console.log(res);
       next(event);
