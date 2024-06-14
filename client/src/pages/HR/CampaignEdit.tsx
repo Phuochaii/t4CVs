@@ -16,7 +16,7 @@ import {
 import CampaignEditCard from '../../shared/components/CampaignEditCard';
 import { getJobById } from '../../modules/helper';
 import { updateJobStatus } from '../../modules/admin-module';
-import { getField, getProfile } from '../../modules/hr-module';
+import { getField, getJobByCampaignId, getProfile } from '../../modules/hr-module';
 import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 function RecruitmentDisplayTable() {
@@ -149,8 +149,7 @@ function CampaignEdit() {
       const res1 = await getProfile(token!);
       console.log(res1.companyId);
       setEmployer(res1);
-      const res = await getJobById(recruitment.id);
-      console.log(res);
+      const res = await getJobByCampaignId(token!, recruitment.id);
       setJob(res);
       setRecruitment({
         ...response,
