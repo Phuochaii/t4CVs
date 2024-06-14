@@ -6,7 +6,6 @@ import { In, Repository } from 'typeorm';
 import { JobMapper } from '../mapper';
 import { CreateJobDto } from '../../domain/dto/Req/create-job.dto';
 import { QueryDTO } from '../../domain/dto/Req/query.dto';
-import { FindJobByCampaignIdDto } from '../../domain/dto/Resp/find-job-by-campaignId.dto';
 import { JobRepository } from '../../domain/repository';
 import { UpdateJobStatusDto } from '../../domain/dto/Req/update-job-status.dto';
 
@@ -28,15 +27,36 @@ export class TypeOrmJobRepository extends JobRepository {
       where: {
         campaignId,
       },
-      relations: ['jobDetail'],
+      relations: [
+        'jobDetail',
+        'major',
+        'level',
+        'currency',
+        'fields',
+        'exp',
+        'type',
+        'locations',
+      ],
     });
     if (!job) return null;
     return new JobMapper().toDomain(job);
   }
 
   async findJobsByCampaignIds(campaignIds: number[]): Promise<JobAggregate[]> {
-    const jobs = await this.jobRepository.findBy({
-      campaignId: In(campaignIds),
+    const jobs = await this.jobRepository.find({
+      where: {
+        campaignId: In(campaignIds),
+      },
+      relations: [
+        'jobDetail',
+        'major',
+        'level',
+        'currency',
+        'fields',
+        'exp',
+        'type',
+        'locations',
+      ],
     });
     if (!jobs) return null;
     const result = jobs.map((job) => {
