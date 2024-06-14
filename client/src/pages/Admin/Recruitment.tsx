@@ -64,7 +64,7 @@ function RecruitmentTable({
                           newJobPost.id,
                           !jobPost.status,
                         );
-                        setRefresh(!refresh);
+                        setRefresh((prev) => !prev);
                       }}
                     />
                     <div className="mt-1">

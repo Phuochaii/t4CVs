@@ -131,7 +131,7 @@ function Company() {
                   company?.id as number,
                   !company?.status,
                 );
-                setRefresh(!refresh);
+                setRefresh((prev) => !prev);
               }}
               className="cursor-pointer box-follow flex items-center bg-white rounded-[8px] text-[#00b14f] text-lg h-[48px] py-[6px] pl-[14px] pr-[18px]"
             >

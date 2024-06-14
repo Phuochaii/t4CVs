@@ -105,7 +105,7 @@ function Employer() {
                     employer.id,
                     !employer.phoneNumberStatus,
                   );
-                  setRefresh(!refresh);
+                  setRefresh((prev) => !prev);
                 }}
               ></Switch>
             </div>
@@ -153,7 +153,7 @@ function Employer() {
                     employer.id,
                     !employer.licenseStatus,
                   );
-                  setRefresh(!refresh);
+                  setRefresh((prev) => !prev);
                 }}
               ></Switch>
             </div>
