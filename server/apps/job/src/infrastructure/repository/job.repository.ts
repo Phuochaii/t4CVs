@@ -20,14 +20,10 @@ export class TypeOrmJobRepository extends JobRepository {
   }
 
   async deleteJob(id: number) {
-    const rs = await this.jobRepository.delete(id);
-    console.log(rs);
-    return rs;
+    return await this.jobRepository.delete(id);
   }
 
-  async findJobByCampaignId(
-    campaignId: number,
-  ): Promise<FindJobByCampaignIdDto> {
+  async findJobByCampaignId(campaignId: number): Promise<JobAggregate> {
     const job = await this.jobRepository.findOne({
       where: {
         campaignId,
@@ -35,40 +31,16 @@ export class TypeOrmJobRepository extends JobRepository {
       relations: ['jobDetail'],
     });
     if (!job) return null;
-    const result: FindJobByCampaignIdDto = {
-      titleRecruitment: job.titleRecruitment,
-      companyId: job.companyId,
-      salaryMax: job.salaryMax,
-      salaryMin: job.salaryMin,
-      campaignId: job.campaignId,
-      status: job.status,
-      expiredDate: job.expiredDate,
-      locations: job.locations,
-      jobDetail: job.jobDetail,
-    };
-    return result;
+    return new JobMapper().toDomain(job);
   }
 
-  async findJobsByCampaignIds(
-    campaignIds: number[],
-  ): Promise<FindJobByCampaignIdDto[]> {
+  async findJobsByCampaignIds(campaignIds: number[]): Promise<JobAggregate[]> {
     const jobs = await this.jobRepository.findBy({
       campaignId: In(campaignIds),
     });
     if (!jobs) return null;
     const result = jobs.map((job) => {
-      const result: FindJobByCampaignIdDto = {
-        titleRecruitment: job.titleRecruitment,
-        companyId: job.companyId,
-        salaryMax: job.salaryMax,
-        salaryMin: job.salaryMin,
-        campaignId: job.campaignId,
-        status: job.status,
-        expiredDate: job.expiredDate,
-        locations: job.locations,
-        jobDetail: job.jobDetail,
-      };
-      return result;
+      return new JobMapper().toDomain(job);
     });
     return result;
   }

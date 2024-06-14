@@ -9,13 +9,11 @@ export abstract class JobRepository {
   // abstract updateJob(data: UpdateJobDTO): Promise<boolean>;
   abstract findJobsByCampaignIds(
     campaignIds: number[],
-  ): Promise<FindJobByCampaignIdDto[]>;
+  ): Promise<JobAggregate[]>;
   abstract updateJobStatus(data: UpdateJobStatusDto): Promise<boolean>;
   abstract findJobById(id: number): Promise<JobAggregate>;
   abstract searchJob(newQuery: QueryDTO): Promise<JobAggregate[]>;
   abstract saveJob(job: JobAggregate): Promise<JobAggregate>;
   abstract createJob(createJobDto: CreateJobDto): Promise<JobAggregate>;
-  abstract findJobByCampaignId(
-    campaignId: number,
-  ): Promise<FindJobByCampaignIdDto>;
+  abstract findJobByCampaignId(campaignId: number): Promise<JobAggregate>;
 }

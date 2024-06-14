@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import {
   Observable,
   catchError,
@@ -20,6 +25,8 @@ import { UpdateCompanyStatusDto } from './dto/Req/updateCompanyStatus.dto';
 import { EmployerService } from '../employer/employer.service';
 import { UploadService } from '../upload/upload.service';
 import { UpdateEmployerCompanyDTO } from '../employer/dto/Req/updateEmployerCompany.dto';
+import { JobService } from '../job/job.service';
+import { ApplicationService } from '../application/application.service';
 
 @Injectable()
 export class CompanyService {
@@ -27,6 +34,10 @@ export class CompanyService {
     @Inject('COMPANY') private readonly companyClient: ClientProxy,
     private readonly employerService: EmployerService,
     private readonly uploadService: UploadService,
+    @Inject(forwardRef(() => JobService))
+    private readonly jobService: JobService,
+    @Inject(forwardRef(() => ApplicationService))
+    private readonly applicationService: ApplicationService,
   ) {}
 
   async createCompany(
@@ -243,8 +254,22 @@ export class CompanyService {
     }
   }
 
-  deleteCampaign(id: number) {
-    return this.companyClient.send({ cmd: 'delete_campaign' }, id).pipe(
+  async deleteCampaign(id: number) {
+    try {
+      await lastValueFrom(
+        await this.applicationService.delApplicationbyCampaignId(id),
+      );
+    } catch (error) {
+      console.error('Error deleting application by campaign ID:', error);
+    }
+
+    try {
+      await lastValueFrom(this.jobService.deleteJobByCampaignId(id));
+    } catch (error) {
+      console.error('Error deleting job by campaign ID:', error);
+    }
+
+    return await this.companyClient.send({ cmd: 'delete_campaign' }, id).pipe(
       catchError((error) => {
         return throwError(() => error.response);
       }),

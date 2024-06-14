@@ -7,3 +7,4 @@ export * from './getbycampaignId-application.dto';
 export * from './getallbycampaignId-application.dto';
 export * from './getbyuserId-application.dto';
 export * from './getbyuserIdpagination-application.dto';
+export * from './delapplicationbycampaignId.dto';

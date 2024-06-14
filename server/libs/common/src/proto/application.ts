@@ -8,6 +8,10 @@ export interface DeleteApplicationRequest {
   id: number;
 }
 
+export interface DeleteApplicationbyCampaignIdRequest {
+  campaignId: number;
+}
+
 export interface ReadApplicationRequest {
   id: number;
 }
@@ -94,6 +98,10 @@ export interface ApplicationServiceClient {
   updateApplication(request: UpdateApplicationRequest): Observable<Application>;
 
   deleteApplication(request: DeleteApplicationRequest): Observable<Empty>;
+
+  deleteApplicationByCampaignId(
+    request: DeleteApplicationbyCampaignIdRequest,
+  ): Observable<Empty>;
 }
 
 /** The job application service definition. */
@@ -126,6 +134,10 @@ export interface ApplicationServiceController {
   deleteApplication(
     request: DeleteApplicationRequest,
   ): Promise<Empty> | Observable<Empty> | Empty;
+
+  deleteApplicationByCampaignId(
+    request: DeleteApplicationbyCampaignIdRequest,
+  ): Promise<Empty> | Observable<Empty> | Empty;
 }
 
 export function ApplicationServiceControllerMethods() {
@@ -138,6 +150,7 @@ export function ApplicationServiceControllerMethods() {
       'readAllApplicationByUserId',
       'updateApplication',
       'deleteApplication',
+      'deleteApplicationByCampaignId',
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(

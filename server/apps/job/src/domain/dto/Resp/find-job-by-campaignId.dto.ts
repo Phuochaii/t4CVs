@@ -1,6 +1,7 @@
 import { JobDetail, Location } from '../../entities';
 
 export class FindJobByCampaignIdDto {
+  id: number;
   titleRecruitment: string;
   companyId: number;
   salaryMax: number;
