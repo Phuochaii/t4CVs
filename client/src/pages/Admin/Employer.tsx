@@ -39,7 +39,10 @@ function Employer() {
         allEmployers: EmployerFromServer[];
         total: number;
         totalPages: number;
-      } = await getAllEmployer(token, page); // Cấn authen
+      } =
+        searchText == ''
+          ? await getAllEmployer(token, page)
+          : await findEmployerByName(searchText, page);
       const allEmployersWithCompany = allEmployers.map(async (employer) => {
         const company = employer.companyId
           ? await getCompanyById(employer.companyId)
@@ -49,19 +52,7 @@ function Employer() {
       setEmployers(await Promise.all(allEmployersWithCompany));
       setTotalPages(totalPages);
     }
-    async function getDataSearch() {
-      const {
-        employers,
-      }: {
-        employers: EmployerFromServer[];
-      } = await findEmployerByName(searchText, page);
-      setEmployers(employers);
-    }
-    if (searchText == '') {
-      getData();
-    } else {
-      getDataSearch();
-    }
+    getData();
   }, [page, refresh, searchText]);
 
   const columns: BasicColumnProps[] = useMemo(
