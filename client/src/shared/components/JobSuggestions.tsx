@@ -3,7 +3,7 @@ import JobSuggestionItem from './JobSuggestionItem';
 const JobSuggestions = () => {
   return (
     <>
-      <div className="w-full px-[170px] bg-white">
+      <div className="w-full px-[170px] bg-white pb-6">
         <div className="pt-6 text-3xl font-bold text-[#00b14f]">
           Gợi ý việc làm phù hợp
         </div>

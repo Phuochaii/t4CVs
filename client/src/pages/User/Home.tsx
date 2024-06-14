@@ -612,14 +612,6 @@ function Home() {
                     <span className="action-show_all text-[13px] font-medium text-slate-900 underline underline-offset-1 cursor-pointer hover:text-green-600">
                       Xem tất cả
                     </span>
-
-                    {/* <span className="action-show_previous rounded-full border border-green-600 p-2 text-green-600 cursor-pointer hover:bg-green-600 hover:text-white">
-                      <ChevronLeftIcon className="w-5 h-5" />
-                    </span>
-
-                    <span className="action-show_previous rounded-full border border-green-600 p-2 text-green-600 cursor-pointer hover:bg-green-600 hover:text-white">
-                      <ChevronRightIcon className="w-5 h-5" />
-                    </span> */}
                   </div>
                 </div>
                 <div className="left-detail--item"></div>
@@ -634,7 +626,7 @@ function Home() {
                           }}
                           className="job-item-search-result max-h-60 bg-white p-2 border border-transparent rounded-lg shadow-md flex gap-3 hover:border-green-500"
                         >
-                          <div className="job-logo-company w-24 h-24 min-w-24 flex items-center border rounded-lg">
+                          <div className="job-logo-company w-24 h-24 min-w-24 flex items-center border rounded-lg overflow-hidden">
                             <img
                               src={
                                 item.company?.image
@@ -646,14 +638,6 @@ function Home() {
                           <div className="job-details flex flex-col w-full">
                             <div className="job-title text-black font-semibold col-span-3 text-lg">
                               {item.titleRecruitment}
-                              {/* <div className="job-salary col-start-4 flex items-center">
-                                <CurrencyDollarIcon className="w-5 mr-2" />
-                                <strong className="salary-count">
-                                  {item.salaryMin == 0 && item.salaryMax == 0
-                                    ? "Thoả thuận"
-                                    : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{" "}
-                                </strong>
-                              </div> */}
                             </div>
                             <span className="job-company-name text-slate-600 text-sm col-span-3 mb-2">
                               {item.company?.name
