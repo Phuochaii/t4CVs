@@ -139,18 +139,15 @@ function PostCompaign1({
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any, event: any) => {
-    console.log(
-      cityOption ? cityOption.map((option) => parseInt(option.value)) : [],
-    );
-    // if (salaryMax <= 0) {
-    //   return errorToast('Mức lương tối đa phải lớn hơn 0');
-    // }
-    // if (salary <= 0) {
-    //   return errorToast('Mức lương tối thiểu phải lớn hơn 0');
-    // }
-    // if (salary > salaryMax) {
-    //   return errorToast('Mức lương tối thiểu phải bé hơn mức lương tối đa');
-    // }
+    if (Number.parseInt(salaryMax) < 0) {
+      return errorToast('Mức lương tối đa không được âm');
+    }
+    if (Number.parseInt(salary) < 0) {
+      return errorToast('Mức lương tối thiểu không được âm');
+    }
+    if (Number.parseInt(salary) > Number.parseInt(salaryMax)) {
+      return errorToast('Mức lương tối thiểu phải bé hơn mức lương tối đa');
+    }
     if (!salaryError && !salaryMaxError && employer.companyId !== null) {
       const updatedItem = { ...item };
 
@@ -190,6 +187,7 @@ function PostCompaign1({
       updatedItem.benefit = data.benefit;
       updatedItem.requirement = data.requirement;
       updatedItem.skills = data.skill;
+      console.log(updatedItem);
       const res = await postJob(token!, JSON.stringify(updatedItem));
       console.log(res);
       next(event);
@@ -1075,7 +1073,7 @@ function PostCompaign1({
                 <div className="space-y-2 w-3/12">
                   <span className="text-base font-semibold">Số điện thoại</span>
                   <input
-                    type="text"
+                    type="number"
                     className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                     placeholder="Số điện thoại"
                     {...register('phone', {
