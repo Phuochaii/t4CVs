@@ -1026,11 +1026,11 @@ function ApplyCV() {
                         </span>
                       </div>
                       <div
-                        onClick={() =>
+                        onClick={() => {
                           navigation(
-                            `/companies/${jobData?.companyId ? jobData?.companyId : ''}`,
-                          )
-                        }
+                            `/companies/${jobData?.company?.id ? jobData?.company?.id : ''}`,
+                          );
+                        }}
                         className="job-detail__company--action font-bold text-green-500 flex flex-row gap-2 items-center justify-center cursor-pointer hover:underline"
                       >
                         Xem trang công ty
