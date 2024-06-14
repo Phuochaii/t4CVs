@@ -135,7 +135,9 @@ function CampaignEdit() {
   const [openSection, setOpenSection] = useState(-1);
   const [refresh, setRefresh] = useState(false);
   const [job, setJob] = useState<RecruitmentFromServer>(state);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [employer, setEmployer] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [fields, setFields] = useState<any>(null);
   useEffect(() => {
     const getData = async () => {

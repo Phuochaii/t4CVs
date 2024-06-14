@@ -1,32 +1,27 @@
-import * as React from "react";
-import { DefaultPagination } from "../../../../shared/components/default-pagination";
-import * as HRModule from "../../../../modules/hr-module";
-import ReceivedCVTable from "../../../../shared/components/ReceivedCVTable";
-import { CampaignFromServer } from "../../../../shared/types/Campaign.type";
-import { ApplicationFromServer } from "../../../../shared/types/Application.type";
-import { useProfileContext } from "../../../../shared/services/authen/domain/context";
+import * as React from 'react';
+import { DefaultPagination } from '../../../../shared/components/default-pagination';
+import * as HRModule from '../../../../modules/hr-module';
+import ReceivedCVTable from '../../../../shared/components/ReceivedCVTable';
+import { CampaignFromServer } from '../../../../shared/types/Campaign.type';
+import { ApplicationFromServer } from '../../../../shared/types/Application.type';
+import { useProfileContext } from '../../../../shared/services/authen/domain/context';
 
-function Application({
-  compaignId,
-}: {
-  compaignId: string;
-}) {
+function Application({ compaignId }: { compaignId: string }) {
   // const compaignId = "1";
 
   const [listCV, setListCV] = React.useState<ApplicationFromServer[]>([]);
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
   const [campaign, setCampaign] = React.useState<CampaignFromServer | null>(
-    null
+    null,
   );
-  const {token} = useProfileContext();
+  const { token } = useProfileContext();
   const fetchCompaign = async () => {
     HRModule.getCampaignById({ id: compaignId }).then((res) => {
       setCampaign(res);
     });
   };
   const fetchApplication = async () => {
-
     HRModule.getApplicationByCampaignIdHRId({
       campaignId: compaignId,
       token: token!,

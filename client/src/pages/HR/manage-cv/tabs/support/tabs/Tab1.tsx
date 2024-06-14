@@ -1,17 +1,17 @@
-import * as React from "react";
-import * as HRModule from "../../../../../../modules/hr-module";
-import { DefaultPagination } from "../../../../../../shared/components/default-pagination";
-import ReceivedCVTable from "../../../../../../shared/components/ReceivedCVTable";
-import { useProfileContext } from "../../../../../../shared/services/authen/domain/context";
+import * as React from 'react';
+import * as HRModule from '../../../../../../modules/hr-module';
+import { DefaultPagination } from '../../../../../../shared/components/default-pagination';
+import ReceivedCVTable from '../../../../../../shared/components/ReceivedCVTable';
+import { useProfileContext } from '../../../../../../shared/services/authen/domain/context';
 
-function Tab1({ compaignId }: { compaignId: string}) {
+function Tab1({ compaignId }: { compaignId: string }) {
   const [listCV, setListCV] = React.useState([]);
   const [statusMode, setStatusMode] = React.useState<boolean | undefined>(
-    undefined
+    undefined,
   );
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
-  const {token} = useProfileContext()
+  const { token } = useProfileContext();
   const fetchApplication = async () => {
     HRModule.getApplicationByCampaignIdHRId({
       campaignId: compaignId,
@@ -40,7 +40,7 @@ function Tab1({ compaignId }: { compaignId: string}) {
             type="radio"
             defaultChecked
             name="read-mode"
-            style={{ transform: "translateY(2px)" }}
+            style={{ transform: 'translateY(2px)' }}
             onClick={() => setStatusMode(undefined)}
           />
           Hiển thị tất cả CV
@@ -50,7 +50,7 @@ function Tab1({ compaignId }: { compaignId: string}) {
             className="mr-2"
             type="radio"
             name="read-mode"
-            style={{ transform: "translateY(2px)" }}
+            style={{ transform: 'translateY(2px)' }}
             onClick={() => setStatusMode(false)}
           />
           Chỉ hiện thị CV chưa xem

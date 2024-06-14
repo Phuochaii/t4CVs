@@ -32,6 +32,7 @@ function PostJob() {
   const [compaignName, setcompaignName] = useState('');
   const [compaignId, setcompaignId] = useState('');
   const [chosenPlan, setChosenPlan] = useState(plans[0]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [employer, setEmployer] = useState<any>(null);
   useEffect(() => {
     // Fetch data from your API

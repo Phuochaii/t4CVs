@@ -1,21 +1,15 @@
-import * as React from "react";
-import { DefaultPagination } from "../../../../shared/components/default-pagination";
-import * as HRModule from "../../../../modules/hr-module";
-import FollowingCVTable from "../../../../shared/components/FollowingCVTable";
-import { ApplicationFromServer } from "../../../../shared/types/Application.type";
-import { useProfileContext } from "../../../../shared/services/authen/domain/context";
+import * as React from 'react';
+import { DefaultPagination } from '../../../../shared/components/default-pagination';
+import * as HRModule from '../../../../modules/hr-module';
+import FollowingCVTable from '../../../../shared/components/FollowingCVTable';
+import { ApplicationFromServer } from '../../../../shared/types/Application.type';
+import { useProfileContext } from '../../../../shared/services/authen/domain/context';
 
-function FollowingCV({
-  compaignId,
-  
-}: {
-  compaignId: string;
-  
-}) {
+function FollowingCV({ compaignId }: { compaignId: string }) {
   // const hrId = "1";
 
   const [listCV, setListCV] = React.useState<ApplicationFromServer[]>([]);
-  const {token} = useProfileContext();
+  const { token } = useProfileContext();
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
 

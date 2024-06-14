@@ -138,9 +138,9 @@ function PostCompaign1({
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any, event: any) => {
-    console.log(cityOption
-      ? cityOption.map((option) => parseInt(option.value))
-      : [])
+    // console.log(cityOption
+    //   ? cityOption.map((option) => parseInt(option.value))
+    //   : [])
     if (!salaryError && !salaryMaxError && employer.companyId !== null) {
       const updatedItem = { ...item };
 
@@ -209,6 +209,7 @@ function PostCompaign1({
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [fields, setFields] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [employer, setEmployer] = useState<any>(null);
   const { token } = useProfileContext();
   useEffect(() => {
@@ -262,15 +263,6 @@ function PostCompaign1({
     { value: 'Không quan trọng', label: 'Không quan trọng' },
     { value: 'Nam', label: 'Nam' },
     { value: 'Nữ', label: 'Nữ' },
-  ];
-  const cityOptions = [
-    { value: 'Hồ Chí Minh', label: 'Hồ Chí Minh' },
-    { value: 'Bình Dương', label: 'Bình Dương' },
-    { value: 'Bắc Ninh', label: 'Bắc Ninh' },
-    { value: 'Đồng Nai', label: 'Đồng Nai' },
-    { value: 'Hưng Yên', label: 'Hưng Yên' },
-    { value: 'Hải Dương', label: 'Hải Dương' },
-    { value: 'Đà Nẵng', label: 'Đà Nẵng' },
   ];
   const salaryOptions = [
     { value: 'Trong khoảng', label: 'Trong khoảng' },

@@ -11,13 +11,7 @@ import {
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { statusColor } from '../../shared/types/RecruitmentStatus.type';
-import { RecruitmentJobPost } from '../../shared/types/Recruitment.type';
-import {
-  getAllJobs,
-  getCampaignById,
-  getJobByCampaignId,
-  getJobsStat,
-} from '../../modules/helper';
+import { getJobByCampaignId } from '../../modules/helper';
 import { useProfileContext } from '../../shared/services/authen/domain/context';
 import { getAllCompaignByHrId } from '../../modules/hr-module';
 import moment from 'moment';
@@ -26,6 +20,7 @@ import moment from 'moment';
 interface RecruitmentTableProps {
   refresh: boolean;
   setRefresh: Dispatch<SetStateAction<boolean>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[];
 }
 
@@ -49,7 +44,7 @@ function RecruitmentTable({
         </tr>
       </thead>
       <tbody>
-        {data.map((jobPost: any, key: number) => {
+        {data.map((jobPost, key: number) => {
           console.log(jobPost);
           return (
             <tr key={key}>
@@ -114,16 +109,17 @@ function RecruitmentTable({
 const filteredStatuses = ['Tất cả', 'Đang hiển thị', 'Dừng hiển thị'];
 
 function Recruitment() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [data, setData] = useState<any[]>([]);
   const [selectedStatus, setSelectedStatus] = useState(0);
   const [filterKeyword, setFilterKeyword] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [jobStats, setJobStats] = useState({
-    isActive: 0,
-    total: 0,
-    isNotActive: 0,
-  });
+  // const [jobStats, setJobStats] = useState({
+  //   isActive: 0,
+  //   total: 0,
+  //   isNotActive: 0,
+  // });
   const [refresh, setRefresh] = useState(false);
   const { token } = useProfileContext();
   useEffect(() => {
@@ -134,6 +130,7 @@ function Recruitment() {
       // console.log(allCampaigns)
       // const stats = await getJobsStat();
       // setJobStats(stats);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const rawRecruitments = allCampaigns.map(async (item: any) => {
         console.log(item);
         const job = await getJobByCampaignId(token!, item.id);
