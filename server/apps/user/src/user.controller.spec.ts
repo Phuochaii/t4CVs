@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from './domain/user.service';
-import { CreateUserDTO } from './domain/dto/Req';
+import { CreateUserDTO, QueryDTO } from './domain/dto/Req';
 import { User } from './domain/entities';
+import { FindUserRespDTO } from './domain/dto/Resp/find-users.dto';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -19,7 +20,7 @@ describe('UserController', () => {
     createUser: jest.fn((user: CreateUserDTO) => {
       return;
     }),
-    findAll: jest.fn(() => {
+    findAll: jest.fn((query: QueryDTO) => {
       const users: User[] = [
         {
           id: '1',
@@ -34,7 +35,16 @@ describe('UserController', () => {
           image: 'test',
         },
       ];
-      return users;
+      const skip =
+        (parseInt(String(query.page)) - 1) * parseInt(String(query.limit));
+      const result: FindUserRespDTO = {
+        page: parseInt(String(query.page)),
+        limit: parseInt(String(query.limit)),
+        total: users.length,
+        total_pages: Math.ceil(users.length / parseInt(String(query.limit))),
+        data: users.slice(skip, skip + parseInt(String(query.limit))),
+      };
+      return result;
     }),
     isUserExist: jest.fn((id: string) => {
       return true;
@@ -90,7 +100,17 @@ describe('UserController', () => {
 
   describe('findAll', () => {
     it('should return all users', () => {
-      expect(controller.findAll({})).toEqual(expect.any(Array));
+      const query = {
+        page: 1,
+        limit: 10,
+      };
+      expect(controller.findAll(query)).toEqual({
+        page: expect.any(Number),
+        limit: expect.any(Number),
+        total: expect.any(Number),
+        total_pages: expect.any(Number),
+        data: expect.any(Array),
+      });
     });
     it('should call the service.findAll method', async () => {
       expect(mockUserService.findAll).toHaveBeenCalled();

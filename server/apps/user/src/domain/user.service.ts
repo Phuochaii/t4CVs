@@ -16,15 +16,14 @@ export class UserService {
 
   async findAll(query: QueryDTO) {
     const { page = 1, limit = 10, ...newQuery } = query;
-    const skip = (page - 1) * limit;
+    const skip = (parseInt(String(page)) - 1) * parseInt(String(limit));
     const users = await this.userRepository.searchUser(newQuery);
-
     const result: FindUserRespDTO = {
       page: parseInt(String(page)),
       limit: parseInt(String(limit)),
       total: users.length,
       total_pages: Math.ceil(users.length / limit),
-      data: users.slice(skip, skip + limit),
+      data: users.slice(skip, skip + parseInt(String(limit))),
     };
     return result;
   }

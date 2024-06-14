@@ -12,7 +12,7 @@ describe('UserService', () => {
     createUser: jest.fn((user) => {
       return;
     }),
-    findAll: jest.fn(() => {
+    searchUser: jest.fn(() => {
       return [
         {
           id: '1',
@@ -99,10 +99,20 @@ describe('UserService', () => {
 
   describe('findAll', () => {
     it('should return all users', async () => {
-      expect(await service.findAll()).toEqual(expect.any(Array));
+      const query = {
+        page: 1,
+        limit: 10,
+      };
+      expect(await service.findAll(query)).toEqual({
+        data: expect.any(Array),
+        limit: expect.any(Number),
+        page: expect.any(Number),
+        total: expect.any(Number),
+        total_pages: expect.any(Number),
+      });
     });
-    it('should call the repository.findAll method', async () => {
-      expect(mockUserRepository.findAll).toHaveBeenCalled();
+    it('should call the repository.searchJob method', async () => {
+      expect(mockUserRepository.searchUser).toHaveBeenCalled();
     });
   });
 
