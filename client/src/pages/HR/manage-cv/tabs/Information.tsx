@@ -2,6 +2,7 @@ import * as React from 'react';
 import moment from 'moment';
 import { useProfileContext } from '../../../../shared/services/authen/domain/context';
 import { getJobByCampaignId } from '../../../../modules/admin-module';
+import { numberWithCommas } from '../../../../utils/numberWithCommas';
 
 function Information({ compaignId }: { compaignId: string }) {
   const [jobData, setJobData] = React.useState<any>();
@@ -36,7 +37,7 @@ function Information({ compaignId }: { compaignId: string }) {
           <div className="label text-2xl font-bold">Mức lương</div>
           <div className="value">
             {jobData?.salaryMin && jobData?.salaryMax
-              ? ` ${jobData?.salaryMin} - ${jobData?.salaryMax} ${jobData?.currency?.name || ''}`
+              ? ` ${numberWithCommas(jobData?.salaryMin)} - ${numberWithCommas(jobData?.salaryMax)} ${jobData?.currency?.name || ''}`
               : 'Thỏa thuận'}
           </div>
         </div>
