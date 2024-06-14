@@ -36,6 +36,8 @@ function CampaignEditCard({
   fields: any;
   employer: any;
 }) {
+  console.log(jobItem);
+  
   const { id: compaignId } = useParams();
   const navigate = useNavigate();
 
@@ -577,7 +579,7 @@ function CampaignEditCard({
                           >,
                         ) => setGenderOptions(e)}
                         defaultValue={gender.find((item) => {
-                          return item.label === jobItem.jobDetail.gender;
+                          return item.value === jobItem.jobDetail.gender;
                         })}
                       />
                     </div>
@@ -692,7 +694,7 @@ function CampaignEditCard({
                         height: 20,
                       }}
                     ></MapPin>
-                    <div className="font-bold text-base mr-10">Khu vực 1: </div>
+                    <div className="font-bold text-base mr-10">Khu vực: </div>
                     <div className="w-5/12">
                       <MultiDropdown
                         placeholder="Chọn Tỉnh/ Thành phố"
@@ -707,36 +709,7 @@ function CampaignEditCard({
                     </div>
                   </div>
                   <div className="flex flex-row space-x-10">
-                    <div className="w-3/12">
-                      <SingleDropdown
-                        placeholder="Chọn Quận/ Huyện"
-                        options={districtOptions}
-                        onChange={(
-                          e: SetStateAction<
-                            SingleValue<{ value: string; label: string }>
-                          >,
-                        ) => setDistrictOptions(e)}
-                        defaultValue={districts.data
-                          .map((province) =>
-                            province.districts.map((district) => ({
-                              value: district.value,
-                              label: district.label,
-                            })),
-                          )
-                          .flat()
-                          .filter((district) =>
-                            city
-                              .filter((item) =>
-                                jobItem.locations
-                                  .map((item1) => item1.id)
-                                  .includes(Number.parseInt(item.value)),
-                              )
-                              .map((item) => item.value)
-                              .includes(district.label.split(' ')[1]),
-                          )}
-                      />
-                    </div>
-                    <div className="w-8/12">
+                    <div className="w-full">
                       <input
                         type="text"
                         className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"

@@ -142,7 +142,6 @@ function CampaignEdit() {
   useEffect(() => {
     const getData = async () => {
       const response = await getField(token!);
-      console.log(token!);
       const data = response;
       console.log(response);
       setFields(data);
