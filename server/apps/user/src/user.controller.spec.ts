@@ -90,7 +90,7 @@ describe('UserController', () => {
 
   describe('findAll', () => {
     it('should return all users', () => {
-      expect(controller.findAll()).toEqual(expect.any(Array));
+      expect(controller.findAll({})).toEqual(expect.any(Array));
     });
     it('should call the service.findAll method', async () => {
       expect(mockUserService.findAll).toHaveBeenCalled();

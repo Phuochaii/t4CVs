@@ -27,11 +27,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
           cache-dependency-path: server/package.json
-      - name: Unit Test
+      - name: Unit Test For User Service
         working-directory: ./server
         run: |
           npm i
-          npm run build --if-present
-          npm test user.controller
-          npm test user.service
-          npm test user.repository
+          pnpm ci
+          pnpm run build --if-present
+          pnpm test user.controller
+          pnpm test user.service
+          pnpm test user.repository
