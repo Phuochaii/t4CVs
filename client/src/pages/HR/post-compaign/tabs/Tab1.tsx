@@ -590,7 +590,7 @@ function PostCompaign1({
                         height: 20,
                       }}
                     ></MapPin>
-                    <div className="font-bold text-base mr-10">Khu vực 1: </div>
+                    <div className="font-bold text-base mr-10">Khu vực: </div>
                     <div className="w-5/12">
                       <MultiDropdown
                         placeholder="Chọn Tỉnh/ Thành phố"
@@ -600,17 +600,6 @@ function PostCompaign1({
                     </div>
                   </div>
                   <div className="flex flex-row space-x-10">
-                    <div className="w-3/12">
-                      <SingleDropdown
-                        placeholder="Chọn Quận/ Huyện"
-                        options={districtOptions}
-                        onChange={(
-                          e: SetStateAction<
-                            SingleValue<{ value: string; label: string }>
-                          >,
-                        ) => setDistrictOptions(e)}
-                      />
-                    </div>
                     <div className="w-8/12">
                       <input
                         type="text"
