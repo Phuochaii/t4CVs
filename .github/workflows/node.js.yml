@@ -6,10 +6,9 @@ name: Node.js CI
 on:
   push:
     branches: ['main']
-  
+
   pull_request:
     branches: ['main']
-  
 
 jobs:
   build:
@@ -31,6 +30,7 @@ jobs:
       - run: cd server
       - run: npm ci
       - run: npm run build --if-present
+      - run: npm run
       - run: |
           npm test user.controller
           npm test user.service
