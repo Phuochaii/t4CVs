@@ -142,15 +142,15 @@ function PostCompaign1({
     console.log(
       cityOption ? cityOption.map((option) => parseInt(option.value)) : [],
     );
-    if (salaryMax <= 0) {
-      return errorToast('Mức lương tối đa phải lớn hơn 0');
-    }
-    if (salary <= 0) {
-      return errorToast('Mức lương tối thiểu phải lớn hơn 0');
-    }
-    if (salary > salaryMax) {
-      return errorToast('Mức lương tối thiểu phải bé hơn mức lương tối đa');
-    }
+    // if (salaryMax <= 0) {
+    //   return errorToast('Mức lương tối đa phải lớn hơn 0');
+    // }
+    // if (salary <= 0) {
+    //   return errorToast('Mức lương tối thiểu phải lớn hơn 0');
+    // }
+    // if (salary > salaryMax) {
+    //   return errorToast('Mức lương tối thiểu phải bé hơn mức lương tối đa');
+    // }
     if (!salaryError && !salaryMaxError && employer.companyId !== null) {
       const updatedItem = { ...item };
 
