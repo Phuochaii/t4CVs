@@ -113,7 +113,7 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
             <span className="font-bold bg-slate-200 text-zinc-400">
               {`#${data.campaignId}`}
             </span>
-            {
+            {/* {
               <div
                 className={`flex items-center gap-2 font-bold ${
                   isHovered ? 'visible' : 'invisible'
@@ -122,7 +122,7 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
                 <a href="#">Sửa chiến dịch</a>
                 <a href="#">Xem báo cáo</a>
               </div>
-            }
+            } */}
           </div>
         </div>
       </td>
