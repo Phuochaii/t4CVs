@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CampaignTable } from '../../shared/components/compaign-table';
 import { Campaign as CampaignType } from '../../shared/types/Campaign.type';
+
 import {
   getAllCompaignByHrId,
   getApplicationsByCampaignId,

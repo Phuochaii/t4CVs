@@ -120,6 +120,7 @@ function ManageCV() {
                     <Tab sx={tabSx} label="Tin tuyển dụng" value="2" />
                     <Tab sx={tabSx} label="CV ứng tuyển" value="3" />
                     <Tab
+                      className="pointer-events-none"
                       sx={tabSx}
                       label={
                         <span style={{ color: 'grey' }}>
@@ -129,6 +130,7 @@ function ManageCV() {
                       value="4"
                     />
                     <Tab
+                      className="pointer-events-none"
                       sx={tabSx}
                       label={<span style={{ color: 'grey' }}>CV tìm kiếm</span>}
                       value="5"
@@ -136,6 +138,7 @@ function ManageCV() {
                     <Tab sx={tabSx} label="CV đang theo dõi" value="6" />
                     <Tab sx={tabSx} label="CV được hỗ trợ" value="7" />
                     <Tab
+                      className="pointer-events-none"
                       sx={tabSx}
                       label={<span style={{ color: 'grey' }}>Dịch vụ</span>}
                       value="8"

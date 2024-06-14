@@ -124,7 +124,6 @@ function HRProfileRegister() {
     position: '',
   });
 
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [expanded, setExpanded] = useState(true);
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -187,16 +186,6 @@ function HRProfileRegister() {
 
     const validations = [
       {
-        check: !formData.address_work,
-        action: () => {
-          setValidateMessages((prevState) => ({
-            ...prevState,
-            address: 'Địa chỉ làm việc không được để trống',
-          }));
-          setErrorMessage(validateMessages.address);
-        },
-      },
-      {
         check: !formData.position,
         action: () => {
           setValidateMessages((prevState) => ({
@@ -206,16 +195,7 @@ function HRProfileRegister() {
           setErrorMessage(validateMessages.position);
         },
       },
-      {
-        check: !formData.company,
-        action: () => {
-          setValidateMessages((prevState) => ({
-            ...prevState,
-            company: 'Tên công ty không được để trống',
-          }));
-          setErrorMessage(validateMessages.company);
-        },
-      },
+
       {
         check: !isPhoneValid(formData.phone),
         action: () => setErrorMessage(validateMessages.phone),
@@ -278,7 +258,6 @@ function HRProfileRegister() {
     })
       .then(() => successToast('Success register profile'))
       .then(() => setErrorMessage(''))
-      .then(() => setShowSuccessMessage(true))
       .then(() => setRole(Roles.HR))
       .catch(() => setErrorMessage('Failed to set up employer profile !'));
   };
@@ -412,13 +391,61 @@ function HRProfileRegister() {
               </div>
             </div>
 
+            <div className="col-span-1">
+              <h4 className="text-gray-700 font-bold">
+                Vị trí công tác <span className="text-red-500">*</span>
+              </h4>
+              <FormControl fullWidth>
+                <Select
+                  id="Position"
+                  value={formData.position}
+                  displayEmpty
+                  onChange={(e) => {
+                    setFormData((prevFormData) => ({
+                      ...prevFormData,
+                      position: parseInt(e.target.value as string) || null,
+                    }));
+                    setValidateMessages((prevState) => ({
+                      ...prevState,
+                      position: '',
+                    }));
+                  }}
+                  placeholder="Chọn vị trí công tác"
+                  className="mt-2 h-9 border text-black"
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        maxHeight: '200px',
+                      },
+                    },
+                  }}
+                >
+                  <MenuItem value="" disabled>
+                    Chọn vị trí công tác
+                  </MenuItem>
+                  {positions
+                    ? positions.map((position) => (
+                        <MenuItem key={position.id} value={position.id}>
+                          {position.name}
+                        </MenuItem>
+                      ))
+                    : 'Error to fetch positions'}
+                </Select>
+              </FormControl>
+              {validateMessages.position && (
+                <div className="text-red-500 font-semibold">
+                  {validateMessages.position}
+                </div>
+              )}
+            </div>
+
             <h4 className="text-gray-700 font-bold">
               Số điện thoại cá nhân <span className="text-red-500">*</span>
             </h4>
             <Input
               id="phone"
               name="phone"
-              type="text"
+              type="number"
               placeholder="Số điện thoại cá nhân"
               value={formData.phone}
               onChange={(e) => {
@@ -435,168 +462,8 @@ function HRProfileRegister() {
               icon={Phone}
             />
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-1">
-                <h4 className="text-gray-700 font-bold">
-                  Công ty <span className="text-red-500">*</span>
-                </h4>
-                <Input
-                  id="name_company"
-                  name="name_company"
-                  type="text"
-                  placeholder="Tên công ty"
-                  value={formData.company}
-                  onChange={(e) => {
-                    setFormData((prevFormData) => ({
-                      ...prevFormData,
-                      company: e.target.value,
-                    }));
-                    setValidateMessages((prevState) => ({
-                      ...prevState,
-                      company: '',
-                    }));
-                  }}
-                  errorMessage={validateMessages.company}
-                  icon={Building}
-                />
-              </div>
-
-              <div className="col-span-1">
-                <h4 className="text-gray-700 font-bold">
-                  Vị trí công tác <span className="text-red-500">*</span>
-                </h4>
-                <FormControl fullWidth>
-                  <Select
-                    id="Position"
-                    value={formData.position}
-                    displayEmpty
-                    onChange={(e) => {
-                      setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        position: parseInt(e.target.value as string) || null,
-                      }));
-                      setValidateMessages((prevState) => ({
-                        ...prevState,
-                        position: '',
-                      }));
-                    }}
-                    placeholder="Chọn vị trí công tác"
-                    className="mt-2 h-9"
-                    MenuProps={{
-                      PaperProps: {
-                        style: {
-                          maxHeight: '200px',
-                        },
-                      },
-                    }}
-                  >
-                    <MenuItem value="" disabled>
-                      Chọn vị trí công tác
-                    </MenuItem>
-                    {positions
-                      ? positions.map((position) => (
-                          <MenuItem key={position.id} value={position.id}>
-                            {position.name}
-                          </MenuItem>
-                        ))
-                      : 'Error to fetch positions'}
-                  </Select>
-                </FormControl>
-                {validateMessages.position && (
-                  <div className="text-red-500 font-semibold">
-                    {validateMessages.position}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-1">
-                <h4 className="text-gray-700 font-bold">
-                  Địa chỉ làm việc <span className="text-red-500">*</span>
-                </h4>
-                <FormControl fullWidth>
-                  <Select
-                    id="Address"
-                    value={formData.address_work}
-                    displayEmpty
-                    onChange={(e) => {
-                      setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        address_work: e.target.value,
-                      }));
-
-                      const foundProvince = data_provinces.data.find(
-                        (province) => province.code === e.target.value,
-                      );
-
-                      setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        address: foundProvince?.name_with_type || '',
-                      }));
-
-                      setValidateMessages((prevState) => ({
-                        ...prevState,
-                        address: '',
-                      }));
-                    }}
-                    placeholder="Chọn tỉnh/ thành phố"
-                    className="mt-2 h-9"
-                    MenuProps={{ PaperProps: { style: { maxHeight: 200 } } }}
-                  >
-                    <MenuItem value="" disabled>
-                      Chọn tỉnh/ thành phố
-                    </MenuItem>
-                    {data_provinces.data.map((province) => (
-                      <MenuItem key={province.code} value={province.code}>
-                        {province.name_with_type}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                {validateMessages.address && (
-                  <div className="text-red-500 font-semibold">
-                    {validateMessages.address}
-                  </div>
-                )}
-              </div>
-
-              <div className="col-span-1">
-                <h4 className="text-gray-700 font-bold">Quận/ huyện</h4>
-                <FormControl fullWidth>
-                  <Select
-                    id="District"
-                    value={formData.district}
-                    displayEmpty
-                    onChange={(e) =>
-                      setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        district: e.target.value,
-                      }))
-                    }
-                    placeholder="Chọn quận/ huyện"
-                    className="mt-2 h-9"
-                    disabled={!formData.address_work}
-                    MenuProps={{ PaperProps: { style: { maxHeight: 200 } } }}
-                  >
-                    <MenuItem value="" disabled>
-                      Chọn quận/ huyện
-                    </MenuItem>
-                    {filteredDistricts.map((district) => (
-                      <MenuItem
-                        key={district.code}
-                        value={district.name_with_type}
-                      >
-                        {district.name_with_type}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </div>
-            </div>
-
             <h4 className="text-gray-700 font-bold">Skype</h4>
-            <input
+            <Input
               id="skype_account"
               name="skype_account"
               type="text"
@@ -611,6 +478,7 @@ function HRProfileRegister() {
               className={`text-black mt-1 bg-white pl-12 pr-3 py-2 border rounded-md w-full
                   focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 
                   `}
+              icon={Building}
             />
 
             <FormControlLabel
@@ -655,11 +523,6 @@ function HRProfileRegister() {
             >
               Đăng xuất
             </button>
-            {showSuccessMessage && (
-              <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mt-4">
-                Đăng ký thành công!
-              </div>
-            )}
           </form>
         </div>
 

@@ -17,6 +17,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 let positionArray = [];
 
 function Profile() {
+  const [isLoading, setIsLoading] = useState(false);
   const { user, logout } = useAuth0();
   const [imageFile, setImageFile] = useState();
   const [image, setImage] = useState();
@@ -146,15 +147,17 @@ function Profile() {
     for (const value of formData.values()) {
       console.log(value);
     }
+    setIsLoading(true);
     HRModule.uploadHRProfile({ formData: formData, token: token })
       .then((res) => {
+        setIsLoading(false);
         successToast('Cập nhật thành công!');
         setTimeout(() => {
           location.reload();
         }, 2000);
       })
       .catch((res) => {
-        console.log(res);
+        setIsLoading(false);
         return errorToast('Cập nhật thất bại, xin vui lòng thử lại sau');
       });
   };
@@ -252,7 +255,7 @@ function Profile() {
               Đổi avatar
             </button>
           </div>
-          <span className="w-5/12">Email: {userInfo.skype}</span>
+          <span className="w-5/12">Skype: {userInfo.skype}</span>
         </div>
         <div className="w-full flex flex-row items-center space-x-20">
           <div className="w-5/12 space-y-2">
@@ -322,9 +325,9 @@ function Profile() {
           </button>
           <button
             onClick={handleUpdateInfo}
-            className="text-sm btn-success py-1 px-2 rounded text-white bg-green-500 shadow-md cursor-pointer"
+            className={`text-sm btn-success py-1 px-2 rounded text-white bg-green-500 shadow-md cursor-pointer ${isLoading && 'opacity-70'}`}
           >
-            Cập nhật
+            {isLoading ? 'On Processing...' : 'Cập nhật'}
           </button>
         </div>
       </div>
