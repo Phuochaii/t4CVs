@@ -39,10 +39,13 @@ function CampaignEditCard({
   const { id: compaignId } = useParams();
   const navigate = useNavigate();
 
-
-  const [,setDistrictOption] = useState<{ value: string; label: string; }[]>([]);
-  function getAllDistrictsOfProvinces(provinceNames: string[]): { value: string; label: string; }[] {
-    const allDistricts: { value: string; label: string; }[] = [];
+  const [, setDistrictOption] = useState<{ value: string; label: string }[]>(
+    [],
+  );
+  function getAllDistrictsOfProvinces(
+    provinceNames: string[],
+  ): { value: string; label: string }[] {
+    const allDistricts: { value: string; label: string }[] = [];
     provinceNames.forEach((provinceName) => {
       const province = districts.data.find(
         (p: { name: string }) => p.name === provinceName,
@@ -186,7 +189,9 @@ function CampaignEditCard({
   );
   const [salaryError, setSalaryError] = useState(false);
   const [salaryMaxError, setSalaryMaxError] = useState(false);
-  const [showPopup, setShowPopup] = useState(jobItem.salaryMax !== 0 && jobItem.salaryMin !== 0);
+  const [showPopup, setShowPopup] = useState(
+    jobItem.salaryMax !== 0 && jobItem.salaryMin !== 0,
+  );
   const [salary, setSalary] = useState(jobItem.salaryMin.toString());
   const [salaryMax, setSalaryMax] = useState(jobItem.salaryMax.toString());
   const [date, setDate] = useState(jobItem.expiredDate);
@@ -312,11 +317,10 @@ function CampaignEditCard({
     if (choice !== null) {
       if (typeof choice !== 'function' && choice.value === 'Trong khoảng') {
         if (jobItem.salaryMax !== null && !jobItem.salaryMin !== null) {
-            setShowPopup(true);
-            setSalaryError(false);
-            setSalaryMaxError(false);
-        }
-        else {
+          setShowPopup(true);
+          setSalaryError(false);
+          setSalaryMaxError(false);
+        } else {
           setShowPopup(true);
           setSalaryError(true);
           setSalaryMaxError(true);
@@ -643,7 +647,11 @@ function CampaignEditCard({
                         placeholder="-- Kiểu lương --"
                         options={salaryOptions}
                         onChange={togglePopup}
-                        defaultValue={jobItem.salaryMin !== 0 && jobItem.salaryMax !== 0 ? salaryOptions[0] : salaryOptions[1]}
+                        defaultValue={
+                          jobItem.salaryMin !== 0 && jobItem.salaryMax !== 0
+                            ? salaryOptions[0]
+                            : salaryOptions[1]
+                        }
                       />
                     </div>
                   </div>
@@ -744,9 +752,6 @@ function CampaignEditCard({
                     + Thêm địa chỉ
                   </button>
                 </div>
-                <button className=" mt-4 px-4 py-2 text-white bg-green-600">
-                  Thêm khu vực mới
-                </button>
               </div>
             </div>
           </div>

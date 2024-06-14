@@ -25,6 +25,7 @@ import { useProfileContext } from '../../../../shared/services/authen/domain/con
 import { getField, getProfile, postJob } from '../../../../modules/hr-module';
 import { Alert } from '@mui/material';
 import { districts } from '../../../../shared/types/Districts';
+import { errorToast } from '../../../../utils/toast';
 function PostCompaign1({
   next,
   previous,
@@ -81,8 +82,8 @@ function PostCompaign1({
   const [salaryError, setSalaryError] = useState(true);
   const [salaryMaxError, setSalaryMaxError] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [salary, setSalary] = useState('');
-  const [salaryMax, setSalaryMax] = useState('');
+  const [salary, setSalary] = useState(0);
+  const [salaryMax, setSalaryMax] = useState(0);
   const [date, setDate] = useState('');
   const [districtOptions, setDistrictOption] = useState<
     { value: string; label: string }[]
@@ -138,9 +139,18 @@ function PostCompaign1({
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any, event: any) => {
-    console.log(cityOption
-      ? cityOption.map((option) => parseInt(option.value))
-      : [])
+    console.log(
+      cityOption ? cityOption.map((option) => parseInt(option.value)) : [],
+    );
+    if (salaryMax <= 0) {
+      return errorToast('Mức lương tối đa phải lớn hơn 0');
+    }
+    if (salary <= 0) {
+      return errorToast('Mức lương tối thiểu phải lớn hơn 0');
+    }
+    if (salary > salaryMax) {
+      return errorToast('Mức lương tối thiểu phải bé hơn mức lương tối đa');
+    }
     if (!salaryError && !salaryMaxError && employer.companyId !== null) {
       const updatedItem = { ...item };
 
@@ -558,7 +568,7 @@ function PostCompaign1({
                       <div className="space-y-2 w-1/2 bg-red">
                         <span className="text-base font-semibold">Từ</span>
                         <input
-                          type="text"
+                          type="number"
                           className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                           placeholder="0"
                           value={salary}
@@ -568,7 +578,7 @@ function PostCompaign1({
                       <div className="space-y-2 w-1/2 bg-red">
                         <span className="text-base font-semibold">Đến</span>
                         <input
-                          type="text"
+                          type="number"
                           className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                           placeholder="0"
                           value={salaryMax}
@@ -626,9 +636,6 @@ function PostCompaign1({
                     + Thêm địa chỉ
                   </button>
                 </div>
-                <button className=" mt-4 px-4 py-2 text-white bg-green-600">
-                  Thêm khu vực mới
-                </button>
               </div>
             </div>
           </div>
