@@ -30,9 +30,8 @@ jobs:
       - name: Unit Test
         working-directory: ./server
         run: |
-          npm ci
+          npm i
           npm run build --if-present
-          npm run
           npm test user.controller
           npm test user.service
           npm test user.repository
