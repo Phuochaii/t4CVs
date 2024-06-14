@@ -11,7 +11,6 @@ function Information({ compaignId }: { compaignId: string }) {
     try {
       const res = await getJobByCampaignId(token!, compaignId);
       setJobData(res);
-      // await console.log(res);
     } catch (error) {
       console.log('Error fetching data. Please try again.');
     }
@@ -108,15 +107,37 @@ function Information({ compaignId }: { compaignId: string }) {
                 </p>
               </div>
             </div>
+            <div className="job-description__item">
+              <h3 className="text-base font-bold mb-2">Địa điểm làm việc</h3>
+              <div className="job-description__item--content">
+                {jobData?.locations
+                  ? jobData?.locations.map((location: any) => (
+                      <p className="" key={location.id}>
+                        {location.name}
+                      </p>
+                    ))
+                  : ''}
+              </div>
+            </div>
+            <div className="job-description__item">
+              <span className="text-base font-bold mb-2"> Kinh nghiệm </span>
+              <div className="job-description__item--content">
+                {jobData?.exp
+                  ? jobData?.exp?.name
+                    ? jobData?.exp?.name
+                    : ''
+                  : ''}
+              </div>
+            </div>
           </div>
         </div>
-        <div className="job-detail__information-detail--actions flex flex-col gap-y-4">
-          <div className="job-detail__information-detail--actions-label">
-            <span className="font-bold">Hạn nộp hồ sơ:</span>{' '}
+        <div className="job-description__item">
+          <div className="text-base font-bold mb-2"> Hạn nộp hồ sơ: </div>
+          <span className="job-description__item--value">
             {moment
               .utc(jobData?.expiredDate ? jobData?.expiredDate : '')
               .format('DD/MM/YYYY')}
-          </div>
+          </span>
         </div>
       </div>
     </>

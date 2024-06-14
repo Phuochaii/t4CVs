@@ -39,25 +39,16 @@ function Company() {
         allCompanies: CompanyFromServer[];
         total: number;
         totalPages: number;
-      } = await getAllCompanies(page);
+      } =
+        searchText == ''
+          ? await getAllCompanies(page)
+          : await findCompanyByName(searchText, page);
       const fields = await getAllFields();
       setCompanies(allCompanies);
       setTotalPages(totalPages);
       setField(fields);
     }
-    async function getDataSearch() {
-      const {
-        companies,
-      }: {
-        companies: CompanyFromServer[];
-      } = await findCompanyByName(searchText, page);
-      setCompanies(companies);
-    }
-    if (searchText == '') {
-      getData();
-    } else {
-      getDataSearch();
-    }
+    getData();
   }, [page, refresh, searchText]);
 
   const columns: BasicColumnProps[] = useMemo(
@@ -133,14 +124,18 @@ function Company() {
         cell: (data: ObjectFromServer) => {
           const company = data as CompanyFromServer;
           return (
-            <div>
-              <Switch
-                checked={company.status}
-                onChange={async () => {
-                  await updateCompanyStatus(token, company.id, !company.status);
-                  setRefresh(!refresh);
-                }}
-              />
+            <div
+              onClick={async () => {
+                await updateCompanyStatus(
+                  token,
+                  company?.id as number,
+                  !company?.status,
+                );
+                setRefresh(!refresh);
+              }}
+              className="cursor-pointer box-follow flex items-center bg-white rounded-[8px] text-[#00b14f] text-lg h-[48px] py-[6px] pl-[14px] pr-[18px]"
+            >
+              <Switch checked={company?.status ? company?.status : false} />
             </div>
           );
         },

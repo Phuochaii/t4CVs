@@ -234,7 +234,11 @@ export async function findEmployerByName(
   const response = await axios.get(`
     ${serverURL}/employer/name/${name}?page=${page}&limit=${limit}`);
   const rawEmployers: EmployerFromServer[] = response.data.data;
-  return { employers: rawEmployers };
+  return {
+    allEmployers: rawEmployers,
+    total: response.data.total,
+    totalPages: response.data.total_page,
+  };
 }
 
 export async function findCompanyByName(
@@ -245,5 +249,7 @@ export async function findCompanyByName(
   const response = await axios.get(`
     ${serverURL}/company/name/${name}?page=${page}&limit=${limit}`);
   const rawCompanies: CompanyFromServer[] = response.data.data;
-  return { companies: rawCompanies };
+  const totalPages = response.data.total_page;
+  const total = response.data.total;
+  return { allCompanies: rawCompanies, totalPages: totalPages, total: total };
 }
