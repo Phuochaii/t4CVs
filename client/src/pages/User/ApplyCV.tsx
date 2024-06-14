@@ -532,6 +532,7 @@ function ApplyCV() {
   const [showModal, setShowModal] = useState(false);
   const handleBeforeApply = () => {
     if (!isAuthenticated) {
+      alert('Bạn cần đăng nhập trước khi ứng tuyển');
       navigation('/user-login');
       return;
     }
@@ -685,7 +686,7 @@ function ApplyCV() {
                           </span>
                           <strong className="job-detail__info--section-content-value">
                             {jobData?.salaryMin && jobData?.salaryMax
-                              ? ` ${jobData?.salaryMin} - ${jobData?.salaryMax} ${jobData?.currency?.name}`
+                              ? ` ${new Intl.NumberFormat().format(jobData?.salaryMin)} - ${new Intl.NumberFormat().format(jobData?.salaryMax)}  ${jobData?.currency?.name}`
                               : 'Thỏa thuận'}
                           </strong>
                         </div>

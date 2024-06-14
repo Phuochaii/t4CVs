@@ -142,9 +142,12 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
         )}`}</div>
       </td>
       <td className="border">
-        <div className="p-2 font-bold text-blue-500">{`${
-          data.company ? data.company.name : ''
-        }`}</div>
+        <div
+          onClick={() => {
+            if (data.company) navigation(`/admin/company/${data.company.id}`);
+          }}
+          className="p-2 font-bold text-blue-500 hover:underline"
+        >{`${data.company ? data.company.name : ''}`}</div>
       </td>
       <td className="border max-w-[180px]">
         {campaign.recruitment ? (

@@ -15,6 +15,7 @@ import { useProfileContext } from '../../shared/services/authen/domain/context';
 import { DefaultPagination } from '../../shared/components/default-pagination';
 import useCustomPagination from '../../utils/useCustomPagination';
 const option = [
+  { value: 'Tất cả', label: 'Tất cả' },
   { value: 'Đã ứng tuyển', label: 'Đã ứng tuyển' },
   { value: 'NTD đã xem hồ sơ', label: 'NTD đã xem hồ sơ' },
 ];
@@ -39,16 +40,18 @@ function YourApplications() {
     setSelectedApplications(applications);
     setSelectedApplications((prev) =>
       prev?.filter((item) => {
-        if (value === 'Đã ứng tuyển') {
-          return item.status === false;
+        if (value === 'Tất cả') {
+          return item;
+        } else if (value === 'Đã ứng tuyển') {
+          return !item.status;
         } else {
-          return item.status === true;
+          return item.status;
         }
       }),
     );
     console.log(selectedApplications);
   };
-  const [jobs, setJobs] = useState<RecruitmentFromServer[] | undefined>([]);
+  // const [jobs, setJobs] = useState<RecruitmentFromServer[] | undefined>([]);
   const fetchApplications = async () => {
     if (!token) {
       console.log('Token is undefined');
@@ -60,7 +63,7 @@ function YourApplications() {
         console.log(result);
         setApplication(applications);
         setSelectedApplications(applications);
-        setJobs(jobs);
+        // setJobs(jobs);
       });
     } catch (error) {
       console.error('An error occurred:', error);

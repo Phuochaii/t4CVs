@@ -19,19 +19,19 @@ function OverviewCard({ title, number, percent }: OverviewCardProps) {
     >
       <div className="flex items-center justify-between gap-4">
         <div className="w-24 h-24 text-center bg-gradient-to-b from-green-500  to-blue-500 flex justify-center items-center font-bold p-2 text-green-400 rounded-[50%]">
-          <div className="w-full h-full bg-white rounded-[50%] flex justify-center items-center">
+          <div className="w-full h-full bg-white rounded-[50%] flex justify-center items-center text-[24px]">
             {number}
           </div>
         </div>
         <div className="relative flex flex-col items-start justify-center gap-2">
-          <MoreHorizontal
+          {/* <MoreHorizontal
             className="self-end text-slate-400 hover:text-slate-600"
             onClick={(event) => {
               event.preventDefault();
               event.stopPropagation();
               setOpenDialog(!openDialog);
             }}
-          />
+          /> */}
           <h2 className="font-bold text-slate-400">{title}</h2>
           <span className="text-emerald-400">{percent}%</span>
           {openDialog && (

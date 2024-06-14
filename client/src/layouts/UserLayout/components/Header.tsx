@@ -432,7 +432,7 @@ function Header() {
                       onClick={() => {
                         navigation('/saved-jobs');
                       }}
-                      className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 hover:text-green-600 hover:bg-slate-200"
+                      className="flex flex-row gap-3 p-4 rounded cursor-pointer text-slate-800 bg-slate-100 w-96 opacity-50 pointer-events-none"
                     >
                       <svg
                         className="w-7 h-7"
