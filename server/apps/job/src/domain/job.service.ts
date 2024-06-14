@@ -55,16 +55,12 @@ export class JobService {
     return await this.jobRepository.saveJob(data);
   }
 
-  async findJobByCampaignId(
-    campaignId: number,
-  ): Promise<FindJobByCampaignIdDto> {
+  async findJobByCampaignId(campaignId: number): Promise<JobAggregate> {
     const job = await this.jobRepository.findJobByCampaignId(campaignId);
     return job;
   }
 
-  async findJobsByCampaignIds(
-    campaignIds: number[],
-  ): Promise<FindJobByCampaignIdDto[]> {
+  async findJobsByCampaignIds(campaignIds: number[]): Promise<JobAggregate[]> {
     const jobs = await this.jobRepository.findJobsByCampaignIds(campaignIds);
     return jobs;
   }
