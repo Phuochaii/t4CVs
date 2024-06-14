@@ -255,9 +255,19 @@ export class CompanyService {
   }
 
   async deleteCampaign(id: number) {
-    lastValueFrom(await this.applicationService.delApplicationbyCampaignId(id));
+    try {
+      await lastValueFrom(
+        await this.applicationService.delApplicationbyCampaignId(id),
+      );
+    } catch (error) {
+      console.error('Error deleting application by campaign ID:', error);
+    }
 
-    lastValueFrom(await this.jobService.deleteJobByCampaignId(id));
+    try {
+      await lastValueFrom(this.jobService.deleteJobByCampaignId(id));
+    } catch (error) {
+      console.error('Error deleting job by campaign ID:', error);
+    }
 
     return await this.companyClient.send({ cmd: 'delete_campaign' }, id).pipe(
       catchError((error) => {
