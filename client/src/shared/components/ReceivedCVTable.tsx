@@ -2,11 +2,13 @@ import { ApplicationFromServer } from '../../shared/types/Application.type';
 import { Mail, Phone, Clock } from 'lucide-react';
 import * as HRModule from '../../modules/hr-module';
 import moment from 'moment';
+import { useProfileContext } from '../services/authen/domain/context';
 
 interface ApplicationProps {
   data: ApplicationFromServer[];
   compaigns?: NameValue[];
   hasCampaignColumn: boolean;
+  setRefreshData: () => void;
 }
 
 function TableHeader({ hasCampaignColumn }: { hasCampaignColumn: boolean }) {
@@ -24,11 +26,16 @@ function TableHeader({ hasCampaignColumn }: { hasCampaignColumn: boolean }) {
   );
 }
 
-function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
+function TableBody({
+  data,
+  compaigns,
+  hasCampaignColumn,
+  setRefreshData,
+}: ApplicationProps) {
   function getCompaignName(id: string | number) {
-    // console.log(id);
     return compaigns?.filter((item) => item.value == id)[0].name;
   }
+  const { token } = useProfileContext();
   return (
     <tbody className="bg-[#F8F8F8C9]">
       {data.map((item: ApplicationFromServer, index: number) => (
@@ -80,8 +87,14 @@ function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
                 // fetchApplication(hrId);
                 HRModule.getCVByApplicationID({
                   applicationId: item.id,
+                  token: token!,
                 }).then((res) => {
-                  console.log(res);
+                  HRModule.updateApplicationStatus({
+                    applicationId: item.id,
+                    token: token!,
+                    status: true,
+                  });
+                  setRefreshData();
                   window.open(res.link, '_blank', 'noopener');
                 });
               }}
@@ -100,12 +113,14 @@ interface ReceivedCVTableProps {
   data: ApplicationFromServer[];
   compaigns?: NameValue[];
   hasCampaignColumn?: boolean;
+  setRefreshData: () => void;
 }
 
 function ReceivedCVTable({
   data,
   compaigns,
   hasCampaignColumn = true,
+  setRefreshData,
 }: ReceivedCVTableProps) {
   return (
     <table
@@ -117,6 +132,7 @@ function ReceivedCVTable({
         hasCampaignColumn={hasCampaignColumn}
         data={data}
         compaigns={compaigns}
+        setRefreshData={setRefreshData}
       />
     </table>
   );

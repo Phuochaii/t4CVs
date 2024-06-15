@@ -16,7 +16,7 @@ function RecruitmentReports() {
               năng Báo cáo hiệu quả tuyển dụng của SHiring - Quản trị tuyển dụng
               hiệu suất cao
               <span className="text-green-500"> tại đây. </span>
-              Để biết thêm chi tiết vui lòng liên hệ đội ngũ hỗ trợ của TopCV.
+              Để biết thêm chi tiết vui lòng liên hệ đội ngũ hỗ trợ của t4CVs.
             </div>
             <div className="left-body--details grid grid-cols-2">
               <div className="left-details flex flex-col gap-3">
@@ -58,7 +58,7 @@ function RecruitmentReports() {
                     </svg>
                   </div>
                   <span className="left-detail--item_value font-medium">
-                    phucdk@topcv.vn
+                    phucdk@t4CVs.vn
                   </span>
                 </div>
               </div>
@@ -110,7 +110,7 @@ function RecruitmentReports() {
                     </svg>
                   </div>
                   <span className="right-detail--item_value font-medium">
-                    cskh@topcv.vn
+                    cskh@t4CVs.vn
                   </span>
                 </div>
               </div>
@@ -120,7 +120,7 @@ function RecruitmentReports() {
                 Tìm hiểu thêm:
               </span>
               <span className="action-vip-user text-green-500">
-                Chương trình khách hàng thân thiết của TopCV
+                Chương trình khách hàng thân thiết của t4CVs
               </span>
               <span className="action-report text-green-500">
                 Báo cáo tuyển dụng

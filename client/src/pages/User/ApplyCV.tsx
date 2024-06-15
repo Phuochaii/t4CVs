@@ -1,16 +1,17 @@
 // khoa
+import { useAuth0 } from '@auth0/auth0-react';
 import { useState, useRef, useEffect } from 'react';
 import { TextField, InputLabel, Modal, Box } from '@mui/material';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
-import JobService from '../../modules/job-module';
 import SearchBoxComponent from '../../layouts/UserLayout/components/SearchBoxComponent';
 import RelatedJobComponent from '../../layouts/UserLayout/components/RelatedJobComponent';
 import InterestedJobComponent from '../../layouts/UserLayout/components/InterestedJobComponent';
-import { salary_range } from '../../shared/utils/constant';
-import { withRoleCheck } from "../../shared/services/authen/domain/withRoleCheck";
-import { Roles } from "../../shared/services/authen/domain/context";
+import { getAllExp, getAllLocation, getJobById } from '../../modules/helper';
+import { uploadApplication, uploadCV } from '../../modules/user-module';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
+import Loading from '../../shared/components/Loading/Loading';
 
 const modalApplyStyle = {
   position: 'absolute' as const,
@@ -32,115 +33,102 @@ interface filterSearch {
   expId: number;
 }
 
-function ApplyCV() {
-  const [jobId, setJobId] = useState('');
-  const { id } = useParams();
-
-  const userId =
-    localStorage.getItem('user') == null
-      ? ''
-      : JSON.parse(localStorage.getItem('user') as string).id;
-  // const jobId = '3';
-  // const userId = '2';
-
-  const [showModal, setShowModal] = useState(false);
+// Modal Apply CV
+function ApplyModal({ open, handleClose, handleOpen, jobData, user }) {
+  const [applyLoading, setApplyLoading] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFile, setSelectedFile] = useState<any>();
+  const { token } = useProfileContext();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setApplyLoading(true);
+    // Custom validation logic
+    const errors = {};
+
+    if (!formData.name) {
+      errors.name = 'Name is required';
+      setApplyLoading(false);
+    }
+    if (!formData.email) {
+      errors.email = 'Email is required';
+      setApplyLoading(false);
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(formData.email)
+    ) {
+      errors.email = 'Invalid email address';
+      setApplyLoading(false);
+    }
+    if (!formData.phone) {
+      errors.phone = 'Phone number is required';
+      setApplyLoading(false);
+    } else if (!/^\d{10}$/i.test(formData.phone)) {
+      errors.phone = 'Invalid phone number';
+      setApplyLoading(false);
+    }
+    if (!formData.file) {
+      errors.file = 'File is required';
+      setApplyLoading(false);
+    }
+
+    try {
+      if (Object.keys(errors).length === 0) {
+        // Upload CV
+        const postData = new FormData();
+        postData.append('file', formData.file);
+        // postData.append("userId", user?.sub);
+
+        const newUploadCV = await uploadCV({
+          postData: postData,
+          token: token,
+        }).then((res) => res.data);
+        console.log(newUploadCV);
+
+        // Create Application
+        const appData = {
+          fullname: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          coverLetter: formData.cover_letter,
+          campaignId: jobData.campaignId,
+          userId: user?.sub,
+          cvId: newUploadCV.id,
+        };
+
+        const appRes = await uploadApplication({ data: appData, token: token });
+
+        console.log(appRes);
+        // Optionally, you can reset the form after successful submission
+        handleDeleteFile();
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          file: null,
+          cover_letter: '',
+        });
+        // handleClose();
+
+        alert('Create Application successfully');
+        handleClose();
+      } else {
+        setErrors(errors);
+        console.log(errors);
+        setApplyLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
+      setApplyLoading(false);
+    }
+    setApplyLoading(false);
+  };
+
   const chooseUploadCV = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
-  const navigation = useNavigate();
-
-  const [jobData, setJobData] = useState<any>({});
-  const [cities, setCities] = useState<any[]>([]);
-  const [exp_year, setExpYear] = useState<any[]>([]);
-
-  const [filter, setFilter] = useState<filterSearch>({
-    titleRecruitment: '',
-    salaryMin: 0,
-    salaryMax: 0,
-    locationId: 0,
-    expId: 0,
-  });
-
-  const SelectLocation = (value: number) => {
-    setFilter((prevState) => ({ ...prevState, locationId: value }));
-  };
-
-  const SelectExp = (value: number) => {
-    setFilter((prevState) => ({ ...prevState, expId: value }));
-  };
-
-  const setTitleRecruitment = (value: string) => {
-    setFilter((prevState) => ({ ...prevState, titleRecruitment: value }));
-  };
-
-  // const SelectSalary = (value: number) => {
-  //   if (value !== 0) {
-  //     const foundRange = salary_range.find(
-  //       (range) => Number(range.value) === value
-  //     );
-  //     if (foundRange) {
-  //       setFilter((prevFilter) => ({
-  //         ...prevFilter,
-  //         salaryMin: foundRange.minSalary,
-  //         salaryMax: foundRange.maxSalary,
-  //       }));
-  //     }
-  //   } else {
-  //     setFilter((prevFilter) => ({
-  //       ...prevFilter,
-  //       salaryMin: 0,
-  //       salaryMax: 0,
-  //     }));
-  //   }
-  // };
-
-  const fetchDataFilter = async () => {
-    try {
-      const locationResponse = await JobService.getAllLocation();
-      setCities(locationResponse);
-
-      const expResponse = await JobService.getAllExp();
-      setExpYear(expResponse);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-  const fetchJobData = async () => {
-    try {
-      const response = await fetch(`http://localhost:3000/job/${jobId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
-      }
-      const data = await response.json();
-      console.log(data);
-      setJobData(data);
-    } catch (error) {
-      console.log('Error fetching data. Please try again.');
-    }
-  };
-  useEffect(() => {
-    setJobId(id);
-    window.scrollTo(0, 0);
-    fetchJobData();
-    fetchDataFilter();
-  }, []);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    fetchJobData();
-  }, [jobId]);
-
-  // Handle Modal
-  const handleOpenModal = () => {
-    setShowModal(true);
-  };
-  const handleCloseModal = () => setShowModal(false);
-
-  const [selectedFile, setSelectedFile] = useState<any>();
 
   const handleFileInputChange = (event) => {
     const file = event.target.files[0];
@@ -200,92 +188,417 @@ function ApplyCV() {
       [name]: inputValue,
     });
   };
+  return (
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box className="modal-apply-cv min-w-[600px]" sx={modalApplyStyle}>
+        <form onSubmit={handleSubmit}>
+          <div className="modal-header py-5 px-8 flex flex-row items-center justify-between border-b-4 border-slate-100">
+            <div className="form-header_title text-2xl font-bold">
+              Ứng tuyển
+              <span className="text-green-500">
+                {' '}
+                {jobData?.titleRecruitment}
+              </span>
+            </div>
+            <div
+              className="form-header_action btn-close w-10 p-2 rounded-full bg-slate-200 cursor-pointer hover:bg-slate-300"
+              onClick={handleClose}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18 18 6M6 6l12 12"
+                />
+              </svg>
+            </div>
+          </div>
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+          <div className="modal-body overflow-auto h-[36rem] py-5 px-8">
+            <div className="apply-content flex flex-col gap-5">
+              <div className="apply-content_tab">
+                <div className="apply-content_tab-title flex flex-row items-center gap-3 text-lg font-semibold">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-7 h-7"
+                    fill="rgb(34 197 94)"
+                    viewBox="0 0 24 24"
+                  >
+                    <path fill="none" d="M0 0h24v24H0z" />
+                    <path d="M12.414 5H21a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h7.414l2 2zM12 13a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm-4 5h8a4 4 0 1 0-8 0z" />
+                  </svg>
+                  Chọn CV để ứng tuyển
+                </div>
+              </div>
+              <div className="apply-content_tab p-5 text-center border-2 border-dashed border-green-400 rounded-lg cursor-pointer group/input_cv">
+                <div className="input-dragDropBox">
+                  <input
+                    type="file"
+                    name="file"
+                    accept=".doc,.docx,.pdf"
+                    onChange={handleFileInputChange}
+                    ref={fileInputRef}
+                    className="block w-full text-sm text-slate-500 hidden"
+                  />
+                  {!selectedFile ? (
+                    <div
+                      className="input-inner flex flex-col gap-3 w-max m-auto"
+                      onClick={chooseUploadCV}
+                    >
+                      <div className="input-inner_icon flex flex-row gap-3 font-bold items-center justify-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="rgb(203 213 225)"
+                          className="w-10 h-10"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.03 5.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72v4.94a.75.75 0 0 0 1.5 0v-4.94l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        Tải lên CV từ máy tính, chọn hoặc kéo thả
+                      </div>
+                      <span className="input-inner_format text-slate-400">
+                        Hỗ trợ định dạng .doc, .docx, pdf có kích thước dưới 5MB
+                      </span>
+                      <span className="input-inner_action btn-apply font-bold m-auto text-center py-2 px-5 rounded-lg bg-slate-300 group-hover/input_cv:text-white group-hover/input_cv:bg-green-600">
+                        Chọn CV
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="input-inner flex flex-col gap-3 w-max m-auto">
+                      <div className="input-inner_icon flex flex-row gap-3 font-bold items-center justify-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="rgb(203 213 225)"
+                          className="w-10 h-10"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.03 5.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72v4.94a.75.75 0 0 0 1.5 0v-4.94l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        Tải lên CV từ máy tính, chọn hoặc kéo thả
+                      </div>
+                      <span className="input-inner_format text-slate-400">
+                        Hỗ trợ định dạng .doc, .docx, pdf có kích thước dưới 5MB
+                      </span>
+                      <div className="selected-file-detail flex flex-row gap-2 items-center justify-center text-green-500">
+                        <svg
+                          className="w-8 h-8"
+                          fill="rgb(34 197 94)"
+                          viewBox="-6.5 0 32 32"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M13.438 5.656l4.406 4.625c0.438 0.469 0.813 1.344 0.813 2.031v13.688c0 0.625-0.5 1.188-1.188 1.188h-16.281c-0.625 0-1.188-0.563-1.188-1.188v-20.031c0-0.625 0.563-1.188 1.188-1.188h10.25c0.688 0 1.563 0.406 2 0.875zM2.469 25.125h13.719c0.219 0 0.406-0.188 0.406-0.406v-11.438c0-0.219-0.188-0.406-0.406-0.406h-4.906c-0.219 0-0.406-0.188-0.406-0.406v-5.219c0-0.219-0.156-0.375-0.375-0.375h-8.031c-0.219 0-0.375 0.156-0.375 0.375v17.469c0 0.219 0.156 0.406 0.375 0.406zM15.219 10.531l-1.969-2.125c-0.156-0.156-0.281-0.094-0.281 0.125v1.906c0 0.188 0.188 0.375 0.375 0.375h1.75c0.219 0 0.281-0.125 0.125-0.281zM4.875 8.719h3.875c0.406 0 0.781 0.375 0.781 0.813v0.469c0 0.406-0.375 0.781-0.781 0.781h-3.875c-0.438 0-0.813-0.375-0.813-0.781v-0.469c0-0.438 0.375-0.813 0.813-0.813zM4.875 12.906h3.875c0.406 0 0.781 0.375 0.781 0.813v0.469c0 0.406-0.375 0.781-0.781 0.781h-3.875c-0.438 0-0.813-0.375-0.813-0.781v-0.469c0-0.438 0.375-0.813 0.813-0.813zM13.719 19.156h-8.844c-0.438 0-0.813-0.344-0.813-0.781v-0.469c0-0.438 0.375-0.781 0.813-0.781h8.844c0.406 0 0.813 0.344 0.813 0.781v0.469c0 0.438-0.406 0.781-0.813 0.781zM13.719 23.438h-8.844c-0.438 0-0.813-0.344-0.813-0.75v-0.5c0-0.438 0.375-0.781 0.813-0.781h8.844c0.406 0 0.813 0.344 0.813 0.781v0.5c0 0.406-0.406 0.75-0.813 0.75z"></path>
+                        </svg>
+                        <p className="truncate max-w-52">
+                          {selectedFile?.name}
+                        </p>
+                        <span
+                          className="delete-btn bg-red-100 rounded-md p-1 px-2"
+                          onClick={handleDeleteFile}
+                        >
+                          <svg
+                            className="w-6 h-6"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4V4zm2 2h6V4H9v2zM6.074 8l.857 12H17.07l.857-12H6.074zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1zm4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1z"
+                              fill="rgb(239 68 68)"
+                            />
+                          </svg>
+                        </span>
+                        <span
+                          className="input-inner_action btn-apply font-bold text-center py-2 px-5 rounded-lg bg-slate-300 group-hover/input_cv:text-white group-hover/input_cv:bg-green-600"
+                          onClick={chooseUploadCV}
+                        >
+                          Chọn CV
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="input-userInfo pt-3 mt-4 border-t flex flex-col gap-3">
+                  <div className="input-userInfo__banner flex justify-between items-center">
+                    <div className="input-userInfo__banner-label text-green-500">
+                      Vui lòng nhập đầy đủ thông tin chi tiết:
+                    </div>
+                    <div className="input-userInfo__banner-required text-xs text-red-500">
+                      (*) Thông tin bắt buộc.
+                    </div>
+                  </div>
 
-    // Custom validation logic
-    const errors = {};
+                  <div className="input-userInfo__value flex flex-row flex-wrap gap-2 text-black text-start">
+                    <div className="input-userInfo__value-username basis-full flex flex-col gap-1">
+                      <InputLabel>
+                        Họ và tên <span className="text-red-500"> *</span>
+                      </InputLabel>
+                      <TextField
+                        className={`input_item w-full 
+                                    ${errors.name ? 'border-red-500' : ''}
+                                  `}
+                        size="small"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="Họ tên hiển thị với NTD"
+                      />
+                      {errors.name && (
+                        <p className="text-red-500 text-xs italic">
+                          {errors.name}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex flex-row gap-2 basis-full">
+                      <div className="input-userInfo__value-email flex flex-col gap-1 w-full">
+                        <InputLabel>
+                          Email <span className="text-red-500"> *</span>
+                        </InputLabel>
+                        <TextField
+                          className={`input_item
+                                      ${errors.email ? 'border-red-500' : ''}
+                                    `}
+                          size="small"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          placeholder="Email hiển thị với NTD"
+                        />
+                        {errors.email && (
+                          <p className="text-red-500 text-xs italic">
+                            {errors.email}
+                          </p>
+                        )}
+                      </div>
+                      <div className="input-userInfo__value-phone flex flex-col gap-1 w-full">
+                        <InputLabel>
+                          Số điện thoại <span className="text-red-500"> *</span>
+                        </InputLabel>
+                        <TextField
+                          className={`input_item
+                                      ${errors.phone ? 'border-red-500' : ''}
+                                    `}
+                          size="small"
+                          type="number"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          placeholder="Số điện thoại hiển thị với NTD"
+                        />
+                        {errors.phone && (
+                          <p className="text-red-500 text-xs italic">
+                            {errors.phone}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="apply-content_tab">
+                <div className="apply-content_tab-title flex flex-row items-center gap-3 text-lg font-semibold">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-7 h-7"
+                    fill="rgb(34 197 94)"
+                    viewBox="0 0 512 512"
+                  >
+                    <path d="M278.5 215.6L23 471c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l74.8-74.8c7.4 4.6 15.3 8.2 23.8 10.5C200.3 452.8 270 454.5 338 409.4c12.2-8.1 5.8-25.4-8.8-25.4l-16.1 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l97.7-29.3c3.4-1 6.4-3.1 8.4-6.1c4.4-6.4 8.6-12.9 12.6-19.6c6.2-10.3-1.5-23-13.5-23l-38.6 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l80.9-24.3c4.6-1.4 8.4-4.8 10.2-9.3C494.5 163 507.8 86.1 511.9 36.8c.8-9.9-3-19.6-10-26.6s-16.7-10.8-26.6-10C391.5 7 228.5 40.5 137.4 131.6C57.3 211.7 56.7 302.3 71.3 356.4c2.1 7.9 12 9.6 17.8 3.8L253.6 195.8c6.2-6.2 16.4-6.2 22.6 0c5.4 5.4 6.1 13.6 2.2 19.8z" />
+                  </svg>
+                  Thư giới thiệu:
+                </div>
+                <div className="apply-content_tab-sub-title text-slate-500 mt-2">
+                  Một thư giới thiệu ngắn gọn, chỉn chu sẽ giúp bạn trở nên
+                  chuyên nghiệp và gây ấn tượng hơn với nhà tuyển dụng.
+                </div>
+                <div className="cover-letter-area border rounded-lg border-slate-400 px-1 mt-2">
+                  <TextField
+                    name="cover_letter"
+                    value={formData.cover_letter}
+                    onChange={handleChange}
+                    multiline
+                    rows={4}
+                    placeholder="Viết giới thiệu ngắn gọn về bản thân (điểm mạnh, điểm yếu) và nêu rõ mong muốn, lý do bạn muốn ứng tuyển cho vị trí này."
+                    className="w-full"
+                  />
+                </div>
+              </div>
+              <div className="apply-content_tab border border-slate-300 rounded-lg p-3">
+                <span className="note-title flex gap-2 items-center text-red-500 font-bold text-lg">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6"
+                    viewBox="0 0 24 24"
+                    fill="rgb(248 113 113)"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  Lưu ý
+                </span>
+                <div className="note-content">
+                  <p className="note-content__list mt-3">
+                    <span>
+                      1. t4CVs khuyên tất cả các bạn hãy luôn cẩn trọng trong
+                      quá trình tìm việc và chủ động nghiên cứu về thông tin
+                      công ty, vị trí việc làm trước khi ứng tuyển.
+                      <br />
+                      Ứng viên cần có trách nhiệm với hành vi ứng tuyển của
+                      mình. Nếu bạn gặp phải tin tuyển dụng hoặc nhận được liên
+                      lạc đáng ngờ của nhà tuyển dụng, hãy báo cáo ngay cho
+                      t4CVs qua email
+                      <a
+                        className="text-green-500"
+                        target="_top"
+                        href="mailto:hotro@topcv.vn"
+                      >
+                        {' '}
+                        hotro@t4CVs.vn
+                      </a>{' '}
+                      để được hỗ trợ kịp thời.
+                    </span>
+                  </p>
+                  <p className="note-content__list mt-3">
+                    <span>
+                      2. Tìm hiểu thêm kinh nghiệm phòng tránh lừa đảo
+                      <a
+                        href="https://blog.topcv.vn/huong-dan-tim-viec-an-toan-trong-ky-nguyen-so/"
+                        target="__blank"
+                        className="font-semibold text-green-500"
+                      >
+                        {' '}
+                        tại đây.
+                      </a>
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-    if (!formData.name) {
-      errors.name = 'Name is required';
-    }
-    if (!formData.email) {
-      errors.email = 'Email is required';
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(formData.email)
-    ) {
-      errors.email = 'Invalid email address';
-    }
-    if (!formData.phone) {
-      errors.phone = 'Phone number is required';
-    } else if (!/^\d{10}$/i.test(formData.phone)) {
-      errors.phone = 'Invalid phone number';
-    }
-    if (!formData.file) {
-      errors.file = 'File is required';
-    }
+          <div className="modal-footer py-5 px-8 flex flex-row gap-3 items-center border-t-4 border-slate-100">
+            <span
+              className="btn-close font-semibold py-2 px-4 rounded-lg text-slate-700 bg-slate-200 cursor-pointer hover:bg-slate-300"
+              onClick={handleClose}
+            >
+              Hủy
+            </span>
 
-    if (Object.keys(errors).length === 0) {
-      // Upload CV
-      const postData = new FormData();
-      postData.append('file', formData.file);
-      postData.append('userId', userId);
+            <button
+              type="submit"
+              className="flex gap-3 items-center justify-center btn-apply font-bold w-full py-2 px-5 rounded-lg bg-green-500 text-white hover:bg-green-600 cursor-pointer"
+            >
+              Ứng tuyển ngay
+              {applyLoading && <Loading />}
+            </button>
+          </div>
+        </form>
+      </Box>
+    </Modal>
+  );
+}
 
-      const response = await fetch('http://localhost:3000/cv', {
-        method: 'POST',
-        body: postData,
-      });
+function ApplyCV() {
+  const { user, getAccessTokenSilently, isAuthenticated, isLoading } =
+    useAuth0();
 
-      if (!response.ok) {
-        throw new Error('Failed to upload CV');
-      }
+  const [jobId, setJobId] = useState('');
+  const { id } = useParams();
 
-      const newUploadCV = await response.json();
-      // console.log(newUploadCV);
+  // const userId = user?.sub;
 
-      // Create Application
-      const appData = {
-        fullname: formData.name,
-        phone: formData.phone,
-        email: formData.email,
-        coverLetter: formData.cover_letter,
-        campaignId: jobData.campaignId,
-        userId: userId,
-        cvId: newUploadCV.id,
-      };
-
-      const appRes = await fetch('http://localhost:3000/application', {
-        method: 'POST',
-        headers: {
-          Accept: '*/*',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(appData),
-      });
-
-      if (!appRes.ok) {
-        throw new Error('Failed to create Application');
-      }
-
-      console.log(appRes);
-      // Optionally, you can reset the form after successful submission
-      handleDeleteFile();
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        file: null,
-        cover_letter: '',
-      });
-      handleCloseModal();
-
-      alert('Create Application successfully');
-    } else {
-      setErrors(errors);
-      console.log(errors);
+  const [showModal, setShowModal] = useState(false);
+  const handleBeforeApply = () => {
+    if (!isAuthenticated) {
+      alert('Bạn cần đăng nhập trước khi ứng tuyển');
+      navigation('/user-login');
+      return;
     }
   };
+
+  const navigation = useNavigate();
+
+  const [jobData, setJobData] = useState<any>({});
+  const [cities, setCities] = useState<any[]>([]);
+  const [exp_year, setExpYear] = useState<any[]>([]);
+
+  const [filter, setFilter] = useState<filterSearch>({
+    titleRecruitment: '',
+    salaryMin: 0,
+    salaryMax: 0,
+    locationId: 0,
+    expId: 0,
+  });
+
+  const SelectLocation = (value: number) => {
+    setFilter((prevState) => ({ ...prevState, locationId: value }));
+  };
+
+  const SelectExp = (value: number) => {
+    setFilter((prevState) => ({ ...prevState, expId: value }));
+  };
+
+  const setTitleRecruitment = (value: string) => {
+    setFilter((prevState) => ({ ...prevState, titleRecruitment: value }));
+  };
+
+  const fetchDataFilter = async () => {
+    try {
+      const locationResponse = await getAllLocation();
+      setCities(locationResponse);
+
+      const expResponse = await getAllExp();
+      setExpYear(expResponse);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  const fetchJobData = async () => {
+    if (jobId) {
+      const data = await getJobById(jobId);
+      await setJobData(data);
+    }
+  };
+  useEffect(() => {
+    setJobId(id);
+    window.scrollTo(0, 0);
+    fetchJobData();
+    fetchDataFilter();
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    fetchJobData();
+  }, [jobId]);
+
+  // Handle Modal
+  const handleOpenModal = () => {
+    handleBeforeApply();
+    setShowModal(true);
+  };
+  const handleCloseModal = () => setShowModal(false);
 
   const handleSearch = () => {
     const queryParams = {
@@ -307,339 +620,15 @@ function ApplyCV() {
     navigation(`/results?${queryString}`);
   };
 
-  const ApplyModal = withRoleCheck(Roles.USER, () => (
-    <Modal
-        open={true}
-        onClose={handleCloseModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box className="modal-apply-cv" sx={modalApplyStyle}>
-          <form onSubmit={handleSubmit}>
-            <div className="modal-header py-5 px-8 flex flex-row items-center justify-between border-b-4 border-slate-100">
-              <div className="form-header_title text-2xl font-bold">
-                Ứng tuyển
-                <span className="text-green-500">
-                  {" "}
-                  {jobData?.titleRecruitment}
-                </span>
-              </div>
-              <div
-                className="form-header_action btn-close w-10 p-2 rounded-full bg-slate-200 cursor-pointer hover:bg-slate-300"
-                onClick={handleCloseModal}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18 18 6M6 6l12 12"
-                  />
-                </svg>
-              </div>
-            </div>
-
-            <div className="modal-body overflow-auto h-[36rem] py-5 px-8">
-              <div className="apply-content flex flex-col gap-5">
-                <div className="apply-content_tab">
-                  <div className="apply-content_tab-title flex flex-row items-center gap-3 text-lg font-semibold">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-7 h-7"
-                      fill="rgb(34 197 94)"
-                      viewBox="0 0 24 24"
-                    >
-                      <path fill="none" d="M0 0h24v24H0z" />
-                      <path d="M12.414 5H21a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h7.414l2 2zM12 13a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm-4 5h8a4 4 0 1 0-8 0z" />
-                    </svg>
-                    Chọn CV để ứng tuyển
-                  </div>
-                </div>
-                <div className="apply-content_tab p-5 text-center border-2 border-dashed border-green-400 rounded-lg cursor-pointer group/input_cv">
-                  <div className="input-dragDropBox">
-                    <input
-                      type="file"
-                      name="file"
-                      accept=".doc,.docx,.pdf"
-                      onChange={handleFileInputChange}
-                      ref={fileInputRef}
-                      className="block w-full text-sm text-slate-500 hidden"
-                    />
-                    {!selectedFile ? (
-                      <div
-                        className="input-inner flex flex-col gap-3 w-max m-auto"
-                        onClick={chooseUploadCV}
-                      >
-                        <div className="input-inner_icon flex flex-row gap-3 font-bold items-center justify-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="rgb(203 213 225)"
-                            className="w-10 h-10"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.03 5.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72v4.94a.75.75 0 0 0 1.5 0v-4.94l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          Tải lên CV từ máy tính, chọn hoặc kéo thả
-                        </div>
-                        <span className="input-inner_format text-slate-400">
-                          Hỗ trợ định dạng .doc, .docx, pdf có kích thước dưới
-                          5MB
-                        </span>
-                        <span className="input-inner_action btn-apply font-bold m-auto text-center py-2 px-5 rounded-lg bg-slate-300 group-hover/input_cv:text-white group-hover/input_cv:bg-green-600">
-                          Chọn CV
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="input-inner flex flex-col gap-3 w-max m-auto">
-                        <div className="input-inner_icon flex flex-row gap-3 font-bold items-center justify-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="rgb(203 213 225)"
-                            className="w-10 h-10"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.03 5.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72v4.94a.75.75 0 0 0 1.5 0v-4.94l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          Tải lên CV từ máy tính, chọn hoặc kéo thả
-                        </div>
-                        <span className="input-inner_format text-slate-400">
-                          Hỗ trợ định dạng .doc, .docx, pdf có kích thước dưới
-                          5MB
-                        </span>
-                        <div className="selected-file-detail flex flex-row gap-2 items-center justify-center text-green-500">
-                          <svg
-                            className="w-8 h-8"
-                            fill="rgb(34 197 94)"
-                            viewBox="-6.5 0 32 32"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M13.438 5.656l4.406 4.625c0.438 0.469 0.813 1.344 0.813 2.031v13.688c0 0.625-0.5 1.188-1.188 1.188h-16.281c-0.625 0-1.188-0.563-1.188-1.188v-20.031c0-0.625 0.563-1.188 1.188-1.188h10.25c0.688 0 1.563 0.406 2 0.875zM2.469 25.125h13.719c0.219 0 0.406-0.188 0.406-0.406v-11.438c0-0.219-0.188-0.406-0.406-0.406h-4.906c-0.219 0-0.406-0.188-0.406-0.406v-5.219c0-0.219-0.156-0.375-0.375-0.375h-8.031c-0.219 0-0.375 0.156-0.375 0.375v17.469c0 0.219 0.156 0.406 0.375 0.406zM15.219 10.531l-1.969-2.125c-0.156-0.156-0.281-0.094-0.281 0.125v1.906c0 0.188 0.188 0.375 0.375 0.375h1.75c0.219 0 0.281-0.125 0.125-0.281zM4.875 8.719h3.875c0.406 0 0.781 0.375 0.781 0.813v0.469c0 0.406-0.375 0.781-0.781 0.781h-3.875c-0.438 0-0.813-0.375-0.813-0.781v-0.469c0-0.438 0.375-0.813 0.813-0.813zM4.875 12.906h3.875c0.406 0 0.781 0.375 0.781 0.813v0.469c0 0.406-0.375 0.781-0.781 0.781h-3.875c-0.438 0-0.813-0.375-0.813-0.781v-0.469c0-0.438 0.375-0.813 0.813-0.813zM13.719 19.156h-8.844c-0.438 0-0.813-0.344-0.813-0.781v-0.469c0-0.438 0.375-0.781 0.813-0.781h8.844c0.406 0 0.813 0.344 0.813 0.781v0.469c0 0.438-0.406 0.781-0.813 0.781zM13.719 23.438h-8.844c-0.438 0-0.813-0.344-0.813-0.75v-0.5c0-0.438 0.375-0.781 0.813-0.781h8.844c0.406 0 0.813 0.344 0.813 0.781v0.5c0 0.406-0.406 0.75-0.813 0.75z"></path>
-                          </svg>
-                          <p className="truncate max-w-52">
-                            {selectedFile?.name}
-                          </p>
-                          <span
-                            className="delete-btn bg-red-100 rounded-md p-1 px-2"
-                            onClick={handleDeleteFile}
-                          >
-                            <svg
-                              className="w-6 h-6"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4V4zm2 2h6V4H9v2zM6.074 8l.857 12H17.07l.857-12H6.074zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1zm4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1z"
-                                fill="rgb(239 68 68)"
-                              />
-                            </svg>
-                          </span>
-                          <span
-                            className="input-inner_action btn-apply font-bold text-center py-2 px-5 rounded-lg bg-slate-300 group-hover/input_cv:text-white group-hover/input_cv:bg-green-600"
-                            onClick={chooseUploadCV}
-                          >
-                            Chọn CV
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="input-userInfo pt-3 mt-4 border-t flex flex-col gap-3">
-                    <div className="input-userInfo__banner flex justify-between items-center">
-                      <div className="input-userInfo__banner-label text-green-500">
-                        Vui lòng nhập đầy đủ thông tin chi tiết:
-                      </div>
-                      <div className="input-userInfo__banner-required text-xs text-red-500">
-                        (*) Thông tin bắt buộc.
-                      </div>
-                    </div>
-
-                    <div className="input-userInfo__value flex flex-row flex-wrap gap-2 text-black text-start">
-                      <div className="input-userInfo__value-username basis-full flex flex-col gap-1">
-                        <InputLabel>
-                          Họ và tên <span className="text-red-500"> *</span>
-                        </InputLabel>
-                        <TextField
-                          className={`input_item w-full 
-                                      ${errors.name ? "border-red-500" : ""}
-                                    `}
-                          size="small"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          placeholder="Họ tên hiển thị với NTD"
-                        />
-                        {errors.name && (
-                          <p className="text-red-500 text-xs italic">
-                            {errors.name}
-                          </p>
-                        )}
-                      </div>
-                      <div className="flex flex-row gap-2 basis-full">
-                        <div className="input-userInfo__value-email flex flex-col gap-1 w-full">
-                          <InputLabel>
-                            Email <span className="text-red-500"> *</span>
-                          </InputLabel>
-                          <TextField
-                            className={`input_item
-                                        ${errors.email ? "border-red-500" : ""}
-                                      `}
-                            size="small"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder="Email hiển thị với NTD"
-                          />
-                          {errors.email && (
-                            <p className="text-red-500 text-xs italic">
-                              {errors.email}
-                            </p>
-                          )}
-                        </div>
-                        <div className="input-userInfo__value-phone flex flex-col gap-1 w-full">
-                          <InputLabel>
-                            Số điện thoại{" "}
-                            <span className="text-red-500"> *</span>
-                          </InputLabel>
-                          <TextField
-                            className={`input_item
-                                        ${errors.phone ? "border-red-500" : ""}
-                                      `}
-                            size="small"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            placeholder="Số điện thoại hiển thị với NTD"
-                          />
-                          {errors.phone && (
-                            <p className="text-red-500 text-xs italic">
-                              {errors.phone}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="apply-content_tab">
-                  <div className="apply-content_tab-title flex flex-row items-center gap-3 text-lg font-semibold">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-7 h-7"
-                      fill="rgb(34 197 94)"
-                      viewBox="0 0 512 512"
-                    >
-                      <path d="M278.5 215.6L23 471c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l74.8-74.8c7.4 4.6 15.3 8.2 23.8 10.5C200.3 452.8 270 454.5 338 409.4c12.2-8.1 5.8-25.4-8.8-25.4l-16.1 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l97.7-29.3c3.4-1 6.4-3.1 8.4-6.1c4.4-6.4 8.6-12.9 12.6-19.6c6.2-10.3-1.5-23-13.5-23l-38.6 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l80.9-24.3c4.6-1.4 8.4-4.8 10.2-9.3C494.5 163 507.8 86.1 511.9 36.8c.8-9.9-3-19.6-10-26.6s-16.7-10.8-26.6-10C391.5 7 228.5 40.5 137.4 131.6C57.3 211.7 56.7 302.3 71.3 356.4c2.1 7.9 12 9.6 17.8 3.8L253.6 195.8c6.2-6.2 16.4-6.2 22.6 0c5.4 5.4 6.1 13.6 2.2 19.8z" />
-                    </svg>
-                    Thư giới thiệu:
-                  </div>
-                  <div className="apply-content_tab-sub-title text-slate-500 mt-2">
-                    Một thư giới thiệu ngắn gọn, chỉn chu sẽ giúp bạn trở nên
-                    chuyên nghiệp và gây ấn tượng hơn với nhà tuyển dụng.
-                  </div>
-                  <div className="cover-letter-area border rounded-lg border-slate-400 px-1 mt-2">
-                    <TextField
-                      name="cover_letter"
-                      value={formData.cover_letter}
-                      onChange={handleChange}
-                      multiline
-                      rows={4}
-                      placeholder="Viết giới thiệu ngắn gọn về bản thân (điểm mạnh, điểm yếu) và nêu rõ mong muốn, lý do bạn muốn ứng tuyển cho vị trí này."
-                      className="w-full"
-                    />
-                  </div>
-                </div>
-                <div className="apply-content_tab border border-slate-300 rounded-lg p-3">
-                  <span className="note-title flex gap-2 items-center text-red-500 font-bold text-lg">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-6 h-6"
-                      viewBox="0 0 24 24"
-                      fill="rgb(248 113 113)"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    Lưu ý
-                  </span>
-                  <div className="note-content">
-                    <p className="note-content__list mt-3">
-                      <span>
-                        1. TopCV khuyên tất cả các bạn hãy luôn cẩn trọng trong
-                        quá trình tìm việc và chủ động nghiên cứu về thông tin
-                        công ty, vị trí việc làm trước khi ứng tuyển.
-                        <br />
-                        Ứng viên cần có trách nhiệm với hành vi ứng tuyển của
-                        mình. Nếu bạn gặp phải tin tuyển dụng hoặc nhận được
-                        liên lạc đáng ngờ của nhà tuyển dụng, hãy báo cáo ngay
-                        cho TopCV qua email
-                        <a
-                          className="text-green-500"
-                          target="_top"
-                          href="mailto:hotro@topcv.vn"
-                        >
-                          {" "}
-                          hotro@topcv.vn
-                        </a>{" "}
-                        để được hỗ trợ kịp thời.
-                      </span>
-                    </p>
-                    <p className="note-content__list mt-3">
-                      <span>
-                        2. Tìm hiểu thêm kinh nghiệm phòng tránh lừa đảo
-                        <a
-                          href="https://blog.topcv.vn/huong-dan-tim-viec-an-toan-trong-ky-nguyen-so/"
-                          target="__blank"
-                          className="font-semibold text-green-500"
-                        >
-                          {" "}
-                          tại đây.
-                        </a>
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="modal-footer py-5 px-8 flex flex-row gap-3 items-center border-t-4 border-slate-100">
-              <span
-                className="btn-close font-semibold py-2 px-4 rounded-lg text-slate-700 bg-slate-200 cursor-pointer hover:bg-slate-300"
-                onClick={handleCloseModal}
-              >
-                Hủy
-              </span>
-              <button
-                type="submit"
-                className="btn-apply font-bold w-full text-center py-2 px-5 rounded-lg bg-green-500 text-white hover:bg-green-600 cursor-pointer"
-              >
-                Ứng tuyển ngay
-              </button>
-            </div>
-          </form>
-        </Box>
-      </Modal>
-  ))
-
   return (
     <>
+      <ApplyModal
+        handleClose={handleCloseModal}
+        open={showModal}
+        handleOpen={handleOpenModal}
+        jobData={jobData}
+        user={user}
+      />
       <div className="apply-cv">
         <div className="search-job">
           <div className="header">
@@ -697,7 +686,7 @@ function ApplyCV() {
                           </span>
                           <strong className="job-detail__info--section-content-value">
                             {jobData?.salaryMin && jobData?.salaryMax
-                              ? ` ${jobData?.salaryMin} - ${jobData?.salaryMax} ${jobData?.currency?.name}`
+                              ? ` ${new Intl.NumberFormat().format(jobData?.salaryMin)} - ${new Intl.NumberFormat().format(jobData?.salaryMax)}  ${jobData?.currency?.name}`
                               : 'Thỏa thuận'}
                           </strong>
                         </div>
@@ -948,7 +937,7 @@ function ApplyCV() {
                           </svg>
                         </div>
                         <div className="quantity-applied-user__text">
-                          TopCV chưa hỗ trợ xem số lượt ứng tuyển cho việc làm
+                          t4CVs chưa hỗ trợ xem số lượt ứng tuyển cho việc làm
                           này
                         </div>
                       </div>
@@ -1037,11 +1026,11 @@ function ApplyCV() {
                         </span>
                       </div>
                       <div
-                        onClick={() =>
+                        onClick={() => {
                           navigation(
-                            `/companies/${jobData?.companyId ? jobData?.companyId : ''}`,
-                          )
-                        }
+                            `/companies/${jobData?.company?.id ? jobData?.company?.id : ''}`,
+                          );
+                        }}
                         className="job-detail__company--action font-bold text-green-500 flex flex-row gap-2 items-center justify-center cursor-pointer hover:underline"
                       >
                         Xem trang công ty
@@ -1249,13 +1238,18 @@ function ApplyCV() {
                         Khu vực
                       </div>
                       <div className="box-category-tags flex flex-row flex-wrap gap-3">
-                        <span className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500">
-                          {jobData?.locations
-                            ? jobData?.locations[0]?.name
-                              ? jobData?.locations[0]?.name
-                              : ''
-                            : ''}
-                        </span>
+                        {jobData?.locations
+                          ? jobData?.locations.map((location: any) => (
+                              <strong
+                                className="job-detail__info--section-content-value"
+                                key={location.id}
+                              >
+                                <span className="box-category-tag text-sm px-2 py-1 rounded bg-slate-100 text-slate-500">
+                                  {location.name}
+                                </span>
+                              </strong>
+                            ))
+                          : ''}
                       </div>
                     </div>
                   </div>
@@ -1268,9 +1262,6 @@ function ApplyCV() {
           </div>
         </div>
       </div>
-
-      {/* Modal Apply CV */}
-      {showModal && <ApplyModal/>}
     </>
   );
 }

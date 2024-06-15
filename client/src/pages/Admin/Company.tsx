@@ -5,11 +5,6 @@ import {
   Search,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  getAllCompanies,
-  getAllFields,
-  updateCompanyStatus,
-} from '../../shared/utils/helper';
 import { CompanyFromServer } from '../../shared/types/Company.type';
 import BasicTable, {
   BasicColumnProps,
@@ -17,6 +12,13 @@ import BasicTable, {
 } from '../../shared/components/basic-table';
 import { Field } from '../../shared/types/Recruitment.type';
 import Switch from '../../shared/components/CustomSwitch';
+import { updateCompanyStatus } from '../../modules/admin-module';
+import {
+  getAllCompanies,
+  getAllFields,
+  findCompanyByName,
+} from '../../modules/helper';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 function Company() {
   const [companies, setCompanies] = useState<CompanyFromServer[]>([]);
@@ -24,6 +26,8 @@ function Company() {
   const [totalPages, setTotalPages] = useState(0);
   const [fields, setField] = useState<Field[]>([]);
   const [refresh, setRefresh] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const { token } = useProfileContext();
 
   useEffect(() => {
     async function getData() {
@@ -35,14 +39,17 @@ function Company() {
         allCompanies: CompanyFromServer[];
         total: number;
         totalPages: number;
-      } = await getAllCompanies(page);
+      } =
+        searchText == ''
+          ? await getAllCompanies(page)
+          : await findCompanyByName(searchText, page);
       const fields = await getAllFields();
       setCompanies(allCompanies);
       setTotalPages(totalPages);
       setField(fields);
     }
     getData();
-  }, [page, refresh]);
+  }, [page, refresh, searchText]);
 
   const columns: BasicColumnProps[] = useMemo(
     () => [
@@ -117,14 +124,18 @@ function Company() {
         cell: (data: ObjectFromServer) => {
           const company = data as CompanyFromServer;
           return (
-            <div>
-              <Switch
-                checked={company.status}
-                onChange={async () => {
-                  await updateCompanyStatus(company.id, !company.status);
-                  setRefresh(!refresh);
-                }}
-              />
+            <div
+              onClick={async () => {
+                await updateCompanyStatus(
+                  token,
+                  company?.id as number,
+                  !company?.status,
+                );
+                setRefresh((prev) => !prev);
+              }}
+              className="cursor-pointer box-follow flex items-center bg-white rounded-[8px] text-[#00b14f] text-lg h-[48px] py-[6px] pl-[14px] pr-[18px]"
+            >
+              <Switch checked={company?.status ? company?.status : false} />
             </div>
           );
         },
@@ -132,6 +143,10 @@ function Company() {
     ],
     [fields],
   );
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div className="flex flex-col items-center flex-grow bg-slate-200">
@@ -145,13 +160,18 @@ function Company() {
               <span className="text-gray-400">Tất cả công ty</span>
               <ChevronDown stroke="#9ca3af" size={16} />
             </div>
-            <div className="flex items-center justify-between flex-grow p-2 text-sm bg-white ">
+            <form
+              onSubmit={handleSearch}
+              className="flex items-center justify-between flex-grow p-2 text-sm bg-white "
+            >
               <input
                 className="w-full text-gray-400"
-                placeholder="Tìm công ty (nhấn Enter để tìm kiếm)"
+                placeholder="Tìm công ty (Nhập để tìm kiếm)"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
               ></input>
               <Search stroke="#9ca3af" size={16} />
-            </div>
+            </form>
           </div>
         </div>
         <BasicTable data={companies} columns={columns} tableFor="company" />

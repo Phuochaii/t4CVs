@@ -1,26 +1,25 @@
-import * as React from "react";
-import { DefaultPagination } from "../../../../shared/components/default-pagination";
-import * as HRModule from "../../../../modules/hr-module";
-import ReceivedCVTable from "../../../../shared/components/ReceivedCVTable";
-import { CampaignFromServer } from "../../../../shared/types/Campaign.type";
-import { ApplicationFromServer } from "../../../../shared/types/Application.type";
+import * as React from 'react';
+import { DefaultPagination } from '../../../../shared/components/default-pagination';
+import * as HRModule from '../../../../modules/hr-module';
+import ReceivedCVTable from '../../../../shared/components/ReceivedCVTable';
+import { CampaignFromServer } from '../../../../shared/types/Campaign.type';
+import { ApplicationFromServer } from '../../../../shared/types/Application.type';
+import { useProfileContext } from '../../../../shared/services/authen/domain/context';
 
-function Application({
-  compaignId,
-  hrId,
-}: {
-  compaignId: string;
-  hrId: string;
-}) {
+function Application({ compaignId }: { compaignId: string }) {
   // const compaignId = "1";
 
   const [listCV, setListCV] = React.useState<ApplicationFromServer[]>([]);
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
   const [campaign, setCampaign] = React.useState<CampaignFromServer | null>(
-    null
+    null,
   );
-
+  const [refresh, setRefresh] = React.useState<boolean>(false);
+  const setRefreshData = () => {
+    setRefresh(!refresh);
+  };
+  const { token } = useProfileContext();
   const fetchCompaign = async () => {
     HRModule.getCampaignById({ id: compaignId }).then((res) => {
       setCampaign(res);
@@ -29,7 +28,7 @@ function Application({
   const fetchApplication = async () => {
     HRModule.getApplicationByCampaignIdHRId({
       campaignId: compaignId,
-      hrId: hrId,
+      token: token!,
       page: page,
     }).then((res) => {
       setListCV(res.applications || []);
@@ -43,7 +42,7 @@ function Application({
   }, []);
   React.useEffect(() => {
     fetchApplication();
-  }, [page]);
+  }, [page, refresh]);
 
   return listCV.length == 0 ? (
     <div className="flex justify-center items-center flex-col p-5">
@@ -58,6 +57,7 @@ function Application({
         <ReceivedCVTable
           data={listCV}
           hasCampaignColumn={false}
+          setRefreshData={setRefreshData}
           // compaigns={[{ name: campaign.name, value: campaign.id }]}
         />
       )}

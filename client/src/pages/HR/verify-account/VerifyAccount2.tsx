@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ImageVerification from '../../../shared/components/ImageVerification';
-import * as HRModule from '../../../modules/hr-module';
 import axios from 'axios';
 
 import { errorToast, successToast } from '../../../utils/toast';

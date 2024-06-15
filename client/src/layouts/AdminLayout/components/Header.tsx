@@ -1,11 +1,13 @@
-import { Bell, ChevronDown } from "lucide-react";
-import { useState } from "react";
-import SearchBar from "./SearchBar";
-import { useNavigate } from "react-router-dom";
-import RoundedButton from "../../HRLayout/components/RoundedButton";
-import { useAuth0 } from "@auth0/auth0-react";
-import { AUTH0_CLIENT_ID } from "../../../shared/services/authen/infrastructure/config";
-import { Roles, useProfileContext } from "../../../shared/services/authen/domain/context";
+import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import RoundedButton from '../../HRLayout/components/RoundedButton';
+import { useAuth0 } from '@auth0/auth0-react';
+import { AUTH0_CLIENT_ID } from '../../../shared/services/authen/infrastructure/config';
+import {
+  Roles,
+  useProfileContext,
+} from '../../../shared/services/authen/domain/context';
 const accountButton = {
   name: '',
   link: '',
@@ -17,19 +19,21 @@ const accountButton = {
 
 function Header() {
   const navigation = useNavigate();
-  const {logout} = useAuth0();
-  const {profile} = useProfileContext();
-  
+  const { logout } = useAuth0();
+  const { profile } = useProfileContext();
+
   const [displayAccountTab, setDisplayAccountTab] = useState(false);
 
   return (
     <div className="flex fixed bg-white items-center justify-between h-16 gap-6 px-4 top-0 left-0 right-0 z-50">
       <div className="flex-1 h-full">
-        <img src="/topcv-logo-6.webp" className="object-contain h-full"></img>
+        <img
+          src="../../../images/t4cvs-logo.png"
+          className="object-contain h-full"
+        ></img>
       </div>
-      <SearchBar placeholder="Search " />
+      {/* <SearchBar placeholder="Search " /> */}
 
-      <Bell className="mx-2 text-slate-500" />
       <li className="relative list-none">
         <a
           className="inline-flex items-center text-center bg-transparent"
@@ -57,8 +61,10 @@ function Header() {
                 onClick={() => {
                   logout({
                     clientId: AUTH0_CLIENT_ID,
-                    logoutParams: { returnTo: `${window.location.origin}${Roles.ADMIN.loginUrl}` },
-                  })
+                    logoutParams: {
+                      returnTo: `${window.location.origin}${Roles.ADMIN.loginUrl}`,
+                    },
+                  });
                 }}
               >
                 <span className="text-black cursor-pointer hover:text-green-500">

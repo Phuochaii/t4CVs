@@ -4,6 +4,9 @@ import CertificateVerification from './CertificateVerification';
 import { Dot, HardDriveDownload } from 'lucide-react';
 import axios from 'axios';
 import { successToast, errorToast } from '../../utils/toast';
+import { useProfileContext } from '../services/authen/domain/context';
+import { useAuth0 } from '@auth0/auth0-react';
+import { getHRById, updateEmployerLicense } from '../../modules/hr-module';
 function Certificate() {
   const navigation = useNavigate();
   const [user, setUser] = useState();
@@ -13,54 +16,54 @@ function Certificate() {
   const [secondFile, setSecondFile] = useState(null);
   const [refresh, setRefresh] = useState(false);
   const [onLoading, setOnLoading] = useState(false);
+  const { token } = useProfileContext();
+  const { user: hrId } = useAuth0();
 
   const handleUploadLicense = async () => {
-    setOnLoading(true);
     // if (!firstImage && !firstFile ) {
-    if (!firstFile) {
-      alert('Vui lòng chọn file giấy ủy quyền');
-      return;
+
+    if (!firstFile && !secondFile) {
+      return errorToast('Vui lòng chọn file giấy ủy quyền');
     }
-    const data = {
-      files: [firstFile, secondFile],
-      employerId: 1,
-    };
+    setOnLoading(true);
+
     const formData = new FormData();
-    formData.append('files', firstFile);
-    formData.append('files', secondFile);
-    formData.append('employerId', '1');
-    console.log(formData);
-    // await HRModule.updateEmployerLicense(formData).then((res) => {
-    //   console.log(res);
-    // });
-    await axios
-      .put('http://localhost:3000/employer/update/license', formData)
+    if (firstFile) {
+      console.log('have 1');
+      formData.append('files', firstFile);
+    }
+    if (secondFile) {
+      console.log('have 2');
+      formData.append('files', secondFile);
+    }
+    console.log(token);
+    await updateEmployerLicense(formData, token)
       .then((res) => {
         successToast(
           'Cập nhật thành công! Xin vui lòng chờ 2 giây để hệ thống cập nhật lại',
         );
+        setOnLoading(false);
         setRefresh(!refresh);
       })
       .catch((res) => {
-        errorToast('Cập nhật thất bại, xin vui lòng thử lại sau');
-      }).finally(() => {
         setOnLoading(false);
+        errorToast('Cập nhật thất bại, xin vui lòng thử lại sau');
       });
   };
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/employer/1");
-      const userInfo = await response.json();
+      const response = await getHRById(hrId?.sub);
+      const userInfo = response.data;
       setUser(userInfo);
       console.log(userInfo);
-      if (userInfo) {
-        if (userInfo.license) {
-          setFirstImage(userInfo.license);
-        }
-        if (userInfo.license) {
-          setSecondImage(userInfo.license);
-        }
-      }
+      // if (userInfo) {
+      //   if (userInfo.license) {
+      //     setFirstImage(userInfo.license);
+      //   }
+      //   if (userInfo.license) {
+      //     setSecondImage(userInfo.license);
+      //   }
+      // }
     } catch (error) {
       return errorToast('Không tìm thấy thông tin người dùng hiện tại');
     }
@@ -78,9 +81,9 @@ function Certificate() {
           Thông tin giấy phép kinh doanh
         </h1>
         <h1 className="text-black text-[13px] mb-2">
-          Trạng thái:{" "}
+          Trạng thái:{' '}
           <span className="text-green-700 font-bold">
-            {firstImage ? "Đã cập nhật giấy tờ" : "Chưa cập nhật giấy tờ"}
+            {user?.license ? 'Đã cập nhật giấy tờ' : 'Chưa cập nhật giấy tờ'}
           </span>
         </h1>
         <div className="rounded-lg inline-block text-[#00b14f] py-2 px-3 border border-[#00b14f] cursor-pointer">
@@ -88,7 +91,7 @@ function Certificate() {
             className="flex items-center gap-1"
             onClick={() => {
               window.open(
-                "https://docs.google.com/document/d/1PkPCJWYlA2oF-jb9cAaOea9agFM35Z_P/edit"
+                'https://docs.google.com/document/d/1PkPCJWYlA2oF-jb9cAaOea9agFM35Z_P/edit',
               );
             }}
           >
@@ -98,7 +101,7 @@ function Certificate() {
         </div>
         {user?.license && (
           <div className="text-black ">
-            Giấy ủy quyền:{" "}
+            Giấy ủy quyền đã đăng ký:{' '}
             <span
               className="cursor-pointer text-green-700"
               onClick={() => {
@@ -109,9 +112,9 @@ function Certificate() {
             </span>
           </div>
         )}
-        {user?.supplement && user?.supplement != "null" && (
+        {user?.supplement && user?.supplement != 'null' && (
           <div className="text-black">
-            Giấy tờ định danh:{" "}
+            Giấy tờ định danh đã đăng ký:{' '}
             <span
               className="cursor-pointer text-green-700"
               onClick={() => {
@@ -122,8 +125,8 @@ function Certificate() {
             </span>
           </div>
         )}
-        <div></div>
-        <div className="w-full flex flex-row items-center">
+
+        <div className="w-full mt-4 flex flex-row items-center">
           <div className="w-[50%]">
             <span className="text-black text-[13px]">Giấy ủy quyền *</span>
           </div>
@@ -159,9 +162,9 @@ function Certificate() {
             onClick={() => {
               handleUploadLicense();
             }}
-            className={`text-base btn-success py-2 px-10 rounded text-white bg-green-500 shadow-md ${firstFile && secondFile ? "opacity-100 cursor-pointer " : "opacity-65 cursor-default"}`}
+            className={`text-base btn-success py-2 px-10 rounded text-white bg-green-500 shadow-md ${firstFile || secondFile ? 'opacity-100 cursor-pointer ' : 'opacity-65 cursor-default pointer-events-none'}`}
           >
-            {onLoading ? "On processing..." : "Lưu"}
+            {onLoading ? 'On processing...' : 'Lưu'}
           </button>
         </div>
         <div className="mt-5">

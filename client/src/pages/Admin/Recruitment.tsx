@@ -1,24 +1,19 @@
-import clsx from "clsx";
-import {
-  ArrowUp,
-  ChevronLeftCircle,
-  ChevronRightCircle,
-  Pause,
-  Pencil,
-  Search,
-  Settings,
-} from "lucide-react";
-import React, { SetStateAction, useEffect, useState } from "react";
-import { statusColor } from "../../shared/types/RecruitmentStatus.type";
-import { RecruitmentJobPost } from "../../shared/types/Recruitment.type";
+import clsx from 'clsx';
+import { ChevronLeftCircle, ChevronRightCircle, Search } from 'lucide-react';
+import React, { SetStateAction, useEffect, useState } from 'react';
+import { statusColor } from '../../shared/types/RecruitmentStatus.type';
+import { RecruitmentJobPost } from '../../shared/types/Recruitment.type';
+import { getCampaignById } from '../../modules/helper';
+import Switch from '../../shared/components/CustomSwitch';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 import {
   getAllJobs,
-  getCampaignById,
+  updateJobStatus,
   getJobsStat,
-} from "../../shared/utils/helper";
-import Switch from "../../shared/components/CustomSwitch";
-import axios from "axios";
-
+  getApplicationsByCampaignId,
+  getEmployerById,
+  findJobRecruitmentByName,
+} from '../../modules/admin-module';
 interface RecruitmentTableProps {
   data: RecruitmentJobPost[];
   setData: React.Dispatch<SetStateAction<RecruitmentJobPost[]>>;
@@ -26,23 +21,24 @@ interface RecruitmentTableProps {
   setRefresh: React.Dispatch<SetStateAction<boolean>>;
 }
 
-const serverURL = "http://localhost:3000";
 function RecruitmentTable({
   data,
   setData,
   refresh,
   setRefresh,
 }: RecruitmentTableProps) {
+  const { token } = useProfileContext();
+
   return (
     <table className="w-full bg-white">
       <thead>
         <tr>
           <td className="font-bold border">Tin tuyển dụng</td>
-          <td className="p-2 font-bold text-center align-middle border ">
+          {/* <td className="p-2 font-bold text-center align-middle border ">
             <div className="flex items-center justify-center w-full h-full">
               <Settings size={16} />
             </div>
-          </td>
+          </td> */}
           <td className="font-bold border">Công ty</td>
           <td className="font-bold border">Ngày tạo</td>
         </tr>
@@ -63,59 +59,45 @@ function RecruitmentTable({
                         };
                         data[key] = newJobPost;
                         setData([...data]);
-                        await axios.put(
-                          `${serverURL}/job/update-status`,
-                          {
-                            id: newJobPost.id,
-                            status: !jobPost.status,
-                          }
+                        await updateJobStatus(
+                          token,
+                          newJobPost.id,
+                          !jobPost.status,
                         );
-                        setRefresh(!refresh);
+                        setRefresh((prev) => !prev);
                       }}
                     />
                     <div className="mt-1">
                       <div className="font-bold capitalize">
                         {jobPost.titleRecruitment}
-                        {"    "}
+                        {'    '}
                         <span
                           className={clsx(
-                            "p-1 font-semibold",
+                            'p-1 font-semibold',
                             statusColor[
-                              jobPost.status
-                                ? "Đang hiển thị"
-                                : "Dừng hiển thị"
+                              jobPost.status ? 'Đang hiển thị' : 'Dừng hiển thị'
                             ].bg,
                             statusColor[
-                              jobPost.status
-                                ? "Đang hiển thị"
-                                : "Dừng hiển thị"
-                            ].text
+                              jobPost.status ? 'Đang hiển thị' : 'Dừng hiển thị'
+                            ].text,
                           )}
                         >
-                          {jobPost.status
-                            ? "Đang hiển thị"
-                            : "Dừng hiển thị"}
+                          {jobPost.status ? 'Đang hiển thị' : 'Dừng hiển thị'}
                         </span>
                       </div>
                       <span className="text-slate-500">{`#${jobPost.id}`}</span>
                     </div>
                   </div>
                   <div></div>
-                  <span>
-                    Chiến dịch tuyển dụng: {jobPost.campaign.name}
-                  </span>
-                  <button className="p-2 font-bold text-green-500 bg-green-50">
-                    Xem CV ứng tuyển
-                  </button>
+                  <span> Chiến dịch tuyển dụng: {jobPost.campaign.name} </span>
+                  <div className="p-2 font-bold text-green-500 bg-green-50">
+                    Đã có {jobPost.applications.length} người ứng tuyển
+                  </div>
                 </div>
               </td>
-              <td className="p-2 border w-[64px]">
+              {/* <td className="p-2 border w-[64px]">
                 <div className="flex flex-col items-center justify-center gap-4">
-                  <Pencil
-                    fill="gray"
-                    stroke="white"
-                    strokeWidth={1}
-                  />
+                  <Pencil fill="gray" stroke="white" strokeWidth={1} />
                   <button className="p-2 rounded-full">
                     <Pause fill="gray" stroke="transparent" />
                   </button>
@@ -123,12 +105,10 @@ function RecruitmentTable({
                     <ArrowUp stroke="gray" />
                   </button>
                 </div>
-              </td>
-              <td className="border w-[360px]">
-                {jobPost.company?.name}
-              </td>
+              </td> */}
+              <td className="border w-[360px]"> {jobPost.company?.name} </td>
               <td className="border">
-                {jobPost.createdAt.toLocaleDateString("vi-VN")}
+                {jobPost.createdAt.toLocaleDateString('vi-VN')}
               </td>
             </tr>
           );
@@ -138,12 +118,11 @@ function RecruitmentTable({
   );
 }
 
-const filteredStatuses = ["Tất cả", "Đang hiển thị", "Dừng hiển thị"];
+const filteredStatuses = ['Tất cả', 'Đang hiển thị', 'Dừng hiển thị'];
 
 function Recruitment() {
   const [data, setData] = useState<RecruitmentJobPost[]>([]);
   const [selectedStatus, setSelectedStatus] = useState(0);
-  const [filterKeyword, setFilterKeyword] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [jobStats, setJobStats] = useState({
@@ -152,20 +131,39 @@ function Recruitment() {
     isNotActive: 0,
   });
   const [refresh, setRefresh] = useState(false);
+  const { token } = useProfileContext();
+  const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
     const getAllRecruitments = async () => {
-      const { allJobs, totalPages } = await getAllJobs(page);
-      const stats = await getJobsStat();
+      const { allJobs, totalPages } =
+        searchText == ''
+          ? await getAllJobs(token, page)
+          : await findJobRecruitmentByName(token, page, undefined, searchText);
+
+      const stats = await getJobsStat(token);
       setJobStats(stats);
-      const rawRecruitments = allJobs.map(async (item) => {
+      const validJobs = allJobs.filter((item) => {
+        return !!item.campaignId;
+      });
+
+      const rawRecruitments = validJobs.map(async (item) => {
         const campaign = await getCampaignById(item.campaignId);
+        const employer = await getEmployerById(campaign.employerId);
+        const { applications } = await getApplicationsByCampaignId(
+          token,
+          employer.id,
+          page,
+          5,
+          item.campaignId,
+        );
         const rawRecruitment = {
           ...item,
           createdAt: new Date(item.createAt),
           updatedAt: new Date(item.updateAt),
           expiredDate: new Date(item.expiredDate),
           campaign: campaign,
+          applications: applications,
         };
         return rawRecruitment;
       });
@@ -173,7 +171,11 @@ function Recruitment() {
       setTotalPages(totalPages);
     };
     getAllRecruitments();
-  }, [page, refresh]);
+  }, [page, refresh, searchText]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div className="flex-grow bg-slate-200">
@@ -186,56 +188,54 @@ function Recruitment() {
             return (
               <div
                 className={clsx(
-                  "px-2 py-1 rounded-full items-center text-[12px] cursor-pointer flex gap-[6px]",
+                  'px-2 py-1 rounded-full items-center text-[12px] cursor-pointer flex gap-[6px]',
                   selectedStatus === key
-                    ? "bg-green-500 text-white"
-                    : "bg-slate-300"
+                    ? 'bg-green-500 text-white'
+                    : 'bg-slate-300',
                 )}
                 key={key}
                 onClick={() => setSelectedStatus(key)}
               >
                 {status}
                 <span className="flex items-center justify-center w-6 h-6 text-white bg-red-500 rounded-full">
-                  {status === "Tất cả"
+                  {status === 'Tất cả'
                     ? jobStats.total
-                    : status === "Đang hiển thị"
-                    ? jobStats.isActive
-                    : jobStats.isNotActive}
+                    : status === 'Đang hiển thị'
+                      ? jobStats.isActive
+                      : jobStats.isNotActive}
                 </span>
               </div>
             );
           })}
         </div>
 
-        <div className="relative flex items-center w-2/5 bg-white">
+        <form
+          onSubmit={handleSearch}
+          className="relative flex items-center w-2/5 bg-white"
+        >
           <input
             className="flex-grow p-4"
-            placeholder="Tìm kiếm tin tuyển dụng theo tiêu đề hoặc mã tin"
-            onChange={(e) => {
-              setFilterKeyword(e.currentTarget.value);
-            }}
+            placeholder="Nhập để tìm kiếm tin tuyển dụng theo tiêu đề"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
           ></input>
           <Search className="px-2" size={32} />
-        </div>
+        </form>
         <RecruitmentTable
           refresh={refresh}
           setRefresh={setRefresh}
           setData={setData}
-          data={data
-            .filter(
-              (jobPost) =>
-                (jobPost.status
-                  ? "Đang hiển thị"
-                  : "Dừng hiển thị") ===
-                  filteredStatuses[selectedStatus] ||
-                (filteredStatuses[selectedStatus] === "Tất cả" &&
-                  jobPost)
-            )
-            .filter(
-              (jobPost) =>
-                jobPost.titleRecruitment.includes(filterKeyword) ||
-                jobPost.campaign.name.includes(filterKeyword)
-            )}
+          data={data.filter(
+            (jobPost) =>
+              (jobPost.status ? 'Đang hiển thị' : 'Dừng hiển thị') ===
+                filteredStatuses[selectedStatus] ||
+              (filteredStatuses[selectedStatus] === 'Tất cả' && jobPost),
+          )}
+          // )
+          // .filter(
+          //   (jobPost) =>
+          //     jobPost.titleRecruitment.includes(filterKeyword) ||
+          //     jobPost.campaign.name.includes(filterKeyword),
         />
         <div className="flex items-center self-center justify-center gap-2">
           <ChevronLeftCircle
@@ -252,9 +252,7 @@ function Recruitment() {
             stroke="green"
             className="cursor-pointer"
             strokeWidth={1}
-            onClick={() =>
-              setPage(page + 1 <= totalPages ? page + 1 : page)
-            }
+            onClick={() => setPage(page + 1 <= totalPages ? page + 1 : page)}
           />
         </div>
       </div>

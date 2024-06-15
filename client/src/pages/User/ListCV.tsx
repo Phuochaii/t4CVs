@@ -35,63 +35,13 @@ const ListCV = () => {
   const fakeData = [
     {
       cv: 'https://picsum.photos/200',
-      tag: ['Tag 1', 'Tag 2', 'Tag 3'],
+      tag: ['Thanh Lịch', 'Cổ Điển'],
       name: 'John Doe',
-    },
-    {
-      cv: 'https://picsum.photos/200',
-      tag: ['Tag 4', 'Tag 5', 'Tag 6'],
-      name: 'Jane Smith',
-    },
-    {
-      cv: 'https://picsum.photos/200',
-      tag: ['Tag 4', 'Tag 5', 'Tag 6', 'tag8', 'Tag9'],
-      name: 'Jane Smith',
-    },
-    {
-      cv: 'https://picsum.photos/200',
-      tag: ['Tag 4', 'Tag 5', 'Tag 6'],
-      name: 'Jane Smith',
-    },
-    {
-      cv: 'https://picsum.photos/200',
-      tag: ['Tag 4', 'Tag 5', 'Tag 6'],
-      name: 'Jane Smith',
-    },
-    {
-      cv: 'https://picsum.photos/200',
-      tag: ['Tag 4', 'Tag 5', 'Tag 6'],
-      name: 'Jane Smith',
-    },
-    {
-      cv: 'https://picsum.photos/200',
-      tag: ['Tag 4', 'Tag 5', 'Tag 6'],
-      name: 'Jane Smith',
-    },
-    {
-      cv: 'https://picsum.photos/200',
-      tag: ['Tag 4', 'Tag 5', 'Tag 6'],
-      name: 'Jane Smith',
-    },
-    {
-      cv: 'https://picsum.photos/200',
-      tag: ['Tag 4', 'Tag 5', 'Tag 6'],
-      name: 'Jane Smith',
-    },
-    {
-      cv: 'https://picsum.photos/200',
-      tag: ['Tag 4', 'Tag 5', 'Tag 6'],
-      name: 'Jane Smith',
-    },
-    {
-      cv: 'https://picsum.photos/200',
-      tag: ['Tag 4', 'Tag 5', 'Tag 6'],
-      name: 'Jane Smith',
     },
   ];
 
   return (
-    <div className="items-center flex flex-col justify-center">
+    <div className="items-center flex flex-col justify-center bg-white">
       <div>
         <img src={CVPageImage} alt="cv-page" loading="eager" />
       </div>
@@ -106,21 +56,29 @@ const ListCV = () => {
         {/*Chọn loại CV*/}
         <div className="border-b border-gray-300 flex flex-row">
           <div
-            className={`border-b w-1/6 text-lg px-2 py-4 cursor-pointer ${selected === 1 ? 'border-green-600' : 'border-gray-100'}`}
+            className={`border-b w-1/6 text-lg px-2 py-4 cursor-pointer ${
+              selected === 1 ? 'border-green-600' : 'border-gray-100'
+            }`}
             onClick={() => handleSelect(1)}
           >
             <h1
-              className={`text-center font-bold ${selected === 1 ? 'text-green-500' : 'text-gray-500'}`}
+              className={`text-center font-bold ${
+                selected === 1 ? 'text-green-500' : 'text-gray-500'
+              }`}
             >
               Mẫu CV theo style
             </h1>
           </div>
           <div
-            className={`border-b w-1/4 text-lg px-2 py-4 cursor-pointer ${selected === 2 ? 'border-green-600' : 'border-gray-100'}`}
+            className={`border-b w-1/4 text-lg px-2 py-4 cursor-pointer ${
+              selected === 2 ? 'border-green-600' : 'border-gray-100'
+            }`}
             onClick={() => handleSelect(2)}
           >
             <h1
-              className={`text-center font-bold ${selected === 2 ? 'text-green-500' : 'text-gray-500'}`}
+              className={`text-center font-bold ${
+                selected === 2 ? 'text-green-500' : 'text-gray-500'
+              }`}
             >
               Mẫu CV theo vị trí ứng tuyển
             </h1>
@@ -176,11 +134,13 @@ const ListCV = () => {
               name="radio-buttons-group"
             >
               <FormControlLabel
+                className="text-black"
                 value="new"
                 control={<Radio color="success" />}
                 label="Mới cập nhật"
               />
               <FormControlLabel
+                className="text-black"
                 value="most"
                 control={<Radio color="success" />}
                 label="Được dùng nhiều nhất"

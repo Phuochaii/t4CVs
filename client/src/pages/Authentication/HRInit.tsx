@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import Footer from "../../layouts/UserLayout/components/Footer";
+import { useNavigate } from 'react-router-dom';
+import Footer from '../../layouts/UserLayout/components/Footer';
 
 function HRInit() {
   const navigation = useNavigate();
@@ -11,7 +11,7 @@ function HRInit() {
             <div className="flex flex-col justify-center">
               <img
                 className="logo w-[90px] translate-y-2"
-                src="https://tuyendung.topcv.vn/images/topcv-logo.png"
+                src="../../../images/t4cvs-logo.png"
                 alt=""
               />
             </div>
@@ -20,7 +20,7 @@ function HRInit() {
                 <li className="relative">
                   <a
                     href="#"
-                    style={{ fontSize: "13px" }}
+                    style={{ fontSize: '13px' }}
                     className="font-semibold px-3  hover:text-green-500"
                   >
                     Giới thiệu
@@ -29,7 +29,7 @@ function HRInit() {
                 <li className="relative">
                   <a
                     href="#"
-                    style={{ fontSize: "13px" }}
+                    style={{ fontSize: '13px' }}
                     className="font-semibold px-3  hover:text-green-500"
                   >
                     Dịch vụ
@@ -38,7 +38,7 @@ function HRInit() {
                 <li className="relative">
                   <a
                     href="#"
-                    style={{ fontSize: "13px" }}
+                    style={{ fontSize: '13px' }}
                     className="font-semibold px-3  hover:text-green-500"
                   >
                     Báo giá
@@ -47,7 +47,7 @@ function HRInit() {
                 <li className="relative">
                   <a
                     href="#"
-                    style={{ fontSize: "13px" }}
+                    style={{ fontSize: '13px' }}
                     className="font-semibold px-3  hover:text-green-500"
                   >
                     Hỗ trợ
@@ -56,7 +56,7 @@ function HRInit() {
                 <li className="relative">
                   <a
                     href="#"
-                    style={{ fontSize: "13px" }}
+                    style={{ fontSize: '13px' }}
                     className="font-semibold px-3  hover:text-green-500"
                   >
                     Blog tuyển dụng
@@ -72,7 +72,7 @@ function HRInit() {
             <li>
               <button
                 onClick={() => {
-                  navigation("/hr-login");
+                  navigation('/hr-login');
                 }}
                 className="py-3.5 px-5 rounded-md mx-2 border text-[#00A74B] border-[#00A74B] hover:border-green-800 bg-white"
               >
@@ -82,7 +82,7 @@ function HRInit() {
             <li>
               <button
                 onClick={() => {
-                  navigation("/hr-signup");
+                  navigation('/hr-signup');
                 }}
                 className="py-3.5 px-5 rounded-md mx-2 bg-[#00A74B] hover:bg-green-800 text-white"
               >
@@ -99,7 +99,7 @@ function HRInit() {
         </div>
         <button
           onClick={() => {
-            navigation("/user-signup");
+            navigation('/user-signup');
           }}
           className="font-bold py-1 px-4 rounded-md mx-2 bg-[#00B14F] hover:bg-green-800 text-white"
         >
@@ -124,11 +124,11 @@ function HRInit() {
           <p className="text-[#00B14F] font-medium">BIG UPDATE</p>
           <p
             className="font-medium text-2xl border border-l-[5px] border-l-green-500 pl-2 my-3"
-            style={{ fontFamily: "Alexandria, sans-serif;" }}
+            style={{ fontFamily: 'Alexandria, sans-serif;' }}
           >
-            TopCV Smart Recruitment Platform
+            t4CVs Smart Recruitment Platform
           </p>
-          <p style={{ color: "#646464" }}>
+          <p style={{ color: '#646464' }}>
             Nền tảng công nghệ ứng dụng sâu trí tuệ nhân tạo (AI) và Recruitment
             Marketing, mang đến các giải pháp toàn diện giúp doanh nghiệp giải
             quyết đồng thời các bài toán xoay quanh vấn đề tuyển dụng, từ việc
@@ -137,11 +137,11 @@ function HRInit() {
           </p>
           <button
             onClick={() => {
-              navigation("/user-signup");
+              navigation('/user-signup');
             }}
             className="font-bold py-1 px-4 rounded-md mx-2 my-3 bg-[#00B14F] hover:bg-green-800 text-white"
           >
-            Tư vấn tuyển dụng miễn phí{" "}
+            Tư vấn tuyển dụng miễn phí{' '}
             <span className="text-2xl font-extrabold">→</span>
           </button>
         </div>

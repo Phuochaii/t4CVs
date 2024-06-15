@@ -2,8 +2,9 @@ import { SetStateAction, useEffect, useState } from 'react';
 // import Switch from "../../shared/components/CustomSwitch";
 import { Link, useNavigate } from 'react-router-dom';
 import { Campaign } from '../types/Campaign.type';
-import { getUserById } from '../utils/helper';
+import { getUserById } from '../../modules/user-module';
 import { UserFromServer } from '../types/User.type';
+import { useProfileContext } from '../services/authen/domain/context';
 
 export interface CampaignTableProps {
   data: Campaign[];
@@ -30,7 +31,7 @@ interface CampaignTableRowProps {
 
 export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
   const navigation = useNavigate();
-
+  const { token } = useProfileContext();
   const [isHovered, setIsHovered] = useState(false);
   const [applicants, setApplicants] = useState<(UserFromServer | null)[]>([]);
   const campaign = data;
@@ -40,8 +41,11 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
     async function getUsers() {
       const applicantPromises = campaign.applications.map(
         async (application) => {
-          const applicant = await getUserById(application.userId);
-          return applicant;
+          const applicant = await getUserById({
+            userId: application.userId.toString(),
+            token: token!,
+          });
+          return applicant.data;
         },
       );
       setApplicants(await Promise.all(applicantPromises));
@@ -102,7 +106,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
             <span className="font-bold bg-slate-200 text-zinc-400">
               {`#${campaign.campaignId}`}
             </span>
-            {
+            {/* {
               <div
                 className={`flex items-center gap-2 font-bold ${
                   isHovered ? 'visible' : 'invisible'
@@ -111,7 +115,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
                 <a href="#">Sửa chiến dịch</a>
                 <a href="#">Xem báo cáo</a>
               </div>
-            }
+            } */}
           </div>
         </div>
       </td>

@@ -5,19 +5,21 @@ import {
   ChevronRightCircle,
   Search,
 } from 'lucide-react';
-
 import { SetStateAction, useEffect, useState } from 'react';
 import { Campaign as CampaignType } from '../../shared/types/Campaign.type';
 // import Switch from "../../shared/components/CustomSwitch";
+import { UserFromServer } from '../../shared/types/User.type';
 import {
   getAllCampaigns,
   getApplicationsByCampaignId,
-  getCompanyById,
   getEmployerById,
-  getJobByCampaignId,
   getUserById,
-} from '../../shared/utils/helper';
-import { UserFromServer } from '../../shared/types/User.type';
+  getJobByCampaignId,
+  findCampaignByName,
+} from '../../modules/admin-module';
+import { getCompanyById } from '../../modules/helper';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
+import { useNavigate } from 'react-router-dom';
 
 interface CampaignTableProps {
   data: CampaignType[];
@@ -49,13 +51,14 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [applicants, setApplicants] = useState<(UserFromServer | null)[]>([]);
   const campaign = data;
-  console.log(data);
+  const { token } = useProfileContext();
+  const navigation = useNavigate();
+
   useEffect(() => {
     async function getUsers() {
       const applicantPromises = campaign.applications.map(
         async (application) => {
-          console.log('Applications', application);
-          const applicant = await getUserById(application.userId);
+          const applicant = await getUserById(token, application.userId);
           return applicant;
         },
       );
@@ -63,7 +66,6 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
     }
     getUsers();
   }, []);
-  console.log('Applicants', applicants);
   return (
     <tr
       className="align-top hover:bg-green-100 bg-slate-50"
@@ -88,12 +90,12 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
                 'Chưa có CV nào'
               ) : (
                 <div className="flex items-center gap-1">
-                  {applicants.slice(0, 5).map((_, item) => {
+                  {applicants.slice(0, 5).map((candidate, item) => {
                     return (
                       <img
                         key={item}
                         src={
-                          // candidate?.image ||
+                          candidate?.image ||
                           'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'
                         }
                         className="object-cover w-8 h-8 rounded-full"
@@ -111,7 +113,7 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
             <span className="font-bold bg-slate-200 text-zinc-400">
               {`#${data.campaignId}`}
             </span>
-            {
+            {/* {
               <div
                 className={`flex items-center gap-2 font-bold ${
                   isHovered ? 'visible' : 'invisible'
@@ -120,12 +122,19 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
                 <a href="#">Sửa chiến dịch</a>
                 <a href="#">Xem báo cáo</a>
               </div>
-            }
+            } */}
           </div>
         </div>
       </td>
       <td className="border">
-        <div className="p-2 font-bold text-blue-500">{`${data.employer.fullname}`}</div>
+        <div
+          onClick={() => {
+            navigation(`/admin/employer/${data.employer.id}`);
+          }}
+          className="p-2 font-bold text-blue-500 cursor-pointer hover:underline"
+        >
+          {`${data.employer.fullname}`}
+        </div>
       </td>
       <td className="border">
         <div className="p-2 font-bold text-blue-500">{`${data.postDate?.toLocaleDateString(
@@ -133,9 +142,12 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
         )}`}</div>
       </td>
       <td className="border">
-        <div className="p-2 font-bold text-blue-500">{`${
-          data.company ? data.company.name : ''
-        }`}</div>
+        <div
+          onClick={() => {
+            if (data.company) navigation(`/admin/company/${data.company.id}`);
+          }}
+          className="p-2 font-bold text-blue-500 hover:underline"
+        >{`${data.company ? data.company.name : ''}`}</div>
       </td>
       <td className="border max-w-[180px]">
         {campaign.recruitment ? (
@@ -151,30 +163,18 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
                 {campaign.recruitment.status ? 'Đang mở' : 'Đang đóng'}
               </span>
             </div>
-            <div
+            {/* <div
               className={`flex items-center gap-2 ${
                 isHovered ? 'visible' : 'invisible'
               }`}
             >
               <button> Yêu cầu hiển thị </button>
-            </div>
+            </div> */}
           </div>
         ) : (
           <>Không có tin tuyển dụng</>
         )}
       </td>
-
-      {/* <td className="border">
-        <div className="p-2">
-          {campaign.isCampaignActive ? (
-            <span className="px-2 py-1 font-bold text-green-500 rounded-sm bg-slate-100">
-              Thêm
-            </span>
-          ) : (
-            <>Chiến dịch đang tắt</>
-          )}
-        </div>
-      </td> */}
     </tr>
   );
 };
@@ -184,9 +184,11 @@ const CompanyCampaignTable = ({ data }: CampaignTableProps) => {
     <table className="w-full text-sm bg-white">
       <CompanyCampaignTableHeader />
       <tbody>
-        {data.map((item, index) => (
-          <CompanyCampaignTableRow data={item} key={index} />
-        ))}
+        {data.length != 0
+          ? data.map((item, index) => (
+              <CompanyCampaignTableRow data={item} key={index} />
+            ))
+          : 'Không có chiến dịch phù hợp'}
       </tbody>
     </table>
   );
@@ -196,38 +198,54 @@ function Campaign() {
   const [campaigns, setCampaigns] = useState<CampaignType[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const { token } = useProfileContext();
+  const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
     async function getData() {
-      const { allCampaigns, totalPages } = await getAllCampaigns(page);
-      const rawCampaigns = await allCampaigns.map(async (item) => {
-        const employer = await getEmployerById(item.employerId);
-        const company = employer.companyId
-          ? await getCompanyById(employer.companyId)
-          : await null;
-        const job = await getJobByCampaignId(item.id);
-        const { applications } = await getApplicationsByCampaignId(
-          item.employerId,
-          item.id,
-        );
-        const rawCampaign: CampaignType = {
-          campaignName: item.name,
-          campaignId: item.id,
-          employer: employer,
-          company: company,
-          postDate: new Date(item.createdAt),
-          recruitment: job,
-          applications: applications,
-          applicants: [],
-        };
-        return rawCampaign;
-      });
-      setCampaigns(await Promise.all(rawCampaigns));
-      setTotalPages(totalPages);
+      const { allCampaigns, totalPages } =
+        searchText == ''
+          ? await getAllCampaigns(page)
+          : await findCampaignByName(token, searchText, page);
+      if (allCampaigns) {
+        const rawCampaigns = await allCampaigns.map(async (item) => {
+          const employer = await getEmployerById(item.employerId);
+          const company = employer.companyId
+            ? await getCompanyById(employer.companyId)
+            : await null;
+          const job = await getJobByCampaignId(token, item.id);
+          const { applications } = await getApplicationsByCampaignId(
+            token,
+            employer.id,
+            page,
+            5,
+            item.id,
+            true,
+          );
+          const rawCampaign: CampaignType = {
+            campaignName: item.name,
+            campaignId: item.id,
+            employer: employer,
+            company: company,
+            postDate: new Date(item.createdAt),
+            recruitment: job,
+            applications: applications,
+            applicants: [],
+          };
+          return rawCampaign;
+        });
+        setCampaigns(await Promise.all(rawCampaigns));
+        setTotalPages(totalPages);
+      } else {
+        setCampaigns([]);
+      }
     }
     getData();
-    console.log('GO');
-  }, [page]);
+  }, [page, searchText]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div className="flex flex-col items-center flex-grow bg-slate-200">
@@ -244,12 +262,18 @@ function Campaign() {
               <span className="text-gray-400">Tất cả chiến dịch</span>
               <ChevronDown stroke="#9ca3af" size={16} />
             </div>
-            <div className="flex items-center justify-between flex-grow p-2 text-sm bg-white ">
-              <span className="text-gray-400">
-                Tìm chiến dịch (Nhấn enter để tìm kiếm)
-              </span>
+            <form
+              onSubmit={handleSearch}
+              className="flex items-center justify-between flex-grow p-2 text-sm bg-white "
+            >
+              <input
+                className="w-full text-gray-400"
+                placeholder="Tìm chiến dịch (Nhập để tìm kiếm)"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              ></input>
               <Search stroke="#9ca3af" size={16} />
-            </div>
+            </form>
           </div>
         </div>
         <CompanyCampaignTable data={campaigns} setData={setCampaigns} />

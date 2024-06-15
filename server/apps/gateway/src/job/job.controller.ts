@@ -62,6 +62,7 @@ export class JobController {
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:hr'))
   @Post('create')
   createJob(@Body() data: CreateJobDto): Observable<string> {
+    console.log(data)
     return this.jobService.createJob(data);
   }
 

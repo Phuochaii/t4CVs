@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './components/Header';
-import GradientFill from './components/GradientFill';
+// import GradientFill from './components/GradientFill';
 import Sidebar from './components/SideBar';
 
 interface LayoutProp {

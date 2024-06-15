@@ -10,36 +10,36 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CampaignTable } from '../../shared/components/compaign-table';
 import { Campaign as CampaignType } from '../../shared/types/Campaign.type';
+
 import {
+  getAllCompaignByHrId,
   getApplicationsByCampaignId,
-  getCampaignByHRId,
-  getCompanyById,
-  getEmployerById,
-  getJobByCampaignId,
-} from '../../shared/utils/helper';
+  getProfile,
+} from '../../modules/hr-module';
+import { getCompanyById, getJobByCampaignId } from '../../modules/helper';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 function Campaign() {
   const [campaigns, setCampaigns] = useState<CampaignType[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const navigation = useNavigate();
-
+  const { token } = useProfileContext();
   useEffect(() => {
-    const hrId = JSON.parse(localStorage.getItem('hr') as string).id;
-
     const getAllCompaigns = async () => {
-      const { allCampaigns, totalPages } = await getCampaignByHRId(hrId, 1);
-
+      const response = await getAllCompaignByHrId({ token: token! });
+      const { allCampaigns, totalPages } = response;
       setTotalPages(totalPages);
-      const rawCampaigns = await allCampaigns.map(async (item) => {
-        const employer = await getEmployerById(item.employerId);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const rawCampaigns = await allCampaigns.map(async (item: any) => {
+        const employer = await getProfile(token!);
         const company = employer.companyId
           ? await getCompanyById(employer.companyId)
           : null;
-        const job = await getJobByCampaignId(item.id);
+        const job = await getJobByCampaignId(token!, item.id);
 
         const { applications } = await getApplicationsByCampaignId(
-          item.employerId,
+          token!,
           item.id,
         );
         const rawCampaign: CampaignType = {
