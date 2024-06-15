@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Pencil,
   Folder,
@@ -30,14 +31,13 @@ import { districts } from '../types/Districts';
 function CampaignEditCard({
   jobItem,
   fields,
-  employer,
+  // employer,
 }: {
   jobItem: RecruitmentFromServer;
   fields: any;
   employer: any;
 }) {
-  console.log(jobItem);
-  
+  // console.log(jobItem);
   const { id: compaignId } = useParams();
   const navigate = useNavigate();
 
@@ -90,14 +90,14 @@ function CampaignEditCard({
   const field = convertToOptions(fields?.field);
   const exp = convertToOptions(fields?.exp);
   const typeOptions = convertToOptions(fields?.type);
-  const my_city = city.filter((item) =>
-    jobItem.locations
-      .map((item1) => item1.id)
-      .includes(Number.parseInt(item.value)),
-  );
-  const districtOptions = getAllDistrictsOfProvinces(
-    my_city.map((item) => item.label),
-  );
+  // const my_city = city.filter((item) =>
+  //   jobItem.locations
+  //     .map((item1) => item1.id)
+  //     .includes(Number.parseInt(item.value)),
+  // );
+  // const districtOptions = getAllDistrictsOfProvinces(
+  //   my_city.map((item) => item.label),
+  // );
 
   const {
     register,
@@ -135,10 +135,10 @@ function CampaignEditCard({
         .includes(Number.parseInt(item.value)),
     ) || null,
   );
-  const [, setDistrictOptions] = useState<SingleValue<{
-    value: string;
-    label: string;
-  }> | null>(null);
+  // const [, setDistrictOptions] = useState<SingleValue<{
+  //   value: string;
+  //   label: string;
+  // }> | null>(null);
   const [jobTypeOptions, setjobTypeOptions] = useState<SingleValue<{
     value: string;
     label: string;
@@ -340,15 +340,15 @@ function CampaignEditCard({
     setUserChoice(choice);
   };
 
-  const cityOptions = [
-    { value: 'Hồ Chí Minh', label: 'Hồ Chí Minh' },
-    { value: 'Bình Dương', label: 'Bình Dương' },
-    { value: 'Bắc Ninh', label: 'Bắc Ninh' },
-    { value: 'Đồng Nai', label: 'Đồng Nai' },
-    { value: 'Hưng Yên', label: 'Hưng Yên' },
-    { value: 'Hải Dương', label: 'Hải Dương' },
-    { value: 'Đà Nẵng', label: 'Đà Nẵng' },
-  ];
+  // const cityOptions = [
+  //   { value: 'Hồ Chí Minh', label: 'Hồ Chí Minh' },
+  //   { value: 'Bình Dương', label: 'Bình Dương' },
+  //   { value: 'Bắc Ninh', label: 'Bắc Ninh' },
+  //   { value: 'Đồng Nai', label: 'Đồng Nai' },
+  //   { value: 'Hưng Yên', label: 'Hưng Yên' },
+  //   { value: 'Hải Dương', label: 'Hải Dương' },
+  //   { value: 'Đà Nẵng', label: 'Đà Nẵng' },
+  // ];
   const salaryOptions = [
     { value: 'Trong khoảng', label: 'Trong khoảng' },
     { value: 'Thỏa thuận', label: 'Thỏa thuận' },
