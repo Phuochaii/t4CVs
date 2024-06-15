@@ -167,6 +167,16 @@ export class CompanyController {
     return this.companyService.deleteCampaign(id);
   }
 
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
+  @Get('campaign/name/:name')
+  findCampaignByName(
+    @Param('name') name: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.companyService.findCampaignByName(name, page, limit);
+  }
+
   @Get('field/all')
   getAllField() {
     return this.companyService.getAllField();

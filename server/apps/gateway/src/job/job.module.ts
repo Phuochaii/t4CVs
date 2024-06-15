@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { JobService } from './job.service';
 import { JobController } from './job.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -16,7 +16,7 @@ import { CompanyModule } from '../company/company.module';
         },
       },
     ]),
-    CompanyModule,
+    forwardRef(() => CompanyModule),
   ],
   controllers: [JobController],
   providers: [JobService],

@@ -7,6 +7,7 @@ import {
   GetByCampaignIdDto,
   GetByUserIdApplicationDto,
   GetByUserIdPaginationApplicationDto,
+  DeleteByCampaignIdDto,
 } from './dto';
 import {
   CreateApplicationService,
@@ -17,6 +18,7 @@ import {
   GetByCampaignIdService,
   GetByUserIdApplicationService,
   GetByUserIdPaginationApplicationService,
+  DelApplicationService,
 } from './service';
 import { Application } from './entity';
 import { RpcException } from '@nestjs/microservices';
@@ -32,7 +34,7 @@ export class ApplicationDomain {
     private readonly getAllByCampaignIdApplicationService: GetByCampaignIdService,
     private readonly getByUserIdApplicationService: GetByUserIdApplicationService,
     private readonly getByUserIdPagiantionApplicationService: GetByUserIdPaginationApplicationService,
-    // private readonly getByUserIdPaginationApplicationService: GetByUserIdPaginationApplicationService,
+    private readonly delApplicationService: DelApplicationService,
   ) {}
 
   async createApplication(request: CreateApplicationDto): Promise<Application> {
@@ -66,13 +68,14 @@ export class ApplicationDomain {
     const total = (await total_data).length;
     const data =
       await this.getByCampaignIdWithPaginationService.execute(request);
+    const total1 = (await data).length;
 
     const total_pages = Math.ceil(total / request.limit);
     if (!total_data || !data) {
       return {
         page: request.page,
         limit: request.limit,
-        total: total,
+        total: total1,
         totalPage: total_pages,
         applications: [],
       };
@@ -80,7 +83,7 @@ export class ApplicationDomain {
     return {
       page: request.page,
       limit: request.limit,
-      total: total,
+      total: total1,
       totalPage: total_pages,
       applications: data,
     };
@@ -136,5 +139,9 @@ export class ApplicationDomain {
       applications: data,
     };
     // return await this.getByUserIdPagiantionApplicationService.execute(request);
+  }
+
+  async delApplicationbyCampaign(request: DeleteByCampaignIdDto) {
+    return await this.delApplicationService.execute(request);
   }
 }

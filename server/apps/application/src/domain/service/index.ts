@@ -6,3 +6,4 @@ export * from './get-by-campaign-id-with-pagination.service';
 export * from './get-by-campaign-id.service';
 export * from './getbyuserId-application.service';
 export * from './getbyuserIdpagination-application.service';
+export * from './delApplicationbyCampaignId.service';

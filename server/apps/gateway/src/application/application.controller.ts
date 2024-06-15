@@ -8,6 +8,7 @@ import {
   Query,
   ParseBoolPipe,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApplicationService } from './application.service';
@@ -58,6 +59,31 @@ export class ApplicationController {
     );
   }
 
+  //admin get applications by campaignId + hrId
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:admin'))
+  @Get('/admin/:hrId')
+  async findAllAdmin(
+    @Param('hrId') hrId: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('campaignId') campaignId: number | null,
+    @Query(
+      'status',
+      new ParseBoolPipe({
+        optional: true,
+      }),
+    )
+    status: boolean | null, //truyen vao false or null //filter
+  ) {
+    return this.applicationService.findAll(
+      page,
+      limit,
+      campaignId,
+      status,
+      hrId,
+    );
+  }
+
   //user get applications
   @UseGuards(AuthGuard('jwt'), PermissionsGuard('role:user'))
   @Get('/user')
@@ -102,8 +128,9 @@ export class ApplicationController {
     return this.applicationService.update(id, status);
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.applicationService.remove(+id);
-  // }
+  //
+  @Delete('/adminnnnn/:campaignId')
+  remove(@Param('campaignId') campaignId: number) {
+    return this.applicationService.delApplicationbyCampaignId(campaignId);
+  }
 }

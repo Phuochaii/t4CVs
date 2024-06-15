@@ -24,7 +24,7 @@ export class UserService {
       limit: parseInt(String(limit)),
       total: users.length,
       total_pages: Math.ceil(users.length / limit),
-      data: users.slice(skip, skip + limit),
+      data: users.slice(skip, skip + parseInt(String(limit))),
     };
     return result;
   }

@@ -11,6 +11,7 @@ import {
   GetByUserIdApplicationDto,
   GetByUserIdPaginationApplicationDto,
   UpdateApplicationDto,
+  DeleteByCampaignIdDto,
 } from '../../../domain/dto';
 import { Application } from '../../../domain/entity';
 import { Injectable } from '@nestjs/common';
@@ -144,5 +145,14 @@ export class TypeOrmApplicationReadRepository extends ApplicationReadRepository 
       return;
     }
     return data.map((schema) => this.mapper.toDomain(schema));
+  }
+
+  async delApplicationbyCampaignId(application: DeleteByCampaignIdDto) {
+    console.log(application.campaignId);
+    const result = await this.applicationRepository.delete({
+      campaignId: application.campaignId,
+    });
+
+    return 'success';
   }
 }

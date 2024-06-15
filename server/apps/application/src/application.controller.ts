@@ -10,6 +10,7 @@ import {
   Pagination,
   ReadAllApplicationByCampaignIdRequest,
   ReadAllApplicationByUserIdRequest,
+  DeleteApplicationbyCampaignIdRequest,
 } from '@app/common/proto/application';
 import { CommandService } from './cqrs/command.service';
 import { QueryService } from './cqrs/query.service';
@@ -54,5 +55,9 @@ export class ApplicationController implements ApplicationServiceController {
   deleteApplication(request: DeleteApplicationRequest) {
     request;
     return null;
+  }
+
+  deleteApplicationByCampaignId(request: DeleteApplicationbyCampaignIdRequest) {
+    return this.applicationApplication.delApplicationbyCampaign(request);
   }
 }

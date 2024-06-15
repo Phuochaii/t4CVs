@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { CreateJobDto } from './dto/Req/createJob.dto';
 import { Observable, catchError, lastValueFrom, throwError } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
@@ -11,8 +16,19 @@ import { UpdateJobDTO } from './dto/Req/update-job.dto';
 export class JobService {
   constructor(
     @Inject('JOB') private readonly jobClient: ClientProxy,
+    @Inject(forwardRef(() => CompanyService))
     private readonly companyService: CompanyService,
   ) {}
+
+  deleteJobByCampaignId(campaignId: number) {
+    return this.jobClient
+      .send({ cmd: 'delete_job_by_campaignId' }, campaignId)
+      .pipe(
+        catchError((error) => {
+          return throwError(() => error.response);
+        }),
+      );
+  }
 
   deleteJob(id: number) {
     return this.jobClient.send({ cmd: 'delete_job' }, id).pipe(

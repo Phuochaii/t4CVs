@@ -31,26 +31,36 @@ export class JobService {
     private typeService: TypeService,
   ) {}
 
+  async deleteJobByCampaignId(campaignId: number) {
+    const job = await this.jobRepository.findJobByCampaignId(campaignId);
+    if (!job)
+      throw new RpcException(
+        new BadRequestException(
+          `Job doesn't exist with campaign id = ${campaignId}!`,
+        ),
+      );
+    await this.jobDetailService.deleteJobDetail(job.jobDetail.id);
+    return await this.jobRepository.deleteJob(job.id);
+  }
+
   async deleteJob(id: number) {
     const job = await this.jobRepository.findJobById(id);
     if (!job)
       throw new RpcException(new BadRequestException(`Job doesn't exist!`));
+    await this.jobDetailService.deleteJobDetail(job.jobDetail.id);
     return await this.jobRepository.deleteJob(id);
   }
   async updateJob(data: JobAggregate) {
+    await this.jobDetailService.updateJobDetail(data.jobDetail);
     return await this.jobRepository.saveJob(data);
   }
 
-  async findJobByCampaignId(
-    campaignId: number,
-  ): Promise<FindJobByCampaignIdDto> {
+  async findJobByCampaignId(campaignId: number): Promise<JobAggregate> {
     const job = await this.jobRepository.findJobByCampaignId(campaignId);
     return job;
   }
 
-  async findJobsByCampaignIds(
-    campaignIds: number[],
-  ): Promise<FindJobByCampaignIdDto[]> {
+  async findJobsByCampaignIds(campaignIds: number[]): Promise<JobAggregate[]> {
     const jobs = await this.jobRepository.findJobsByCampaignIds(campaignIds);
     return jobs;
   }
@@ -125,13 +135,12 @@ export class JobService {
       });
       jobs = jobLocation;
     }
-
     const result: FindJobRespDTO = {
       page: parseInt(String(page)),
       limit: parseInt(String(limit)),
       total: jobs.length,
       total_pages: Math.ceil(jobs.length / limit),
-      data: jobs.slice(skip, skip + limit),
+      data: jobs.slice(skip, skip + parseInt(String(limit))),
     };
     return result;
   }
@@ -177,7 +186,7 @@ export class JobService {
       limit: parseInt(String(limit)),
       total: jobs.length,
       total_pages: Math.ceil(jobs.length / limit),
-      data: jobs.slice(skip, skip + limit),
+      data: jobs.slice(skip, skip + parseInt(String(limit))),
     };
     return result;
   }

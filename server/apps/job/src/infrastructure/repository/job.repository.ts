@@ -6,7 +6,6 @@ import { In, Repository } from 'typeorm';
 import { JobMapper } from '../mapper';
 import { CreateJobDto } from '../../domain/dto/Req/create-job.dto';
 import { QueryDTO } from '../../domain/dto/Req/query.dto';
-import { FindJobByCampaignIdDto } from '../../domain/dto/Resp/find-job-by-campaignId.dto';
 import { JobRepository } from '../../domain/repository';
 import { UpdateJobStatusDto } from '../../domain/dto/Req/update-job-status.dto';
 
@@ -23,51 +22,45 @@ export class TypeOrmJobRepository extends JobRepository {
     return await this.jobRepository.delete(id);
   }
 
-  async findJobByCampaignId(
-    campaignId: number,
-  ): Promise<FindJobByCampaignIdDto> {
+  async findJobByCampaignId(campaignId: number): Promise<JobAggregate> {
     const job = await this.jobRepository.findOne({
       where: {
         campaignId,
       },
-      select: {
-        titleRecruitment: true,
-        companyId: true,
-        salaryMax: true,
-        salaryMin: true,
-        campaignId: true,
-        status: true,
-      },
+      relations: [
+        'jobDetail',
+        'major',
+        'level',
+        'currency',
+        'fields',
+        'exp',
+        'type',
+        'locations',
+      ],
     });
     if (!job) return null;
-    const result: FindJobByCampaignIdDto = {
-      titleRecruitment: job.titleRecruitment,
-      companyId: job.companyId,
-      salaryMax: job.salaryMax,
-      salaryMin: job.salaryMin,
-      campaignId: job.campaignId,
-      status: job.status,
-    };
-    return result;
+    return new JobMapper().toDomain(job);
   }
 
-  async findJobsByCampaignIds(
-    campaignIds: number[],
-  ): Promise<FindJobByCampaignIdDto[]> {
-    const jobs = await this.jobRepository.findBy({
-      campaignId: In(campaignIds),
+  async findJobsByCampaignIds(campaignIds: number[]): Promise<JobAggregate[]> {
+    const jobs = await this.jobRepository.find({
+      where: {
+        campaignId: In(campaignIds),
+      },
+      relations: [
+        'jobDetail',
+        'major',
+        'level',
+        'currency',
+        'fields',
+        'exp',
+        'type',
+        'locations',
+      ],
     });
     if (!jobs) return null;
     const result = jobs.map((job) => {
-      const result: FindJobByCampaignIdDto = {
-        titleRecruitment: job.titleRecruitment,
-        companyId: job.companyId,
-        salaryMax: job.salaryMax,
-        salaryMin: job.salaryMin,
-        campaignId: job.campaignId,
-        status: job.status,
-      };
-      return result;
+      return new JobMapper().toDomain(job);
     });
     return result;
   }
