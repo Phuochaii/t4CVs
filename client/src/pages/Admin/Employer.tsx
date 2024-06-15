@@ -77,7 +77,13 @@ function Employer() {
         tableCellClassname: '',
         cell: (data: ObjectFromServer) => {
           const employer = data as EmployerFromServer;
-          return <div>{employer.gender === 'Male' ? 'Nam' : 'Nữ'}</div>;
+          return (
+            <div>
+              {employer.gender === 'Male' || employer.gender === 'Nam'
+                ? 'Nam'
+                : 'Nữ'}
+            </div>
+          );
         },
       },
       {
