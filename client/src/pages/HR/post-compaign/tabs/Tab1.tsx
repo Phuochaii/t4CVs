@@ -51,10 +51,10 @@ function PostCompaign1({
     value: string;
     label: string;
   }> | null>(null);
-  const [, setDistrictOptions] = useState<SingleValue<{
-    value: string;
-    label: string;
-  }> | null>(null);
+  // const [, setDistrictOptions] = useState<SingleValue<{
+  //   value: string;
+  //   label: string;
+  // }> | null>(null);
   const [jobTypeOptions, setjobTypeOptions] = useState<SingleValue<{
     value: string;
     label: string;
@@ -187,10 +187,12 @@ function PostCompaign1({
       updatedItem.benefit = data.benefit;
       updatedItem.requirement = data.requirement;
       updatedItem.skills = data.skill;
+      console.log(updatedItem);
+      
 
-      const res = await postJob(token!, JSON.stringify(updatedItem));
-      console.log(res);
-      next(event);
+      // const res = await postJob(token!, JSON.stringify(updatedItem));
+      // console.log(res);
+      // next(event);
     } else {
       if (employer.companyId === null) {
         <Alert severity="error">Bạn chưa có công ty</Alert>;
@@ -268,9 +270,9 @@ function PostCompaign1({
     setUserChoice(choice);
   };
   const gender = [
-    { value: 'Không quan trọng', label: 'Không quan trọng' },
-    { value: 'Nam', label: 'Nam' },
-    { value: 'Nữ', label: 'Nữ' },
+    { value: 'Any', label: 'Không quan trọng' },
+    { value: 'Female', label: 'Nữ' },
+    { value: 'Male', label: 'Nam' },
   ];
   const salaryOptions = [
     { value: 'Trong khoảng', label: 'Trong khoảng' },
