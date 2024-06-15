@@ -149,7 +149,7 @@ function HRLogIn() {
                 }
                 className={`
                   text-black mt-1 bg-white pl-12 pr-3 py-3 border rounded-md w-full
-                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
+                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500
                   ${passwordEmpty ? 'border-red-500' : ''}
                 `}
               />
