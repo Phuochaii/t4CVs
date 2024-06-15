@@ -100,8 +100,8 @@ function Profile() {
           avatar: response.image,
           skype: response.skype,
         };
-        console.log(positionArray);
-        let currentPosition;
+        // console.log(positionArray);
+        // let currentPosition;
         currentPosition = positionArray.filter((item) => {
           if (item.id === currentInfo.position) {
             setPositionValue(item.name);

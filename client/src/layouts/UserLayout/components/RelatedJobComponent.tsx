@@ -1,9 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import JobListItem from '../../../shared/components/JobListItem';
 import { getValidJobs } from '../../../modules/user-module';
-import { useAuth0 } from '@auth0/auth0-react';
 
-function RelatedJobComponent({ setJobId }: { setJobId: (id: number) => void }) {
+function RelatedJobComponent({
+  setJobId,
+}: {
+  setJobId: Dispatch<SetStateAction<string>>;
+}) {
   const [jobResults, setJobResults] = useState<any>([]);
   useEffect(() => {
     const fetchJobResults = async () => {

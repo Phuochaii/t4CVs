@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { CircleDollarSign, Heart } from 'lucide-react';
 
 const RecruitmentItem = (props) => {
