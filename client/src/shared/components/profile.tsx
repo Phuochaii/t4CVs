@@ -100,9 +100,8 @@ function Profile() {
           avatar: response.image,
           skype: response.skype,
         };
-        // console.log(positionArray);
-        // let currentPosition;
-        currentPosition = positionArray.filter((item) => {
+
+        const currentPosition = positionArray.filter((item) => {
           if (item.id === currentInfo.position) {
             setPositionValue(item.name);
             return item.name;
@@ -110,6 +109,7 @@ function Profile() {
         });
 
         setUserInfo(currentInfo);
+        console.log(currentInfo);
       })
       .catch();
   };
