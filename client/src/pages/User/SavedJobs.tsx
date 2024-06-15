@@ -40,8 +40,7 @@ function SavedJobs() {
             <div className="list-saved-jobs grid grid-cols-3 gap-x-4 py-8">
               <div className="left-box col-span-2">
                 <div className="left-box-body bg-white rounded-lg overflow-hidden">
-                  <div className="left-box--banner py-10 px-6 h-44 text-white bg-cover bg-[url('../../images/saved-jobs_banner.png')]">
-                    {/* <img src="../../images/saved-jobs_banner.png" /> */}
+                  <div className="left-box--banner py-10 px-6 h-44 text-white bg-cover ">
                     <h1 className="text-2xl font-bold">Việc làm đã lưu</h1>
                     <span className="max-w-lg">
                       Xem lại danh sách những việc làm mà bạn đã lưu trước đó.
