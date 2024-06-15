@@ -12,6 +12,6 @@ services:
       - EVENTSTORE_INSECURE=true
       - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
     volumes:
-      - ./volumes/eventstore:/var/lib/eventstore
+      - eventstore:/var/lib/eventstore
 volumes:
   eventstore:

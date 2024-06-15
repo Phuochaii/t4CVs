@@ -9,6 +9,7 @@ import {
   GetByCampaignIdService,
   GetByUserIdApplicationService,
   GetByUserIdPaginationApplicationService,
+  DelApplicationService,
 } from './domain/service';
 import { InfrastructureModule } from './infrastructure/infrastucture.module';
 import { ApplicationFactory } from './domain/factory/application.factory';
@@ -87,6 +88,13 @@ import {
       inject: [ApplicationReadRepository],
     },
     {
+      provide: DelApplicationService,
+      useFactory: (repository: ApplicationWriteRepository) => {
+        return new DelApplicationService(repository);
+      },
+      inject: [ApplicationWriteRepository],
+    },
+    {
       provide: ApplicationDomain,
       useFactory: (
         createApplicationService: CreateApplicationService,
@@ -97,6 +105,7 @@ import {
         getAllByCampaignIdApplication: GetByCampaignIdService,
         getByUserIdApplication: GetByUserIdApplicationService,
         getByUserIdPaginationApplication: GetByUserIdPaginationApplicationService,
+        delApplicationService: DelApplicationService,
       ) => {
         return new ApplicationDomain(
           createApplicationService,
@@ -107,6 +116,7 @@ import {
           getAllByCampaignIdApplication,
           getByUserIdApplication,
           getByUserIdPaginationApplication,
+          delApplicationService,
         );
       },
       inject: [
@@ -118,6 +128,7 @@ import {
         GetByCampaignIdService,
         GetByUserIdApplicationService,
         GetByUserIdPaginationApplicationService,
+        DelApplicationService,
       ],
     },
   ],

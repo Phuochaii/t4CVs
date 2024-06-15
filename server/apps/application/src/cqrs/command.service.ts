@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ApplicationDomain } from '../domain/application.application';
-import { CreateApplicationDto, UpdateApplicationDto } from '../domain/dto';
+import {
+  CreateApplicationDto,
+  DeleteByCampaignIdDto,
+  UpdateApplicationDto,
+} from '../domain/dto';
 
 @Injectable()
 export class CommandService {
@@ -11,5 +15,9 @@ export class CommandService {
 
   async updateApplication(request: UpdateApplicationDto) {
     return await this.applicationDomain.updateApplication(request);
+  }
+
+  async delApplicationbyCampaign(request: DeleteByCampaignIdDto) {
+    return await this.applicationDomain.delApplicationbyCampaign(request);
   }
 }

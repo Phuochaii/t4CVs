@@ -5,6 +5,7 @@ import { SnapshotService } from './snapshot.service';
 import { EventStorePublishedEvent } from '../../event-dispatcher.ts/event-store';
 import {
   ApplicationCreatedEvent,
+  ApplicationDeletedEvent,
   ApplicationUpdatedEvent,
 } from 'apps/application/src/domain/event';
 import { plainToInstance } from 'class-transformer';
@@ -73,6 +74,17 @@ export class EventStoreRepository {
         );
         if (!application) return;
         application.applyEvent(applicationUpdatedEvent);
+      case ApplicationDeletedEvent.name:
+        const applicationDeletedEvent = plainToInstance(
+          ApplicationDeletedEvent,
+          event.data,
+        );
+        const index = state.applications.findIndex(
+          (application) => application.id === applicationDeletedEvent.data.id,
+        );
+        if (index === -1) return;
+        state.applications.splice(index, 1);
+        break;
       default:
         break;
     }

@@ -58,6 +58,6 @@ export class ApplicationController implements ApplicationServiceController {
   }
 
   deleteApplicationByCampaignId(request: DeleteApplicationbyCampaignIdRequest) {
-    return this.applicationApplication.delApplicationbyCampaign(request);
+    return this.commandService.delApplicationbyCampaign(request);
   }
 }
