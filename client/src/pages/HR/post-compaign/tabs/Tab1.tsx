@@ -182,7 +182,7 @@ function PostCompaign1({
       updatedItem.quantity = Number.parseInt(data.quantity);
       updatedItem.jobSchedule = data.schedule;
       updatedItem.gender =
-        genderOptions?.value !== undefined ? genderOptions?.value : '0';
+        genderOptions?.value !== undefined ? genderOptions?.value : 'Không quan trọng';
       updatedItem.description = data.description;
       updatedItem.benefit = data.benefit;
       updatedItem.requirement = data.requirement;
@@ -190,9 +190,9 @@ function PostCompaign1({
       console.log(updatedItem);
       
 
-      // const res = await postJob(token!, JSON.stringify(updatedItem));
-      // console.log(res);
-      // next(event);
+      const res = await postJob(token!, JSON.stringify(updatedItem));
+      console.log(res);
+      next(event);
     } else {
       if (employer.companyId === null) {
         <Alert severity="error">Bạn chưa có công ty</Alert>;
@@ -270,9 +270,9 @@ function PostCompaign1({
     setUserChoice(choice);
   };
   const gender = [
-    { value: 'Any', label: 'Không quan trọng' },
-    { value: 'Female', label: 'Nữ' },
-    { value: 'Male', label: 'Nam' },
+    { value: 'Không quan trọng', label: 'Không quan trọng' },
+    { value: 'Nữ', label: 'Nữ' },
+    { value: 'Nam', label: 'Nam' },
   ];
   const salaryOptions = [
     { value: 'Trong khoảng', label: 'Trong khoảng' },

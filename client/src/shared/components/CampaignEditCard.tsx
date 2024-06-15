@@ -76,9 +76,9 @@ function CampaignEditCard({
     return data.map(({ id, name }) => ({ value: id.toString(), label: name }));
   };
   const gender = [
-    { value: 'Any', label: 'Không quan trọng' },
-    { value: 'Female', label: 'Nữ' },
-    { value: 'Male', label: 'Nam' },
+    { value: 'Không quan trọng', label: 'Không quan trọng' },
+    { value: 'Nữ', label: 'Nữ' },
+    { value: 'Nam', label: 'Nam' },
   ];
   const major = convertToOptions(fields?.major);
   const city = convertToOptions(fields?.location);
