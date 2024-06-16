@@ -380,7 +380,7 @@ function Home() {
             <span className="mr-2">•</span>
             <span className="lable-item text-sm">Cập nhật lúc: </span>
             <span className="time-scan item-number number-job-new-today">
-              00:33 06/04/2024
+              21:33 16/06/2024
             </span>
           </div>
         </div>
