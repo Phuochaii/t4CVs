@@ -36,7 +36,9 @@ services:
     networks:
       - backend
   nginx:
-    build: ./nginx/deploy
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
     ports:
       - '80:80'
     networks:
