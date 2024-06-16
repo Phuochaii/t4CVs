@@ -1,15 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class GatewayService {
+  constructor(
+    private readonly configService: ConfigService,
+  ) {}
   getHello(): string {
-    return 'Hello World!';
+    return 'Hello World! ' + this.configService.get('GATEWAY_PORT');
   }
-
-  // getHelloFromCVService(): Observable<string> {
-  //   const a = this.cvClient.send({ cmd: 'create_cv' }, {});
-  //   return a.pipe((response) => {
-  //     return response;
-  //   });
-  // }
 }

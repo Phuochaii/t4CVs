@@ -13,9 +13,5 @@ services:
       - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
     volumes:
       - eventstore:/var/lib/eventstore
-  nginx:
-    build: ./nginx
-    ports:
-      - '3000:80'
 volumes:
   eventstore:
