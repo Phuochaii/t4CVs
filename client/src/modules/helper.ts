@@ -4,7 +4,7 @@ import { CompanyFromServer } from '../shared/types/Company.type';
 import { Field, RecruitmentFromServer } from '../shared/types/Recruitment.type';
 import { EmployerFromServer } from '../shared/types/Employer.type';
 
-const serverURL = 'http://localhost:3000';
+const serverURL = 'http://34.28.130.105';
 
 export async function getCampaignById(id: number) {
   const response = await axios.get(`${serverURL}/company/campaign/${id}`);

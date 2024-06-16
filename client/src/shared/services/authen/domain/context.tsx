@@ -47,7 +47,7 @@ export const Roles: { [key in 'HR' | 'USER' | 'ADMIN']: Role } = {
     },
     redirectUrl: '/hr/news',
     loginUrl: '/hr-login',
-    registerApiUrl: 'http://localhost:3000/employer/account',
+    registerApiUrl: 'http://34.28.130.105/employer/account',
     getProfile: async (token) => {
       const profile = await getHrProfile(token);
       return {
@@ -100,7 +100,7 @@ export const Roles: { [key in 'HR' | 'USER' | 'ADMIN']: Role } = {
       return <Spinner />;
     },
     loginUrl: "/user-login",
-    registerApiUrl: "http://localhost:3000/user/account",
+    registerApiUrl: "http://34.28.130.105/user/account",
     getProfile: async (token) => {
       const profile = await getUserProfile(token);
       return {
@@ -133,7 +133,7 @@ export const Roles: { [key in 'HR' | 'USER' | 'ADMIN']: Role } = {
     },
     loginUrl: "/admin-login",
     redirectUrl: "/admin/overview",
-    registerApiUrl: "http://localhost:3000/admin/account",
+    registerApiUrl: "http://34.28.130.105/admin/account",
   },
 };
 

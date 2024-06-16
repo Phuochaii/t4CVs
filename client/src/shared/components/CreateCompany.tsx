@@ -67,7 +67,7 @@ const CreateCompany = ({
     formData.append('name', data.name);
     successToast('Tạo công ty thành công!');
     try {
-      const response = await fetch('http://localhost:3000/company/create', {
+      const response = await fetch('http://34.28.130.105/company/create', {
         method: 'POST',
         body: formData,
         headers: {

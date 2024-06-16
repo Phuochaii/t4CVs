@@ -272,7 +272,7 @@ function CampaignEditCard({
       console.log(JSON.stringify(updatedItem));
       try {
         const response = await axios.put(
-          'http://localhost:3000/job/update-job',
+          'http://34.28.130.105/job/update-job',
           JSON.stringify(updatedItem),
           {
             headers: {
