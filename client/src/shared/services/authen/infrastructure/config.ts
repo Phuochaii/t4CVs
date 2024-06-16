@@ -1,4 +1,4 @@
-export const HOST_URL = 'https://dacnpm-m9tw.onrender.com';
+export const HOST_URL = 'http://localhost:3000';
 export const AUTH0_DOMAIN = 'dev-0oh0fi1avbej1681.us.auth0.com';
 export const AUTH0_CLIENT_ID = 'NXdIWANcMLVivHz2A3ANsPHLYVvCAgd1';
 export const AUTH0_LOGIN_REDIRECT_URL = HOST_URL;
