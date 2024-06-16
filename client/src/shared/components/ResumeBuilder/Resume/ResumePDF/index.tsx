@@ -86,6 +86,13 @@ export const ResumePDF = ({
     ),
   };
 
+  const renderComponents = () => {
+    return showFormsOrder.map((form) => {
+      const Component = formTypeToComponent[form];
+      return <Component key={form} />;
+    });
+  };
+
   return (
     <>
       <Document title={`${name} Resume`} author={name} producer={"Inhouse"}>
@@ -118,10 +125,11 @@ export const ResumePDF = ({
               themeColor={themeColor}
               isPDF={isPDF}
             />
-            {showFormsOrder.map((form) => {
-              const Component = formTypeToComponent[form];
-              return <Component key={form} />;
-            })}
+            {renderComponents().map((component, index) => (
+              <View key={index} style={{ marginBottom: spacing[4] }}>
+                {component}
+              </View>
+            ))}
           </View>
         </Page>
       </Document>
