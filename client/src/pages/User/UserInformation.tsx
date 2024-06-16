@@ -58,7 +58,7 @@ function UserInformation() {
     }
   };
   const { token } = useProfileContext();
-  const { user, logout } = useAuth0();
+  const { user } = useAuth0();
   const userId = user?.sub;
   const [userInfo, setUserInfo] = useState({
     fullname: 'Hải Yến Viên',

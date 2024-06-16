@@ -1,24 +1,36 @@
-import { useState } from 'react';
+import clsx from 'clsx';
+import { useState, useEffect } from 'react';
 import { Switch } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { Search } from 'lucide-react';
+import { ArrowUpCircle, Check, Info, Search } from 'lucide-react';
 
 import ManganeBanner from '../../shared/assets/images/manage-cv-banner.webp';
 import NoCVImage from '../../shared/assets/images/no-cv.webp';
 import NoCVUploadImage from '../../shared/assets/images/no-cv-upload.webp';
 import NoProfileImage from '../../shared/assets/images/no-profile.webp';
-import Avatar from '../../shared/assets/images/vietnam-flag-icon.png';
+
+import * as UserModule from '../../modules/user-module';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
+
+interface UserInfoType {
+  fullname: string;
+  phone: string;
+  avatar: string;
+  email: string;
+}
 
 const TemplateCV = () => {
-  const [isOn, setIsOn] = useState(false);
+  const { user } = useAuth0();
   const [isFocused, setIsFocused] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [userInfo, setUserInfo] = useState<UserInfoType>();
+
+  const [jobSeekingActive, setJobSeekingActive] = useState(false);
+  const [availble, setAvailable] = useState(false);
+  const { token } = useProfileContext();
 
   const navigate = useNavigate();
-
-  const toggleSwitch = () => {
-    setIsOn(!isOn);
-  };
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -32,6 +44,27 @@ const TemplateCV = () => {
     setSearchValue(event.target.value);
   };
 
+  const fetchUserInfo = async () => {
+    UserModule.getUserById({ userId: user?.sub, token: token })
+      .then((res) => {
+        const response = res.data;
+        console.log(response);
+        const currentInfo = {
+          fullname: response.fullname,
+          phone: response.phone,
+          avatar:
+            response.image ||
+            'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg',
+          email: '*****@gmail.com',
+        };
+        setUserInfo(currentInfo);
+      })
+      .catch();
+  };
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
   return (
     <div
       className="justify-center flex flex-row"
@@ -113,89 +146,101 @@ const TemplateCV = () => {
       </div>
 
       <div className="w-3/12 m-8 flex flex-col">
-        <div className="bg-white rounded-lg p-5 md:p-6 mb-5">
-          <div className="container mx-auto">
-            <div className="flex items-center">
-              <div className="w-16 h-16 bg-gray-300 rounded-full mr-4 overflow-hidden">
-                <img
-                  src={Avatar}
-                  alt="avatar"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              <div className="ml-4">
-                <p>Chào bạn trở lại,</p>
-                <p className="font-medium">Trần Nguyên</p>
-                <div className=" bg-gray-200 rounded inline-block">
-                  <p>Tài khoản đã xác thực</p>
+        {userInfo && (
+          <div className="flex flex-col p-2 divide-y gap-6 bg-white rounded-lg max-w-[400px]">
+            <div className="flex gap-6">
+              <div className="relative">
+                <span className="absolute right-0 py-[2px] px-[4px] text-[8px] text-white uppercase bg-slate-500">
+                  Verified
+                </span>
+                <div className="cursor-pointer">
+                  <img
+                    src={
+                      userInfo.avatar ||
+                      'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'
+                    }
+                    alt="User Image"
+                    className="object-cover w-20 h-20 rounded-full"
+                  />
                 </div>
-                <p>Nâng cấp tài khoản</p>
+              </div>
+              <div className="flex flex-col items-start gap-2">
+                <div className="flex flex-col items-start gap-1">
+                  <div className="text-sm">Chào bạn trở lại,</div>
+                  <h1 className="font-bold text-md">{userInfo.fullname}</h1>
+                  <div className="flex items-center p-1 text-xs text-white bg-gray-500">
+                    Tài khoản đã xác thực
+                  </div>
+                </div>
+                <button className="flex items-center gap-2 px-2 py-1 text-sm font-bold rounded-full bg-slate-200">
+                  <ArrowUpCircle size={16} />Nâng cấp tài khoản
+                </button>
               </div>
             </div>
-          </div>
-          <div className="flex flex-col border-t-2 border-gray mt-4">
-            <div className="flex items-center">
-              <Switch
-                checked={isOn}
-                onChange={toggleSwitch}
-                inputProps={{ 'aria-label': 'controlled' }}
-                sx={{
-                  '& .MuiSwitch-thumb': {
-                    bgcolor: isOn ? 'green' : 'gray',
-                  },
-                  '& .MuiSwitch-track': {
-                    bgcolor: isOn ? 'green' : 'gray',
-                  },
-                }}
-              />
-              <span
-                className={`ml-2 ${isOn ? 'text-green-500' : 'text-gray-400'} font-bold`}
-              >
-                {isOn ? 'Đang Bật Tìm Việc' : 'Đang Tắt Tìm Việc'}
-              </span>
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-2">
+                <Switch
+                  checked={jobSeekingActive}
+                  onChange={() => setJobSeekingActive(!jobSeekingActive)}
+                />{' '}
+                <span
+                  className={clsx(
+                    'font-bold',
+                    jobSeekingActive ? 'text-green-500' : 'text-slate-500',
+                  )}
+                >
+                  Đang Tắt tìm việc
+                </span>
+              </div>
+              <p className="text-sm text-gray-400">
+                Bật tìm việc giúp hồ sơ của bạn nổi bật hơn và được chú ý nhiều hơn
+                trong danh sách tìm kiếm của NTD
+              </p>
+              <div className="flex items-center gap-2">
+                <Switch
+                  checked={availble}
+                  onChange={() => setAvailable(!availble)}
+                />{' '}
+                <span
+                  className={clsx(
+                    'font-bold',
+                    availble ? 'text-green-500' : 'text-slate-500',
+                  )}
+                >
+                  Cho phép NTD tìm kiếm hồ sơ
+                </span>
+              </div>
+              <p>
+                Khi có cơ hội việc làm phù hợp, NTD sẽ liên hệ và trao đổi với bạn
+                qua:
+              </p>
+              <ul className="flex flex-col gap-2">
+                <li className="flex items-center gap-2">
+                  <div className="p-1 bg-green-200 rounded-full">
+                    <Check className="text-green-500" size={16} />
+                  </div>
+                  Nhắn tin qua Top Connect trên t4CVs
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="p-1 bg-green-200 rounded-full">
+                    <Check className="text-green-500" size={16} />
+                  </div>
+                  Email và Số điện thoại của bạn
+                </li>
+              </ul>
+              <img src="/images/banner-app.png" />
             </div>
-            <p>
-              Bật tìm việc giúp hồ sơ của bạn nổi bật hơn và được chú ý nhiều
-              hơn trong danh sách tìm kiếm của NTD.
-            </p>
-            <div className="flex items-center">
-              <Switch
-                checked={isOn}
-                onChange={toggleSwitch}
-                inputProps={{ 'aria-label': 'controlled' }}
-                sx={{
-                  '& .MuiSwitch-thumb': {
-                    bgcolor: isOn ? 'green' : 'gray',
-                  },
-                  '& .MuiSwitch-track': {
-                    bgcolor: isOn ? 'green' : 'gray',
-                  },
-                }}
-              />
-              <span
-                className={`ml-2 ${isOn ? 'text-green-500' : 'text-gray-400'} font-bold`}
-              >
-                {isOn
-                  ? 'Đang cho phép NTD tìm kiếm hồ sơ'
-                  : 'Chưa cho phép NTD tìm kiếm hồ sơ'}
-              </span>
+            <div className="flex flex-col items-start gap-4 py-2">
+              <div className="flex items-start gap-2">
+                <Info size={16} className="text-gray-400" />
+                Khởi tạo t4CVs Profile để gia tăng 300% cơ hội việc làm tốt
+              </div>
+              <button className="px-4 py-2 font-bold text-green-500 border border-green-600 rounded">
+                Tạo t4CVs Profile
+              </button>
             </div>
-            <p>
-              Khi bạn cho phép, các NTD uy tín có thể chủ động kết nối và gửi
-              đến bạn những cơ hội việc làm hấp dẫn nhất, giúp nhân đôi hiệu quả
-              tìm việc.
-            </p>
           </div>
-          <div className="flex flex-col border-t-2 border-gray mt-4">
-            <div>
-              <p>Khởi tạo t4CVs Profile để gia tăng 300% cơ hội việc làm tốt</p>
-            </div>
-            <button className="mt-4 px-4 py-2 text-xs font-bold w-40 h-8 border border-green-500 rounded text-green-500 hover:bg-green-500 hover:text-white transition duration-300">
-              Tạo t4CVs Profile
-            </button>
-          </div>
-        </div>
+        )}
 
         <div className="bg-white rounded-lg p-5 md:p-6 mb-5">
           <div>
@@ -262,23 +307,10 @@ const TemplateCV = () => {
             <p>Bao nhiêu NTD đang quan tâm tới Hồ sơ của bạn?</p>
           </div>
           <div className="rounded-lg p-5 md:p-6 shadow-md">
-            <div className="container mx-auto mt-4">
-              <div className="flex items-center">
-                <div className="w-16 h-16 bg-gray-300 rounded-full mr-4 overflow-hidden">
-                  <img
-                    src={Avatar}
-                    alt="avatar"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                <div className="ml-4 w-2/3">
-                  <p>
-                    Mỗi lượt Nhà tuyển dụng xem CV mang đến một cơ hội để bạn
-                    gần hơn với công việc phù hợp.
-                  </p>
-                </div>
-              </div>
+            <div className="flex items-center">
+              <p>
+                Mỗi lượt Nhà tuyển dụng xem CV mang đến một cơ hội để bạn gần hơn với công việc phù hợp.
+              </p>
             </div>
           </div>
         </div>
