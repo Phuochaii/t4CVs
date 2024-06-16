@@ -1,9 +1,29 @@
 version: '3.8'
 services:
-  eventstore:
-    image: eventstore/eventstore:latest
+  nestjs:
+    container_name: nestjs
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    environment:
+      - DB_HOST=database
+      - EVENTSTORE_HOST=eventstore
+    expose:
+      - 4000
+      - 4001
     ports:
-      - "2113:2113"
+      - 4000:4000
+    depends_on:
+      - database
+      - eventstore
+    networks:
+      - backend
+  eventstore:
+    container_name: eventstore
+    image: eventstore/eventstore:latest
+    expose:
+      - '2113'
     environment:
       - EVENTSTORE_CLUSTER_SIZE=1
       - EVENTSTORE_RUN_PROJECTIONS=All
@@ -13,20 +33,31 @@ services:
       - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
     volumes:
       - eventstore:/var/lib/eventstore
+    networks:
+      - backend
   nginx:
     build: ./nginx
     ports:
       - '80:80'
-  postgres:
+    networks:
+      - backend
+    depends_on:
+      - nestjs
+  database:
+    container_name: database
     image: postgres:latest
-    ports:
-      - '5432:5432'
+    expose:
+      - '5432'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: postgres
     volumes:
       - postgres:/var/lib/postgresql/data
+    networks:
+      - backend
+networks:
+  backend:
 volumes:
   eventstore:
   postgres:
