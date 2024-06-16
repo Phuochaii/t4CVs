@@ -4,6 +4,7 @@ import { EmployerFromServer } from '../shared/types/Employer.type';
 import { ApplicationFromServer } from '../shared/types/Application.type';
 import { UserFromServer } from '../shared/types/User.type';
 import { UserCV } from '../shared/types/CV_user.type';
+import { RecruitmentFromServer } from '../shared/types/Recruitment.type';
 
 const serverURL = 'http://localhost:3000';
 
@@ -104,7 +105,7 @@ const getApplicationByCampaignIdHRId = async ({
   );
 
   const response = await axios.get(
-    `${serverURL}/application/hr/?page=${page}&limit=${limit}&campaignId=${campaignId}${status != undefined ? `&status=${status}` : ''}`,
+    `${serverURL}/application/hr?page=${page}&limit=${limit}&campaignId=${campaignId}${status != undefined ? `&status=${status}` : ''}`,
     {
       headers: {
         authorization: `Bearer ${token}`,
@@ -141,14 +142,16 @@ const getAllCompaignByHrId = async ({ token }: { token: string }) => {
 const updateApplicationStatus = async ({
   applicationId,
   token,
+  status,
 }: {
   applicationId: number;
   token: string;
+  status: boolean;
 }) => {
   const response = await axios.patch(
     `${serverURL}/application/${applicationId}`,
     {
-      status: true,
+      status: status,
     },
     {
       headers: {
@@ -459,6 +462,25 @@ export async function getEmployerById(id: number | string) {
   const response = await axios.get(`${serverURL}/employer/${id}`);
   const rawEmployer: EmployerFromServer = response.data;
   return rawEmployer;
+}
+
+export async function getJobByCampaignId(
+  token: string,
+  campaignId: number | string,
+) {
+  try {
+    const response = await axios.get(
+      `${serverURL}/job?campaignId=${campaignId}`,
+      {
+        headers: { authorization: `Bearer ${token}` },
+      },
+    );
+    if (response.status != 200) return null;
+    const rawJob: RecruitmentFromServer = response.data;
+    return rawJob;
+  } catch (e) {
+    return null;
+  }
 }
 
 // cập nhật các function export vào đây (dưới đây chưa đủ)

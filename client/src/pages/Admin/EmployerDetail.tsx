@@ -31,13 +31,11 @@ function EmployerDetail() {
   useEffect(() => {
     if (employerInfo?.companyId) {
       fetchCompanyInfo(employerInfo.companyId);
-      console.log(234, companyInfo);
     }
   }, [employerInfo]);
   const fetchEmployerInfo = async (id: string) => {
     try {
       const response = await getEmployerById(id);
-      console.log(response);
       setEmployerInfo(response);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -47,7 +45,6 @@ function EmployerDetail() {
   const fetchCompanyInfo = async (id: string | number) => {
     try {
       const response = await getCompanyById(id);
-      console.log(response);
       setCompanyInfo(response);
     } catch (error) {
       console.error('Error fetching data:', error);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Icon from '../../shared/components/regular-icon';
 import {
   LucideProps,
@@ -11,6 +11,7 @@ import {
 import Profile from '../../shared/components/profile';
 import Certificate from '../../shared/components/certificate';
 import CompanyInfo from '../../shared/components/company-info';
+import { useLocation, useParams } from 'react-router-dom';
 const Item = ({
   icon,
   iconSize = 16,
@@ -57,12 +58,6 @@ const Item = ({
 const Settings = () => {
   const sidebarItems = [
     {
-      icon: Lock,
-      title: 'Đổi mật khẩu',
-      key: 'ChangePassword',
-      component: <div>Change Password</div>,
-    },
-    {
       icon: UserRound,
       title: 'Thông tin cá nhân',
       key: 'Profile',
@@ -87,13 +82,33 @@ const Settings = () => {
       icon: Share2,
       title: 'Kết nối API',
       key: 'APIConnection',
+      available: false,
       component: <div>API Connection</div>,
     },
+    {
+      icon: Lock,
+      title: 'Đổi mật khẩu',
+      key: 'ChangePassword',
+      available: false,
+      component: <div>Change Password</div>,
+    },
   ];
-  const [selectedKey, setSelectedKey] = useState('ChangePassword');
+
+  const location = useLocation();
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.size !== 0) {
+      const activeParam = searchParams.get('active');
+      setSelectedKey(activeParam);
+    } else {
+      setSelectedKey('Profile');
+    }
+  }, [location.search]);
+  const [selectedKey, setSelectedKey] = useState('');
   const selectedComponent = sidebarItems.find(
     (item) => item.key === selectedKey,
   )?.component;
+
   return (
     <div className="flex flex-row h-fit m-5">
       <div className="w-[22%] bg-gray-100">
@@ -105,7 +120,11 @@ const Settings = () => {
               title={item.title}
               isChosen={selectedKey === item.key}
               available={item.available}
-              onClick={() => setSelectedKey(item.key)}
+              onClick={() => {
+                if (item.available) {
+                  setSelectedKey(item.key);
+                }
+              }}
             />
           ))}
         </ul>

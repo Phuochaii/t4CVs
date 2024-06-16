@@ -51,18 +51,14 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [applicants, setApplicants] = useState<(UserFromServer | null)[]>([]);
   const campaign = data;
-  // console.log(data);
   const { token } = useProfileContext();
   const navigation = useNavigate();
-  // console.log(token); //Có token
 
   useEffect(() => {
     async function getUsers() {
       const applicantPromises = campaign.applications.map(
         async (application) => {
-          // console.log('Applications', application);
           const applicant = await getUserById(token, application.userId);
-          console.log(applicant);
           return applicant;
         },
       );
@@ -70,7 +66,6 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
     }
     getUsers();
   }, []);
-  // console.log('Applicants', applicants);
   return (
     <tr
       className="align-top hover:bg-green-100 bg-slate-50"
@@ -118,7 +113,7 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
             <span className="font-bold bg-slate-200 text-zinc-400">
               {`#${data.campaignId}`}
             </span>
-            {
+            {/* {
               <div
                 className={`flex items-center gap-2 font-bold ${
                   isHovered ? 'visible' : 'invisible'
@@ -127,7 +122,7 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
                 <a href="#">Sửa chiến dịch</a>
                 <a href="#">Xem báo cáo</a>
               </div>
-            }
+            } */}
           </div>
         </div>
       </td>
@@ -147,9 +142,12 @@ const CompanyCampaignTableRow = ({ data }: CompanyCampaignTableRowProps) => {
         )}`}</div>
       </td>
       <td className="border">
-        <div className="p-2 font-bold text-blue-500">{`${
-          data.company ? data.company.name : ''
-        }`}</div>
+        <div
+          onClick={() => {
+            if (data.company) navigation(`/admin/company/${data.company.id}`);
+          }}
+          className="p-2 font-bold text-blue-500 hover:underline"
+        >{`${data.company ? data.company.name : ''}`}</div>
       </td>
       <td className="border max-w-[180px]">
         {campaign.recruitment ? (
@@ -202,7 +200,6 @@ function Campaign() {
   const [totalPages, setTotalPages] = useState(0);
   const { token } = useProfileContext();
   const [searchText, setSearchText] = useState('');
-  // console.log(token); //Có token
 
   useEffect(() => {
     async function getData() {
@@ -210,7 +207,6 @@ function Campaign() {
         searchText == ''
           ? await getAllCampaigns(page)
           : await findCampaignByName(token, searchText, page);
-      // console.log(allCampaigns);
       if (allCampaigns) {
         const rawCampaigns = await allCampaigns.map(async (item) => {
           const employer = await getEmployerById(item.employerId);
@@ -245,7 +241,6 @@ function Campaign() {
       }
     }
     getData();
-    console.log('GO');
   }, [page, searchText]);
 
   const handleSearch = (e) => {

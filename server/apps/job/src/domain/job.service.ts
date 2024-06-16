@@ -31,6 +31,18 @@ export class JobService {
     private typeService: TypeService,
   ) {}
 
+  async deleteJobByCampaignId(campaignId: number) {
+    const job = await this.jobRepository.findJobByCampaignId(campaignId);
+    if (!job)
+      throw new RpcException(
+        new BadRequestException(
+          `Job doesn't exist with campaign id = ${campaignId}!`,
+        ),
+      );
+    await this.jobDetailService.deleteJobDetail(job.jobDetail.id);
+    return await this.jobRepository.deleteJob(job.id);
+  }
+
   async deleteJob(id: number) {
     const job = await this.jobRepository.findJobById(id);
     if (!job)
@@ -43,16 +55,12 @@ export class JobService {
     return await this.jobRepository.saveJob(data);
   }
 
-  async findJobByCampaignId(
-    campaignId: number,
-  ): Promise<FindJobByCampaignIdDto> {
+  async findJobByCampaignId(campaignId: number): Promise<JobAggregate> {
     const job = await this.jobRepository.findJobByCampaignId(campaignId);
     return job;
   }
 
-  async findJobsByCampaignIds(
-    campaignIds: number[],
-  ): Promise<FindJobByCampaignIdDto[]> {
+  async findJobsByCampaignIds(campaignIds: number[]): Promise<JobAggregate[]> {
     const jobs = await this.jobRepository.findJobsByCampaignIds(campaignIds);
     return jobs;
   }

@@ -9,7 +9,6 @@ import SearchBoxComponent from '../../layouts/UserLayout/components/SearchBoxCom
 import RelatedJobComponent from '../../layouts/UserLayout/components/RelatedJobComponent';
 import InterestedJobComponent from '../../layouts/UserLayout/components/InterestedJobComponent';
 import { getAllExp, getAllLocation, getJobById } from '../../modules/helper';
-import { AUTH0_BACKEND_AUDIENCE } from '../../shared/services/authen/infrastructure/config';
 import { uploadApplication, uploadCV } from '../../modules/user-module';
 import { useProfileContext } from '../../shared/services/authen/domain/context';
 import Loading from '../../shared/components/Loading/Loading';
@@ -533,6 +532,7 @@ function ApplyCV() {
   const [showModal, setShowModal] = useState(false);
   const handleBeforeApply = () => {
     if (!isAuthenticated) {
+      alert('Bạn cần đăng nhập trước khi ứng tuyển');
       navigation('/user-login');
       return;
     }
@@ -686,7 +686,7 @@ function ApplyCV() {
                           </span>
                           <strong className="job-detail__info--section-content-value">
                             {jobData?.salaryMin && jobData?.salaryMax
-                              ? ` ${jobData?.salaryMin} - ${jobData?.salaryMax} ${jobData?.currency?.name}`
+                              ? ` ${new Intl.NumberFormat().format(jobData?.salaryMin)} - ${new Intl.NumberFormat().format(jobData?.salaryMax)}  ${jobData?.currency?.name}`
                               : 'Thỏa thuận'}
                           </strong>
                         </div>
@@ -1026,11 +1026,11 @@ function ApplyCV() {
                         </span>
                       </div>
                       <div
-                        onClick={() =>
+                        onClick={() => {
                           navigation(
-                            `/companies/${jobData?.companyId ? jobData?.companyId : ''}`,
-                          )
-                        }
+                            `/companies/${jobData?.company?.id ? jobData?.company?.id : ''}`,
+                          );
+                        }}
                         className="job-detail__company--action font-bold text-green-500 flex flex-row gap-2 items-center justify-center cursor-pointer hover:underline"
                       >
                         Xem trang công ty

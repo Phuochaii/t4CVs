@@ -16,7 +16,7 @@ import {
 import CampaignEditCard from '../../shared/components/CampaignEditCard';
 import { getJobById } from '../../modules/helper';
 import { updateJobStatus } from '../../modules/admin-module';
-import { getField, getProfile } from '../../modules/hr-module';
+import { getField, getJobByCampaignId, getProfile } from '../../modules/hr-module';
 import { useProfileContext } from '../../shared/services/authen/domain/context';
 
 function RecruitmentDisplayTable() {
@@ -135,20 +135,20 @@ function CampaignEdit() {
   const [openSection, setOpenSection] = useState(-1);
   const [refresh, setRefresh] = useState(false);
   const [job, setJob] = useState<RecruitmentFromServer>(state);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [employer, setEmployer] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [fields, setFields] = useState<any>(null);
   useEffect(() => {
     const getData = async () => {
       const response = await getField(token!);
-      console.log(token!);
       const data = response;
       console.log(response);
       setFields(data);
       const res1 = await getProfile(token!);
       console.log(res1.companyId);
       setEmployer(res1);
-      const res = await getJobById(recruitment.id);
-      console.log(res);
+      const res = await getJobByCampaignId(token!, recruitment.id);
       setJob(res);
       setRecruitment({
         ...response,

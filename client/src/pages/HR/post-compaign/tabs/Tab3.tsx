@@ -9,7 +9,7 @@ const slides = [
 
 function PostCompaign3({
   next,
-  previous,
+  // previous,
 }: {
   next: React.MouseEventHandler<HTMLButtonElement>;
   previous: React.MouseEventHandler<HTMLButtonElement>;
@@ -17,11 +17,11 @@ function PostCompaign3({
   const autoSlideInterval = 5000;
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const previousSlide = () => {
-    setCurrentSlide((current) =>
-      current == 0 ? slides.length - 1 : current - 1,
-    );
-  };
+  // const previousSlide = () => {
+  //   setCurrentSlide((current) =>
+  //     current == 0 ? slides.length - 1 : current - 1,
+  //   );
+  // };
 
   const nextSlide = () => {
     setCurrentSlide((current) =>

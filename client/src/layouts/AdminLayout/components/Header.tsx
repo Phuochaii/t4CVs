@@ -1,6 +1,5 @@
-import { Bell, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
-import SearchBar from './SearchBar';
 import { useNavigate } from 'react-router-dom';
 import RoundedButton from '../../HRLayout/components/RoundedButton';
 import { useAuth0 } from '@auth0/auth0-react';

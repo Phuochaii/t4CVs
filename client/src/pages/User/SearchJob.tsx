@@ -2,13 +2,8 @@
 import { useState } from 'react';
 import React from 'react';
 import { TextField, InputAdornment, MenuItem } from '@mui/material';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  CurrencyDollarIcon,
-} from '@heroicons/react/20/solid';
-import {
-  HeartIcon,
   BriefcaseIcon,
   CubeIcon,
   ClockIcon,
@@ -21,7 +16,15 @@ import { DefaultPagination } from '../../shared/components/default-pagination';
 import SearchBoxComponent from '../../layouts/UserLayout/components/SearchBoxComponent';
 import InterestedJobComponent from '../../layouts/UserLayout/components/InterestedJobComponent';
 import JobListItem from '../../shared/components/JobListItem';
-import { getAllExp, getAllFields, getAllLevel, getAllLocation, getAllMajor, getAllType, searchJob } from '../../modules/helper';
+import {
+  getAllExp,
+  getAllFields,
+  getAllLevel,
+  getAllLocation,
+  getAllMajor,
+  getAllType,
+  searchJob,
+} from '../../modules/helper';
 
 const news_type = [
   {
@@ -59,7 +62,6 @@ interface SearchParams {
 
 function SearchJob() {
   const navigation = useNavigate();
-  const url = useLocation();
 
   const [cities, setCities] = useState<any[]>([]);
   const [exp_year, setExpYear] = useState<any[]>([]);

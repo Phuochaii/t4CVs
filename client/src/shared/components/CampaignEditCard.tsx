@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Pencil,
   Folder,
@@ -30,19 +31,23 @@ import { districts } from '../types/Districts';
 function CampaignEditCard({
   jobItem,
   fields,
-  employer,
+  // employer,
 }: {
   jobItem: RecruitmentFromServer;
   fields: any;
   employer: any;
 }) {
+  // console.log(jobItem);
   const { id: compaignId } = useParams();
   const navigate = useNavigate();
 
-
-  const [,setDistrictOption] = useState<{ value: string; label: string; }[]>([]);
-  function getAllDistrictsOfProvinces(provinceNames: string[]): { value: string; label: string; }[] {
-    const allDistricts: { value: string; label: string; }[] = [];
+  const [, setDistrictOption] = useState<{ value: string; label: string }[]>(
+    [],
+  );
+  function getAllDistrictsOfProvinces(
+    provinceNames: string[],
+  ): { value: string; label: string }[] {
+    const allDistricts: { value: string; label: string }[] = [];
     provinceNames.forEach((provinceName) => {
       const province = districts.data.find(
         (p: { name: string }) => p.name === provinceName,
@@ -71,9 +76,9 @@ function CampaignEditCard({
     return data.map(({ id, name }) => ({ value: id.toString(), label: name }));
   };
   const gender = [
-    { value: 'Any', label: 'Không quan trọng' },
-    { value: 'Female', label: 'Nữ' },
-    { value: 'Male', label: 'Nam' },
+    { value: 'Không quan trọng', label: 'Không quan trọng' },
+    { value: 'Nữ', label: 'Nữ' },
+    { value: 'Nam', label: 'Nam' },
   ];
   const major = convertToOptions(fields?.major);
   const city = convertToOptions(fields?.location);
@@ -85,14 +90,14 @@ function CampaignEditCard({
   const field = convertToOptions(fields?.field);
   const exp = convertToOptions(fields?.exp);
   const typeOptions = convertToOptions(fields?.type);
-  const my_city = city.filter((item) =>
-    jobItem.locations
-      .map((item1) => item1.id)
-      .includes(Number.parseInt(item.value)),
-  );
-  const districtOptions = getAllDistrictsOfProvinces(
-    my_city.map((item) => item.label),
-  );
+  // const my_city = city.filter((item) =>
+  //   jobItem.locations
+  //     .map((item1) => item1.id)
+  //     .includes(Number.parseInt(item.value)),
+  // );
+  // const districtOptions = getAllDistrictsOfProvinces(
+  //   my_city.map((item) => item.label),
+  // );
 
   const {
     register,
@@ -130,10 +135,10 @@ function CampaignEditCard({
         .includes(Number.parseInt(item.value)),
     ) || null,
   );
-  const [, setDistrictOptions] = useState<SingleValue<{
-    value: string;
-    label: string;
-  }> | null>(null);
+  // const [, setDistrictOptions] = useState<SingleValue<{
+  //   value: string;
+  //   label: string;
+  // }> | null>(null);
   const [jobTypeOptions, setjobTypeOptions] = useState<SingleValue<{
     value: string;
     label: string;
@@ -186,7 +191,9 @@ function CampaignEditCard({
   );
   const [salaryError, setSalaryError] = useState(false);
   const [salaryMaxError, setSalaryMaxError] = useState(false);
-  const [showPopup, setShowPopup] = useState(jobItem.salaryMax !== 0 && jobItem.salaryMin !== 0);
+  const [showPopup, setShowPopup] = useState(
+    jobItem.salaryMax !== 0 && jobItem.salaryMin !== 0,
+  );
   const [salary, setSalary] = useState(jobItem.salaryMin.toString());
   const [salaryMax, setSalaryMax] = useState(jobItem.salaryMax.toString());
   const [date, setDate] = useState(jobItem.expiredDate);
@@ -312,11 +319,10 @@ function CampaignEditCard({
     if (choice !== null) {
       if (typeof choice !== 'function' && choice.value === 'Trong khoảng') {
         if (jobItem.salaryMax !== null && !jobItem.salaryMin !== null) {
-            setShowPopup(true);
-            setSalaryError(false);
-            setSalaryMaxError(false);
-        }
-        else {
+          setShowPopup(true);
+          setSalaryError(false);
+          setSalaryMaxError(false);
+        } else {
           setShowPopup(true);
           setSalaryError(true);
           setSalaryMaxError(true);
@@ -334,15 +340,15 @@ function CampaignEditCard({
     setUserChoice(choice);
   };
 
-  const cityOptions = [
-    { value: 'Hồ Chí Minh', label: 'Hồ Chí Minh' },
-    { value: 'Bình Dương', label: 'Bình Dương' },
-    { value: 'Bắc Ninh', label: 'Bắc Ninh' },
-    { value: 'Đồng Nai', label: 'Đồng Nai' },
-    { value: 'Hưng Yên', label: 'Hưng Yên' },
-    { value: 'Hải Dương', label: 'Hải Dương' },
-    { value: 'Đà Nẵng', label: 'Đà Nẵng' },
-  ];
+  // const cityOptions = [
+  //   { value: 'Hồ Chí Minh', label: 'Hồ Chí Minh' },
+  //   { value: 'Bình Dương', label: 'Bình Dương' },
+  //   { value: 'Bắc Ninh', label: 'Bắc Ninh' },
+  //   { value: 'Đồng Nai', label: 'Đồng Nai' },
+  //   { value: 'Hưng Yên', label: 'Hưng Yên' },
+  //   { value: 'Hải Dương', label: 'Hải Dương' },
+  //   { value: 'Đà Nẵng', label: 'Đà Nẵng' },
+  // ];
   const salaryOptions = [
     { value: 'Trong khoảng', label: 'Trong khoảng' },
     { value: 'Thỏa thuận', label: 'Thỏa thuận' },
@@ -573,7 +579,7 @@ function CampaignEditCard({
                           >,
                         ) => setGenderOptions(e)}
                         defaultValue={gender.find((item) => {
-                          return item.label === jobItem.jobDetail.gender;
+                          return item.value === jobItem.jobDetail.gender;
                         })}
                       />
                     </div>
@@ -643,7 +649,11 @@ function CampaignEditCard({
                         placeholder="-- Kiểu lương --"
                         options={salaryOptions}
                         onChange={togglePopup}
-                        defaultValue={jobItem.salaryMin !== 0 && jobItem.salaryMax !== 0 ? salaryOptions[0] : salaryOptions[1]}
+                        defaultValue={
+                          jobItem.salaryMin !== 0 && jobItem.salaryMax !== 0
+                            ? salaryOptions[0]
+                            : salaryOptions[1]
+                        }
                       />
                     </div>
                   </div>
@@ -684,7 +694,7 @@ function CampaignEditCard({
                         height: 20,
                       }}
                     ></MapPin>
-                    <div className="font-bold text-base mr-10">Khu vực 1: </div>
+                    <div className="font-bold text-base mr-10">Khu vực: </div>
                     <div className="w-5/12">
                       <MultiDropdown
                         placeholder="Chọn Tỉnh/ Thành phố"
@@ -699,36 +709,7 @@ function CampaignEditCard({
                     </div>
                   </div>
                   <div className="flex flex-row space-x-10">
-                    <div className="w-3/12">
-                      <SingleDropdown
-                        placeholder="Chọn Quận/ Huyện"
-                        options={districtOptions}
-                        onChange={(
-                          e: SetStateAction<
-                            SingleValue<{ value: string; label: string }>
-                          >,
-                        ) => setDistrictOptions(e)}
-                        defaultValue={districts.data
-                          .map((province) =>
-                            province.districts.map((district) => ({
-                              value: district.value,
-                              label: district.label,
-                            })),
-                          )
-                          .flat()
-                          .filter((district) =>
-                            city
-                              .filter((item) =>
-                                jobItem.locations
-                                  .map((item1) => item1.id)
-                                  .includes(Number.parseInt(item.value)),
-                              )
-                              .map((item) => item.value)
-                              .includes(district.label.split(' ')[1]),
-                          )}
-                      />
-                    </div>
-                    <div className="w-8/12">
+                    <div className="w-full">
                       <input
                         type="text"
                         className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
@@ -744,9 +725,6 @@ function CampaignEditCard({
                     + Thêm địa chỉ
                   </button>
                 </div>
-                <button className=" mt-4 px-4 py-2 text-white bg-green-600">
-                  Thêm khu vực mới
-                </button>
               </div>
             </div>
           </div>

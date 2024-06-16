@@ -20,7 +20,7 @@ function Overview() {
   useEffect(() => {
     async function getData() {
       const {
-        allEmployers,
+        // allEmployers,
         total,
         // totalPages,
       }: {
@@ -29,7 +29,6 @@ function Overview() {
         totalPages: number;
       } = await getAllEmployer(token, 1, 0);
       setTotalEmployer(total);
-      console.log(allEmployers);
     }
 
     const getJobStats = async () => {
@@ -49,73 +48,8 @@ function Overview() {
     );
     getJobStats();
     getData();
-  }, [jobStats.isActive, jobStats.total]);
+  }, [jobStats.isActive, jobStats.total, token]);
 
-  const [data] = useState([
-    {
-      title: 'HR',
-      rows: [
-        {
-          title: 'Evil Incorporated',
-          number: '400',
-        },
-        {
-          title: 'Rockstar',
-          number: '400',
-        },
-        {
-          title: 'Rito',
-          number: '400',
-        },
-        {
-          title: 'Volvo',
-          number: '400',
-        },
-      ],
-    },
-    {
-      title: 'User',
-      rows: [
-        {
-          title: 'Mac Zucc',
-          number: '25',
-        },
-        {
-          title: 'Jeff Bezos',
-          number: '500',
-        },
-        {
-          title: 'Zilong Ma',
-          number: '1000',
-        },
-        {
-          title: 'Cho Bite',
-          number: '500',
-        },
-      ],
-    },
-    {
-      title: 'Campaign',
-      rows: [
-        {
-          title: 'Ukraine - India',
-          number: '2040',
-        },
-        {
-          title: 'Israel',
-          number: '500',
-        },
-        {
-          title: 'Palestine',
-          number: '500',
-        },
-        {
-          title: 'Sua Kun Cho Em',
-          number: '500',
-        },
-      ],
-    },
-  ]);
   return (
     <div className="flex flex-col flex-grow gap-8 px-12 py-8 bg-slate-100">
       <div className="flex items-center justify-between font-bold text-slate-500">

@@ -1,11 +1,16 @@
 import { Clock, Phone, Mail } from 'lucide-react';
 import { ApplicationFromServer } from '../types/Application.type';
+import * as HRModule from '../../modules/hr-module';
+import { useProfileContext } from '../services/authen/domain/context';
 
 interface TableProps {
   data: ApplicationFromServer[];
+  setRefreshData: () => void;
 }
 
-function FollowingCVTable({ data }: TableProps) {
+function FollowingCVTable({ data, setRefreshData }: TableProps) {
+  const { token } = useProfileContext();
+
   return (
     <table className="p-5" style={{ width: '100%' }}>
       <thead className="border-b-2 border-gray-100 capitalize pb-2">
@@ -35,7 +40,23 @@ function FollowingCVTable({ data }: TableProps) {
               <div className="h-full">
                 <p className=" text-lg font-bold">{item.fullname}</p>
 
-                <button className="bg-green-300 text-white my-2 px-2">
+                <button
+                  onClick={() => {
+                    HRModule.getCVByApplicationID({
+                      applicationId: item.id,
+                      token: token!,
+                    }).then((res) => {
+                      HRModule.updateApplicationStatus({
+                        applicationId: item.id,
+                        token: token!,
+                        status: true,
+                      });
+                      setRefreshData();
+                      window.open(res.link, '_blank', 'noopener');
+                    });
+                  }}
+                  className="bg-green-300 text-white my-2 px-2"
+                >
                   Xem CV
                 </button>
               </div>

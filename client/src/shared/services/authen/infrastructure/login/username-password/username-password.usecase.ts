@@ -1,4 +1,7 @@
-import { AUTH0_BACKEND_AUDIENCE, AUTH0_REALM } from "../../config";
+import { 
+    // AUTH0_BACKEND_AUDIENCE, 
+    AUTH0_REALM, 
+    HOST_URL} from "../../config";
 import { UsernamePasswordLoginCredentials } from "../../../domain";
 import { Auth0OperationUseCase, Auth0CallCredentials } from "../../base.usecase";
 import { Role } from "../../../domain/context";
@@ -19,7 +22,7 @@ export class UsernamePasswordLoginUseCase extends Auth0OperationUseCase {
             realm: realm,
             username: username,
             password: password,
-            redirectUri: `http://localhost:5173${this.role.redirectUrl}`,
+            redirectUri: `${HOST_URL}${this.role.redirectUrl}`,
             responseType: auht0Config.responseType,
             state: transaction.state,
             nonce: transaction.nonce,

@@ -28,7 +28,6 @@ function Employer() {
   const [refresh, setRefresh] = useState(false);
   const [searchText, setSearchText] = useState('');
   const { token } = useProfileContext();
-  // console.log(token); //Có token
 
   useEffect(() => {
     async function getData() {
@@ -40,8 +39,10 @@ function Employer() {
         allEmployers: EmployerFromServer[];
         total: number;
         totalPages: number;
-      } = await getAllEmployer(token, page); // Cấn authen
-      console.log(allEmployers);
+      } =
+        searchText == ''
+          ? await getAllEmployer(token, page)
+          : await findEmployerByName(searchText, page);
       const allEmployersWithCompany = allEmployers.map(async (employer) => {
         const company = employer.companyId
           ? await getCompanyById(employer.companyId)
@@ -51,20 +52,7 @@ function Employer() {
       setEmployers(await Promise.all(allEmployersWithCompany));
       setTotalPages(totalPages);
     }
-    async function getDataSearch() {
-      const {
-        employers,
-      }: {
-        employers: EmployerFromServer[];
-      } = await findEmployerByName(searchText, page);
-      console.log(employers);
-      setEmployers(employers);
-    }
-    if (searchText == '') {
-      getData();
-    } else {
-      getDataSearch();
-    }
+    getData();
   }, [page, refresh, searchText]);
 
   const columns: BasicColumnProps[] = useMemo(
@@ -89,7 +77,13 @@ function Employer() {
         tableCellClassname: '',
         cell: (data: ObjectFromServer) => {
           const employer = data as EmployerFromServer;
-          return <div>{employer.gender === 'Male' ? 'Nam' : 'Nữ'}</div>;
+          return (
+            <div>
+              {employer.gender === 'Male' || employer.gender === 'Nam'
+                ? 'Nam'
+                : 'Nữ'}
+            </div>
+          );
         },
       },
       {
@@ -117,7 +111,7 @@ function Employer() {
                     employer.id,
                     !employer.phoneNumberStatus,
                   );
-                  setRefresh(!refresh);
+                  setRefresh((prev) => !prev);
                 }}
               ></Switch>
             </div>
@@ -165,7 +159,7 @@ function Employer() {
                     employer.id,
                     !employer.licenseStatus,
                   );
-                  setRefresh(!refresh);
+                  setRefresh((prev) => !prev);
                 }}
               ></Switch>
             </div>

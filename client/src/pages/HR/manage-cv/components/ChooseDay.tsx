@@ -4,7 +4,6 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export default function PositionedMenu() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [value, setValue] = React.useState('7 days');
 
   return (
@@ -16,7 +15,6 @@ export default function PositionedMenu() {
           sx={{ backgroundColor: '#DADADA', maxWidth: '100px' }}
           onChange={(e) => {
             setValue(e.target.value);
-            setAnchorEl(null);
           }}
           className="mt-2 h-9"
         >

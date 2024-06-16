@@ -2,6 +2,7 @@ import * as React from 'react';
 import moment from 'moment';
 import { useProfileContext } from '../../../../shared/services/authen/domain/context';
 import { getJobByCampaignId } from '../../../../modules/admin-module';
+import { numberWithCommas } from '../../../../utils/numberWithCommas';
 
 function Information({ compaignId }: { compaignId: string }) {
   const [jobData, setJobData] = React.useState<any>();
@@ -10,7 +11,6 @@ function Information({ compaignId }: { compaignId: string }) {
     try {
       const res = await getJobByCampaignId(token!, compaignId);
       setJobData(res);
-      // await console.log(res);
     } catch (error) {
       console.log('Error fetching data. Please try again.');
     }
@@ -21,10 +21,10 @@ function Information({ compaignId }: { compaignId: string }) {
     fetchJobData();
   }, []);
 
-  return (
-      jobData ==null ? 
-      <p>Chưa có thông tin vị trí tuyển dụng</p> : 
-      (<>
+  return jobData == null ? (
+    <p>Chưa có thông tin vị trí tuyển dụng</p>
+  ) : (
+    <>
       <div className="information text-black flex flex-col gap-2 px-5 py-3">
         <div className="title-recruitment">
           <div className="label text-2xl font-bold">Vị trí tuyển dụng</div>
@@ -35,8 +35,8 @@ function Information({ compaignId }: { compaignId: string }) {
         <div className="salary-range">
           <div className="label text-2xl font-bold">Mức lương</div>
           <div className="value">
-            {jobData?.salaryMin && jobData?.salaryMax
-              ? ` ${jobData?.salaryMin} - ${jobData?.salaryMax} ${jobData?.currency?.name}`
+            {jobData?.salaryMin || jobData?.salaryMax
+              ? ` ${numberWithCommas(jobData?.salaryMin)} - ${numberWithCommas(jobData?.salaryMax)} ${jobData?.currency?.name || ''}`
               : 'Thỏa thuận'}
           </div>
         </div>
@@ -107,7 +107,7 @@ function Information({ compaignId }: { compaignId: string }) {
                 </p>
               </div>
             </div>
-            {/* <div className="job-description__item">
+            <div className="job-description__item">
               <h3 className="text-base font-bold mb-2">Địa điểm làm việc</h3>
               <div className="job-description__item--content">
                 {jobData?.locations
@@ -118,29 +118,30 @@ function Information({ compaignId }: { compaignId: string }) {
                     ))
                   : ''}
               </div>
-            </div> */}
+            </div>
             <div className="job-description__item">
               <span className="text-base font-bold mb-2"> Kinh nghiệm </span>
-              <strong className="job-description__item--content">
+              <div className="job-description__item--content">
                 {jobData?.exp
                   ? jobData?.exp?.name
                     ? jobData?.exp?.name
                     : ''
                   : ''}
-              </strong>
+              </div>
             </div>
           </div>
         </div>
-        <div className="job-detail__information-detail--actions flex flex-col gap-y-4">
-          <div className="job-detail__information-detail--actions-label">
-            Hạn nộp hồ sơ:{' '}
+        <div className="job-description__item">
+          <div className="text-base font-bold mb-2"> Hạn nộp hồ sơ: </div>
+          <span className="job-description__item--value">
             {moment
               .utc(jobData?.expiredDate ? jobData?.expiredDate : '')
               .format('DD/MM/YYYY')}
-          </div>
+          </span>
         </div>
       </div>
-    </>));
+    </>
+  );
 }
 
 export default Information;

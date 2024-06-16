@@ -272,7 +272,7 @@ function HRSignUp() {
     }, 3000);
 
     if (!error) {
-      setShowSuccessMessage(true);
+      // setShowSuccessMessage(true);
       register(
         {
           username: formData.email,

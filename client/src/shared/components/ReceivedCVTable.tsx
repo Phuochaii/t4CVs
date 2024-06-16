@@ -8,6 +8,7 @@ interface ApplicationProps {
   data: ApplicationFromServer[];
   compaigns?: NameValue[];
   hasCampaignColumn: boolean;
+  setRefreshData: () => void;
 }
 
 function TableHeader({ hasCampaignColumn }: { hasCampaignColumn: boolean }) {
@@ -25,11 +26,16 @@ function TableHeader({ hasCampaignColumn }: { hasCampaignColumn: boolean }) {
   );
 }
 
-function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
+function TableBody({
+  data,
+  compaigns,
+  hasCampaignColumn,
+  setRefreshData,
+}: ApplicationProps) {
   function getCompaignName(id: string | number) {
     return compaigns?.filter((item) => item.value == id)[0].name;
   }
-  const {token} = useProfileContext();
+  const { token } = useProfileContext();
   return (
     <tbody className="bg-[#F8F8F8C9]">
       {data.map((item: ApplicationFromServer, index: number) => (
@@ -86,7 +92,9 @@ function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
                   HRModule.updateApplicationStatus({
                     applicationId: item.id,
                     token: token!,
+                    status: true,
                   });
+                  setRefreshData();
                   window.open(res.link, '_blank', 'noopener');
                 });
               }}
@@ -96,9 +104,7 @@ function TableBody({ data, compaigns, hasCampaignColumn }: ApplicationProps) {
             </button>
           </td>
         </tr>
-      )
-      
-      )}
+      ))}
     </tbody>
   );
 }
@@ -107,12 +113,14 @@ interface ReceivedCVTableProps {
   data: ApplicationFromServer[];
   compaigns?: NameValue[];
   hasCampaignColumn?: boolean;
+  setRefreshData: () => void;
 }
 
 function ReceivedCVTable({
   data,
   compaigns,
   hasCampaignColumn = true,
+  setRefreshData,
 }: ReceivedCVTableProps) {
   return (
     <table
@@ -124,6 +132,7 @@ function ReceivedCVTable({
         hasCampaignColumn={hasCampaignColumn}
         data={data}
         compaigns={compaigns}
+        setRefreshData={setRefreshData}
       />
     </table>
   );

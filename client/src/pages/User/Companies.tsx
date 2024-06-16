@@ -11,21 +11,15 @@ import useCustomPagination from '../../utils/useCustomPagination';
 
 function Companies() {
   const [searchText, setSearchText] = useState('');
-  const [companies, setCompanies] = useState([]);
-  // const [totalPages, setTotalPages] = useState(0);
-  // const [page, setPage] = useState(1);
+  const [companies, setCompanies] = useState<CompanyFromServer[]>([]);
 
   useEffect(() => {
     fetchCompanies();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchCompanies = async () => {
     try {
-      // const response = await axios.get('http://localhost:3000/company/all');
       const response = await getAllCompany();
-      console.log(response);
-      // setTotalPages(response.totalPages);
       setCompanies(response.data.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -34,13 +28,9 @@ function Companies() {
 
   useEffect(() => {
     async function getData() {
-      const {
-        companies,
-      }: {
-        companies: CompanyFromServer[];
-      } = await findCompanyByName(searchText);
-      console.log(companies);
-      setCompanies(companies);
+      const response = await findCompanyByName(searchText);
+      console.log(response);
+      setCompanies(response.allCompanies);
     }
     if (searchText == '') {
       fetchCompanies();

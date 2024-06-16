@@ -26,7 +26,7 @@ const UpdateCompanyInfo = ({
   const [imageFile, setImageFile] = useState<File>();
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const imageUploadRef = useRef<HTMLInputElement | null>(null);
-  const { token } = useProfileContext()
+  const { token } = useProfileContext();
   const handleImageUpload = () => {
     if (imageUploadRef.current) {
       imageUploadRef.current.click();
@@ -80,7 +80,7 @@ const UpdateCompanyInfo = ({
     description: '',
   });
   const onSubmit = async (data: any, event: any) => {
-    const result = await updateCompanyId(token!, company.id)
+    const result = await updateCompanyId(token!, company.id);
     // console.log(result);
     // const res = await getProfile(token!);
     // console.log(res.companyId)
@@ -91,7 +91,12 @@ const UpdateCompanyInfo = ({
     }
 
     formData.append('id', company.id.toString());
-    formData.append('field', Number.parseInt(fieldOptions?.value !== undefined ? fieldOptions?.value : '1').toString());
+    formData.append(
+      'field',
+      Number.parseInt(
+        fieldOptions?.value !== undefined ? fieldOptions?.value : '1',
+      ).toString(),
+    );
     formData.append('taxCode', data.MST);
     formData.append('website', data.website);
     formData.append('address', data.address);
@@ -104,7 +109,7 @@ const UpdateCompanyInfo = ({
         method: 'PUT',
         body: formData,
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -268,13 +273,13 @@ const UpdateCompanyInfo = ({
               <div className="space-y-2  ">
                 <span className="text-base">Điện thoại</span>
                 <input
-                  type="text"
+                  type="number"
                   className=" bg-white border border-slate-300 hover:border-green-500 focus:border-green-500 outline-none text-black text-base  w-full p-2.5"
                   placeholder="Nhập số điện thoại"
                   {...register('phoneNumber', {
                     required: true,
                   })}
-                  defaultValue={company.phone}
+                  defaultValue={company.phone || company.phone.toString()}
                 />
               </div>
             </div>

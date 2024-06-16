@@ -31,7 +31,7 @@ interface CampaignTableRowProps {
 
 export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
   const navigation = useNavigate();
-  const {token} = useProfileContext()
+  const { token } = useProfileContext();
   const [isHovered, setIsHovered] = useState(false);
   const [applicants, setApplicants] = useState<(UserFromServer | null)[]>([]);
   const campaign = data;
@@ -41,7 +41,10 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
     async function getUsers() {
       const applicantPromises = campaign.applications.map(
         async (application) => {
-          const applicant = await getUserById({userId :application.userId.toString(), token: token! });
+          const applicant = await getUserById({
+            userId: application.userId.toString(),
+            token: token!,
+          });
           return applicant.data;
         },
       );
@@ -103,7 +106,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
             <span className="font-bold bg-slate-200 text-zinc-400">
               {`#${campaign.campaignId}`}
             </span>
-            {
+            {/* {
               <div
                 className={`flex items-center gap-2 font-bold ${
                   isHovered ? 'visible' : 'invisible'
@@ -112,7 +115,7 @@ export const CampaignTableRow = ({ data }: CampaignTableRowProps) => {
                 <a href="#">Sửa chiến dịch</a>
                 <a href="#">Xem báo cáo</a>
               </div>
-            }
+            } */}
           </div>
         </div>
       </td>

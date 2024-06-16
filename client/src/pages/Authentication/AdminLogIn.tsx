@@ -92,7 +92,7 @@ function AdminLogIn() {
               className={`
                   text-black mt-1 bg-white pl-12 pr-3 py-3 border rounded-md w-full
                   focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
-                  ${userNameEmpty ? 'border-red-500' : ''}
+                  ${userNameEmpty ? "border-red-500" : ""}
                 `}
             />
           </div>
@@ -101,7 +101,7 @@ function AdminLogIn() {
               Không được để trống tên tài khoản
             </div>
           ) : (
-            ''
+            ""
           )}
 
           <h4 className="text-gray-700 font-bold">Mật khẩu</h4>
@@ -113,7 +113,7 @@ function AdminLogIn() {
               <input
                 id="password"
                 name="password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 placeholder="Mật khẩu"
                 value={formData.password}
                 onChange={(e) =>
@@ -121,8 +121,8 @@ function AdminLogIn() {
                 }
                 className={`
                   text-black mt-1 bg-white pl-12 pr-3 py-3 border rounded-md w-full
-                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500
-                  ${passwordEmpty ? 'border-red-500' : ''}
+                  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500
+                  ${passwordEmpty ? "border-red-500" : ""}
                 `}
               />
               <div className="absolute right-3 top-8 transform -translate-y-1/2">
@@ -132,9 +132,9 @@ function AdminLogIn() {
                   className="focus:outline-none"
                 >
                   {showPassword ? (
-                    <EyeOff className="w-5 h-5 text-gray-500" />
-                  ) : (
                     <Eye className="w-5 h-5 text-gray-500" />
+                  ) : (
+                    <EyeOff className="w-5 h-5 text-gray-500" />
                   )}
                 </button>
               </div>
@@ -143,7 +143,7 @@ function AdminLogIn() {
           {passwordEmpty && !formData.password ? (
             <div className="text-red-500">Không được để trống mất khẩu</div>
           ) : (
-            ''
+            ""
           )}
 
           <div className="flex justify-end">

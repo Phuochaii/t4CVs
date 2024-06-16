@@ -26,7 +26,7 @@ function JobListItem({ item }: { item: any }) {
               <strong className="salary-count">
                 {item.salaryMin == 0 && item.salaryMax == 0
                   ? 'Thoả thuận'
-                  : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{' '}
+                  : `${new Intl.NumberFormat().format(item.salaryMin)} - ${new Intl.NumberFormat().format(item.salaryMax)}  ${item.currency.name}`}
               </strong>
             </div>
           </div>

@@ -1,23 +1,21 @@
-import * as React from "react";
-import { DefaultPagination } from "../../../../shared/components/default-pagination";
-import * as HRModule from "../../../../modules/hr-module";
-import FollowingCVTable from "../../../../shared/components/FollowingCVTable";
-import { ApplicationFromServer } from "../../../../shared/types/Application.type";
-import { useProfileContext } from "../../../../shared/services/authen/domain/context";
+import * as React from 'react';
+import { DefaultPagination } from '../../../../shared/components/default-pagination';
+import * as HRModule from '../../../../modules/hr-module';
+import FollowingCVTable from '../../../../shared/components/FollowingCVTable';
+import { ApplicationFromServer } from '../../../../shared/types/Application.type';
+import { useProfileContext } from '../../../../shared/services/authen/domain/context';
 
-function FollowingCV({
-  compaignId,
-  
-}: {
-  compaignId: string;
-  
-}) {
+function FollowingCV({ compaignId }: { compaignId: string }) {
   // const hrId = "1";
 
   const [listCV, setListCV] = React.useState<ApplicationFromServer[]>([]);
-  const {token} = useProfileContext();
+  const { token } = useProfileContext();
   const [page, setPage] = React.useState<number>(1);
   const [totalPage, setTotalPage] = React.useState<number>(1);
+  const [refresh, setRefresh] = React.useState<boolean>(false);
+  const setRefreshData = () => {
+    setRefresh(!refresh);
+  };
 
   const fetchApplication = async () => {
     HRModule.getApplicationByCampaignIdHRId({
@@ -37,7 +35,7 @@ function FollowingCV({
 
   React.useEffect(() => {
     fetchApplication();
-  }, [page]);
+  }, [page, refresh]);
 
   return (
     <div>
@@ -48,7 +46,7 @@ function FollowingCV({
         </div>
       ) : (
         <div className="p-5">
-          <FollowingCVTable data={listCV} />
+          <FollowingCVTable data={listCV} setRefreshData={setRefreshData}/>
           <div className="flex justify-center mt-5">
             <DefaultPagination
               totalPage={totalPage}
