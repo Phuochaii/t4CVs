@@ -12,7 +12,7 @@ function JobListItem({ item }: { item: any }) {
       }}
       className="job-item-search-result max-h-60 bg-white px-3 py-3.5 mb-3 border border-transparent rounded-lg shadow-md flex gap-3"
     >
-      <div className="job-logo-company w-32 h-32 min-w-32 flex items-center border rounded-lg">
+      <div className="job-logo-company w-32 h-32 min-w-32 max-h-[112px] flex items-center border rounded-lg overflow-hidden">
         <img src={item.company?.image ? item.company?.image : 'no '} />
       </div>
       <div className="job-detail w-full h-full">
@@ -26,7 +26,7 @@ function JobListItem({ item }: { item: any }) {
               <strong className="salary-count">
                 {item.salaryMin == 0 && item.salaryMax == 0
                   ? 'Thoả thuận'
-                  : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{' '}
+                  : `${new Intl.NumberFormat().format(item.salaryMin)} - ${new Intl.NumberFormat().format(item.salaryMax)}  ${item.currency.name}`}
               </strong>
             </div>
           </div>

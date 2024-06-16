@@ -22,8 +22,8 @@ export class RegisterUseCase extends Auth0OperationUseCase {
         }).then(() => {
             this.usernamePasswordLogin.call()
         }).catch((error) => {
-            alert('Register failed');
-            console.log(error);
+            // alert('Register failed');
+            alert(error.response.data.message);
         });
     }
 }

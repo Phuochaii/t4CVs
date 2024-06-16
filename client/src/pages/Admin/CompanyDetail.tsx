@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Switch from '../../shared/components/CustomSwitch';
-import { updateCompanyStatus, getCompanyById } from '../../shared/utils/helper';
+import { getCompanyById } from '../../modules/helper';
+import { updateCompanyStatus } from '../../modules/admin-module';
 import { CompanyFromServer } from '../../shared/types/Company.type';
 import { CheckCheck } from 'lucide-react';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
+import { errorToast } from '../../utils/toast';
 
 function CompanyDetail() {
   const navigation = useNavigate();
   const { id } = useParams();
   const [companyInfo, setCompanyInfo] = useState<CompanyFromServer | null>();
   const [refresh, setRefresh] = useState(false);
+  const { token } = useProfileContext();
 
   useEffect(() => {
     if (!id) return;
@@ -22,10 +26,9 @@ function CompanyDetail() {
   const fetchCompanyInfo = async (id: string) => {
     try {
       const response = await getCompanyById(id);
-      // console.log(response);
       setCompanyInfo(response);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      return errorToast(`Error fetching data: ${error}`);
     }
   };
   return (
@@ -127,6 +130,7 @@ function CompanyDetail() {
             <div
               onClick={async () => {
                 await updateCompanyStatus(
+                  token,
                   companyInfo?.id as number,
                   !companyInfo?.status,
                 );

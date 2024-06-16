@@ -1,7 +1,7 @@
 import { CompanyFromServer } from './Company.type';
 
 export interface EmployerFromServer {
-  id: number;
+  id: string;
   fullname: string;
   gender: string;
   skype: string;

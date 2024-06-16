@@ -1,7 +1,7 @@
-import DayChooseButton from "../components/ChooseDay";
-import { ExternalLink } from "lucide-react";
-import { LineChart } from "@mui/x-charts/LineChart";
-import RecuitmentTable from "../components/RecuimentTable";
+import DayChooseButton from '../components/ChooseDay';
+import { ExternalLink } from 'lucide-react';
+import { LineChart } from '@mui/x-charts/LineChart';
+import RecuitmentTable from '../components/RecuimentTable';
 
 function LineNote({ title, color }: { title: string; color: string }) {
   return (
@@ -15,28 +15,28 @@ function LineNote({ title, color }: { title: string; color: string }) {
 function Recuitment() {
   const tableHeading = [
     // "Thao tác",//
-    "Tin tuyển dụng",
-    "Số lần hiển thị",
-    "Số lượt xem",
-    "Tỷ lệ xem tin",
-    "Số lượng ứng tuyển",
-    "Tỷ lệ ứng tuyển",
+    'Tin tuyển dụng',
+    'Số lần hiển thị',
+    'Số lượt xem',
+    'Tỷ lệ xem tin',
+    'Số lượng ứng tuyển',
+    'Tỷ lệ ứng tuyển',
   ];
   const tableData = [
     {
-      title: "Nhân viên kinh doanh",
+      title: 'Nhân viên kinh doanh',
       show: 100,
       view: 50,
-      rateView: "50%",
+      rateView: '50%',
       apply: 10,
-      rateApply: "20%",
+      rateApply: '20%',
     },
   ];
   return (
     <div>
       <div className="border-b-2 border-gray-00 pb-4 pt-2">
         <p className="flex-grow">
-          Báo cáo Tin tuyển dụng:{" "}
+          Báo cáo Tin tuyển dụng:{' '}
           <span className="text-green-500 font-bold">Nhân viên kinh doanh</span>
         </p>
       </div>
@@ -44,7 +44,7 @@ function Recuitment() {
         <div className="flex-grow">
           <DayChooseButton />
           <LineChart
-            xAxis={[{ data: ["1", 2, 3, 5, 8, 10] }]}
+            xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
             series={[
               {
                 data: [2, 5.5, 2, 8.5, 1.5, 5],
@@ -75,7 +75,7 @@ function Recuitment() {
       <RecuitmentTable
         heading={tableHeading}
         data={tableData}
-        objectKey={["title", "show", "view", "rateView", "apply", "rateApply"]}
+        objectKey={['title', 'show', 'view', 'rateView', 'apply', 'rateApply']}
       />
     </div>
   );

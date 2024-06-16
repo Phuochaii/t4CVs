@@ -8,12 +8,10 @@ import { DefaultPagination } from '../../shared/components/default-pagination';
 import {
   ChevronRightIcon,
   ChevronLeftIcon,
-  XMarkIcon,
   HeartIcon,
 } from '@heroicons/react/24/solid';
-import JobService from '../../modules/job-module';
 import SearchBoxComponent from '../../layouts/UserLayout/components/SearchBoxComponent';
-import { salary_range } from '../../shared/utils/constant';
+// import { salary_range } from '../../shared/utils/constant';
 import SingleDropdown from '../../shared/components/SingleDropDown';
 import { SingleValue } from 'react-select';
 import FPT from '../../shared/assets/images/FPT.jpg';
@@ -21,6 +19,7 @@ import VNRS from '../../shared/assets/images/VNRS.png';
 import { Heart } from 'lucide-react';
 import TopCompanies from '../../shared/components/TopCompanies';
 import JobSuggestions from '../../shared/components/JobSuggestions';
+import { getAllExp, getAllLocation, searchJob } from '../../modules/helper';
 
 const vip_company_slides = [
   '../../../images/slide_1.png',
@@ -84,15 +83,15 @@ function Home() {
   const [page, setPage] = useState(1);
 
   React.useEffect(() => {
-    searchJob();
+    findJob();
   }, []);
 
   React.useEffect(() => {
-    searchJob();
+    findJob();
   }, [page]);
 
-  const searchJob = () => {
-    JobService.searchJob({
+  const findJob = () => {
+    searchJob({
       page: page,
       limit: 8,
       titleRecruitment: '',
@@ -271,26 +270,26 @@ function Home() {
     value: string;
     label: string;
   }> | null>(null);
-  const SelectSalary = (value: number) => {
-    if (value !== 0) {
-      const foundRange = salary_range.find(
-        (range) => Number(range.value) === value,
-      );
-      if (foundRange) {
-        setFilter((prevFilter) => ({
-          ...prevFilter,
-          salaryMin: foundRange.minSalary,
-          salaryMax: foundRange.maxSalary,
-        }));
-      }
-    } else {
-      setFilter((prevFilter) => ({
-        ...prevFilter,
-        salaryMin: 0,
-        salaryMax: 0,
-      }));
-    }
-  };
+  // const SelectSalary = (value: number) => {
+  //   if (value !== 0) {
+  //     const foundRange = salary_range.find(
+  //       (range) => Number(range.value) === value,
+  //     );
+  //     if (foundRange) {
+  //       setFilter((prevFilter) => ({
+  //         ...prevFilter,
+  //         salaryMin: foundRange.minSalary,
+  //         salaryMax: foundRange.maxSalary,
+  //       }));
+  //     }
+  //   } else {
+  //     setFilter((prevFilter) => ({
+  //       ...prevFilter,
+  //       salaryMin: 0,
+  //       salaryMax: 0,
+  //     }));
+  //   }
+  // };
 
   useEffect(() => {
     setInterval(vip_company_next, autoSlideInterval);
@@ -298,10 +297,10 @@ function Home() {
     setInterval(big_interested_jobs_next, autoSlideInterval);
     const fetchData = async () => {
       try {
-        const locationResponse = await JobService.getAllLocation();
+        const locationResponse = await getAllLocation();
         setCities(locationResponse);
 
-        const expResponse = await JobService.getAllExp();
+        const expResponse = await getAllExp();
         setExpYear(expResponse);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -334,7 +333,7 @@ function Home() {
   return (
     <>
       <div className="section-header">
-        <div className="container flex flex-col gap-4">
+        <div className="flex flex-col gap-4 items-center">
           <div className="hearder-box text-center">
             <h1 className="title">
               Tìm việc làm nhanh 24h, việc làm mới nhất trên toàn quốc.
@@ -416,7 +415,7 @@ function Home() {
         </div>
         {/* Việc làm tốt nhất */}
         <div className="flex flex-col ml-20 mt-5 items-center ">
-          <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg">
+          <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg w-full">
             <div className="flex flex-row items-center">
               <h1 className="title">Việc làm tốt nhất</h1>
               <p className="font-thin text-[30px] mx-5"> | </p>
@@ -451,8 +450,8 @@ function Home() {
               </button>
             </div>
           </div>
-          <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg mt-3">
-            <div className="w-3/12">
+          <div className="flex flex-row items-center ml-6 justify-between  max-w-screen-lg w-full gap-x-3 mt-3">
+            <div className="w-60">
               <SingleDropdown
                 placeholder="Chọn bộ lọc"
                 options={options}
@@ -487,19 +486,6 @@ function Home() {
                 <ChevronRightIcon className="mx-2 w-5 h-5" />
               </button>
             </div>
-          </div>
-          <div className="flex flex-row items-center ml-6 justify-between max-w-screen-lg mt-6 bg-blue-100 rounded-lg p-2">
-            <div className="flex flex-row items-center">
-              <p className="font-bold">
-                Gợi ý:{' '}
-                <span className="font-normal">
-                  Di chuột vào tiêu đề việc làm để xem thêm thông tin chi tiết
-                </span>
-              </p>
-            </div>
-            <button onClick={() => {}}>
-              <XMarkIcon className="bg-blue-100 w-5 h-5"></XMarkIcon>
-            </button>
           </div>
           <div className="ml-6 mt-4 max-w-screen-lg grid grid-cols-1 md:grid-cols-3 gap-4">
             {companies.length > 0 ? (
@@ -626,14 +612,6 @@ function Home() {
                     <span className="action-show_all text-[13px] font-medium text-slate-900 underline underline-offset-1 cursor-pointer hover:text-green-600">
                       Xem tất cả
                     </span>
-
-                    {/* <span className="action-show_previous rounded-full border border-green-600 p-2 text-green-600 cursor-pointer hover:bg-green-600 hover:text-white">
-                      <ChevronLeftIcon className="w-5 h-5" />
-                    </span>
-
-                    <span className="action-show_previous rounded-full border border-green-600 p-2 text-green-600 cursor-pointer hover:bg-green-600 hover:text-white">
-                      <ChevronRightIcon className="w-5 h-5" />
-                    </span> */}
                   </div>
                 </div>
                 <div className="left-detail--item"></div>
@@ -646,9 +624,9 @@ function Home() {
                           onClick={() => {
                             navigation(`/detail-job/${item.id}`);
                           }}
-                          className="job-item-search-result max-h-60 bg-white p-2 border border-transparent rounded-lg shadow-md flex gap-3"
+                          className="job-item-search-result max-h-60 bg-white p-2 border border-transparent rounded-lg shadow-md flex gap-3 hover:border-green-500"
                         >
-                          <div className="job-logo-company w-24 h-24 min-w-24 flex items-center border rounded-lg">
+                          <div className="job-logo-company w-24 h-24 min-w-24 flex items-center border rounded-lg overflow-hidden">
                             <img
                               src={
                                 item.company?.image
@@ -660,14 +638,6 @@ function Home() {
                           <div className="job-details flex flex-col w-full">
                             <div className="job-title text-black font-semibold col-span-3 text-lg">
                               {item.titleRecruitment}
-                              {/* <div className="job-salary col-start-4 flex items-center">
-                                <CurrencyDollarIcon className="w-5 mr-2" />
-                                <strong className="salary-count">
-                                  {item.salaryMin == 0 && item.salaryMax == 0
-                                    ? "Thoả thuận"
-                                    : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{" "}
-                                </strong>
-                              </div> */}
                             </div>
                             <span className="job-company-name text-slate-600 text-sm col-span-3 mb-2">
                               {item.company?.name
@@ -682,7 +652,7 @@ function Home() {
                                     : `${item.salaryMin} - ${item.salaryMax} ${item.currency.name}`}{' '}
                                 </div>
                                 <div className="job-location p-1 rounded bg-slate-200 text-slate-900 text-xs font-medium">
-                                  {item.locations[0].name}
+                                  {item.locations[0]?.name}
                                   {item.locations.length > 1
                                     ? ` & ${item.locations.length - 1} nơi khác`
                                     : ''}

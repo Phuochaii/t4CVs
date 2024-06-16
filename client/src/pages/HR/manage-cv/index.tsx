@@ -31,8 +31,9 @@ function NumberLabelWidget(item: NumberLabelWidgetProps) {
 }
 function ManageCV() {
   const navigation = useNavigate();
-  const hrId = JSON.parse(localStorage.getItem('hr') as string).id;
+  // const hrId = JSON.parse(localStorage.getItem('hr') as string).id;
   const { id } = useParams();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [campaign, setCampaign] = React.useState({} as any);
 
   const compaignId = id as string;
@@ -90,9 +91,7 @@ function ManageCV() {
 
       {/*  */}
 
-      <div
-      //  style={{ maxWidth: "1206px" }}
-      >
+      <div>
         <div className="flex mt-6 mx-6 justify-between">
           {numberData.map((item, index) => (
             <div
@@ -119,12 +118,46 @@ function ManageCV() {
                   >
                     <Tab sx={tabSx} label="Thông tin tuyển dụng" value="1" />
                     <Tab sx={tabSx} label="Tin tuyển dụng" value="2" />
-                    <Tab sx={tabSx} label="CV ứng tuyển" value="3" />
-                    <Tab sx={tabSx} label="Ứng viên đã xem tin" value="4" />
-                    <Tab sx={tabSx} label="CV tìm kiếm" value="5" />
+                    <Tab
+                      sx={tabSx}
+                      className="pointer-events-none"
+                      label={
+                        <span style={{ color: 'grey' }}>CV ứng tuyển</span>
+                      }
+                      value="3"
+                    />
+                    <Tab
+                      className="pointer-events-none"
+                      sx={tabSx}
+                      label={
+                        <span style={{ color: 'grey' }}>
+                          Ứng viên đã xem tin
+                        </span>
+                      }
+                      value="4"
+                    />
+                    <Tab
+                      className="pointer-events-none"
+                      sx={tabSx}
+                      label={<span style={{ color: 'grey' }}>CV tìm kiếm</span>}
+                      value="5"
+                    />
                     <Tab sx={tabSx} label="CV đang theo dõi" value="6" />
-                    <Tab sx={tabSx} label="CV được hỗ trợ" value="7" />
-                    <Tab sx={tabSx} label="Dịch vụ" value="8" />
+                    <Tab
+                      sx={tabSx}
+                      className="pointer-events-none"
+                      label={
+                        <span style={{ color: 'grey' }}>CV được hỗ trợ</span>
+                      }
+                      value="7"
+                    />
+                    <Tab
+                      className="pointer-events-none"
+                      sx={tabSx}
+                      label={<span style={{ color: 'grey' }}>Dịch vụ</span>}
+                      value="8"
+                    />
+                    <Tab sx={tabSx} label="Quản lý chiến dịch" value="9" />
                   </TabList>
                 </Box>
                 <TabPanel sx={{ padding: '12px 0' }} value="1">
@@ -134,7 +167,7 @@ function ManageCV() {
                   {tabs.Recuitment()}
                 </TabPanel>
                 <TabPanel sx={{ padding: '12px 0' }} value="3">
-                  {tabs.Application({ compaignId: compaignId, hrId: hrId })}
+                  {tabs.Application({ compaignId: compaignId })}
                 </TabPanel>
                 <TabPanel sx={{ padding: '12px 0' }} value="4">
                   Item Three
@@ -144,13 +177,16 @@ function ManageCV() {
                   Item Three
                 </TabPanel>
                 <TabPanel sx={{ padding: '12px 0' }} value="6">
-                  {tabs.CV({ compaignId: compaignId, hrId: hrId })}
+                  {tabs.CV({ compaignId: compaignId })}
                 </TabPanel>
                 <TabPanel sx={{ padding: '12px 0' }} value="7">
-                  {tabs.Support({ compaignId: compaignId, hrId: hrId })}
+                  {tabs.Support({ compaignId: compaignId })}
                 </TabPanel>
                 <TabPanel sx={{ padding: '12px 0' }} value="8">
                   Item Three
+                </TabPanel>
+                <TabPanel sx={{ padding: '12px 0' }} value="9">
+                  {tabs.EditCampaign()}
                 </TabPanel>
               </TabContext>
             </Box>

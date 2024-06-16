@@ -21,15 +21,6 @@ export class UploadService {
     @Inject('UPLOAD') private readonly uploadClient: ClientProxy,
     private readonly configService: ConfigService,
   ) {
-    // this.s3Client = new S3Client({
-    //   region: this.configService.get<string>('AWS_S3_REGION'),
-    //   credentials: {
-    //     accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY'),
-    //     secretAccessKey: this.configService.get<string>(
-    //       'AWS_SECRET_ACCESS_KEY',
-    //     ),
-    //   },
-    // });
     this.s3Client = new S3Client({
       region: 'us-east-1',
       credentials: {
@@ -62,6 +53,7 @@ export class UploadService {
       });
 
       await this.s3Client.send(command);
+      
 
       return `https://${bucketName}.s3.amazonaws.com/${newFilename}`;
     } catch (error) {

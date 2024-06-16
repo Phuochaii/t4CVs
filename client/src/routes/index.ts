@@ -6,7 +6,7 @@ import * as Error from '../pages/Error';
 
 import { UserLayout, AdminLayout, HRLayout, EmptyLayout } from '../layouts';
 import { ReactElement } from 'react';
-import { Role, Roles } from "../shared/services/authen/domain/context";
+import { Role, Roles } from '../shared/services/authen/domain/context';
 
 interface LayoutProp {
   children: React.ReactNode | React.ReactElement<any>;
@@ -15,7 +15,7 @@ interface LayoutProp {
 interface RouteItem {
   path: string;
   component: () => ReactElement;
-  layout: ({ }:LayoutProp) => ReactElement;
+  layout: ({}: LayoutProp) => ReactElement;
   role?: Role;
 }
 
@@ -27,12 +27,32 @@ const routes: RouteItem[] = [
   { path: 'admin', component: Authentication.AdminInit, layout: EmptyLayout },
 
   // AUTHENTICATION PAGES - Tiến
-  { path: 'admin-login', component:Authentication.AdminLogIn, layout: EmptyLayout},
-  { path: 'hr-login', component:Authentication.HRLogIn, layout: EmptyLayout},
-  { path: 'hr-signup', component:Authentication.HRSignUp, layout: EmptyLayout},
-  { path: 'hr-profile-register', component:Authentication.HRProfileRegister, layout: EmptyLayout},
-  { path: 'user-login', component:Authentication.UserLogIn, layout: EmptyLayout},
-  { path: 'user-signup', component:Authentication.UserSignUp, layout: EmptyLayout},
+  {
+    path: 'admin-login',
+    component: Authentication.AdminLogIn,
+    layout: EmptyLayout,
+  },
+  { path: 'hr-login', component: Authentication.HRLogIn, layout: EmptyLayout },
+  {
+    path: 'hr-signup',
+    component: Authentication.HRSignUp,
+    layout: EmptyLayout,
+  },
+  {
+    path: 'hr-profile-register',
+    component: Authentication.HRProfileRegister,
+    layout: EmptyLayout,
+  },
+  {
+    path: 'user-login',
+    component: Authentication.UserLogIn,
+    layout: EmptyLayout,
+  },
+  {
+    path: 'user-signup',
+    component: Authentication.UserSignUp,
+    layout: EmptyLayout,
+  },
 
   // USER PAGES - Nguyên , Khoa, Hùng
   { path: '/', component: User.Home, layout: UserLayout }, //khoa - > tiến
@@ -49,7 +69,12 @@ const routes: RouteItem[] = [
   { path: '/list-cv', component: User.ListCV, layout: UserLayout }, // nguyên
 
   // ADMIN PAGES - Thức
-  { path: '/admin/overview', component: Admin.Overview, layout: AdminLayout, role: Roles.ADMIN },
+  {
+    path: '/admin/overview',
+    component: Admin.Overview,
+    layout: AdminLayout,
+    role: Roles.ADMIN,
+  },
 
   // HR PAGES - Yến, Thịnh, Thức
   { path: '/hr/approve', component: HR.ReceiveCV, layout: HRLayout }, // yến
@@ -71,25 +96,33 @@ const routes: RouteItem[] = [
   { path: '/companies/', component: User.Companies, layout: UserLayout }, // thinh
 
   // ADMIN
-  { path: '/admin/company', component: Admin.Company, layout: AdminLayout }, // thuc
+  {
+    path: '/admin/company',
+    component: Admin.Company,
+    layout: AdminLayout,
+    role: Roles.ADMIN,
+  }, // thuc
   {
     path: '/admin/campaign',
     component: Admin.Campaign,
     layout: AdminLayout,
+    role: Roles.ADMIN,
   }, // thuc
   {
     path: '/admin/recruitment',
     component: Admin.Recruitment,
     layout: AdminLayout,
+    role: Roles.ADMIN,
   }, // thuc
   {
     path: '/admin/employer',
     component: Admin.Employer,
     layout: AdminLayout,
+    role: Roles.ADMIN,
   }, // thuc
 
   // HR
-  { path: "/hr/news", component: HR.News, layout: HRLayout, role: Roles.HR }, //khoa
+  { path: '/hr/news', component: HR.News, layout: HRLayout, role: Roles.HR }, //khoa
 
   { path: '/hr/post-compaign', component: HR.PostJob, layout: HRLayout }, // thinh
   {
@@ -117,8 +150,6 @@ const routes: RouteItem[] = [
     component: HR.CompaignEdit,
     layout: HRLayout,
   }, // thuc
-
-  { path: '/hr/recruitment', component: HR.Recruitment, layout: HRLayout },
 
   { path: '/hr/manage-cv/:id', component: HR.ManageCV, layout: HRLayout }, // yen
 
@@ -148,11 +179,13 @@ const routes: RouteItem[] = [
     path: '/admin/company/:id',
     component: Admin.CompanyDetail,
     layout: AdminLayout,
+    role: Roles.ADMIN,
   },
   {
     path: '/admin/employer/:id',
     component: Admin.EmployerDetail,
     layout: AdminLayout,
+    role: Roles.ADMIN,
   },
 ];
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Switch, colors } from '@mui/material';
+import { Switch } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Search, Check, CircleAlert } from 'lucide-react';
 
@@ -49,7 +49,7 @@ function CV() {
         <div className="bg-white rounded-lg shadow-md mb-2 mt-4 p-6 flex flex-row justify-between h-64 border border-gray-100">
           <div>
             <h1 className="text-black text-19 font-bold leading-24 m-0">
-              CV đã tạo trên TopCV
+              CV đã tạo trên t4CVs
             </h1>
           </div>
           <div className="justify-end items-center flex flex-col">
@@ -69,7 +69,7 @@ function CV() {
         <div className="bg-white rounded-lg shadow-md mb-2 mt-4 p-6 flex flex-row justify-between h-64 border border-gray-100">
           <div>
             <h1 className="text-black text-19 font-bold leading-24 m-0">
-              CV đã tải lên TopCV
+              CV đã tải lên t4CVs
             </h1>
           </div>
           <div className="justify-end items-center flex flex-col">
@@ -91,7 +91,7 @@ function CV() {
         <div className="bg-white rounded-lg shadow-md mb-2 mt-4 p-6 flex flex-row justify-between h-64 border border-gray-100">
           <div>
             <h1 className="text-black text-19 font-bold leading-24 m-0">
-              TopCV Profile
+              t4CVs Profile
             </h1>
           </div>
           <div className="justify-end items-center flex flex-col">
@@ -101,7 +101,7 @@ function CV() {
               loading="eager"
               alt="NoCV"
             />
-            <p> Bạn chưa tạo TopCV Profile</p>
+            <p> Bạn chưa tạo t4CVs Profile</p>
           </div>
           <div>
             <button className="bg-green-600 rounded-full text-white leading-none px-4 py-3 hover:bg-green-700">
@@ -190,7 +190,7 @@ function CV() {
                   style={{ color: 'green', width: 15, height: 15 }}
                 ></Check>
               </div>
-              <p className="text-sm">Nhắn tin qua Top Connect trên TopCV</p>
+              <p className="text-sm">Nhắn tin qua Top Connect trên t4CVs</p>
             </div>
             <div className="flex flex-row items-center space-x-2">
               <div className="p-1 bg-green-100 rounded-full w-fit h-fit">
@@ -218,11 +218,11 @@ function CV() {
                 }}
               ></CircleAlert>
               <p className="text-[11px]">
-                Khởi tạo TopCV Profile để gia tăng 300% cơ hội việc làm tốt
+                Khởi tạo t4CVs Profile để gia tăng 300% cơ hội việc làm tốt
               </p>
             </div>
             <button className="mt-4 px-4 py-2 text-xs font-bold w-40 h-8 border border-green-500 rounded text-green-500 hover:bg-green-500 hover:text-white transition duration-300">
-              Tạo TopCV Profile
+              Tạo t4CVs Profile
             </button>
           </div>
         </div>

@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const SearchCompany = (props) => {
+const SearchCompany = ({ onSearch }) => {
+  const [inputText, setInputText] = useState('');
+
+  const handleSubmit = (e) => {
+    if (e) e.preventDefault();
+    onSearch(inputText);
+  };
+
   return (
     <div className="min-h-[273px] pt-6 mb-0 w-full bg-gradient-to-r from-[#f8fffa] to-[#cbffe1]">
       <div className="flex w-full px-[90px]">
@@ -28,7 +35,7 @@ const SearchCompany = (props) => {
             bạn
           </div>
           <form
-            action=""
+            onSubmit={handleSubmit}
             className="bg-white h-[50px] border-[1px] border-white overflow-hidden rounded-full flex items-center justify-between px-8 duration-300	 hover:border-[#00b14f]"
           >
             <div className="flex items-center w-[80%]">
@@ -47,11 +54,19 @@ const SearchCompany = (props) => {
                 type="text"
                 placeholder="Nhập tên công ty"
                 className="bg-white focus:outline-none w-full"
+                value={inputText}
+                onChange={(e) => {
+                  setInputText(e.target.value);
+                  onSearch(e.target.value);
+                }}
               />
             </div>
-            <div className="text-white bg-[#00b14f] rounded-full py-[6px] px-3 translate-x-1/4 text-lg cursor-pointer">
+            <button
+              type="submit"
+              className="text-white bg-[#00b14f] rounded-full py-[6px] px-3 translate-x-1/4 text-lg cursor-pointer"
+            >
               Tìm kiếm
-            </div>
+            </button>
           </form>
         </div>
         <div className="ml-auto text-right">

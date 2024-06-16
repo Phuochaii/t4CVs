@@ -6,7 +6,7 @@ const name = ({ company }) => {
   return (
     <div
       onClick={() => navigation(`/companies/${company.id}`)}
-      className="item relative  h-[400px] rounded-[5px] mb-6 overflow-hidden border hover:border-green-600 hover:border-2 hover:bg-[#e7e7e75b]"
+      className="border-2 border-[transparent] shadow-md	 item relative  h-[400px] rounded-[5px] mb-6 overflow-hidden hover:border-green-600 hover:border-2 hover:bg-[#e7e7e75b]"
     >
       <div className="absolute left-4 h-16 w-16 rounded-[5px] top-[120px] overflow-hidden border border-[#EEE] z-10 ">
         <img

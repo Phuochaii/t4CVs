@@ -1,21 +1,21 @@
 import {
   CreateApplicationDto,
-  GetApplicationDto,
+  GetApplicationByIdDto,
   GetAllApplicationsDto,
   UpdateApplicationDto,
-  GetByCampaignIdApplicationDto,
-  GetAllByCampaignIdApplicationDto,
+  GetByCampaignIdWithPaginationDto,
+  GetByCampaignIdDto,
   GetByUserIdApplicationDto,
   GetByUserIdPaginationApplicationDto,
-  DelApplicationByCampaignIdDto,
+  DeleteByCampaignIdDto,
 } from './dto';
 import {
   CreateApplicationService,
   GetApplicationService,
   GetAllApplicationService,
   UpdateApplicationService,
-  GetByCampaignIdApplicationService,
-  GetAllByCampaignIdApplicationService,
+  GetByCampaignIdWithPaginationService,
+  GetByCampaignIdService,
   GetByUserIdApplicationService,
   GetByUserIdPaginationApplicationService,
   DelApplicationService,
@@ -24,14 +24,14 @@ import { Application } from './entity';
 import { RpcException } from '@nestjs/microservices';
 import { Applications } from '@app/common/proto/application';
 
-export class ApplicationApplication {
+export class ApplicationDomain {
   constructor(
     private readonly createApplicationService: CreateApplicationService,
     private readonly getApplicationService: GetApplicationService,
     private readonly getAllApplicationService: GetAllApplicationService,
-    private readonly getByCampaignIdApplicationService: GetByCampaignIdApplicationService,
+    private readonly getByCampaignIdWithPaginationService: GetByCampaignIdWithPaginationService,
     private readonly updateApplicationService: UpdateApplicationService,
-    private readonly getAllByCampaignIdApplicationService: GetAllByCampaignIdApplicationService,
+    private readonly getAllByCampaignIdApplicationService: GetByCampaignIdService,
     private readonly getByUserIdApplicationService: GetByUserIdApplicationService,
     private readonly getByUserIdPagiantionApplicationService: GetByUserIdPaginationApplicationService,
     private readonly delApplicationService: DelApplicationService,
@@ -42,7 +42,7 @@ export class ApplicationApplication {
   }
 
   async getApplication(
-    request: GetApplicationDto,
+    request: GetApplicationByIdDto,
   ): Promise<Application | null> {
     const data = await this.getApplicationService.execute(request);
     if (!data) {
@@ -58,7 +58,7 @@ export class ApplicationApplication {
   }
 
   async getByCampaignIdApplication(
-    request: GetByCampaignIdApplicationDto,
+    request: GetByCampaignIdWithPaginationDto,
   ): Promise<Applications> {
     const campaignIds = request.campaignIds;
     const total_data = this.getAllByCampaignIdApplication({
@@ -66,9 +66,10 @@ export class ApplicationApplication {
     });
 
     const total = (await total_data).length;
-    const data = await this.getByCampaignIdApplicationService.execute(request);
+    const data =
+      await this.getByCampaignIdWithPaginationService.execute(request);
     const total1 = (await data).length;
-    console.log(total1);
+
     const total_pages = Math.ceil(total / request.limit);
     if (!total_data || !data) {
       return {
@@ -90,7 +91,7 @@ export class ApplicationApplication {
   }
 
   async getAllByCampaignIdApplication(
-    request: GetAllByCampaignIdApplicationDto,
+    request: GetByCampaignIdDto,
   ): Promise<Application[]> {
     return await this.getAllByCampaignIdApplicationService.execute(request);
   }
@@ -140,7 +141,7 @@ export class ApplicationApplication {
     // return await this.getByUserIdPagiantionApplicationService.execute(request);
   }
 
-  async delApplicationbyCampaign(request: DelApplicationByCampaignIdDto) {
+  async delApplicationbyCampaign(request: DeleteByCampaignIdDto) {
     return await this.delApplicationService.execute(request);
   }
 }

@@ -1,15 +1,18 @@
 // Thịnh
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './PostJob.css';
 import * as HRModule from '../../../modules/hr-module';
+import { useProfileContext } from '../../../shared/services/authen/domain/context';
+import { getProfile } from '../../../modules/hr-module';
+import { errorToast } from '../../../utils/toast';
 
 const plans = [
   {
     image:
       'https://tuyendung.topcv.vn/app/_nuxt/img/campaign_post_job.afe6934.png',
-    title: 'Đăng tin tuyển dụng tại TopCV',
+    title: 'Đăng tin tuyển dụng tại t4CVs',
     description:
       'Đăng tin tuyển dụng tiếp cận 7 triệu + ứng viên tiềm năng & nhận về CV ứng tuyển',
     button: 'Đăng tin tuyển dụng',
@@ -26,14 +29,53 @@ const plans = [
 
 function PostJob() {
   const navigation = useNavigate();
-  const hrId = '1';
+  const { token } = useProfileContext();
   const [modal, setModal] = useState(false);
   const [compaignName, setcompaignName] = useState('');
   const [compaignId, setcompaignId] = useState('');
   const [chosenPlan, setChosenPlan] = useState(plans[0]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [employer, setEmployer] = useState<any>(null);
+  useEffect(() => {
+    // Fetch data from your API
+    const fetchData = async () => {
+      const res = await getProfile(token!);
+      console.log(res);
+      setEmployer(res);
+    };
+
+    fetchData();
+  }, []);
   const toggleModal = () => {
     // nay xu li sau
     setModal((prev) => !prev);
+  };
+  const handleSubmit = async () => {
+    console.log(employer);
+    if (compaignName.length <= 5) {
+      return errorToast('Tên chiến dịch tuyển dụng length > 5');
+    } else if (employer.companyId === null) {
+      errorToast('Bạn chưa có công ty');
+      setTimeout(() => {
+        return errorToast(
+          'Bạn sẽ được chuyển về trang tạo công ty trong vòng 3 giây',
+        );
+      }, 1000);
+      setTimeout(() => {
+        navigation('/hr/settings?active=CompanyInfo');
+      }, 3000);
+    } else {
+      toggleModal();
+      await HRModule.createCompaign({
+        name: compaignName,
+        token: token!,
+      })
+        .then((res) => {
+          console.log(456, res);
+          setcompaignId(res.id);
+        })
+        .catch((err) => console.log(err));
+    }
   };
   return (
     <div>
@@ -53,10 +95,10 @@ function PostJob() {
           <div className="banner_info">
             Hoạt động tuyển dụng của doanh nghiệp được tiến hành theo từng giai
             đoạn
-            <br /> với các mục tiêu tuyển dụng khác nhau. Chiến .topcv.v dịch
+            <br /> với các mục tiêu tuyển dụng khác nhau. Chiến .t4CVs.v dịch
             tuyển dụng là nơi tổng hợp các
             <br /> hoạt động khác nhau của một đợt tuyển dụng được thực hiện
-            trên nền tảng TopCV
+            trên nền tảng t4CVs
           </div>
           <div className="banner_button">
             <button className="button">Tìm hiểu thêm</button>
@@ -92,21 +134,7 @@ function PostJob() {
                 </div>
               )}
             </div>
-            <div
-              onClick={async () => {
-                if (compaignName.length <= 5) {
-                  alert('Tên chiến dịch tuyển dụng length > 5');
-                  return;
-                }
-                await HRModule.createCompaign({
-                  employerId: hrId,
-                  name: compaignName,
-                }).then((res) => setcompaignId(res.id));
-                // navigation("/hr/compaign");
-                toggleModal();
-              }}
-              className="form_button mt-2"
-            >
+            <div onClick={handleSubmit} className="form_button mt-2">
               Tiếp theo
             </div>
           </div>
@@ -114,7 +142,7 @@ function PostJob() {
             <div className="ref_head">Tài liệu bạn nên xem</div>
             <div className="ref_description">
               Hiểu về cách chiến dịch tuyển dụng hoạt động sẽ giúp bạn tối ưu
-              tốt hơn hoạt động tuyển dụng của doanh nghiệp trên TopCV. Hãy chắc
+              tốt hơn hoạt động tuyển dụng của doanh nghiệp trên t4CVs. Hãy chắc
               chắn bạn đã tìm hiểu thông tin về chiến dịch tuyển dụng.
             </div>
             <div className="ref_links">
@@ -134,10 +162,7 @@ function PostJob() {
           <div className="overlay" onClick={toggleModal}></div>
           <div className="modal-content">
             <div className="modal-header">
-              <h2 className="modal-title">
-                Khởi động chiến dịch:{' '}
-                <span style={{ color: '#00b14f' }}>Tuyển IT</span>
-              </h2>
+              <h2 className="modal-title">Khởi động chiến dịch: </h2>
               <div className="close-btn" onClick={toggleModal}>
                 <svg
                   fill="#000000"
@@ -217,7 +242,7 @@ function PostJob() {
                     Đăng tin tuyển dụng
                   </div>
                   <div className="text-sm text-neutral-700 mt-1">
-                    Đăng tin tuyển dụng tại TopCV
+                    Đăng tin tuyển dụng tại t4CVs
                   </div>
                 </div>
                 <div
@@ -265,7 +290,7 @@ function PostJob() {
                     Chủ động tìm kiếm ứng viên
                   </div>
                   <div className="text-sm text-neutral-700 mt-1">
-                    Lọc CV ứng viên từ TopCV
+                    Lọc CV ứng viên từ t4CVs
                   </div>
                 </div>
               </div>

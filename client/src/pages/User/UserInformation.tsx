@@ -1,7 +1,11 @@
 import clsx from 'clsx';
 import { ArrowUpCircle, Camera, Check, Info } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Switch from '../../shared/components/CustomSwitch';
+import * as UserModule from '../../modules/user-module';
+import { errorToast, successToast } from '../../utils/toast';
+import { useProfileContext } from '../../shared/services/authen/domain/context';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const fields: {
   label: string;
@@ -34,6 +38,28 @@ const fields: {
 ];
 
 function UserInformation() {
+  const [imageFile, setImageFile] = useState();
+  const [image, setImage] = useState();
+  const imageUploadRef = useRef(null);
+  const handleImageUpload = useCallback(() => {
+    imageUploadRef?.current?.click();
+  }, []);
+  const imagePreview = (e) => {
+    const selectedImage = e.target.files[0];
+    setImageFile(selectedImage);
+    console.log(selectedImage);
+    if (selectedImage) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        setImage(event.target.result);
+      };
+      reader.readAsDataURL(selectedImage);
+    }
+  };
+  const { token } = useProfileContext();
+  const { user, logout } = useAuth0();
+  const userId = user?.sub;
   const [userInfo, setUserInfo] = useState({
     fullname: 'Hải Yến Viên',
     phone: '0123 456 789',
@@ -50,6 +76,64 @@ function UserInformation() {
     const newUserInfo = { ...userInfo };
     newUserInfo[field] = value;
     setUserInfo(newUserInfo);
+  };
+
+  const fetchUserInfo = async () => {
+    UserModule.getUserById({ userId: user?.sub || userId, token: token })
+      .then((res) => {
+        const response = res.data;
+        console.log(response);
+        const currentInfo = {
+          fullname: response.fullname,
+          phone: response.phone,
+          avatar:
+            response.image ||
+            'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg',
+          email: '*****@gmail.com',
+        };
+        setUserInfo(currentInfo);
+      })
+      .catch();
+  };
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  const handleUpdateInfo = () => {
+    if (!imageFile && !userInfo.avatar) {
+      return errorToast('Vui lòng chọn ảnh đại diện');
+    }
+    if (userInfo.fullname === '') {
+      return errorToast('Tên vừa nhập không hợp lệ');
+    }
+    if (userInfo.fullname.length <= 5) {
+      return errorToast('Tên vừa nhập phải có 5 ký tự trở lên');
+    }
+    if (isNaN(userInfo.phone)) {
+      return errorToast('Số điện thoại không hợp lệ');
+    }
+    if (userInfo.phone.length !== 10 && userInfo.phone.length !== 11) {
+      return errorToast('Số điện thoại phải từ 10 tới 11 số ');
+    }
+    const formData = new FormData();
+    formData.append('id', user?.sub || userId);
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
+    formData.append('fullname', userInfo.fullname);
+    formData.append('phone', userInfo.phone);
+    console.log(formData);
+    UserModule.updateUserById(formData, token)
+      .then((res) => {
+        successToast('Cập nhật thành công!');
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
+      })
+      .catch((res) => {
+        errorToast('Cập nhật thất bại, xin vui lòng thử lại sau');
+      });
   };
 
   return (
@@ -69,7 +153,7 @@ function UserInformation() {
               </label>
               <input
                 name="full-name"
-                type="text"
+                type={item.accessor === 'phone' ? 'number' : 'text'}
                 className={clsx(
                   'px-4 py-2 border rounded-lg bg-white',
                   item.disabled ? 'text-gray-500 cursor-not-allowed' : '',
@@ -84,7 +168,10 @@ function UserInformation() {
             </div>
           );
         })}
-        <button className="items-start self-start px-8 py-2 font-bold text-white bg-green-600 rounded-lg hover:bg-green-700 active:bg-green-800">
+        <button
+          onClick={handleUpdateInfo}
+          className="items-start self-start px-8 py-2 font-bold text-white bg-green-600 rounded-lg hover:bg-green-700 active:bg-green-800"
+        >
           Lưu
         </button>
       </div>
@@ -94,14 +181,28 @@ function UserInformation() {
             <span className="absolute right-0 py-[2px] px-[4px] text-[8px] text-white uppercase bg-slate-500">
               Verified
             </span>
-            <img
-              src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80"
-              alt="User Image"
-              className="object-cover w-20 h-20 rounded-full"
-            />
-            <div className="absolute p-1 right-0 flex items-center justify-center bg-green-500 rounded-full bottom-[25%]">
-              <Camera size={16} stroke="white" />
+            <div className="cursor-pointer" onClick={handleImageUpload}>
+              <img
+                src={
+                  image ||
+                  userInfo.avatar ||
+                  'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'
+                }
+                alt="User Image"
+                className="object-cover w-20 h-20 rounded-full"
+              />
+              <div className="absolute p-1 right-0 flex items-center justify-center bg-green-500 rounded-full bottom-[25%]">
+                <Camera size={16} stroke="white" />
+              </div>
             </div>
+            <input
+              type="file"
+              name="file"
+              ref={imageUploadRef}
+              onChange={imagePreview}
+              style={{ display: 'none' }}
+              accept="image/png, image/gif, image/jpeg"
+            />
           </div>
           <div className="flex flex-col items-start gap-2">
             <div className="flex flex-col items-start gap-1">
@@ -158,7 +259,7 @@ function UserInformation() {
               <div className="p-1 bg-green-200 rounded-full">
                 <Check className="text-green-500" size={16} />
               </div>
-              Nhắn tin qua Top Connect trên TopCV
+              Nhắn tin qua Top Connect trên t4CVs
             </li>
             <li className="flex items-center gap-2">
               <div className="p-1 bg-green-200 rounded-full">
@@ -172,10 +273,10 @@ function UserInformation() {
         <div className="flex flex-col items-start gap-4 py-2">
           <div className="flex items-start gap-2">
             <Info size={16} className="text-gray-400" />
-            Khởi tạo TopCV Profile để gia tăng 300% cơ hội việc làm tốt
+            Khởi tạo t4CVs Profile để gia tăng 300% cơ hội việc làm tốt
           </div>
           <button className="px-4 py-2 font-bold text-green-500 border border-green-600 rounded">
-            Tạo TopCV Profile
+            Tạo t4CVs Profile
           </button>
         </div>
       </div>
