@@ -64,7 +64,7 @@ function ApplyModal({ open, handleClose, handleOpen, jobData, user }) {
       errors.phone = 'Phone number is required';
       setApplyLoading(false);
     } else if (!/^\d{10}$/i.test(formData.phone)) {
-      errors.phone = 'Invalid phone number';
+      errors.phone = 'Invalid phone number, phone has 10 number';
       setApplyLoading(false);
     }
     if (!formData.file) {
