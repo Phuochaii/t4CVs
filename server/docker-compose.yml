@@ -17,5 +17,16 @@ services:
     build: ./nginx
     ports:
       - '3000:80'
+  postgres:
+    image: postgres:latest
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
 volumes:
   eventstore:
+  postgres:
