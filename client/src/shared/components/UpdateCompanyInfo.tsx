@@ -105,7 +105,7 @@ const UpdateCompanyInfo = ({
     formData.append('description', data.description);
     successToast('Cập nhật thành công!');
     try {
-      const response = await fetch('http://localhost:3000/company/update', {
+      const response = await fetch('http://34.28.130.105/company/update', {
         method: 'PUT',
         body: formData,
         headers: {

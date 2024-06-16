@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ApplicationSchema } from './schema';
 import { WriteRepositoryModule } from '../write/write-repository.module';
 import { ApplicationReadRepository } from 'apps/application/src/domain/repository';
+import { DatabaseConfiger } from '../database/init';
 
 type DatabaseOptions = TypeOrmModuleOptions & { database: string };
 @Module({
@@ -26,7 +27,8 @@ type DatabaseOptions = TypeOrmModuleOptions & { database: string };
           synchronize: true,
           dropSchema: true,
         };
-        return defaultConfig;
+        const databaseConfiger = new DatabaseConfiger(defaultConfig);
+        return databaseConfiger.config();
       },
     }),
     TypeOrmModule.forFeature([ApplicationSchema]),

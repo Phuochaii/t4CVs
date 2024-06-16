@@ -5,12 +5,12 @@ import { ApplicationFromServer } from '../shared/types/Application.type';
 import { CampaignFromServer } from '../shared/types/Campaign.type';
 import { RecruitmentFromServer } from '../shared/types/Recruitment.type';
 
-const serverURL = 'http://localhost:3000';
+const serverURL = 'http://34.28.130.105';
 
 // không đụng vào phần này
 export const isAdmin = async (token: string) => {
   const result = await axios
-    .get('http://localhost:3000/admin/check', {
+    .get('http://34.28.130.105/admin/check', {
       headers: {
         authorization: `Bearer ${token}`,
       },
@@ -21,7 +21,7 @@ export const isAdmin = async (token: string) => {
 
 export const getProfile = async (token: string) => {
   const result = await axios
-    .get('http://localhost:3000/admin/profile', {
+    .get('http://34.28.130.105/admin/profile', {
       headers: {
         authorization: `Bearer ${token}`,
       },
