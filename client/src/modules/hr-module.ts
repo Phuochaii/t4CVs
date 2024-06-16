@@ -6,7 +6,7 @@ import { UserFromServer } from '../shared/types/User.type';
 import { UserCV } from '../shared/types/CV_user.type';
 import { RecruitmentFromServer } from '../shared/types/Recruitment.type';
 
-const serverURL = 'http://34.28.130.105';
+const serverURL = 'http://localhost:3000';
 
 // ------------------- khong dụng vào phần này
 interface CreateEmployerInterface {
@@ -52,7 +52,7 @@ export const createEmpolyer = async ({
 };
 const isHr: (token: string) => Promise<boolean> = async (token) => {
   const result = await axios
-    .get('http://34.28.130.105/employer/check', {
+    .get('http://localhost:3000/employer/check', {
       headers: {
         authorization: `Bearer ${token}`,
       },

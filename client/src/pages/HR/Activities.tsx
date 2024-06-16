@@ -127,7 +127,7 @@ function Activities() {
   const fetchCampaigns = async () => {
     try {
       const response = await axios.get(
-        'http://34.28.130.105/company/campaign/employer/1',
+        'http://localhost:3000/company/campaign/employer/1',
       );
       setCampaigns(response.data.data);
     } catch (error) {
