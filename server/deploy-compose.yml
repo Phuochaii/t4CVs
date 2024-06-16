@@ -36,7 +36,7 @@ services:
     networks:
       - backend
   nginx:
-    build: ./nginx
+    build: ./nginx/deploy
     ports:
       - '80:80'
     networks:
