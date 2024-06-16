@@ -8,7 +8,7 @@ export enum AUTH0_REALM {
     Facebook = 'facebook',
     LinkedIn = 'linkedin',
 } ;
-export const AUTH0_SCOPE = 'openid email profile offline_access';a
+export const AUTH0_SCOPE = 'openid email profile offline_access';
 export const AUTH0_LOGIN_RESPONSE_TYPE = 'code';
 export const AUTH0_LOGOUT_URL = HOST_URL;
 export const AUTH0_BACKEND_AUDIENCE = 'http://localhost:300/';
