@@ -105,7 +105,7 @@ const UpdateCompanyInfo = ({
     formData.append('description', data.description);
     successToast('Cập nhật thành công!');
     try {
-      const response = await fetch('https://https-proxy-48ml.onrender.com/company/update', {
+      const response = await fetch('https://https-proxy-ten.vercel.app/company/update', {
         method: 'PUT',
         body: formData,
         headers: {

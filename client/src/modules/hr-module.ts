@@ -6,7 +6,7 @@ import { UserFromServer } from '../shared/types/User.type';
 import { UserCV } from '../shared/types/CV_user.type';
 import { RecruitmentFromServer } from '../shared/types/Recruitment.type';
 
-const serverURL = 'https://https-proxy-48ml.onrender.com';
+const serverURL = 'https://https-proxy-ten.vercel.app';
 
 // ------------------- khong dụng vào phần này
 interface CreateEmployerInterface {
@@ -52,7 +52,7 @@ export const createEmpolyer = async ({
 };
 const isHr: (token: string) => Promise<boolean> = async (token) => {
   const result = await axios
-    .get('https://https-proxy-48ml.onrender.com/employer/check', {
+    .get('https://https-proxy-ten.vercel.app/employer/check', {
       headers: {
         authorization: `Bearer ${token}`,
       },

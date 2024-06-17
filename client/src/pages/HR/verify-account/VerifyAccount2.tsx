@@ -29,7 +29,7 @@ function VerifyAccount2() {
     //   console.log(res);
     // });
     await axios
-      .put('https://https-proxy-48ml.onrender.com/employer/update/license', formData)
+      .put('https://https-proxy-ten.vercel.app/employer/update/license', formData)
       .then((res) => {
         successToast('Cập nhật thành công! Trở lại màn hình chính sau 2 giấy');
         setTimeout(() => {
@@ -43,7 +43,7 @@ function VerifyAccount2() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://https-proxy-48ml.onrender.com/employer/1');
+        const response = await fetch('https://https-proxy-ten.vercel.app/employer/1');
         const userInfo = await response.json();
         setUser(userInfo);
         console.log(userInfo);

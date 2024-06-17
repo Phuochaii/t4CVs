@@ -4,7 +4,7 @@ import { CompanyFromServer } from '../shared/types/Company.type';
 import { Field, RecruitmentFromServer } from '../shared/types/Recruitment.type';
 import { EmployerFromServer } from '../shared/types/Employer.type';
 
-const serverURL = 'https://https-proxy-48ml.onrender.com';
+const serverURL = 'https://https-proxy-ten.vercel.app';
 
 export async function getCampaignById(id: number) {
   const response = await axios.get(`${serverURL}/company/campaign/${id}`);

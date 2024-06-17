@@ -5,12 +5,12 @@ import { ApplicationFromServer } from '../shared/types/Application.type';
 import { CampaignFromServer } from '../shared/types/Campaign.type';
 import { RecruitmentFromServer } from '../shared/types/Recruitment.type';
 
-const serverURL = 'https://https-proxy-48ml.onrender.com';
+const serverURL = 'https://https-proxy-ten.vercel.app';
 
 // không đụng vào phần này
 export const isAdmin = async (token: string) => {
   const result = await axios
-    .get('https://https-proxy-48ml.onrender.com/admin/check', {
+    .get('https://https-proxy-ten.vercel.app/admin/check', {
       headers: {
         authorization: `Bearer ${token}`,
       },
@@ -21,7 +21,7 @@ export const isAdmin = async (token: string) => {
 
 export const getProfile = async (token: string) => {
   const result = await axios
-    .get('https://https-proxy-48ml.onrender.com/admin/profile', {
+    .get('https://https-proxy-ten.vercel.app/admin/profile', {
       headers: {
         authorization: `Bearer ${token}`,
       },

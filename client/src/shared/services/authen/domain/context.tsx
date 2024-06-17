@@ -47,7 +47,7 @@ export const Roles: { [key in 'HR' | 'USER' | 'ADMIN']: Role } = {
     },
     redirectUrl: '/hr/news',
     loginUrl: '/hr-login',
-    registerApiUrl: 'https://https-proxy-48ml.onrender.com/employer/account',
+    registerApiUrl: 'https://https-proxy-ten.vercel.app/employer/account',
     getProfile: async (token) => {
       const profile = await getHrProfile(token);
       return {
@@ -100,7 +100,7 @@ export const Roles: { [key in 'HR' | 'USER' | 'ADMIN']: Role } = {
       return <Spinner />;
     },
     loginUrl: "/user-login",
-    registerApiUrl: "https://https-proxy-48ml.onrender.com/user/account",
+    registerApiUrl: "https://https-proxy-ten.vercel.app/user/account",
     getProfile: async (token) => {
       const profile = await getUserProfile(token);
       return {
@@ -133,7 +133,7 @@ export const Roles: { [key in 'HR' | 'USER' | 'ADMIN']: Role } = {
     },
     loginUrl: "/admin-login",
     redirectUrl: "/admin/overview",
-    registerApiUrl: "https://https-proxy-48ml.onrender.com/admin/account",
+    registerApiUrl: "https://https-proxy-ten.vercel.app/admin/account",
   },
 };
 

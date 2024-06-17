@@ -67,7 +67,7 @@ const CreateCompany = ({
     formData.append('name', data.name);
     successToast('Tạo công ty thành công!');
     try {
-      const response = await fetch('https://https-proxy-48ml.onrender.com/company/create', {
+      const response = await fetch('https://https-proxy-ten.vercel.app/company/create', {
         method: 'POST',
         body: formData,
         headers: {

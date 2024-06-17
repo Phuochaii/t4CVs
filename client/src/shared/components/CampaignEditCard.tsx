@@ -272,7 +272,7 @@ function CampaignEditCard({
       console.log(JSON.stringify(updatedItem));
       try {
         const response = await axios.put(
-          'https://https-proxy-48ml.onrender.com/job/update-job',
+          'https://https-proxy-ten.vercel.app/job/update-job',
           JSON.stringify(updatedItem),
           {
             headers: {

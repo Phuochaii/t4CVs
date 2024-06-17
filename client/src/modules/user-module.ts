@@ -3,7 +3,7 @@ import { ApplicationFromServer } from '../shared/types/Application.type';
 import { RecruitmentFromServer } from '../shared/types/Recruitment.type';
 import { UserCV } from '../shared/types/CV_user.type';
 
-const serverURL = 'https://https-proxy-48ml.onrender.com';
+const serverURL = 'https://https-proxy-ten.vercel.app';
 // GET NOTIFICATION
 // không đụng vào phânf bên dưới
 const getNotification = async ({

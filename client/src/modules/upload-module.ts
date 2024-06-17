@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://https-proxy-48ml.onrender.com/upload";
+const API_URL = "https://https-proxy-ten.vercel.app/upload";
 
 export const uploadFile = async (file: File) => {
   try {
