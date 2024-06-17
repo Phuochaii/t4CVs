@@ -40,7 +40,7 @@ services:
       context: ./nginx/deploy
       dockerfile: Dockerfile
     ports:
-      - '80:80'
+      - '443:80'
     networks:
       - backend
     depends_on:
