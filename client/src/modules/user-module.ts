@@ -3,7 +3,7 @@ import { ApplicationFromServer } from '../shared/types/Application.type';
 import { RecruitmentFromServer } from '../shared/types/Recruitment.type';
 import { UserCV } from '../shared/types/CV_user.type';
 
-const serverURL = 'http://34.28.130.105';
+const serverURL = 'https://https-proxy-48ml.onrender.com';
 // GET NOTIFICATION
 // không đụng vào phânf bên dưới
 const getNotification = async ({
