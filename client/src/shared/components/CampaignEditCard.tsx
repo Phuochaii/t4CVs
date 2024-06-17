@@ -272,7 +272,7 @@ function CampaignEditCard({
       console.log(JSON.stringify(updatedItem));
       try {
         const response = await axios.put(
-          'http://34.28.130.105/job/update-job',
+          'https://https-proxy-48ml.onrender.com/job/update-job',
           JSON.stringify(updatedItem),
           {
             headers: {

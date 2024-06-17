@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://34.28.130.105/upload";
+const API_URL = "https://https-proxy-48ml.onrender.com/upload";
 
 export const uploadFile = async (file: File) => {
   try {

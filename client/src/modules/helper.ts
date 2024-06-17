@@ -4,7 +4,7 @@ import { CompanyFromServer } from '../shared/types/Company.type';
 import { Field, RecruitmentFromServer } from '../shared/types/Recruitment.type';
 import { EmployerFromServer } from '../shared/types/Employer.type';
 
-const serverURL = 'http://34.28.130.105';
+const serverURL = 'https://https-proxy-48ml.onrender.com';
 
 export async function getCampaignById(id: number) {
   const response = await axios.get(`${serverURL}/company/campaign/${id}`);
