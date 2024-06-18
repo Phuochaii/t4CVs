@@ -5,10 +5,10 @@ name: Back-end CI
 
 on:
   push:
-    branches: ['main']
+    branches: ['local']
 
   pull_request:
-    branches: ['main']
+    branches: ['local']
 
 jobs:
   build:
