@@ -2,11 +2,9 @@ import { JobAggregate } from '../aggregate/job.aggregate';
 import { CreateJobDto } from '../dto/Req/create-job.dto';
 import { QueryDTO } from '../dto/Req/query.dto';
 import { UpdateJobStatusDto } from '../dto/Req/update-job-status.dto';
-import { FindJobByCampaignIdDto } from '../dto/Resp/find-job-by-campaignId.dto';
 
 export abstract class JobRepository {
   abstract deleteJob(id: number);
-  // abstract updateJob(data: UpdateJobDTO): Promise<boolean>;
   abstract findJobsByCampaignIds(
     campaignIds: number[],
   ): Promise<JobAggregate[]>;

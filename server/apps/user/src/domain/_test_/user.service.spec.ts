@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from '../user.service';
+import { UserService } from '../services/user.service';
 import { UserRepository } from '../repository';
 import { TypeOrmUserRepository } from '../../infrastructure/repository';
-import { CreateUserDTO } from '../dto/Req';
+import { CreateUserDTO, QueryDTO } from '../dto/Req';
+import { FindUserRespDTO } from '../dto/Resp/find-users.dto';
 
 describe('UserService', () => {
   let service: UserService;
@@ -12,7 +13,7 @@ describe('UserService', () => {
     createUser: jest.fn((user) => {
       return;
     }),
-    findAll: jest.fn(() => {
+    searchUser: jest.fn((query: QueryDTO) => {
       return [
         {
           id: '1',
@@ -98,11 +99,22 @@ describe('UserService', () => {
   });
 
   describe('findAll', () => {
+    const query: QueryDTO = {
+      page: 1,
+      limit: 10,
+    };
     it('should return all users', async () => {
-      expect(await service.findAll()).toEqual(expect.any(Array));
+      const result: FindUserRespDTO = {
+        page: 1,
+        limit: 10,
+        total: expect.any(Number),
+        total_pages: expect.any(Number),
+        data: expect.any(Array),
+      };
+      expect(await service.findAll(query)).toEqual(result);
     });
     it('should call the repository.findAll method', async () => {
-      expect(mockUserRepository.findAll).toHaveBeenCalled();
+      expect(mockUserRepository.searchUser).toHaveBeenCalled();
     });
   });
 

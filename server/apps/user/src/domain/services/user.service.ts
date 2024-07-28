@@ -1,7 +1,7 @@
-import { CreateUserDTO, QueryDTO } from './dto/Req';
-import { FindUserRespDTO } from './dto/Resp/find-users.dto';
-import { UserRepository } from './repository';
-import { UpdateUserDTO } from './dto/Req/update-user.dto';
+import { CreateUserDTO, QueryDTO } from '../dto/Req';
+import { FindUserRespDTO } from '../dto/Resp/find-users.dto';
+import { UserRepository } from '../repository';
+import { UpdateUserDTO } from '../dto/Req/update-user.dto';
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}

@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { UserService } from './domain/user.service';
+import { UserService } from './domain/services/user.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { CreateUserDTO, QueryDTO } from './domain/dto/Req';
 import { UpdateUserDTO } from './domain/dto/Req/update-user.dto';

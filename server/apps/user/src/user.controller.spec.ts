@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
-import { UserService } from './domain/user.service';
-import { CreateUserDTO } from './domain/dto/Req';
-import { User } from './domain/entities';
+import { UserService } from './domain/services/user.service';
+import { CreateUserDTO, QueryDTO } from './domain/dto/Req';
+import { FindUserRespDTO } from './domain/dto/Resp/find-users.dto';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -19,22 +19,29 @@ describe('UserController', () => {
     createUser: jest.fn((user: CreateUserDTO) => {
       return;
     }),
-    findAll: jest.fn(() => {
-      const users: User[] = [
-        {
-          id: '1',
-          fullname: 'test',
-          phone: 'test',
-          image: 'test',
-        },
-        {
-          id: '2',
-          fullname: 'test',
-          phone: 'test',
-          image: 'test',
-        },
-      ];
-      return users;
+    findAll: jest.fn((query: QueryDTO) => {
+      const result: FindUserRespDTO = {
+        page: Math.floor(Math.random() * 10) + 1,
+        limit: Math.floor(Math.random() * 10) + 1,
+        total: Math.floor(Math.random() * 20) + 1,
+        total_pages: Math.floor(Math.random() * 5) + 1,
+        data: [
+          {
+            id: '1',
+            fullname: 'test',
+            phone: 'test',
+            image: 'test',
+          },
+          {
+            id: '2',
+            fullname: 'test',
+            phone: 'test',
+            image: 'test',
+          },
+        ],
+      };
+
+      return result;
     }),
     isUserExist: jest.fn((id: string) => {
       return true;
@@ -89,8 +96,19 @@ describe('UserController', () => {
   });
 
   describe('findAll', () => {
+    const query: QueryDTO = {
+      page: 1,
+      limit: 10,
+    };
     it('should return all users', () => {
-      expect(controller.findAll()).toEqual(expect.any(Array));
+      const result: FindUserRespDTO = {
+        page: expect.any(Number),
+        limit: expect.any(Number),
+        total: expect.any(Number),
+        total_pages: expect.any(Number),
+        data: expect.any(Array),
+      };
+      expect(controller.findAll(query)).toEqual(result);
     });
     it('should call the service.findAll method', async () => {
       expect(mockUserService.findAll).toHaveBeenCalled();
